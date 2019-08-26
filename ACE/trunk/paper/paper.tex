@@ -1,0 +1,151 @@
+\documentclass[a4paper,9pt,twoside,twocolumn]{scrartcl}
+%\documentclass{aa}%\documentclass[jgrga]{agutex}
+%\usepackage{astron}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx,color}
+\usepackage{latexsym}
+\usepackage{textcomp}
+\usepackage{natbib}
+\usepackage[a4paper,left=2.cm,right=2.5cm,top=2.5cm,bottom=3cm]{geometry}
+\usepackage[cols=2,hyper=true,number=none,acronym=true]{glossary}
+\usepackage{epsfig}
+\pagestyle{headings}
+%\oddsidemargin-0.5cm
+%\evensidemargin0.cm
+%\newcommand{\abs}[1]{\left\lvert#1\right\rvert}
+%\newcommand{\ion}[2]{#1$^{#2+}$}
+%\newcommand{\ion}[3]{#1$^{#2+}_{#3}$}
+\Large
+\begin{document}
+\pagestyle{plain}
+%\large
+\title{The carbon isotopic ratio $^{13}\rm{C}/^{12}\rm{C}$ in the solar wind at 1 AU}
+\author{M. Köten\protect\\
+\small{Institut f\"ur Experimentelle und Angewandte Physik,
+             University of Kiel, {D-24098 Kiel}, Germany
+}}
+\date{\small{\today}}
+\maketitle	
+\large
+%\begin{abstract}
+%\noindent For the purpose of the SWICS data analysis we have developed an advanced efficiency model of the instrument.
+%The model includes the inner geometry and all relevant interactions between the incoming particles and the different components of the instrument.
+%We have included pre-flight and in-flight calibration data to determine the instrumental response functions (see sec. \ref{pfc} and \ref{ifc}).
+%Now the model can be used to calculate the positions of all solar wind ions in the the so-called ET-matrices.
+%Additionally the model provides the detection eficiencies for any solar wind ion depending on mass $m$, charge $q$, and velocity $\vec{v}$ (see sec. %\ref{dp}).
+%Therefore we can determine physical quantities like absolute fluxes or densities from the count rates belonging to a specific solar wind ion. 
+%The second part of our work is the determination of the solar wind $^{13} \rm{C} / ^{13} \rm{C}$ ratio which is consistent with the terrestrial ratio %looking at the preliminary results (see sec \ref{c13c12}).
+%\end{abstract}
+
+%\author{L. Berger}
+%\abstract{bla}
+%\maketitle
+
+
+\section{Introduction}
+Investigating the elemental and isotopic composition of samples originating from different regions of the solar system provide information about the conditions and processes which were dominating when the respective parent bodies condensated. For a better understanding of the early evolution of the solar system such measurements are conditionally significant, if one not knows the composition of the matter the solar system evolved from, the so-called presolar nebula. Although the presolar nebula does not exist anymore, its composition can be determined by analyzing meteorites which are as old as the solar system. Alternatively one can analyse of the outer convection zone of the Sun which is assumed to reflect the composition of the presolar nebula except for elements with nuclear charge $\rm{Z}\,<\,6$. Lighter elements than carbon were largely destroyed in the early phase of the solar evolution when the young star started to fuse helium from hydrogen (pp-chain reaction).
+
+The temperature in the solar core is about $15,6 \cdot 10^6 \rm{K}$ which means that the fusion processes only breed helium from hydrogen. The main contribution is provided by the pp-chain reaction (98,4 \%). Only about 1,6 \% of the energy is provided by the CNO-cycle reaction. In the latter one from the basic element $^{12}\rm{C}$ temporarily the nitrogen isotopes $^{13}\rm{N}$, $^{14}\rm{N}$, and $^{15}\rm{N}$, the oxygen isotope $^{15}\rm{O}$, and the carbon isotope $^{13}\rm{C}$ are generated. At the end of the cycle the catalyst $^{12}\rm{C}$ is regenerated again and all above mentioned intermediate products are destroyed. Due to the fact that there is no transposition of matter between the solar core and the radiative zone and even more with the convection zone, the composition of the convection zone is not assumed to be contaminated with the temporarily produced nitrogen, oxygen and carbon isotopes.
+
+In general, there are two different ways to measure the composition of the outer convection of the Sun, spectroscopic observations and in-situ measuremets of the solar wind. This work deals with the determination of the carbon isotopic ratio $^{13}\rm{C}/^{12}\rm{C}$ in the solar wind. Without exception all previous measurements of the solar carbon isotopic ratio $^{13}\rm{C}/^{12}\rm{C}$ are based on spectroscopic observations of the rotation bands of carbonaceous molecules, e.g. CO in the photoshere. For the first time we have determined the carbon isotopic ratio $^{13}\rm{C}/^{12}\rm{C}$ in the solar wind.
+
+An overview about all previous measurements is given in $\it{Woods} [2009]$ and in $\it{Harris} [1987]$. Most of solar photospheric measurements revealed values which are very similar to the terrestrial and lunar ratio $^{13}\rm{C}/^{12}\rm{C} \approx 1:89$. The analysis of carbonaceous composition of the inner planets and meteorites from the asteroid belt showed also similar results. In contrast different measurements of the composition of carbonaceous molecules (e.g.\,$\rm{CH_4}$ or HCN) in the atmospheres of the outer gas-planets and in tails of comets revealed different values for the carbon isotopic ratio $^{13}\rm{C}/^{12}\rm{C}$ in a wide range from about 1:160 up to 1:20. In this context it is worth mentioning that in most cases the uncertatinties of the calcuated ratios are on the order of several ten percent, so that within the errorbars the stated ratios overlap with the terrestrial ratio.
+
+The results of presented here can be seen as an additional element to create a baseline of elemental and isotopic abundances in the solar outer convection zone and thus, in the presolar nebula. In contrast to the previous measurements which are based on spectroscopic observations it delivers an independent check. Furthermore, possible deviations between photospheric and solar-wind abundances can provide information to improve our knowledge and understanding about eventually existing mass-dependent fractionantion processes in solar-wind evolution.
+
+\section{Data analysis}
+The data analysis is based on ACE/SWICS data. The ACE (Advanced Composition Explorer) probe (\cite{Gloeckler1998}) was launched in 1997 and is since then positioned at L1. The SWICS (Solar Wind Ion Composition Spectrometer) instrument (\cite{Gloeckler1998}) is a linear time-of-flight mass spectrometer which is used to measure solar wind ions and suprathermal particles.
+
+\subsection{Instrumentation}
+Figure \ref{swics} shows a schematic view of SWICS. We will give a very short description of the inner working of the instrument. First, the particles are selected by their energy-per-charge. This is accomlished by applying a defined voltage on the deflection system. All in all there are 60 energy-per-charge steps which cover an energy-per-charge range from 0.6kV up to about 100kV. The instrument measures the velocity (time-of-flight measurement over a defined distance) and the energy of the incoming particles at the end of the time-of-flight section with a solid state detector (SSD). By these three measurements one can theoretically calculate the three quantities mass $m$, charge $q$ and absolute value of the velocity $|\vec{v}|$. 
+\begin{figure}[t]
+\centering
+\includegraphics[scale=0.3, angle=0]{bilder/swics_scheme.eps.eps}
+\caption{Schematic view of ACE/SWICS.}
+\label{swics}
+\end{figure}
+Unfortunately the instrument does not allow the determination of the respective components $v_x,v_y,v_z$ of the velocity vector $|\vec{v}|$. For a more detailed explanation of the operational breakdown of the instrument see \cite{Koten2005} and \cite{Koten2009}.
+
+SWICS was originally designed to measure the elemental and charge-state composition of the solar wind and not its isotopic composition. There are similar instruments in space which were designed to measure the isotopic composition of the solar wind, e.g CELIAS/MTOF on SOHO (\cite{Kallenbach1997}) or SWIMS (Solar Wind Ion Mass Spectrometer) (\cite{Gloeckler1998}) on ACE, but these instruments have a crucial disadvantage for the measurement of the isotopic composition of carbon. SWICS as well as MTOF and SWIMS include a thin carbon foil which the detected particles have to pass through. The difference between both types is that the time-of-flight section of SWICS is force-free whereas in the time-of-flight section of MTOF and SWIMS the ions are exposed to a harmonic potential which means that the time of flight $\tau$ does not depend on the ion energy $d\tau/dE=0$. Thus, the measurements of MTOF and SWIMS do not allow to distinguish between the carbon ions related to the solar wind and those ejected from the carbon foil (FIXME: Evtl noch Bilder).
+
+\subsection{ACE/SWICS Data}
+As mentioned above there are 60 energy-per-charge steps. The measure time in each step is 12 seconds. Thus, a full measure cycle is completed after 12 minutes, which is therefore the highest time resolution we can achieve with this instrument. 
+
+The energy- and time-of-flight signal of each detected gets preprocessed by an ADC (Analogue Digital Converter) and is stored as a PHA (Pulse Height Analysis) word. Acculmulating these PHA words over a certain time period (multiples of 12 minutes) and using some preprocessing software we get 60 so-called ET-matrices (256 Energy-channels and 1024 Time-of-Flight channels); one matrix for each energy-per-charge step. Each solar wind ion got its specific position in these ET-matrices. For technical reasons we had to bin two channels each in both directions so that we obtained 128x512 channels. Figure FIXME shows an example of a binned ET-matrix. 
+
+\subsection{Ion positions}
+We found a semi-empiric function to calculate the time-of-flight channel $\hat{T}$ from the time $\tau$ the ion needs to pass the time-of-flight section. Analoguously we found another semi-empiric function to calculate the energy channel $\hat{E}$ from the measured energy $E_{\rm{meas}}$.
+\begin{equation}
+\hat{T}=\left(\tau \cdot 2.43\,\rm{ch}\,/\,\rm{ns} + 6.41\,\rm{ch}\right)},
+\label{eq-1}
+\end{equation}
+\begin{equation}
+\hat{E}=\left(E_{\rm{meas}} \cdot 0.189\,\rm{ch}\,/\,\rm{keV} + 0.448\,\rm{ch}\right)}.
+\label{eq0}
+\end{equation}
+Knowing the time of flight $\tau$ and the measured energy $E_{\rm{meas}}$ these formulae are valid for all solar wind ions. FIXME: Bild einer ET-Matrix mit Positionen.
+\subsection{Shape of the peaks}
+For a detailed analysis of the solar wind ion abundances beneath the ion positions in the ET-matrices one also has to know the two dimensional distribution functions of the peaks. Especially when the peaks overlap it is of fundamental importance to know the shapes of the peaks to avoid mismatching of the counts to other ion populations. Analyzing the relatively isolated $\rm{He}^{2+}$ (FIXME: ET-matrix nur He2+) we found that the one dimensional distribution in energy direction is well described by a Gaussian
+\begin{equation}
+G(E)=e^{-\frac{(E-\hat{E})^2}{2\,\sigma_{\rm{G}}^2}}
+\label{eq1}
+   \end{equation}
+in opposite to the distribution in ToF direction which can be approximated by an asymmetric Kappa-function $\mathcal{K}(x)$. The $\mathcal{K}$-Function is a generalized distribution function and is given by 
+   \begin{equation}
+   \mathcal{K} (x)\,=\, K_{0} \cdot \left(1+\frac{(x-x_0)^2}{\kappa\,\sigma_{\kappa}^2}\right)^{-\kappa}.
+   \label{eq2}
+   \end{equation}
+The $\kappa$-value is a parameter which can be used to weight the tail of the distribution variably.
+With $\kappa\,=\,1$ the distribution corresponds to a Lorentzian. In the case that $\kappa\,=\,\infty$ the $\mathcal{K}$-distribution fits a Gaussian with $\sigma_{\kappa}\,=\,\sigma_{\rm{Gauss}}\cdot \sqrt{2}$.
+
+In this context "asymmeric" means that we used different $\kappa$-values to lower ($\kappa_l$) and higher ($\kappa_r$) ToF-channels respectively seen from the peak position.
+
+Additionally, $\kappa_{\rm{r}}$ is not constant for a single two dimensional distribution, but increases to higher energy channels and decreases to lower energy channels. This behavious can be well approximated by the linear relation
+\begin{equation}
+\kappa_{\rm{r}}=\kappa_{\rm{r},1} \cdot (E-\hat{E}) + \kappa_{\rm{r},2}
+\label{eq3}
+\end{equation}
+The $\mathcal{K}$-Function is then given by
+\begin{equation}
+\mathcal{K}(E,T)=\begin{cases}
+  \mathcal{K}_l(T), & T\,<\,\hat{T}\\
+  \mathcal{K}_r(E,T), & T\,\geq \,\hat{T}.
+\end{cases}
+\label{eq4}
+\end{equation}
+with 
+\begin{equation}
+\mathcal{K}_l(T)= \left(1+\frac{(T-\hat{T})^2}{\kappa_{\rm{l}}\,\sigma_{\kappa,\rm{l}}^2}\right)^{-\kappa_{\rm{l}}}
+\end{equation}
+and 
+\begin{equation}
+\mathcal{K}_r(E,T)= \left(1+\frac{(T-\hat{T})^2}{\kappa_{\rm{r}}\,\sigma_{\kappa,\rm{r}}^2}\right)^{-\kappa_{\rm{r}}}
+\end{equation}
+Finally the complete distribution function for each peak is given by 
+\begin{equation}
+F(E,T)=A\cdot G(E) \cdot \mathcal{K}(E,T).
+\label{eq5}
+\end{equation}
+$A$ is the scale factor. The parameters $\sigma_{\rm{G}}$, $\sigma_{\kappa,\rm{l}}$, $\kappa_{\rm{l}}$, $\sigma_{\kappa,\rm{r}}$,  $\kappa_{\rm{r,1}}$ and $\kappa_{\rm{r,2}}$ show a slight variability depending on the considered energy-per-charge step. This characteristic is presumably attributed to variable properties of the energy-per-charge analyzer in the different steps. The values of the parameters and their dependence on the energy-per-charge step are not presented here but in \cite{Koten2009}.
+
+\subsection{Data selection}
+The terrestrial and photospheric abundance of $^{13}\rm{C}$ is about two orders of magnitude lower than the abundance of $^{12}\rm{C}$. Assuming that the ratio in the solar wind is on the same order magnitude, the analysis procedure requires a resolution on the order of about 1\%. This can only be achieved by using long-term data to guarantee high count rates to minimize the effect of statistical errors. Thus, for the determination of the carbon isotopic ratio in the solar wind we have used long-term-data accumulated from 2001 to 2007 excluding time periods which are associated with CMEs (Coronal Mass Ejections).
+%This time frame includes periods with a high solar activity as well as periods with a "Silent Sun".
+The disadvantage of using long-term data is that we cannot conclude anything about spatial and time-dependent variabilities of the ratio $^{13}\rm{C}/^{12}\rm{C}$. Nevertheless, we can present an accurate average value of the carbon isotopic ratio in the solar wind.
+\subsection{Charge state selection}
+There are mainly three abundant charge states of carbon in the solar wind, ($\rm{C}^{4+}$, $\rm{C}^{5+}$, and $\rm{C}^{6+}$). For the determination of the isotopic ratio $^{13}_{\,\,6}\rm{C}$/$^{12}_{\,\,6}\rm{C}$, in this work we have concentrated on the six times charged carbon. The reason becomes clear looking at the positions of the different charge states of the carbon isotopes in the ET-matrices. As an example, Figure FIXME shows an ET-matrix of long-term data in the $E/q$-step 30.
+$^{13}_{\,\,6}\rm{C}^{5+}$ is very difficult to detect because it is always at the tail of the most abundant heavy solar wind ion, $^{16}_{\,\,8}\rm{O}^{6+}$. This would require an analysis technique which delivers a resolution of a few per mill in opposite to the method we used which delivers a resolution of about 1 \%.
+
+A similar problem exists in trying to detect $^{13}_{\,\,6}\rm{C}^{4+}$ which is at the tail of $^{16}_{\,\,8}\rm{O}^{5+}$. Additionally, in the latter case much more ions have to be considered and need to be included in the final fit to determine the respective abundances. These ions are mainly low charged particles with nuclear charge Z=10 or higher. Although these ions are relatively far away from the $^{13}_{\,\,6}\rm{C}^{4+}$ position, the large number of ions which have to be considered and influence each other holds error sources which can falsify any conclusion about the abundance of $^{13}_{\,\,6}\rm{C}^{4+}$. In the case of $^{13}_{\,\,6}\rm{C}^{6+}$, this problem can be largely avoided using appropriate speed filters which cause a decrease of the count rates depending on the $m/q$-value.
+Thus, many ions which have to be included to detect $^{13}_{\,\,6}\rm{C}^{4+}$ can be neglected in the final fit to detect $^{13}_{\,\,6}\rm{C}^{6+}$.
+FIXME: Bild mit C5+ und C4+ in den genannten Flanken.
+\subsection{Speed- (m/q-) filter}
+
+
+\end{document}
+
+
+
+

@@ -1,0 +1,333 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[utf8]{inputenc} % für Umlaute etc
+\usepackage[ngerman]{babel} % nur damit funktionieren "` Anführungszeichen "'
+\usepackage{hyperref} % für Links
+\usepackage{enumitem} %for customising itemize, enumerate etc.
+\usepackage{tikz} % for the date lines
+\usetikzlibrary{calc} % for coordinate calculations of date lines
+
+\usepackage[textsize=footnotesize]{todonotes} % selbsterklärend
+
+\setlength{\marginparwidth}{3.5cm} % größerer Seitenrand für Todo-Notes
+
+
+\newcommand{\heute}[3][April]{\textbf{#2 -- #3. #1}}
+
+\newcommand{\DayInApril}[3][]{\vspace{2cm}%
+	\noindent \tikz \draw [draw=black, ultra thick, #1]
+	($(current page.center)-(0.5\linewidth,0)$) -- 
+	($(current page.center)+(0.5\linewidth,0)$)
+	node [midway, fill=white] {\heute{#2}{#3}};
+}
+
+
+\newcommand{\DayInMay}[3][]{\vspace{2cm}%
+	\noindent \tikz \draw [draw=black, ultra thick, #1]
+	($(current page.center)-(0.5\linewidth,0)$) -- 
+	($(current page.center)+(0.5\linewidth,0)$)
+	node [midway, fill=white] {\textbf{#2 -- #3. Mai}};
+}
+
+\newcommand{\DayInJune}[3][]{\vspace{2cm}%
+	\noindent \tikz \draw [draw=black, ultra thick, #1]
+	($(current page.center)-(0.5\linewidth,0)$) -- 
+	($(current page.center)+(0.5\linewidth,0)$)
+	node [midway, fill=white] {\textbf{#2 -- #3. Juni}};
+}
+
+\newcommand{\DayInJuly}[3][]{\vspace{2cm}%
+	\noindent \tikz \draw [draw=black, ultra thick, #1]
+	($(current page.center)-(0.5\linewidth,0)$) -- 
+	($(current page.center)+(0.5\linewidth,0)$)
+	node [midway, fill=white] {\textbf{#2 -- #3. Juli}};
+}
+
+\newcommand{\DayInAug}[3][]{\vspace{2cm}%
+	\noindent \tikz \draw [draw=black, ultra thick, #1]
+	($(current page.center)-(0.5\linewidth,0)$) -- 
+	($(current page.center)+(0.5\linewidth,0)$)
+	node [midway, fill=white] {\textbf{#2 -- #3. August}};
+}
+
+
+%opening
+\title{Master Journal}
+\date{}
+ 
+\begin{document}
+
+\maketitle
+
+
+
+\DayInApril{Di}{2}
+
+
+Nur rumgebastelt:
+\begin{itemize}
+	\item Versehentlich Swics-Ordner gelöscht, wiederhergestellt.
+	\item SVN durchsucht nach fehlendem libacepy.ancil:\\ \textit{svn+ssh://asterix/data/subversion/etph/swics/trunk/ionpositions/libacepy}\\
+	Softlink gesetzt in Hauptverzeichnis: \textit{ln -s [path]}
+	\item Numpy und Scipy aktualisiert: \textit{sudo pip install numpy upgrade}\\$\rightarrow$ Fehlermeldungen endlich weg
+	\item Journal 'Osmo' runtergeladen, wieder verworfen, LibreOffice ausprobiert, verworfen, für Latex entschieden: An \href{https://www.overleaf.com/project/5ca382231c72a24e9afbfe17}{Diary-Template} orientiert
+	\item Dazu: in \textit{newcommand} eingelesen, versucht aktuelles Datum ohne Update einzubauen, guten \href{https://tex.stackexchange.com/questions/156237/print-current-date-without-updating}{Beitrag} mit \href{https://cremeronline.com/LaTeX/minimaltikz.pdf}{tikz}-Package gefunden, 
+\end{itemize}
+
+
+
+\DayInApril{Mi}{03}
+\begin{itemize}
+	\item Versucht, \textit{itemize}-Listen anzupassen mit \href{ftp://ftp.fu-berlin.de/tex/CTAN/macros/latex/contrib/enumitem/enumitem.pdf}{\textit{enumitem}}-Package $\rightarrow$ zu zeitaufwändig, mach ich später. TODO
+	\item außerdem TODO: Todo-command von Stefan/Finn raussuchen
+	\item Jetzt weiß ich, warum ich Dist3D nicht weiter gecheckt habe: Funktioniert nicht ohne AspectAngle-Phi und -Theta und ohne Testen versteh ich nicht, was passiert. Ich muss also erstmal die Winkel einpflegen.
+	\item TODO: Git aufsetzen (!!) und nochmal PyCharm checken
+	\item Programmstruktur auf Papier gefunden. Yay, sehr hilfreich! \textit{ulysses\_traj.py} angefangen anzupassen an zusammengefasste Trajektoriendatei (traj\_data\_pool.dat).
+	\item NEXT: Methode sync\_traj() in uswipha.py anpassen, am besten alte M. einfach umbenennen (als Backup) und eine neue schreiben.
+\end{itemize}
+
+
+\DayInApril{Do}{04}
+\begin{itemize}
+	\item Wollte schnell AA-Phi und AA-Theta einpflegen, da fällt mir auf: Die müssen ja noch brechnet werden aus den HG-Koordinaten. Die Funktion dafür gibts schon: \verb|calc_asp_angles()| aus \verb|ul_calc_traj.py|. Die braucht aber Erd-Koordinaten in HG-Koordinaten und die gibts noch nicht. Ich könnte die von der NASA-Seite holen, würde die aber lieber rechnerisch rausbekommen. Altes Problem rekapituliert: Erd-K. bekannt in HC: LAT immer Null, LONG unbekannt. In HG: LAT unbekannt, LONG berechenbar aus Ulysses-Datenprodukt.
+	Ich brauche eine der unbekannten Größen! (Über Drehmatrix rückwärts rausrechnen: Geht nicht, weil ich keine kartesischen Koordinaten habe(?))
+	Nächster Versuch: Über SPE, SEP, ESP. $\rightarrow$ Hilft nicht.
+	Jetzt pflege ich Erddaten von der \href{https://omniweb.gsfc.nasa.gov/coho/helios/planet.html}{NASA} halt in \textit{ulysses\_traj} ein. Mal gucken, ob ichs rückwärts berechnen und damit verifizieren kann...
+\end{itemize}
+
+\DayInApril{Sa}{06}
+\begin{itemize}
+	\item Begonnen, die NASA-Daten einzuladen und die Winkel in RTN auszurechnen. Mit Testfunktion kommt leider nicht das Richtige raus. Fehlersuche.
+	\item Fehlersuche ergab: Ich hatte den Long-Shift übermutig aus der Koord.-Trafo für die Erde rausgenommen. Muss aber natürlich drin bleiben, weil 
+	ja auf RTN-Koord. des SC (dessen Daten mit dem Shift belastet sind) transformiert wird.
+\end{itemize}
+
+\DayInApril{So}{07}
+\begin{itemize}
+	\item Was für Daten sollen jetzt eigentlich synchronisiert werden mit sync\_traj()? RTN-Koordinates fürs SC sind ja nicht besonders aussagekräftig (weil Null in T und N). Ich nehme wahrscheinlich die verschiedenen AA's und HG-Koordinaten. Kann man ja schnell anpassen.
+	\item Next: Das machen (Anpassung in \textit{ulysses\_traj}), dann \textit{Dist3D} damit aufrufen und gucken, was als nächstes fehlt.
+\end{itemize}
+
+\DayInApril{Di}{09}
+\begin{itemize}
+	\item AspectAngles werden geschluckt von \textit{Dist3D}. Nächstes Problem: Detektor-ID! $\rightarrow$ Achja. Ist ja schon drin in den Datenprodukten, als \textit{det}.
+	Ich setze jetzt neues Dist3D speziell für Ulysses SWICS auf (Skript aus \textit{SWICS/trunk/ace\_dbd/} nach \textit{Ulysses/swics/software} kopieren).
+	\item Next: Brauche passende getvelovity-Methode, dafür muss ich rausfinden, ob Ulysses/SWICS dieselben EpQ-Spannungssteps hat wie ACE/SWICS
+\end{itemize}	
+
+\DayInApril{Mi}{10}
+\begin{itemize}
+	\item Rausgefunden, in welcher Einheit Werte in \textit{getvelocity} sind: $\frac{keV}{e} = kV$!
+	\item Entsprechendes Werteintervall nicht im SWICS-Paper gefunden. Im ACE-SWICS-Paper geguckt: Da steht zumindest der obere Wert von $100\,\mathrm{\frac{keV}{e}}$ (Main Channel). Die untere Grenze ist allerdings $0.49$ anstatt $0.61$ (in \textit{ancil.py}). Habe die Werte mal geplottet und in der logarithmierten Darstellung ist ein deutlicher Knick in der Geraden! Interessanterweise sind in dem Paper (TABLE1) auch zwei Werte für Step Size angegeben. Erstens macht eine Step Size ja nicht so viel Sinn, wenn die Steps logarithmisch verteilt sind. Also habe ich mir \textit{exp()} von den Differenzen angeguckt: Tatsächlich zwei konstante Werte! Aber statt $1.0744/1.0365$ bekomme ich $0.071$ und $0.144$. Hm...
+\end{itemize}
+
+
+\DayInApril{Mo}{15}
+\begin{itemize}
+	\item Mit Lars gesprochen. Die EpQ-Steps wurden aus den Housekeepingdaten von ACE ausgelesen. Und bei Ace sind sie in der Tat auf zwei verschiedenen Steigungen. Das ist bei Ulysses wahrscheinlich nicht so. Für U. (64 statt 60, aber kleinere Range) hat Thies schon damit gearbeitet, die muss es also irgendwo geben, Lars schaut mal nach. In den Raw- oder PHA-Daten haben wir sie nicht gefunden. Bis dahin nehme ich die Funktion von ACE als Dummywerte.
+\end{itemize}
+
+\DayInApril{Mi}{17}
+\begin{itemize}
+	\item Neuen Softlink (libacepy) gesetzt für Dist3D. Jetzt muss ich mit Dummy-GetVelocity() das Skript verstehen.
+	\item D.vspace gibt an: \textit{welche Geschwindigkeitseigenschaften(Richtung, Betrag) muss ein Teilchen gehabt haben, damit es hier gemessen wurde?}
+	\item Ich mauschel mich da durch, passe alles entsprechend an. Problem: Es gibt in \textit{d}s Datenprodukten (uswipha-Instanz) vier(!) Detektor-ID-Werte: 0,1,2,3. Ich erinnere mich vage, dass ich früher mal wusste, was das war. Muss ich rausfinden und abfangen, weil dist3D natürlich nur was mit drei Werten anfangen kann. \\
+	Achso, abfangen klingt kompliziert: Einfach Maske setzen!
+	\item Unterwegs (in der Kladde) gelvelocity()-Funktion für Ulysses gefunden! Yay! (\textit{/home/asterix/fischer/PUI/Ulysses/swics/software/libulpy/uswiuitils.py}) (Lars: Eigentlich noch ein Step mehr: 85 oder so. Aber der ist kaputt)
+	\item Zum Detektor-ID-Problem habe ich nur was Knappes auf S.45/46 gefunden. Leider nicht das Endergebnis und Lars' Aussage zur damaligen Analyse. Ich suche jetzt das Skript, das die jeweiligen Plots erstellt, an denen wir damals was gesehen haben: 
+	\item Angefangen, \textit{pui\_ulysses.py} durchzugehen. Polarplot() funktioniert nicht. Woher kommen die drei Masken? Muss ich nach Ostern weiter durchgucken...
+\end{itemize}
+
+\DayInApril{Mi}{24}
+\begin{itemize}
+	\item Aus Osterurlaub wieder da. Jetzt muss ich wirklich loslegen -- noch 3 Wochen bis zum Vortrag. 
+	\item Einiges mal überflogen. Grobe Struktur: Alten Vortrag zusammenfassen: PUI $\rightarrow$ was erwarten wir für eine VDF? Echte VDF sieht aber anders aus. Erklärungen? Messfehler $\rightarrow$  Übergang SC-frame auf SW-frame bzw. (?) Übergang 1D auf 3D (diesen Zusammenhang muss ich mir klar machen!!). Dann fange ich an, Ulysses/SWICS zu erklären und was bisher mit der Trajektorie etc. gemacht wurde.
+\end{itemize}
+
+\DayInMay{Do}{02}
+\begin{itemize}
+	\item Rausgefunden, warum in polarplot() die Masken schon gesetzt waren: In diy$\rightarrow$ gibts das Skript load\_pui\_ulysses.py, das genau diese Masken setzt.
+	\item Detektorproblem: Dort werden Detektoren 0,1,2 geladen, d.h. Nr. 3 ist evtl. der, der über ist?
+	\item PATHPROB: Zum Ausführen von load\_pui\_ulysses.py muss ich uswipha.py laden, das füge ich dafür zum python-sys-Path hinzu. Dasselbe mit pui\_ulysses.py
+	\item Habe jetzt endlich alle alten Sachen (AnimatePolarplot) zum Laufen bekommen. Evtl. könnte man die Animation auf Lars' Kollimator umbauen. Aber nur ganz evtl.
+\end{itemize}
+
+\DayInJune{Di}{04}
+Dokument aufgesetzt, Bibdatei angelegt, Zusammenschrieb auch damit verbunden. Für Biblatex entschieden.
+\begin{verbatim}
+\usepackage[backend=biber,style=authoryear,maxbibnames=2,natbib=true]{biblatex}}
+\end{verbatim} 
+Dann mit citep (alles in Parenthesis) oder citet (im Fließtext) zitieren.\\ \\
+Weiter: Infos von losen Zetteln in Zusammenschrieb schreiben.
+
+
+\DayInJune{Mi}{12}
+Python3 zusätzlich zu Python2 installiert (weil Max' Programm in Python3 geschrieben ist):
+\begin{itemize}
+	\item Python 2.7 und Python3 irgendwie vorhanden.
+	\item \textit{sudo apt-get install python3-pip}
+	\item Jetzt kann ich mit \textit{pip3} Python3 erreichen und mit \textit{pip2} Python2 (Nur \textit{pip} bezieht sich auch auf 3)
+	\item Problem: \textit{ipython} öffnet immer ipython für Python2. \textit{pip3 install ipython
+	} hat nicht geholfen.
+	\item Sebastian hat geholfen: Ipython3 ganz normal installieren: \textit{sudo apt install ipython3
+	}. Jetzt kann ich entweder \textit{ipython} oder \textit{ipython3} aufrufen! Jetzt noch alle Pakete mit \textit{pip3} installieren
+\end{itemize}
+Anderes:
+\begin{itemize}
+	\item pip immer nur lokal installieren, also ohne \textit{sudo}!
+	\item TK: GUI-Programm in C++ geschrieben, für Python über Interface tkinter. Nicht über pip installierbar, denn pip soll nur pure Pyhton Pakete installieren. Also installieren mit \textit{sudo apt install python3-tk}
+\end{itemize}
+
+
+\DayInJuly{Fr}{12}
+Bei Lars gemeldet. Er hat den Kollimator und Dist3D weiter eintwickelt.
+\begin{itemize}
+	\item Zeigt Ergebnisplot (das ist auch mein Ziel mit Ulysses), bei dem entlang der x-Richtung in die Verteilungskugel geguckt wird (schnittweise). Man erkennt innen was in der Mitte (Innere Quelle?) und außen die Schale!
+	\item phasenraumgewichtet (wie oft habe ich überhaupt in eine Richtung geguckt, d.h., wie groß ist die Wahrscheinlichkeit, dass ich ein Teilchen hätte messen können?) und normiert (auf max)
+	\item Das sind ACE-Daten, Langzeit, alle vsw. Ziel ist, wenn alles läuft, nach unterschiedlichen Magnetfeldkonfigurationen und vsw zu filtern und evtl. Unterschiede zu finden.
+	\item Bsp: Bfeld einschränken auf theta: kP und phi: $-90\,^\circ$ bis $-70^\circ$ und $90\,^\circ$ bis $110^\circ$. Zeichnung s. Kladde S. 83. Erwartung wird irgendwie nicht richtig erfüllt. Filter auf kleine vsw: schon eher.
+	\item Evtl. gibt es noch ein Problem mit dem Aspect Angle, denn die Population ist manchmal wohl auf der falschen Seite (nämlich links)
+	\item das sind 12-min-Daten. Eigentlich müsste man Minutendaten nehmen, denn: Gyroperiode der Teilchen ist etwa eine Minute. Alle Änderungen des B-Feldes, die auf kürzeren Zeitskalen stattfinden: PA-Bestimmung nicht sinnvoll, weil keine volle Gyrobahn. Deutlich längere Zeitskalen: auch nicht sinnvoll, weil Verteilung mitdreht (?)
+\end{itemize}
+Zu den Daten:
+\begin{itemize}
+\item Etwas veränderte Ordnerstruktur. Ich muss neu auschecken: \\ \textit{svn+ssh://asterix/data/subversion/etph/ACE} (Instrumentelles, die Dist3D die hier liegt ist eine alte Version) bzw. \textit{.../etph/PUIs} (datenspezifisches, neuere Dist3D, die zu PUIs passt)
+\item ACE-Datensatz zu Probieren auf \textit{data/etph/berger/mq...} \\ Dort liegen HE2+-gefilterte Daten aus 12 Jahren. Ich muss zusätzlich wHE einschränken auf 0.9 bis 10 (das ist w ganz einfach in 1D, Lars hat auch gezeigt, wie das in 3D abgebildet wird, Todo: überlegen!) und eine Maske von Hand legen (s. Zeichnung Kladde S. 83)
+\item Datensatz umfasst ca 800000 PHAs+. Nach Maskierung sollten etwa 400000 übrig bleiben.
+\item Pi mal Daumen ist das eine Messung pro 12-Minuten-Zyklus! (120 Cycles pro Tag mal 365 Tage mal 10 Jahre = 400000 Cycles)
+\item $\rightarrow$ Wir können nur nach Signaturen suchen, die sich langzeitmäßig oder regelmäßig ändern. Aussagen von Zyklus zu Zyklus sind überhaupt nicht sinnvoll!
+\item Dist3D nimmt neue Parameter:
+\begin{itemize}
+	\item nrs\_perp ist Anzahl der Punkte an der kurzen Seite (da reicht eigentlich einer, denn die Breite ist klein gegen den Sektorsweep! Wäre nur praktisch, wenn man eine hübsche Abbildung vom Kollimator machen will)
+	\item nrs\_perp: 3
+	\item nrs\_sec: wie viele Steps in einem 45-Grad-Step
+	\item nrs\_epq: wie viele Einzelsteps innerhalb der Breite eines EpQ-Steps (nominelles Geschwindigkeitintervall)
+\end{itemize}
+	\item Lars' Rechner kam mit nrs\_epq = 3 schon an seine Grenzen. Das liegt an calc\_w, weil da noch eine zusätzliche Dimension (Sonnenwindgeschwindigkeiten) dazu kommt. Das will er jetzt umbauen.
+\end{itemize}
+Weiter: Neu auschecken, Kopien anlegen und alles zum Laufen bekommen
+
+
+
+\DayInJuly{Do}{18}
+\begin{itemize}
+	\item SWICS\_collimator durchgeschaut, alles verstanden
+	\item Jetzt Dist3D durchgucken. Zum Laden von Lars' Probedatensatz: .../PUIs/ace\_swics\_3d.py
+\end{itemize}
+
+\DayInJuly{Do}{18}
+\begin{itemize}
+		\item Nachtrag zur Pip2-Installation (pycwt): \\ \textit{pip install --user pycwt}
+\end{itemize}
+
+\DayInJuly{Do}{25}
+\begin{itemize}
+	\item Nils: Schnell mal was plotten:\\
+	\verb|figure(),plot(d.data["swt"])| \\
+	Histogrammieren: \\
+	\verb|figure(),hist(d.data["swt"],arange(0,300,1))|
+	\item Bin bei Funktion \verb|def _calc_phspeff_wgt(self):|.\\ \todo{todo} Phasenraumvolumen nicht verstanden. Warum komme ich mit Integration nicht auf dasselbe Ergebnis, warum ist es nicht egal, welchen Winkel ich als welche Integrationsvariable nehme...?
+	\item \todo{Geometriefaktor \ldots} Geometriefaktor auch nicht verstanden. Sullivan-Paper: woher kommt der Kosinus? 
+\end{itemize}
+
+\DayInJuly{Fr}{26}
+\begin{itemize}
+	\item \verb|_calc_sw_bulk_propoperties()| nicht gecheckt, warum passiert das da mit der Alfven-Geschwindigkeit und warum findet man das nirgendwo? \todo{Alfvengeschwindigkeit} Evtl. bei Marsch nachlesen...? \\
+	Allerdings ist die Funktion auch nicht so wichtig atm, glaube ich, wird nicht benutzt?
+\end{itemize}
+\textbf{Lars:}
+\begin{itemize}
+	\item Datenprodukte ACE: \\ 
+	\textit{dsw} -- Sonnenwinddichte \\
+	\textit{tsw} -- Temperatur Sonnenwind \\
+	\textit{swt} -- sector weight, ähnlich wie Base Weight Rate. Erklärung im Zusammenschrieb 
+	\item Funktionenwald in \verb|dist3D_pui|: Die aktuelle, wichtige ist \verb|calc_w3dspecs|! Die funktioniert auch!
+	\begin{itemize}
+		\item Erklärung in 3 Schritten:
+		\item Unten ganz normal histogrammieren mit diversen Weights
+		\item twts: ? (wgts*swgt)
+		\item Loops darüber: Wie oft habe ich in eine Richtung geguckt. Um den Dichtegang rauszunehmen, der daraus resultiert, dass man häufig entlang der Radialen guckt und zu zeigen, dass darunter ein ähnlicher Dichtegang liegt, der nichts damit zu tun hat
+		\item zurückgegeben werden dann \verb|norm_arr| (proportional zur absoluten Messzeit, "`wie oft hat das Instrument in eine Richtung geguckt"'; Erwartung: häufig entlang der Spinachse, als radial) und Histogramm ungewichtet.
+		\item Plot erzeugen: \\
+		\verb|norm_arr[norm_arr==0]=1.| Null-Werte auf 1 setzen (warum?) \\
+		\verb|H2 = H/norm_arr| Normierung durchführen \\
+		\verb|wbins = arange(-2.-2.01.0.2)| \\
+		\verb|pcolormesh(wbins,wbins,H2[10,:,:].T)| 10. Slice. Bei 11 geht man weiter nach vorne usw... (\todo{Slices} rausfinden, in welche Richtung)
+	\end{itemize}
+	\item Die anderen eher sekundär (funktionieren auch nicht, weil die noch auf einem anderen Kollimator arbeiten?): Da hat L. nur mal schnell was ausprobiert oder der Versuch bzw. das auf 1D runterzubrechen (\verb|calc_wpecs2()|) oder für jedes w die PA-Verteilung zu zeigen (\verb|calc_muspec()|)
+	\item Plan: Quick and Dirty für Ulysses umschreiben, solange Lars im Urlaub ist. Lars denkt, dass fast nur der Sec0-Versatz zum Sunpulse-Analyser geändert werden muss. Hiefür soll ich diesen Versatz als variabel lassen, sodass man den übergeben kann bei Funktionsaufruf und ein bisschen ausprobieren kann. Man erwartet den Protonen-Bulk (Bereich ziemlich starke Intensität) relativ radial. Auf dem Wege kann man schon einiges ausschließen. Das kann ich auch schon ohne die Gewichtung sehen.
+\end{itemize}
+
+\DayInJuly{Mi}{31}
+\begin{itemize}
+	\item Habe jetzt Dist3D für ACE durchgeguckt und das meiste gecheckt.
+	\item Umbau für Ulysses. \todo{Ordnerstruktur} Neue Ordnerstruktur. Bisher liegt alles in \verb|old_stuff|.
+	\item Muss ich an \verb|swics_collimator| was ändern?
+\end{itemize}
+
+\DayInAug{Do}{1}
+\verb|swics_collimator| durchgeguckt. Liegt inzwischen als \verb|swics_collimator_ulysses.py| in \verb|./PUI/Ulysses|.
+\begin{itemize}
+	\item Rausgefunden, dass das Umbrechen der Zeilen \textit{Wrapping} heißt und es geschafft, das nachträglich in Pycharm für die Kommentare zu machen: File -- Settings -- Code Style -- \textit{Hard wrap} einstellen und \textit{Wrap on typing} ankreuzen. Außerdem unter Code Style -- Python -- Wrapping and Braces --\textit{Ensure right margin...} ankreuzen. Außerdem hat Edit -- Fill Paragraph geholfen. \\
+	Danach reformatieren!
+	\item In der Kollimatorklasse habe ich eigentlich nur die Dokumentation angepasst und ein paar Checks gemacht. Das KS ist bei ACE ja anders (GSE) als bei Ulysses (RTN), aber das ist ja schon bei der Berechnung des AA mit eingeflossen.
+	\item
+	\verb|offset_sp| ist jetzt der variable Versatz zwischen Sunpulse-Sensor-Guckrichtung und SWICS Z-Achse. (Bei ACE sind das 135 Grad.)
+\end{itemize}
+Jetzt geht es an \verb|Dist3D|.
+\begin{itemize}
+	\item Datenloader uswipha zum Laufen bringen: Daten wurden von \verb|/data/etph/...| nach \verb|/data/projects/...| verschoben. Die Lösung kann so einfach sein.
+	\item \verb|swics_collimator_ulysses| muss schon ein FieldOfView zum Kollimator zufügen!
+	\item Changes:
+	\begin{itemize}
+		\item \textit{did} $\rightarrow$ \textit{det}. \todo{Det-ID} Welchen Detektor muss ich jetzt nochmal rausschmeißen? Beobachtungen auf 3 Jahren Daten (1993,94,95):
+		\begin{itemize}
+			\item Det3 wird kaum angesprochen! (von 43 Mio PHAs nur 1225 auf Det3)
+			\item Wenn ich nur Ech unter Threshold nehme (26 Mio; = Doubles), landen fast alle in Det0. (Det1: 26, Det2: 88, Det3: 164)
+			\item $\rightarrow$ Ich würde denken, dass Det3 einfach Müll ist.
+			\item Das passt auch zum Kommentar vom 2.Mai. D.h., ich muss eine Maske setzen, bevor ich in Dist2D reingehe. \todo{Doubles} Soll ich eigentlich auch Doubles benutzen, macht das Sinn?
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+Morgen: Schauen, ob ich \verb|pui_ulysses| benutzen kann. Sonst anderes Main-Programm bauen (Daten laden, Masken setzen, ...).
+
+
+\DayInAug{Fr}{2}
+\begin{itemize}
+	\item Pycharm-Problem vorab: Ich kann den Debugger irgendwie nicht bei meiner momentanen Datenstruktur verwende. Er findet die ganzen Pakete nicht...
+	\item Weiter Veränderungen in Dist3D:
+	\begin{itemize}
+		\item Das Skript heißt \verb|load_pui_ulysses|. Benutze ich jetzt.
+		\item Funktion \verb|getvelocity_allsteps| zum Umrechnen von EpQ-Steps in echte Energien pro Ladung bzw. in Geschwindigkeiten: s. Kommentar vom 15.04. Ist bei Ulysses SW eine andere als bei ACE. \todo{getvelocity} Die richtigen Werte müssen wir noch raussuchen. Ich benutze jetzt erstmal die ACE-Funktion. Später muss dann auch die Anzahl der Steps angepasst werden!
+		\item \todo{Delta EpQ} Ist Delta EpQ dasselbe, 3\%?
+		\item \todo{Geomfak}Geometriefaktor ist wahrscheinlich derselbe, oder?
+		\item \todo{Eigengeschwindigkeit} In \verb|_calc_vspace_| wird bei ACE die Eigengeschwindigkeit nur in der y-Komponente abgezogen. Das muss bei Ulysses aber ja nicht so sein (?).
+		\item Ich bin gerade verwirrt von den Koordinatensystemen. GSE hat x-Achse ja vom SC zur Sonne positiv und später wird das umgedreht, damit der SW grob aus positiver Richtung kommt. RTN eigentlich andersrum. Soll ich das so beibehalten? Dann muss ich nochmal zurück zum Kollimator. Denn das FOV ist dann ja in negativer R-Richtung. \\ Ich hab jetzt erst einmal das RTN umgedreht, jetzt ist alles so wie beim GSE. Es ist ein bisschen inkonsistent, dass ich den AA ab der negativen R-Achse berechne. Jetzt tue ich halt so, als wär das die positive Achse, dann muss ich nichts ändern bei FoV. \todo{Koordinatensystem} Aber vielleicht wird das problematisch, wenn ich die Eigengeschwindigkeit einrechne, die ja evtl. in normalen RTN-Komponenten angegeben wird?
+		\item In \verb|_add_3Dv| musste ich nochmal Datenproduktnamen ändern, außerdem \textit{det DCR to det 0} rausnehmen. Bei ACE gibts es offensichtlich $det = 7 $- Zuweisungen. \\
+		Außerdem geht der EpQ-Step über 60 hinaus. Das crasht, weil ja die getvelocity von ACE mit 60 Steps benutzt wird. Ich wollte Daten erstmal einfach vormaskieren, bekomme das aber nicht hin. Bei der Übergabe von \verb|d| wird die Mastermaske ignoriert! Ich suche quasi die subset-Funktion aus dbData -- nur "`live"', also ohne Wegschreiben.
+	\end{itemize}
+\end{itemize}
+
+\DayInAug{Di}{6}
+\begin{itemize}
+	\item Bin jetzt den Umweg gegangen über \verb|save_subset| und \verb|load_subset|. Damit schreibe ich ein Subset von den gefilterten Daten (Det von 0 bis 2 und epq von 0 bis 59) in eine Binärdatei und lese sie wieder ein...
+	\todo{Subset} Da muss es aber doch noch einen anderen Weg geben? \\
+	Nachtrag: Ich habe EpQ schließlich von 1 bis 58 gefiltert, weil die ACE-Daten auch so vorliegen. 0-59 hat für \verb|get_velocities| funktioniert, aber nicht fürs Synchronisieren der Efficiencies.
+	\item \todo{Efficiencies} Efficiencies soll ich ja erstmal von ACE nehmen. Da die nur für die Triples gelten (?) filtere ich die Doubles jetzt auch mal raus: \verb|d.set_mask('Master','ech',12,120,reset=True)|
+	\item Für Ulysses gibt es das Datenprodukt \textit{swt}, das Sectorweight, nicht. \todo{Sectorweight} Lars fragen bzw. selbst nachgucken, evtl. wird das nur über uswipha nicht eingeladen. Bis dahin setzte ich alle Gewichte auf 1 (in \verb|calc_w3dspecs)|)
+	\item Es läuft durch!! Ich kann das Spektrum erzeugen!! Jetzt mal mehr Daten einladen...
+	\item Ständig Memory Error... \\ 200 Tage sind das Maximum.
+	\item Überlegung, warum jedes PHA-wort überhaupt 9 FoV-Punkte hat: Weil man nicht weiß, wo der Sektor getroffen wurde. Punkt 0 hat z.B. eine ganz andere w-Signatur als Punkt 5. Alle Möglichkeiten müssen betrachtet werden.\\
+	Aber: Macht eine w-Auflösung von 0.2 überhaupt Sinn?\\
+	Die größte Differenz im Betrag von w haben immer der erste und der letzte Eintrag. \\
+	Differenzen werden kleiner für größeren EpQ-Steps. Stimmt nicht ganz: Peaken bei einem mittleren EpQ-Step (abh. von vsw)\\
+	WARUM verändern sich die Differenzen für verschiedene Sektoren bei keinem AA?? $\rightarrow$ Weil irgendwie der AA doch nicht Null ist. Was geht da schief?\\
+	ToDo für morgen: \begin{itemize}
+		\item Methode basteln, um schnell irgendwelche Sachen zu plotten, z.B. wSpace. Das ist ja nicht mehr wirklich eine Sache in SwicsCollimator, weil ich mir ja mehrere Kollimatoren angucke.
+		\item Methode schreiben, mit der ich durch die pcolormesh-Dinger loopen kann, um mir ein besseres Bild zu machen.
+		\item Variablen SP-Offset durchführen und das verstehen.
+		\item Oben weiter machen: Wollte eig. nur sicher gehen, dass sich die Diff mit den Sektoren nicht ändern und mit den Detektoren schon! (Tut es das dann?)
+	\end{itemize}
+\end{itemize}
+
+\end{document}

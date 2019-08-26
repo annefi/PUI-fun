@@ -1,0 +1,607 @@
+gcc -I/home/ivar/berger/ace/nr_211/recipes_cpp/utils -I. -I/home/ivar/berger/ace/tnt_122 -O3 -o xairy.out xairy.o airy.o bessik.o bessjy.o beschb.o chebev.o -lm
+xairy.o(.text+0x1b): In function `__static_initialization_and_destruction_0(int, int)':
+: undefined reference to `std::ios_base::Init::Init[in-charge]()'
+xairy.o(.text+0x6a): In function `main':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_empty_rep_storage'
+xairy.o(.text+0x83): In function `main':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::_S_empty_rep_storage'
+xairy.o(.text+0x8b): In function `main':
+: undefined reference to `std::ios_base::ios_base[not-in-charge]()'
+xairy.o(.text+0x92): In function `main':
+: undefined reference to `VTT for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0x99): In function `main':
+: undefined reference to `VTT for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0xa5): In function `main':
+: undefined reference to `vtable for std::basic_ios<char, std::char_traits<char> >'
+xairy.o(.text+0xc5): In function `main':
+: undefined reference to `std::basic_ios<char, std::char_traits<char> >::init(std::basic_streambuf<char, std::char_traits<char> >*)'
+xairy.o(.text+0xd9): In function `main':
+: undefined reference to `vtable for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0xe4): In function `main':
+: undefined reference to `vtable for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0xec): In function `main':
+: undefined reference to `std::basic_filebuf<char, std::char_traits<char> >::basic_filebuf[in-charge]()'
+xairy.o(.text+0xfb): In function `main':
+: undefined reference to `std::basic_ios<char, std::char_traits<char> >::init(std::basic_streambuf<char, std::char_traits<char> >*)'
+xairy.o(.text+0x10d): In function `main':
+: undefined reference to `std::basic_filebuf<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode)'
+xairy.o(.text+0x13a): In function `main':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string[in-charge](char const*, std::allocator<char> const&)'
+xairy.o(.text+0x144): In function `main':
+: undefined reference to `std::cerr'
+xairy.o(.text+0x149): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x151): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x156): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x15e): In function `main':
+: undefined reference to `std::cerr'
+xairy.o(.text+0x163): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+xairy.o(.text+0x16b): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x170): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x17a): In function `main':
+: undefined reference to `std::cerr'
+xairy.o(.text+0x17f): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x187): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x18c): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x1b4): In function `main':
+: undefined reference to `std::basic_ios<char, std::char_traits<char> >::widen(char) const'
+xairy.o(.text+0x1c2): In function `main':
+: undefined reference to `std::basic_istream<char, std::char_traits<char> >& std::getline<char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char)'
+xairy.o(.text+0x1de): In function `main':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::find(char const*, unsigned long, unsigned long) const'
+xairy.o(.text+0x1fd): In function `main':
+: undefined reference to `std::basic_ios<char, std::char_traits<char> >::widen(char) const'
+xairy.o(.text+0x20b): In function `main':
+: undefined reference to `std::basic_istream<char, std::char_traits<char> >& std::getline<char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char)'
+xairy.o(.text+0x22f): In function `main':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string[in-charge](char const*, std::allocator<char> const&)'
+xairy.o(.text+0x239): In function `main':
+: undefined reference to `std::cerr'
+xairy.o(.text+0x23e): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x246): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x24b): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x253): In function `main':
+: undefined reference to `std::cerr'
+xairy.o(.text+0x258): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+xairy.o(.text+0x260): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x265): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x26f): In function `main':
+: undefined reference to `std::cerr'
+xairy.o(.text+0x274): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x27c): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x281): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x293): In function `main':
+: undefined reference to `std::basic_istream<char, std::char_traits<char> >::operator>>(int&)'
+xairy.o(.text+0x2aa): In function `main':
+: undefined reference to `std::basic_ios<char, std::char_traits<char> >::widen(char) const'
+xairy.o(.text+0x2b8): In function `main':
+: undefined reference to `std::basic_istream<char, std::char_traits<char> >& std::getline<char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char)'
+xairy.o(.text+0x2bd): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x2c2): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x2c7): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x2d4): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x2dc): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x2e1): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x2e8): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x2ed): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x301): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x30a): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x312): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x317): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x31e): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x332): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x33b): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x340): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x361): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x368): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x372): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x381): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x38a): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x3ac): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x3b4): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x3b9): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x3c0): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x3c5): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x3d9): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x3e2): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x403): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x40a): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x41e): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x427): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x42c): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x44d): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+xairy.o(.text+0x455): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x45a): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x464): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x469): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::ios_base& (*)(std::ios_base&))'
+xairy.o(.text+0x496): In function `main':
+: undefined reference to `std::basic_istream<char, std::char_traits<char> >::operator>>(double&)'
+xairy.o(.text+0x4a3): In function `main':
+: undefined reference to `std::basic_istream<char, std::char_traits<char> >::operator>>(double&)'
+xairy.o(.text+0x4b0): In function `main':
+: undefined reference to `std::basic_istream<char, std::char_traits<char> >::operator>>(double&)'
+xairy.o(.text+0x4bd): In function `main':
+: undefined reference to `std::basic_istream<char, std::char_traits<char> >::operator>>(double&)'
+xairy.o(.text+0x4ca): In function `main':
+: undefined reference to `std::basic_istream<char, std::char_traits<char> >::operator>>(double&)'
+xairy.o(.text+0x4e0): In function `main':
+: undefined reference to `std::basic_ios<char, std::char_traits<char> >::widen(char) const'
+xairy.o(.text+0x4ee): In function `main':
+: undefined reference to `std::basic_istream<char, std::char_traits<char> >& std::getline<char, std::char_traits<char>, std::allocator<char> >(std::basic_istream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> >&, char)'
+xairy.o(.text+0x512): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x51d): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x52c): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x535): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(double)'
+xairy.o(.text+0x53d): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x542): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x549): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x558): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x563): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x56c): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(double)'
+xairy.o(.text+0x58e): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(double)'
+xairy.o(.text+0x595): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x5a0): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x5b0): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x5b9): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(double)'
+xairy.o(.text+0x5db): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(double)'
+xairy.o(.text+0x5e3): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x5e8): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x5ef): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x5f9): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x608): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x611): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(double)'
+xairy.o(.text+0x633): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(double)'
+xairy.o(.text+0x63a): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x64f): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x658): In function `main':
+: undefined reference to `std::cout'
+xairy.o(.text+0x65d): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(double)'
+xairy.o(.text+0x67f): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(double)'
+xairy.o(.text+0x687): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+xairy.o(.text+0x68c): In function `main':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+xairy.o(.text+0x6a4): In function `main':
+: undefined reference to `std::basic_filebuf<char, std::char_traits<char> >::close()'
+xairy.o(.text+0x6c0): In function `main':
+: undefined reference to `std::basic_ios<char, std::char_traits<char> >::clear(std::_Ios_Iostate)'
+xairy.o(.text+0x6cc): In function `main':
+: undefined reference to `vtable for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0x6d8): In function `main':
+: undefined reference to `vtable for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0x6e4): In function `main':
+: undefined reference to `vtable for std::basic_filebuf<char, std::char_traits<char> >'
+xairy.o(.text+0x6e9): In function `main':
+: undefined reference to `std::basic_filebuf<char, std::char_traits<char> >::close()'
+xairy.o(.text+0x6fc): In function `main':
+: undefined reference to `std::__basic_file<char>::~__basic_file [in-charge]()'
+xairy.o(.text+0x707): In function `main':
+: undefined reference to `vtable for std::basic_streambuf<char, std::char_traits<char> >'
+xairy.o(.text+0x727): In function `main':
+: undefined reference to `std::locale::~locale [in-charge]()'
+xairy.o(.text+0x72e): In function `main':
+: undefined reference to `VTT for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0x744): In function `main':
+: undefined reference to `VTT for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0x753): In function `main':
+: undefined reference to `vtable for std::basic_ios<char, std::char_traits<char> >'
+xairy.o(.text+0x760): In function `main':
+: undefined reference to `std::ios_base::~ios_base [not-in-charge]()'
+xairy.o(.text+0x7b1): In function `main':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Rep::_M_destroy(std::allocator<char> const&)'
+xairy.o(.text+0x7c9): In function `main':
+: undefined reference to `std::basic_ios<char, std::char_traits<char> >::clear(std::_Ios_Iostate)'
+xairy.o(.text+0x7df): In function `main':
+: undefined reference to `vtable for std::basic_ios<char, std::char_traits<char> >'
+xairy.o(.text+0x7e4): In function `main':
+: undefined reference to `std::ios_base::~ios_base [not-in-charge]()'
+xairy.o(.text+0x813): In function `main':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Rep::_M_destroy(std::allocator<char> const&)'
+xairy.o(.text+0x820): In function `main':
+: undefined reference to `vtable for std::basic_filebuf<char, std::char_traits<char> >'
+xairy.o(.text+0x828): In function `main':
+: undefined reference to `std::basic_filebuf<char, std::char_traits<char> >::close()'
+xairy.o(.text+0x83b): In function `main':
+: undefined reference to `std::__basic_file<char>::~__basic_file [in-charge]()'
+xairy.o(.text+0x843): In function `main':
+: undefined reference to `std::basic_streambuf<char, std::char_traits<char> >::~basic_streambuf [not-in-charge]()'
+xairy.o(.text+0x84a): In function `main':
+: undefined reference to `VTT for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0x859): In function `main':
+: undefined reference to `VTT for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0x8aa): In function `main':
+: undefined reference to `vtable for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0x8b6): In function `main':
+: undefined reference to `vtable for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0x8c1): In function `main':
+: undefined reference to `vtable for std::basic_filebuf<char, std::char_traits<char> >'
+xairy.o(.text+0x8c6): In function `main':
+: undefined reference to `std::basic_filebuf<char, std::char_traits<char> >::close()'
+xairy.o(.text+0x8d9): In function `main':
+: undefined reference to `std::__basic_file<char>::~__basic_file [in-charge]()'
+xairy.o(.text+0x8e5): In function `main':
+: undefined reference to `vtable for std::basic_streambuf<char, std::char_traits<char> >'
+xairy.o(.text+0x905): In function `main':
+: undefined reference to `std::locale::~locale [in-charge]()'
+xairy.o(.text+0x90c): In function `main':
+: undefined reference to `VTT for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0x91b): In function `main':
+: undefined reference to `VTT for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0x931): In function `main':
+: undefined reference to `vtable for std::basic_ios<char, std::char_traits<char> >'
+xairy.o(.text+0x93e): In function `main':
+: undefined reference to `std::ios_base::~ios_base [not-in-charge]()'
+xairy.o(.text+0x948): In function `main':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Rep::_M_destroy(std::allocator<char> const&)'
+xairy.o(.text+0x992): In function `main':
+: undefined reference to `vtable for std::basic_streambuf<char, std::char_traits<char> >'
+xairy.o(.text+0x9b5): In function `main':
+: undefined reference to `std::locale::~locale [in-charge]()'
+xairy.o(.text+0x9bc): In function `main':
+: undefined reference to `VTT for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0x9d2): In function `main':
+: undefined reference to `VTT for std::basic_ifstream<char, std::char_traits<char> >'
+xairy.o(.text+0x9e1): In function `main':
+: undefined reference to `vtable for std::basic_ios<char, std::char_traits<char> >'
+xairy.o(.text+0x9f8): In function `main':
+: undefined reference to `vtable for std::basic_streambuf<char, std::char_traits<char> >'
+xairy.o(.text+0xa36): In function `__tcf_0':
+: undefined reference to `std::ios_base::Init::~Init [in-charge]()'
+xairy.o(.eh_frame+0x12): undefined reference to `__gxx_personality_v0'
+airy.o(.text+0x1b): In function `__static_initialization_and_destruction_0(int, int)':
+: undefined reference to `std::ios_base::Init::Init[in-charge]()'
+airy.o(.text+0x396): In function `__tcf_0':
+: undefined reference to `std::ios_base::Init::~Init [in-charge]()'
+airy.o(.eh_frame+0x11): undefined reference to `__gxx_personality_v0'
+bessik.o(.text+0x1b): In function `__static_initialization_and_destruction_0(int, int)':
+: undefined reference to `std::ios_base::Init::Init[in-charge]()'
+bessik.o(.text+0x92): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string[in-charge](char const*, std::allocator<char> const&)'
+bessik.o(.text+0x9c): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessik.o(.text+0xa1): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessik.o(.text+0xa9): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessik.o(.text+0xae): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessik.o(.text+0xb6): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessik.o(.text+0xbb): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+bessik.o(.text+0xc3): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessik.o(.text+0xc8): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessik.o(.text+0xd2): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessik.o(.text+0xd7): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessik.o(.text+0xdf): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessik.o(.text+0xe4): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessik.o(.text+0x1ff): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string[in-charge](char const*, std::allocator<char> const&)'
+bessik.o(.text+0x209): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessik.o(.text+0x20e): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessik.o(.text+0x216): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessik.o(.text+0x21b): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessik.o(.text+0x223): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessik.o(.text+0x228): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+bessik.o(.text+0x230): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessik.o(.text+0x235): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessik.o(.text+0x23f): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessik.o(.text+0x244): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessik.o(.text+0x24c): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessik.o(.text+0x251): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessik.o(.text+0x57d): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string[in-charge](char const*, std::allocator<char> const&)'
+bessik.o(.text+0x587): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessik.o(.text+0x58c): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessik.o(.text+0x594): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessik.o(.text+0x599): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessik.o(.text+0x5a1): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessik.o(.text+0x5a6): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+bessik.o(.text+0x5ae): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessik.o(.text+0x5b3): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessik.o(.text+0x5bd): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessik.o(.text+0x5c2): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessik.o(.text+0x5ca): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessik.o(.text+0x5cf): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessik.o(.text+0x89b): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string[in-charge](char const*, std::allocator<char> const&)'
+bessik.o(.text+0x8a5): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessik.o(.text+0x8aa): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessik.o(.text+0x8b2): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessik.o(.text+0x8b7): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessik.o(.text+0x8bf): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessik.o(.text+0x8c4): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+bessik.o(.text+0x8cc): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessik.o(.text+0x8d1): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessik.o(.text+0x8db): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessik.o(.text+0x8e0): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessik.o(.text+0x8e8): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessik.o(.text+0x8ed): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessik.o(.text+0x9f9): In function `NR::bessik(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Rep::_M_destroy(std::allocator<char> const&)'
+bessik.o(.text+0xa26): In function `__tcf_0':
+: undefined reference to `std::ios_base::Init::~Init [in-charge]()'
+bessik.o(.eh_frame+0x12): undefined reference to `__gxx_personality_v0'
+bessjy.o(.text+0x1b): In function `__static_initialization_and_destruction_0(int, int)':
+: undefined reference to `std::ios_base::Init::Init[in-charge]()'
+bessjy.o(.text+0xa9): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string[in-charge](char const*, std::allocator<char> const&)'
+bessjy.o(.text+0xb3): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessjy.o(.text+0xb8): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessjy.o(.text+0xc0): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessjy.o(.text+0xc5): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessjy.o(.text+0xcd): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessjy.o(.text+0xd2): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+bessjy.o(.text+0xda): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessjy.o(.text+0xdf): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessjy.o(.text+0xe9): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessjy.o(.text+0xee): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessjy.o(.text+0xf6): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessjy.o(.text+0xfb): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessjy.o(.text+0x2d0): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string[in-charge](char const*, std::allocator<char> const&)'
+bessjy.o(.text+0x2da): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessjy.o(.text+0x2df): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessjy.o(.text+0x2e7): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessjy.o(.text+0x2ec): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessjy.o(.text+0x2f4): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessjy.o(.text+0x2f9): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+bessjy.o(.text+0x301): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessjy.o(.text+0x306): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessjy.o(.text+0x310): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessjy.o(.text+0x315): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessjy.o(.text+0x31d): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessjy.o(.text+0x322): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessjy.o(.text+0x723): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string[in-charge](char const*, std::allocator<char> const&)'
+bessjy.o(.text+0x72d): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessjy.o(.text+0x732): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessjy.o(.text+0x73a): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessjy.o(.text+0x73f): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessjy.o(.text+0x747): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessjy.o(.text+0x74c): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+bessjy.o(.text+0x754): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessjy.o(.text+0x759): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessjy.o(.text+0x763): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessjy.o(.text+0x768): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessjy.o(.text+0x770): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessjy.o(.text+0x775): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessjy.o(.text+0xc17): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string[in-charge](char const*, std::allocator<char> const&)'
+bessjy.o(.text+0xc21): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessjy.o(.text+0xc26): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessjy.o(.text+0xc2e): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessjy.o(.text+0xc33): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessjy.o(.text+0xc3b): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessjy.o(.text+0xc40): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+bessjy.o(.text+0xc48): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessjy.o(.text+0xc4d): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessjy.o(.text+0xc57): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::cerr'
+bessjy.o(.text+0xc5c): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+bessjy.o(.text+0xc64): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+bessjy.o(.text+0xc69): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+bessjy.o(.text+0xdf0): In function `NR::bessjy(double, double, double&, double&, double&, double&)':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Rep::_M_destroy(std::allocator<char> const&)'
+bessjy.o(.text+0xe26): In function `__tcf_0':
+: undefined reference to `std::ios_base::Init::~Init [in-charge]()'
+bessjy.o(.eh_frame+0x12): undefined reference to `__gxx_personality_v0'
+beschb.o(.text+0x1b): In function `__static_initialization_and_destruction_0(int, int)':
+: undefined reference to `std::ios_base::Init::Init[in-charge]()'
+beschb.o(.text+0x9c): In function `NR::beschb(double, double&, double&, double&, double&)':
+: undefined reference to `operator new[](unsigned long)'
+beschb.o(.text+0x1fe): In function `NR::beschb(double, double&, double&, double&, double&)':
+: undefined reference to `operator new[](unsigned long)'
+beschb.o(.text+0x2b6): In function `__tcf_0':
+: undefined reference to `operator delete[](void*)'
+beschb.o(.text+0x2f6): In function `__tcf_1':
+: undefined reference to `operator delete[](void*)'
+beschb.o(.text+0x296): In function `__tcf_2':
+: undefined reference to `std::ios_base::Init::~Init [in-charge]()'
+beschb.o(.eh_frame+0x11): undefined reference to `__gxx_personality_v0'
+chebev.o(.text+0x1b): In function `__static_initialization_and_destruction_0(int, int)':
+: undefined reference to `std::ios_base::Init::Init[in-charge]()'
+chebev.o(.text+0x101): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string[in-charge](char const*, std::allocator<char> const&)'
+chebev.o(.text+0x10b): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::cerr'
+chebev.o(.text+0x110): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+chebev.o(.text+0x118): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+chebev.o(.text+0x11d): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+chebev.o(.text+0x125): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::cerr'
+chebev.o(.text+0x12a): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <char, std::char_traits<char>, std::allocator<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)'
+chebev.o(.text+0x132): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+chebev.o(.text+0x137): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+chebev.o(.text+0x141): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::cerr'
+chebev.o(.text+0x146): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::operator<< <std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*)'
+chebev.o(.text+0x14e): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >& std::endl<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&)'
+chebev.o(.text+0x153): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::basic_ostream<char, std::char_traits<char> >::operator<<(std::basic_ostream<char, std::char_traits<char> >& (*)(std::basic_ostream<char, std::char_traits<char> >&))'
+chebev.o(.text+0x187): In function `NR::chebev(double, double, NRVec<double> const&, int, double)':
+: undefined reference to `std::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Rep::_M_destroy(std::allocator<char> const&)'
+chebev.o(.text+0x1a6): In function `__tcf_0':
+: undefined reference to `std::ios_base::Init::~Init [in-charge]()'
+chebev.o(.eh_frame+0x12): undefined reference to `__gxx_personality_v0'
+collect2: ld returned 1 exit status
+make: *** [xairy.out] Fehler 1

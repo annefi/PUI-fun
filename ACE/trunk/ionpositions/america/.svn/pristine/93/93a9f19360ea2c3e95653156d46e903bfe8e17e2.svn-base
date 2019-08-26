@@ -1,0 +1,15 @@
+ficlose
+retall
+$ ln -fs ~/ace/axlv2/tools/axlv2_distfunc_template.save .
+$ ln -fs ~/ace/axlv2/tools/axlv2_nvt_template.save .
+.run axlv2_distfunc.pro
+
+;ions=['C2+','C3+','C4+','C5+','C6+',$
+;      'N2+','N3+','N4+','N5+','N6+','N7+','N8+',$
+;      'O4+','O5+','O6+','O7+','O8+']
+ions = ['O2+','O3+','O4+','O5+','O6+','O7+','O8+']
+
+ydoy_str = '2005009'
+axlv2_distfunc, dffile='axlv2_distfunc_'+ydoy_str+'.dat', $
+  nvtfile='axlv2_nvt_'+ydoy_str+'.dat', ions=ions, tag=tag,$
+  doyfrs=[9.40]

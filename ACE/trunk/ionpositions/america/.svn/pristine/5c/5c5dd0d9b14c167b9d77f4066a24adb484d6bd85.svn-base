@@ -1,0 +1,17 @@
+FILES = axlv2_deliv_elem_2004183_2004364.ps 
+
+# convert *all* files
+#FILES = $(wildcard *.ps)
+
+WEB_DIR = $(SHRGWEB)/../solar-heliospheric2/jraines
+
+FILES_PDF = $(addsuffix .pdf, $(basename $(FILES)))
+
+default: $(FILES_PDF)
+	$(MAKE) $^
+
+# rules
+
+%.pdf: %.ps
+	ps2pdf $< $@
+	cp $@ $(WEB_DIR)

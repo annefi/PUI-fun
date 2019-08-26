@@ -1,0 +1,18 @@
+ficlose
+retall
+
+.compile qdist_ctemp.pro
+.run axlv2_deliv_ctemp.pro
+
+$ ln -fs /home/jraines/ace/axlv2/tools/axlv2_deliv_qdist_template.save .
+$ ln -fs /shrg1/local/idl_lib/cr_table.save .
+
+file_doyfr_range_str = '2004001_2004364'
+
+doyfr_ranges = split_doyfr_range_by_cr([2004001.,2004364.], /omit_year)
+print, 'cr_ranges = '
+print, doyfr_ranges
+
+
+axlv2_deliv_ctemp, file_doyfr_range_str=file_doyfr_range_str, $
+  doyfr_ranges=doyfr_ranges, ctemp=ctemp, doyfrs=doyfrs ;, /noread

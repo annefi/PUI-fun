@@ -1,0 +1,21 @@
+Habe die sigmas der Winkeleverteilungen mit TRIM Daten abgeglichen.
+Hatte seinerzeit leider nur eine qualitative Überprüfung gemacht. 
+Der grundsätzliche Verlauf wird durch die Funktion von Gonin 
+(Internal Report, 08/1993 in der Doktorarbeit von Marc Gonin)
+sehr gut wiedergegeben. Jedoch stimmen die Sigmas nicht überein.
+Das sigma, das sich aus TRIM ergibt, ist immer etwa 2/3  des Wertes von Gonin.
+Ich vertraue hier eher den Messungen von Gonin als den TRIM Simulationen
+auch für Energien über dem was Gonin gemessen hat, da diese Systematik nahezu erhalten bleibt.
+In den Dateien (Bsp: TRANSMIT_100keV_500000.txt) steht eine text und komma bereinigte version von
+TRANSMIT.txt aus TRIM. (Im Beispiel Energie 100 keV und 500000 Teilchen, Habe alles mit Sauerstoff gerechnet.)
+lorenz.py liest diese datei ein und macht daraus eine f(theta)-verteilung wie in gonins report (ang_dist...).
+die erste spalte des outputs gibt den winkel in rad an. die verteilung, die herauskommt ist nicht normiert.
+mit hilfe des fistrkipts kann eine verteilungsfunktion an den python output gefittet werden. 
+Zuatz: lorenz_3d.py hat nie funktioniert. Um die 3d Verteilung zu bekommen habe ich direkt den 
+kleine Zusatz in test1.f genommen. Ziemlich am Ende. 
+
+
+im file tgh stehen die sigmas (1. spalte energie in keV,
+2.spalte trim,
+3.spalte gonin,
+4.spalte högberg)

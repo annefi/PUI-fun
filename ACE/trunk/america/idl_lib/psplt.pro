@@ -1,0 +1,62 @@
+;============================================================
+PRO PSPLT, FILE=FILE, PORTRAIT=PORTRAIT, BIG=BIG, COLOR=COLOR
+;============================================================
+;
+; Directs graphical output to postscript file
+;
+; FILE     - Name of postscript file
+;
+; PORTRAIT - Set this keyword to get portriat mode output (default landscape)
+;
+; BIG      - Set this keyword to get large format output (2X regular size)
+;
+; COLOR    - Set this keyword if you are making a color plot (default b/w)
+;
+COMMON FILE_PLOT, PLTFILE, PLT_UNIT, DEV, PLT_DEV         
+;
+ON_ERROR,1
+;
+IF (N_ELEMENTS(PLT_DEV) EQ 0) THEN PLT_DEV=''
+;
+IF (PLT_DEV NE '') AND (PLT_DEV NE 'PS') THEN FICLOSE
+IF !D.NAME NE 'PS' THEN DEV=!D.NAME
+PLT_DEV='PS'
+SET_PLOT,'PS'
+IF !D.UNIT NE 0 THEN RETURN                                        
+PLTFILE=''
+
+OPEN:
+IF N_ELEMENTS(FILE) EQ 0 THEN READ,'ENTER OUTPUT FILE NAME: ',PLTFILE $
+ELSE PLTFILE=FILE
+
+IF KEYWORD_SET(COLOR) THEN BEGIN
+
+  IF KEYWORD_SET(BIG) THEN BEGIN
+    DEVICE, /COLOR, BITS_PER_PIXEL=8, FILENAME = PLTFILE, /LANDSCAPE, $
+           YOFF=43, YSIZE=25.5, XOFF=1.5, XSIZE=42.5
+    IF KEYWORD_SET(PORTRAIT) THEN $
+	DEVICE,/PORTRAIT,XSIZE=24,XOFFSET=2,YSIZE=39,YOFFSET=2
+  ENDIF ELSE BEGIN
+    DEVICE, /COLOR, BITS_PER_PIXEL=8, FILENAME = PLTFILE, /LANDSCAPE, $
+           YOFF=25.85, XSIZE=22.5
+    IF KEYWORD_SET(PORTRAIT) THEN $
+      DEVICE,/PORTRAIT,XSIZE=18,XOFFSET=2,YSIZE=24,YOFFSET=2
+  ENDELSE
+
+ENDIF ELSE BEGIN	;color not set - use b/w
+
+  IF KEYWORD_SET(BIG) THEN BEGIN
+    DEVICE, BITS_PER_PIXEL=8, FILENAME = PLTFILE, /LANDSCAPE, $
+           YOFF=43, YSIZE=25.5, XOFF=1.5, XSIZE=42.5
+    IF KEYWORD_SET(PORTRAIT) THEN $
+	   DEVICE,/PORTRAIT,XSIZE=24,XOFFSET=2,YSIZE=39,YOFFSET=2
+  ENDIF ELSE BEGIN
+    DEVICE, BITS_PER_PIXEL=8, FILENAME = PLTFILE, /LANDSCAPE, $
+           YOFF=25.85, XSIZE=22.5
+    IF KEYWORD_SET(PORTRAIT) THEN $
+      DEVICE,/PORTRAIT,XSIZE=18,XOFFSET=2,YSIZE=24,YOFFSET=2
+  ENDELSE
+ENDELSE
+
+RETURN
+END

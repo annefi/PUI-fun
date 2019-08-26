@@ -1,0 +1,12 @@
+PSDES now calculates:       0xc665630e10b5 0x1debd99fa679e
+Known correct answers are:  0x604d1dce 0x509c0c23
+
+PSDES now calculates:       0x7bdd80913c3b 0x65efc141337c
+Known correct answers are:  0xd97f8571 0xa66cb41a
+
+PSDES now calculates:       0x26b6519a0788 0x3f8776c00108
+Known correct answers are:  0x7822309d 0x64300984
+
+PSDES now calculates:       0xcdca21bfee3 0x52c92ddb5e69
+Known correct answers are:  0xd7f376f0 0x59ba89eb
+

@@ -1,0 +1,16 @@
+Ideas, TODO, Bug- and wishlist for the GNUPlot advanced interface (funcif)
+--------------------------------------------------------------------------
+- Allow much shorter user code, just five lines for a simple fit should be enough
+- allow access to parameters and parameter errors through a direct
+  class lookup, i.e. landau.sigma instead of landau.pars["sigma"]
+
+- One _gpfunc array per Gnuplot instance is needed! Remove global
+  _gpfunc array.
+
+- Operators +-*/ etc. for sums. etc of functions, instead of
+  using the Sum class or similar things.
+
+- intelligent system to handle overlapping parameter names, which should
+  remove the need for functions parameters named specially, like Nsigma, Lsigma etc.
+
+

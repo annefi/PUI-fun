@@ -1,0 +1,34 @@
+9.0                # Enter input sequence version number:
+0		   # Sum up whole timeframe, for given swspeed intervall
+500.		   # lower boundary for upper sum
+550.		   # upper boundary for upper sum
+0		   # Sum up whole timeframe, sorted for aspect angle (true or false)? PAPS = 21.299759 kV (level =127) from 1998001 -> 2000118; PAPS = 24.868179 kV (level = 171) from 2000138 -> up to now
+15.		   # Aspect angle interval for upper sum 	
+0		   # Do Rates (true) or Counts (false)?
+7                  # Enter PHA filter flag:
+0                  # Enter velocity filter value (0.0 for none):
+2                  # Use which FM (-1..4, 2 is standard):
+1		   # Output E-T slices?
+0		   # Output MMQ data for MA?
+1.0                # Enter MMQ data mass *lower* limit: 
+100.0              # Enter MMQ data mass *upper* limit: 
+1.0                # Enter MMQ data m/q *lower* limit: 
+20.0               # Enter MMQ data m/q *upper* limit: 
+axlv2		   # Enter filename base (for all files): 
+0		   # Enter global debugging level (0-5): 
+/data/ivar/ace/data/LV1     # Enter directory containing LV1 data
+/data/ivar/ace/amerika/eff/ux-ax-hybrid   # Enter efficiency directory: 
+/data/ivar/ace/amerika/get_ace_aspect # Enter external aspect command:
+/data/ivar/ace/amerika/DUTYCYCL.DAT # Enter duty cycle filename (full path):
+0		   # Do boxrates calculation? 
+0		   # Do spillrates calculation?
+0.01               # SpillRates cutoff:
+5                  # SpillRates max. iterations:
+0		   # Do probrates calculation? 
+0                  # Output P slices?
+0		   # Load probrates? 
+0		   # Save probrates? 
+3.0                # Enter PR gauss cutoff:
+1                  # Enter state of first high-state Fe:
+1.0                # Enter PR gauss cutoff for high-state Fe:
+0		   # Do distribution function calculations? 

@@ -1,0 +1,2578 @@
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+
+fitwalker       = -1
+
+fitwalker       = fitwalker+1
+cthick          = 1.5+(fitwalker*0.2)
+
+
+fitrunner       = 0
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitwalker       = fitwalker+1
+cthick          = 1.5+(fitwalker*0.2)
+
+
+fitrunner       = 0
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitwalker       = fitwalker+1
+cthick          = 1.5+(fitwalker*0.2)
+
+
+fitrunner       = 0
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitwalker       = fitwalker+1
+cthick          = 1.5+(fitwalker*0.2)
+
+
+fitrunner       = 0
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitwalker       = fitwalker+1
+cthick          = 1.5+(fitwalker*0.2)
+
+
+fitrunner       = 0
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitrunner       = fitrunner+1
+     
+fitcounter      = 1
+FC2             = fitrunner*0.02
+
+
+
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+fitcounter      = fitcounter+1
+Ethr            = 28
+pf2             = 0.48
+C2              = FC2
+defl            = (fitcounter*0.02)
+FWHM            = 10
+thick           = cthick
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1
+
+
+fit dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 via thick, C2, defl
+
+plot dcr_fsr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/odaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+dcr_fsr(e)="swxeff_gpt.so", "O"
+
+
+
+print "Ethr = " , Ethr
+
+print "pf2 = " , pf2
+
+print "C2 = " , C2
+
+print "defl = " , defl
+
+print "FWHM = " , FWHM
+
+print "thick = " , thick
+
+print "rde = ", rde
+
+

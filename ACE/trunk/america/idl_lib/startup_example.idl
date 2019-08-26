@@ -1,0 +1,19 @@
+; startup.idl -- commands idl will execute on startup
+; Jim Raines (jraines), 6Oct99
+
+!path = !path + ":~/idl"
+
+; this allows use of 8 bit color tables
+; note: it seems to require 'idl.gr_visual: PseudoColor' and 
+; 'idl.colors=256' in .Xdefaults, even though the former is unsupported
+device, decomposed=0
+loadct, 34
+fix_ct_ends
+;; un-comment for testing 8 bit color
+;plot, findgen(10), color=50
+
+.run ~/idl/color_util.pro
+
+
+
+

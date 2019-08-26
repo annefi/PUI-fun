@@ -1,0 +1,6 @@
+After initial checkout, call rebuilt.sh to make the build scripts.
+
+Automatically generated documentation (out of date for a maximum of
+usually only 30 minutes!) can be found in
+
+/data/asterix/onno/libetph-doc/

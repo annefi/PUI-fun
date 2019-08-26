@@ -1,0 +1,17 @@
+AC_INIT(src/matrix.hh)
+AM_INIT_AUTOMAKE(libetph, 0.1.0)
+dnl AM_CONFIG_HEADER(config.h)
+dnl AC_SUBST(VERSION)
+dnl ISODATE=`date +%Y-%m-%d`
+dnl AC_SUBST(ISODATE)
+
+dnl AC_CANONICAL_HOST
+
+AC_PROG_INSTALL
+AC_PROG_CC
+dnl AM_PROG_LEX
+dnl AC_PROG_YACC
+AC_PROG_CXX
+AC_PROG_RANLIB
+
+AC_OUTPUT(Makefile src/Makefile)

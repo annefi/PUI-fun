@@ -1,0 +1,19 @@
+ficlose
+retall
+.run axlv2_n_fig.pro
+
+ions = ['He2+','O2+','O3+','O4+','O5+','O6+','O7+','O8+']
+colors = [0,    0,   16,   50,    128,   192,  224,  254]
+!x.range = [9.0, 10.5]
+
+tag = ''
+!y.range=[1.e-5,1.e-1]
+
+axlv2_n_fig, file='axlv2_nvt_2005009_2005010.dat', data=nvt, ions=ions,$
+  tag=tag, draw_points=1, colors=colors
+
+nvt.n = nvt.n*110.
+
+axlv2_n_fig, file='axlv2_nvt_2005009_2005010.dat', data=nvt, ions=ions,$
+  tag=tag, draw_points=1, /noread, colors=colors
+

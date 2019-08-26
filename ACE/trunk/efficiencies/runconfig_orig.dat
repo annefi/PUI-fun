@@ -1,0 +1,47 @@
+FITMODE*        set_fitmode
+GEOMMODE**      2
+targetssd***    2
+caldatssd****   2
+caldatzion***** set_caldatzion
+beta--aspang    set_ba                    ! bleibt bis auf weiteres bei 0; mit 1 kann man thang und aspect_angle variieren - wird nicht gebraucht.
+aspect_angle    set_aspang                  ! d.h. wir arbeiten jetzt mit einem pencil beam, geometrie wird mit geomaspang.f berechnet.
+beta_angle      set_beta                    ! in swxeff.f ist jetzt const3 der aspect angle und wird in autorun.py mitgefittet.
+thang           set_thang                  ! mach angle
+entryangle      0.0
+run0            1                    ! Read the E/q eqsteps/steps and param/parameters
+run1            0                    ! Test run for the dutycycle function
+run2            set_run2                    ! paramerror calculation
+run3            0                    ! Test run for swxeff
+run4            set_run4                    ! Run for all elements in param/ionlist #
+run5            0                    ! Test run for random noise
+run6            set_run6                    ! Run for error estimation (random noise)
+run7            0                    ! Monte Carlo Integration
+run8            0                    ! Different experiments
+
+* 0=papstoepq=const; 1=papstoepq aus den caldatzion calibrationsdaten; 2=papstoepq aus O+Ne+Mg+Si+Fe
+  3=papstoepq aus O+Fe, 4=papstoepq aus O+Mg, 5=papstoepq aus O+Ne
+
+** 0=Steiger-Integration; 1=Meine numerische Integration; 2= Meine numerische Integration 
+    (vorgerechnet für zentralen beschuss --> wird dann einfach eigelesen)
+
+*** Einfach die SSD Nummer: 1=rechts, 2=mitte, 3=links
+    anhand der targetssd nummer werden das stopping auf der detektoroberfläche und der pulse height defect angepasst
+
+**** SSD Nummer, welches während der Kalibration beschossen wurde (da es z.B. Oxygen Kalibrationsdaten
+     für SSD2 und SSD3 gibt, ist dies nötig.
+
+***** Kernladung des Kalibrationselements
+
+
+# = Output sind     .en files:      1.Spalte E/q;       2.Spalte: emeas;            3.Spalte: energy channel
+                    .tof files:     1.Spalte E/q;       2.Spalte: ToF;              3.Spalte: ToF channel
+                    .eff files:     1.Spalte E/q;       2.Spalte: efficiency
+                    _eff files:     1.Spalte E/q;       2.Spalte: energy channel;   3.Spalte: ToF channel  (nicht korrigiert, siehe Lab.Buch: 2007, Seite 1-8)
+zusatz zum einstellen von aspect_angle und beta:
+"set_ba" nicht auf 1 setzen -- das ist nicht ganz ausgereift
+ist "set_ba"=0, hat man in swxeff.f noch zwei optionen der geometrieberechnung (siehe code)
+man kann das hier gesetzte beta verwenden und "geomforfit(sigma,defl,resprobst, resprobse)" benutzen oder 
+"geomaspang(aspang,sigmal,defl,probse,probst)" beutzen indem man dann in swxeff.f direkt den aspang setzen kann.
+(das hier gesetzte beta ist dann komplett wirkungslos)
+--> letzteres hat den vorteil, dass man aspang mitfitten kann (mache ich momentan auch; um mir die mühe zu ersparen,
+eigens dafür eine neue variable mit allem pipapo einzuführen, benutze ich const3, was sowieso sonst nirgends auftaucht)

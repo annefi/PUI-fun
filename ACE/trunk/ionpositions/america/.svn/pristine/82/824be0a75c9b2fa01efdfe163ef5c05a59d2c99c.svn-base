@@ -1,0 +1,3849 @@
+%!PS-Adobe-3.0
+%%Title: DistFunc.cc, DistFunc.h
+%%For: Jim Raines
+%%Creator: a2ps version 4.13
+%%CreationDate: Thu Mar 24 15:59:40 2005
+%%BoundingBox: 24 24 588 768
+%%DocumentData: Clean7Bit
+%%Orientation: Landscape
+%%Pages: 11
+%%PageOrder: Ascend
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: font Courier
+%%+ font Courier-Bold
+%%+ font Helvetica
+%%+ font Helvetica-Bold
+%%+ font Symbol
+%%+ font Times-Bold
+%%+ font Times-Roman
+%%DocumentProcessColors: Black Blue Green Red 
+%%DocumentSuppliedResources: procset a2ps-color-prolog
+%%+ encoding ISO-8859-1Encoding
+%%EndComments
+/a2psdict 200 dict def
+a2psdict begin
+%%BeginProlog
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+
+% EPSF import as in the Red Book
+/BeginInclude {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack 
+  userdict begin
+    0 setgray 0 setlinecap
+    1 setlinewidth 0 setlinejoin
+    10 setmiterlimit [ ] 0 setdash newpath
+    gs_languagelevel 1 ne {
+      false setstrokeadjust false setoverprint 
+    } if
+} bind def
+
+/EndInclude {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+/BeginEPSF {
+  BeginInclude
+  /showpage { } def
+} bind def
+
+/EndEPSF {
+  EndInclude
+} bind def
+
+% Page prefeed
+/page_prefeed {         % bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} bind def
+
+/deffont {
+  findfont exch scalefont def
+} bind def
+
+/reencode_font {
+  findfont reencode 2 copy definefont pop def
+} bind def
+
+% Function c-show (str => -)
+% centers text only according to x axis.
+/c-show { 
+  dup stringwidth pop
+  2 div neg 0 rmoveto
+  show
+} bind def
+
+% Function l-show (str => -)
+% prints texts so that it ends at currentpoint
+/l-show {
+  dup stringwidth pop neg 
+  0 
+  rmoveto show
+} bind def
+
+% center-fit show (str w => -)
+% show centered, and scale currentfont so that the width is less than w
+/cfshow {
+  exch dup stringwidth pop
+  % If the title is too big, try to make it smaller
+  3 2 roll 2 copy
+  gt
+  { % if, i.e. too big
+    exch div
+    currentfont exch scalefont setfont
+  } { % ifelse
+    pop pop 
+  }
+  ifelse
+  c-show			% center title
+} bind def
+
+% Return the y size of the current font
+% - => fontsize
+/currentfontsize {
+  currentfont /FontType get 0 eq {
+    currentfont /FontMatrix get 3 get
+  }{
+    currentfont /FontMatrix get 3 get 1000 mul
+  } ifelse
+} bind def
+
+% reencode the font
+% <encoding-vector> <fontdict> -> <newfontdict>
+/reencode { %def
+  dup length 5 add dict begin
+    { %forall
+      1 index /FID ne 
+      { def }{ pop pop } ifelse
+    } forall
+    /Encoding exch def
+
+    % Use the font's bounding box to determine the ascent, descent,
+    % and overall height; don't forget that these values have to be
+    % transformed using the font's matrix.
+    % We use `load' because sometimes BBox is executable, sometimes not.
+    % Since we need 4 numbers an not an array avoid BBox from being executed
+    /FontBBox load aload pop
+    FontMatrix transform /Ascent exch def pop
+    FontMatrix transform /Descent exch def pop
+    /FontHeight Ascent Descent sub def
+
+    % Define these in case they're not in the FontInfo (also, here
+    % they're easier to get to.
+    /UnderlinePosition 1 def
+    /UnderlineThickness 1 def
+    
+    % Get the underline position and thickness if they're defined.
+    currentdict /FontInfo known {
+      FontInfo
+      
+      dup /UnderlinePosition known {
+	dup /UnderlinePosition get
+	0 exch FontMatrix transform exch pop
+	/UnderlinePosition exch def
+      } if
+      
+      dup /UnderlineThickness known {
+	/UnderlineThickness get
+	0 exch FontMatrix transform exch pop
+	/UnderlineThickness exch def
+      } if
+      
+    } if
+    currentdict 
+  end 
+} bind def
+
+% composite fonts for ASCII-EUC mixed string
+% Version 1.2 1/31/1990
+% Orignal Ken'ichi HANDA (handa@etl.go.jp)
+% Modified Norio Katayama (katayama@rd.nacsis.ac.jp),1998
+% Extend & Fix Koji Nakamaru (maru@on.cs.keio.ac.jp), 1999
+% Anyone can freely copy, modify, distribute this program.
+
+/copyfont {	% font-dic extra-entry-count  copyfont  font-dic
+	1 index maxlength add dict begin
+	{	1 index /FID ne 2 index /UniqueID ne and
+		{def} {pop pop} ifelse
+	} forall
+	currentdict
+	end
+} bind def
+
+/compositefont { % ASCIIFontName EUCFontName RomanScale RomanOffset Rot(T/F) compositefont font
+    /RomanRotation exch def
+    /RomanOffset exch def
+    /RomanScale exch def
+    userdict /fixeucfont_dict known not {
+	userdict begin
+	    /fixeucfont_dict 2 dict begin
+		/UpperByteEncoding [
+		    16#00 1 16#20 { pop 0 } for
+		    16#21 1 16#28 { 16#20 sub } for
+		    16#29 1 16#2F { pop 0 } for
+		    16#30 1 16#74 { 16#27 sub } for
+		    16#75 1 16#FF { pop 0 } for
+		] def
+	        /LowerByteEncoding [
+		    16#00 1 16#A0 { pop /.notdef } for
+		    16#A1 1 16#FE { 16#80 sub 16 2 string cvrs
+				    (cXX) dup 1 4 -1 roll
+				    putinterval cvn } for
+		    /.notdef
+		] def
+		currentdict
+	    end def
+	end
+    } if
+    findfont dup /FontType get 0 eq {
+	14 dict begin
+	    %
+	    % 7+8 bit EUC font
+	    %
+	    12 dict begin
+		/EUCFont exch def
+		/FontInfo (7+8 bit EUC font) readonly def
+		/PaintType 0 def
+		/FontType 0 def
+		/FontMatrix matrix def
+		% /FontName
+		/Encoding fixeucfont_dict /UpperByteEncoding get def
+		/FMapType 2 def
+		EUCFont /WMode known
+		{ EUCFont /WMode get /WMode exch def }
+		{ /WMode 0 def } ifelse
+		/FDepVector [
+		    EUCFont /FDepVector get 0 get
+		    [ 16#21 1 16#28 {} for 16#30 1 16#74 {} for ]
+		    {
+			13 dict begin
+			    /EUCFont EUCFont def
+			    /UpperByte exch 16#80 add def	
+			    % /FontName
+			    /FontInfo (EUC lower byte font) readonly def
+			    /PaintType 0 def
+			    /FontType 3 def
+			    /FontMatrix matrix def
+			    /FontBBox {0 0 0 0} def
+			    /Encoding
+				fixeucfont_dict /LowerByteEncoding get def
+			    % /UniqueID
+			    % /WMode
+			    /BuildChar {
+				gsave
+				exch dup /EUCFont get setfont
+				/UpperByte get
+				2 string
+				dup 0 4 -1 roll put
+				dup 1 4 -1 roll put
+				dup stringwidth setcharwidth
+				0 0 moveto show
+				grestore
+			    } bind def
+			    currentdict
+			end
+			/lowerbytefont exch definefont
+		    } forall
+		] def
+		currentdict
+	    end
+	    /eucfont exch definefont
+	    exch
+	    findfont 1 copyfont dup begin
+		RomanRotation {
+			/FontMatrix FontMatrix
+			[ 0 RomanScale neg RomanScale 0 RomanOffset neg 0 ]
+			matrix concatmatrix def
+		}{
+			/FontMatrix FontMatrix
+			[ RomanScale 0 0 RomanScale 0 RomanOffset ] matrix concatmatrix
+			def
+			/CDevProc
+			    {pop pop pop pop 0 exch -1000 exch 2 div 880} def
+		} ifelse
+	    end
+	    /asciifont exch definefont
+	    exch
+	    /FDepVector [ 4 2 roll ] def
+	    /FontType 0 def
+	    /WMode 0 def
+	    /FMapType 4 def
+	    /FontMatrix matrix def
+	    /Encoding [0 1] def
+	    /FontBBox {0 0 0 0} def
+%	    /FontHeight 1.0 def % XXXX
+	    /FontHeight RomanScale 1.0 ge { RomanScale }{ 1.0 } ifelse def
+	    /Descent -0.3 def   % XXXX
+	    currentdict
+	end
+	/tmpfont exch definefont
+	pop
+	/tmpfont findfont
+    }{
+	pop findfont 0 copyfont
+    } ifelse
+} def	
+
+/slantfont {	% FontName slant-degree  slantfont  font'
+    exch findfont 1 copyfont begin
+    [ 1 0 4 -1 roll 1 0 0 ] FontMatrix exch matrix concatmatrix
+    /FontMatrix exch def
+    currentdict
+    end
+} def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+
+% -------- Some routines to enlight plain b/w printings ---------
+
+% Underline
+% width --
+/dounderline {
+  currentpoint
+  gsave
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    0 rlineto
+    stroke
+  grestore
+} bind def
+
+% Underline a string
+% string --
+/dounderlinestring {
+  stringwidth pop
+  dounderline
+} bind def
+
+/UL {
+  /ul exch store
+} bind def
+
+% Draw a box of WIDTH wrt current font
+% width --
+/dobox {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    stroke
+  grestore
+} bind def
+
+/BX {
+  /bx exch store
+} bind def
+
+% Box a string
+% string --
+/doboxstring {
+  stringwidth pop
+  dobox
+} bind def
+
+%
+% ------------- Color routines ---------------
+%
+/FG /setrgbcolor load def
+
+% Draw the background
+% width --
+/dobackground {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    bgcolor aload pop setrgbcolor
+    fill
+  grestore
+} bind def
+
+% Draw bg for a string
+% string --
+/dobackgroundstring {
+  stringwidth pop
+  dobackground
+} bind def
+
+
+/BG {
+  dup /bg exch store
+  { mark 4 1 roll ] /bgcolor exch store } if
+} bind def
+
+
+/Show {
+  bg { dup dobackgroundstring } if
+  ul { dup dounderlinestring } if
+  bx { dup doboxstring } if
+  show
+} bind def
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T {
+  cw mul x0 add
+  bg { dup currentpoint pop sub dobackground } if
+  ul { dup currentpoint pop sub dounderline } if
+  bx { dup currentpoint pop sub dobox } if
+  y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n {
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+/S {
+  Show
+} bind def
+
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Function title: prints page header.
+% <ct> <rt> <lt> are passed as argument
+/title { 
+  % 1. Draw the background
+  x v get y v get moveto
+  0 setgray
+  gsave
+    0 th 2 div neg rmoveto 
+    th setlinewidth
+    0.5 0.5 1 setrgbcolor
+    pw 0 rlineto stroke
+  grestore
+  % 2. Border it
+  gsave
+    0.7 setlinewidth
+    pw 0 rlineto
+    0 th neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+  % stk: ct rt lt
+  x v get y v get th sub 1 add moveto
+%%IncludeResource: font Helvetica
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  % 3. The left title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    fnfs 0.8 mul hm rmoveto
+    show			% left title
+  grestore
+  exch
+  % stk: ct ltw rt
+  % 4. the right title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    dup
+    pw exch stringwidth pop fnfs 0.8 mul add sub
+    hm
+    rmoveto
+    show			% right title
+  grestore
+  % stk: ct ltw rtw
+  % 5. the center title
+  gsave
+    pw 3 1 roll
+    % stk: ct pw ltw rtw
+    3 copy 
+    % Move to the center of the left room
+    sub add 2 div hm rmoveto
+    % What is the available space in here?
+    add sub fnfs 0.8 mul sub fnfs 0.8 mul sub
+    % stk: ct space_left
+%%IncludeResource: font Helvetica-Bold
+  fHelvetica-Bold fnfs scalefont setfont
+    1 setgray
+    cfshow
+  grestore
+} bind def
+
+% Function border: prints virtual page border
+/border { %def
+  gsave				% print four sides
+    0 setgray
+    x v get y v get moveto
+    0.7 setlinewidth		% of the square
+    pw 0 rlineto
+    0 ph neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+} bind def
+
+% Function water: prints a water mark in background
+/water { %def
+  gsave
+    scx scy moveto rotate
+%%IncludeResource: font Times-Bold
+  fTimes-Bold 100 scalefont setfont
+    .97 setgray
+    dup stringwidth pop 2 div neg -50 rmoveto
+    show
+  grestore
+} bind def
+
+% Function rhead: prints the right header
+/rhead {  %def
+  lx ly moveto
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  l-show
+} bind def
+
+% Function footer (cf rf lf -> -)
+/footer {
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  dx dy moveto
+  show
+
+  snx sny moveto
+  l-show
+  
+  fnx fny moveto
+  c-show
+} bind def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+%%BeginResource: procset a2ps-color-prolog 2.0 1
+
+%% Definition of the color faces.
+/p {
+  0 0 0 FG
+  false BG
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/sy {
+  0 0 0 FG
+  false BG
+  fSymbol bfs scalefont setfont
+  Show
+} bind def
+
+/k {
+  false BG
+  false UL
+  false BX
+  0 0 0.9 FG
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/K {
+  false BG
+  false UL
+  false BX
+  0 0 0.8 FG
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/c {
+  false BG
+  false UL
+  false BX
+  0.8 0 0 FG
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/C {
+  false BG
+  false UL
+  false BX
+  0.8 0 0 FG
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/l {
+  0 0 0 FG
+  0.8 0.8 0 true BG
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/L {
+  0 0 0 FG
+  1 1 0 true BG
+  false UL
+  false BX
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/str {
+  false BG
+  false UL
+  false BX
+  0 0.5 0 FG
+  fTimes-Roman bfs scalefont setfont
+  Show
+} bind def
+
+/e{
+  1 0 0 true BG
+  false UL
+  true BX
+  1 1 1 FG
+  fHelvetica-Bold bfs scalefont setfont
+  Show
+} bind def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul 2 div neg 0 rmoveto
+    f# setfont
+    0.8 0.1 0.1 FG
+    c-show
+  grestore
+} bind def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Times-Roman
+%%IncludeResource: font Symbol
+%%BeginResource: encoding ISO-8859-1Encoding
+/ISO-8859-1Encoding [
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quoteright 
+/parenleft /parenright /asterisk /plus /comma /minus /period /slash 
+/zero /one /two /three /four /five /six /seven 
+/eight /nine /colon /semicolon /less /equal /greater /question 
+/at /A /B /C /D /E /F /G 
+/H /I /J /K /L /M /N /O 
+/P /Q /R /S /T /U /V /W 
+/X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore 
+/quoteleft /a /b /c /d /e /f /g 
+/h /i /j /k /l /m /n /o 
+/p /q /r /s /t /u /v /w 
+/x /y /z /braceleft /bar /braceright /asciitilde /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclamdown /cent /sterling /currency /yen /brokenbar /section 
+/dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron 
+/degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph /bullet 
+/cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf /threequarters /questiondown 
+/Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla 
+/Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis 
+/Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply 
+/Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls 
+/agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla 
+/egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis 
+/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide 
+/oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis 
+] def
+%%EndResource
+% Initialize page description variables.
+/sh 612 def
+/sw 792 def
+/llx 24 def
+/urx 768 def
+/ury 588 def
+/lly 24 def
+/#copies 1 def
+/th 15.000000 def
+/fnfs 11 def
+/bfs 7.493857 def
+/cw 4.496314 def
+
+% Dictionary for ISO-8859-1 support
+/iso1dict 6 dict begin
+  /fCourier ISO-8859-1Encoding /Courier reencode_font
+  /fCourier-Bold ISO-8859-1Encoding /Courier-Bold reencode_font
+  /fHelvetica ISO-8859-1Encoding /Helvetica reencode_font
+  /fHelvetica-Bold ISO-8859-1Encoding /Helvetica-Bold reencode_font
+  /fTimes-Bold ISO-8859-1Encoding /Times-Bold reencode_font
+  /fTimes-Roman ISO-8859-1Encoding /Times-Roman reencode_font
+currentdict end def
+/bgcolor [ 0 0 0 ] def
+/bg false def
+/ul false def
+/bx false def
+% The font for line numbering
+/f# /Helvetica findfont bfs .6 mul scalefont def
+/fSymbol /Symbol findfont def
+/hm fnfs 0.25 mul def
+/pw
+   cw 81.400000 mul
+def
+/ph
+   522.321860 th add
+def
+/pmw urx llx sub pw 2 mul sub 1 div def
+/pmh 0 def
+/v 0 def
+/x [
+  0
+  dup pmw add pw add
+] def
+/y [
+  pmh ph add 0 mul ph add
+  dup
+] def
+/scx sw 2 div def
+/scy sh 2 div def
+/snx urx def
+/sny lly 2 add def
+/dx llx def
+/dy sny def
+/fnx scx def
+/fny dy def
+/lx snx def
+/ly ury fnfs 0.8 mul sub def
+/sx 0 def
+/tab 8 def
+/x0 0 def
+/y0 0 def
+%%EndSetup
+
+%%Page: (1-2) 1
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*) c n
+(  File: DistFunc.h) N
+() N
+(  Description:) N
+() N
+(    Calculate observed distribution function and moments from) N
+(    probabilistic rates.) N
+() N
+(  Author: Jim Raines, 21Aug2001) N
+() N
+(  Method:) N
+() N
+(  Revision controlled by CVS:) N
+(  $Id: DistFunc.cc,v 1.37 2005/03/24 05:02:36 jraines Exp $) N
+(    ) N
+(  Major Modification History:) N
+(    01Jun2004  jmr  Changed to newly derived distribution function equations.) N
+(                    Old version became DistFunc1.) N
+(    -------->  jmr  Many unrecorded changes to DF equations\(->3d->1d->1/439...\)) N
+(    22Nov2004  jmr  Switched back to 3d before sending to Ruedi) N
+(*/) N
+() p n
+(#include) K
+( ") p
+(swindal.h) str
+(") p n
+(#include) K
+( ") p
+(nr.h) str
+(") p n
+(#include) K
+( ") p
+(nrutil.h) str
+(") p n
+() N
+(// for output function) c n
+(#include) K
+( <sys/types.h>   ) p
+(// for FM mod. time \(open\)) c n
+(#include) K
+( <sys/stat.h>    ) p
+(// for FM mod. time \(fstat\)) c n
+(#include) K
+( <fcntl.h>       ) p
+(// for FM mod. time \(open\)) c n
+(#include) K
+( <unistd.h>      ) p
+(// for FM mod. time \(fstat\)) c n
+(#include) K
+( <time.h>        ) p
+(// for creation time in header) c n
+() p n
+() N
+(DistFunc::DistFunc\() S
+(int) k
+( N\){) p n
+(  n.assign\(N,0.0\);) N
+(  n_err.assign\(N,0.0\);) N
+(  v0.assign\(N,0.0\);) N
+(  vth.assign\(N,0.0\);) N
+() N
+(  fit_n.assign\(N,0.0\);) N
+(  fit_v0.assign\(N,0.0\);) N
+(  fit_vth.assign\(N,0.0\);) N
+(  fit_err.assign\(N,0.0\);) N
+() N
+(  quality.assign\(N,0\);) N
+() N
+(  ) S
+(// build initial A array, ) c n
+(  vector<) p
+(float) k
+(> zero;) p n
+(  vector<) S
+(float) k
+(> neg_one;) p n
+(  zero.assign\(MAXEDB, 0.0\);) N
+(  neg_one.assign\(MAXEDB, -1.0\);) N
+(  ) S
+(for) K
+( \() p
+(int) k
+( i = 0; i < N; i++\){) p n
+(    v.push_back\(zero\);) N
+(    A.push_back\(zero\);) N
+(    ErrA.push_back\(zero\);) N
+(    fit_A.push_back\(zero\);) N
+(    Err_fit_A.push_back\(neg_one\);) N
+(  }) N
+(  ) N
+(}) N
+() N
+(float) k
+( DistFunc::getDensity\() p
+(int) k
+( s\){) p n
+(  ) S
+(return) K
+(\(n[s]\);) p n
+(}) N
+() N
+(float) k
+( DistFunc::getBulkVelocity\() p
+(int) k
+( s\){) p n
+(  ) S
+(return) K
+(\(v0[s]\);) p n
+(}) N
+(DistFunc.cc) (Page 1/17) (Mar 24, 05 15:56) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(float) k
+( DistFunc::getThermVelocity\() p
+(int) k
+( s\){) p n
+(  ) S
+(return) K
+(\(vth[s]\);) p n
+(}) N
+() N
+(int) k
+( DistFunc::calc\() p
+(const) K
+( vector<Ion>& grp, ) p
+(const) K
+( AnalysisData& ad, ) p n
+() S 8 T () S 16 T (   ProbRates PR, AceSwicsDutyCycle duty,) N
+() S 8 T () S 16 T (   UlyssesSwicsEffic eff_obj\){) N
+(  ) S
+(/* Notes:) c n
+() N
+(     1.  i and nedb are used interchangably to mean the number of the ) N
+(     E/q step) N
+() N
+(     2.  This will \(likely\) work with other rates besides prob. ones) N
+(         if the variable type was changed in the prototype.) N
+() N
+(  */) N
+(  string thisprog = ") p
+(DistFunc::calc) str
+(";) p n
+() N
+(  ) S
+(/* delta v at step i is an ave. velocity at that step */) c n
+(  vector <) p
+(float) k
+(> delta_v; ) p n
+(  delta_v.reserve\(MAXEDB\);) N
+() N
+(  ) S
+(// E/q acceptance ranges) c n
+(  vector<) p
+(float) k
+(> delta_eq;) p n
+(  delta_eq.reserve\(MAXEDB\);) N
+() N
+(  ) S
+(// efficiency object) c n
+(  ;) p n
+(  ) S
+(// no longer needed) c n
+(  ) p
+(//   for \(int nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) c n
+(  ) p
+(//     delta_eq[nedb] = ad.EqAcceptFac * ad.Eqtab[nedb];) c n
+(  ) p
+(//   }) c n
+() p n
+(  ) S
+(for) K
+( \() p
+(unsigned) k
+( ) p
+(int) k
+( s = 0; s < grp.size\(\); s++\){) p n
+(    ) S
+(if) K
+( \(gDbgLvl >= 1\){) p n
+(      cout << thisprog << ") S
+( -I- calculating nvt for ) str
+(" << ad.Ions[s].name) p n
+() S 8 T (   << endl;) N
+(    }) N
+() N
+(    ) S
+(// define some notational short cuts) c n
+(    ) p
+(float) k
+( m = grp[s].mass;) p n
+(    ) S
+(float) k
+( q = grp[s].charge;) p n
+() N
+(    ) S
+(// -- variables for holding intermediate results --) c n
+() p n
+(    ) S
+(// calc. v[i] and  for all i, km/s) c n
+(    ) p
+(// note: constant is unit conversion, 9.648e4 e amu km^2 / keV s^2) c n
+(    ) p
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(      v[s][nedb] = sqrt\( 2.0 * ad.Eqtab[nedb]* q/m * 9.648e4 \);) N
+(    }) N
+() N
+(    ) S
+(// calculate phase space density \(A[i]\) for all i) c n
+(    ) p
+(// A[i] = Nsi / \(sqrt\(delta_eq\) tau g eta vi^4\)) c n
+(    ) p
+(// units: s^3/\(cm^2 km^4\)) c n
+(    ) p
+(float) k
+( sum_A = 0.;  ) p
+(// sum of A over nedb for normalization) c n
+(    ) p
+(float) k
+( sigsq_f1_dc = 0.;) p n
+(    ) S
+(float) k
+( f1_dc = 0.;) p n
+(    ) S
+(float) k
+( sigsq_f0_dc = 0.;) p n
+(    ) S
+(float) k
+( f0_dc = 0.;) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+() N
+(      ) S
+(// calc. delta_v[i] between each v[i]) c n
+(      ) p
+(if) K
+( \( nedb == \(MAXEDB - 1\) \){) p n
+() S 8 T () S
+(/* This is somewhat arbitrary but few if any counts should land ) c n
+() S 8 T (   here so it should not matter. */) N
+() p 8 T (delta_v[nedb] = delta_v[nedb-1];) N
+(      }) N
+(      ) S
+(else) K
+({) p n
+(DistFunc.cc) (Page 2/17) (Mar 24, 05 15:56) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(DistFunc.cc) (1/11) (Thursday March 24, 2005) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (3-4) 2
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p 8 T (delta_v[nedb] = v[s][nedb] - v[s][nedb+1];) N
+(      }) N
+(      delta_v[nedb] = fabs\(delta_v[nedb]\); ) S
+(// absolute value) c n
+(      ) p n
+(      ) S
+(// Efficiency) c n
+(      ) p
+(float) k
+( etot = ad.Eqtab[nedb] + ad.Ions[s].charge*ad.PapsVolt;) p n
+(      ) S
+(float) k
+( eff = eff_obj.getEffic\(ad.Ions[s].name , etot\);) p n
+(      ) S
+(//float eff = 1.0;  // for testing) c n
+(      ) p
+(//cout << thisprog << " -W- eff hardcoded to " << eff) c n
+(      ) p
+(//   << " for debugging" << endl;) c n
+() p n
+(      ) S
+(if) K
+( \(eff >= 0.\) {) p n
+() S 8 T () S
+(// distribution function in s^3/km^6) c n
+() p 8 T (A[s][nedb] = 2 * PR.getProbRate\(nedb,s\) * 1.e10 / ) N
+() S 8 T (  \(ad.EqAcceptFac * eff * ad.GeomFactor * pow\(v[s][nedb],4\)\);) N
+() N
+() S 8 T () S
+(// Error) c n
+() p 8 T () S
+(if) K
+( \(PR.getProbRate\(nedb,s\) > 0.\) {) p n
+() S 8 T (  ErrA[s][nedb] = sqrt\( PR.getProbRate\(nedb,s\)*gAccumTime \) /) N
+() S 8 T (    \(PR.getProbRate\(nedb,s\)*gAccumTime\);) N
+() N
+() S 8 T (  ) S
+(// NOTE:  These formulas assume 1D moments used below) c n
+() p 8 T (  ) S
+(// square of error in F1 \(divided by constants \(dc\)\)) c n
+() p 8 T (  sigsq_f1_dc += PR.getProbRate\(nedb,s\) * gAccumTime *) N
+() S 8 T (    pow\( delta_v[nedb] / pow\(v[s][nedb],3\) / eff ,2\);) N
+() N
+() S 8 T (  ) S
+(// F1 \(divided by constants \(dc\)\)) c n
+() p 8 T (  f1_dc += PR.getProbRate\(nedb,s\) * gAccumTime *) N
+() S 8 T (    delta_v[nedb] / pow\(v[s][nedb],3\) / eff;) N
+() N
+() S 8 T (  ) S
+(// square of error in F0 \(divided by constants \(dc\)\)) c n
+() p 8 T (  sigsq_f0_dc += PR.getProbRate\(nedb,s\) * gAccumTime *) N
+() S 8 T (    pow\( delta_v[nedb] / pow\(v[s][nedb],4\) / eff ,2\);) N
+() N
+() S 8 T (  ) S
+(// F0 \(divided by constants \(dc\)\)) c n
+() p 8 T (  f0_dc += PR.getProbRate\(nedb,s\) * gAccumTime *) N
+() S 8 T (    delta_v[nedb] / pow\(v[s][nedb],4\) / eff;) N
+() S 8 T (}) N
+() S 8 T () S
+(else) K
+( {) p n
+() S 8 T (  ErrA[s][nedb] = 0.0;) N
+() S 8 T (}) N
+(      }) N
+(      ) S
+(else) K
+( {) p n
+() S 8 T (A[s][nedb] = 0.0; ) S
+(//FIX: is this what we want?) c n
+() p 8 T (ErrA[s][nedb] = -1.0;) N
+(      }) N
+() N
+(      sum_A += A[s][nedb];) N
+(    }) N
+(    ) N
+(    ) S
+(// calculate error in density) c n
+(    n_err[s] = sqrt\(4. * sigsq_f1_dc / pow\(f1_dc,2\) +) p n
+() S 8 T () S 16 T (    sigsq_f0_dc / pow\(f0_dc,2\)\);) N
+() N
+(    cout << thisprog << ") S
+( -I- sum_A = ) str
+(" << sum_A << endl;) p n
+() N
+(    ) S
+(// This did not work) c n
+(//     // normalize A) N
+(//     for \(int nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) N
+(//       A[s][nedb] = A[s][nedb]/sum_A;) N
+(//     }    ) N
+() p n
+(    ) S
+(float) k
+( n_local, v0_local, vth_local;) p n
+(    calc1dMoments\(s, A, delta_v, duty, ad, n_local, v0_local, vth_local\);) N
+() N
+(    v0[s] = v0_local;) N
+(    vth[s] = vth_local;) N
+(    n[s] = n_local;) N
+() N
+(DistFunc.cc) (Page 3/17) (Mar 24, 05 15:56) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    ) p
+(/* -----------------------------------------------------------------) c n
+(       Calculate n, v0, and vth via gauss fitting if appropriate) N
+(       ----------------------------------------------------------------- */) N
+(    ) p
+(if) K
+( \(v0[s] > 0.0 && n[s] > 0.\){) p n
+(      ) S
+(//    if \(v0[s] > 0.0 && n[s] > 0. && ad.Ions[s].name == "He2+"\){) c n
+(      cout << thisprog << ") p
+( -I- gauss fitting A for ) str
+(" << ad.Ions[s].name ) p n
+() S 8 T (   << endl;) N
+(      ) S
+(int) k
+( fit_result = GaussFitA\(s\);) p n
+() N
+(      calc1dMoments\(s, fit_A, delta_v, duty, ad, ) N
+() S 8 T () S 16 T (  n_local, v0_local, vth_local\);) N
+(      ) S
+(/* NOTE:  n_err is calculated above assuming 1D moments so it will be ) c n
+() S 8 T ( wrong if 3D moments are used here \(in previous line\).  ) N
+(      */) N
+() p n
+(      ) S
+(/* re-assign v0 and vth to moment-derived values) c n
+() S 8 T ( true => v0 and vth from moment calculation) N
+() S 8 T ( false => v0 and vth from GaussFitA, i.e. center and width of Gaussian) N
+(      */) N
+(      ) p
+(if) K
+( \(1\){) p n
+() S 8 T (fit_v0[s] = v0_local;) N
+() S 8 T (fit_vth[s] = vth_local;) N
+(      }) N
+(      fit_n[s] = n_local;) N
+(    }) N
+() N
+() N
+(  } ) S
+(// loop over species) c n
+() p n
+(  ) S
+(int) k
+( total_quality = determineQuality\(\);) p n
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(int) k
+( DistFunc::calc3dMoments\() p
+(const) K
+( ) p
+(int) k
+(& s, ) p n
+() S 8 T () S 16 T () S 24 T (  ) S
+(const) K
+( vector< vector<) p
+(float) k
+(> >& A_local, ) p n
+() S 8 T () S 16 T () S 24 T (  ) S
+(const) K
+( vector<) p
+(float) k
+(>& delta_v, ) p n
+() S 8 T () S 16 T () S 24 T (  AceSwicsDutyCycle duty, ) S
+(const) K
+( AnalysisData& ad,) p n
+() S 8 T () S 16 T () S 24 T (  ) S
+(float) k
+(& n_local, ) p
+(float) k
+(& v0_local, ) p
+(float) k
+(& vth_local\){) p n
+() N
+(  ) S
+(/* Notes) c n
+() N
+(     1.  These equations have been re-derived many times and are not) N
+(     yet confirmed.) N
+(  */) N
+(  string thisprog = ") p
+(DistFunc::calcMoments) str
+(";) p n
+() N
+() N
+(  ) S
+(// calculate 0th moment \(sums over i\)) c n
+(  ) p
+(// F0 =  n / D) c n
+(  ) p
+(// units: 1/km^3) c n
+(  ) p
+(float) k
+( F0 = 0.0;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    F0 += A_local[s][nedb] * pow\(v[s][nedb],2.0\) * delta_v[nedb];) N
+(  }) N
+() N
+(  ) S
+(// calculate 1st moment \(sums over i\)) c n
+(  ) p
+(// F1 = n v0 / D) c n
+(  ) p
+(// units: 1/\(km^2 s\)) c n
+(  ) p
+(float) k
+( F1 = 0.0;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    F1 += A_local[s][nedb] * pow\(v[s][nedb],3.0\) * delta_v[nedb]; ) N
+(  }) N
+() N
+(  v0_local = F1/F0;) N
+() N
+(  ) S
+(// calculate 2nd moment \(sums over i\)) c n
+(  ) p
+(// F2 = n D vth^2) c n
+(  ) p
+(// units: 1/\(km s^2\)) c n
+(DistFunc.cc) (Page 4/17) (Mar 24, 05 15:56) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(DistFunc.cc) (2/11) (Thursday March 24, 2005) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (5-6) 3
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  ) p
+(float) k
+( F2 = 0.0;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    F2 += A_local[s][nedb] * pow\(\(v[s][nedb] - v0_local\),2\) * ) N
+(      pow\(v[s][nedb],2.0\) * delta_v[nedb];) N
+(  }) N
+() N
+(  ) S
+(// calculate state quantity: thermal velocity \(vth\) in km/s) c n
+(  vth_local = sqrt\( F2 / F0 \);) p n
+() N
+(  ) S
+(// Duty Cycle) c n
+(  ) p
+(float) k
+( delta_psi = vth_local/v0_local;) p n
+(  ) S
+(if) K
+( \(gDbgLvl >= 1\) {) p n
+(    cout << thisprog << ") S
+( -I- delta_psi = ) str
+(" << delta_psi << endl;) p n
+(    cout << thisprog << ") S
+( -I- CycleTime = ) str
+(" << ad.CycleTime << endl;) p n
+(  }) N
+(  ) S
+(float) k
+( D = duty.calcByInterpolation\(ad.CycleTime, delta_psi\);) p n
+() N
+(  ) S
+(// calculate state quantity: density \(n\) in cm^-3) c n
+(  ) p
+(// n =  n D / factor) c n
+(  ) p
+(// factor \(1 km / 1.0e5 cm\)^3 converts from km^-3 to cm^-3) c n
+(  ) p
+(if) K
+( \(D > 0.\) {) p n
+(    n_local = F0 * D / \(1.0e15\);) N
+(  }) N
+(  ) S
+(else) K
+( {) p n
+(    n_local = -1.0;) N
+(  }) N
+() N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(int) k
+( DistFunc::calc1dMoments\() p
+(const) K
+( ) p
+(int) k
+(& s, ) p n
+() S 8 T () S 16 T () S 24 T (  ) S
+(const) K
+( vector< vector<) p
+(float) k
+(> >& A_local, ) p n
+() S 8 T () S 16 T () S 24 T (  ) S
+(const) K
+( vector<) p
+(float) k
+(>& delta_v, ) p n
+() S 8 T () S 16 T () S 24 T (  AceSwicsDutyCycle duty, ) S
+(const) K
+( AnalysisData& ad,) p n
+() S 8 T () S 16 T () S 24 T (  ) S
+(float) k
+(& n_local, ) p
+(float) k
+(& v0_local, ) p
+(float) k
+(& vth_local\){) p n
+() N
+(  ) S
+(/* Notes) c n
+() N
+(     1.  These equations have been re-derived many times and are not) N
+(     yet confirmed.) N
+(  */) N
+(  string thisprog = ") p
+(DistFunc::calc1dMoments) str
+(";) p n
+() N
+() N
+(  ) S
+(// calculate 0th moment \(sums over i\)) c n
+(  ) p
+(// F0/D =  n / v0^2) c n
+(  ) p
+(// units: s^2/km^5) c n
+(  ) p
+(float) k
+( F0 = 0.0;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    F0 += A_local[s][nedb] * delta_v[nedb];) N
+(  }) N
+() N
+(  ) S
+(// calculate 1st moment \(sums over i\)) c n
+(  ) p
+(// F1/D = n / v0) c n
+(  ) p
+(// units: s/km^4) c n
+(  ) p
+(float) k
+( F1 = 0.0;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    F1 += A_local[s][nedb] * v[s][nedb] * delta_v[nedb]; ) N
+(  }) N
+() N
+(  v0_local = F1/F0;) N
+() N
+(  ) S
+(// calculate 2nd moment \(sums over i\)) c n
+(  ) p
+(// F2 / D = n vth^2 / v0^2) c n
+(  ) p
+(// units: 1/\(km^3\)) c n
+(  ) p
+(float) k
+( F2 = 0.0;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    F2 += A_local[s][nedb] * pow\(\(v[s][nedb] - v0_local\),2\) * delta_v[nedb];) N
+(DistFunc.cc) (Page 5/17) (Mar 24, 05 15:56) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  }) p n
+() N
+(  ) S
+(// calculate state quantity: thermal velocity \(vth\) in km/s) c n
+(  vth_local = sqrt\( F2 / F0 \);) p n
+() N
+(  ) S
+(// Duty Cycle) c n
+(  ) p
+(float) k
+( delta_psi = vth_local/v0_local;) p n
+(  ) S
+(if) K
+( \(gDbgLvl >= 1\) {) p n
+(    cout << thisprog << ") S
+( -I- delta_psi = ) str
+(" << delta_psi << endl;) p n
+(    cout << thisprog << ") S
+( -I- CycleTime = ) str
+(" << ad.CycleTime << endl;) p n
+(  }) N
+(  ) S
+(float) k
+( D = duty.calcByInterpolation\(ad.CycleTime, delta_psi\);) p n
+() N
+(  ) S
+(// calculate state quantity: density \(n\) in cm^-3) c n
+(  ) p
+(// n =  F1^2 / \(D F0 factor\)) c n
+(  ) p
+(// factor \(1 km / 1.0e5 cm\)^3 converts from km^-3 to cm^-3) c n
+(  ) p
+(if) K
+( \(D > 0.\) {) p n
+(    n_local = pow\(F1,2.\) / \(D * F0 * 1.0e15\);) N
+(  }) N
+(  ) S
+(else) K
+( {) p n
+(    n_local = -1.0;) N
+(  }) N
+() N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(int) k
+( DistFunc::GaussFitA\() p
+(int) k
+( s\){) p n
+(  ) S
+(const) K
+( string thisprog = ") p
+(DistFunc::GaussFitA) str
+(";) p n
+() N
+(  ) S
+(/* 0 => normal) c n
+(     1 => error) N
+(  */) N
+(  ) p
+(int) k
+( status = 0; ) p n
+(  ) N
+(  ) S
+(/* ----------------------------------------------------------------------) c n
+(     Set up arrays) N
+(     ---------------------------------------------------------------------- */) N
+(//   // copy into correct type and eliminating unused elements 0 and 1) N
+(//   Vec_DP x\(MAXEDB-FIRSTEDB, 0.\);) N
+(//   Vec_DP y\(MAXEDB-FIRSTEDB, 0.\);) N
+(//   cout << thisprog << " -D- dumping x/y..." << endl;) N
+(//   for \(int nedb=FIRSTEDB; nedb<MAXEDB; nedb++\){) N
+(//     x[nedb-FIRSTEDB] = v[s][nedb];) N
+(//     y[nedb-FIRSTEDB] = A[s][nedb];) N
+(//     cout << "+ nedb=" << nedb << " x=" << x[nedb-FIRSTEDB]) N
+(// ) S 8 T ( << " y=" << y[nedb-FIRSTEDB] << endl;) N
+(//   }) N
+() p n
+(//  const int MinEDB    = 22; // FIRSTEDB;) c n
+(//  const int MaxEDB    = 36; // MAXEDB - 1;) N
+(  ) p
+(const) K
+( ) p
+(int) k
+( MinEDB    = FIRSTEDB;) p n
+(  ) S
+(const) K
+( ) p
+(int) k
+( MaxEDB    = MAXEDB - 1;) p n
+(  ) S
+(int) k
+( NumPoints = MaxEDB - MinEDB + 1;) p n
+(  TNT::Vector<) S
+(double) k
+(> x\(NumPoints, 0.\);) p n
+(  TNT::Vector<) S
+(double) k
+(> y\(NumPoints, 0.\);) p n
+() N
+(  ) S
+(if) K
+( \(gDbgLvl >= 3\) cout << thisprog << ") p
+( -D- dumping x/y...) str
+(" << endl;) p n
+() N
+(  ) S
+(float) k
+( ymax = -1.0;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb=MinEDB; nedb<MaxEDB; nedb++\){) p n
+(    x[nedb-MinEDB] = ) S
+(static_cast) k
+(<) p
+(double) k
+(>\(v[s][nedb]\);) p n
+(    y[nedb-MinEDB] = ) S
+(static_cast) k
+(<) p
+(double) k
+(>\(A[s][nedb]\);) p n
+() N
+(    ) S
+(if) K
+( \(gDbgLvl >= 3\){) p n
+(      cout << ") S
+(+ nedb=) str
+(" << nedb << ") p
+( x=) str
+(" << x[nedb-MinEDB]) p n
+() S 8 T (   << ") S
+( y=) str
+(" << y[nedb-MinEDB] << endl;) p n
+(    }) N
+(  ) N
+(DistFunc.cc) (Page 6/17) (Mar 24, 05 15:56) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(DistFunc.cc) (3/11) (Thursday March 24, 2005) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (7-8) 4
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    ) p
+(if) K
+( \(y[nedb-MinEDB] > ymax\) ymax = y[nedb-MinEDB];) p n
+(  }) N
+() N
+(  ) S
+(// set sigma\(As[nedb]\) to dummy value) c n
+(  ) p
+(// FIX: calculate actual) c n
+(  TNT::Vector<) p
+(double) k
+(> sigmas\(NumPoints, 0.1\);) p n
+() N
+(  ) S
+(// initialize gaussian parameters) c n
+(  TNT::Vector<) p
+(double) k
+(> a\(3\);  ) p
+(// one 3 parameter Gaussian) c n
+(  Vec_I_BOOL ia\(a.size\(\)\);) p n
+(  a[0] = ymax;) N
+(  ia[0] = ) S
+(true) k
+(;) p n
+(  a[1] = v0[s];) N
+(  ia[1] = ) S
+(true) k
+(;) p n
+(  a[2] = vth[s];) N
+(  ia[2] = ) S
+(true) k
+(;) p n
+() N
+(  DP alamda = -1.0; ) S
+(// -1 => initialization) c n
+() p n
+(  ) S
+(// working variables for mrqmin) c n
+(  ) p
+(//Mat_O_DP covar\(a.size\(\),a.size\(\)\);) c n
+(  ) p
+(//Mat_O_DP alpha\(a.size\(\),a.size\(\)\);) c n
+(  TNT::Matrix<DP> covar\(a.size\(\),a.size\(\)\);) p n
+(  TNT::Matrix<DP> alpha\(a.size\(\),a.size\(\)\);) N
+(  DP chisq = 1.0;) N
+(  ) N
+(  ) S
+(bool) k
+( Converged = ) p
+(false) k
+(;) p n
+(  ) S
+(bool) k
+( OneMore = ) p
+(false) k
+(;) p n
+(  ) S
+(int) k
+( num_iter = 1;) p n
+(  ) S
+(int) k
+( num_iter_max = 10000;) p n
+(  DP last_chisq = 0.0;) N
+(  DP delta_chisq_cutoff = 1.0e-3;) N
+(  ) S
+(while) K
+( \(!Converged  || OneMore\){) p n
+(    ) S
+(/* Fit is judged converged when the fractional change in chisq is) c n
+(       below the cutoff.  After that, one more call of mrqmin must be) N
+(       made, after alamda=0.0, to cause mrqmin to set covar and alpha) N
+(       to be set to covariance and curvature matrix for converged) N
+(       parameters.  This, unfortunately, complicates the loop logic somewhat.) N
+(    */) N
+() p n
+(    ) S
+(// toggle back to false if set; to ensure only *one* more iteration) c n
+(    ) p
+(if) K
+( \(OneMore\) OneMore = ) p
+(false) k
+(;) p n
+() N
+(    NR::mrqmin\(x, y, sigmas, a, ia, covar, alpha, chisq, NR::fgauss, alamda\);) N
+(    ) N
+(    ) S
+(if) K
+( \(!Converged\){) p n
+(      DP delta_chisq_frac = abs\(last_chisq - chisq\)/chisq;) N
+(      last_chisq = chisq;) N
+(      ) S
+(if) K
+( \( \(delta_chisq_frac <= delta_chisq_cutoff\)  && ) p n
+() S 8 T (   \(num_iter > 1\) \){) N
+(      ) S
+(// have to have > 1 iteration to see chisq change!) c n
+() p n
+() S 8 T (Converged = ) S
+(true) k
+(;) p n
+() S 8 T (OneMore = ) S
+(true) k
+(;) p n
+() N
+() S 8 T () S
+(/* setting alamda = 0.0 causes  */) c n
+() p 8 T (alamda = 0.0;  ) N
+() N
+() S 8 T () S
+(if) K
+( \(gDbgLvl >= 3\){) p n
+() S 8 T (  cout << thisprog << ") S
+( -I- fit converged on iteration=) str
+(" << num_iter ) p n
+() S 8 T (       << endl;) N
+() S 8 T (}) N
+(      }) N
+(      ) S
+(if) K
+( \(gDbgLvl >= 3 || \(gDbgLvl >= 1 && OneMore\)\){ ) p n
+() S 8 T (cout << thisprog << ") S
+( -I- iteration=) str
+(" << num_iter << ") p
+( chisq=) str
+(") p n
+() S 8 T (     << chisq << ") S
+( last change: ) str
+(" << delta_chisq_frac << endl;) p n
+(      }) N
+(    }) N
+(      ) N
+(DistFunc.cc) (Page 7/17) (Mar 24, 05 15:56) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    ) p
+(// get out after max iterations) c n
+(    ) p
+(if) K
+( \(num_iter > num_iter_max\) {) p n
+(      cout << thisprog << ") S
+( -W- gauss fit failed to converge after ) str
+(" ) p n
+() S 8 T (   << num_iter_max << ") S
+( iterations.  Aborting...) str
+(" << endl;) p n
+(      ) S
+(break) K
+(;) p n
+(    }) N
+() N
+(    num_iter++;) N
+(  }) N
+() N
+(  ) S
+(/* ----------------------------------------------------------------------) c n
+(     Evaluate quality of fit) N
+(     ---------------------------------------------------------------------- */) N
+(  ) p
+(// Compute the quality of the fit) c n
+(  ) p
+(// NR C++ sec. 15.1 \(p665\)) c n
+(  ) p
+(double) k
+( Q = NR::gammq\(.5*\(NumPoints - a.size\(\)\),.5*chisq\); ) p n
+() N
+(  string quality;) N
+(  ) S
+(if) K
+( \(Q < 0.001\){) p n
+(    status = 1;) N
+(    quality = ") S
+(low) str
+(";) p n
+(  }) N
+(  ) S
+(if) K
+( \(Q > 0.001 && Q < 0.1\){) p n
+(    status = 0;) N
+(    quality = ") S
+(possible, but not well determined) str
+(";) p n
+(  }) N
+(  ) S
+(if) K
+( \(Q > .1\) {) p n
+(    status = 0;) N
+(    quality = ") S
+(hi) str
+(";) p n
+(  }) N
+() N
+(  ) S
+(if) K
+( \(gDbgLvl >= 1\){) p n
+(    cout << thisprog << ") S
+( -I- quality of fit:) str
+(" << endl;) p n
+(    cout << ") S
+(+ chisq=) str
+(" << chisq << endl;) p n
+(    cout << ") S
+(+ gammq\(.5*) str
+(" <<NumPoints - a.size\(\) << ") p
+(, .5*chisq\) = ) str
+(" ) p n
+() S 8 T ( << Q << endl;) N
+(    cout << ") S
+(+ chances that model parameters fit data: ) str
+(" << quality << endl;) p n
+() N
+(  }) N
+() N
+(  ) S
+(/* ----------------------------------------------------------------------) c n
+(     Create a modeled \(fit\) A and calculate physical parameters) N
+(     ---------------------------------------------------------------------- */) N
+(  ) p
+(//  if \(status == 1 || status == 0\){ // no need if fit was bad) c n
+(  ) p
+(if) K
+( \(1\){  ) p
+(// hardcode on for dbg) c n
+(    DP fit_y;) p n
+(    TNT::Vector<) S
+(double) k
+(> dyda\(a.size\(\), 0.0\);) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( nedb = MinEDB; nedb <= MaxEDB; nedb++\){) p n
+(      NR::fgauss\(x[nedb-MinEDB], a, fit_y, dyda\);) N
+(      fit_A[s][nedb] = fit_y;) N
+() N
+(      fit_n[s] += fit_A[s][nedb];) N
+(    }) N
+() N
+(    fit_v0[s] = a[1];) N
+(    fit_vth[s] = a[2];) N
+(    fit_err[s] = Q; ) S
+(// FIX: this may not be completely true but it is related) c n
+(  }) p n
+() N
+(  ) S
+(return) K
+( status;) p n
+(}) N
+() N
+(int) k
+( DistFunc::outputDF\() p
+(FILE) k
+( *OUT, ) p
+(float) k
+( doyfr, AnalysisData ad\){) p n
+(  ) S
+(const) K
+( ) p
+(char) k
+( fmfile[] = ") p
+(/home/jraines/ace/axfmtweak/xfmexp.cc) str
+(";) p n
+() N
+(  ) S
+(static) K
+( ) p
+(bool) k
+( FirstTime = ) p
+(true) k
+(;) p n
+() N
+(  ) S
+(// keep fields the same total width!) c n
+(  ) p
+(char) k
+( hdrfmt[] =") p
+(# %6s %3s %8s %8s %6s %10s %10s %10s %10s\\n) str
+(";) p n
+(DistFunc.cc) (Page 8/17) (Mar 24, 05 15:56) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(DistFunc.cc) (4/11) (Thursday March 24, 2005) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (9-10) 5
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  ) p
+(char) k
+( datafmt[]=") p
+(  %6.2f %3d %8.2f %8.2f %6s %10.2e %10.2e %10.2e %10.2e\\n) str
+(";) p n
+() N
+(  ) S
+(if) K
+( \(FirstTime\) {  ) p
+(// print header first time through ) c n
+(    fprintf\(OUT,") p
+(# Distribution function from ACE Level II data processor \(v2.0\)\\n) str
+("\);) p n
+() N
+(    ) S
+(// get and format calendar time for header) c n
+(    time_t now;) p n
+(    ) S
+(char) k
+( timestr[19];) p n
+(    time\(&now\);) N
+(    strftime\(timestr, 19, ") S
+(%d%b%Y %H:%M:%S) str
+(", localtime\(&now\)\);) p n
+(    fprintf\(OUT,") S
+(# Created: %s\\n) str
+(", timestr\);) p n
+() N
+(    ) S
+(// include RCS ID in header) c n
+(    fprintf\(OUT,") p
+(# DistFunc: %s\\n) str
+(", ") p
+($Id: DistFunc.cc,v 1.37 2005/03/24 05:02:36 jraines Exp $) str
+("\);) p n
+() N
+(    ) S
+(// column headings) c n
+(    ) p
+(// note: 'fill' column is present only to mimic format of other rate files) c n
+(    fprintf\(OUT,hdrfmt,") p
+(doyfr) str
+(",") p
+(edb) str
+(",") p
+(E/q) str
+(",") p
+(v) str
+(",) p n
+() S 8 T (    ") S
+(ion) str
+(",") p
+(df) str
+(", ") p
+(df_err) str
+(",") p
+(fit_df) str
+(", ") p
+(fit_df_err) str
+("\);) p n
+() N
+(    FirstTime = ) S
+(false) k
+(;) p n
+(  }) N
+() N
+(  ) S
+(for) K
+( \() p
+(unsigned) k
+( ) p
+(int) k
+( s = 0; s < ad.Ions.size\(\); s++\){) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(      fprintf\(OUT, datafmt, doyfr, nedb, ad.Eqtab[nedb],v[s][nedb],) N
+() S 8 T (       ad.Ions[s].name.c_str\(\), A[s][nedb], ErrA[s][nedb],) N
+() S 8 T (       fit_A[s][nedb], Err_fit_A[s][nedb]\);) N
+(    }) N
+(  }) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(int) k
+( DistFunc::outputNVT\() p
+(FILE) k
+( *OUT, ) p
+(float) k
+( doyfr, AnalysisData ad\){) p n
+(  ) S
+(const) K
+( ) p
+(char) k
+( fmfile[] = ") p
+(/home/jraines/ace/axfmtweak/xfmexp.cc) str
+(";) p n
+() N
+(  ) S
+(static) K
+( ) p
+(bool) k
+( FirstTime = ) p
+(true) k
+(;) p n
+() N
+(  ) S
+(// keep fields the same total width!) c n
+(  ) p
+(char) k
+( hdrfmt[] =") p
+(# %6s %6s %8s %8s %8s %8s %8s %8s %8s %8s %8s\\n) str
+(";) p n
+(  ) S
+(char) k
+( datafmt[]=") p
+(  %6.2f %6s %8.2e %8.2e %8.2e %8.2g %8.2e %8.2e %8.2e %8.2g %8d\\n) str
+(";) p n
+() N
+(  ) S
+(if) K
+( \(FirstTime\) {  ) p
+(// print header first time through ) c n
+(    fprintf\(OUT,") p
+(# State variables from ACE Level II data processor \(v2.0\)\\n) str
+("\);) p n
+() N
+(    ) S
+(// get and format calendar time for header) c n
+(    time_t now;) p n
+(    ) S
+(char) k
+( timestr[19];) p n
+(    time\(&now\);) N
+(    strftime\(timestr, 19, ") S
+(%d%b%Y %H:%M:%S) str
+(", localtime\(&now\)\);) p n
+(    fprintf\(OUT,") S
+(# Created: %s\\n) str
+(", timestr\);) p n
+() N
+(    ) S
+(// include RCS ID in header) c n
+(    fprintf\(OUT,") p
+(# DistFunc: %s\\n) str
+(", ") p
+($Id: DistFunc.cc,v 1.37 2005/03/24 05:02:36 jraines Exp $) str
+("\);) p n
+() N
+(    ) S
+(// column headings) c n
+(    fprintf\(OUT,hdrfmt,") p
+(doyfr) str
+(",") p
+(ion) str
+(",") p
+(n) str
+(",") p
+(v) str
+(", ") p
+(vth) str
+(",") p
+(n_err) str
+(",) p n
+() S 8 T (    ") S
+(fit_n) str
+(",") p
+(fit_v) str
+(", ") p
+(fit_vth) str
+(", ") p
+(fit_err) str
+(", ") p
+(quality) str
+("\);) p n
+() N
+(    FirstTime = ) S
+(false) k
+(;) p n
+(  }) N
+() N
+(  ) S
+(for) K
+( \() p
+(unsigned) k
+( ) p
+(int) k
+( s = 0; s < ad.Ions.size\(\); s++\){) p n
+(    fprintf\(OUT, datafmt, doyfr, ad.Ions[s].name.c_str\(\),) N
+() S 8 T (    getDensity\(s\), getBulkVelocity\(s\), getThermVelocity\(s\), ) N
+() S 8 T (    n_err[s], ) N
+() S 8 T (    fit_n[s], fit_v0[s], fit_vth[s],) N
+() S 8 T (    fit_err[s],) N
+(DistFunc.cc) (Page 9/17) (Mar 24, 05 15:56) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p 8 T (    quality[s]\);) N
+(  }) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(int) k
+( DistFunc::outputDelivNVT\() p
+(FILE) k
+( *OUT, ) p
+(float) k
+( doyfr, AnalysisData ad\){) p n
+(  ) S
+(static) K
+( ) p
+(bool) k
+( FirstTime = ) p
+(true) k
+(;) p n
+() N
+(  ) S
+(if) K
+( \(FirstTime\) {  ) p
+(// print header first time through ) c n
+(    fprintf\(OUT,") p
+(# State variables from ACE/SWICS Level II data processor\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Data version: 2.0\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Contact: Jim Raines \(jraines@umich.edu\)\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Doc: http://www.srl.caltech.edu/ACE/\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Fill: -1.0\\n) str
+("\);) p n
+() N
+(    ) S
+(// get and format calendar time for header) c n
+(    time_t now;) p n
+(    ) S
+(char) k
+( timestr[19];) p n
+(    time\(&now\);) N
+(    strftime\(timestr, 19, ") S
+(%d%b%Y %H:%M:%S) str
+(", localtime\(&now\)\);) p n
+(    fprintf\(OUT,") S
+(# Created: %s\\n) str
+(", timestr\);) p n
+() N
+(    ) S
+(char) k
+( hdrfmt[]=") p
+( %10s %8s %8s %4s) str
+(";) p n
+() N
+(    ) S
+(// --- column names ---) c n
+(    fprintf\(OUT,") p
+(# %6s) str
+(",") p
+(doyfr) str
+("\);) p n
+() N
+(    fprintf\(OUT,hdrfmt,") S
+(nHe2) str
+(",") p
+(vHe2) str
+(",") p
+(vthHe2) str
+(",") p
+(qual) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(nC5/nHe2) str
+(",") p
+(vC5) str
+(",") p
+(vthC5) str
+(",") p
+(qual) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(nO6/nHe2) str
+(",") p
+(vO6) str
+(",") p
+(vthO6) str
+(",") p
+(qual) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(nFe10/nHe2) str
+(",") p
+(vFe10) str
+(",") p
+(vthFe10) str
+(",") p
+(qual) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(nMg10/nHe2) str
+(",") p
+(vMg10) str
+(",") p
+(vthMg10) str
+(",") p
+(qual) str
+("\);) p n
+(    fprintf\(OUT,") S
+(\\n) str
+("\);) p n
+() N
+(        ) S
+(// --- column units ---) c n
+(    fprintf\(OUT,") p
+(# %6s) str
+(",") p
+(days) str
+("\);) p n
+() N
+(    fprintf\(OUT,hdrfmt,") S
+(cm^-3) str
+(",") p
+(km/s) str
+(",") p
+(km/s) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+(km/s) str
+(",") p
+(km/s) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+(km/s) str
+(",") p
+(km/s) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+(km/s) str
+(",") p
+(km/s) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+(km/s) str
+(",") p
+(km/s) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,") S
+(\\n) str
+("\);) p n
+() N
+(    FirstTime = ) S
+(false) k
+(;) p n
+(  }) N
+() N
+(  ) S
+(int) k
+( s;) p n
+(  ) S
+(float) k
+( n_he, n_ratio;) p n
+(  fprintf\(OUT, ") S
+(  %6.2f) str
+(", doyfr\);) p n
+() N
+(  ) S
+(char) k
+( datafmt[]=") p
+( %10.2e %8.2e %8.2e %4d) str
+(";) p n
+() N
+(  s = ad.getIonIndex\(") S
+(He2+) str
+("\);) p n
+(  n_he = getDensity\(s\); ) N
+(  fprintf\(OUT, datafmt, n_he*110., getBulkVelocity\(s\), getThermVelocity\(s\), ) N
+() S 8 T (  quality[s]\);) N
+() N
+(  s = ad.getIonIndex\(") S
+(C5+) str
+("\);) p n
+(  n_ratio = calc_n_ratio\(getDensity\(s\),n_he\);) N
+(  fprintf\(OUT, datafmt, n_ratio, getBulkVelocity\(s\), getThermVelocity\(s\), ) N
+() S 8 T (  quality[s]\);) N
+() N
+(  s = ad.getIonIndex\(") S
+(O6+) str
+("\);) p n
+(  n_ratio = calc_n_ratio\(getDensity\(s\),n_he\);) N
+(  fprintf\(OUT, datafmt, n_ratio, getBulkVelocity\(s\), getThermVelocity\(s\), ) N
+() S 8 T (  quality[s]\);) N
+() N
+(DistFunc.cc) (Page 10/17) (Mar 24, 05 15:56) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(DistFunc.cc) (5/11) (Thursday March 24, 2005) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (11-12) 6
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  s = ad.getIonIndex\(") p
+(Fe10+) str
+("\);) p n
+(  n_ratio = calc_n_ratio\(getDensity\(s\),n_he\);) N
+(  fprintf\(OUT, datafmt, n_ratio, getBulkVelocity\(s\), getThermVelocity\(s\), ) N
+() S 8 T (  quality[s]\);) N
+() N
+(  s = ad.getIonIndex\(") S
+(Mg10+) str
+("\);) p n
+(  n_ratio = calc_n_ratio\(getDensity\(s\),n_he\);) N
+(  fprintf\(OUT, datafmt, n_ratio, getBulkVelocity\(s\), getThermVelocity\(s\), ) N
+() S 8 T (  quality[s]\);) N
+() N
+(  fprintf\(OUT, ") S
+(\\n) str
+("\);) p n
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(int) k
+( DistFunc::outputDelivElemAbun\() p
+(FILE) k
+( *OUT, ) p
+(float) k
+( doyfr, AnalysisData ad\){) p n
+(  ) S
+(static) K
+( ) p
+(bool) k
+( FirstTime = ) p
+(true) k
+(;) p n
+() N
+(  ) S
+(if) K
+( \(FirstTime\) {  ) p
+(// print header first time through ) c n
+(    fprintf\(OUT,") p
+(# Elemental abundances from ACE/SWICS Level II data processor\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Data version: 2.0\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Contact: Jim Raines \(jraines@umich.edu\)\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Doc: http://www.srl.caltech.edu/ACE/\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Fill: -1.0\\n) str
+("\);) p n
+() N
+(    ) S
+(// get and format calendar time for header) c n
+(    time_t now;) p n
+(    ) S
+(char) k
+( timestr[19];) p n
+(    time\(&now\);) N
+(    strftime\(timestr, 19, ") S
+(%d%b%Y %H:%M:%S) str
+(", localtime\(&now\)\);) p n
+(    fprintf\(OUT,") S
+(# Created: %s\\n) str
+(", timestr\);) p n
+() N
+(    ) S
+(// keep fields the same total width!) c n
+(    ) p
+(char) k
+( hdrfmt[] =") p
+( %9s %7s) str
+(";) p n
+() N
+(    ) S
+(// column names) c n
+(    fprintf\(OUT,") p
+(# %6s) str
+(",") p
+(doyfr) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(4He/O) str
+(",") p
+(QF_He/O) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(Ne/O) str
+(",") p
+(QF_Ne/O) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(Mg/O) str
+(",") p
+(QF_Mg/O) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(Fe/O) str
+(",") p
+(QF_Fe/O) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(Si/O) str
+(",") p
+(QF_Si/O) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(S/O) str
+(",") p
+(QF_S/O) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(N/O) str
+(",") p
+(QF_N/O) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(C/O) str
+(",") p
+(QF_C/O) str
+("\);) p n
+(    fprintf\(OUT,") S
+(\\n) str
+("\);) p n
+() N
+(    ) S
+(// column units) c n
+(    fprintf\(OUT,") p
+(# %6s) str
+(",") p
+(hours) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,") S
+(\\n) str
+("\);) p n
+() N
+(    FirstTime = ) S
+(false) k
+(;) p n
+(  }) N
+() N
+(  string element;) N
+(  ) S
+(float) k
+( n_ratio, n_sum;) p n
+(  ) S
+(int) k
+( qual = 0;) p n
+(  fprintf\(OUT, ") S
+(  %6.2f) str
+(", doyfr\);) p n
+() N
+(  ) S
+(char) k
+( datafmt[]=") p
+( %9.2e %7d) str
+(";) p n
+() N
+(DistFunc.cc) (Page 11/17) (Mar 24, 05 15:56) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  element = ") p
+(O) str
+(";) p n
+(  ) S
+(int) k
+( oxy_qual = 0;) p n
+(  ) S
+(float) k
+( n_oxy_sum = calc_elem_n_sum\(element, ad, oxy_qual\);) p n
+() N
+(  ) S
+(// report all fill values if O is marked as low statistics) c n
+(  ) p
+(// FIX: hardcoded number of elements) c n
+(  ) p
+(if) K
+( \(oxy_qual > 0\){) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( i = 0; i < 8; i++\)) p n
+(      fprintf\(OUT, datafmt, -1.0, 0\);) N
+(    ) S
+(return) K
+(\(0\);) p n
+(  }) N
+(      ) N
+(  element = ") S
+(He) str
+(";) p n
+(  ) S
+(float) k
+( mass = 4.0;) p n
+(  n_sum = calc_isotope_n_sum\(element, mass, ad, qual\);) N
+(  n_ratio = calc_n_ratio\(n_sum,n_oxy_sum\);) N
+(  fprintf\(OUT, datafmt, n_ratio, qual\);) N
+() N
+(  element = ") S
+(C) str
+(";) p n
+(  n_sum = calc_elem_n_sum\(element, ad, qual\);) N
+(  n_ratio = calc_n_ratio\(n_sum,n_oxy_sum\);) N
+(  fprintf\(OUT, datafmt, n_ratio, qual\);) N
+() N
+(  element = ") S
+(N) str
+(";) p n
+(  n_sum = calc_elem_n_sum\(element, ad, qual\);) N
+(  n_ratio = calc_n_ratio\(n_sum,n_oxy_sum\);) N
+(  fprintf\(OUT, datafmt, n_ratio, qual\);) N
+() N
+(  element = ") S
+(Ne) str
+(";) p n
+(  n_sum = calc_elem_n_sum\(element, ad, qual\);) N
+(  n_ratio = calc_n_ratio\(n_sum,n_oxy_sum\);) N
+(  fprintf\(OUT, datafmt, n_ratio, qual\);) N
+() N
+(  element = ") S
+(Mg) str
+(";) p n
+(  n_sum = calc_elem_n_sum\(element, ad, qual\);) N
+(  n_ratio = calc_n_ratio\(n_sum,n_oxy_sum\);) N
+(  fprintf\(OUT, datafmt, n_ratio, qual\);) N
+() N
+(  element = ") S
+(Si) str
+(";) p n
+(  n_sum = calc_elem_n_sum\(element, ad, qual\);) N
+(  n_ratio = calc_n_ratio\(n_sum,n_oxy_sum\);) N
+(  fprintf\(OUT, datafmt, n_ratio, qual\);) N
+() N
+(  element = ") S
+(S) str
+(";) p n
+(  n_sum = calc_elem_n_sum\(element, ad, qual\);) N
+(  n_ratio = calc_n_ratio\(n_sum,n_oxy_sum\);) N
+(  fprintf\(OUT, datafmt, n_ratio, qual\);) N
+() N
+(  element = ") S
+(Fe) str
+(";) p n
+(  n_sum = calc_elem_n_sum\(element, ad, qual\);) N
+(  n_ratio = calc_n_ratio\(n_sum,n_oxy_sum\);) N
+(  fprintf\(OUT, datafmt, n_ratio, qual\);) N
+() N
+(  fprintf\(OUT, ") S
+(\\n) str
+("\);) p n
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(int) k
+( DistFunc::outputDelivQRatio\() p
+(FILE) k
+( *OUT, ) p
+(float) k
+( doyfr, AnalysisData ad\){) p n
+(  ) S
+(static) K
+( ) p
+(bool) k
+( FirstTime = ) p
+(true) k
+(;) p n
+() N
+(  ) S
+(if) K
+( \(FirstTime\) {  ) p
+(// print header first time through ) c n
+(    fprintf\(OUT,") p
+(# Charge state ratios from ACE/SWICS Level II data processor\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Data version: 2.0\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Contact: Jim Raines \(jraines@umich.edu\)\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Doc: http://www.srl.caltech.edu/ACE/\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Fill: -1.0\\n) str
+("\);) p n
+() N
+(    ) S
+(// get and format calendar time for header) c n
+(DistFunc.cc) (Page 12/17) (Mar 24, 05 15:56) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(DistFunc.cc) (6/11) (Thursday March 24, 2005) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (13-14) 7
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    time_t now;) p n
+(    ) S
+(char) k
+( timestr[19];) p n
+(    time\(&now\);) N
+(    strftime\(timestr, 19, ") S
+(%d%b%Y %H:%M:%S) str
+(", localtime\(&now\)\);) p n
+(    fprintf\(OUT,") S
+(# Created: %s\\n) str
+(", timestr\);) p n
+() N
+(    ) S
+(char) k
+( hdrfmt[]=") p
+( %9s %10s) str
+(";) p n
+() N
+(    ) S
+(// --- column names ---) c n
+(    fprintf\(OUT,") p
+(# %6s) str
+(",") p
+(doyfr) str
+("\);) p n
+() N
+(    fprintf\(OUT,hdrfmt,") S
+(nC5/nC6) str
+(",") p
+(qf_nC5/nC6) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(nO7/nO6) str
+(",") p
+(qf_nO7/nO6) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(ave_q_C) str
+(",") p
+(qf_ave_q_C) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(ave_q_O) str
+(",") p
+(qf_ave_q_O) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(ave_q_fe) str
+(",") p
+(qf_ave_q_fe) str
+("\);) p n
+() N
+(    fprintf\(OUT,") S
+(\\n) str
+("\);) p n
+() N
+(    ) S
+(// --- column units ---) c n
+(    fprintf\(OUT,") p
+(# %6s) str
+(",") p
+(hours) str
+("\);) p n
+() N
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+([1]) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(e) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(e) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(e) str
+(",") p
+([1]) str
+("\);) p n
+() N
+(    fprintf\(OUT,") S
+(\\n) str
+("\);) p n
+() N
+(    FirstTime = ) S
+(false) k
+(;) p n
+(  }) N
+() N
+(  ) S
+(int) k
+( s_num,s_den;) p n
+(  ) S
+(float) k
+( n_ratio, qual_ratio;) p n
+(  fprintf\(OUT, ") S
+(  %6.2f) str
+(", doyfr\);) p n
+() N
+(  ) S
+(char) k
+( datafmt[]=") p
+( %9.2e %10d) str
+(";) p n
+() N
+(  s_num = ad.getIonIndex\(") S
+(C6+) str
+("\);) p n
+(  s_den = ad.getIonIndex\(") S
+(C5+) str
+("\);) p n
+(  n_ratio = calc_n_ratio\(getDensity\(s_num\),getDensity\(s_den\)\);) N
+(  qual_ratio = \(quality[s_num] == 1\) || \(quality[s_den] == 1\);) N
+(  fprintf\(OUT, datafmt, n_ratio, qual_ratio\);) N
+() N
+(  s_num = ad.getIonIndex\(") S
+(O7+) str
+("\);) p n
+(  s_den = ad.getIonIndex\(") S
+(O6+) str
+("\);) p n
+(  n_ratio = calc_n_ratio\(getDensity\(s_num\),getDensity\(s_den\)\);) N
+(  qual_ratio = \(quality[s_num] == 1\) || \(quality[s_den] == 1\);) N
+(  fprintf\(OUT, datafmt, n_ratio, qual_ratio\);) N
+() N
+(  ) S
+(int) k
+( qual = 0;) p n
+(  n_ratio = calc_ave_q\(") S
+(C) str
+(", ad, qual\);) p n
+(  qual_ratio = \(qual > 0\);) N
+(  fprintf\(OUT, datafmt, n_ratio, qual_ratio\);) N
+() N
+(  qual = 0;) N
+(  n_ratio = calc_ave_q\(") S
+(O) str
+(", ad, qual\);) p n
+(  qual_ratio = \(qual > 0\);) N
+(  fprintf\(OUT, datafmt, n_ratio, qual_ratio\);) N
+() N
+(  qual = 0;) N
+(  n_ratio = calc_ave_q\(") S
+(Fe) str
+(", ad, qual\);) p n
+(  qual_ratio = \(qual > 0\);) N
+(  fprintf\(OUT, datafmt, n_ratio, qual_ratio\);) N
+() N
+(  fprintf\(OUT, ") S
+(\\n) str
+("\);) p n
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(DistFunc.cc) (Page 13/17) (Mar 24, 05 15:56) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(}) p n
+() N
+(int) k
+( DistFunc::outputDelivQDist\() p
+(FILE) k
+( *OUT, ) p
+(float) k
+( doyfr, AnalysisData ad,) p n
+() S 8 T () S 16 T () S 24 T (       string element\){) N
+(  ) S
+(static) K
+( ) p
+(bool) k
+( PrintHeader;) p n
+(  ) S
+(static) K
+( vector<string> elements_processed;) p n
+() N
+(  string thisprog = ") S
+(DistFunc::outputDelivQDist) str
+(";) p n
+() N
+(  ) S
+(// check to see if this element has been processed before) c n
+(  PrintHeader = ) p
+(true) k
+(;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( i = 0; i < elements_processed.size\(\); i++\){) p n
+(    ) S
+(if) K
+( \(elements_processed[i] == element\) {) p n
+(      PrintHeader = ) S
+(false) k
+(;) p n
+(      ) S
+(break) K
+(;) p n
+(    }) N
+(  }) N
+() N
+(  ) S
+(if) K
+( \(PrintHeader\) {  ) p
+(// print header on first processing of element only) c n
+(    fprintf\(OUT,") p
+(# %s charge state distribution from ACE/SWICS Level II data processor\\n) str
+(", element.c_) p n
+(str\(\)\);) N
+(    fprintf\(OUT,") S
+(# Data version: 2.0\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Contact: Jim Raines \(jraines@umich.edu\)\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Doc: http://www.srl.caltech.edu/ACE/\\n) str
+("\);) p n
+(    fprintf\(OUT,") S
+(# Fill: -1.0\\n) str
+("\);) p n
+() N
+(    ) S
+(// get and format calendar time for header) c n
+(    time_t now;) p n
+(    ) S
+(char) k
+( timestr[19];) p n
+(    time\(&now\);) N
+(    strftime\(timestr, 19, ") S
+(%d%b%Y %H:%M:%S) str
+(", localtime\(&now\)\);) p n
+(    fprintf\(OUT,") S
+(# Created: %s\\n) str
+(", timestr\);) p n
+() N
+(    ) S
+(char) k
+( hdrfmt[]=") p
+( %7s %3s %9s %10s) str
+(";) p n
+() N
+(    ) S
+(// --- column names ---) c n
+(    fprintf\(OUT,") p
+(# %6s) str
+(",") p
+(doyfr) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(ion) str
+(",") p
+(chg) str
+(", ") p
+(rel_abun) str
+(",") p
+(qf_rel_abun) str
+("\);) p n
+(    fprintf\(OUT,") S
+(\\n) str
+("\);) p n
+() N
+(    ) S
+(// --- column units ---) c n
+(    fprintf\(OUT,") p
+(# %6s) str
+(",") p
+(hours) str
+("\);) p n
+(    fprintf\(OUT,hdrfmt,") S
+(n/a) str
+(",") p
+(e) str
+(",") p
+([1]) str
+(",") p
+([1]) str
+("\);) p n
+(    fprintf\(OUT,") S
+(\\n) str
+("\);) p n
+() N
+(    ) S
+(// save this one so the header is not printed again) c n
+(    elements_processed.push_back\(element\);) p n
+(  }) N
+() N
+() N
+(  ) S
+(int) k
+( qual = -1;) p n
+(  ) S
+(float) k
+( elem_n_sum = calc_elem_n_sum\(element, ad, qual\);) p n
+(  cout << thisprog << ") S
+( -D- sum of ) str
+(" << element << ") p
+( densities is ) str
+(" << elem_n_sum << end) p n
+(l;) N
+() N
+(  ) S
+(// find range to deliver) c n
+(  ) p
+(float) k
+( lo_chg = 0.;) p n
+(  ) S
+(float) k
+( hi_chg = 0.;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( i = 0; i < DeliverableRanges.size\(\); i++\){) p n
+(    ) S
+(if) K
+( \(DeliverableRanges[i].name == element\) {) p n
+(      lo_chg = DeliverableRanges[i].lo_chg;) N
+(      hi_chg = DeliverableRanges[i].hi_chg;) N
+(      ) S
+(break) K
+(;) p n
+(    }) N
+(  }) N
+(  ) N
+(  ) S
+(char) k
+( datafmt[]=") p
+(  %6.2f %7s %3.0f %9.2e %10d\\n) str
+(";) p n
+(  ) S
+(float) k
+( n_ratio;) p n
+(  ) S
+(for) K
+( \() p
+(unsigned) k
+( ) p
+(int) k
+( s = 0; s < ad.Ions.size\(\); s++\){) p n
+(DistFunc.cc) (Page 14/17) (Mar 24, 05 15:56) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(DistFunc.cc) (7/11) (Thursday March 24, 2005) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (15-16) 8
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    ) p
+(if) K
+( \(ad.Ions[s].element == element && ) p n
+() S 8 T (\(ad.Ions[s].charge >= lo_chg && ad.Ions[s].charge <= hi_chg\)\){) N
+(      n_ratio = calc_n_ratio\(getDensity\(s\),elem_n_sum\);) N
+(      fprintf\(OUT, datafmt, doyfr, ad.Ions[s].name.c_str\(\), ) N
+() S 8 T (      ad.Ions[s].charge, n_ratio, quality[s]\);) N
+(    }) N
+(  }) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(int) k
+( DistFunc::determineQuality\(\){) p n
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(void) k
+( DistFunc::filterNvtByQuality\(AnalysisData ad\){) p n
+(  string thisprog = ") S
+(DistFunc::filterNvtByQuality) str
+(";) p n
+() N
+(  ) S
+(// move these to somewhere else later) c n
+(  ) p
+(const) K
+( ) p
+(int) k
+( QF_LOW_STATS = 1;) p n
+() N
+(  ) S
+(for) K
+( \() p
+(unsigned) k
+( ) p
+(int) k
+( s = 0; s < ad.Ions.size\(\); s++\){) p n
+(    ) S
+(// dbg) c n
+(    ad.Ions[s].print\(\);) p n
+() N
+(    ) S
+(// density) c n
+(    ) p
+(if) K
+( \(n_err[s] > ad.Ions[s].errlvl.n_yellow\) ) p n
+(      quality[s] = quality[s] | QF_LOW_STATS;) N
+(    ) S
+(if) K
+( \(n_err[s] > ad.Ions[s].errlvl.n_red\) n[s] = FILL;) p n
+() N
+(    ) S
+(// velocity) c n
+(    ) p
+(float) k
+( comp_v = abs\(1 - \(v0[s]/fit_v0[s]\)\);) p n
+(    ) S
+(// -- no velocity filter is currently being applied --) c n
+() p n
+(    ) S
+(// thermal velocity) c n
+(    ) p
+(float) k
+( comp_vth = 2*abs\(vth[s]-fit_vth[s]\)/) p n
+(      \(ad.EqAcceptFac*v0[s]\);) N
+(    ) S
+(if) K
+( \(comp_vth > ad.Ions[s].errlvl.vth_red\) vth[s] = FILL;) p n
+(  }) N
+() N
+(  ) S
+(return) K
+(;) p n
+(}) N
+() N
+(float) k
+(  DistFunc::calc_n_ratio\() p
+(float) k
+( n_num, ) p
+(float) k
+( n_denom\){) p n
+(  ) S
+(float) k
+( ratio;) p n
+() N
+(  ) S
+(// not logic keeps out NaNs) c n
+(  ) p
+(if) K
+( \( ! \(n_denom > 0.\)\) ratio = FILL;) p n
+(  ) S
+(else) K
+( ) p
+(if) K
+( \( ! \(n_num > 0.\)\) ratio = FILL;) p n
+(  ) S
+(else) K
+( ratio = n_num/n_denom;) p n
+() N
+(  ) S
+(return) K
+(\(ratio\);) p n
+(}) N
+() N
+(float) k
+( DistFunc::calc_elem_n_sum\(string element, AnalysisData ad, ) p
+(int) k
+(& qual\){) p n
+() N
+(  ) S
+(float) k
+( n_sum = 0.;) p n
+(  ) S
+(float) k
+( qual_sum = 0.;) p n
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < ad.Ions.size\(\); s++\){) p n
+(    ) S
+(if) K
+( \(ad.Ions[s].element == element && n[s] > 0.\){ ) p n
+(      ) S
+(// last clause keeps out -1.0 fill) c n
+(      n_sum += n[s];) p n
+(      qual_sum += n[s]*) S
+(static_cast) k
+(<) p
+(float) k
+(>\(quality[s]\);) p n
+(    }) N
+(  }) N
+() N
+(  qual = 1;) N
+(  ) S
+(if) K
+( \(n_sum > 0.\){) p n
+(DistFunc.cc) (Page 15/17) (Mar 24, 05 15:56) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    ) p
+(if) K
+( \(qual_sum/n_sum >= .5\) qual = 1;  ) p
+(// somewhat arbitrary cutoff) c n
+(    ) p
+(else) K
+( qual = 0;) p n
+(  }) N
+() N
+(  ) S
+(return) K
+(\(n_sum\);) p n
+(}) N
+() N
+(float) k
+( DistFunc::calc_isotope_n_sum\(string element, ) p
+(float) k
+( mass,) p n
+() S 8 T () S 16 T () S 24 T () S 32 T (   AnalysisData ad, ) S
+(int) k
+(& qual\){) p n
+() N
+(  ) S
+(float) k
+( n_sum = 0.;) p n
+(  ) S
+(float) k
+( qual_sum = 0.;) p n
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < ad.Ions.size\(\); s++\){) p n
+(    ) S
+(if) K
+( \(ad.Ions[s].element == element && ad.Ions[s].mass == mass) p n
+() S 8 T (&& n[s] > 0.\){ ) N
+(      ) S
+(// last clause keeps out -1.0 fill) c n
+(      n_sum += n[s];) p n
+(      qual_sum += n[s]*) S
+(static_cast) k
+(<) p
+(float) k
+(>\(quality[s]\);) p n
+(    }) N
+(  }) N
+() N
+(  qual = 1;) N
+(  ) S
+(if) K
+( \(n_sum > 0.\){) p n
+(    ) S
+(if) K
+( \(qual_sum/n_sum >= .5\) qual = 1;  ) p
+(// somewhat arbitrary cutoff) c n
+(    ) p
+(else) K
+( qual = 0;) p n
+(  }) N
+() N
+(  ) S
+(return) K
+(\(n_sum\);) p n
+(}) N
+() N
+(float) k
+( DistFunc::calc_ave_q\(string element, AnalysisData ad, ) p
+(int) k
+(& qual\){) p n
+() N
+(  ) S
+(float) k
+( n_sum = 0.;) p n
+(  ) S
+(float) k
+( q_sum = 0.;) p n
+(  ) S
+(float) k
+( qual_sum = 0;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < ad.Ions.size\(\); s++\){) p n
+(    ) S
+(if) K
+( \(ad.Ions[s].element == element\){) p n
+(      ) S
+(if) K
+( \(n[s] > 0.\) { ) p
+(// filter out fill values \(-1.0\)) c n
+() p 8 T (q_sum += n[s]*ad.Ions[s].charge;) N
+() S 8 T (qual_sum += n[s]*) S
+(static_cast) k
+(<) p
+(float) k
+(>\(quality[s]\);) p n
+() S 8 T (n_sum += n[s];) N
+(      }) N
+(    }) N
+(  }) N
+() N
+(  ) S
+(float) k
+( ave_q = 0.;) p n
+(  qual = 1;) N
+(  ) S
+(if) K
+( \(n_sum > 0. && q_sum > 0.\){) p n
+(    ave_q = q_sum/n_sum;) N
+() N
+(    ) S
+(if) K
+( \(qual_sum/n_sum >= .5\) qual = 1; ) p
+(// somewhat arbitrary cutoff) c n
+(    ) p
+(else) K
+( qual = 0;) p n
+(  }) N
+(  ) S
+(else) K n
+(    ave_q = -1.0;) p n
+() N
+(  ) S
+(return) K
+(\(ave_q\);) p n
+(}) N
+() N
+(void) k
+( DistFunc::keepOnlyDeliv\() p
+(const) K
+( AnalysisData& ad, string element, ) p n
+() S 8 T () S 16 T () S 24 T (     ) S
+(float) k
+( lo_chg, ) p
+(float) k
+( hi_chg\){) p n
+(  ) S
+(/* zero n, v, vth for specified element outside of specified charge) c n
+(     range, inclusive */) N
+() p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( s=0; s < ad.Ions.size\(\); s++\){) p n
+(    ) S
+(if) K
+( \(ad.Ions[s].element == element &&) p n
+() S 8 T (\(ad.Ions[s].charge < lo_chg || ad.Ions[s].charge > hi_chg\)\){) N
+(      n[s] = FILL;) N
+(DistFunc.cc) (Page 16/17) (Mar 24, 05 15:56) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(DistFunc.cc) (8/11) (Thursday March 24, 2005) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (17) 9
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(      n_err[s] = FILL;) p n
+(      v0[s] = FILL;) N
+(      vth[s] = FILL;) N
+() N
+(      fit_n[s] = FILL;) N
+(      fit_v0[s] = FILL;) N
+(      fit_vth[s] = FILL;) N
+(      fit_err[s] = FILL;) N
+(    }) N
+(  }) N
+() N
+(  DeliverableRanges.push_back\(deliv_element\(element,lo_chg,hi_chg\)\);) N
+() N
+(  ) S
+(return) K
+(;) p n
+(}) N
+() N
+(DistFunc::deliv_element::deliv_element\(string element, ) S
+(float) k
+( lo,) p n
+() S 8 T () S 16 T () S 24 T () S 32 T () S 40 T (    ) S
+(float) k
+( hi\){) p n
+(  name = element;) N
+(  lo_chg = lo;) N
+(  hi_chg = hi;) N
+(}) N
+(DistFunc.cc) (Page 17/17) (Mar 24, 05 15:56) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(DistFunc.cc) (9/11) (Thursday March 24, 2005) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (1-2) 10
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*) c n
+(  File: DistFunc.h) N
+() N
+(  Description:) N
+() N
+(    Calculate observed distribution function and moments from) N
+(    probabilistic rates.) N
+() N
+(  Author: Jim Raines, 21Aug2001) N
+() N
+(  Method:) N
+() N
+(  Revision controlled by CVS:) N
+(  $Id: DistFunc.h,v 1.17 2005/03/10 21:57:35 jraines Exp $) N
+() N
+(    ) N
+(    ) N
+(  Major Modification History:) N
+(    ) N
+() N
+(*/) N
+() p n
+(class DistFunc {) N
+(public:) N
+(  ) S
+(// constructor, init's arrays \(for get functions\) to size N) c n
+(  DistFunc::DistFunc\() p
+(int) k
+( N\);) p n
+() N
+(  ) S
+(float) k
+( getDensity\() p
+(int) k
+( s\);  ) p
+(// for species s) c n
+(  ) p
+(float) k
+( getBulkVelocity\() p
+(int) k
+( s\);) p n
+(  ) S
+(float) k
+( getThermVelocity\() p
+(int) k
+( s\);) p n
+() N
+(  ) S
+(int) k
+( calc\() p
+(const) K
+( vector<Ion>& group, ) p
+(const) K
+( AnalysisData& ad, ProbRates PR,) p n
+() S 8 T (   AceSwicsDutyCycle duty, UlyssesSwicsEffic eff_obj\);) N
+() N
+(  ) S
+(/* filters all class-wide n, v0 and vth values by quality, setting) c n
+(     quality flag and replacing values with fill value where) N
+(     appropriate */) N
+(  ) p
+(void) k
+( filterNvtByQuality\(AnalysisData ad\);) p n
+() N
+(  ) S
+(/* keep only deliverables) c n
+(     filters out ions with extended charge states \(beyond that which) N
+(     is delivered to ASC \) to make auto-production safer.  Works by) N
+(     zeroing n, v, vth \(and corresponding fit_ variables\) for) N
+(     specified element outside of specified charge range, ends inclusive */) N
+(  ) p
+(void) k
+( keepOnlyDeliv\() p
+(const) K
+( AnalysisData& ad, string element, ) p n
+() S 8 T () S 16 T (     ) S
+(float) k
+( lo_chg, ) p
+(float) k
+( hi_chg\);) p n
+() N
+(  ) S
+(// Write out distribution function for all ions in ad.Ions) c n
+(  ) p
+(// to OUT file, with doyfr as the time.) c n
+(  ) p
+(int) k
+( outputDF\() p
+(FILE) k
+( *OUT, ) p
+(float) k
+( doyfr, AnalysisData ad\);) p n
+() N
+(  ) S
+(// Write density, velocity and thermal velocity for all ions in ad.Ions) c n
+(  ) p
+(// to OUT file, with doyfr as the time.) c n
+(  ) p
+(int) k
+( outputNVT\() p
+(FILE) k
+( *OUT, ) p
+(float) k
+( doyfr, AnalysisData ad\);) p n
+() N
+(  ) S
+(/* Write *delivered* \(to ACE Science Center \(ASC\)\) version of NVT file to) c n
+(     OUT file, with doyfr as the time.  Content is a mix of individual) N
+(     ions values and ratios. */) N
+(  ) p
+(int) k
+( outputDelivNVT\() p
+(FILE) k
+( *OUT, ) p
+(float) k
+( doyfr, AnalysisData ad\);) p n
+() N
+(  ) S
+(/* Write delivered \(to ASC\) elemental abundances */) c n
+(  ) p
+(int) k
+( outputDelivElemAbun\() p
+(FILE) k
+( *OUT, ) p
+(float) k
+( doyfr, AnalysisData ad\);) p n
+() N
+(  ) S
+(/* Write delivered \(to ASC\) charge ratios */) c n
+(  ) p
+(int) k
+( outputDelivQRatio\() p
+(FILE) k
+( *OUT, ) p
+(float) k
+( doyfr, AnalysisData ad\);) p n
+() N
+(  ) S
+(/* Write delivered \(to ASC\) charge distribution for specified element */) c n
+(  ) p
+(int) k
+( outputDelivQDist\() p
+(FILE) k
+( *OUT, ) p
+(float) k
+( doyfr, AnalysisData ad, string element\);) p n
+() N
+(DistFunc.h) (Page 1/3) (Mar 10, 05 16:57) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(private:) p n
+(  vector<) S
+(float) k
+(> n;     ) p
+(// density) c n
+(  vector<) p
+(float) k
+(> n_err; ) p
+(// error in density) c n
+(  vector<) p
+(float) k
+(> v0;    ) p
+(// bulk velocity) c n
+(  vector<) p
+(float) k
+(> vth;   ) p
+(// thermal velocity) c n
+() p n
+(  ) S
+(/* E/q velocity -- ion-specific conversion of E/q values to velocity) c n
+(     This is *not* the bulk velocity; it is the ordinate for ) N
+(     calculation of A moments and plotting. */) N
+(  vector< vector<) p
+(float) k
+(> > v; ) p n
+() N
+(  ) S
+(// A, phase space density in s^3/km^6) c n
+(  vector< vector<) p
+(float) k
+(> > A;) p n
+() N
+(  ) S
+(// Error in A) c n
+(  vector< vector<) p
+(float) k
+(> > ErrA;  ) p n
+() N
+(  ) S
+(// gauss fit A to find n, v, vth) c n
+(  ) p
+(int) k
+( GaussFitA\() p
+(int) k
+( s\);) p n
+() N
+(  ) S
+(// physical parameters from fit rather than moment) c n
+(  vector<) p
+(float) k
+(> fit_n;     ) p
+(// density) c n
+(  vector<) p
+(float) k
+(> fit_v0;    ) p
+(// bulk velocity) c n
+(  vector<) p
+(float) k
+(> fit_vth;   ) p
+(// thermal velocity) c n
+(  vector<) p
+(float) k
+(> fit_err;   ) p
+(// fit-derived errors applicable to fit_nvt) c n
+(  vector< vector<) p
+(float) k
+(> > fit_A;) p n
+(  vector< vector<) S
+(float) k
+(> > Err_fit_A;) p n
+() N
+(  ) S
+(// quality -- more to come) c n
+(  vector<) p
+(int) k
+(> quality;) p n
+(  ) S
+(int) k
+( DistFunc::determineQuality\(\);) p n
+() N
+(  ) S
+(// The moment part of the distribution function calculations) c n
+(  ) p
+(int) k
+( DistFunc::calc3dMoments\() p
+(const) K
+( ) p
+(int) k
+(& s, ) p n
+() S 8 T () S 16 T () S 24 T (    ) S
+(const) K
+( vector< vector<) p
+(float) k
+(> >& Alocal, ) p n
+() S 8 T () S 16 T () S 24 T (    ) S
+(const) K
+( vector<) p
+(float) k
+(>& delta_v, ) p n
+() S 8 T () S 16 T () S 24 T (    AceSwicsDutyCycle duty, ) S
+(const) K
+( AnalysisData& ad,) p n
+() S 8 T () S 16 T () S 24 T (    ) S
+(float) k
+(& n_local, ) p
+(float) k
+(& v0_local, ) p
+(float) k
+(& vth_local\);) p n
+() N
+(  ) S
+(int) k
+( DistFunc::calc1dMoments\() p
+(const) K
+( ) p
+(int) k
+(& s, ) p n
+() S 8 T () S 16 T () S 24 T (    ) S
+(const) K
+( vector< vector<) p
+(float) k
+(> >& Alocal, ) p n
+() S 8 T () S 16 T () S 24 T (    ) S
+(const) K
+( vector<) p
+(float) k
+(>& delta_v, ) p n
+() S 8 T () S 16 T () S 24 T (    AceSwicsDutyCycle duty, ) S
+(const) K
+( AnalysisData& ad,) p n
+() S 8 T () S 16 T () S 24 T (    ) S
+(float) k
+(& n_local, ) p
+(float) k
+(& v0_local, ) p
+(float) k
+(& vth_local\);) p n
+() N
+(  ) S
+(// calculate a density ratio, returning the fill value where appropriate) c n
+(  ) p
+(float) k
+( calc_n_ratio\() p
+(float) k
+( n, ) p
+(float) k
+( n_he\);) p n
+() N
+(  ) S
+(/* calculate sum over density for given element \(skipping fill) c n
+(     values appropriately\) */) N
+(  ) p
+(float) k
+( DistFunc::calc_elem_n_sum\(string element, AnalysisData ad,) p n
+() S 8 T () S 16 T () S 24 T () S 32 T (  ) S
+(int) k
+(& quality\);) p n
+() N
+(  ) S
+(/* calculate sum over density for given element isotope \(skipping fill) c n
+(     values appropriately\) */) N
+(  ) p
+(float) k
+( DistFunc::calc_isotope_n_sum\(string element, ) p
+(float) k
+( mass, ) p n
+() S 8 T () S 16 T () S 24 T () S 32 T (     AnalysisData ad,) S
+(int) k
+(& quality\);) p n
+() N
+(  ) S
+(/* calculate density-weighted sum of charges for given element) c n
+(     \(skipping fill values appropriately\) */) N
+(  ) p
+(float) k
+( DistFunc::calc_ave_q\(string element, AnalysisData ad, ) p
+(int) k
+(& quality\);) p n
+() N
+(  ) S
+(// internal data structure for keeping track of deliverable element) c n
+(  ) p
+(// charge ranges; all public because it is intimately tied to DistFunc) c n
+(  class deliv_element {) p n
+(  public:) N
+(    deliv_element\(string name, ) S
+(float) k
+( lo_chg, ) p
+(float) k
+( hi_chg\);) p n
+(    string name;) N
+(    ) S
+(float) k
+( lo_chg;) p n
+(DistFunc.h) (Page 2/3) (Mar 10, 05 16:57) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(../include/DistFunc.h) (10/11) (Thursday March 24, 2005) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (3) 11
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    ) p
+(float) k
+( hi_chg;) p n
+(  };) N
+() N
+(  vector<deliv_element> DeliverableRanges;) N
+( };) N
+(DistFunc.h) (Page 3/3) (Mar 10, 05 16:57) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(../include/DistFunc.h) (11/11) (Thursday March 24, 2005) footer
+end % of iso1dict
+pagesave restore
+showpage
+
+%%Trailer
+end
+%%EOF

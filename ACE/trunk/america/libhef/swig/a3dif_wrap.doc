@@ -1,0 +1,26 @@
+a3dif_wrap.c
+
+[ Module : a3dif, Package : a3dif ]
+
+
+a3opencyclefile(zfn);
+        [ returns int  ]
+
+a3closecyclefile();
+        [ returns int  ]
+
+a3readcycle();
+        [ returns int  ]
+
+a3expand();
+        [ returns int  ]
+
+a3gcnq();
+        [ returns double * ]
+
+a3gcnm();
+        [ returns double * ]
+
+aval(x,index);
+        [ returns double  ]
+

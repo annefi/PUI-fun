@@ -1,0 +1,17 @@
+ficlose
+retall
+$ ln -fs ~/ace/axlv2/tools/axlv2_nvt_template.save .
+.run axlv2_nvt.pro
+
+file = '../9-110-150-pl'
+file += '/axlv2_nvt_2000110_2000150.dat'
+
+second_file = 'axlv2_nvt_2000110_2000150.dat'
+
+  ;ions = ['He2+','He2+','O6+']
+ions=0
+
+tag = ''
+
+axlv2_nvt, file=file, second_file=second_file, ions=ions, tag=tag, $
+     data=d, second_data=d2

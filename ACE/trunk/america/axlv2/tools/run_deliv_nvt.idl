@@ -1,0 +1,35 @@
+ficlose
+retall
+.run axlv2_deliv_nvt.pro
+$ ln -fs ~/ace/axlv2/tools/axlv2_deliv_nvt_template.save .
+$ ln -fs ~/ace/axlv2/tools/axlv2_deliv_nvt_swepam_template.save .
+$ ln -fs ~/ace/axlv2/tools/axlv2_deliv_nvt_swe_template.save .
+$ ln -fs /shrg1/local/idl_lib/cr_table.save .
+
+;; define correlative data filenames
+swepam_file = '../../swepam_1998_2005_v3_20Apr2005.dat'
+swe_file = '../../09May2005-SWE-data/wi_swefc_apbimax.2004.060.339.txt'
+
+;; determine doyfr ranges
+doyfr_ranges = split_doyfr_range_by_cr([2004001.,2004364.], /omit_year)
+print, 'cr_ranges = '
+print, doyfr_ranges
+
+;he_scalar = 2.93
+he_scalar = 1.00
+
+;; replot with SWEPAM data
+axlv2_deliv_nvt, file='axlv2_deliv_nvt_2004001_2004364.dat',$
+  data=d, swepam_file=swepam_file, he_scalar=he_scalar, $
+ doyfr_ranges=doyfr_ranges, tag='swepam', swepam_data=swepam_data
+
+;; replot with WIND/SWE data
+axlv2_deliv_nvt, file='axlv2_deliv_nvt_2004001_2004364.dat',$
+  data=d, swe_file=swe_file, he_scalar=he_scalar, $
+  doyfr_ranges=doyfr_ranges, tag='swe', swe_data=swe_data
+
+;; zoom on trouble spot
+;axlv2_deliv_nvt, file='axlv2_deliv_nvt_2004001_2004364.dat',$
+;  data=d, he_scalar=he_scalar, /n_pnts, $
+;  doyfr_ranges=[[168.,170.]], tag='zoom_168'
+

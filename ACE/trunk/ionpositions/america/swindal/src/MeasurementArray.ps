@@ -1,0 +1,2590 @@
+%!PS-Adobe-3.0
+%%Title: MeasurementArray.cc, MeasurementArray.h
+%%For: Jim Raines
+%%Creator: a2ps version 4.13
+%%CreationDate: Mon Aug  9 11:20:38 2004
+%%BoundingBox: 24 24 588 768
+%%DocumentData: Clean7Bit
+%%Orientation: Landscape
+%%Pages: 6
+%%PageOrder: Ascend
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: font Courier
+%%+ font Courier-Bold
+%%+ font Helvetica
+%%+ font Helvetica-Bold
+%%+ font Symbol
+%%+ font Times-Bold
+%%+ font Times-Roman
+%%DocumentProcessColors: Black Blue Green Red 
+%%DocumentSuppliedResources: procset a2ps-color-prolog
+%%+ encoding ISO-8859-1Encoding
+%%EndComments
+/a2psdict 200 dict def
+a2psdict begin
+%%BeginProlog
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+
+% EPSF import as in the Red Book
+/BeginInclude {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack 
+  userdict begin
+    0 setgray 0 setlinecap
+    1 setlinewidth 0 setlinejoin
+    10 setmiterlimit [ ] 0 setdash newpath
+    gs_languagelevel 1 ne {
+      false setstrokeadjust false setoverprint 
+    } if
+} bind def
+
+/EndInclude {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+/BeginEPSF {
+  BeginInclude
+  /showpage { } def
+} bind def
+
+/EndEPSF {
+  EndInclude
+} bind def
+
+% Page prefeed
+/page_prefeed {         % bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} bind def
+
+/deffont {
+  findfont exch scalefont def
+} bind def
+
+/reencode_font {
+  findfont reencode 2 copy definefont pop def
+} bind def
+
+% Function c-show (str => -)
+% centers text only according to x axis.
+/c-show { 
+  dup stringwidth pop
+  2 div neg 0 rmoveto
+  show
+} bind def
+
+% Function l-show (str => -)
+% prints texts so that it ends at currentpoint
+/l-show {
+  dup stringwidth pop neg 
+  0 
+  rmoveto show
+} bind def
+
+% center-fit show (str w => -)
+% show centered, and scale currentfont so that the width is less than w
+/cfshow {
+  exch dup stringwidth pop
+  % If the title is too big, try to make it smaller
+  3 2 roll 2 copy
+  gt
+  { % if, i.e. too big
+    exch div
+    currentfont exch scalefont setfont
+  } { % ifelse
+    pop pop 
+  }
+  ifelse
+  c-show			% center title
+} bind def
+
+% Return the y size of the current font
+% - => fontsize
+/currentfontsize {
+  currentfont /FontType get 0 eq {
+    currentfont /FontMatrix get 3 get
+  }{
+    currentfont /FontMatrix get 3 get 1000 mul
+  } ifelse
+} bind def
+
+% reencode the font
+% <encoding-vector> <fontdict> -> <newfontdict>
+/reencode { %def
+  dup length 5 add dict begin
+    { %forall
+      1 index /FID ne 
+      { def }{ pop pop } ifelse
+    } forall
+    /Encoding exch def
+
+    % Use the font's bounding box to determine the ascent, descent,
+    % and overall height; don't forget that these values have to be
+    % transformed using the font's matrix.
+    % We use `load' because sometimes BBox is executable, sometimes not.
+    % Since we need 4 numbers an not an array avoid BBox from being executed
+    /FontBBox load aload pop
+    FontMatrix transform /Ascent exch def pop
+    FontMatrix transform /Descent exch def pop
+    /FontHeight Ascent Descent sub def
+
+    % Define these in case they're not in the FontInfo (also, here
+    % they're easier to get to.
+    /UnderlinePosition 1 def
+    /UnderlineThickness 1 def
+    
+    % Get the underline position and thickness if they're defined.
+    currentdict /FontInfo known {
+      FontInfo
+      
+      dup /UnderlinePosition known {
+	dup /UnderlinePosition get
+	0 exch FontMatrix transform exch pop
+	/UnderlinePosition exch def
+      } if
+      
+      dup /UnderlineThickness known {
+	/UnderlineThickness get
+	0 exch FontMatrix transform exch pop
+	/UnderlineThickness exch def
+      } if
+      
+    } if
+    currentdict 
+  end 
+} bind def
+
+% composite fonts for ASCII-EUC mixed string
+% Version 1.2 1/31/1990
+% Orignal Ken'ichi HANDA (handa@etl.go.jp)
+% Modified Norio Katayama (katayama@rd.nacsis.ac.jp),1998
+% Extend & Fix Koji Nakamaru (maru@on.cs.keio.ac.jp), 1999
+% Anyone can freely copy, modify, distribute this program.
+
+/copyfont {	% font-dic extra-entry-count  copyfont  font-dic
+	1 index maxlength add dict begin
+	{	1 index /FID ne 2 index /UniqueID ne and
+		{def} {pop pop} ifelse
+	} forall
+	currentdict
+	end
+} bind def
+
+/compositefont { % ASCIIFontName EUCFontName RomanScale RomanOffset Rot(T/F) compositefont font
+    /RomanRotation exch def
+    /RomanOffset exch def
+    /RomanScale exch def
+    userdict /fixeucfont_dict known not {
+	userdict begin
+	    /fixeucfont_dict 2 dict begin
+		/UpperByteEncoding [
+		    16#00 1 16#20 { pop 0 } for
+		    16#21 1 16#28 { 16#20 sub } for
+		    16#29 1 16#2F { pop 0 } for
+		    16#30 1 16#74 { 16#27 sub } for
+		    16#75 1 16#FF { pop 0 } for
+		] def
+	        /LowerByteEncoding [
+		    16#00 1 16#A0 { pop /.notdef } for
+		    16#A1 1 16#FE { 16#80 sub 16 2 string cvrs
+				    (cXX) dup 1 4 -1 roll
+				    putinterval cvn } for
+		    /.notdef
+		] def
+		currentdict
+	    end def
+	end
+    } if
+    findfont dup /FontType get 0 eq {
+	14 dict begin
+	    %
+	    % 7+8 bit EUC font
+	    %
+	    12 dict begin
+		/EUCFont exch def
+		/FontInfo (7+8 bit EUC font) readonly def
+		/PaintType 0 def
+		/FontType 0 def
+		/FontMatrix matrix def
+		% /FontName
+		/Encoding fixeucfont_dict /UpperByteEncoding get def
+		/FMapType 2 def
+		EUCFont /WMode known
+		{ EUCFont /WMode get /WMode exch def }
+		{ /WMode 0 def } ifelse
+		/FDepVector [
+		    EUCFont /FDepVector get 0 get
+		    [ 16#21 1 16#28 {} for 16#30 1 16#74 {} for ]
+		    {
+			13 dict begin
+			    /EUCFont EUCFont def
+			    /UpperByte exch 16#80 add def	
+			    % /FontName
+			    /FontInfo (EUC lower byte font) readonly def
+			    /PaintType 0 def
+			    /FontType 3 def
+			    /FontMatrix matrix def
+			    /FontBBox {0 0 0 0} def
+			    /Encoding
+				fixeucfont_dict /LowerByteEncoding get def
+			    % /UniqueID
+			    % /WMode
+			    /BuildChar {
+				gsave
+				exch dup /EUCFont get setfont
+				/UpperByte get
+				2 string
+				dup 0 4 -1 roll put
+				dup 1 4 -1 roll put
+				dup stringwidth setcharwidth
+				0 0 moveto show
+				grestore
+			    } bind def
+			    currentdict
+			end
+			/lowerbytefont exch definefont
+		    } forall
+		] def
+		currentdict
+	    end
+	    /eucfont exch definefont
+	    exch
+	    findfont 1 copyfont dup begin
+		RomanRotation {
+			/FontMatrix FontMatrix
+			[ 0 RomanScale neg RomanScale 0 RomanOffset neg 0 ]
+			matrix concatmatrix def
+		}{
+			/FontMatrix FontMatrix
+			[ RomanScale 0 0 RomanScale 0 RomanOffset ] matrix concatmatrix
+			def
+			/CDevProc
+			    {pop pop pop pop 0 exch -1000 exch 2 div 880} def
+		} ifelse
+	    end
+	    /asciifont exch definefont
+	    exch
+	    /FDepVector [ 4 2 roll ] def
+	    /FontType 0 def
+	    /WMode 0 def
+	    /FMapType 4 def
+	    /FontMatrix matrix def
+	    /Encoding [0 1] def
+	    /FontBBox {0 0 0 0} def
+%	    /FontHeight 1.0 def % XXXX
+	    /FontHeight RomanScale 1.0 ge { RomanScale }{ 1.0 } ifelse def
+	    /Descent -0.3 def   % XXXX
+	    currentdict
+	end
+	/tmpfont exch definefont
+	pop
+	/tmpfont findfont
+    }{
+	pop findfont 0 copyfont
+    } ifelse
+} def	
+
+/slantfont {	% FontName slant-degree  slantfont  font'
+    exch findfont 1 copyfont begin
+    [ 1 0 4 -1 roll 1 0 0 ] FontMatrix exch matrix concatmatrix
+    /FontMatrix exch def
+    currentdict
+    end
+} def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+
+% -------- Some routines to enlight plain b/w printings ---------
+
+% Underline
+% width --
+/dounderline {
+  currentpoint
+  gsave
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    0 rlineto
+    stroke
+  grestore
+} bind def
+
+% Underline a string
+% string --
+/dounderlinestring {
+  stringwidth pop
+  dounderline
+} bind def
+
+/UL {
+  /ul exch store
+} bind def
+
+% Draw a box of WIDTH wrt current font
+% width --
+/dobox {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    stroke
+  grestore
+} bind def
+
+/BX {
+  /bx exch store
+} bind def
+
+% Box a string
+% string --
+/doboxstring {
+  stringwidth pop
+  dobox
+} bind def
+
+%
+% ------------- Color routines ---------------
+%
+/FG /setrgbcolor load def
+
+% Draw the background
+% width --
+/dobackground {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    bgcolor aload pop setrgbcolor
+    fill
+  grestore
+} bind def
+
+% Draw bg for a string
+% string --
+/dobackgroundstring {
+  stringwidth pop
+  dobackground
+} bind def
+
+
+/BG {
+  dup /bg exch store
+  { mark 4 1 roll ] /bgcolor exch store } if
+} bind def
+
+
+/Show {
+  bg { dup dobackgroundstring } if
+  ul { dup dounderlinestring } if
+  bx { dup doboxstring } if
+  show
+} bind def
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T {
+  cw mul x0 add
+  bg { dup currentpoint pop sub dobackground } if
+  ul { dup currentpoint pop sub dounderline } if
+  bx { dup currentpoint pop sub dobox } if
+  y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n {
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+/S {
+  Show
+} bind def
+
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Function title: prints page header.
+% <ct> <rt> <lt> are passed as argument
+/title { 
+  % 1. Draw the background
+  x v get y v get moveto
+  0 setgray
+  gsave
+    0 th 2 div neg rmoveto 
+    th setlinewidth
+    0.5 0.5 1 setrgbcolor
+    pw 0 rlineto stroke
+  grestore
+  % 2. Border it
+  gsave
+    0.7 setlinewidth
+    pw 0 rlineto
+    0 th neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+  % stk: ct rt lt
+  x v get y v get th sub 1 add moveto
+%%IncludeResource: font Helvetica
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  % 3. The left title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    fnfs 0.8 mul hm rmoveto
+    show			% left title
+  grestore
+  exch
+  % stk: ct ltw rt
+  % 4. the right title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    dup
+    pw exch stringwidth pop fnfs 0.8 mul add sub
+    hm
+    rmoveto
+    show			% right title
+  grestore
+  % stk: ct ltw rtw
+  % 5. the center title
+  gsave
+    pw 3 1 roll
+    % stk: ct pw ltw rtw
+    3 copy 
+    % Move to the center of the left room
+    sub add 2 div hm rmoveto
+    % What is the available space in here?
+    add sub fnfs 0.8 mul sub fnfs 0.8 mul sub
+    % stk: ct space_left
+%%IncludeResource: font Helvetica-Bold
+  fHelvetica-Bold fnfs scalefont setfont
+    1 setgray
+    cfshow
+  grestore
+} bind def
+
+% Function border: prints virtual page border
+/border { %def
+  gsave				% print four sides
+    0 setgray
+    x v get y v get moveto
+    0.7 setlinewidth		% of the square
+    pw 0 rlineto
+    0 ph neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+} bind def
+
+% Function water: prints a water mark in background
+/water { %def
+  gsave
+    scx scy moveto rotate
+%%IncludeResource: font Times-Bold
+  fTimes-Bold 100 scalefont setfont
+    .97 setgray
+    dup stringwidth pop 2 div neg -50 rmoveto
+    show
+  grestore
+} bind def
+
+% Function rhead: prints the right header
+/rhead {  %def
+  lx ly moveto
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  l-show
+} bind def
+
+% Function footer (cf rf lf -> -)
+/footer {
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  dx dy moveto
+  show
+
+  snx sny moveto
+  l-show
+  
+  fnx fny moveto
+  c-show
+} bind def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+%%BeginResource: procset a2ps-color-prolog 2.0 1
+
+%% Definition of the color faces.
+/p {
+  0 0 0 FG
+  false BG
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/sy {
+  0 0 0 FG
+  false BG
+  fSymbol bfs scalefont setfont
+  Show
+} bind def
+
+/k {
+  false BG
+  false UL
+  false BX
+  0 0 0.9 FG
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/K {
+  false BG
+  false UL
+  false BX
+  0 0 0.8 FG
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/c {
+  false BG
+  false UL
+  false BX
+  0.8 0 0 FG
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/C {
+  false BG
+  false UL
+  false BX
+  0.8 0 0 FG
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/l {
+  0 0 0 FG
+  0.8 0.8 0 true BG
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/L {
+  0 0 0 FG
+  1 1 0 true BG
+  false UL
+  false BX
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/str {
+  false BG
+  false UL
+  false BX
+  0 0.5 0 FG
+  fTimes-Roman bfs scalefont setfont
+  Show
+} bind def
+
+/e{
+  1 0 0 true BG
+  false UL
+  true BX
+  1 1 1 FG
+  fHelvetica-Bold bfs scalefont setfont
+  Show
+} bind def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul 2 div neg 0 rmoveto
+    f# setfont
+    0.8 0.1 0.1 FG
+    c-show
+  grestore
+} bind def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Times-Roman
+%%IncludeResource: font Symbol
+%%BeginResource: encoding ISO-8859-1Encoding
+/ISO-8859-1Encoding [
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quoteright 
+/parenleft /parenright /asterisk /plus /comma /minus /period /slash 
+/zero /one /two /three /four /five /six /seven 
+/eight /nine /colon /semicolon /less /equal /greater /question 
+/at /A /B /C /D /E /F /G 
+/H /I /J /K /L /M /N /O 
+/P /Q /R /S /T /U /V /W 
+/X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore 
+/quoteleft /a /b /c /d /e /f /g 
+/h /i /j /k /l /m /n /o 
+/p /q /r /s /t /u /v /w 
+/x /y /z /braceleft /bar /braceright /asciitilde /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclamdown /cent /sterling /currency /yen /brokenbar /section 
+/dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron 
+/degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph /bullet 
+/cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf /threequarters /questiondown 
+/Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla 
+/Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis 
+/Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply 
+/Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls 
+/agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla 
+/egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis 
+/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide 
+/oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis 
+] def
+%%EndResource
+% Initialize page description variables.
+/sh 612 def
+/sw 792 def
+/llx 24 def
+/urx 768 def
+/ury 588 def
+/lly 24 def
+/#copies 1 def
+/th 15.000000 def
+/fnfs 11 def
+/bfs 7.493857 def
+/cw 4.496314 def
+
+% Dictionary for ISO-8859-1 support
+/iso1dict 6 dict begin
+  /fCourier ISO-8859-1Encoding /Courier reencode_font
+  /fCourier-Bold ISO-8859-1Encoding /Courier-Bold reencode_font
+  /fHelvetica ISO-8859-1Encoding /Helvetica reencode_font
+  /fHelvetica-Bold ISO-8859-1Encoding /Helvetica-Bold reencode_font
+  /fTimes-Bold ISO-8859-1Encoding /Times-Bold reencode_font
+  /fTimes-Roman ISO-8859-1Encoding /Times-Roman reencode_font
+currentdict end def
+/bgcolor [ 0 0 0 ] def
+/bg false def
+/ul false def
+/bx false def
+% The font for line numbering
+/f# /Helvetica findfont bfs .6 mul scalefont def
+/fSymbol /Symbol findfont def
+/hm fnfs 0.25 mul def
+/pw
+   cw 81.400000 mul
+def
+/ph
+   522.321860 th add
+def
+/pmw urx llx sub pw 2 mul sub 1 div def
+/pmh 0 def
+/v 0 def
+/x [
+  0
+  dup pmw add pw add
+] def
+/y [
+  pmh ph add 0 mul ph add
+  dup
+] def
+/scx sw 2 div def
+/scy sh 2 div def
+/snx urx def
+/sny lly 2 add def
+/dx llx def
+/dy sny def
+/fnx scx def
+/fny dy def
+/lx snx def
+/ly ury fnfs 0.8 mul sub def
+/sx 0 def
+/tab 8 def
+/x0 0 def
+/y0 0 def
+%%EndSetup
+
+%%Page: (1-2) 1
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*) c n
+(  File: MeasurementArray.cc) N
+() N
+(  Description:) N
+(    Code for MeasurementArray class) N
+() N
+(  Author: Jim Raines, 6Jun2001) N
+() N
+(  Method:) N
+(    ) N
+(  Revision controlled by CVS:) N
+(  $Id: MeasurementArray.cc,v 1.11 2004/08/02 17:03:45 jraines Exp $) N
+() N
+(  Major Modification History:) N
+(    ) N
+() N
+(*/) N
+() p n
+(#include) K
+( ") p
+(swindal.h) str
+(") p n
+(#include) K
+( <iomanip>) p n
+() N
+(// Constructor ) c n
+(MeasurementArray::MeasurementArray\() p
+(void) k
+(\){) p n
+(  TNT::Matrix<) S
+(float) k
+(> A\(MAXTOFCH,MAXESDCH, 0.0\);) p n
+(  ) N
+(  ) S
+(/* --- fill vector with \(tofch,esdch\) matrices --- */) c n
+(  ) p
+(for) K
+( \() p
+(int) k
+( i = 0; i < MAXEDB; i++\){) p n
+(    MA.push_back\(A\);) N
+(  }) N
+() N
+(  ) S
+(/* set default PHA range\(s\) to keep, see header for details */) c n
+(  filter = 2;  ) p
+(// 2 -> keep range 1 only) c n
+() p n
+(  ) S
+(/* set default value for basic rate weighting flag, see header for details */) c n
+(  doBRW = 1;   ) p
+(// 1 => T) c n
+(}) p n
+() N
+(int) k
+( MeasurementArray::fill\() p
+(const) K
+( AceSwicsData& swxdata\){) p n
+(/*) c n
+(  Description:) N
+() N
+(    Make measurement array.  This routine builds and returns the) N
+(    measurement array \(tof, esd, nedb\).  The elements of the array are) N
+(    in counts per second, while the tof and esd indices are in) N
+(    channels.  Inclusion of the nedb dimension makes a cube of) N
+(    \(tof,esd\) matrices, where the nedb index is the number of the EDB) N
+(    in which the \(tof,esd\) values were collected \(which corresponds to) N
+(    the E/q value\).) N
+() N
+(  Author: Jim Raines, ) N
+() N
+(  Method:) N
+(    ) N
+(  Major Modification History:) N
+(    ) N
+() N
+(*/) N
+(  string thisprog = ") p
+(MeasurementArray::fill) str
+(";  ) p
+(// name of this routine) c n
+(  ) p
+(int) k
+( DbgLvl = gDbgLvl;  ) p
+(// debugging level, init. to global value) c n
+() p n
+(  ) S
+(bool) k
+( dumpPhaFlag = ) p
+(false) k
+(;  ) p
+(// t=>pha info written to static file for debug) c n
+() p n
+(  ) S
+(bool) k
+( Rates = ) p
+(true) k
+(;  ) p
+(// true -> MA is rates; false -> MA is counts) c n
+() p n
+(  Pha pha;  ) S
+(// container for holding each successive pha word as returned) c n
+(            ) p
+(// from swxdata.getPha\(i\)) c n
+() p n
+(  ) S
+(if) K
+( \(DbgLvl >= 1\) {) p n
+(    cout << thisprog << ") S
+( -I- filling MeasurementArray...) str
+(" << endl;) p n
+(MeasurementArray.cc) (Page 1/10) (Aug 02, 04 13:03) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  }) p n
+() N
+(  ) S
+(/* --- change elements of MA from rates to counts --- */) c n
+(  ) p
+(/* -------------------------------------------------- */) c n
+(  ) p
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( ntof = 0; ntof < MAXTOFCH; ntof++\){) p n
+(      ) S
+(for) K
+( \() p
+(int) k
+( nesd = 0; nesd < MAXESDCH; nesd++\){) p n
+() S 8 T () S
+(if) K
+( \(Rates\){) p n
+() S 8 T (  MA[nedb][ntof][nesd] = MA[nedb][ntof][nesd] * gAccumTime;) N
+() S 8 T (}) N
+(      }) N
+(    }) N
+(  }) N
+() N
+() N
+(  ) S
+(/* --- count PHA words with tof \(channels\), esd \(channels\) and nedb --- ) c n
+(     -------------------------------------------------------------------- */) N
+(  ) p
+(int) k
+( npha_tot  = 0;  ) p
+(// number of pha read from swxdata object) c n
+(  ) p
+(int) k
+( npha_used = 0;  ) p
+(// number of pha in analyzed for filling into MA) c n
+() p n
+(  ) S
+(if) K
+( \(DbgLvl >= 2\) dumpPhaFlag = ) p
+(true) k
+(; ) p
+(// temporary) c n
+() p n
+(  ) S
+(FILE) k
+( *DUMP_USED;) p n
+(  ) S
+(FILE) k
+( *DUMP_DISC;) p n
+(  ) S
+(if) K
+( \(dumpPhaFlag\) {) p n
+(    DUMP_USED = fopen\(") S
+(mafill_used_pha.dat) str
+(", ") p
+(a) str
+("\);) p n
+(    DUMP_DISC = fopen\(") S
+(mafill_discarded_pha.dat) str
+(", ") p
+(a) str
+("\);) p n
+(  }    ) N
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( npha = 0; npha < swxdata.getNpha\(\); npha++\){ ) p
+(// loop over PHAs) c n
+() p n
+(    pha = swxdata.getPha\(npha\);) N
+(    npha_tot++;) N
+() N
+(    ) S
+(// select PHAs to used based on several criteria) c n
+(    ) p
+(bool) k
+( pha_ok = ) p
+(false) k
+(;) p n
+(    ) S
+(if) K
+( \(pha.nedb < MAXEDB && ) p n
+() S 8 T (passRange\(pha.range\) &&) N
+() S 8 T (passVelFilter\(pha.speed, pha.swspeed\) \){ ) S
+(// PHA used) c n
+() p n
+(      pha_ok = ) S
+(true) k
+(;) p n
+(      npha_used++;) N
+() N
+(      ) S
+(if) K
+( \(dumpPhaFlag\)) p n
+() S 8 T (swxdata.dumpPhaFile\(&pha, npha, -1, DUMP_USED\);) N
+(    }) N
+(    ) S
+(else) K
+( {) p n
+(      pha_ok = ) S
+(false) k
+(;) p n
+() N
+(      ) S
+(if) K
+( \(dumpPhaFlag\)) p n
+() S 8 T (swxdata.dumpPhaFile\(&pha, npha, -1, DUMP_DISC\);) N
+(    }) N
+() N
+(    ) S
+(// if PHA passes selection criteria, put it into MA) c n
+(    ) p
+(if) K
+( \(pha_ok\){) p n
+() N
+(      ) S
+(// this should be up in selection criteria) c n
+(      ) p
+(if) K
+( \( pha.tofch > \(MAXTOFCH - 1\) \) {  ) p
+(// -1 b/c ch starts at 0) c n
+() p 8 T (cout << thisprog << ") S
+( -W- tofch out of range \() str
+(" ) p n
+() S 8 T (     << MAXTOFCH - 1 << ") S
+( max\):) str
+(" ) p n
+() S 8 T (     << ") S
+( nedb=) str
+(" << pha.nedb ) p n
+() S 8 T (     << ") S
+( tofch=) str
+(" << pha.tofch ) p n
+() S 8 T (     << ") S
+( esdch=) str
+(" << pha.esdch ) p n
+() S 8 T (     << endl;) N
+(      }) N
+() N
+(      ) S
+(// so should this) c n
+(      ) p
+(if) K
+( \( pha.esdch > \(MAXESDCH - 1\) \) {) p n
+() S 8 T (cout << thisprog << ") S
+( -W- esdch out of range \() str
+(" ) p n
+(MeasurementArray.cc) (Page 2/10) (Aug 02, 04 13:03) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(MeasurementArray.cc) (1/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (3-4) 2
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p 8 T (     << MAXESDCH -1 << ") S
+( max\):) str
+(") p n
+() S 8 T (     << ") S
+( nedb=) str
+(" << pha.nedb ) p n
+() S 8 T (     << ") S
+( tofch=) str
+(" << pha.tofch ) p n
+() S 8 T (     << ") S
+( esdch=) str
+(" << pha.esdch ) p n
+() S 8 T (     << endl;) N
+(      }) N
+() N
+(      ) S
+(if) K
+( \(DbgLvl >= 3\) {) p n
+() S 8 T (cout << thisprog << ") S
+( -D- dumping meas. array coord.: ) str
+(") p n
+() S 8 T (     << ") S
+( nedb=) str
+(" << pha.nedb ) p n
+() S 8 T (     << ") S
+( tofch=) str
+(" << pha.tofch ) p n
+() S 8 T (     << ") S
+( esdch=) str
+(" << pha.esdch ) p n
+() S 8 T (     << endl;) N
+(      }) N
+() N
+(      ) S
+(if) K
+( \(DbgLvl >= 4\) {) p n
+() S 8 T (cout << thisprog << ") S
+(-D- before add MA[) str
+(" << pha.nedb << ") p
+(,) str
+(" ) p n
+() S 8 T (     << pha.tofch << ") S
+(,) str
+(" ) p n
+() S 8 T (     << pha.esdch << ") S
+(]=) str
+(" ) p n
+() S 8 T (     << MA[pha.nedb][pha.tofch][pha.esdch] << endl;) N
+(      }) N
+() N
+(      ) S
+(/* ------------------------------ */) c n
+(      ) p
+(/* increment counts in E-T matrix */) c n
+(      ) p
+(/* ------------------------------ */) c n
+(      ) p
+(if) K
+( \(doBRW\){) p n
+( ) S 8 T (MA[pha.nedb][pha.tofch][pha.esdch] += pha.weight;) N
+(      }) N
+(      ) S
+(else) K
+({) p n
+() S 8 T (MA[pha.nedb][pha.tofch][pha.esdch] += 1.0;) N
+(      }) N
+() N
+(      ) S
+(if) K
+( \(DbgLvl >= 4\) {) p n
+() S 8 T (cout << thisprog << ") S
+(-D- after add MA[) str
+(" << pha.nedb << ") p
+(,) str
+(" ) p n
+() S 8 T (     << pha.tofch << ") S
+(,) str
+(" ) p n
+() S 8 T (     << pha.esdch << ") S
+(]=) str
+(" ) p n
+() S 8 T (     << MA[pha.nedb][pha.tofch][pha.esdch] ) N
+() S 8 T (     << endl << endl;) N
+(      }) N
+() N
+(    }) N
+(  }) N
+() N
+(  ) S
+(if) K
+( \(DbgLvl >= 1\){) p n
+(    ) S
+(float) k
+( used_percent = 100.0 * ) p
+(static_cast) k
+(<) p
+(float) k
+(>\(npha_used\) / ) p n
+(      ) S
+(static_cast) k
+(<) p
+(float) k
+(>\(npha_tot\);) p n
+(    cout << thisprog << ") S
+( -I- ) str
+(" << npha_used << ") p
+( of ) str
+(" << npha_tot) p n
+() S 8 T ( << ") S
+( pha used to fill array \() str
+(") p n
+() S 8 T ( << used_percent << ") S
+(%\)) str
+("  << endl;) p n
+(  }) N
+() N
+(  ) S
+(/* --- determine accumulation time for PHAs just added ---) c n
+(     ------------------------------------------------------- */) N
+(  ) p
+(double) k
+( timeInterval;  ) p
+(// seconds between first and last PHA) c n
+() p n
+(  pha = swxdata.getPha\(swxdata.getNpha\(\) - 1\);) N
+(  timeInterval = pha.scet;) N
+(  ) S
+(if) K
+( \(DbgLvl >= 3\) {) p n
+(    cout.precision\(12\);) N
+(    cout << thisprog << ") S
+(-D- end_time=) str
+(" << pha.scet << endl;) p n
+(    cout.precision\(6\);) N
+(  }) N
+() N
+(  pha = swxdata.getPha\(0\);) N
+(  ) S
+(if) K
+( \(DbgLvl >= 3\) {) p n
+(    cout.precision\(12\);) N
+(    cout << thisprog << ") S
+(-D- start_time=) str
+(" << pha.scet << endl;) p n
+(    cout.precision\(6\);) N
+(  }) N
+(MeasurementArray.cc) (Page 3/10) (Aug 02, 04 13:03) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(  timeInterval = timeInterval - pha.scet;) N
+() N
+(  ) S
+(/* Differences between cycle times will not include time for the last) c n
+(     cycle read.  Therefore, add a typical cycle time to the calc. interval.) N
+(     FIX:  Should this be 58?) N
+(  */) N
+(  timeInterval += 12.*60.;) p n
+() N
+(  gAccumTime += \() S
+(float) k
+(\)timeInterval;) p n
+() N
+(  ) S
+(if) K
+( \(DbgLvl >= 2\) {) p n
+(    cout << thisprog << ") S
+( -D-) str
+(") p n
+() S 8 T ( << ") S
+( timeInterval=) str
+(" << timeInterval ) p n
+() S 8 T ( << ") S
+( gAccumTime=) str
+(" << gAccumTime ) p n
+() S 8 T ( << endl;) N
+(  }) N
+() N
+(  ) S
+(/* --- transform elements of MA back from counts to rates --- ) c n
+(     ---------------------------------------------------------- */) N
+(  ) p
+(float) k
+( ma_sum = 0.0;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( ntof = 0; ntof < MAXTOFCH; ntof++\){) p n
+(      ) S
+(for) K
+( \() p
+(int) k
+( nesd = 0; nesd < MAXESDCH; nesd++\){) p n
+() N
+() S 8 T () S
+(if) K
+( \(DbgLvl >= 4 && MA[nedb][ntof][nesd] > 0.0\){) p n
+() S 8 T (  cout << thisprog << ") S
+(-D- before norm MA[) str
+(" << nedb ) p n
+() S 8 T (       << ") S
+(,) str
+(" << ntof << ") p
+(,) str
+(" << nesd) p n
+() S 8 T (       << ") S
+(]=) str
+(" << MA[nedb][ntof][nesd] << endl;) p n
+() S 8 T (}) N
+() N
+() S 8 T () S
+(if) K
+( \(Rates\){) p n
+() S 8 T (  MA[nedb][ntof][nesd] = MA[nedb][ntof][nesd] / \() S
+(float) k
+(\)gAccumTime;) p n
+() S 8 T (}) N
+() N
+() S 8 T () S
+(// for debugging) c n
+() p 8 T (ma_sum += MA[nedb][ntof][nesd];) N
+() N
+() S 8 T () S
+(if) K
+( \(DbgLvl >= 4 && MA[nedb][ntof][nesd] > 0.0\){) p n
+() S 8 T (  cout << thisprog << ") S
+(-D- after norm MA[) str
+(" << nedb << ") p
+(,) str
+(" << ntof ) p n
+() S 8 T (       << ") S
+(,) str
+(" << nesd) p n
+() S 8 T (       << ") S
+(]=) str
+(" << MA[nedb][ntof][nesd] << endl;) p n
+() S 8 T (}) N
+() N
+(      } ) S
+(// loop over nesd) c n
+(    } ) p
+(// loop over ntof) c n
+(  } ) p
+(// loop over EDBs) c n
+() p n
+(  ) S
+(if) K
+( \(DbgLvl >= 2\){) p n
+(    cout << thisprog << ") S
+( -D- sum of all elements of MA = ) str
+(" << ma_sum << endl;;) p n
+(  }) N
+() N
+(  ) S
+(if) K
+( \(dumpPhaFlag\) {) p n
+(    fclose\(DUMP_USED\);) N
+(    fclose\(DUMP_DISC\);) N
+(  }) N
+(return) K
+( 0;) p n
+(}) N
+() N
+(TNT::Matrix<) S
+(float) k
+(> MeasurementArray::getSlice\() p
+(int) k
+( nedb\){) p n
+(  ) S
+(return) K
+(\(MA[nedb]\);) p n
+(}) N
+() N
+(TNT::Matrix<) S
+(float) k
+(> MeasurementArray::EtSlice2Mmq\(TNT::Matrix<) p
+(float) k
+(> slice, ) p n
+(  ) S
+(int) k
+( nedb, ) p
+(const) K
+( AnalysisData& ad\){) p n
+() N
+(  ) S
+(// call with default MMQ limits) c n
+(  EtSlice2Mmq\(slice, nedb, ad, 1.2, 70.0, 1.15, 10.0\);) p n
+(}) N
+(MeasurementArray.cc) (Page 4/10) (Aug 02, 04 13:03) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(MeasurementArray.cc) (2/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (5-6) 3
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(TNT::Matrix<) S
+(float) k
+(> MeasurementArray::EtSlice2Mmq) p n
+(  \(TNT::Matrix<) S
+(float) k
+(> slice, ) p
+(int) k
+( nedb, ) p
+(const) K
+( AnalysisData& ad,) p n
+(   ) S
+(double) k
+( mm0, ) p
+(double) k
+( mm1, ) p
+(double) k
+( mq0, ) p
+(double) k
+( mq1\){) p n
+(  ) S
+(// mass range of \(mm0,mm1\) and m/q range of \(mq0,mq1\)) c n
+() p n
+(  string thisprog = ") S
+(EtSlice2Mmq) str
+(";) p n
+(  ) S
+(int) k
+( DbgLvl = gDbgLvl; ) p
+(// init local debugging level to global one) c n
+() p n
+(  TNT::Matrix<) S
+(float) k
+(> mmq\(NQCH, NMCH, 0.0\);) p n
+() N
+(  ) S
+(int) k
+( nmm = 0;) p n
+(  ) S
+(int) k
+( nmmzero = 0;) p n
+(  ) S
+(int) k
+( nmq = 0;) p n
+(  ) S
+(int) k
+( nmqzero = 0;) p n
+() N
+(  ) S
+(if) K
+( \(DbgLvl >= 1\){) p n
+(    cout << thisprog << ") S
+( -I- MMQ output using following limits) str
+(" ) p n
+() S 8 T ( << ") S
+( mm0=) str
+(" << mm0) p n
+() S 8 T ( << ") S
+( mm1=) str
+(" << mm1) p n
+() S 8 T ( << ") S
+( mq0=) str
+(" << mq0) p n
+() S 8 T ( << ") S
+( mq1=) str
+(" << mq1) p n
+() S 8 T ( << endl;) N
+(  }) N
+() N
+() N
+(  ) S
+(double) k
+( mm;   ) p
+(// mass for current E-T coordinate) c n
+(  ) p
+(double) k
+( mq;   ) p
+(// m/q for current E-T coordinate) c n
+(  ) p
+(int) k
+(   im;   ) p
+(// mass bin) c n
+(  ) p
+(int) k
+(   iq;   ) p
+(// m/q bin) c n
+() p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( ntof = 0; ntof < MAXTOFCH; ntof++\){) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( nesd = 0; nesd < MAXESDCH; nesd++\){) p n
+() N
+(      eqte2mmq\(ad.Eqtab[nedb], ad.PapsVolt, ntof, nesd, mm, mq\);) N
+() N
+(      ) S
+(if) K
+( \( \(DbgLvl >= 3\) && \(mm > 0.0 && mq > 0.0\) \){) p n
+() S 8 T (cout << thisprog << ") S
+( -D- ) str
+(" ) p n
+() S 8 T (     << ") S
+( nedb=) str
+(" << nedb) p n
+() S 8 T (     << ") S
+( ntof=) str
+(" << ntof) p n
+() S 8 T (     << ") S
+( nesd=) str
+(" << nesd) p n
+() S 8 T (     << ") S
+( mm=) str
+(" << mm) p n
+() S 8 T (     << ") S
+( mq=) str
+(" << mq) p n
+() S 8 T (     << endl;) N
+(      }) N
+(      ) N
+(      ) S
+(/* collect some stats on zero and nonzero mass and m/q */) c n
+(      ) p
+(if) K
+( \(mm > 0.0\){) p n
+() S 8 T (nmm++;) N
+(      }) N
+(      ) S
+(else) K
+({) p n
+() S 8 T (nmmzero++;) N
+(      }) N
+() N
+(      ) S
+(if) K
+( \(mq > 0.0\){) p n
+() S 8 T (nmq++;) N
+(      }) N
+(      ) S
+(else) K
+({) p n
+() S 8 T (nmqzero++;) N
+(      }) N
+() N
+(      im =  ) S
+(int) k
+( \( \(NMCH - 1\) * log\(mm/mm0\)/log\(mm1/mm0\) \);) p n
+() N
+(      iq =  ) S
+(int) k
+( \( \(NQCH - 1\) * log\(mq/mq0\)/log\(mq1/mq0\) \);) p n
+() N
+(      ) S
+(if) K
+( \( \(DbgLvl >= 3\) && \(im > 0.0 && iq > 0.0\) \){) p n
+() S 8 T (cout << thisprog << ") S
+( -D- ) str
+(" ) p n
+() S 8 T (     << ") S
+( nedb=) str
+(" << nedb) p n
+() S 8 T (     << ") S
+( ntof=) str
+(" << ntof) p n
+(MeasurementArray.cc) (Page 5/10) (Aug 02, 04 13:03) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p 8 T (     << ") S
+( nesd=) str
+(" << nesd) p n
+() S 8 T (     << ") S
+( im=) str
+(" << im) p n
+() S 8 T (     << ") S
+( iq=) str
+(" << iq) p n
+() S 8 T (     << endl;) N
+(      }) N
+(      ) N
+(      ) S
+(// assign if within mmq dimensions) c n
+(      ) p
+(if) K
+( \( \(\(im >= 0\) && \(iq >= 0\)\) &&  \(\(im < NMCH\) && \(iq < NQCH\)\) \){) p n
+() S 8 T (mmq[iq][im] += slice[ntof][nesd];) N
+() N
+() S 8 T () S
+(if) K
+( \(DbgLvl >= 3\){) p n
+() S 8 T (  cout << thisprog << ") S
+( -D- ) str
+(" ) p n
+() S 8 T (       << ") S
+(mmq=) str
+(" << mmq[iq][im] << endl;) p n
+() S 8 T (}) N
+(      }) N
+(    }) N
+(  }) N
+() N
+(  ) S
+(/* some stats calculations and output */) c n
+(  ) p
+(if) K
+( \(DbgLvl >= 3\){) p n
+(    ) S
+(float) k
+( nmmfrac, nmqfrac;) p n
+(    nmmfrac = \() S
+(float) k
+(\) nmm / \() p
+(float) k
+(\) \(nmm + nmmzero\);) p n
+(    nmqfrac = \() S
+(float) k
+(\) nmq / \() p
+(float) k
+(\) \(nmq + nmqzero\);) p n
+(    cout << thisprog << ") S
+( -D- Non-zero:) str
+(" ) p n
+() S 8 T ( << ") S
+( nmmfrac=) str
+(" << nmmfrac) p n
+() S 8 T ( << ") S
+( nmqfrac=) str
+(" << nmqfrac) p n
+() S 8 T ( << endl;) N
+(  }) N
+() N
+(  ) S
+(return) K
+( mmq;) p n
+(}) N
+() N
+(int) k
+( MeasurementArray::outputMMQ) p n
+( \(string outfile,) S
+(long) k
+( ) p
+(int) k
+( StartYdoy, ) p
+(long) k
+( ) p
+(int) k
+( StopYdoy,) p
+(const) K
+( AnalysisData& ad\){) p n
+() N
+(  outputMMQ\(outfile, StartYdoy, StopYdoy, ad, 1.2, 70.0, 1.15, 10.0\);) N
+(}) N
+() N
+(int) k
+( MeasurementArray::outputMMQ) p n
+(  \(string outfile,) S
+(long) k
+( ) p
+(int) k
+( StartYdoy, ) p
+(long) k
+( ) p
+(int) k
+( StopYdoy,) p
+(const) K
+( AnalysisData& ad,) p n
+(   ) S
+(double) k
+( mm0, ) p
+(double) k
+( mm1,) p
+(double) k
+( mq0, ) p
+(double) k
+( mq1\) {) p n
+(  ) S
+(/* Description: Output several tof-esd and mmq matrices to files. */) c n
+() p n
+(  string thisprog = ") S
+(outputMMQ) str
+(";) p n
+() N
+(  std::ofstream fout;) N
+(  fout.precision\(3\);) N
+() N
+(  TNT::Matrix<) S
+(float) k
+(> a\(MAXTOFCH,MAXESDCH, 0.0\);) p n
+(  TNT::Matrix<) S
+(float) k
+(> sum\(MAXTOFCH,MAXESDCH, 0.0\);) p n
+() N
+(  ) S
+(/* --- write mmq matrices to file ---) c n
+(     ----------------------------------) N
+(  */) N
+(  TNT::Matrix<) p
+(float) k
+(> mmq\(NQCH,NMCH, 0.0\);) p n
+(  TNT::Matrix<) S
+(float) k
+(> mmqsum\(NQCH,NMCH, 0.0\);) p n
+(  TNT::Matrix<) S
+(float) k
+(> zero\(NQCH,NMCH, 0.0\);) p n
+() N
+(  fout.open\(outfile.c_str\(\)\);) N
+() N
+(  fout << ") S
+(ACE/SWICS m-m/q in counts/second for day\(s\) ) str
+(" << StartYdoy <<) p n
+(    ") S
+( - ) str
+(" << StopYdoy << endl;) p n
+(  fout << ") S
+(m/q_\(amu/e\) mass_\(amu\)) str
+(" << endl;) p n
+(  fout << mq0 << ") S
+( ) str
+(" << mq1 << ") p
+( ) str
+(" << mm0 << ") p
+( ) str
+(" << mm1 << endl;) p n
+(  ) S
+(//fout << "1 " << NQCH << " 1 " << NMCH << endl;) c n
+(  ) p n
+(  mmqsum = 0.0;) N
+(  ) S
+(for) K
+(\() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB ; nedb++\){) p n
+(    a = getSlice\(nedb\);) N
+(MeasurementArray.cc) (Page 6/10) (Aug 02, 04 13:03) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(MeasurementArray.cc) (3/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (7-8) 4
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    mmq = EtSlice2Mmq\(a,nedb,ad, mm0, mm1, mq0, mq1\);) p n
+(    mmqsum = mmqsum + mmq;) N
+(  }) N
+() N
+(  fout << mmqsum;) N
+(  fout.close\(\);) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+() N
+(int) k
+( MeasurementArray::outputMMQfmc\(string outfile,) p
+(const) K
+( AnalysisData& ad\){) p n
+(  ) S
+(/* Description: Write out FMC centers in M-M/Q.) c n
+(     Copied from AnalysisData::outputFM.  */) N
+() p n
+(  ) S
+(FILE) k
+( *FMCF; ) p
+(// Forward Model Comparison File \(pointer\)) c n
+(  FMCF = fopen\(outfile.c_str\(\), ") p
+(w+) str
+("\);) p n
+() N
+(  ) S
+(// keep fields the same total width!) c n
+(  ) p
+(char) k
+( hdrfmt[] =") p
+(# %3s %6s %6s %6s %6s %6s %6s\\n) str
+(";) p n
+(  ) S
+(char) k
+( datafmt[]=) p n
+(  ") S
+(  %3d %6.2f %6s %6.2f %6.2f %6.2f %6.2f \\n) str
+(";) p n
+() N
+(  ) S
+(// --- print file header ---) c n
+(  fprintf\(FMCF,") p
+(# Forward Model parameters from ACE Level II data processor \(v2.0\)\\n) str
+("\);) p n
+() N
+(  ) S
+(// get and format calendar time for header) c n
+(  time_t now;) p n
+(  ) S
+(char) k
+( timestr[19];) p n
+(  time\(&now\);) N
+(  strftime\(timestr, 19, ") S
+(%d%b%Y %H:%M:%S) str
+(", localtime\(&now\)\);) p n
+(  fprintf\(FMCF,") S
+(# Created: %s\\n) str
+(", timestr\);) p n
+() N
+(  ) S
+(// print column headings) c n
+(  fprintf\(FMCF,hdrfmt,") p
+(EDB) str
+(",") p
+(E/q) str
+(",") p
+(ion) str
+(",") p
+(moq) str
+(",") p
+(moqsig) str
+(",") p
+(mass) str
+(",") p
+(massig) str
+("\);) p n
+() N
+(  ) S
+(// --- write output line for each EDB for each species ---) c n
+(  ) p
+(int) k
+( itof,iesd;  ) p
+(// integer versions) c n
+(  ) p
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < ad.Ions.size\(\); s++\){) p n
+(      ) S
+(double) k
+( mq = 0.0;) p n
+(      ) S
+(double) k
+( mqsig = 0.0;) p n
+(      ) S
+(double) k
+( mm = 0.0;) p n
+(      ) S
+(double) k
+( mmsig = 0.0;) p n
+() N
+(      ) S
+(// --- get mass \(mm\) and m/q \(mq\) ---) c n
+(      itof = ) p
+(static_cast) k
+(<) p
+(int) k
+(> \(ad.Ions[s].tof[nedb]\);) p n
+(      iesd = ) S
+(static_cast) k
+(<) p
+(int) k
+(> \(ad.Ions[s].esd[nedb]\);) p n
+(      eqte2mmq\(ad.Eqtab[nedb], ad.PapsVolt, itof, iesd, mm, mq\);      ) N
+(      ) N
+(      ) S
+(// --- get sigmas for mass \(mmsig\) and m/q \(mqsig\) ---) c n
+(      ) p
+(// must add to tof/esd to get into range) c n
+(      itof = ) p
+(static_cast) k
+(<) p
+(int) k
+(> \(ad.Ions[s].tof[nedb]+ad.Ions[s].stof[nedb]\);) p n
+(      iesd = ) S
+(static_cast) k
+(<) p
+(int) k
+(> \(ad.Ions[s].esd[nedb]+ad.Ions[s].sesd[nedb]\);) p n
+(      eqte2mmq\(ad.Eqtab[nedb], ad.PapsVolt, itof, iesd, mmsig, mqsig\);      ) N
+(      ) S
+(// subtract off center to get actual sigma) c n
+(      ) p
+(if) K
+( \(mmsig > mm\) mmsig = mmsig - mm;) p n
+(      ) S
+(else) K
+( mmsig = 0.0;) p n
+(      ) S
+(if) K
+( \(mqsig > mq\) mqsig = mqsig - mq;) p n
+(      ) S
+(else) K
+( mmsig = 0.0;) p n
+() N
+(      fprintf\(FMCF, datafmt, nedb, ad.Eqtab[nedb],ad.Ions[s].name.c_str\(\),) N
+() S 8 T (      mq,mqsig,mm,mmsig\);) N
+(    }) N
+(  }) N
+() N
+(  fclose\(FMCF\);) N
+() N
+(  ) S
+(return) K
+( \(0\);) p n
+(MeasurementArray.cc) (Page 7/10) (Aug 02, 04 13:03) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(}) p n
+() N
+() N
+(int) k
+( MeasurementArray::save\(string file\){) p n
+() N
+(  std::ofstream fout;) N
+(  fout.open\(file.c_str\(\)\);) N
+(  fout.precision\(10\);) N
+() N
+(  ) S
+(if) K
+( \(gDbgLvl\) {) p n
+(    cout << ") S
+(MeasurementArray::save -I- saving MA to ) str
+(" << file << endl;) p n
+(  }) N
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    fout << MA[nedb];) N
+(  }) N
+(  fout.close\(\);) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+() N
+(int) k
+( MeasurementArray::load\(string file\){) p n
+(  string thisprog = ") S
+(MeasurementArray::load) str
+(";) p n
+(  ) N
+(  std::ifstream fin;) N
+(  fin.open\(file.c_str\(\)\);) N
+() N
+(  ) S
+(if) K
+( \(gDbgLvl\) {) p n
+(    cout << thisprog << ") S
+( -I- loading MA from ) str
+(" << file << endl;) p n
+(  }) N
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    fin >> MA[nedb];) N
+(  }) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(float) k
+( MeasurementArray::getElement\() p
+(int) k
+( nedb, ) p
+(int) k
+( tofch, ) p
+(int) k
+( esdch\) ) p
+(const) K
+( {) p n
+() N
+(  ) S
+(/* The nedb is bounds checked because the STL vector is not. */) c n
+(  ) p
+(if) K
+( \( \(nedb < MAXEDB\) \){) p n
+(    ) S
+(return) K
+(\(MA[nedb][tofch][esdch]\);) p n
+(  }) N
+(  ) S
+(else) K
+( {) p n
+(    ) S
+(return) K
+(\(-1.0\);) p n
+(  }) N
+(}) N
+() N
+(/*  Output swindal E-T matrices for entire charge step range to a file.) c n
+(    Adapted from outputMA.cc.) N
+(*/) N
+(int) k
+( MeasurementArray::outputETslices) p n
+(  \(string outfile, ) S
+(long) k
+( ) p
+(int) k
+( StartYdoy, ) p
+(long) k
+( ) p
+(int) k
+( StopYdoy, ) p n
+(   ) S
+(const) K
+( AnalysisData& ad\) {) p n
+() N
+(  string thisprog = ") S
+(outputETslices) str
+(";) p n
+() N
+(  std::ofstream fout;) N
+(  fout.precision\(3\);) N
+() N
+(  TNT::Matrix<) S
+(float) k
+(> a\(MAXTOFCH,MAXESDCH, 0.0\);) p n
+() N
+(  ) S
+(/* --- output all E-T \(MA\) slices \(into one file\) ---) c n
+(     --------------------------------------------------) N
+(  */) N
+(  cout << thisprog << ") p
+( -I- writing E-T slice for each charge step...) str
+(" << endl;) p n
+(  fout.open\(outfile.c_str\(\)\);) N
+(MeasurementArray.cc) (Page 8/10) (Aug 02, 04 13:03) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(MeasurementArray.cc) (4/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (9-10) 5
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  ) p
+(for) K
+(\() p
+(int) k
+( i = FIRSTEDB; i < MAXEDB ; i++\){) p n
+(    a = getSlice\(i\);) N
+() N
+(    fout << ") S
+(ACE/SWICS counts/second for day\(s\) ) str
+(" << StartYdoy <<) p n
+(      ") S
+( - ) str
+(" << StopYdoy << endl;) p n
+(    ) S
+(//    fout << "TOF_CH ESD_CH" << endl;) c n
+(    fout << ") p
+(TOF_CH_STEP_) str
+(" << i << ") p
+( ESD_CH) str
+(" << endl;) p n
+(    fout << ") S
+(0 1023 0 255) str
+(" << endl;) p n
+(    fout << a; ) N
+(    ) N
+(  }) N
+() N
+(  fout.close\(\);) N
+() N
+() N
+(  ) S
+(return) K
+( \(0\);) p n
+(}) N
+() N
+() N
+(int) k
+( MeasurementArray::setFilter\() p
+(int) k
+( newfilter\){) p n
+(  ) S
+(if) K
+( \( \(newfilter >= 0\) && \(newfilter <= 15\) \){) p n
+(    filter = newfilter;) N
+(    ) S
+(return) K
+(\(0\);) p n
+(  }) N
+(  ) S
+(else) K
+({) p n
+(    ) S
+(if) K
+( \(gDbgLvl >= 2\) {) p n
+(      cout << ") S
+(MeasurementArray::setFiler -E- filter=) str
+(") p n
+() S 8 T (   << newfilter << ") S
+( not allowed) str
+(" << endl;) p n
+(    }) N
+(    ) S
+(return) K
+(\(1\);) p n
+(  }) N
+(}) N
+() N
+(int) k
+( MeasurementArray::getFilter\() p
+(void) k
+(\){) p n
+(  ) S
+(return) K
+(\(filter\);) p n
+(}) N
+() N
+(bool) k
+( MeasurementArray::passRange\() p
+(int) k
+( range\){) p n
+(  ) N
+(  ) S
+(/* array of flags with the bit corresponding to the range \(index\) set */) c n
+(  ) p
+(const) K
+( ) p
+(int) k
+( RANGE[4] = {1,2,4,8};) p n
+() N
+(  ) S
+(if) K
+( \(range >= 0 && range <= 3\){) p n
+(    ) S
+(return) K
+(\(RANGE[range] & filter\);) p n
+(  }) N
+(  ) S
+(else) K
+( {) p n
+(    ) S
+(if) K
+( \(gDbgLvl >= 2\) {) p n
+(      cout << ") S
+(MeasurementArray::passRange -E- range=) str
+(") p n
+() S 8 T (   << range << ") S
+( not allowed) str
+(" << endl;) p n
+(    }) N
+(    ) S
+(return) K
+( ) p
+(false) k
+(;) p n
+(  }) N
+(}) N
+() N
+(int) k
+( MeasurementArray::setDoBRW\() p
+(bool) k
+( val\){) p n
+(  doBRW = val;) N
+(  ) S
+(if) K
+( \(gDbgLvl >= 1\) {) p n
+(    cout << ") S
+(MeasurementArray::setDoBRW -I- basic rate weighting is ) str
+(";) p n
+(    ) S
+(if) K
+( \(doBRW\){) p n
+(      cout <<") S
+(on) str
+(" << endl;) p n
+(    }) N
+(    ) S
+(else) K
+({) p n
+(      cout <<") S
+(on) str
+(" << endl;) p n
+(    }) N
+(  }) N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(bool) k
+( MeasurementArray::getDoBRW\() p
+(void) k
+(\){) p n
+(MeasurementArray.cc) (Page 9/10) (Aug 02, 04 13:03) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  ) p
+(return) K
+(\(doBRW\);) p n
+(}) N
+() N
+(void) k
+( MeasurementArray::setVelFilterFrac\() p
+(double) k
+( val\){) p n
+(  velFilterFrac = val;) N
+(  ) S
+(return) K
+(;) p n
+(}) N
+() N
+(double) k
+( MeasurementArray::getVelFilterFrac\(\){) p n
+(   ) S
+(return) K
+(\(velFilterFrac\);) p n
+(}) N
+() N
+(bool) k
+( MeasurementArray::passVelFilter\() p
+(double) k
+( ion_speed, ) p
+(double) k
+( sw_speed\){) p n
+(  ) S
+(bool) k
+( retval = ) p
+(false) k
+(;) p n
+(  ) S
+(if) K
+( \(velFilterFrac > 0.0\){) p n
+(    ) S
+(if) K
+( \( \(ion_speed >= sw_speed*\(1.0-velFilterFrac\)\) && ) p n
+() S 8 T ( \(ion_speed <= sw_speed*\(1.0+velFilterFrac\)\) \){) N
+(      retval = ) S
+(true) k
+(;) p n
+(    }) N
+(  }) N
+(  ) S
+(else) K
+({ ) p
+(// 0.0 => filter off, i.e. all speeds pass) c n
+(    retval = ) p
+(true) k
+(;) p n
+(  }) N
+() N
+(  ) S
+(return) K
+(\(retval\);) p n
+(}) N
+(MeasurementArray.cc) (Page 10/10) (Aug 02, 04 13:03) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(MeasurementArray.cc) (5/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (1-2) 6
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*) c n
+(  File: MeasurementArray.h) N
+() N
+(  Description:) N
+(    Header for MeasurementArray Class) N
+() N
+(  Author: Jim Raines, ) N
+() N
+(  Method:) N
+(    ) N
+(  Revision controlled by CVS:) N
+(  $Id: MeasurementArray.h,v 1.9 2004/01/27 21:19:02 jraines Exp $) N
+() N
+(  Major Modification History:) N
+(    ) N
+() N
+(*/) N
+() p n
+(class MeasurementArray {) N
+( public:) N
+(  TNT::Matrix<) S
+(float) k
+(> getSlice\() p
+(int) k
+(\); ) p
+(// get a tof/esd matrix at edb=nedb) c n
+(  TNT::Matrix<) p
+(float) k
+(> putSlice\() p
+(int) k
+(\);) p
+(// put a tof/esd matrix at edb=nedb into MA) c n
+() p n
+(  ) S
+(float) k
+( MeasurementArray::getElement \() p
+(int) k
+( nedb, ) p
+(int) k
+( tofch, ) p
+(int) k
+( esdch\) ) p
+(const) K
+(;) p n
+() N
+(  ) S
+(// Write E-T slices to file specified with outfile.) c n
+(  ) p
+(// Note:  Start/StopYdoy are for matrix headers.) c n
+(  ) p
+(int) k
+( outputETslices\(string outfile, ) p
+(long) k
+( ) p
+(int) k
+( StartYdoy, ) p
+(long) k
+( ) p
+(int) k
+( StopYdoy, ) p n
+() S 8 T () S 16 T (     ) S
+(const) K
+( AnalysisData& ad\);) p n
+() N
+(  ) S
+(// --- Convert an esdch-tofch matrix \(slice\) to mass-mass/charge) c n
+(  ) p
+(// with default mmq limits) c n
+(  TNT::Matrix<) p
+(float) k
+(> MeasurementArray::EtSlice2Mmq) p n
+(    \(TNT::Matrix<) S
+(float) k
+(> slice,) p
+(int) k
+( nedb,  ) p
+(const) K
+( AnalysisData& ad\);) p n
+(  ) S
+(// with mmq limits specified) c n
+(  ) p
+(// mass range of \(mm0,mm1\) and m/q range of \(mq0,mq1\)) c n
+(  TNT::Matrix<) p
+(float) k
+(> MeasurementArray::EtSlice2Mmq) p n
+(    \(TNT::Matrix<) S
+(float) k
+(> slice,) p
+(int) k
+( nedb,  ) p
+(const) K
+( AnalysisData& ad,) p n
+(     ) S
+(double) k
+( mm0, ) p
+(double) k
+( mm1, ) p
+(double) k
+( mq0, ) p
+(double) k
+( mq1\);) p n
+() N
+(  ) S
+(// --- output mass-mass/charge array to file \(uses EtSlice2Mmq\)) c n
+(  ) p
+(// with default mmq limits) c n
+(  ) p
+(int) k
+( MeasurementArray::outputMMQ) p n
+(    \(string outfile,) S
+(long) k
+( ) p
+(int) k
+( StartYdoy, ) p
+(long) k
+( ) p
+(int) k
+( StopYdoy, ) p n
+(     ) S
+(const) K
+( AnalysisData& ad\);) p n
+(  ) S
+(// with mmq limits specified) c n
+(  ) p
+(// mass range of \(mm0,mm1\) and m/q range of \(mq0,mq1\)) c n
+(  ) p
+(int) k
+( MeasurementArray::outputMMQ) p n
+(    \(string outfile,) S
+(long) k
+( ) p
+(int) k
+( StartYdoy, ) p
+(long) k
+( ) p
+(int) k
+( StopYdoy, ) p n
+(     ) S
+(const) K
+( AnalysisData& ad, ) p
+(double) k
+( mm0, ) p
+(double) k
+( mm1,) p
+(double) k
+( mq0, ) p
+(double) k
+( mq1\);) p n
+() N
+(  ) S
+(// Output forward model centers in M-M/Q) c n
+(  ) p
+(int) k
+( MeasurementArray::outputMMQfmc\(string outfile,) p
+(const) K
+( AnalysisData& ad\);) p n
+() N
+(  ) S
+(/* Fills measurement matrix from vector of Pha objects.  */) c n
+(  ) p
+(int) k
+( fill\() p
+(const) K
+( AceSwicsData& swxdata\);) p n
+() N
+(  ) S
+(/* set/getFilter - set/get bit field decsribing from which Range\(s\)) c n
+(     to keep PHAs.  If the bit corresponding to a particular range is) N
+(     on \(1\), then PHAs from that range will be loaded into MA.) N
+(     ) N
+(     filter) N
+(     value     bits*       use range\(s\)) N
+(     ------    -----       ------------) N
+(     0         0000        none \(not used\)) N
+(     1         0001        0) N
+(     2         0010        1) N
+(     3         0011        1 and 0) N
+(     4         0100        2) N
+(MeasurementArray.h) (Page 1/2) (Jan 27, 04 16:19) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(     5         0101        2 and 0) c n
+(     6         0110        2 and 1) N
+(     7         0111        2, 1, and 0) N
+(     8         1000        3) N
+(     9         1001        3 and 0) N
+(     10        1010        3 and 1) N
+(     11        1011        3, 1 and 0) N
+(     12        1100        3 and 2) N
+(     13        1101        3, 2 and 0) N
+(     14        1110        3, 2 and 1) N
+(     15        1111        3, 2, 1 and 0) N
+(     ) N
+(     *other leading 0's omitted) N
+(  */) N
+(  ) p
+(int) k
+( setFilter\() p
+(int) k
+( filter\); ) p
+(// returns 0 if successful) c n
+(  ) p
+(int) k
+( getFilter\() p
+(void) k
+(\);           ) p
+(// returns current value of filter) c n
+(  bool passRange\() p
+(int) k
+( range\);) p
+(// returns true if range passes through filter) c n
+() p n
+(  ) S
+(// set/getDoBRW -- toggle use of basic rate weighting) c n
+(  ) p
+(// true -> do basic rate weighting) c n
+(  ) p
+(int) k
+( setDoBRW\(bool\);       ) p
+(// set flag, 1=>T, 0=>F; returns 0 if successful) c n
+(  bool getDoBRW\() p
+(void) k
+(\);      ) p
+(// returns current value of doBRW flag) c n
+() p n
+(  ) S
+(/* set/get velocity filter fraction) c n
+(     When set to positive, non-zero value, only PHA words with speed ) N
+(     \(from d/TOF\) with this fraction of the solar wind speed, calculated from) N
+(     matrix rates of the cycle from which the PHA originated.) N
+(  */) N
+(  ) p
+(void) k
+( setVelFilterFrac\() p
+(double) k
+(\);) p n
+(  ) S
+(double) k
+( getVelFilterFrac\(\);) p n
+() N
+(  ) S
+(int) k
+( save\(string file\);) p n
+(  ) S
+(int) k
+( load\(string file\);) p n
+() N
+(  ) S
+(// Constructor) c n
+(  MeasurementArray\() p
+(void) k
+(\);) p n
+() N
+( private:) N
+() N
+(  vector<TNT::Matrix<) S
+(float) k
+(> > MA;  ) p
+(// the measurement array itself \(cnts/s\)) c n
+() p n
+(  ) S
+(// PHA filter value used by set/getFilter) c n
+(  ) p
+(int) k
+( filter; ) p n
+() N
+(  ) S
+(// returns true if ion_speed is within velFilterFrac of sw_speed) c n
+(  bool passVelFilter\() p
+(double) k
+( ion_speed, ) p
+(double) k
+( sw_speed\);) p n
+(  ) S
+(double) k
+( velFilterFrac;) p n
+() N
+(  bool doBRW;               ) S
+(// T => do basic rate weighting) c n
+(};) p n
+() N
+(MeasurementArray.h) (Page 2/2) (Jan 27, 04 16:19) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(../include/MeasurementArray.h) (6/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+
+%%Trailer
+end
+%%EOF

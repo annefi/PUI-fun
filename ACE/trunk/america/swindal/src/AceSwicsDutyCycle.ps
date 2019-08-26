@@ -1,0 +1,1980 @@
+%!PS-Adobe-3.0
+%%Title: AceSwicsDutyCycle.cc, AceSwicsDutyCycle.h
+%%For: Jim Raines
+%%Creator: a2ps version 4.13
+%%CreationDate: Mon Aug  9 11:20:39 2004
+%%BoundingBox: 24 24 588 768
+%%DocumentData: Clean7Bit
+%%Orientation: Landscape
+%%Pages: 6
+%%PageOrder: Ascend
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: font Courier
+%%+ font Courier-Bold
+%%+ font Helvetica
+%%+ font Helvetica-Bold
+%%+ font Symbol
+%%+ font Times-Bold
+%%+ font Times-Roman
+%%DocumentProcessColors: Black Blue Green Red 
+%%DocumentSuppliedResources: procset a2ps-color-prolog
+%%+ encoding ISO-8859-1Encoding
+%%EndComments
+/a2psdict 200 dict def
+a2psdict begin
+%%BeginProlog
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+
+% EPSF import as in the Red Book
+/BeginInclude {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack 
+  userdict begin
+    0 setgray 0 setlinecap
+    1 setlinewidth 0 setlinejoin
+    10 setmiterlimit [ ] 0 setdash newpath
+    gs_languagelevel 1 ne {
+      false setstrokeadjust false setoverprint 
+    } if
+} bind def
+
+/EndInclude {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+/BeginEPSF {
+  BeginInclude
+  /showpage { } def
+} bind def
+
+/EndEPSF {
+  EndInclude
+} bind def
+
+% Page prefeed
+/page_prefeed {         % bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} bind def
+
+/deffont {
+  findfont exch scalefont def
+} bind def
+
+/reencode_font {
+  findfont reencode 2 copy definefont pop def
+} bind def
+
+% Function c-show (str => -)
+% centers text only according to x axis.
+/c-show { 
+  dup stringwidth pop
+  2 div neg 0 rmoveto
+  show
+} bind def
+
+% Function l-show (str => -)
+% prints texts so that it ends at currentpoint
+/l-show {
+  dup stringwidth pop neg 
+  0 
+  rmoveto show
+} bind def
+
+% center-fit show (str w => -)
+% show centered, and scale currentfont so that the width is less than w
+/cfshow {
+  exch dup stringwidth pop
+  % If the title is too big, try to make it smaller
+  3 2 roll 2 copy
+  gt
+  { % if, i.e. too big
+    exch div
+    currentfont exch scalefont setfont
+  } { % ifelse
+    pop pop 
+  }
+  ifelse
+  c-show			% center title
+} bind def
+
+% Return the y size of the current font
+% - => fontsize
+/currentfontsize {
+  currentfont /FontType get 0 eq {
+    currentfont /FontMatrix get 3 get
+  }{
+    currentfont /FontMatrix get 3 get 1000 mul
+  } ifelse
+} bind def
+
+% reencode the font
+% <encoding-vector> <fontdict> -> <newfontdict>
+/reencode { %def
+  dup length 5 add dict begin
+    { %forall
+      1 index /FID ne 
+      { def }{ pop pop } ifelse
+    } forall
+    /Encoding exch def
+
+    % Use the font's bounding box to determine the ascent, descent,
+    % and overall height; don't forget that these values have to be
+    % transformed using the font's matrix.
+    % We use `load' because sometimes BBox is executable, sometimes not.
+    % Since we need 4 numbers an not an array avoid BBox from being executed
+    /FontBBox load aload pop
+    FontMatrix transform /Ascent exch def pop
+    FontMatrix transform /Descent exch def pop
+    /FontHeight Ascent Descent sub def
+
+    % Define these in case they're not in the FontInfo (also, here
+    % they're easier to get to.
+    /UnderlinePosition 1 def
+    /UnderlineThickness 1 def
+    
+    % Get the underline position and thickness if they're defined.
+    currentdict /FontInfo known {
+      FontInfo
+      
+      dup /UnderlinePosition known {
+	dup /UnderlinePosition get
+	0 exch FontMatrix transform exch pop
+	/UnderlinePosition exch def
+      } if
+      
+      dup /UnderlineThickness known {
+	/UnderlineThickness get
+	0 exch FontMatrix transform exch pop
+	/UnderlineThickness exch def
+      } if
+      
+    } if
+    currentdict 
+  end 
+} bind def
+
+% composite fonts for ASCII-EUC mixed string
+% Version 1.2 1/31/1990
+% Orignal Ken'ichi HANDA (handa@etl.go.jp)
+% Modified Norio Katayama (katayama@rd.nacsis.ac.jp),1998
+% Extend & Fix Koji Nakamaru (maru@on.cs.keio.ac.jp), 1999
+% Anyone can freely copy, modify, distribute this program.
+
+/copyfont {	% font-dic extra-entry-count  copyfont  font-dic
+	1 index maxlength add dict begin
+	{	1 index /FID ne 2 index /UniqueID ne and
+		{def} {pop pop} ifelse
+	} forall
+	currentdict
+	end
+} bind def
+
+/compositefont { % ASCIIFontName EUCFontName RomanScale RomanOffset Rot(T/F) compositefont font
+    /RomanRotation exch def
+    /RomanOffset exch def
+    /RomanScale exch def
+    userdict /fixeucfont_dict known not {
+	userdict begin
+	    /fixeucfont_dict 2 dict begin
+		/UpperByteEncoding [
+		    16#00 1 16#20 { pop 0 } for
+		    16#21 1 16#28 { 16#20 sub } for
+		    16#29 1 16#2F { pop 0 } for
+		    16#30 1 16#74 { 16#27 sub } for
+		    16#75 1 16#FF { pop 0 } for
+		] def
+	        /LowerByteEncoding [
+		    16#00 1 16#A0 { pop /.notdef } for
+		    16#A1 1 16#FE { 16#80 sub 16 2 string cvrs
+				    (cXX) dup 1 4 -1 roll
+				    putinterval cvn } for
+		    /.notdef
+		] def
+		currentdict
+	    end def
+	end
+    } if
+    findfont dup /FontType get 0 eq {
+	14 dict begin
+	    %
+	    % 7+8 bit EUC font
+	    %
+	    12 dict begin
+		/EUCFont exch def
+		/FontInfo (7+8 bit EUC font) readonly def
+		/PaintType 0 def
+		/FontType 0 def
+		/FontMatrix matrix def
+		% /FontName
+		/Encoding fixeucfont_dict /UpperByteEncoding get def
+		/FMapType 2 def
+		EUCFont /WMode known
+		{ EUCFont /WMode get /WMode exch def }
+		{ /WMode 0 def } ifelse
+		/FDepVector [
+		    EUCFont /FDepVector get 0 get
+		    [ 16#21 1 16#28 {} for 16#30 1 16#74 {} for ]
+		    {
+			13 dict begin
+			    /EUCFont EUCFont def
+			    /UpperByte exch 16#80 add def	
+			    % /FontName
+			    /FontInfo (EUC lower byte font) readonly def
+			    /PaintType 0 def
+			    /FontType 3 def
+			    /FontMatrix matrix def
+			    /FontBBox {0 0 0 0} def
+			    /Encoding
+				fixeucfont_dict /LowerByteEncoding get def
+			    % /UniqueID
+			    % /WMode
+			    /BuildChar {
+				gsave
+				exch dup /EUCFont get setfont
+				/UpperByte get
+				2 string
+				dup 0 4 -1 roll put
+				dup 1 4 -1 roll put
+				dup stringwidth setcharwidth
+				0 0 moveto show
+				grestore
+			    } bind def
+			    currentdict
+			end
+			/lowerbytefont exch definefont
+		    } forall
+		] def
+		currentdict
+	    end
+	    /eucfont exch definefont
+	    exch
+	    findfont 1 copyfont dup begin
+		RomanRotation {
+			/FontMatrix FontMatrix
+			[ 0 RomanScale neg RomanScale 0 RomanOffset neg 0 ]
+			matrix concatmatrix def
+		}{
+			/FontMatrix FontMatrix
+			[ RomanScale 0 0 RomanScale 0 RomanOffset ] matrix concatmatrix
+			def
+			/CDevProc
+			    {pop pop pop pop 0 exch -1000 exch 2 div 880} def
+		} ifelse
+	    end
+	    /asciifont exch definefont
+	    exch
+	    /FDepVector [ 4 2 roll ] def
+	    /FontType 0 def
+	    /WMode 0 def
+	    /FMapType 4 def
+	    /FontMatrix matrix def
+	    /Encoding [0 1] def
+	    /FontBBox {0 0 0 0} def
+%	    /FontHeight 1.0 def % XXXX
+	    /FontHeight RomanScale 1.0 ge { RomanScale }{ 1.0 } ifelse def
+	    /Descent -0.3 def   % XXXX
+	    currentdict
+	end
+	/tmpfont exch definefont
+	pop
+	/tmpfont findfont
+    }{
+	pop findfont 0 copyfont
+    } ifelse
+} def	
+
+/slantfont {	% FontName slant-degree  slantfont  font'
+    exch findfont 1 copyfont begin
+    [ 1 0 4 -1 roll 1 0 0 ] FontMatrix exch matrix concatmatrix
+    /FontMatrix exch def
+    currentdict
+    end
+} def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+
+% -------- Some routines to enlight plain b/w printings ---------
+
+% Underline
+% width --
+/dounderline {
+  currentpoint
+  gsave
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    0 rlineto
+    stroke
+  grestore
+} bind def
+
+% Underline a string
+% string --
+/dounderlinestring {
+  stringwidth pop
+  dounderline
+} bind def
+
+/UL {
+  /ul exch store
+} bind def
+
+% Draw a box of WIDTH wrt current font
+% width --
+/dobox {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    stroke
+  grestore
+} bind def
+
+/BX {
+  /bx exch store
+} bind def
+
+% Box a string
+% string --
+/doboxstring {
+  stringwidth pop
+  dobox
+} bind def
+
+%
+% ------------- Color routines ---------------
+%
+/FG /setrgbcolor load def
+
+% Draw the background
+% width --
+/dobackground {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    bgcolor aload pop setrgbcolor
+    fill
+  grestore
+} bind def
+
+% Draw bg for a string
+% string --
+/dobackgroundstring {
+  stringwidth pop
+  dobackground
+} bind def
+
+
+/BG {
+  dup /bg exch store
+  { mark 4 1 roll ] /bgcolor exch store } if
+} bind def
+
+
+/Show {
+  bg { dup dobackgroundstring } if
+  ul { dup dounderlinestring } if
+  bx { dup doboxstring } if
+  show
+} bind def
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T {
+  cw mul x0 add
+  bg { dup currentpoint pop sub dobackground } if
+  ul { dup currentpoint pop sub dounderline } if
+  bx { dup currentpoint pop sub dobox } if
+  y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n {
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+/S {
+  Show
+} bind def
+
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Function title: prints page header.
+% <ct> <rt> <lt> are passed as argument
+/title { 
+  % 1. Draw the background
+  x v get y v get moveto
+  0 setgray
+  gsave
+    0 th 2 div neg rmoveto 
+    th setlinewidth
+    0.5 0.5 1 setrgbcolor
+    pw 0 rlineto stroke
+  grestore
+  % 2. Border it
+  gsave
+    0.7 setlinewidth
+    pw 0 rlineto
+    0 th neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+  % stk: ct rt lt
+  x v get y v get th sub 1 add moveto
+%%IncludeResource: font Helvetica
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  % 3. The left title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    fnfs 0.8 mul hm rmoveto
+    show			% left title
+  grestore
+  exch
+  % stk: ct ltw rt
+  % 4. the right title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    dup
+    pw exch stringwidth pop fnfs 0.8 mul add sub
+    hm
+    rmoveto
+    show			% right title
+  grestore
+  % stk: ct ltw rtw
+  % 5. the center title
+  gsave
+    pw 3 1 roll
+    % stk: ct pw ltw rtw
+    3 copy 
+    % Move to the center of the left room
+    sub add 2 div hm rmoveto
+    % What is the available space in here?
+    add sub fnfs 0.8 mul sub fnfs 0.8 mul sub
+    % stk: ct space_left
+%%IncludeResource: font Helvetica-Bold
+  fHelvetica-Bold fnfs scalefont setfont
+    1 setgray
+    cfshow
+  grestore
+} bind def
+
+% Function border: prints virtual page border
+/border { %def
+  gsave				% print four sides
+    0 setgray
+    x v get y v get moveto
+    0.7 setlinewidth		% of the square
+    pw 0 rlineto
+    0 ph neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+} bind def
+
+% Function water: prints a water mark in background
+/water { %def
+  gsave
+    scx scy moveto rotate
+%%IncludeResource: font Times-Bold
+  fTimes-Bold 100 scalefont setfont
+    .97 setgray
+    dup stringwidth pop 2 div neg -50 rmoveto
+    show
+  grestore
+} bind def
+
+% Function rhead: prints the right header
+/rhead {  %def
+  lx ly moveto
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  l-show
+} bind def
+
+% Function footer (cf rf lf -> -)
+/footer {
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  dx dy moveto
+  show
+
+  snx sny moveto
+  l-show
+  
+  fnx fny moveto
+  c-show
+} bind def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+%%BeginResource: procset a2ps-color-prolog 2.0 1
+
+%% Definition of the color faces.
+/p {
+  0 0 0 FG
+  false BG
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/sy {
+  0 0 0 FG
+  false BG
+  fSymbol bfs scalefont setfont
+  Show
+} bind def
+
+/k {
+  false BG
+  false UL
+  false BX
+  0 0 0.9 FG
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/K {
+  false BG
+  false UL
+  false BX
+  0 0 0.8 FG
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/c {
+  false BG
+  false UL
+  false BX
+  0.8 0 0 FG
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/C {
+  false BG
+  false UL
+  false BX
+  0.8 0 0 FG
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/l {
+  0 0 0 FG
+  0.8 0.8 0 true BG
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/L {
+  0 0 0 FG
+  1 1 0 true BG
+  false UL
+  false BX
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/str {
+  false BG
+  false UL
+  false BX
+  0 0.5 0 FG
+  fTimes-Roman bfs scalefont setfont
+  Show
+} bind def
+
+/e{
+  1 0 0 true BG
+  false UL
+  true BX
+  1 1 1 FG
+  fHelvetica-Bold bfs scalefont setfont
+  Show
+} bind def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul 2 div neg 0 rmoveto
+    f# setfont
+    0.8 0.1 0.1 FG
+    c-show
+  grestore
+} bind def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Times-Roman
+%%IncludeResource: font Symbol
+%%BeginResource: encoding ISO-8859-1Encoding
+/ISO-8859-1Encoding [
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quoteright 
+/parenleft /parenright /asterisk /plus /comma /minus /period /slash 
+/zero /one /two /three /four /five /six /seven 
+/eight /nine /colon /semicolon /less /equal /greater /question 
+/at /A /B /C /D /E /F /G 
+/H /I /J /K /L /M /N /O 
+/P /Q /R /S /T /U /V /W 
+/X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore 
+/quoteleft /a /b /c /d /e /f /g 
+/h /i /j /k /l /m /n /o 
+/p /q /r /s /t /u /v /w 
+/x /y /z /braceleft /bar /braceright /asciitilde /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclamdown /cent /sterling /currency /yen /brokenbar /section 
+/dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron 
+/degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph /bullet 
+/cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf /threequarters /questiondown 
+/Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla 
+/Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis 
+/Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply 
+/Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls 
+/agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla 
+/egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis 
+/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide 
+/oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis 
+] def
+%%EndResource
+% Initialize page description variables.
+/sh 612 def
+/sw 792 def
+/llx 24 def
+/urx 768 def
+/ury 588 def
+/lly 24 def
+/#copies 1 def
+/th 15.000000 def
+/fnfs 11 def
+/bfs 7.493857 def
+/cw 4.496314 def
+
+% Dictionary for ISO-8859-1 support
+/iso1dict 6 dict begin
+  /fCourier ISO-8859-1Encoding /Courier reencode_font
+  /fCourier-Bold ISO-8859-1Encoding /Courier-Bold reencode_font
+  /fHelvetica ISO-8859-1Encoding /Helvetica reencode_font
+  /fHelvetica-Bold ISO-8859-1Encoding /Helvetica-Bold reencode_font
+  /fTimes-Bold ISO-8859-1Encoding /Times-Bold reencode_font
+  /fTimes-Roman ISO-8859-1Encoding /Times-Roman reencode_font
+currentdict end def
+/bgcolor [ 0 0 0 ] def
+/bg false def
+/ul false def
+/bx false def
+% The font for line numbering
+/f# /Helvetica findfont bfs .6 mul scalefont def
+/fSymbol /Symbol findfont def
+/hm fnfs 0.25 mul def
+/pw
+   cw 81.400000 mul
+def
+/ph
+   522.321860 th add
+def
+/pmw urx llx sub pw 2 mul sub 1 div def
+/pmh 0 def
+/v 0 def
+/x [
+  0
+  dup pmw add pw add
+] def
+/y [
+  pmh ph add 0 mul ph add
+  dup
+] def
+/scx sw 2 div def
+/scy sh 2 div def
+/snx urx def
+/sny lly 2 add def
+/dx llx def
+/dy sny def
+/fnx scx def
+/fny dy def
+/lx snx def
+/ly ury fnfs 0.8 mul sub def
+/sx 0 def
+/tab 8 def
+/x0 0 def
+/y0 0 def
+%%EndSetup
+
+%%Page: (1-2) 1
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*) c n
+(  File: AceSwicsDutyCycle.cc) N
+() N
+(  Description:) N
+(    Duty cycle combines the angular integrations performed by a) N
+(    SWICS-type instrument into one number. This module contains) N
+(    functions which calculate the duty cycle and handle associated tasks.) N
+() N
+(  Author\(s\): Jim Raines \(jmr\)) N
+() N
+(  Method:) N
+(    See 'References' in header file for this class.) N
+() N
+(  Revison controlled by CVS:) N
+(  $Id: AceSwicsDutyCycle.cc,v 1.7 2004/07/28 13:28:35 jraines Exp $) N
+() N
+(  Major Modification History:) N
+(    11Sep2003   jmr   initial coding) N
+() N
+(*/) N
+( ) p n
+(#include) K
+( ") p
+(swindal.h) str
+(") p n
+(#include) K
+( ") p
+(swindal_nr.h) str
+(") p n
+() N
+(#include) K
+( <sstream>) p n
+() N
+(// ACE Ancillary \(O/A\) Data library) c n
+(namespace) K
+( ancil {) p n
+(  ) S
+(extern) K
+( ") p
+(C) str
+(" {) p n
+(#include) K
+( ") p
+(libace_ancil.h) str
+(") p n
+(  }) N
+(}) N
+() N
+(// definition of static data members) c n
+(float) k
+( AceSwicsDutyCycle::MachAngle;) p n
+(float) k
+( AceSwicsDutyCycle::AspectAngle;) p n
+() N
+(AceSwicsDutyCycle::AceSwicsDutyCycle\() S
+(void) k
+(\){) p n
+(  AncillaryFilename = ") S
+(/shrg1/ace/LV1/ACE_ANCIL.HDF) str
+(";) p n
+() N
+(  UseExtAspectCommand = ) S
+(true) k
+(;) p n
+(  ExtAspectCommand = ") S
+(/shrg1/ace/sw/bin/get_ace_aspect) str
+(";) p n
+() N
+(  MachAngle = \(0.1\);  ) S
+(// set default value) c n
+() p n
+(  AspectAngle = -1.0;) N
+() N
+(  InterpolFilename = ") S
+(/shrg1/ace/sw/src/axlv2/DUTYCYCL.DAT) str
+(";) p n
+(  InterpolAccurCutoff = 0.02;) N
+(}) N
+() N
+(float) k
+( AceSwicsDutyCycle::getAspectAngle\() p
+(void) k
+(\){) p n
+(  ) S
+(return) K
+(\(AspectAngle\);) p n
+(}) N
+() N
+(void) k
+( AceSwicsDutyCycle::setMachAngle\() p
+(float) k
+( value\){) p n
+(  MachAngle = value;) N
+(}) N
+(float) k
+( AceSwicsDutyCycle::getMachAngle\() p
+(void) k
+(\){) p n
+(  ) S
+(return) K
+(\(MachAngle\);) p n
+(}) N
+() N
+(void) k
+( AceSwicsDutyCycle::setAncillaryFilename\(string filename\){) p n
+(  AncillaryFilename = filename;) N
+(}) N
+() N
+(string AceSwicsDutyCycle::getAncillaryFilename\(\){) N
+(  ) S
+(return) K
+(\(AncillaryFilename\);) p n
+(}) N
+(AceSwicsDutyCycle.cc) (Page 1/7) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(void) k
+( AceSwicsDutyCycle::setExtAspectCommand\(string cmd\){) p n
+(  ExtAspectCommand = cmd;) N
+(}) N
+() N
+(string AceSwicsDutyCycle::getExtAspectCommand\(\){) N
+(  ) S
+(return) K
+(\(ExtAspectCommand\);) p n
+(}) N
+() N
+(void) k
+( AceSwicsDutyCycle::useExtAspectCommand\() p
+(bool) k
+( val\){) p n
+(  UseExtAspectCommand = val;) N
+(}) N
+() N
+(bool) k
+( AceSwicsDutyCycle::useExtAspectCommand\(\){) p n
+(  ) S
+(return) K
+(\(UseExtAspectCommand\);) p n
+(}) N
+() N
+(/*) c n
+(  Routine: AceSwicsDutyCycle::calcByIntegration) N
+() N
+(  Description:) N
+(    Calculates the duty cycle from aspect angle \(found with cycle) N
+(    time\) and Mach angle.) N
+() N
+(  Arguments:) N
+(    MachAngle -- angle between ion velocity and solar wind velocity,) N
+(    typically a small number < .2) N
+() N
+(    CycleTime -- time in seconds since 1970.) N
+() N
+(  Method:) N
+(    See references section in header file for this class.) N
+(    ACE Science Center ancillary code is used to extract the aspect angle ) N
+(    for a particular cycle time \(locally libace_ancil\).) N
+(*/) N
+() p n
+(float) k
+( AceSwicsDutyCycle::calcByIntegration\() p
+(double) k
+( CycleTime\){) p n
+(  ) S
+(float) k
+( DutyCycle;) p n
+(  ) S
+(const) K
+( string thisprog = ") p
+(AceSwicsDutyCycle::calcByIntegration) str
+(";) p n
+() N
+(  ) S
+(if) K
+( \(gDbgLvl >= 2\) cout << thisprog << ") p
+( -I- entering...) str
+(" << endl;) p n
+() N
+(  getNewAspectAngle\(CycleTime\);) N
+() N
+(  ) S
+(// convert to radians) c n
+(  AspectAngle = \(AspectAngle/360.0\)*\(2.0*M_PI\);) p n
+() N
+(  ) S
+(/* Integrate numerically to find duty cycle) c n
+(     ---------------------------------------------------------------) N
+(     Ref. 2, equation A31 with angles from A32 and A33.) N
+(  */) N
+(  ) p
+(float) k
+( \(*pintegrand\) \() p
+(float) k
+(\) = &AceSwicsDutyCycle::integrand;) p n
+(  DutyCycle = \(1.0/\(2.0*M_PI\)\)*nr::qtrap\(pintegrand, 0.0, 2.0*M_PI\);) N
+() N
+(  ) S
+(if) K
+( \(gDbgLvl >= 2\) cout << thisprog << ") p
+( -I- done.) str
+(" << endl;) p n
+(  ) S
+(return) K
+(\(DutyCycle\);) p n
+(};) N
+() N
+(float) k
+( AceSwicsDutyCycle::integrand\() p
+(float) k
+( phi\){) p n
+() N
+(  ) S
+(float) k
+( alpha  = AspectAngle;) p n
+(  ) S
+(float) k
+( del_psi = MachAngle;) p n
+() N
+(  ) S
+(// Calculate collimator coordinates in terms of others) c n
+(  ) p
+(double) k
+( phi_0;) p n
+(  ) S
+(double) k
+( theta_c_0;) p n
+(  ) S
+(double) k
+( phi_c_0;) p n
+() N
+(  phi_0 = \(cos\(GAMMA\)/sin\(GAMMA\)\) * \(1.0-cos\(alpha\)\)/sin\(alpha\);) N
+(AceSwicsDutyCycle.cc) (Page 2/7) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(AceSwicsDutyCycle.cc) (1/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (3-4) 2
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(  theta_c_0 = acos\( sin\(GAMMA\)*cos\(phi-phi_0\)*sin\(alpha\) + cos\(GAMMA\)*cos\(alpha\)) N
+( \);) N
+(  phi_c_0 = asin\( -sin\(phi-phi_0\)*sin\(alpha\)/sin\(theta_c_0\) \);) N
+() N
+(  ) S
+(float) k
+( integrand;) p n
+(  ) S
+(float) k
+( integrand2;) p n
+() N
+(  ) S
+(// compute integrand for this phi) c n
+(  ) p
+(double) k
+( t11,t12,t21,t22;) p n
+() N
+(  t11 = erf\( \(GAMMA - theta_c_0 + \(DEL_THETA_C/2.0\)\)/) N
+() S 8 T (     \(sqrt\(2.0\)*del_psi\) \);) N
+(  t12 = erf\( \(GAMMA - theta_c_0 - DEL_THETA_C/2.0\)/) N
+() S 8 T (     \(sqrt\(2.0\)*del_psi\) \);) N
+(  t21 = erf\( sin\(theta_c_0\)*\(M_PI - phi_c_0\)/) N
+() S 8 T (     sqrt\(2.0\)*del_psi \);) N
+(  t22 = erf\( sin\(theta_c_0\)*\(M_PI - phi_c_0 - DEL_PHI_C\)/) N
+() S 8 T (     sqrt\(2.0\)*del_psi\);) N
+() N
+(  ) S
+(if) K
+( \(gDbgLvl >= 3\) {) p n
+(    cout << ") S
+( alpha=) str
+(" << alpha) p n
+() S 8 T ( << ") S
+( del_psi=) str
+(" << del_psi << endl;) p n
+(    cout << ") S
+( gamma=) str
+(" << GAMMA ) p n
+() S 8 T ( << ") S
+( del_phi_c=) str
+(" << DEL_PHI_C ) p n
+() S 8 T ( << ") S
+( del_theta_c=) str
+(" << DEL_THETA_C << endl;) p n
+(    cout << ") S
+( phi=) str
+(" << phi) p n
+() S 8 T ( << ") S
+( phi_0=) str
+(" << phi_0) p n
+() S 8 T ( << ") S
+( theta_c_0=) str
+(" << theta_c_0) p n
+() S 8 T ( << ") S
+( phi_c_0=) str
+(" << phi_c_0 << endl;) p n
+(    cout << ") S
+( t11=) str
+(" << t11) p n
+() S 8 T ( << ") S
+( t12=) str
+(" << t12) p n
+() S 8 T ( << ") S
+( t21=) str
+(" << t21) p n
+() S 8 T ( << ") S
+( t22=) str
+(" << t22 << endl;) p n
+(  }) N
+(  integrand = \() S
+(float) k
+(\) \(1.0/2.0 * \(t11 - t12\) * 1.0/2.0 * \(t21 - t22\)\);) p n
+() N
+(  integrand2 = 1.0/2.0 *) N
+(    \(erf\( \(GAMMA - theta_c_0 + \(DEL_THETA_C/2.0\)\)/) N
+() S 8 T (  \(sqrt\(2.0\)*del_psi\) \) -) N
+(     erf\( \(GAMMA - theta_c_0 - DEL_THETA_C/2.0\)/) N
+() S 8 T (  \(sqrt\(2.0\)*del_psi\) \)\) *) N
+(    1.0/2.0 *) N
+(    \(erf\( sin\(theta_c_0\)*\(M_PI - phi_c_0\)/) N
+() S 8 T (  sqrt\(2.0\)*del_psi \) -) N
+(     erf\( sin\(theta_c_0\)*\(M_PI - phi_c_0 - DEL_PHI_C\)/) N
+() S 8 T (  sqrt\(2.0\)*del_psi\)\);) N
+() N
+(  ) S
+(if) K
+( \(gDbgLvl >= 3\) {) p n
+(    cout << ") S
+( terms - all in one = ) str
+(" << integrand - integrand2 << endl ;) p n
+(  }) S 8 T () N
+() N
+(  ) S
+(// arb. change of * to + in searching for right formula) c n
+(  ) p
+(//integrand = \(float\) \(1.0/2.0 * \(t11 - t12\) + 1.0/2.0 * \(t21 - t22\)\);) c n
+() p n
+(  ) S
+(// for debugging only:  duty should be 13.1595) c n
+(  ) p
+(//integrand = phi*phi;) c n
+() p n
+(  ) S
+(return) K
+(\(integrand\);) p n
+(}) N
+() N
+(void) k
+( AceSwicsDutyCycle::setInterpolFilename\(string name\){) p n
+(  InterpolFilename = name;) N
+(}) N
+() N
+(string AceSwicsDutyCycle::getInterpolFilename\(\){) N
+(  ) S
+(return) K
+(\(InterpolFilename\);) p n
+(}) N
+() N
+(AceSwicsDutyCycle.cc) (Page 3/7) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(float) k
+( AceSwicsDutyCycle::calcByInterpolation\() p
+(double) k
+( CycleTime\){) p n
+() N
+(  ) S
+(const) K
+( string thisprog = ") p
+(AceSwicsDutyCycle::calcByInterpolation) str
+(";) p n
+() N
+(  ) S
+(/* ----------------------------------------------------------------------) c n
+(     Angle stuff) N
+(     ---------------------------------------------------------------------- */) N
+(  getNewAspectAngle\(CycleTime\);) p n
+(  ) N
+(  ) S
+(// copy class variables to local variable names, which correspond to) c n
+(  ) p
+(// the mathematical descriptions) c n
+(  ) p
+(float) k
+( alpha  = AspectAngle;) p n
+(  ) S
+(float) k
+( del_psi = MachAngle;) p n
+() N
+(  ) S
+(/* ----------------------------------------------------------------------) c n
+(     read in file containing tabulated duty cycle data) N
+(     ---------------------------------------------------------------------- */) N
+(  std::ifstream fin;) p n
+(  fin.open\(InterpolFilename.c_str\(\)\);) N
+(  ) S
+(if) K
+( \(! fin.good\(\)\) cout << ") p
+(Error opening ) str
+(" << InterpolFilename << endl;) p n
+() N
+(  vector<) S
+(float) k
+(> values;) p n
+(  ) S
+(float) k
+( tmpval;) p n
+(  ) S
+(int) k
+( nrow = 1;) p n
+(  ) S
+(while) K
+(\(! fin.eof\(\)\){) p n
+(    fin >> tmpval;) N
+(    values.push_back\(tmpval\);) N
+(  }) N
+(  fin.close\(\);) N
+() N
+(  ) S
+(/* ----------------------------------------------------------------------) c n
+(     set up arrays) N
+(     ---------------------------------------------------------------------- */) N
+() p n
+(  ) S
+(// --- delta psi ---) c n
+(  ) p
+(// The following number of columns and x2a \(delta psi\) values pertain to) c n
+(  ) p
+(// DUTYCYCL.DAT received from Ruedi von Steiger, 10Oct2003.) c n
+(  ) p
+(const) K
+( ) p
+(int) k
+( NCOLS = 9;  ) p
+(// number of actual columns in file) c n
+(  ) p
+(float) k
+( *x2a;) p n
+(  x2a = nr::vector\(1,NCOLS\);) N
+(  x2a[0] = -1.0;  ) S
+(// not used) c n
+(  x2a[1] = 0.0;   ) p
+(// x2a values from private communication with RvS) c n
+(  x2a[2] = 0.1;) p n
+(  x2a[3] = 0.5;) N
+(  x2a[4] = 1.0;) N
+(  x2a[5] = 2.0;) N
+(  x2a[6] = 3.0;) N
+(  x2a[7] = 5.0;) N
+(  x2a[8] = 10.0;) N
+() N
+(  ) S
+(// --- alpha ---) c n
+(  ) p
+(int) k
+( nrows = values.size\(\)/NCOLS;) p n
+(  ) S
+(float) k
+( *x1a;) p n
+(  x1a = nr::vector\(1,nrows+1\);) N
+(  x1a[0] = -1.0;) N
+() N
+(  ) S
+(// --- duty cycle values \(for given alpha and delta psi\)) c n
+(  ) p
+(float) k
+( **ya;) p n
+(  ya = nr::matrix\(1,nrows+1,1,NCOLS\);) N
+() N
+(  ) S
+(// --- copy values into proper vectors for NR interpolation routine --- ) c n
+(  ) p
+(int) k
+( iv = 0; ) p
+(// index into values vector) c n
+(  ) p
+(int) k
+( ix1a = 0;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( row = 1; row <= nrows ; row++\){) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( col = 1; col <= NCOLS; col++\){) p n
+(      ) S
+(if) K
+( \(col == 1\){) p n
+() S 8 T (x1a[++ix1a] = values[iv];) S
+(// pre-increment so index 1 is first val.) c n
+(      }) p n
+(AceSwicsDutyCycle.cc) (Page 4/7) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(AceSwicsDutyCycle.cc) (2/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (5-6) 3
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(      ) p
+(else) K
+({) p n
+() S 8 T (ya[row][col-1] = values[iv];) N
+(      }) N
+(      iv++;) N
+(    }) N
+(  }  ) N
+() N
+(  ) S
+(/* ----------------------------------------------------------------------) c n
+(     Find chunk of vectors containing x values) N
+(     1\)  locate index so that x is that index and the next) N
+(     2\)  calculate the lower bound on a range of indices, roughly) N
+(     centered on the locatin \(1\) containg the intended number of) N
+(     points for interpolation) N
+(     ---------------------------------------------------------------------- */) N
+(  ) p
+(// alpha) c n
+(  ) p
+(unsigned) k
+( ) p
+(long) k
+( i_alpha;) p n
+(  nr::locate\(x1a, nrows, alpha, &i_alpha\);) N
+(  ) S
+(//cout << " x1a[" << i_alpha << "]=" << x1a[i_alpha] ) c n
+(  ) p
+(//     << " <-> x1a[" << i_alpha+1 << "]=" << x1a[i_alpha+1] << endl;) c n
+(  ) p
+(int) k
+( j = ) p n
+(    imin\(imax\(\(i_alpha-\(NPOINT_INTERPOL-1\)/2\),1\),nrows+1-NPOINT_INTERPOL\);) N
+() N
+(  ) S
+(// del_psi) c n
+(  ) p
+(unsigned) k
+( ) p
+(long) k
+( i_del_psi;) p n
+(  nr::locate\(x2a, NCOLS, del_psi, &i_del_psi\);) N
+(  ) S
+(//cout << " x2a[" << i_del_psi << "]=" << x2a[i_del_psi] ) c n
+(  ) p
+(//     << " <-> x2a[" << i_del_psi+1 << "]=" << x2a[i_del_psi+1]<< endl; ) c n
+(  ) p
+(int) k
+( k = ) p n
+(    imin\(imax\(\(i_del_psi-\(NPOINT_INTERPOL-1\)/2\),1\),NCOLS+1-NPOINT_INTERPOL\);) N
+() N
+(  ) S
+(/* ----------------------------------------------------------------------) c n
+(     Make a subarray for ya) N
+(     \(necessary because gcc did not like passing in a 2D subarray by indexes\)) N
+(     ---------------------------------------------------------------------- */) N
+(  ) p
+(float) k
+( **yasub;) p n
+(  yasub = nr::matrix\(1,NPOINT_INTERPOL,1,NPOINT_INTERPOL\);) N
+(  ) S
+(for) K
+( \() p
+(int) k
+( nrow = 1; nrow <= NPOINT_INTERPOL; nrow++\){) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( ncol = 1; ncol <= NPOINT_INTERPOL; ncol++\){) p n
+(      yasub[nrow][ncol] = ya[nrow+j-1][ncol+k-1];) N
+(      ) S
+(//cout << yasub[nrow][ncol] << "   ";) c n
+(    }) p n
+(    ) S
+(//cout << endl;) c n
+(  }) p n
+(  ) N
+(  ) S
+(/* ----------------------------------------------------------------------) c n
+(     Do actual interpolation) N
+(     ---------------------------------------------------------------------- */) N
+(  ) p
+(float) k
+( duty = -1.0;) p n
+(  ) S
+(float) k
+( accur = -1.0;) p n
+(  nr::polin2\(&x1a[j-1], &x2a[k-1], yasub, ) N
+() S 8 T (     NPOINT_INTERPOL, NPOINT_INTERPOL,) N
+() S 8 T (     alpha, del_psi, &duty, &accur\);) N
+(  ) S
+(if) K
+( \(gDbgLvl >= 1\) {) p n
+(    cout << thisprog << ") S
+( -I- duty = ) str
+(" << duty << ") p
+(, ) str
+(") p n
+() S 8 T ( << ") S
+( accuracy = ) str
+(" << accur << endl;) p n
+(  }) N
+() N
+(  ) S
+(// filter out values with bad accuracies) c n
+(  ) p
+(// The so-called good accuracy range was very simply determined from ) c n
+(  ) p
+(// running a few days and seeing which accuracies led to reasonable dutys.) c n
+(  ) p
+(if) K
+( \(fabs\(accur/duty\) > InterpolAccurCutoff\){) p n
+(    ) S
+(if) K
+( \(gDbgLvl >= 1\) {) p n
+(      cout << thisprog << ") S
+( -W- bad accuracy \() str
+(" ) p n
+() S 8 T (   << accur << ") S
+(\); duty not usable -- returning -1.0) str
+("<< endl;) p n
+(      duty = -1.0;) N
+(    }) N
+(  }    ) N
+() N
+(  ) S
+(return) K
+(\(duty\);) p n
+(AceSwicsDutyCycle.cc) (Page 5/7) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(}) p n
+() N
+(int) k
+( AceSwicsDutyCycle::imin\() p
+(int) k
+( a, ) p
+(int) k
+( b\){) p n
+(  ) S
+(long) k
+( lminarg1,lminarg2;) p n
+(  ) S
+(return) K
+(\(lminarg1=\(a\),lminarg2=\(b\),\(lminarg1\) < \(lminarg2\) ?\\) p n
+() S 8 T ( \(lminarg1\) : \(lminarg2\)\);) N
+(}) N
+() N
+(int) k
+( AceSwicsDutyCycle::imax\() p
+(int) k
+( a, ) p
+(int) k
+( b\){) p n
+(  ) S
+(int) k
+( imaxarg1,imaxarg2;) p n
+(  ) S
+(return) K
+(\(imaxarg1=\(a\),imaxarg2=\(b\),\(imaxarg1\) > \(imaxarg2\) ?\\) p n
+() S 8 T ( \(imaxarg1\) : \(imaxarg2\)\);) N
+(}) N
+() N
+(int) k
+( AceSwicsDutyCycle::getNewAspectAngle\() p
+(double) k
+( CycleTime\){) p n
+(  ) S
+(int) k
+( RetVal = 0;) p n
+() N
+(  ) S
+(const) K
+( string thisprog = ") p
+(AceSwicsDutyCycle::getNewAspectAngle) str
+(";) p n
+() N
+(  ) S
+(/* Get aspect angle from ACE ancillary data via ACE ancillary code) c n
+(     ---------------------------------------------------------------) N
+(  */) N
+(  ) p
+(if) K
+( \(UseExtAspectCommand\){) p n
+(    ) S
+(// assemble ext. command and cycle time argument) c n
+(    std::ostringstream cmd;) p n
+(    cmd << ExtAspectCommand << ") S
+( ) str
+(") p n
+() S 8 T (<< ) S
+(static_cast) k
+(<) p
+(long) k
+(>\(CycleTime\);) p n
+() N
+(    ) S
+(if) K
+( \(gDbgLvl >= 2\) ) p n
+(      cout << thisprog << ") S
+( -D- ext. aspect command string with args: ) str
+(" ) p n
+() S 8 T (   << cmd.str\(\) << endl;) N
+() N
+(    ) S
+(FILE) k
+( *PIPE;) p n
+(    PIPE = popen\(cmd.str\(\).c_str\(\), ") S
+(r) str
+("\);) p n
+(    ) S
+(char) k
+( cmd_out[9];) p n
+(    ) S
+(int) k
+( retval;) p n
+(    retval = fscanf\(PIPE, ") S
+(%s) str
+(", cmd_out\);) p n
+(    ) S
+(if) K
+( \(retval >= 0\){) p n
+(      ) S
+(if) K
+( \(gDbgLvl >= 2\) ) p n
+() S 8 T (cout << thisprog << ") S
+( -D- string returned by ext. aspect command: ) str
+(" ) p n
+() S 8 T (     << cmd_out << endl;) N
+(      ) N
+(      AspectAngle = atof\(cmd_out\);) N
+(    }) N
+(    ) S
+(else) K
+( {) p n
+(      cout << thisprog  ) N
+() S 8 T (   << ") S
+(-E- fscanf on output of ext. aspect command returned ) str
+(" ) p n
+() S 8 T (   << retval << endl;) N
+(    }) N
+(    fclose\(PIPE\);) N
+(  }) N
+(  ) S
+(else) K
+( { ) p
+(// currently DNW -- seg. fault on a3goa_read but not from duty_exp) c n
+(    ) p
+(// 'const' attribute of c_str\(\) not expected by a3goa_read\(\)) c n
+() p n
+(    ) S
+(// Removed in port to gcc 3.3 \(caused errors\), jmr 26Jul2004) c n
+(    ) p
+(//ancil::a3goa_read\( const_cast<char *>\(AncillaryFilename.c_str\(\)\)\);) c n
+() p n
+(    ) S
+(//ancil::a3goa_read\("/shrg1/ace/LV1/ACE_ANCIL.HDF"\);) c n
+() p n
+(    ) S
+(// Removed in port to gcc 3.3 \(caused errors\), jmr 26Jul2004) c n
+(    ) p
+(//AspectAngle = acos\(ancil::a3goa_att_RTN_r\(CycleTime\)\);) c n
+(    ) p n
+(  }) N
+() N
+(  ) S
+(if) K
+( \(AspectAngle <= 0.0\){) p n
+(    cout << thisprog << ") S
+( -E- aspect angle <= 0.0; setting to default \(3.06\)) str
+(") p n
+() S 8 T ( << endl;) N
+(    AspectAngle = 3.06;) N
+(    RetVal = 1;  ) S
+(// mark as not perfect return) c n
+(AceSwicsDutyCycle.cc) (Page 6/7) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(AceSwicsDutyCycle.cc) (3/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (7) 4
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  }) p n
+() N
+(  ) S
+(if) K
+( \(gDbgLvl >= 1\) cout << ") p
+(AspectAngle = ) str
+(" << AspectAngle << ") p
+( deg.) str
+(" << endl;) p n
+() N
+(  ) S
+(return) K
+(\(RetVal\);) p n
+(}) N
+() N
+(void) k
+( AceSwicsDutyCycle::setInterpolAccurCutoff\() p
+(float) k
+( cutoff\){) p n
+(  InterpolAccurCutoff = cutoff;) N
+(}) N
+() N
+(float) k
+( AceSwicsDutyCycle::getInterpolAccurCutoff\(\) ) p
+(const) K
+({) p n
+(  ) S
+(return) K
+(\(InterpolAccurCutoff\);) p n
+(}) N
+(AceSwicsDutyCycle.cc) (Page 7/7) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(AceSwicsDutyCycle.cc) (4/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (1-2) 5
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*) c n
+(  File: AceSwicsDutyCycle.h) N
+() N
+(  Description:) N
+(    Duty cycle combines the angular integrations performed by a) N
+(    SWICS-type instrument into one number. This module contains) N
+(    functions which calculate the duty cycle and handle associated tasks.) N
+() N
+(  Author\(s\): Jim Raines \(jmr\)) N
+() N
+(  Method:) N
+() N
+(  References:) N
+(    1.  SWICS Specific Instrument Interface Specification, SWICS_SIIS-01.pdf) N
+(    2.  von Steiger, R., et. al., "Composition of quasi-stationary) N
+(    solar wind flows from Ulysses/Solar Wind Ion Composition) N
+(    Spectrometer", JGR 105\(A12\), p27,217-27,238 \(2000\)) N
+() N
+(  Revison controlled by CVS:) N
+(  $Id: AceSwicsDutyCycle.h,v 1.3 2004/06/23 13:54:03 jraines Exp $) N
+() N
+(  Major Modification History:) N
+(    11Sep2003   jmr   initial coding) N
+() N
+(*/) N
+( ) p n
+(/* -------------------------------------------------------------------------) c n
+(   Define constants for ACE/SWICS) N
+(   -------------------------------------------------------------------------) N
+(   See ref. 1 for more details.) N
+(   -------------------------------------------------------------------------) N
+(*/) N
+(// Sensor Viewing Angle, SVA) N
+(//const float GAMMA = \(34.5/360.0\)*\(2.0*M_PI\);) N
+(const) K
+( ) p
+(double) k
+( GAMMA = \(57.0/360.0\)*\(2.0*M_PI\); ) p
+(// ULYSSES) c n
+() p n
+(// Sensor opening angle about SVA in elevation \(SOE\) ) c n
+(//const float DEL_PHI_C = \(70.0/360.0\)*\(2.0*M_PI\);  // SOE Sunward +) N
+(                                                  ) p
+(//SOE Earthward) c n
+() p n
+(const) K
+( ) p
+(double) k
+( DEL_PHI_C = \(69.0/360.0\)*\(2.0*M_PI\);  ) p
+(// SOE Sunward + SOE) c n
+() p 8 T () S 16 T () S 24 T () S 32 T () S 40 T () S 48 T (  ) S
+(// Earthward) c n
+() p n
+(// Sensor opening angle about SVA in azimuth \(SOA\)) c n
+(//const float DEL_THETA_C = \(4.2/360.0\)*\(2.0*M_PI\); // SOA1 + SOA2) N
+(const) K
+( ) p
+(double) k
+( DEL_THETA_C = \(4.0/360.0\)*\(2.0*M_PI\); ) p
+(// SOA1 + SOA2) c n
+(  ) p n
+(// number of points over which to do interpolation \(in calcByInterpolation\)) c n
+(const) K
+( ) p
+(int) k
+( NPOINT_INTERPOL = 4;) p n
+(  ) N
+() N
+(class AceSwicsDutyCycle {) N
+() N
+(  ) S
+(/* Note on static members: ) c n
+() N
+(     \(1\) The integrand member function had to be made static so that) N
+(     calls to _Numerical Recipes in C_ integration routines would work) N
+(     properly.  For example, the qtrap functions expect a pointer to) N
+(     the function to be integrated, of type) N
+() N
+(     float \(*\) \(float\)) N
+() N
+(     Pointers to static member functions can be of this type \(if they) N
+(     have a float return type and one float arg. of course\).) N
+() N
+(     However, pointers to non-static member functions would be of type) N
+() N
+(     float \(AceSwicsDutyCycle::*\) \(float\)) N
+() N
+(AceSwicsDutyCycle.h) (Page 1/3) (Jun 23, 04 9:54) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(     The former CANNOT be cast into the latter.  If it happens to work) c n
+(     -- it did not as of this writing \(gcc 2.96\), it is non-portable,) N
+(     possibly undefined and definitely to be avoided at all costs.) N
+(     See the following URL for details.) N
+() N
+(     http://www.parashift.com/c++-faq-lite/pointers-to-members.html) N
+() N
+(     \(2\) The data members MachAngle and AspectAngle had to be made) N
+(     static so that the \(static\) integrand function could access them.) N
+(  */) N
+() p n
+() N
+( public:) N
+(  AceSwicsDutyCycle\() S
+(void) k
+(\);  ) p
+(// constructor) c n
+() p n
+(  ) S
+(/* set/get angle between ion velocity and solar wind bulk velocity) c n
+(     -------------------------------------------------------------------------) N
+(     Value determined by external empirical knowledge of solar wind) N
+(     velocity distribution.  Values from 0.0 to 0.25 are reasonable.) N
+(  */) N
+(  ) p
+(void) k
+( setMachAngle\() p
+(float) k
+( value\);) p n
+(  ) S
+(float) k
+( getMachAngle\() p
+(void) k
+(\);) p n
+() N
+(  ) S
+(// get current aspect angle stored in class variable) c n
+(  ) p
+(float) k
+( getAspectAngle\(\);) p n
+() N
+(  ) S
+(/* set/get external command to be used for retrieving ACE aspect) c n
+(     angle.  Command should take one argument, cycle time in seconds) N
+(     since 1970, and print one value to stout, angle \(in deg.\) between) N
+(     ACE spin \(z\) axis and Sun-ACE radial vector.  Default is ) N
+(     /shrg1/ace/sw/bin/get_ace_aspect.) N
+(   */) S
+( ) p n
+(  ) S
+(void) k
+( setExtAspectCommand\(string cmd\);) p n
+(  string getExtAspectCommand\(\);) N
+() N
+(  ) S
+(/* Toggle method of aspect angle retrieval.  Setting 'true' causes) c n
+(     use of external command \(see setExtAspectCommand\(\)\).  Setting) N
+(     'false' causes use of functions from libace_ancil internally) N
+(     \(currently does not work\).) N
+(  */) N
+(  ) p
+(void) k
+( useExtAspectCommand\(bool val\);) p n
+(  bool useExtAspectCommand\(\);) N
+() N
+(  ) S
+(// set/get filename for reading ACE ancillary \(orbit/attitude\) data) c n
+(  ) p
+(void) k
+( setAncillaryFilename\(string filename\);) p n
+(  string getAncillaryFilename\(\);) N
+() N
+(  ) S
+(/* calcByIntegration) c n
+(     Calculate duty cycle on the fly by integration.  This currently) N
+(     does not give good results.) N
+(  */) N
+(  ) p
+(float) k
+( calcByIntegration\() p
+(double) k
+( CycleTime\);) p n
+() N
+(  ) S
+(/* calcByInterpolation) c n
+(     Calculate by interpolation of pre-calculated values.  Filename) N
+(     should be pre-specified) N
+(  */) N
+(  ) p
+(float) k
+( calcByInterpolation\() p
+(double) k
+( CycleTime\);) p n
+() N
+(  ) S
+(/* set/get filename from which to read table for interpolation */) c n
+(  ) p
+(void) k
+( setInterpolFilename\(string name\);) p n
+(  string getInterpolFilename\(\);) N
+() N
+(  ) S
+(/* Set/get acceptable accuracy of duty cycle interpolation.) c n
+() N
+(     The absolute value of interpolation accuracy divided by the) N
+(     interpolated value \(the duty cycle\) must be less than this value) N
+(     or calcByInterpolation returns duty = -1.0.  According to) N
+(     Numerical Recipes, this accuracy is the last adjustment to the) N
+(AceSwicsDutyCycle.h) (Page 2/3) (Jun 23, 04 9:54) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(../include/AceSwicsDutyCycle.h) (5/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (3) 6
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(     interpolated value.) c n
+() N
+(     This value can be set to whatever fractional uncertainty is) N
+(     allowable in the duty cycle.  At the time of this writing, 0.02,) N
+(     implying an error of less than 2%, seems to work reliably.) N
+() N
+(  */) N
+(  ) p
+(void) k
+( setInterpolAccurCutoff\() p
+(float) k
+( cutoff\);) p n
+(  ) S
+(float) k
+( getInterpolAccurCutoff\(\) ) p
+(const) K
+(;) p n
+( private:) N
+() N
+(  ) S
+(// Filename for ancillary data) c n
+(  string AncillaryFilename;) p n
+() N
+(  ) S
+(// toggle for using external ) c n
+(  bool UseExtAspectCommand;) p n
+() N
+(  string ExtAspectCommand;) N
+() N
+(  ) S
+(// Sun-probe-earth angle in radians) c n
+(  ) p
+(static) K
+( ) p
+(float) k
+( AspectAngle;) p n
+() N
+(  ) S
+(// Angle between ion velocity and solar wind bulk velocity in radians\(?\)) c n
+(  ) p
+(static) K
+( ) p
+(float) k
+( MachAngle;) p n
+() N
+(  ) S
+(// integrand of duty cycle equation for use by numerical integrator) c n
+(  ) p
+(static) K
+( ) p
+(float) k
+( integrand\() p
+(float) k
+( phi\);) p n
+() N
+(  ) S
+(// Integer minimum/maximum functions, used in calcByInterpolation) c n
+(  ) p
+(// Translated from pre-processor macros in nrutil.h, part of) c n
+(  ) p
+(// Numerical Recipes in C.) c n
+(  ) p
+(int) k
+( imin\() p
+(int) k
+( a, ) p
+(int) k
+( b\);) p n
+(  ) S
+(int) k
+( imax\() p
+(int) k
+( a, ) p
+(int) k
+( b\);) p n
+() N
+(  ) S
+(// filename from which to read duty cycle info for interpolation) c n
+(  string InterpolFilename;) p n
+() N
+(  ) S
+(// interpolation accuracy cutoff) c n
+(  ) p
+(float) k
+( InterpolAccurCutoff;) p n
+() N
+(  ) S
+(// get a new aspect angle) c n
+(  ) p
+(int) k
+( getNewAspectAngle\() p
+(double) k
+( CycleTime\);) p n
+(};) N
+(AceSwicsDutyCycle.h) (Page 3/3) (Jun 23, 04 9:54) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(../include/AceSwicsDutyCycle.h) (6/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+
+%%Trailer
+end
+%%EOF

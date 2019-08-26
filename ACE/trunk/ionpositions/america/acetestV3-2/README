@@ -1,0 +1,71 @@
+
+This is the ACE level 1, browse, and ancillary software package. The routines
+in this package are intended to help you access ACE level 1 and browse data
+from C programs. The version number of this package changes in step with the
+version of the ACE level 1 datasets. That sometimes means that the contents
+of this package will not change when the version number changes.
+
+***** See the accompanying Changelog file for details of changes in
+***** the level 1, browse and ancillary software.
+
+The package will unzip into a directory called "acetest".  acetest contains a
+number of subdirectories, whose contents are described briefly below.  Other
+README files within the subdirs may give more details.
+
+These routines are "bare-bones". You are expected to be able to read the C
+header files which describe each of the data structures, and modify the code
+so that it does what you want. Makefiles in each of the subdirectories will
+need to be modified before compiling the code.
+
+More documentation is available from the ASC web site,
+http://www.srl.caltech.edu/ASC/ACE.
+
+To get help, send email to asc@srl.caltech.edu.
+
+This package should always be available by ftp, from
+mussel.srl.caltech.edu, in pub/ace/software.
+
+Description of directories below "acetest".
+-------------------------------------------
+
+anciltest   routines to access ACE ancillary data HDF file,
+            ACE_ANCIL.HDF
+
+avgbrtst    routines to access ACE_BROWSE.HDF, which contains ACE
+            5minute, 1hour and daily browse parameters.
+
+	    ACE_ANCIL.HDF and ACE_BROWSE.HDF can be obtained from
+	    the ASC web site or anon ftp site.
+
+rawbrtst    routines to access raw browse parameter files. Raw browse
+            parameters are generated during level 1 processing, and
+	    the time periods are tied to the instrument cycle times.
+	    There is one raw browse parameter file for each day of the
+	    mission. ACE_BROWSE.HDF is created from the raw browse
+	    parameter files.
+
+hdfsubs     hdf subroutines used to access ACE data structures
+
+include     C header files
+
+edbtest     routines to read Expt Data Records (EDBs) from level 1
+            data files. SWICS and SWIMS data is stored in EDBs.
+
+striptest   routines to strip a data subset from one HDF file and write
+            it out to another HDF file.
+
+schktest    routines to access ACE spacecraft housekeeping data
+
+cristest    routines to access CRIS level 1 data structures
+epamtest    routines to access EPAM level 1 data structures
+magtest     routines to access MAG  level 1 data structures
+sepicatest  routines to access SEPICA level 1 data structures
+sistest     routines to access SIS  level 1 data structures
+swetest     routines to access SWEPAM Electron level 1 data structures
+switest     routines to access SWEPAM Ion level 1 data structures
+swicstest   routines to access SWICS level 1 housekeeping
+            SWICS level 1 data is contained in the EDBs
+swimstest   routines to access SWIMS level 1 housekeeping
+            SWIMS level 1 data is contained in the EDBs
+uleistest   routines to access ULEIS level 1 data structures
+

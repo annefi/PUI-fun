@@ -1,0 +1,20 @@
+ficlose
+retall
+$ ln -fs ~/ace/axlv2/tools/axlv2_nvt_template.save .
+..run ~/ace/axlv2/tools/axlv2_nvt_barq.pro
+
+;; make CNO bar Q plot for each timestep
+tag = ''
+file = 'axlv2_nvt_2005009_2005010.dat'
+
+!p.multi = [0,3,3]
+axlv2_nvt_barq, file=file, data=d, element='C', tag=tag
+
+!p.multi = [0,3,3]
+axlv2_nvt_barq, file=file, data=d, element='N', tag=tag
+
+!p.multi = [0,3,3]
+axlv2_nvt_barq, file=file, data=d, element='O', tag=tag
+
+!p.multi = [0,3,3]
+axlv2_nvt_barq, file=file, data=d, element='Fe', tag=tag, error_level=.7

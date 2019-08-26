@@ -1,0 +1,7 @@
+Each of the file hdf_mag_vec_*.c allows read and write access to a single
+HDF file.  Therefore to copy data from one file to another 2 sets of these 
+routines are needed.  
+
+To make the file hdf_mag_vec_in.c take the file ../hdfsubs/hdf_mag_vec.c 
+and replace "_mag_vec" with "_mag_vec_in" and similarly for
+hdf_mag_vec_out.c.

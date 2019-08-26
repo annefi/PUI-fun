@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[american]{babel}
+\usepackage{natbib}
+\usepackage{epsfig}
+\usepackage{pictex}
+\usepackage{amssymb}
+%\usepackage{eurosans}
+%\usepackage{graphicx
+\usepackage{color}
+\usepackage{colordvi}
+%\usepackage[dvips]{graphicx}
+\usepackage{listings,color}
+\lstset{language=Python}
+
+\title{Energie und ToF verschiebung durch veränderter Beschleunigungsspannung bei ACE_SWICS}
+
+\begin{document}
+In 2000 the acceleration voltage of the ACS-SWICS detector was changed. There is an set of data for the energy-channel and tof-channel positions of the ions for the time after this change. But you cant use this set of data to analyse the data befor 2000, cause all ion positions are shifted. In figure \ref{old_plot} you can see that the peaks of the corresponding ions are shifted to lower energies and higher tof.  My task was it to get a relation for the two shifts.
+\begin{figure}[htbp]
+\includegraphics[width=0.7\textwidth]{old.ps}
+\caption{a Plot of the $\frac{E}{q}$-step 30 in time bevor the change. The crosses are the peaks of the unshifted data}
+\label{old_plot}
+\end{figure}
+
+Getting the energy-shift seemes to be quite simple, cause it should be proportional to the acceleration voltage with the ion charge as proportionality factor. Cause of an effect in the energy detector you cant use directly the voltage. By studiing the shift (old marks with new peaks) depending on the charge, I found the proportionalfactor was chosen to $-0.42$, so that all listed ions were on same energiy channel as the corresponding peaks. The resulting energie-channel you get by the relation $E_1 = E_0 + E' = E_0 - 0.42 q$, where q is the elemental charge of the ion.
+
+Getting the ToF-shifts was much more difficult. First i used the fact that the energy and the tof of an partical is connected by the relation $E = \frac m2 v^2$ with the the mass $m$ and the velocity $v = \frac st$, where $s$ is the flight-distance. You can see that $E \sim \frac{1}{t^2}$, so that all particals with same mass are on the same hyperbel. The ToF-Shift you get by watching the quotions of the old and new energie-channel
+$$\frac{E_0}{E_1} = \frac{t_1^2}{t_0^2}$$
+$$\Rightarrow t_1 = \sqrt{\frac{E_0}{E_0 - 0.42 q}} t_0$$
+The resulting data went in the right way, but they need 2 more corrections. The first on was to compensate a drift from the energie-channel $175$ which depended on the corresponding $\frac Eq$-step. I determined this correction empirically to $0.005(step-25)(175-tof)$. The second correction was only important for the $\frac Eq$-steps until 20 and has an constant value of $2.5$.
+
+The resulting programm code, in python, is given in figure \ref{python_code}. In figure \ref{new_plot} you can see the same plot like below, but with the corrected ion-positions.
+
+\begin{figure}[htbp]
+\begin{lstlisting}[basicstyle=\ttfamily,commentstyle=\color{blue}]                   
+m[1] = sqrt(float(m[2])/(float(m[2])-0.42*charge))*float(m[1])
++(175-float(m[1]))*(step-25)*0.005
+m[2] = float(m[2])-0.42*charge
+if (step < 20):
+	m[1] += 2.5
+\end{lstlisting}
+\caption{The Python-Code for the data-correction}
+\label{python_code}
+\end{figure}
+
+\begin{figure}[htbp]
+\includegraphics[width=0.7\textwidth]{new.ps}
+\caption{a Plot of the $\frac{E}{q}$-step 30 in time bevor the change. The crosses are the corrected ionpositions}
+\label{new_plot}
+\end{figure}
+
+\end{document}

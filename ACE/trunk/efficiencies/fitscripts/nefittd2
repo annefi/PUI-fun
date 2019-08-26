@@ -1,0 +1,125 @@
+ 
+tcr_dcr(e)="swxeff_gpt.so", "Ne"
+
+
+
+Ethr            = 30.7
+pf2             = 0.48
+C2              = 0.1256
+defl            = 0.0718
+FWHM            = 19.12
+thick           = 2
+C1              = 0.5
+pf1             = 0.1
+z               = 10
+rde             = 1
+C3              = 0.1
+
+Ethr = 25.33
+pf1 = 0.5
+pf2 = 0.48
+C1 = 0.5
+C2 = 0.332591159347198
+defl = 0.069041757436395
+FWHM = 10
+thick = 2.44893312176031
+rde = 1.06
+C3 = 0.417922190422943
+
+Z = 10
+Ethr = 25.33
+pf1 = 0.5
+pf2 = 0.48
+C1 = 0.5
+C2 = 0.32796342038183
+defl = 0.0635818147072383
+FWHM = 10
+thick = 2.2601027446087
+rde = 1.06
+C3 = 0.1
+
+Z = 10
+Ethr = 25.33
+Ethr = 30.1
+pf1 = 0.5
+pf2 = 0.48
+C1 = 0.5
+C2 = 0.229087762469949
+#C2 = 0.5
+defl = 0.0952607544196371
+defl = 0.017
+#FWHM = 10
+FWHM = 22.66
+#thick = 2.44
+thick = 2.5
+rde = 1.0
+C3 = 0.5
+
+#Z = 10
+#Ethr = 25.33
+#pf1 = 0.5
+#pf2 = 0.48
+#C1 = 0.5
+#C2 = 0.231313179987078
+#defl = 0.0950565708057459
+#FWHM = 10
+#thick = 2.44830787580146
+#rde = 1.06
+#C3 = 0.1
+
+Z = 10
+Ethr =30.0
+pf1 = 0.5
+pf2 = 0.48
+C1 = 0.5
+C2 = 0.575
+defl = 0.0311
+FWHM = 22.0
+thick = 2.5
+rde = 1.0
+C3 = 0.105
+
+Z = 10
+Ethr = 29.3191247832241
+pf1 = 0.5
+pf2 = 0.48
+C1 = 0.5
+C2 = 0.165197076980591
+defl = 0.05
+FWHM = 22.4100640554832
+thick = 2.5
+rde = 1.0
+C3 = 0.193166932153853
+
+fit tcr_dcr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde,C3) "./caldat/nedaten_ssd2_1p.f" u ($13/$1):15:33 via  C3, FWHM, Ethr
+
+plot tcr_dcr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde,C3), "./caldat/nedaten_ssd2_1p.f" using  ($13/$1):15:33 with errorbars 
+
+
+#fit tcr_dcr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde) "./caldat/nedaten.txt" u ($13/$1):15:24 via Ethr, FWHM
+
+#plot tcr_dcr(x,z,C1,C2,pf1,pf2,Ethr,FWHM,thick,defl,rde), "./caldat/nedaten.txt" using  ($13/$1):15:24 with errorbars 
+
+
+
+print "Z = " , z
+
+print "Ethr = " , Ethr
+
+print "pf1 = " , pf1
+
+print "pf2 = " , pf2
+
+print "C1 = " , C1
+
+print "C2 = " , C2
+
+print "defl = " , defl
+
+print "FWHM = " , FWHM
+
+print "thick = " , thick
+
+print "rde = " , rde
+
+print "C3 = " , C3

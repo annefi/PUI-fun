@@ -1,0 +1,17 @@
+$ln -fs /shrg1/ace/sw/src/axlv2/tools/axlv2_rates_template.save ./axlv2_rates_template.save
+
+.run /shrg1/ace/sw/src/axlv2/tools/axlv2_rates.pro
+
+ydoy_str = '2004230'
+
+file='axlv2_br_'+ydoy_str+'.dat'
+if (file_exists(file)) then $
+  axlv2_rates, file=file,rate_type='Box',data=dbr, tag='ydoy='
+
+file='axlv2_sr_'+ydoy_str+'.dat'
+if (file_exists(file)) then $
+  axlv2_rates, file=file,rate_type='Spill', data=dsr, tag='ydoy='
+
+file='axlv2_pr_'+ydoy_str+'.dat'
+if (file_exists(file)) then $
+  axlv2_rates, file=file, rate_type='Prob',data=dpr, tag='ydoy='

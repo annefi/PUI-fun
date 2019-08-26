@@ -1,0 +1,77 @@
+#
+#   VizieR Astronomical Server: http://vizier.u-strasbg.fr	2007-04-18T07:45:55
+#   Explanations and Statistics of UCDs:			See LINK below
+#   In case of problem, please report to:	question@simbad.u-strasbg.fr
+#    (link)
+#
+#Coosys	J2000:	eq_FK5 2000
+#INFO	-ref=Vxml15319	
+
+#RESOURCE=41330403
+#Name: J/A+AS/133/403
+#Title:	Ionization balance for optically thin plasmas (Mazzotta+ 1998)
+#Table	J_A_AS_133_403_table2:
+#Name: J/A+AS/133/403/table2
+#Title:	Ionization equilibrium
+#Column	El	(A2)	Element symbol	[ucd=phys.atmol.element]
+#Column	logT	(F5.2)	Temperature (log_10_(T))	[ucd=phys.temperature]
+#Column	LogX1	(F6.3)	? Ionic fraction for Element I (neutral)
+#---List of  values:     	[ucd=phys.abund]
+#Column	LogX2	(F6.3)	? Ionic fraction for Element II
+#---List of  values:     	[ucd=phys.abund]
+#Column	LogX3	(F6.3)	? Ionic fraction for Element III
+#---List of  values:     	[ucd=phys.abund]
+#Column	LogX4	(F6.3)	? Ionic fraction for Element IV
+#---List of  values:     	[ucd=phys.abund]
+#Column	LogX5	(F6.3)	? Ionic fraction for Element V
+#---List of  values:     	[ucd=phys.abund]
+#Column	LogX6	(F6.3)	? Ionic fraction for Element VI
+#---List of  values:     	[ucd=phys.abund]
+#Column	LogX7	(F6.3)	? Ionic fraction for Element VII
+#---List of  values:     	[ucd=phys.abund]
+#Column	LogX8	(F6.3)	? Ionic fraction for Element VIII
+#---List of  values:     	[ucd=phys.abund]
+#Column	LogX9	(F6.3)	? Ionic fraction for Element IX
+#---List of  values:     	[ucd=phys.abund]
+El	logT	LogX1	LogX2	LogX3	LogX4	LogX5	LogX6	LogX7	LogX8	LogX9
+	[K]									
+--	-----	------	------	------	------	------	------	------	------	------
+O 	 4.00	-0.001	-2.510	      	      	      	      	      	      	
+O 	 4.10	-0.043	-1.028	      	      	      	      	      	      	
+O 	 4.20	-0.436	-0.198	      	      	      	      	      	      	
+O 	 4.30	-1.189	-0.029	      	      	      	      	      	      	
+O 	 4.40	-1.723	-0.008	-3.627	      	      	      	      	      	
+O 	 4.50	-2.004	-0.007	-2.279	      	      	      	      	      	
+O 	 4.60	-2.210	-0.023	-1.352	      	      	      	      	      	
+O 	 4.70	-2.458	-0.097	-0.707	-3.678	      	      	      	      	
+O 	 4.80	-2.835	-0.296	-0.313	-2.245	      	      	      	      	
+O 	 4.90	-3.365	-0.640	-0.147	-1.246	-4.300	      	      	      	
+O 	 5.00	-4.037	-1.118	-0.177	-0.592	-2.677	      	      	      	
+O 	 5.10	-4.864	-1.746	-0.406	-0.252	-1.530	-4.612	      	      	
+O 	 5.20	      	-2.507	-0.809	-0.174	-0.771	-2.807	      	      	
+O 	 5.30	      	-3.397	-1.373	-0.326	-0.344	-1.521	-2.667	      	
+O 	 5.40	      	-4.474	-2.152	-0.747	-0.268	-0.734	-1.048	      	
+O 	 5.50	      	      	-3.382	-1.661	-0.750	-0.621	-0.251	      	
+O 	 5.60	      	      	      	-2.916	-1.626	-0.993	-0.059	      	
+O 	 5.70	      	      	      	-4.113	-2.488	-1.423	-0.018	      	
+O 	 5.80	      	      	      	      	-3.244	-1.804	-0.007	-4.447	
+O 	 5.90	      	      	      	      	-3.887	-2.119	-0.004	-3.116	
+O 	 6.00	      	      	      	      	-4.406	-2.350	-0.006	-2.057	
+O 	 6.10	      	      	      	      	-4.805	-2.493	-0.027	-1.248	-3.534
+O 	 6.20	      	      	      	      	      	-2.612	-0.105	-0.688	-2.140
+O 	 6.30	      	      	      	      	      	-2.808	-0.291	-0.382	-1.146
+O 	 6.40	      	      	      	      	      	-3.165	-0.634	-0.330	-0.524
+O 	 6.50	      	      	      	      	      	-3.696	-1.133	-0.497	-0.216
+O 	 6.60	      	      	      	      	      	-4.312	-1.697	-0.773	-0.091
+O 	 6.70	      	      	      	      	      	      	-2.247	-1.066	-0.042
+O 	 6.80	      	      	      	      	      	      	-2.756	-1.340	-0.021
+O 	 6.90	      	      	      	      	      	      	-3.219	-1.587	-0.012
+O 	 7.00	      	      	      	      	      	      	-3.643	-1.808	-0.007
+O 	 7.10	      	      	      	      	      	      	-4.032	-2.007	-0.004
+O 	 7.20	      	      	      	      	      	      	-4.391	-2.186	-0.003
+O 	 7.30	      	      	      	      	      	      	-4.726	-2.350	-0.002
+O 	 7.40	      	      	      	      	      	      	      	-2.502	-0.001
+O 	 7.50	      	      	      	      	      	      	      	-2.643	-0.001
+O 	 7.60	      	      	      	      	      	      	      	-2.776	-0.001
+O 	 7.70	      	      	      	      	      	      	      	-2.908	-0.001
+

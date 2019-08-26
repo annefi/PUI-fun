@@ -1,0 +1,26 @@
+.compile qdist_ctemp.pro
+.run axlv2_deliv_ctemp.pro
+z = 8.
+relab = make_array(z+1, /float, value=1.0e-10)
+relab[6] = 0.75
+relab[7] = 0.2
+relab[8] = 0.05   
+
+   print, 'try 1:'
+
+ctemp = qdist_ctemp(z=z, relab=relab)
+  print, 'ctemp = ', ctemp
+
+   mazzotta_fit, z, ctemp, relab_fit
+   print, 'relab_fit = ', relab_fit
+
+   print, 'try 2:'
+
+relab = [7.98656e-10,2.33232e-09,3.23228e-09,8.84302e-09,2.79509e-06,$
+	 1.54405e-03,5.08364e-01,4.17251e-01,7.28376e-02]
+
+ctemp = qdist_ctemp(z=z, relab=relab)
+  print, 'ctemp = ', ctemp
+
+   mazzotta_fit, z, ctemp, relab_fit
+   print, 'relab_fit = ', relab_fit

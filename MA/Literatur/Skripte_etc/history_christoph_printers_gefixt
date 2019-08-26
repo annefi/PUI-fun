@@ -1,0 +1,76 @@
+ 1901  id terasa
+ 1902  cat /etc/group
+ 1903  cat /etc/group | less
+ 1904  uname -a
+ 1905  cat /etc/apt/sources.list
+ 1906  apt policy cups-client
+ 1907  sudo adduser terasa sudo
+ 1908  sudo adduser terasa adm
+ 1911  su terasa
+ 1912  lpstat
+ 1913  cat /etc/cups/client.conf 
+ 1914  lpstat -a
+ 1915  cd pui/ulysses/swics/software/
+ 1916  ls
+ 1917  cd libulpy/
+ 1918  ls
+ 1919  %run ulysses_traj.py
+ 1920  ipython --pylab -i
+ 1921  cd ..
+ 1922  ls
+ 1923  ls .gnome
+ 1924  ls
+ 1925  ls .gnome/apps/jetbrains-pycharm-ce.desktop 
+ 1926  ls .local/
+ 1927  ls
+ 1928  cd .local/
+ 1929  ls
+ 1930  cd share/
+ 1931  ls
+ 1932  find . -type f | xargs grep "AstroCMDL" 2>/dev/null
+ 1933  top
+ 1934  cd .local/
+ 1935  ls
+ 1936  cd share/
+ 1937  ls
+ 1938  cd ..
+ 1939  ls
+ 1940  cd ..
+ 1941  cd .config/
+ 1942  ls
+ 1943  cd ..
+ 1944  ls
+ 1945  cd .cups/
+ 1946  ls
+ 1947  vi lpoptions 
+ 1948  d ..
+ 1949  cd ..
+ 1950  rm -Rf .cups/
+ 1951  cd .cache/
+ 1952  ls
+ 1953  ll
+ 1954  ls
+ 1955  cd ..
+ 1956  ls
+ 1957  lpstat -a
+ 1958  cd .config/
+ 1959  ls
+ 1960  cd xfce4
+ 1961  ls
+ 1962  cd xfconf/
+ 1963  ls
+ 1964  cd ..
+ 1965  cd xfce4-session/
+ 1966  ls
+ 1967  cd ..
+ 1968  find . -type f | xargs grep "AstroCMDL"
+ 1969  find . -type f | xargs grep "AstroCMDL" 2>/dev/null
+ 1970  cd ..
+ 1971  cd .cache/
+ 1972  find . -type f | xargs grep "AstroCMDL" 2>/dev/null
+ 1973  apt policy avahi-daemin
+ 1974  apt policy avahi-daemon
+ 1975  sudo systemctl disable avahi
+ 1976  sudo systemctl disable avahi-daemon
+ 1977  sudo systemctl stop avahi-daemon
+ 1978  history

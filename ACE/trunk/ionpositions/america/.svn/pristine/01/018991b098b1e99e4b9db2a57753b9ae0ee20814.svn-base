@@ -1,0 +1,2 @@
+g++  -g -I/home/jraines/ace/libhef/include -I/home/jraines/ace/swindal -I/shrg1/local/include -I/home/jraines/ace/swindal/include  -c -o read_meff.o read_meff.cc
+gcc -L/home/jraines/ace/libhef -L/shrg1/local/lib -L/home/jraines/ace/swindal  read_meff.o ../../../axlv2/src/xfmexp_phys.o -lswindal -lrecipes_c -lhef -lnetcdf -lstdc++ -lm -lc  -o read_meff

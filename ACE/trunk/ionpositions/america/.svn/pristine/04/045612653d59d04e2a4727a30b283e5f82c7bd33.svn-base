@@ -1,0 +1,20 @@
+make libace_ancilc.so; pwd; cp -fv libace_ancilc.so .. 
+make[1]: Gehe in Verzeichnis »/home/ivar/berger/ace/libace_ancil/src«
+make[1]: Verlasse Verzeichnis »/home/ivar/berger/ace/libace_ancil/src«
+/home/ivar/berger/ace/libace_ancil/src
+,,libace_ancilc.so" -> ,,../libace_ancilc.so"
+make get_ace_aspect; cp -v get_ace_aspect ..
+make[1]: Gehe in Verzeichnis »/home/ivar/berger/ace/libace_ancil/src«
+g++  -DUNIX386 -fPIC -g -Wall -I../include -I/home/ivar/berger/ace/acetest/include -I/home/ivar/berger/ace/hdf/include  -c -o get_ace_aspect.o get_ace_aspect.cc
+make[1]: Verlasse Verzeichnis »/home/ivar/berger/ace/libace_ancil/src«
+,,get_ace_aspect" -> ,,../get_ace_aspect"
+make dump_ace_aosr; cp -v dump_ace_aosr ..
+make[1]: Gehe in Verzeichnis »/home/ivar/berger/ace/libace_ancil/src«
+g++  -DUNIX386 -fPIC -g -Wall -I../include -I/home/ivar/berger/ace/acetest/include -I/home/ivar/berger/ace/hdf/include  -c -o dump_ace_aosr.o dump_ace_aosr.cc
+make[1]: Verlasse Verzeichnis »/home/ivar/berger/ace/libace_ancil/src«
+,,dump_ace_aosr" -> ,,../dump_ace_aosr"
+make get_ace_angles; cp -v get_ace_angles ..
+make[1]: Gehe in Verzeichnis »/home/ivar/berger/ace/libace_ancil/src«
+make[1]: »get_ace_angles« ist bereits aktualisiert.
+make[1]: Verlasse Verzeichnis »/home/ivar/berger/ace/libace_ancil/src«
+,,get_ace_angles" -> ,,../get_ace_angles"

@@ -1,0 +1,1030 @@
+Interface to libhef
+
+[ Module : libhef, Package : libhef ]
+
+
+Some rules to remember when using this library:
+
+(1) There are no multi-dimensional arrays. Array indexing
+    of more-dimensional arrays is achieved by the "index" routines
+    I and I3.
+    Exception: The "cyc" data structure containing the
+               decoded ACE/S3 data uses C-style multi-dimensional
+               arrays. The a3 routines give transparent access
+               to this data without the need of (multi-dimensional)
+               arrays.
+
+(2) Accessing SWICS/ACE data:
+    The data is stored in binary format in a netCDF file (stored
+    are the EDBs, grouped to cycles, plus some ancillary information
+    like quality and time).
+    If data is accessed with a3readcycle, the data is read and
+    stored in static memory within the a3dif routine. The same is
+    true for the "expanded" data. 
+
+    The other a3 routines then use simple look-up of that static
+    memory, sometimes storing it by themselfs into static memory.
+
+    Make sure that you get the newest value for each variable of
+    interest whenever a new cycle has been read.
+
+(3) Routines return the number of errors, if not otherwise
+    stated. Thus, a routine returning 0 completed successfully.
+    Example: reading cycles with a3readcycle() will return
+             0 until the last cycle has been read. At this time,
+             it will return 1.
+
+(4) ACE/SWICS and SWIMS data are sectored (ACE is a spinning
+    spacecraft). The routines to access rates therefore provide
+    the possibility to access data from one specific sector.
+    In addition, the sum over all sectors is available. Internally,
+    the rates are stored in an array of length 9. Elements 0-7
+    contain the rates in the individual sectors, while
+    element 9 contains the sum.
+
+(5) The routine names are cryptic. Sometimes however, they carry a little
+    information:
+    memno indicates                  memno indicates
+    a3    ACE/S3 (that is:           eq    E/q
+          SWICS,SWIMS and SEPICA)    eoq   E/q
+    x     SWICS                      moq   m/q
+    m     SWIMS                      mass  m
+    tab   table
+
+Note that this documentation covers a large part of the
+routines of libhef, but not all of them. Typically, the
+most often used routines are documented here. There are
+some low-level routines the user never has to use directly,
+which are omitted. I am afraid that the source code will
+not be of big help, but you are free to have a look at it
+at: pooh://home/acedata/software/src.
+ 4-Feb-1999/Hefti
+
+1.  Access and handling of ACE data
+===================================
+
+(a3dif.i)
+
+1.1.  binary data: reading and expanding
+----------------------------------------
+
+  Typical use of these routines (perl code):
+  // open file
+  $res = libhef::a3opencyclefile($fn);
+  if( $res ) { exit(1); }
+
+  // loop
+  $rres = 0;
+  while($rres == 0) {
+    // read
+    $rres = libhef::a3readcycle();
+    // stop on error
+    if( $rres != 0 ) {last};
+    // decode data
+    $res  = libhef::a3expand();
+
+    // (your code to access data here)
+  }
+  // close
+  $res = libhef::a3closecyclefile();
+
+a3opencyclefile(zfn);
+        [ returns int  ]
+        open netCDF SWICS/ACE EDB file for reading   
+        
+a3closecyclefile();
+        [ returns int  ]
+        close at the end   
+        
+a3readcycle();
+        [ returns int  ]
+        read one cycle, keep in memory for further processing   
+        
+a3expand();
+        [ returns int  ]
+        decompress TLM bytes to meaningfull values   
+        
+1.2.  time information
+----------------------
+
+a3gtime();
+        [ returns double  ]
+        get time of beginning of cycle   
+        
+a3zrecid();
+        [ returns char * ]
+        string describing record number and time
+        
+1.3.  file and library version information
+------------------------------------------
+
+a3hdffn();
+        [ returns char * ]
+        report name of original HDF file (if available)
+        
+a3ncfver();
+        [ returns char * ]
+        report version of my netCDF file format
+        
+1.4.  S3DPU Housekeeping
+------------------------
+
+a3gdpuhk(ie,i);
+        [ returns BYTE  ]
+        S3DPU Housekeeping Block Item (raw)
+        Returns ith element of S3DPU HK array for edb ie.  There are 48
+        elements total.  (C users use constant 'NDHK' to avoid hardcoding.)
+        
+        C users:
+        --------
+        Data can be accessed via mnemonics and masks from 'ACE S3DPU
+        Command and Data Document'.  See libhef::decoded.h for details.
+        For example, the latchup state can be extracted with the following
+        code:
+        
+        BYTE lustate
+        lustate = a3gdpuhk(ie, LSSDLUSTATE) & MSSDLUSTATE;
+        
+        NOTE:  This does not work with items having masks larger than 0xff.  
+        In that case, assemble the word according to the mask.
+        
+        
+1.5.  SWICS: quality checking
+-----------------------------
+
+a3cycx_nominal(itab);
+        [ returns int  ]
+        ensure settings of SWICS/ACE. Checked are:
+        [] increasing record counter [] increasing time
+        [] no problems encountered when decompressing rates
+        [] needed EDBs (22,42,47,53,54) are present in cycle
+        [] MCP Level 2               [] PAPS Level 127
+        [] HK values for E/q are monotonically decreasing
+        [] E/q table from EDBs is compared with known table itab
+           possible itabs are: 0 --> nominal table
+                               1 --> table used in Jan 1998
+           if omitted, itab=0 is used
+        [] meaningfull rates: FSR,DCR,TCR,SDR all >= 0.0 and DCR >= TCR
+        Note: all testing routines are separatly available in libhef,
+              but I did not write an interface for perl yet.
+        
+1.6.  SWICS: instrument status and DPU settings
+-----------------------------------------------
+
+a3gxeqdpu_i(ie);
+        [ returns double  ]
+        get SWICS E/q [kV] of step ie.
+        Calculated from CNQ structure and E/q Table as found in DPU Spare
+        Block of current cycle.
+        The user has to make sure that he combines the correct data and
+        E/q values. The routine does not do this (minimal impact philosophy).
+        In nominal stepping mode, one will find:
+        99.979 kV for EDB 0 and 0.612 kV for EDB 59.
+        
+a3gxeqtab_i(ie);
+        [ returns int  ]
+        SWICS digital value of E/q as found in DPU Spare block of this cycle.
+        This is the command sent to the instrument in step i. The conversion
+        to kV relies on calibration and might depend on temperature and
+        aspect angle. For the "default conversion", use
+        a3gxeqdpu_i to get the value in kV.
+        
+a3gxeqaux_i(ie);
+        [ returns double  ]
+        get SWICS E/q [kV] for AUX channel of step ie.
+        See a3gxeqdpu_i for description.
+        
+a3gxpavdpu();
+        [ returns double  ]
+        SWICS PAPS according to DPU (not HK) [kV].
+        Calculated from CNQ structure and PAPS Level as found in DPU Spare
+        Block of current cycle.
+        
+a3xpavlev();
+        [ returns int  ]
+        PAPS Level for SWICS
+        
+a3xadc();
+        [ returns int  ]
+        SWICS ADC State: on (1) or off (0)
+        
+a3xtrigcal();
+        [ returns int  ]
+        SWICS "Cal Trigger" state on (1) or off (0)
+        
+a3xtrigmode();
+        [ returns int  ]
+        SWICS Trigger Mode (T AND E, T OR E, E only, T only)
+        
+a3gcnq();
+        [ returns double * ]
+        SWICS DPU settings for m/q classification (CNQ)
+        
+a3gcnm();
+        [ returns double * ]
+        SWICS DPU settings for m   classification (CNM)
+        
+a3gbrtab(ibox,icorn);
+        [ returns int  ]
+        SWICS Basic Rates Definition in [channels] of DPU classification.
+        -------------------------------------------------
+        icorn   reference
+        0       minimal m/q
+        1       maximal m/q
+        2       minimal m
+        3       maximal m
+        4       range being defined
+        -------------------------------------------------
+        Notes: 1) several boxes can be used to define one range.
+        2) A maximum of 8 boxes can be defined for the Basic Rates.
+        3) 255 indicates undefined value.
+        See also: decoded.h and asummary.pl for definitions and usage.
+        
+a3gmrtab(ibox,icorn);
+        [ returns int  ]
+        SWICS Matrix Rates Definition in [channels] of DPU classification.
+        ------------------------------------------------------------------
+        icorn   reference
+        0       minimal m/q 
+        1       maximal m/q 
+        2       minimal m
+        3       maximal m
+        4       matrix rate being defined
+        -------------------------------------------------------------------
+        Notes: 1) several boxes can be used to define one matrix rate.
+        2) A maximum of 20 boxes can be defined for the Matrix Rates.
+        3) 255 indicates undefined value
+        See also: decoded.h and asummary.pl for definitions and usage.
+        
+a3gxhk(ie,i);
+        [ returns float  ]
+        SWICS Housekeeping Block Item (converted)
+        Returns ith element of SWICS HK array for edb ie.  There are 25
+        elements total.  (C users use constant 'NXHK' to avoid hardcoding.)
+        
+        C users:
+        --------
+        Data can be accessed via mnemonics similar to those in 'ACE S3DPU
+        Command and Data Document'.  See libhef::decoded.h for details.
+        For example, the main current can be retrieved with the following
+        code:
+        
+        float x_main_current_1;
+        x_main_current_1 = a3gxhk(ie, LXGPI1);
+        
+        NOTE:  Unlike the raw HK blocks, masks are not needed since these
+        items are already extracted/assembled and converted to physical units.
+        
+        
+        
+1.7.  SWICS Rates
+-----------------
+
+a3gxfsr_i(ie,isec);
+        [ returns double  ]
+        get SWICS FSR of EDB ie and sector isec
+        If isec is omitted or 8, FSR summed over sectors will be returned
+        see also: a3gx===_i, where === can be fsr,dcr,tcr,sdr
+        
+a3gxdcr_i(ie,isec);
+        [ returns double  ]
+        get SWICS DCR[ie] of EDB ie and sector isec
+        If isec is omitted or 8, FSR summed over sectors will be returned
+        see also: a3gx===_i, where === can be fsr,dcr,tcr,sdr
+        
+a3gxtcr_i(ie,isec);
+        [ returns double  ]
+        get SWICS TCR[ie] of EDB ie and sector isec
+        see also: a3gx===_i, where === can be fsr,dcr,tcr,sdr
+        
+a3gxsdr_i(ie,isec);
+        [ returns double  ]
+        get SWICS SSD Rate of EDB ie and sector isec
+        see also: a3gx===_i, where === can be fsr,dcr,tcr,sdr
+        
+a3gxpr_i(ie,isec);
+        [ returns double  ]
+        SWICS "proton rate" (AUX)  of EDB ie and sector isec
+        If isec is omitted or 8, sum over sectors is returned
+        
+a3gxar_i(ie,isec);
+        [ returns double  ]
+        SWICS "alpha rate" (AUX)  of EDB ie and sector isec
+        If isec is omitted or 8, sum over sectors is returned
+        
+a3gxmr(imr,ie,isec);
+        [ returns double  ]
+        SWICS Matrix Rate imr in Step ie and Sector isec
+        If isec is omitted, sum over sectors is returned (or use isec=8)
+        0     H+        Note: this is the default definition of the 
+        1     He++            SWICS Matrix Rate boxes. However, the
+        2     He+             hard-wired definition within the DPU
+        3     O7+             is different from this setup. Whenever
+        4     O6+             the DPU resets, the Matrix Rate box
+        5     Fe              definition must be uploaded manually.
+        6     Si
+        7     Err
+        
+a3gxmr_i(ie,imr,isec);
+        [ returns long  ]
+        SWICS matrix rate imr of EDB ie in sector isec.
+        This is identical to a3gxmr except 
+          1) this returns double
+          2) the edb number (ie) and rate number (imr) are swapped
+             in the calling sequence.
+        See a3gxmr for other details. 
+        
+a3gxbr(ie,ibr,isec);
+        [ returns long  ]
+        
+        SWICS Basic Rate of Range ibr at EDB ie of secot sec
+        if isec is omitted or 8, the sum over all sectors is returned
+        (stored in ...[NSEC] in the cycle structure)
+        
+a3xbrwgt(ie,ibr);
+        [ returns double  ]
+        SWICS Basic Rate weigth at EDB ie, BR ibr
+        Note: Basic Rate Definition is commandable and therefore
+        can change in time. Use libhef::a3gbrtab to
+        get the currently active table.
+        The idea is as follows:
+        Range Ions         Def
+        0     He++ and H+  0 < m ca<= 10 
+        1     minor ions   10 ca<= m <= 100
+        2     pick-up ions 
+        3     everything else ("error range")
+        See also: a3xnpha, a3gbrtab.
+        
+1.8.  SWICS PHAs
+----------------
+
+a3xnpha(ie);
+        [ returns int  ]
+        total number of SWICS PHAs in EDB ie
+        Note that ie refers to the EDB number, rather than to the
+        E/q voltage (Tech Note 3)
+        
+a3gxnr(ie,ibr,isec);
+        [ returns int  ]
+        number of PHAs in range ibr,sector sec, EDB ie
+        if isec is omitted or 8, the sum over all sectors is returned
+        (stored in ...[NSEC] in the cycle structure)
+        
+a3gxmoq_i(ie,i);
+        [ returns double  ]
+        SWICS PHA[i]: m/q (just one PHA word) in DPU units (channels)
+        
+        The DPU truncates the number to get the integer value
+        (cuts the digits after the point). This number has been
+        calculated during the "expand" process using the "DPU simulator"
+        (check out asxdpusim.c). I often use it to do histograms
+        in m-m/q (colored plots).
+        A couple of channels have special meaning (the "DPU
+        simulator" does try to imitate the DPU in all aspects):
+        MQUNDER    0 Output this code if M/Q is too small
+        MQOVER   125 Output this code if M/Q is too big  
+        TOFUNDER 126 Output this code if TOF is too small
+        TOFOVER  127 Output this code if TOF is too big  
+        
+        Check result: -1.0 indicates error (see error message)
+        
+a3gxmas_i(ie,i);
+        [ returns double  ]
+        SWICS PHA[i]: mass (just one PHA word) in DPU units (channels)
+        
+        See above (a3gxmoq_i) for detailed description.
+        Special channels:
+        MUNDER     0 Output this code if M is too small  
+        MOVER    123 Output this code if M is too big    
+        EUNDER   124 Output this code if E is too small  
+        EOVER    125 Output this code if E is too big    
+        TOFUNDER 126 Output this code if TOF is too small
+        TOFOVER  127 Output this code if TOF is too big  
+        
+        Check result: -1.0 indicates error (see error message)
+        See also: a3xnpha
+        
+a3gxtof_i(ie,i);
+        [ returns int  ]
+        SWICS PHA[i]: TOF [ch] (just one PHA word)
+        In case of error, -1 is returned (check error message)
+        See also: a3xnpha
+        
+a3gxesd_i(ie,i);
+        [ returns int  ]
+        SWICS PHA[i]: E_SSD [ch] (just one PHA word)
+        In case of error, -1 is returned (check error message)
+        See also: a3xnpha
+        
+a3gxdid_i(ie,i);
+        [ returns int  ]
+        SWICS PHA[i]: DPU Id [1] (opposed to off-line calculated range)
+        In case of error, -1 is returned (check error message)
+        See also: a3xnpha
+        
+a3gxsec_i(ie,i);
+        [ returns int  ]
+        SWICS PHA[i]: Sector [1]
+        In case of error, -1 is returned (check error message)
+        See also: a3xnpha
+        
+a3gxrng_i(ie,i);
+        [ returns int  ]
+        SWICS PHA[i]: Off-line calculated range [1]
+        In case of error, -1 is returned (check error message)
+        See also: a3xnpha
+        
+a3cxmoq(dmoq_ch);
+        [ returns double  ]
+        convert SWICS m/q from DPU units to phyiscal units ([1])
+        Will not convert reserved channels (-1 is returned).
+        In order to reduce messages, use: libhef::perr_setlevel(1).
+        
+a3cxmas(dmas_ch);
+        [ returns double  ]
+        convert SWICS m from DPU units to phyiscal units ([amu])
+        Will not convert reserved channels (-1 is returned).
+        In order to reduce messages, use: libhef::perr_setlevel(1).
+        
+1.9.  SWICS: high-level PHA access
+----------------------------------
+
+a3xellmmq(ie,moq0,smq1,smq2,mas0,sma1,sma2);
+        [ returns int  ]
+        get N(PHA) falling into ellipse at step ie (m-m/q domain)
+        Note that ie refers to the EDB number, rather than to the
+        E/q voltage (Tech Note 3)
+        
+a3xrell(ie,ir,vH,lflag,moq0,bmoq,mas0,bmas);
+        [ returns double  ]
+        get N(PHA) falling into ruedi's ellipse at step ie (m-m/q domain)
+        Uses a3cxmas and a3cxmoq to convert from DPU to physical units,
+        and therefore _neglects_ reserved channels (see e.g. a3gxmas_i).
+        Typical ellipses:
+        O6+ 2.667    1.025   15.0    1.2
+        O7+ 2.286    1.025   15.0    1.2
+        Note that ie refers to the EDB number, rather than to the
+        E/q voltage (Tech Note 3)
+        The bits in lflag are used as follows:
+        bit value meaning
+        1   1     filter out accidental coincidences (vH = 0 if off)
+        2   2     use basic rate weighting
+        3   4     use upper half of ellipse only
+        bits can be combined. lflag=(1+2+4) turns on filtering,
+        basic weighting, and ellipse selection.
+        In case the filter is off, vH is not used and
+        can be set to 0.0.
+        
+a3xelletm(ie,ir,vH,lflag,t0,st1,st2,e0,se1,se2);
+        [ returns double  ]
+        get N(PHA) falling into ellipse at step ie (E-T domain)
+        ir is the Basic Range to consider, vH is the speed of the protons.
+        ie is the EDB where the PHA was found in telemetry (Tech Note 3).
+        The bits in lflag are used as follows:
+        bit value meaning
+        1   1     filter out accidental coincidences (vH = 0 if off)
+        2   2     use basic rate weighting
+        bits can be combined. lflag=(1+2) turns on both filtering and
+        basic weighting. In case the filter is off, vH is not used and
+        can be set to 0.0.
+        Note: both PAPS and E/q are determined within the routine (by
+              use of a3 routines). E/q of step ie-1 is used.
+        example: a3xelletm(30,1,315.4,0,200.0,3.0,5.0,30.0,7.0,7.0);
+        
+a3mmq(adhst,adx,ady,lflag,vH,Nx,dxl,dxh,Ny,dyl,dyh);
+        [ returns int  ]
+        histogram of SWICS PHA of one cycle in m-m/q domain (added to existing)
+        a3mmq(hst,x,y,0,333.1,300,1.0,20.0,128,1.0,100.0)
+        Uses a3cxmas and a3cxmoq to convert from DPU to physical units,
+        and therefore _neglects_ reserved channels (see e.g. a3gxmas_i).
+        The bits in lflag are used as follows:
+        bit value meaning
+        1   1     filter out accidental coincidences (vH = 0 if off)
+        2   2     use basic rate weighting
+        bits can be combined. lflag=(1+2) turns on both filtering and
+        basic weighting. In case the filter is off, vH is not used and
+        can be set to 0.0.
+        
+a3eth(adhst,lflag,ie,vH,offx,Nx,offy,Ny);
+        [ returns int  ]
+        histogram of SWICS PHA in E-T domain (added to existing)
+        histogram is determined by offsets in both TOF and ESSD, and the
+        dimensions in both directions. offx=200 and Nx=512 would then map
+        TOF channels 200..711 into the histogram. ie is the EDB where
+        the PHA has been found (ie >= 2).
+        The bits in lflag are used as follows:
+        bit value meaning
+        1   1     filter out accidental coincidences (vH = 0 if off)
+        2   2     use basic rate weighting
+        bits can be combined. lflag=(1+2) turns on both filtering and
+        basic weighting. In case the filter is off, vH is not used and
+        can be set to 0.0.
+        Note: both PAPS and E/q are determined within the routine (by
+              use of a3 routines). E/q of step ie-1 is used.
+        
+a3qth(adhst,lflag,vH,offx,Nx,offy,Ny);
+        [ returns int  ]
+        histogram of SWICS PHA in E/q-T domain (added to existing)
+        histogram is determined by offsets in both TOF and E/q (step), and the
+        dimensions in both directions. offx=200 and Nx=512 would then map
+        TOF channels 200..711 into the histogram.
+        The bits in lflag are used as follows:
+        bit value meaning
+        1   1     filter out accidental coincidences (vH = 0 if off)
+        2   2     use basic rate weighting
+        bits can be combined. lflag=(1+2) turns on both filtering and
+        basic weighting. In case the filter is off, vH is not used and
+        can be set to 0.0.
+        
+1.10.  SWICS: Speed from Matrix Rates
+-------------------------------------
+
+ Note: strictly speaking, this routine does not belong to a3dif.
+ It is here for the moment, until I found a clear organization of
+ the data.
+
+a3xmrspd(imr);
+        [ returns double * ]
+        SWICS: kinetic properties for Matrix Rate imr
+        
+a3auxspd();
+        [ returns double * ]
+        SWICS: kinetic prop from AUX channel
+        
+a3xeoqsumv1(v0,vth,mas,crg,ifrst,ilast);
+        [ returns double  ]
+        SWICS: correction for density calculation --- version 1
+        speed,thermal speed,mass,charge,first/last E/q step in sum (2..59)
+        
+1.11.  SWIMS: quality checking
+------------------------------
+
+a3cycm_nominal(alev,olev,hlev,itab);
+        [ returns int  ]
+        ensure settings of SWIMS/ACE. Checked are:
+        [] increasing record counter [] increasing time
+        [] needed EDBs (21,41,35,36) are present in cycle
+        [] Start MCP Level 155       [] Stop MCP Level 155
+        [] Hyperbola Level 177
+        [] HK values for E/q are monotonically decreasing
+        [] E/q table from DPU Spare is compared with known table
+        table valid
+        0     ?
+        1     ?
+        2     ? (used to be active before 3 came in)
+        3     "new" E/q stepping scheme after Hefti and Zurbuchen [1999]
+        Note: routines for these checks are also available separately.
+        Note: Levels for MCP and Hyperbola, as well as E/q Stepping
+              Table can passed as arguments.
+        
+a3ccycm();
+        [ returns int  ]
+        all data needed for SWIMS are available   
+        
+a3ccycm_mcalev(lev);
+        [ returns int  ]
+        SWIMS Start MCP is at level lev   
+        
+a3ccycm_mcolev(lev);
+        [ returns int  ]
+        SWIMS Stop MCP is at level lev   
+        
+a3ccycm_hyplev(lev);
+        [ returns int  ]
+        SWIMS Hyperbola is at level lev   
+        
+a3ccycm_eqhk();
+        [ returns int  ]
+        SWIMS E/q stepping (from HK) is monotonically decreasing.   
+        
+a3ccycm_eqtabnom();
+        [ returns int  ]
+        SWIMS E/q stepping (from table) is as predefined.
+        
+1.12.  SWIMS: instrument status and DPU settings
+------------------------------------------------
+
+a3gmeqdpu_i(ie);
+        [ returns double  ]
+        get SWIMS E/q [kV] of step ie.
+        Using calibrated values for U(ie): parabola with (69.8,0.119,0.048)
+        The user has to make sure that he combines the correct data and
+        E/q values. The routine does not do this (minimal impact philosophy).
+        In nominal stepping mode, one will find:
+        [TBD] 99.979 kV for EDB 0 and 0.612 kV for EDB 59.
+        
+a3mhyplev();
+        [ returns int  ]
+        SWIMS Hyperbola Level (from CMD block)
+        
+a3gmhk(ie,i);
+        [ returns float  ]
+        SWIMS Housekeeping Block Item (converted)
+        Returns ith element of SWIMS HK array for edb ie.  There are 35
+        elements total.  (C users use constant 'NMHK' to avoid hardcoding.)
+        
+        C users:
+        --------
+        Data can be accessed via mnemonics similar to those in 'ACE S3DPU
+        Command and Data Document'.  See libhef::decoded.h for details.
+        For example, the main current can be retrieved with the following
+        code:
+        
+        float m_main_current_1;
+        m_main_current_1 = a3gmhk(ie, LMGPI1);
+        
+        NOTE:  Unlike the raw HK blocks, masks are not needed since these
+        items are already extracted/assembled and converted to physical units.
+        
+        
+        
+1.13.  SWIMS Rates
+------------------
+
+a3mbrwgt(ie,ibr);
+        [ returns double  ]
+        SWIMS Basic Rate weigth at EDB ie, BR ibr
+        Note: Basic Rate Definition _not known_ / commandable.
+        
+a3gmfsr_i(ie,isec);
+        [ returns double  ]
+        get SWIMS FSR of EDB ie and sector isec
+        If isec is omitted or 8, FSR summed over sectors will be returned
+        see also: a3gm===_i, where === can be
+        fsr     start rate
+        fsra    start rate on anode A
+        fsrb    start rate on anode B
+        fsrab   start rate on anode A AND B
+        rsr     stop rate
+        dcr     double coincidence rate
+        mfsr    more than one start, but only one stop in a given time
+        mdcr    one start, but more than one stop in a given time
+        
+a3gmfsra_i(ie,isec);
+        [ returns double  ]
+        get SWIMS FSRA of EDB ie and sector isec
+        If isec is omitted or 8, FSR summed over sectors will be returned
+        see also: a3gmfsr_i and links from there
+        
+a3gmfsrb_i(ie,isec);
+        [ returns double  ]
+        get SWIMS FSRB of EDB ie and sector isec
+        If isec is omitted or 8, FSR summed over sectors will be returned
+        see also: a3gmfsr_i and links from there
+        
+a3gmfsrab_i(ie,isec);
+        [ returns double  ]
+        get SWIMS FSRAB of EDB ie and sector isec
+        If isec is omitted or 8, FSR summed over sectors will be returned
+        see also: a3gmfsr_i and links from there
+        
+a3gmrsr_i(ie,isec);
+        [ returns double  ]
+        get SWIMS RSR (stop rate) of EDB ie and sector isec
+        If isec is omitted or 8, FSR summed over sectors will be returned
+        see also: a3gmfsr_i and links from there
+        
+a3gmdcr_i(ie,isec);
+        [ returns double  ]
+        get SWIMS DCR of EDB ie and sector isec
+        If isec is omitted or 8, FSR summed over sectors will be returned
+        see also: a3gmfsr_i and links from there
+        
+a3gmmfsr_i(ie,isec);
+        [ returns double  ]
+        get SWIMS MFSR of EDB ie and sector isec
+        If isec is omitted or 8, FSR summed over sectors will be returned
+        see also: a3gmfsr_i and links from there
+        
+a3gmmdcr_i(ie,isec);
+        [ returns double  ]
+        get SWIMS MDCR of EDB ie and sector isec
+        If isec is omitted or 8, FSR summed over sectors will be returned
+        see also: a3gmfsr_i and links from there
+        
+1.14.  SWIMS PHA
+----------------
+
+a3mnpha(ie);
+        [ returns int  ]
+        get SWIMS number of PHA words in EDB ie
+        
+a3gmdid(ie,i);
+        [ returns int  ]
+        get SWIMS DPU id for PHA word i in EDB ie
+        (This is the DPU-calculated range.)
+        See also a3gxdid_i
+        
+a3gmsec(ie,i);
+        [ returns int  ]
+        get SWIMS sector for PHA word i in EDB ie
+        
+a3gmstamp(ie,i);
+        [ returns int  ]
+        get SWIMS start (or is it stop?) amplitute for PHA word i in EDB ie
+        
+a3gmstopk1(ie,i);
+        [ returns int  ]
+        get SWIMS stop k1 for PHA word i in EDB ie
+        
+a3gmstopk2(ie,i);
+        [ returns int  ]
+        get SWIMS stop k2 for PHA word i in EDB ie
+        
+a3gmtof(ie,i);
+        [ returns int  ]
+        get SWIMS tof for PHA word i in EDB ie
+        This is the tof in channels.  Use a3cmtof to convert.
+        
+a3cmtof(itof_ch);
+        [ returns double  ]
+        convert SWIMS tof in channels (itof_ch) to tof in ns
+        Works only on normal channels, 0-4095, error otherwise.
+        Returns -1.0 on error; see error message.
+        
+        NOTE:  This has been hardcoded to work for a TOF range of 500ns.  This 
+               range can be commanded to 900ns, after which this routine will give
+               bad conversions.  (Use dtof_ch.)
+        
+1.15.  SWIMS PHA from TOF range
+-------------------------------
+
+a3mcntpha(ie,tid,tlow,thig);
+        [ returns int  ]
+        count PHA of type id in given TOF range at E/q step ie
+        id = -1 --> use all ranges
+        
+a3mtofhist(iel,ieh,itl,ith,tid);
+        [ returns double * ]
+        SWIMS TOF histogram for iel <= E/q step <= ieh,
+        itl <= TOF <= ith and PHA type tid
+        tid == -1 means: all types
+        
+1.16.  SWIMS additional data types
+----------------------------------
+
+a3mtof1_i(i);
+        [ returns long  ]
+        SWIMS TOF histogram 1 accumulated by the DPU on-board
+        0 < i < 1024
+        The histograms 1 and 2 differ by the selection criteria.
+        These are commandable --> bedini@umich.edu
+        
+a3mtof2_i(i);
+        [ returns long  ]
+        SWIMS TOF histogram 1 accumulated by the DPU on-board
+        0 < i < 1024
+        The histograms 1 and 2 differ by the selection criteria.
+        These are commandable --> bedini@umich.edu
+        
+1.17.  SEPICA Housekeeping
+--------------------------
+
+a3gshk(ie,i);
+        [ returns BYTE  ]
+        SEPICA Housekeeping Block Item (raw)
+        Returns ith element of SEPICA HK array for edb ie.  There are 22
+        elements total.  (C users use constant 'NDHK' to avoid hardcoding.)
+        These are commutated over 5 EDBs to make 110 items total.  The
+        commutation counter is NEDB % 5, as described in the 'ACE S3DPU
+        Command and Data Document'.
+        
+        C users:
+        --------
+        Data can be accessed via mnemonics and masks from 'ACE S3DPU
+        Command and Data Document'.  See libhef::decoded.h for details.
+        For example, the fan 1 mode can be extracted with the following
+        code:
+        
+        BYTE fan1mode
+        fan1mode = a3gshk(ie, LSSSFAN1MODE) & MSSSFAN1MODE;
+        
+        NOTE:  This does not work with items having masks larger than 0xff.  
+        In that case, assemble the word according to the mask.
+        
+        
+1.18.  Obsolete Routines
+------------------------
+
+a3gxeqtab();
+        [ returns float * ]
+        SWICS E/q table
+        As found in DPU Spare block of this cycle. Double used for interface only.
+        
+a3gxeqdpu();
+        [ returns float * ]
+        get SWICS E/q values (calculated from eqtab; not HK)
+        
+a3gxfsr();
+        [ returns double * ]
+        get SWICS FSR (summed over sectors)   
+        
+a3gxdcr();
+        [ returns double * ]
+        get SWICS DCR (summed over sectors)   
+        
+a3gxtcr();
+        [ returns double * ]
+        get SWICS TCR (summed over sectors)   
+        
+a3gxsdr();
+        [ returns double * ]
+        get SWICS SSD rate (summed over sectors)   
+        
+a3gxpr();
+        [ returns double * ]
+        get SWICS AUX proton rate (summed over sectors)   
+        
+a3gxar();
+        [ returns double * ]
+        get SWICS AUX alpha rate (summed over sectors)   
+        
+a3gmeqtab();
+        [ returns float * ]
+        get SWIMS E/q table
+        
+a3gmeqtab_i(ie);
+        [ returns int  ]
+        get SWIMS E/q table entry of spin ie
+        
+a3gmeqdpu();
+        [ returns float * ]
+        get SWIMS entrance system voltage values (calculated from eqtab; not HK)
+        
+a3gxmoq(ie);
+        [ returns float * ]
+        SWICS PHAs: m/q (array with a3xnpha(ie) entries)
+        See also: a3xnpha, a3gxmas, a3gxtof_i, a3gxesd_i,a3gxdid_i,
+                  a3gxsec_i, a3gxrng_i
+        
+a3gxmas(ie);
+        [ returns float * ]
+        SWICS PHAs: mass (array with a3xnpha(ie) entries)
+        See also: a3xnpha
+        
+2.  Utilities for ACE (DPU classification)
+==========================================
+
+(ace.i)
+
+2.1.  SWICS: DPU classification
+-------------------------------
+
+adputof(eoq,paps,moq);
+        [ returns double  ]
+        TOF(E/q,PAPS,m/q) according to DPU algorithm
+        Note: PAPS here is "real" voltage, not the one stripped by 1.5 kV.
+              The routine uses a constant "foil loss" of 1.5 kV, as the
+              Ulysses/SWICS DPU does. See also: adpumoq.
+        
+adpuesd(tof,mas);
+        [ returns double  ]
+        ESSD(TOF,m) according to DPU algorithm   
+        
+adpumoq(eoq,paps,tof);
+        [ returns double  ]
+        m/q(E/q,PAPS,TOF) according to DPU algorithm
+        Note: Routine takes care of 1.5 kV "energy loss" in foil.
+              Input is normal PAPS value without modifications
+              (typically 22.8 kV).
+              This is important because the "energy loss" is not implemented
+              in the ACE DPU software. There, a reduced PAPS is often used
+              to compensate for this missing parameter.
+        The routine uses the /default/ classification parameters;
+        not the ones found in the Telemtry.
+        
+adpumas(esd,tof);
+        [ returns double  ]
+        m(ESSD,TOF) according to DPU algorithm   
+        
+adpueoq(istep);
+        [ returns double  ]
+        E/q for nominal stepping
+        N o t e: this routine uses a fixed stepping table; not the
+                 table found in the telemetry.
+        
+2.2.  SWICS forward model
+-------------------------
+
+xfm(eoq,pav,mas,crg);
+        [ returns double * ]
+        The SWICS/ACE forward model
+        Note: pav here is "real" voltage, not the one stripped by 1.5 kV.
+              See also: adpumoq.
+        
+2.3.  SWICS efficiencies
+------------------------
+
+xeffv1(de,dmas);
+        [ returns double  ]
+        SWICS/ACE: first version of routine handling SWICS efficiency
+        de  : total energy/keV
+        dmas: mass/amu of ion of interest
+        
+3.  my numerical routines
+=========================
+
+(hefnum.i)
+
+aget(x,index);
+        [ returns double  ]
+        get entry of array: res = x[index]
+        
+aset(x,idx,dval);
+        [ returns void  ]
+        set value: x[idx] = dval
+        
+aeset(x,istart,ilen,dval);
+        [ returns void  ]
+        set values: x[i] = dval, istart <= i < istart+ilem
+        
+asum(x,istart,ilen);
+        [ returns double  ]
+        sum array: res = sum(x[i]), istart <= i < (istart + ilen)
+        
+aadd(x,y,istart,ilen);
+        [ returns void  ]
+        add two arrays: x[i] = x[i] + y[i]
+        
+dmom1(adx,ady,Nx);
+        [ returns double  ]
+        first moment. x is dist function, y is data.
+        
+dmomN(adx,ady,Nx,dN);
+        [ returns double  ]
+        Nth moment. x is dist function, y is data.
+        
+4.  Memory handling/array indexing
+==================================
+
+(csys.i)
+
+4.1.  Indexing
+--------------
+
+I(ir,Nc,ic);
+        [ returns int  ]
+        index function (2 D) (row,col)
+        
+I3(ir,Nc,ic,ip,Nr);
+        [ returns int  ]
+        index function for arrays with 3 dim (row,col,plane)
+        
+4.2.  Memory allocation
+-----------------------
+
+dvec_get(n);
+        [ returns double * ]
+        allocate memory for (vec)tor of type (d)ouble
+        
+dvec_free(v);
+        [ returns void  ]
+        free memory allocated by dvec_get.
+        
+libhefrev();
+        [ returns char * ]
+        revision string
+        
+Time handling based on time in seconds since 1-1-1970:00:00
+
+sec70_time(alltime,sec70);
+        [ returns void  ]
+        convert seconds to array with format:
+        sec70 julian secs DOY day month year hr min sec week-day (0 for sunday)
+        
+doy_time(alltime,doy,year);
+        [ returns void  ]
+        convert [year,doy] to seconds since 1-1-1970
+        
+date_time(alltime,mday,mon,year);
+        [ returns void  ]
+        convert [day,month,year] to seconds since 1-1-1970
+        
+timstr(sec70);
+        [ returns char * ]
+        text with date from seconds since 1-1-1970
+        
+Toolbox
+
+ltcaldat(julian,mm,id,iyyy);
+        [ returns void  ]
+        julian --> date
+        
+ltjulday(mm,id,iyyy,julday);
+        [ returns void  ]
+        date --> julian
+        
+is_leap(iyear);
+        [ returns int  ]
+        test for leap year
+        
+hefutil.i --- Compilation of tools.
+
+perr_setlevel(ilevel);
+        [ returns int  ]
+        set level of complaints (number of error messages)
+        Possible values:
+        0 PEEYORE complain about everything
+        1 PNOVICE errors and not-so-obvious problems
+        2 PEXPERT severe errors only
+        

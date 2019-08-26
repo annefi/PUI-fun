@@ -1,0 +1,44 @@
+=== vvv libhef.txt === 16-Jun-98/hef =========================================
+
+Contents
+========
+
+  bittools.o
+    int    bit2int
+    int    bytswp
+    int    getbits
+    double comp12n          "STOF-type" decompression
+    long   decmpa           Decompression using table A
+    long   decmpc           "                         C
+  asxdpusim.o
+    double dswxu            u = ln(TOF)
+    double dswxeoq          E/q(Step)
+    double dswxpal          Post-Acceleration voltage (Level)
+    double dswxlnmq         ln(m/q) (DPU algorithm)
+    double dswxlnm          ln(m)   "
+  swxtools.o
+    long   lax_tofcent_ch   Forward Model: center of TOF peak [ch]
+    double dax_tofsig1_ch   sigma_1
+    double dax_tofsig2_ch
+    long   lax_esdcent_ch   center of ESSD peak [ch]
+    double dax_esdsig_ch    sigma
+    void   vax_peakpos      Interfaces
+    void   vpax_peakpos
+    void   vax_peakpos_if
+    void   vax_peakpos_arg
+    BYTE   bax_ellipse_isin Point within ellipse ?
+    double dduty            duty cycle
+    double dgeometryfactor  
+    double deff             efficiency
+    void   vdiffflux        differential flux
+    double dflux            flux
+    double dspeed           speed
+    double dax_aprxspeed    (old)
+  heffile.o
+    int    hefopen          tool
+  hefnum.o
+    double dratio           x/y if y != 0
+    double dsqrt            sqrt(x)
+    double dsqr             x^2
+
+=== ^^^ libhef.txt === 16-Jun-98/hef =========================================

@@ -1,0 +1,21 @@
+ficlose
+retall
+.run axlv2_deliv_elem.pro
+$ ln -s ~/ace/axlv2/tools/axlv2_deliv_elem_template.save .
+$ ln -fs /shrg1/local/idl_lib/cr_table.save .
+
+doyfr_ranges = split_doyfr_range_by_cr([2004001.,2004364.], /omit_year)
+print, 'cr_ranges = '
+print, doyfr_ranges
+
+axlv2_deliv_elem, file='axlv2_deliv_elem_2004001_2004364.dat',$
+  data=d, doyfr_ranges=doyfr_ranges, tag=''
+
+;; zoom
+;axlv2_deliv_elem, file='axlv2_deliv_elem_2004001_2004364.dat',$
+;     data=d, doyfr_ranges=[[242.,244.0]], tag='zoom_242'
+
+;; filled
+;axlv2_deliv_elem, file='axlv2_deliv_elem_2004001_2004364.dat',$
+;  data=d, doyfr_ranges=doyfr_ranges, tag='filled'
+

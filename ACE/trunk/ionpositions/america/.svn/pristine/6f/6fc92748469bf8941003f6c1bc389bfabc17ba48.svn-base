@@ -1,0 +1,1684 @@
+%!PS-Adobe-3.0
+%%Title: AnalysisData.cc, AnalysisData.h
+%%For: Jim Raines
+%%Creator: a2ps version 4.13
+%%CreationDate: Mon Aug  9 11:20:37 2004
+%%BoundingBox: 24 24 588 768
+%%DocumentData: Clean7Bit
+%%Orientation: Landscape
+%%Pages: 4
+%%PageOrder: Ascend
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: font Courier
+%%+ font Courier-Bold
+%%+ font Helvetica
+%%+ font Helvetica-Bold
+%%+ font Symbol
+%%+ font Times-Bold
+%%+ font Times-Roman
+%%DocumentProcessColors: Black Blue Green Red 
+%%DocumentSuppliedResources: procset a2ps-color-prolog
+%%+ encoding ISO-8859-1Encoding
+%%EndComments
+/a2psdict 200 dict def
+a2psdict begin
+%%BeginProlog
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+
+% EPSF import as in the Red Book
+/BeginInclude {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack 
+  userdict begin
+    0 setgray 0 setlinecap
+    1 setlinewidth 0 setlinejoin
+    10 setmiterlimit [ ] 0 setdash newpath
+    gs_languagelevel 1 ne {
+      false setstrokeadjust false setoverprint 
+    } if
+} bind def
+
+/EndInclude {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+/BeginEPSF {
+  BeginInclude
+  /showpage { } def
+} bind def
+
+/EndEPSF {
+  EndInclude
+} bind def
+
+% Page prefeed
+/page_prefeed {         % bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} bind def
+
+/deffont {
+  findfont exch scalefont def
+} bind def
+
+/reencode_font {
+  findfont reencode 2 copy definefont pop def
+} bind def
+
+% Function c-show (str => -)
+% centers text only according to x axis.
+/c-show { 
+  dup stringwidth pop
+  2 div neg 0 rmoveto
+  show
+} bind def
+
+% Function l-show (str => -)
+% prints texts so that it ends at currentpoint
+/l-show {
+  dup stringwidth pop neg 
+  0 
+  rmoveto show
+} bind def
+
+% center-fit show (str w => -)
+% show centered, and scale currentfont so that the width is less than w
+/cfshow {
+  exch dup stringwidth pop
+  % If the title is too big, try to make it smaller
+  3 2 roll 2 copy
+  gt
+  { % if, i.e. too big
+    exch div
+    currentfont exch scalefont setfont
+  } { % ifelse
+    pop pop 
+  }
+  ifelse
+  c-show			% center title
+} bind def
+
+% Return the y size of the current font
+% - => fontsize
+/currentfontsize {
+  currentfont /FontType get 0 eq {
+    currentfont /FontMatrix get 3 get
+  }{
+    currentfont /FontMatrix get 3 get 1000 mul
+  } ifelse
+} bind def
+
+% reencode the font
+% <encoding-vector> <fontdict> -> <newfontdict>
+/reencode { %def
+  dup length 5 add dict begin
+    { %forall
+      1 index /FID ne 
+      { def }{ pop pop } ifelse
+    } forall
+    /Encoding exch def
+
+    % Use the font's bounding box to determine the ascent, descent,
+    % and overall height; don't forget that these values have to be
+    % transformed using the font's matrix.
+    % We use `load' because sometimes BBox is executable, sometimes not.
+    % Since we need 4 numbers an not an array avoid BBox from being executed
+    /FontBBox load aload pop
+    FontMatrix transform /Ascent exch def pop
+    FontMatrix transform /Descent exch def pop
+    /FontHeight Ascent Descent sub def
+
+    % Define these in case they're not in the FontInfo (also, here
+    % they're easier to get to.
+    /UnderlinePosition 1 def
+    /UnderlineThickness 1 def
+    
+    % Get the underline position and thickness if they're defined.
+    currentdict /FontInfo known {
+      FontInfo
+      
+      dup /UnderlinePosition known {
+	dup /UnderlinePosition get
+	0 exch FontMatrix transform exch pop
+	/UnderlinePosition exch def
+      } if
+      
+      dup /UnderlineThickness known {
+	/UnderlineThickness get
+	0 exch FontMatrix transform exch pop
+	/UnderlineThickness exch def
+      } if
+      
+    } if
+    currentdict 
+  end 
+} bind def
+
+% composite fonts for ASCII-EUC mixed string
+% Version 1.2 1/31/1990
+% Orignal Ken'ichi HANDA (handa@etl.go.jp)
+% Modified Norio Katayama (katayama@rd.nacsis.ac.jp),1998
+% Extend & Fix Koji Nakamaru (maru@on.cs.keio.ac.jp), 1999
+% Anyone can freely copy, modify, distribute this program.
+
+/copyfont {	% font-dic extra-entry-count  copyfont  font-dic
+	1 index maxlength add dict begin
+	{	1 index /FID ne 2 index /UniqueID ne and
+		{def} {pop pop} ifelse
+	} forall
+	currentdict
+	end
+} bind def
+
+/compositefont { % ASCIIFontName EUCFontName RomanScale RomanOffset Rot(T/F) compositefont font
+    /RomanRotation exch def
+    /RomanOffset exch def
+    /RomanScale exch def
+    userdict /fixeucfont_dict known not {
+	userdict begin
+	    /fixeucfont_dict 2 dict begin
+		/UpperByteEncoding [
+		    16#00 1 16#20 { pop 0 } for
+		    16#21 1 16#28 { 16#20 sub } for
+		    16#29 1 16#2F { pop 0 } for
+		    16#30 1 16#74 { 16#27 sub } for
+		    16#75 1 16#FF { pop 0 } for
+		] def
+	        /LowerByteEncoding [
+		    16#00 1 16#A0 { pop /.notdef } for
+		    16#A1 1 16#FE { 16#80 sub 16 2 string cvrs
+				    (cXX) dup 1 4 -1 roll
+				    putinterval cvn } for
+		    /.notdef
+		] def
+		currentdict
+	    end def
+	end
+    } if
+    findfont dup /FontType get 0 eq {
+	14 dict begin
+	    %
+	    % 7+8 bit EUC font
+	    %
+	    12 dict begin
+		/EUCFont exch def
+		/FontInfo (7+8 bit EUC font) readonly def
+		/PaintType 0 def
+		/FontType 0 def
+		/FontMatrix matrix def
+		% /FontName
+		/Encoding fixeucfont_dict /UpperByteEncoding get def
+		/FMapType 2 def
+		EUCFont /WMode known
+		{ EUCFont /WMode get /WMode exch def }
+		{ /WMode 0 def } ifelse
+		/FDepVector [
+		    EUCFont /FDepVector get 0 get
+		    [ 16#21 1 16#28 {} for 16#30 1 16#74 {} for ]
+		    {
+			13 dict begin
+			    /EUCFont EUCFont def
+			    /UpperByte exch 16#80 add def	
+			    % /FontName
+			    /FontInfo (EUC lower byte font) readonly def
+			    /PaintType 0 def
+			    /FontType 3 def
+			    /FontMatrix matrix def
+			    /FontBBox {0 0 0 0} def
+			    /Encoding
+				fixeucfont_dict /LowerByteEncoding get def
+			    % /UniqueID
+			    % /WMode
+			    /BuildChar {
+				gsave
+				exch dup /EUCFont get setfont
+				/UpperByte get
+				2 string
+				dup 0 4 -1 roll put
+				dup 1 4 -1 roll put
+				dup stringwidth setcharwidth
+				0 0 moveto show
+				grestore
+			    } bind def
+			    currentdict
+			end
+			/lowerbytefont exch definefont
+		    } forall
+		] def
+		currentdict
+	    end
+	    /eucfont exch definefont
+	    exch
+	    findfont 1 copyfont dup begin
+		RomanRotation {
+			/FontMatrix FontMatrix
+			[ 0 RomanScale neg RomanScale 0 RomanOffset neg 0 ]
+			matrix concatmatrix def
+		}{
+			/FontMatrix FontMatrix
+			[ RomanScale 0 0 RomanScale 0 RomanOffset ] matrix concatmatrix
+			def
+			/CDevProc
+			    {pop pop pop pop 0 exch -1000 exch 2 div 880} def
+		} ifelse
+	    end
+	    /asciifont exch definefont
+	    exch
+	    /FDepVector [ 4 2 roll ] def
+	    /FontType 0 def
+	    /WMode 0 def
+	    /FMapType 4 def
+	    /FontMatrix matrix def
+	    /Encoding [0 1] def
+	    /FontBBox {0 0 0 0} def
+%	    /FontHeight 1.0 def % XXXX
+	    /FontHeight RomanScale 1.0 ge { RomanScale }{ 1.0 } ifelse def
+	    /Descent -0.3 def   % XXXX
+	    currentdict
+	end
+	/tmpfont exch definefont
+	pop
+	/tmpfont findfont
+    }{
+	pop findfont 0 copyfont
+    } ifelse
+} def	
+
+/slantfont {	% FontName slant-degree  slantfont  font'
+    exch findfont 1 copyfont begin
+    [ 1 0 4 -1 roll 1 0 0 ] FontMatrix exch matrix concatmatrix
+    /FontMatrix exch def
+    currentdict
+    end
+} def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+
+% -------- Some routines to enlight plain b/w printings ---------
+
+% Underline
+% width --
+/dounderline {
+  currentpoint
+  gsave
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    0 rlineto
+    stroke
+  grestore
+} bind def
+
+% Underline a string
+% string --
+/dounderlinestring {
+  stringwidth pop
+  dounderline
+} bind def
+
+/UL {
+  /ul exch store
+} bind def
+
+% Draw a box of WIDTH wrt current font
+% width --
+/dobox {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    stroke
+  grestore
+} bind def
+
+/BX {
+  /bx exch store
+} bind def
+
+% Box a string
+% string --
+/doboxstring {
+  stringwidth pop
+  dobox
+} bind def
+
+%
+% ------------- Color routines ---------------
+%
+/FG /setrgbcolor load def
+
+% Draw the background
+% width --
+/dobackground {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    bgcolor aload pop setrgbcolor
+    fill
+  grestore
+} bind def
+
+% Draw bg for a string
+% string --
+/dobackgroundstring {
+  stringwidth pop
+  dobackground
+} bind def
+
+
+/BG {
+  dup /bg exch store
+  { mark 4 1 roll ] /bgcolor exch store } if
+} bind def
+
+
+/Show {
+  bg { dup dobackgroundstring } if
+  ul { dup dounderlinestring } if
+  bx { dup doboxstring } if
+  show
+} bind def
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T {
+  cw mul x0 add
+  bg { dup currentpoint pop sub dobackground } if
+  ul { dup currentpoint pop sub dounderline } if
+  bx { dup currentpoint pop sub dobox } if
+  y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n {
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+/S {
+  Show
+} bind def
+
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Function title: prints page header.
+% <ct> <rt> <lt> are passed as argument
+/title { 
+  % 1. Draw the background
+  x v get y v get moveto
+  0 setgray
+  gsave
+    0 th 2 div neg rmoveto 
+    th setlinewidth
+    0.5 0.5 1 setrgbcolor
+    pw 0 rlineto stroke
+  grestore
+  % 2. Border it
+  gsave
+    0.7 setlinewidth
+    pw 0 rlineto
+    0 th neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+  % stk: ct rt lt
+  x v get y v get th sub 1 add moveto
+%%IncludeResource: font Helvetica
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  % 3. The left title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    fnfs 0.8 mul hm rmoveto
+    show			% left title
+  grestore
+  exch
+  % stk: ct ltw rt
+  % 4. the right title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    dup
+    pw exch stringwidth pop fnfs 0.8 mul add sub
+    hm
+    rmoveto
+    show			% right title
+  grestore
+  % stk: ct ltw rtw
+  % 5. the center title
+  gsave
+    pw 3 1 roll
+    % stk: ct pw ltw rtw
+    3 copy 
+    % Move to the center of the left room
+    sub add 2 div hm rmoveto
+    % What is the available space in here?
+    add sub fnfs 0.8 mul sub fnfs 0.8 mul sub
+    % stk: ct space_left
+%%IncludeResource: font Helvetica-Bold
+  fHelvetica-Bold fnfs scalefont setfont
+    1 setgray
+    cfshow
+  grestore
+} bind def
+
+% Function border: prints virtual page border
+/border { %def
+  gsave				% print four sides
+    0 setgray
+    x v get y v get moveto
+    0.7 setlinewidth		% of the square
+    pw 0 rlineto
+    0 ph neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+} bind def
+
+% Function water: prints a water mark in background
+/water { %def
+  gsave
+    scx scy moveto rotate
+%%IncludeResource: font Times-Bold
+  fTimes-Bold 100 scalefont setfont
+    .97 setgray
+    dup stringwidth pop 2 div neg -50 rmoveto
+    show
+  grestore
+} bind def
+
+% Function rhead: prints the right header
+/rhead {  %def
+  lx ly moveto
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  l-show
+} bind def
+
+% Function footer (cf rf lf -> -)
+/footer {
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  dx dy moveto
+  show
+
+  snx sny moveto
+  l-show
+  
+  fnx fny moveto
+  c-show
+} bind def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+%%BeginResource: procset a2ps-color-prolog 2.0 1
+
+%% Definition of the color faces.
+/p {
+  0 0 0 FG
+  false BG
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/sy {
+  0 0 0 FG
+  false BG
+  fSymbol bfs scalefont setfont
+  Show
+} bind def
+
+/k {
+  false BG
+  false UL
+  false BX
+  0 0 0.9 FG
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/K {
+  false BG
+  false UL
+  false BX
+  0 0 0.8 FG
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/c {
+  false BG
+  false UL
+  false BX
+  0.8 0 0 FG
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/C {
+  false BG
+  false UL
+  false BX
+  0.8 0 0 FG
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/l {
+  0 0 0 FG
+  0.8 0.8 0 true BG
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/L {
+  0 0 0 FG
+  1 1 0 true BG
+  false UL
+  false BX
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/str {
+  false BG
+  false UL
+  false BX
+  0 0.5 0 FG
+  fTimes-Roman bfs scalefont setfont
+  Show
+} bind def
+
+/e{
+  1 0 0 true BG
+  false UL
+  true BX
+  1 1 1 FG
+  fHelvetica-Bold bfs scalefont setfont
+  Show
+} bind def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul 2 div neg 0 rmoveto
+    f# setfont
+    0.8 0.1 0.1 FG
+    c-show
+  grestore
+} bind def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Times-Roman
+%%IncludeResource: font Symbol
+%%BeginResource: encoding ISO-8859-1Encoding
+/ISO-8859-1Encoding [
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quoteright 
+/parenleft /parenright /asterisk /plus /comma /minus /period /slash 
+/zero /one /two /three /four /five /six /seven 
+/eight /nine /colon /semicolon /less /equal /greater /question 
+/at /A /B /C /D /E /F /G 
+/H /I /J /K /L /M /N /O 
+/P /Q /R /S /T /U /V /W 
+/X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore 
+/quoteleft /a /b /c /d /e /f /g 
+/h /i /j /k /l /m /n /o 
+/p /q /r /s /t /u /v /w 
+/x /y /z /braceleft /bar /braceright /asciitilde /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclamdown /cent /sterling /currency /yen /brokenbar /section 
+/dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron 
+/degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph /bullet 
+/cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf /threequarters /questiondown 
+/Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla 
+/Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis 
+/Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply 
+/Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls 
+/agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla 
+/egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis 
+/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide 
+/oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis 
+] def
+%%EndResource
+% Initialize page description variables.
+/sh 612 def
+/sw 792 def
+/llx 24 def
+/urx 768 def
+/ury 588 def
+/lly 24 def
+/#copies 1 def
+/th 15.000000 def
+/fnfs 11 def
+/bfs 7.493857 def
+/cw 4.496314 def
+
+% Dictionary for ISO-8859-1 support
+/iso1dict 6 dict begin
+  /fCourier ISO-8859-1Encoding /Courier reencode_font
+  /fCourier-Bold ISO-8859-1Encoding /Courier-Bold reencode_font
+  /fHelvetica ISO-8859-1Encoding /Helvetica reencode_font
+  /fHelvetica-Bold ISO-8859-1Encoding /Helvetica-Bold reencode_font
+  /fTimes-Bold ISO-8859-1Encoding /Times-Bold reencode_font
+  /fTimes-Roman ISO-8859-1Encoding /Times-Roman reencode_font
+currentdict end def
+/bgcolor [ 0 0 0 ] def
+/bg false def
+/ul false def
+/bx false def
+% The font for line numbering
+/f# /Helvetica findfont bfs .6 mul scalefont def
+/fSymbol /Symbol findfont def
+/hm fnfs 0.25 mul def
+/pw
+   cw 81.400000 mul
+def
+/ph
+   522.321860 th add
+def
+/pmw urx llx sub pw 2 mul sub 1 div def
+/pmh 0 def
+/v 0 def
+/x [
+  0
+  dup pmw add pw add
+] def
+/y [
+  pmh ph add 0 mul ph add
+  dup
+] def
+/scx sw 2 div def
+/scy sh 2 div def
+/snx urx def
+/sny lly 2 add def
+/dx llx def
+/dy sny def
+/fnx scx def
+/fny dy def
+/lx snx def
+/ly ury fnfs 0.8 mul sub def
+/sx 0 def
+/tab 8 def
+/x0 0 def
+/y0 0 def
+%%EndSetup
+
+%%Page: (1-2) 1
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*) c n
+(  File: AnalysisData.cc) N
+() N
+(  Description:) N
+(    Containers and data for data analysis without regard to specific) N
+(    \(SWICS-style\) instrument.) N
+() N
+(  Author: Jim Raines \(jmr\) ) N
+() N
+(  Method:) N
+(    ) N
+(  Revision controlled by CVS:) N
+(  $Id: AnalysisData.cc,v 1.10 2004/01/02 19:42:22 jraines Exp $) N
+(  ) N
+(  Major Modification History:) N
+(    04Apr2001   jmr   Initial coding) N
+(    10Oct2003   jmr   Inserted duty cycle code.) N
+() N
+(*/) N
+() p n
+(#include) K
+( ") p
+(swindal.h) str
+(") p n
+() N
+(/* ---------------------------- */) c n
+(/* AnalysisData Class Functions */) N
+(/* ---------------------------- */) N
+(AnalysisData::AnalysisData\() p
+(void) k
+(\){) p n
+(  Eqtab.reserve\(MAXEDB\);) N
+(  Eqtab.assign\(MAXEDB, 0.0\); ) S
+(// init to 0.0;) c n
+() p n
+(  Range0 = ) S
+(true) k
+(;) p n
+(  ) N
+(  ) S
+(// init. to 1.0 since this is safest value) c n
+(  DutyCycle = 1.0;) p n
+(}) N
+() N
+(int) k
+( AnalysisData::init\() p
+(void) k
+(\){) p n
+(  ) S
+(const) K
+( string thisprog = ") p
+(AnalysisData::init) str
+(";) p n
+(  ) S
+(int) k
+( DbgLvl = gDbgLvl;      ) p
+(// Set local debug level to global level) c n
+() p n
+(  ) S
+(/* --------------------------------------------------------------) c n
+(     Define Physical Constants -- See AnalysisData.h for more info.) N
+(     --------------------------------------------------------------) N
+(  */) N
+(  ) p
+(//  EqAcceptFac = 0.043;   // dimensionless, from swindal.h ref. 1) c n
+(  EqAcceptFac = 0.064;   ) p
+(// dimensionless, from ACE paper) c n
+(  GeomFactor  = 0.0185;  ) p
+(// cm^2, from swindal.h ref. 1) c n
+() p n
+(  ) S
+(/* load values into ion objects -- read from file eventually) c n
+(     ---------------------------------------------------------) N
+(  */) N
+(  ) p
+(if) K
+( \(Range0\) {) p n
+(    ) S
+(// Hydrogen) c n
+(    Ions.push_back\(Ion\(") p
+(H+) str
+(",1.0,1.0\)\);) p n
+(  ) N
+(    ) S
+(// Helium) c n
+(    Ions.push_back\(Ion\(") p
+(3He1+) str
+(",3.0,1.0\)\);) p n
+(    Ions.push_back\(Ion\(") S
+(3He2+) str
+(",3.0,2.0\)\);) p n
+(    Ions.push_back\(Ion\(") S
+(He1+) str
+(",4.0,1.0\)\);) p n
+(    Ions.push_back\(Ion\(") S
+(He2+) str
+(",4.0,2.0\)\);) p n
+(  }) N
+() N
+(  ) S
+(// Carbon) c n
+(  Ions.push_back\(Ion\(") p
+(C4+) str
+(",12.0,4.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(C5+) str
+(",12.0,5.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(C6+) str
+(",12.0,6.0\)\);) p n
+() N
+(  ) S
+(// Nitrogen) c n
+(  Ions.push_back\(Ion\(") p
+(N5+) str
+(",14.0,5.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(N6+) str
+(",14.0,6.0\)\);) p n
+(AnalysisData.cc) (Page 1/5) (Jul 26, 04 9:16) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(  ) S
+(// Oxygen) c n
+(  Ions.push_back\(Ion\(") p
+(O5+) str
+(",16.0,5.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(O6+) str
+(",16.0,6.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(O7+) str
+(",16.0,7.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(O8+) str
+(",16.0,8.0\)\);) p n
+() N
+(  ) S
+(// Neon) c n
+(  Ions.push_back\(Ion\(") p
+(20Ne6+) str
+(",20.0,6.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(20Ne7+) str
+(",20.0,7.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(20Ne8+) str
+(",20.0,8.0\)\);) p n
+() N
+(  ) S
+(// Magnesium) c n
+(  Ions.push_back\(Ion\(") p
+(Mg6+) str
+(",24.0,6.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Mg7+) str
+(",24.0,7.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Mg8+) str
+(",24.0,8.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Mg9+) str
+(",24.0,9.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Mg10+) str
+(",24.0,10.0\)\);) p n
+() N
+(  ) S
+(// Silicon) c n
+(  Ions.push_back\(Ion\(") p
+(Si7+) str
+(",28.0,7.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Si8+) str
+(",28.0,8.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Si9+) str
+(",28.0,9.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Si10+) str
+(",28.0,10.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Si11+) str
+(",28.0,11.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Si12+) str
+(",28.0,12.0\)\);) p n
+() N
+(  ) S
+(// Sulfur) c n
+(  Ions.push_back\(Ion\(") p
+(S8+) str
+(",32.0,8.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(S9+) str
+(",32.0,9.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(S10+) str
+(",32.0,10.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(S11+) str
+(",32.0,11.0\)\);) p n
+() N
+(  ) S
+(// Iron) c n
+(  Ions.push_back\(Ion\(") p
+(Fe6+) str
+(",56.0,6.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Fe7+) str
+(",56.0,7.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Fe8+) str
+(",56.0,8.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Fe9+) str
+(",56.0,9.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Fe10+) str
+(",56.0,10.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Fe11+) str
+(",56.0,11.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Fe12+) str
+(",56.0,12.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Fe13+) str
+(",56.0,13.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Fe14+) str
+(",56.0,14.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Fe15+) str
+(",56.0,15.0\)\);) p n
+(  Ions.push_back\(Ion\(") S
+(Fe16+) str
+(",56.0,16.0\)\);) p n
+() N
+(  ) S
+(if) K
+( \(1\) {  ) p
+(// add extended Fe charge states) c n
+(    Ions.push_back\(Ion\(") p
+(Fe17+) str
+(",56.0,17.0\)\);) p n
+(    Ions.push_back\(Ion\(") S
+(Fe18+) str
+(",56.0,18.0\)\);) p n
+(    Ions.push_back\(Ion\(") S
+(Fe19+) str
+(",56.0,19.0\)\);) p n
+(    Ions.push_back\(Ion\(") S
+(Fe20+) str
+(",56.0,20.0\)\);) p n
+(    Ions.push_back\(Ion\(") S
+(Fe21+) str
+(",56.0,21.0\)\);) p n
+(    Ions.push_back\(Ion\(") S
+(Fe22+) str
+(",56.0,22.0\)\);) p n
+(    Ions.push_back\(Ion\(") S
+(Fe23+) str
+(",56.0,23.0\)\);) p n
+(    Ions.push_back\(Ion\(") S
+(Fe24+) str
+(",56.0,24.0\)\);) p n
+(  }) N
+() N
+(  ) N
+(  ) S
+(/* Ions by name and index */) c n
+(  ) p
+(/* ---------------------- */) c n
+(  ) p
+(for) K
+(\() p
+(int) k
+( nion = 0; nion < Ions.size\(\); nion++\){) p n
+(    IonsByName[Ions[nion].name] = Ions[nion];) N
+(//     cout << thisprog << " -D- IonsByName[" << Ions[nion].name) c n
+(// ) S 8 T ( << "] contains: ";) N
+(//     IonsByName[Ions[nion].name].print\(\);) N
+(//    cout << endl;) N
+(    IonsIndex[Ions[nion].name] = nion;) p n
+() N
+(  }) N
+(AnalysisData.cc) (Page 2/5) (Jul 26, 04 9:16) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(AnalysisData.cc) (1/4) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (3-4) 2
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  ) p
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(int) k
+( AnalysisData::loadInstParam\() p
+(const) K
+( AceSwicsData& swxdata\){) p n
+(  ) S
+(const) K
+( string thisprog = ") p
+(AnalysisData::loadInstParam) str
+(";) p n
+() N
+(  ) S
+(// load E/q table) c n
+(  ) p
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    Eqtab[nedb] = swxdata.getEqtab\(nedb\);) N
+(  }) N
+() N
+(  ) S
+(// load duty cycle) c n
+(  ) p
+(double) k
+( tmp_duty = swxdata.calcDutyCycle\(\);) p n
+(  ) S
+(if) K
+( \(tmp_duty <= 0.0\){ ) p
+(// bad value, use previous \(by not storing\)) c n
+(    cout << thisprog ) p n
+() S 8 T ( << ") S
+( -W- error loading duty cycle; prev. duty retained.) str
+(" ) p n
+() S 8 T ( << endl;) N
+(    ) S
+(if) K
+( \(DutyCycle <= 0.0\){ ) p
+(// prev. value bad too \(should not be possible\)) c n
+(      cout << thisprog ) p n
+() S 8 T (   << ") S
+( -W- prev. duty bad; setting to 1.0.) str
+(" ) p n
+() S 8 T (   << endl;) N
+(      DutyCycle = 1.0;) N
+(    }) N
+(  }) N
+(  ) S
+(else) K
+( {) p n
+(    DutyCycle = tmp_duty;) N
+(  }) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(int) k
+( AnalysisData::loadFM\() p
+(const) K
+( AceSwicsData& swxdata\){) p n
+(  ) S
+(return) K
+(\(loadFM\(swxdata, swxdata.getPav\(\)\)\);) p n
+(}) N
+() N
+(int) k
+( AnalysisData::loadFM\() p
+(const) K
+( AceSwicsData& swxdata, ) p
+(double) k
+( pav\){) p n
+(  ) S
+(const) K
+( string thisprog = ") p
+(AnalysisData::loadFM) str
+(";) p n
+() N
+(  ) S
+(int) k
+( DbgLvl = gDbgLvl;      ) p
+(// Set local debug level to global level) c n
+() p n
+(  ) S
+(// actually set the voltage that will be used in FM and rest of sw.) c n
+(  PapsVolt = pav;) p n
+() N
+(  ) S
+(/* ------------------------------------------------------- */) c n
+(  ) p
+(/* Run forward model for each ion species at each E/q step */) c n
+(  ) p
+(/* ------------------------------------------------------- */) c n
+(  ) p
+(double) k
+( *xfm;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( nion = 0; nion < Ions.size\(\); nion++\){) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(      xfm = swxdata.getFM\(Eqtab[nedb],) N
+() S 8 T () S 16 T (PapsVolt,) N
+() S 8 T () S 16 T (Ions[nion].mass,) N
+() S 8 T () S 16 T (Ions[nion].charge\);) N
+() N
+(      ) S
+(if) K
+( \(DbgLvl > 3\) {) p n
+() S 8 T (printf\(") S
+(%s -D- xfm returned %s %f %f %f %f\\n) str
+(",thisprog.c_str\(\),) p n
+() S 8 T (       Ions[nion].name.c_str\(\), ) N
+() S 8 T (       xfm[0], xfm[1], xfm[2], xfm[3]\);) N
+(      }) N
+() N
+(      Ions[nion].tof[nedb]  = xfm[0];) N
+(      Ions[nion].stof[nedb] = xfm[1];) N
+(      Ions[nion].esd[nedb]  = xfm[2];) N
+(      Ions[nion].sesd[nedb] = xfm[3];) N
+(       ) N
+(    }) N
+(  }) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(AnalysisData.cc) (Page 3/5) (Jul 26, 04 9:16) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(}) p n
+() N
+(/* ---- experimental FM ---- */) c n
+(int) k
+( AnalysisData::loadFMexp\() p
+(const) K
+( AceSwicsData& swxdata\){) p n
+(  ) S
+(return) K
+(\(loadFMexp\(swxdata, swxdata.getPav\(\)\)\);) p n
+(}) N
+() N
+(int) k
+( AnalysisData::loadFMexp\() p
+(const) K
+( AceSwicsData& swxdata, ) p
+(double) k
+( pav\){) p n
+(  ) S
+(const) K
+( string thisprog = ") p
+(AnalysisData::loadFMexp) str
+(";) p n
+() N
+(  ) S
+(int) k
+( DbgLvl = gDbgLvl;      ) p
+(// Set local debug level to global level) c n
+() p n
+(  ) S
+(// actually set the voltage that will be used in FM and rest of sw.) c n
+(  PapsVolt = pav;) p n
+() N
+(  ) S
+(/* ------------------------------------------------------- */) c n
+(  ) p
+(/* Run forward model for each ion species at each E/q step */) c n
+(  ) p
+(/* ------------------------------------------------------- */) c n
+(  ) p
+(double) k
+( *xfm;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( nion = 0; nion < Ions.size\(\); nion++\){) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(      xfm = xfmexp\(Eqtab[nedb],) N
+() S 8 T () S 16 T (PapsVolt,) N
+() S 8 T () S 16 T (Ions[nion].mass,) N
+() S 8 T () S 16 T (Ions[nion].charge\);) N
+() N
+(      ) S
+(if) K
+( \(DbgLvl > 3\) {) p n
+() S 8 T (printf\(") S
+(%s -D- xfm returned %s %f %f %f %f\\n) str
+(",thisprog.c_str\(\),) p n
+() S 8 T (       Ions[nion].name.c_str\(\), ) N
+() S 8 T (       xfm[0], xfm[1], xfm[2], xfm[3]\);) N
+(      }) N
+() N
+(      Ions[nion].tof[nedb]  = xfm[0];) N
+(      Ions[nion].stof[nedb] = xfm[1];) N
+(      Ions[nion].esd[nedb]  = xfm[2];) N
+(      Ions[nion].sesd[nedb] = xfm[3];) N
+(       ) N
+(    }) N
+(  }) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(void) k
+( AnalysisData::dump\() p
+(void) k
+(\){) p n
+(  string thisprog = ") S
+(AnalysisData::dump) str
+(";) p n
+(  ) N
+(  cout << thisprog << ") S
+( -I- AnalysisData object contains:\\n) str
+(";) p n
+(  ) N
+(  cout << ") S
+(+ Ion list \(Ions member\):\\n) str
+(";) p n
+(  ) S
+(for) K
+(\() p
+(int) k
+( nion = 0; nion < Ions.size\(\); nion++\){) p n
+(    cout << ") S
+(Ions[) str
+(" << nion << ") p
+(] := ) str
+(";) p n
+(    Ions[nion].print\(\);) N
+(    cout << ") S
+(\\n) str
+(";) p n
+(  }) N
+() N
+(  ) S
+(// SAVE for example of iteration through map) c n
+(  ) p
+(//  map<string,Ion>::iterator Ibn_iter;) c n
+() p n
+(  ) S
+(//  for\(Ibn_iter = IonsByName.begin\(\); Ibn_iter != IonsByName.end\(\); Ibn_iter+) c n
+(+\){) N
+(  ) p
+(//     Ibn_iter->second.print\(\);) c n
+(  ) p
+(//     cout << "\\n";) c n
+(  ) p
+(//   }) c n
+(  ) p n
+(  cout << ") S
+(\\n+ E/q table \(Eqtab member\):\\n) str
+(";) p n
+(  ) S
+(for) K
+(\() p
+(int) k
+( i = 0; i < Eqtab.size\(\); i++\){) p n
+(    printf\(") S
+(Eqtab[%d]=%f\\n) str
+(",i,Eqtab[i]\);) p n
+(  }) N
+() N
+(AnalysisData.cc) (Page 4/5) (Jul 26, 04 9:16) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(AnalysisData.cc) (2/4) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (5) 3
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(}) p n
+() N
+(void) k
+( AnalysisData::setRange0\() p
+(bool) k
+( value\){) p n
+(  Range0 = value;) N
+(  ) S
+(return) K
+(;) p n
+(}) N
+() N
+(double) k
+( AnalysisData::getDutyCycle\(\) ) p
+(const) K
+({) p n
+(  ) S
+(return) K
+(\(DutyCycle\);) p n
+(}) N
+() N
+(// output forward model parameters for overlay on E-T slices by IDL code) c n
+(void) k
+( AnalysisData::outputFM\(string outfile\){) p n
+(  ) S
+(FILE) k
+( *FMCF; ) p
+(// Forward Model Comparison File \(pointer\)) c n
+(  FMCF = fopen\(outfile.c_str\(\), ") p
+(w+) str
+("\);) p n
+() N
+(  ) S
+(// keep fields the same total width!) c n
+(  ) p
+(char) k
+( hdrfmt[] =") p
+(# %3s %6s %6s %6s %6s %6s %6s\\n) str
+(";) p n
+(  ) S
+(char) k
+( datafmt[]=) p n
+(  ") S
+(  %3d %6.2f %6s %6.2f %6.2f %6.2f %6.2f \\n) str
+(";) p n
+() N
+(  ) S
+(// --- print file header ---) c n
+(  fprintf\(FMCF,") p
+(# Forward Model parameters from ACE Level II data processor \(v2.0\)\\n) str
+("\);) p n
+() N
+(  ) S
+(// get and format calendar time for header) c n
+(  time_t now;) p n
+(  ) S
+(char) k
+( timestr[19];) p n
+(  time\(&now\);) N
+(  strftime\(timestr, 19, ") S
+(%d%b%Y %H:%M:%S) str
+(", localtime\(&now\)\);) p n
+(  fprintf\(FMCF,") S
+(# Created: %s\\n) str
+(", timestr\);) p n
+() N
+(  ) S
+(// print column headings) c n
+(  fprintf\(FMCF,hdrfmt,") p
+(EDB) str
+(",") p
+(E/q) str
+(",") p
+(ion) str
+(",") p
+(tof) str
+(",") p
+(tofsig) str
+(",") p
+(esd) str
+(",") p
+(esdsig) str
+("\);) p n
+() N
+(  ) S
+(// --- write output line for each EDB for each species ---) c n
+(  ) p
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < Ions.size\(\); s++\){) p n
+(      fprintf\(FMCF, datafmt, nedb, Eqtab[nedb],Ions[s].name.c_str\(\),) N
+() S 8 T (      Ions[s].tof[nedb],Ions[s].stof[nedb],) N
+() S 8 T (      Ions[s].esd[nedb],Ions[s].sesd[nedb]\);) N
+(    }) N
+(  }) N
+() N
+(  fclose\(FMCF\);) N
+(}) N
+(AnalysisData.cc) (Page 5/5) (Jul 26, 04 9:16) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(AnalysisData.cc) (3/4) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (1-2) 4
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*) c n
+(  File: AnalysisData.h) N
+() N
+(  Description:) N
+(    Containers and data for data analysis without regard to specific) N
+(    \(SWICS-style\) instrument.) N
+() N
+(  Author: Jim Raines) N
+() N
+(  Method:) N
+(    ) N
+(  Revision controlled by CVS:) N
+(  $Id: AnalysisData.h,v 1.8 2004/07/28 13:28:35 jraines Exp $) N
+(  ) N
+(  Major Modification History:) N
+(      May2001   jmr   initial coding) N
+(    10Oct2003   jmr   Inserted duty cycle code.) N
+() N
+(*/) N
+() p n
+(class AnalysisData {) N
+( public:) N
+() N
+(  vector<Ion> Ions;                    ) S
+(// vector containing all ions defined) c n
+(  std::map<string,) p
+(int) k
+(> IonsIndex;      ) p
+(// indexes in Ions vector keyed by ) c n
+(                                       ) p
+(// ion name ) c n
+(  std::map<string,Ion> IonsByName;     ) p
+(// all defined ions, keyed by ion name) c n
+(  std::map<string,Ion>::iterator Ibn_iter;  ) p
+(// iterator for above) c n
+() p n
+() N
+(  vector<) S
+(double) k
+(> Eqtab;        ) p
+(// Commanded E/q values) c n
+() p n
+(  ) S
+(/* E/q acceptance range factor, delta E / q, unitless) c n
+(     Eqtab[nedb]*EqAcceptFac give width of E/q accepted at nedb) N
+(  */) N
+(  ) p
+(double) k
+( EqAcceptFac;) p n
+() N
+(  ) S
+(/* Post. Acceleration Voltage in kV */) c n
+(  ) p
+(double) k
+( PapsVolt;) p n
+() N
+() N
+(  ) S
+(/* Geometric Factor, an area in cm^2 */) c n
+(  ) p
+(double) k
+( GeomFactor;) p n
+() N
+(  AnalysisData\() S
+(void) k
+(\);) p n
+() N
+(  ) S
+(// build ion table) c n
+(  ) p
+(int) k
+( init\() p
+(void) k
+(\);) p n
+(  ) S
+(// read in various instrument parameters, such as E/q table) c n
+(  ) p
+(int) k
+( loadInstParam\() p
+(const) K
+( AceSwicsData&\);) p n
+(  ) S
+(// load Forward Model params) c n
+(  ) p
+(// --- post accel. volt \(pav\) read from data) c n
+(  ) p
+(int) k
+( loadFM\() p
+(const) K
+( AceSwicsData&\);) p n
+(  ) S
+(// --- user specified pav) c n
+(  ) p
+(int) k
+( loadFM\() p
+(const) K
+( AceSwicsData&, ) p
+(double) k
+( pav\);) p n
+() N
+(  ) S
+(// load *EXPERIMENTAL* Forward Model params) c n
+(  ) p
+(// --- post accel. volt \(pav\) read from data) c n
+(  ) p
+(int) k
+( loadFMexp\() p
+(const) K
+( AceSwicsData&\);) p n
+(  ) S
+(// --- user specified pav) c n
+(  ) p
+(int) k
+( loadFMexp\() p
+(const) K
+( AceSwicsData&, ) p
+(double) k
+( pav\);) p n
+() N
+(  ) S
+(// output forward model parameters for overlay on E-T slices by IDL code) c n
+(  ) p
+(void) k
+( outputFM\(string outfile\);) p n
+(  ) N
+(  ) S
+(void) k
+( dump\() p
+(void) k
+(\);             ) p
+(// dump contents) c n
+() p n
+(  ) S
+(// set flag for inclusion of range 0 ions) c n
+(  ) p
+(void) k
+( setRange0\(bool value\);) p n
+(AnalysisData.h) (Page 1/2) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(  ) S
+(// get value of duty cycle \(must be prev. loaded\)) c n
+(  ) p
+(double) k
+( getDutyCycle\(\) ) p
+(const) K
+(;) p n
+() N
+( private:) N
+() N
+(  bool Range0;) N
+() N
+(  ) S
+(// Dimension-less number which represents angular integrations performed) c n
+(  ) p
+(// by the instrument) c n
+(  ) p
+(double) k
+( DutyCycle;) p n
+() N
+(};) N
+() N
+(AnalysisData.h) (Page 2/2) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(../include/AnalysisData.h) (4/4) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+
+%%Trailer
+end
+%%EOF

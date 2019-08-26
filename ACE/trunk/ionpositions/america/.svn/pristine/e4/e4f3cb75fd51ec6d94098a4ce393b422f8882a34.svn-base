@@ -1,0 +1,24 @@
+ACE/SWICS Level 2 Version 2 Data (preliminary) Release Notes
+============================================================
+
+Pre-release disclaimer!
+-----------------------
+
+This data has not been released yet and, though we applied reasonable
+checks to it, must be considered preliminary.  If your work leads to
+publication, please come back to us for the officially released data
+first.
+
+
+Format:
+-------
+
+There are headers in the data files that should make them pretty 
+self-explanatory.  
+
+The various 'qf' fields are quality flags.  If the flag is 1 then the
+statistics are low and the error larger.  The flag is a disclaimer of
+sorts meaning that this item appears to still be reasonable data but
+we are less confident than when the flag is 0.  We actually report a
+fill value (-1.0) when this problem makes the data unusable.
+

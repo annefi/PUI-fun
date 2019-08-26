@@ -1,0 +1,19 @@
+ficlose
+retall
+.run axlv2_deliv_qratio.pro
+$ ln -s ~/ace/axlv2/tools/axlv2_deliv_qratio_template.save .
+$ ln -fs /shrg1/local/idl_lib/cr_table.save .
+
+doyfr_ranges = split_doyfr_range_by_cr([2004001.,2004364.], /omit_year)
+print, 'cr_ranges = '
+print, doyfr_ranges
+
+axlv2_deliv_qratio, file='axlv2_deliv_qratio_2004001_2004364.dat',$
+  data=d, doyfr_ranges=doyfr_ranges, tag=''
+
+;axlv2_deliv_qratio, file='axlv2_deliv_qratio_2004001_2004364.dat',$
+;  data=d, doyfr_ranges=[[315.,317.]], tag='zoom_315_filled'
+
+
+
+

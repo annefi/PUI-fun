@@ -1,0 +1,7 @@
+testlist.in                                                                    : name of file list
+0                                                                              : Dbglevel
+1                                                                              : lower steplimit
+1000                                                                           : upper steplimit 
+1                                                                              : fitmode (0=each parameter for each ion alone;1=each parameter for all ions simultaniously,2=hight and position, sigxp sigxm and sigyp, sigym are fitted simultaniously for each single ion)
+
+

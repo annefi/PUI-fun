@@ -1,0 +1,43 @@
+retall
+.compile split_ydoy
+
+print, 'long:'
+ydoy = 2004182L
+s = split_ydoy(ydoy)
+help, s
+print,s
+
+print, 'long (strings):'
+ydoy = 2004182L
+s = split_ydoy(ydoy, /strings)
+help, s
+print,s
+
+print, '---------------'
+
+print, 'double:'
+ydoyfr = 2004182.125d
+s = split_ydoy(ydoyfr)
+help, s
+print,s
+
+print, 'double (strings):'
+ydoyfr = 2004182.125d
+s = split_ydoy(ydoyfr, /strings)
+help, s
+print,s
+
+print, '---------------'
+
+print, 'string:'
+ydoyfr = '2004182.125'
+s = split_ydoy(ydoyfr)
+help, s
+print,s
+
+print, 'string (strings):'
+ydoyfr = '2004182.125'
+s = split_ydoy(ydoyfr, /strings)
+help, s
+print,s
+

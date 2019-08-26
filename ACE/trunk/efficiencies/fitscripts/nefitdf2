@@ -1,0 +1,84 @@
+
+dcr_fsr(e)="swxeff_gpt.so", "Ne"
+
+
+Ethr            = 25.33
+pf2             = 0.48
+C2              = 0.128
+C2              = 0.57
+defl            = 0.0734
+defl            = 0.0325657 
+FWHM            = 10
+#thick           = 2.44
+#thick = 2.44830787580146
+thick           = 2.5
+C1              = 0.5
+pf1             = 0.5
+z               = 10
+rde             = 1.00
+C3              = 0.1
+
+Z = 10
+Ethr = 25.33
+pf1 = 0.5
+pf2 = 0.48
+C1 = 0.5
+C2 = 0.578379024371673
+defl = 0.0295823664145579
+FWHM = 10
+thick = 2.49703829778054
+rde = 1.0
+C3 = 0.0082851796314413
+
+Z = 10
+Ethr = 29.0963406644481
+pf1 = 0.5
+pf2 = 0.48
+C1 = 0.5
+C2 = 0.129431440679052
+defl = 0.05
+FWHM = 22.5256915631461
+thick = 2.5
+rde = 1.0
+C3 = 0.24
+
+Z = 10
+Ethr = 29.3191247832241
+pf1 = 0.785
+pf2 = 0.785
+C1 = 0.5
+C2 = 0.5
+defl = 0.075
+FWHM = 22.4100640554832
+thick = 2.5
+rde = 1.0
+m=20
+
+fit dcr_fsr(x,z,m,C1,C2,C3,pf1,pf2,Ethr,FWHM,thick,defl) "./caldat/nedaten_ssd2_1p.f" u ($13/$1):16:34 via defl, C2
+
+plot dcr_fsr(x,z,m,C1,C2,C3,pf1,pf2,Ethr,FWHM,thick,defl), "./caldat/nedaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars
+
+###############################################################################################################
+
+
+print "Z = " , z
+
+print "Ethr = " , Ethr
+
+print "pf1 = " , pf1
+
+print "pf2 = " , pf2
+
+print "C1 = " , C1
+
+print "C2 = " , C2
+
+print "defl = " , defl
+
+print "FWHM = " , FWHM
+
+print "thick = " , thick
+
+print "rde = " , rde
+
+print "C3 = " , C3

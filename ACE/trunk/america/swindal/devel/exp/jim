@@ -1,0 +1,37 @@
+[00mtotal 1960
+   4 [00m00README[00m          4 [00mmapstrvec2.cc[00m     56 [00mphaconv.o[00m
+   4 [00m3darr.cc[00m          4 [00mmapstrvec2.cc~[00m    32 [01;32mpoint2vec[00m*
+   4 [01;34madtest[00m/           4 [00mmapstrvec.cc[00m       4 [00mpoint2vec.cc[00m
+   4 [01;34mcacctest[00m/         4 [00mmapstrvec.cc~[00m      4 [00mpoint2vec.cc~[00m
+  64 [01;32mcoordmap[00m*        24 [01;32mmat2[00m*             24 [01;32mpoplist[00m*
+   4 [00mcoordmap.cc[00m       4 [00mmat2.cc[00m            4 [00mpoplist.cc[00m
+   4 [00mcoordmap.cc~[00m      4 [00mmat2.cc~[00m           4 [00mpoplist.cc~[00m
+ 108 [00mcore[00m             20 [01;32mmatdim[00m*            4 [01;34mpopPhaList[00m/
+   4 [00mexp.h[00m             4 [00mmatdim.cc[00m          4 [00mpopPhaList.cc~[00m
+   0 [01;36mexp.mak[00m@          4 [00mmatdim.cc~[00m         4 [01;34mstlvec[00m/
+ 288 [01;32mfilename[00m*         4 [01;34mnamespace[00m/        36 [01;32mstringexp[00m*
+   4 [00mfilename.cc[00m       4 [00mnamespace.cc~[00m      4 [00mstringexp.cc[00m
+   4 [00mfilename.cc~[00m      4 [00mnamespace.h~[00m       4 [00mstringexp.cc~[00m
+   4 [01;34mglobal[00m/          20 [01;32mnr[00m*               16 [01;32mst-stringeq[00m*
+  16 [01;32minitvec[00m*          4 [00mnr.c~[00m              4 [00mst-stringeq.cc[00m
+   4 [00minitvec.cc[00m       28 [01;32mnrsvdc[00m*            4 [00mst-stringeq.cc~[00m
+   4 [00minitvec.cc~[00m       4 [00mnrsvd.c[00m            4 [00msvd.cc[00m
+  40 [01;32minvert[00m*           4 [00mnrsvd.c~[00m           4 [00msvd.cc~[00m
+   4 [00minvert.cc[00m         4 [00mnrsvdc.c[00m          32 [01;32mtntexp[00m*
+   4 [00minvert.cc~[00m        4 [00mnrsvdc.c~[00m          4 [00mtntexp.cc[00m
+  20 [00minvert.o[00m          4 [00mnrsvdc.o[00m           4 [00mtntexp.cc~[00m
+   4 [01;34mion[00m/              4 [00mnrsvd.o[00m           12 [00mtof2tofch_range.phaconv[00m
+  92 [01;32mionmap[00m*          20 [01;32mnrtest[00m*           28 [01;32mvecexp[00m*
+   4 [00mionmap.cc[00m         4 [00mnrtest.c[00m           4 [00mvecexp.cc[00m
+   4 [00mionmap.cc~[00m        4 [00mnrtest.c~[00m          4 [00mvecexp.cc~[00m
+   0 [00mjim[00m              20 [01;32mnrtestcc[00m*          4 [00mVec.h[00m
+  36 [01;32mmaexp[00m*            4 [00mnrtest.cc~[00m         4 [00mVec.h~[00m
+   4 [00mmaexp.cc[00m          4 [00mnrtestcc.cc[00m      252 [01;32mvecpointer[00m*
+   4 [00mmaexp.cc~[00m         4 [00mnrtestcc.cc~[00m      28 [01;32mvecpointer2[00m*
+   4 [00mMakefile[00m          4 [00mnssub1.cc[00m          4 [00mvecpointer2.cc[00m
+   4 [00mMakefile~[00m         4 [00mnssub1.cc~[00m         4 [00mvecpointer2.cc~[00m
+   4 [00mmapstrarr.cc[00m      8 [00mout[00m                4 [00mvecpointer.cc[00m
+   4 [00mmapstrarr.cc~[00m   184 [01;32mphaconv[00m*           4 [00mvecpointer.cc~[00m
+  84 [01;32mmapstrvec[00m*        4 [00mphaconv.cc[00m         4 [00mxfm_tof_range.cc[00m
+  76 [01;32mmapstrvec2[00m*       4 [00mphaconv.cc~[00m
+[m

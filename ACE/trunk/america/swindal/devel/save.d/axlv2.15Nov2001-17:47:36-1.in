@@ -1,0 +1,16 @@
+1		   # Load Measurement Array (true or false)? 
+0		   # Save Measurement Array when finished (true or false)? 
+2                  # Enter PHA filter flag:
+axlv2		   # Enter filename base (for all files): 
+2000158		   # Enter start date (yyyydoy): 
+2000158		   # Enter stop date (yyyydoy): 
+10		   # Enter number of cycles to load at once (5-10 works well): 
+0		   # Enter maximum number of these groups to process
+1		   # Enter global debugging level (0-5): 
+/home/jim/acedata/LV1  # Enter directory containing LV1 data (DNW)
+0		   # Do boxrates calculation? 
+0		   # Do spillrates calculation? 
+0		   # Do probrates calculation? 
+0		   # Load probrates? 
+0		   # Save probrates? 
+0		   # Do distribution function calculations? 

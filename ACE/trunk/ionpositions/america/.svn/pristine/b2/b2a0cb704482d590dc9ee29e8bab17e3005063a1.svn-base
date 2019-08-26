@@ -1,0 +1,89 @@
+Index: DistFunc.cc
+===================================================================
+RCS file: /shrg1/ace/sw/cvsroot/swindal/src/DistFunc.cc,v
+retrieving revision 1.23
+retrieving revision 1.25
+diff -r1.23 -r1.25
+14c14
+<   $Id: DistFunc.cc,v 1.23 2005/01/07 18:30:15 jraines Exp $
+---
+>   $Id: DistFunc.cc,v 1.25 2005/02/03 21:34:25 jraines Exp $
+36a37
+>   n_err.assign(N,0.0);
+39d39
+<   count_err.assign(N,0.0);
+128,130c128,131
+<     float sum_PR = 0.;
+<     float sum_wgt_err = 0.;
+<     float sum_wgt_cnt = 0.;
+---
+>     float sigsq_f1_dc = 0.;
+>     float f1_dc = 0.;
+>     float sigsq_f0_dc = 0.;
+>     float f0_dc = 0.;
+133,144d133
+<       // Nathan's delta_v[i]
+< //       // calc. delta_v[i] 
+< //       if ( nedb == FIRSTEDB ){ // WARNING: Not in Nathan's derivation
+< // 	delta_v[nedb] = sqrt(v[s][nedb]*v[s][nedb+1]) -  sqrt(v[s][nedb]*v[s][nedb]);
+< //       }
+< //       else if ( nedb == (MAXEDB - 1) ){
+< // 	delta_v[nedb] = sqrt(v[s][nedb]*v[s][nedb]) -  sqrt(v[s][nedb]*v[s][nedb-1]);
+< //       }
+< //       else{
+< // 	delta_v[nedb] = sqrt(v[s][nedb]*v[nedb+1]) -  sqrt(v[s][nedb]*v[s][nedb-1]);
+< //       }
+< 
+171,177c160,175
+< 	  sum_PR += PR.getProbRate(nedb,s)*gAccumTime;
+< 	  
+< 	  sum_wgt_err += PR.getProbRate(nedb,s)*gAccumTime*
+< 	    pow(delta_v[nedb],2)/pow(v[s][nedb],8);
+< 
+< 	  sum_wgt_cnt += PR.getProbRate(nedb,s)*gAccumTime*delta_v[nedb]/
+< 	    pow(v[s][nedb],4);
+---
+> 	  // NOTE:  These formulas assume 1D moments used below
+> 	  // square of error in F1 (divided by constants (dc))
+> 	  sigsq_f1_dc += PR.getProbRate(nedb,s) * gAccumTime *
+> 	    pow( delta_v[nedb] / pow(v[s][nedb],3) / eff ,2);
+> 
+> 	  // F1 (divided by constants (dc))
+> 	  f1_dc += PR.getProbRate(nedb,s) * gAccumTime *
+> 	    delta_v[nedb] / pow(v[s][nedb],3) / eff;
+> 
+> 	  // square of error in F0 (divided by constants (dc))
+> 	  sigsq_f0_dc += PR.getProbRate(nedb,s) * gAccumTime *
+> 	    pow( delta_v[nedb] / pow(v[s][nedb],4) / eff ,2);
+> 
+> 	  // F0 (divided by constants (dc))
+> 	  f0_dc += PR.getProbRate(nedb,s) * gAccumTime *
+> 	    delta_v[nedb] / pow(v[s][nedb],4) / eff;
+191,193c189,191
+<     // calculate total error (relevant to n, v, vth)
+<     //count_err[s] = sqrt(sum_PR)/sum_PR;
+<     count_err[s] = sqrt(sum_wgt_err)/sum_wgt_cnt;
+---
+>     // calculate error in density
+>     n_err[s] = sqrt(2 * sigsq_f1_dc / pow(f1_dc,2) +
+> 		    sigsq_f0_dc / pow(f0_dc,2));
+220a219,221
+>       /* NOTE:  n_err is calculated above assuming 1D moments so it will be 
+> 	 wrong if 3D moments are used here (in previous line).  
+>       */
+392c393
+<     fprintf(OUT,"# DistFunc: %s\n", "$Id: DistFunc.cc,v 1.23 2005/01/07 18:30:15 jraines Exp $");
+---
+>     fprintf(OUT,"# DistFunc: %s\n", "$Id: DistFunc.cc,v 1.25 2005/02/03 21:34:25 jraines Exp $");
+395c396
+<     fprintf(OUT,hdrfmt,"doyfr","ion","n","v", "vth","cnt_err",
+---
+>     fprintf(OUT,hdrfmt,"doyfr","ion","n","v", "vth","n_err",
+404c405
+< 	    count_err[s], 
+---
+> 	    n_err[s], 
+433c434
+<     fprintf(OUT,"# DistFunc: %s\n", "$Id: DistFunc.cc,v 1.23 2005/01/07 18:30:15 jraines Exp $");
+---
+>     fprintf(OUT,"# DistFunc: %s\n", "$Id: DistFunc.cc,v 1.25 2005/02/03 21:34:25 jraines Exp $");

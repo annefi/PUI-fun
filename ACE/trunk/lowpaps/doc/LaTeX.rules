@@ -1,0 +1,97 @@
+# This makefile is a bit broken and recreates some files
+# without necessity.
+# 
+
+#.SUFFIXES:	.ltx .dvi .ps .pdf .ps .eps .jpg .jpeg .png .bmp .tga
+
+%.dvi:		%.ltx
+		rubber $<
+# Die Option -pPDF ist dazu da, spätere PDF-Umwandlung ohne die häßlichen Fonts zu machen
+# Die Option -G0 sorgt dafür, das in einer späteren PDF-Konvertierung 
+# die Ligaturen nicht zu komischen Zeichen werden
+
+%.ps:		%.dvi
+#		dvips -D 600 -Ppdf -G0 $< -o $@
+		dvips -Ppdf -G0 $< -o $@
+
+# PDFLatex hat allerdings den Nachteil, 
+# daß es bestimmte "normale Latexbefehle" nicht versteht
+#.ltx.pdf:	%.ltx
+#		pdflatex $<
+
+%.pdf:		%.ps
+		ps2pdf $<
+
+%.pdf:		%.eps
+		epstopdf $<
+%.eps:		%.ps
+		gs -dNOPAUSE -q -dBATCH -sDEVICE=epswrite -sOutputFile=$@ $<
+
+%.ltx:		%.py
+		lgrind -i $< > $@
+
+######
+
+%.jpeg:		%.jpg
+		cp $< $@
+
+%.jpg:		%.jpeg
+		cp $< $@
+
+######
+%.eps:		%.jpg
+		convert $< $@
+
+%.png:		%.jpg
+		convert $< $@
+
+%.bmp:		%.jpg
+		convert $< $@
+
+%.tga:		%.jpg
+		convert $< $@
+######
+%.eps:		%.png
+		convert $< $@
+
+%.jpg:		%.png
+		convert $< $@
+
+%.bmp:		%.png
+		convert $< $@
+
+%.tga:		%.png
+		convert $< $@
+######
+%.eps:		%.bmp
+		convert $< $@
+
+%.jpg:		%.bmp
+		convert $< $@
+
+%.png:		%.bmp
+		convert $< $@
+
+%.tga:		%.bmp
+		convert $< $@
+######
+%.eps:		%.tga
+		convert $< $@
+
+%.jpg:		%.tga
+		convert $< $@
+
+%.png:		%.tga
+		convert $< $@
+
+%.bmp:		%.tga
+		convert $< $@
+######
+
+
+# usual clean rule (may need adaption!)
+usual-tex-clean:
+	rm -f *~ *.dvi *.toc *.log *.aux revision.ltx
+
+revision.ltx::
+	svnversion . > revision.ltx

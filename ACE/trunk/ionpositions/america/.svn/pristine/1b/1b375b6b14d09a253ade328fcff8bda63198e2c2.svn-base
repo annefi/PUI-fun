@@ -1,0 +1,48 @@
+# File:  ionstream:~jraines/Local_IDL_Devel_Notes.txt
+#
+# Description:
+#   Notes pertaining to development of local (SHRG) IDL code.
+#
+# Author(s):  Jim Raines (jmr)
+#
+# Method:
+#   All entries begin with a date/subject line preceeded by '===>'.
+#   See entries for format.
+#
+
+===> 24Mar2003 color_plot modifications
+
+In my work with ~/ace/axlv2/tools/fmcomp.pro, I came up with a procedure for
+using Dave Ortland's color plot which works pretty well for postscript
+files.  It is contained in color_plot_example.pro.  
+
+Essentially, a 256 entry color table is loaded.  Then the first two
+entries are replaced with black (0) and white (1) with
+fix_ct_ends.pro.  This allows plotting with black axis on a white
+background.
+
+In working with ~/ace/axfmtweak/fmpick.pro, I found out a bunch of
+other useful things about using color plot on X devices.  This info is
+partly contained in that code and partly in ~/idl/startup.idl.
+
+In the process of discovering these things, I tried replacing
+!d.n_colors with !d.table_size.  I believe that this proved to be
+un-necessary as they are set in unison most of the time.  (A quick
+experiment of printing them before and after a 'psplt' command confirm
+this.)  I had thought this was related to the color problems I was
+having in X windows, but (apparently) it was not.
+
+In working with Pat Koehn on FIPS Stop (position sensing) MCP plots,
+we came up with a few other issues.  Pat was using a 64x64 matrix and
+specifying the X and Y matrices (centers spread over 256 points).  We
+discovered that the place where I put the zmin_color was never reached
+under these conditions.  As a patch, we put that chunk of code also in
+the 'else' of the condition that keeps it out of that section.  It
+seems ok so far.  (It is stored in color_plot_devel.pro for now.
+
+I made an example that shows this breakage and copied it to
+color_plot_breaks_zmin_color.pro.  Whenever the x, y arrays are the
+same size as the data (or one less), the zmin_color option is ignored.
+
+I fixed this problem by putting the second chunk of zmin_color code
+further down in the program.

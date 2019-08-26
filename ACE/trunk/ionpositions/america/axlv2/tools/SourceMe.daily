@@ -1,0 +1,12 @@
+alias rw='(./run-axlv2_daily.sh >& run-axlv2_daily.out &);watch tail -24 run-axlv2_daily.out 
+'
+alias r='chmod u+x ./run-axlv2_daily.sh; ./run-axlv2_daily.sh >& run-axlv2_daily.out & '
+alias l='less run-axlv2_daily.out'
+alias lo='less run-axlv2_daily.out'
+alias p='pico -tz run-axlv2_daily.sh'
+alias e='emacs -nw run-axlv2_daily.sh'
+alias wo='watch tail -15 run-axlv2_daily.out'
+alias gvl='gv `\ls -1rt *.ps | tail -1` &'
+
+alias new='mkdir $nd; cp run-axlv2_daily.sh $nd; cd $nd; pwd'
+

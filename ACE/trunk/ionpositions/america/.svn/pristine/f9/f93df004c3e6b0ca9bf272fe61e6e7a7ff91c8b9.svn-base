@@ -1,0 +1,18 @@
+ficlose
+retall
+
+$ ln -fs ~/ace/axlv2/tools/axlv2_nvt_template.save .
+
+.run qdist_contour_fig.pro
+
+ydoy_str = '2004183_242'
+;ydoy_str = '2004208_2004209'
+tag = 'co'
+
+elements = ['C','O']
+error_level = 1.0
+
+qdist_contour_fig, file='axlv2_nvt_'+ydoy_str+'.dat', data=d, $
+  tag=tag, error_level=error_level, $
+  elements=elements
+

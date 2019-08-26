@@ -1,0 +1,44 @@
+dcr_fsr(e)= "swxeff_gpt.so", "O"
+
+z = 8
+m = 16
+Ethr = 23.9033842573106
+pf1 = 0.5
+pf2 = 0.785
+C1 = 0.5
+C2 = 0.53
+C3 = 0.05
+defl = 0.08
+FWHM = 14.8590975085215
+thick = 2.5
+rde = 1.0
+
+
+fit dcr_fsr(x,z,m,C1,C2,C3,pf1,pf2,Ethr,FWHM,thick,defl) "./caldat/o_ne.f" u ($13/$1):16:34 via C2, C3, defl
+
+
+
+###############################################################################################################
+
+
+print "Z = " , z
+
+print "Ethr = " , Ethr
+
+print "pf1 = " , pf1
+
+print "pf2 = " , pf2
+
+print "C1 = " , C1
+
+print "C2 = " , C2
+
+print "defl = " , defl
+
+print "FWHM = " , FWHM
+
+print "thick = " , thick
+
+print "rde = " , rde
+
+print "C3 = " , C3

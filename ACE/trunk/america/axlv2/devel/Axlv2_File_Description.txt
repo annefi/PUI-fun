@@ -1,0 +1,59 @@
+ACE/SWICS Level II data processor files, 11Mar2005:
+======================================================================
+
+----------------------------------------------------------------------
+internal files:
+----------------------------------------------------------------------
+
+For all internal files:
+-----------------------
+Our established practice for error filtering is to discard data with
+n_err > .5.
+
+For absolute densities scale by 110.
+
+File types:
+-----------
+
+axlv2_nvt_yyyydoy.dat -- density, velocity and thermal velocity for
+each analyzed ion at each timestep.  Values for all ions at one time
+step given in sequential lines, then for the next timestep, etc.  NO
+ERROR FILTERING!
+			
+axlv2_distfunc_yyyydoy.dat -- phase space density for each analyzed
+ion at each velocity and timestep.  Values are given for an ion at
+each velocity in subsequent lines.  Then values are given for the next
+ion at each velocity.  When all ions have been written out, the
+timestep increments.  NO ERROR FILTERING!
+
+
+----------------------------------------------------------------------
+deliverable files:
+----------------------------------------------------------------------
+
+For all deliverable files:
+--------------------------
+Quality flags (qual_*) are 1 when statistics are suspect.
+
+Fill values are -1.0.
+
+A limited range of charge states is considered in calculation (no
+extreme hi or lo).
+
+File types:
+-----------
+
+axlv2_deliv_nvt_yyyydoy.dat -- like nvt file above but all densities
+are relative to He (scaling done internally).
+
+axlv2_deliv_elem_yyyydoy.dat -- elemental abundances relative to
+oxygen.
+
+axlv2_deliv_qratio_yyyydoy.dat -- O7/O6, C6/C5, <Q_C>, <Q_O>, <Q_Fe>
+
+axlv2_deliv_Xx_qdist_yyyydoy.dat -- Full charge distribution for
+element Xx.  Values are relative to total for element.  Values for
+each ion are given in sequential lines at one timestep.  Then timestep
+is incremented.
+
+

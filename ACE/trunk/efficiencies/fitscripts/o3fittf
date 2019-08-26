@@ -1,0 +1,48 @@
+tcr_fsr(e)="swxeff_gpt.so", "O"
+
+z = 8
+m = 16
+Ethr = 27.27
+pf1 = 0.785
+pf2 = 0.785
+C1 = 0.5
+C2 = 1.25
+defl = 0.052
+FWHM = 13.87
+thick = 2.5
+rde = 1.0
+C3 = 1.0
+probmode        = 3
+auxpar1         = 1
+auxpar2         = 1
+auxpar3         = 1
+ladung          = 1
+
+fit tcr_fsr(x,z,m,ladung,C1,C2,C3,pf1,pf2,Ethr,FWHM,thick,defl,probmode,auxpar1,auxpar2,auxpar3) "./caldat/o2.txt" u ($13/$1):14:32 via Ethr, FWHM
+
+plot tcr_fsr(x,z,m,ladung,C1,C2,C3,pf1,pf2,Ethr,FWHM,thick,defl,probmode,auxpar1,auxpar2,auxpar3), "./caldat/o2.txt" using  ($13/$1):14:32 with errorbars
+
+
+print "Z = " , z
+
+print "M = ", m
+
+print "Ethr = " , Ethr
+
+print "pf1 = " , pf1
+
+print "pf2 = " , pf2
+
+print "C1 = " , C1
+
+print "C2 = " , C2
+
+print "defl = " , defl
+
+print "FWHM = " , FWHM
+
+print "thick = " , thick
+
+print "rde = " , rde
+
+print "ladung = " , ladung

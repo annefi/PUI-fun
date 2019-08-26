@@ -1,0 +1,55 @@
+ 
+# e_distribution.py ist eine abgespeckte version von tof_distribution.py
+# dient nur dazu energie-histogramm-files zu bauen aus den pha daten
+# gespeichert werden diese in ~/daten/giessen/ und heissen z.B. swxli21.hste
+
+# nachtrag: 22.9.09: gebinnta matrizen und hstt und hste files baut pha2hst_binned.py
+# auch für ungebinnte daten verwendbar; muss nur das richtige einkommentiert werden.
+
+# zum versuch, die dicke der folie aus den caldat herauszuziehen, siehe tof_skript in thick_files_2 unf fit_skript in thick_files_3
+
+# fit_res_plot fittet geraden an die kappa und sigma werte in abhängigkeit des tof channels
+
+# 22.9.09 tof_distribution.py aufgeräumt .. alles überflüssige ist raus
+# tof_distribution.py so wie es vorher war ist gespeichert in tof_distribution_backup.py
+
+# auch die produktion der ergebnisse der foliendicken variation (siehe ordner thick_files, thick_files_2, thick_files_3) ist in tof_distribution_backup.py noch drin (ganz oben), leider habe ich das seinerzeit quick and dirty gemacht, müsste aber noch zu rekonstruieren sein
+
+# dotfile2hst.py liest die dotfiles (leicht modifizierter output von srim, siehe '/home/kleopatra/mu/Desktop/swics/efficiencies/srim/SRIM 2003/srim.py' und den ordner dotfiles im gleichen verzeichnis) ein und macht daraus histogramme
+# die produkte werden in hst_files gespeichert ... nomenklatur : kernladungszahl_masse_energie_foliendicke(_binned).endung
+# zur endung:   hstt -- > tof in kanälen; 1.spalte kanal, 2.spalte counts, 3.spalte fehler(sqrt($2))
+                _binned.hstt -- > tof in gebinnten kanälen: analog .hstt
+                hste -- > energie 1.spalte bruchteil der gesamtenergie in tausendstel 2.spalte tausensdstel der gesamtenergie mal zeilennummer, 3.spalte counts, 4.spalte fehler(sqrt($3))
+
+# paps_thick_variation: paps und thcik wurden variiert und geprüft, ob mit einem satz paps & thick die helium positionen erreicht werden können
+# output von swxeff.f steht in den files bsp: he2_24.5_2.5 für helium 2+, paps=24.5 kV und thick=2.5 ug/cm^2 (nur eine spalte, war einfacher das so zu bauen, d.h. beim plotten 'u 0:1' benutzen spalte 0 ist dann die zeilennummer was auch gleichzeitig dem step entspricht (1 bsi 58))
+# die positionen aus den kkbf fits stehen in bsp: he2_ifp (ifp=inflight position) (enstanden 'zu fuss' --> ein fach die gefitteten positionen in ein file eingetragen
+
+# in ncfn/gute_e_verteilungen sind die swxli nummern für die der e fit in tof_distribution.py gut aussah (by eye)
+# habe für diese mir mal die kappas der energiverteilungen mal angeguckt, es ist keine systematik zu erkennen ...
+# die ergebnisse stehen in neue_fitergebnisse/ungebinnt/fit_res_gute_e_verteilungen_lk_rk_obg. der aufbau ist genause iwe in den übrigen fit_res files
+
+# sf2sfwe.py liest die step_i (i=0,59) aus /data/kleopatra/mu/jahresdaten/all_data/step_files/{v_int}/ ein und produziert
+# /data/kleopatra/mu/jahresdaten/all_data/step_files/{v_int}/step_i_we (with errors), d.h es gibt eine zusätzliche spalte mit den errors
+# spalte 4 = wuzzel aus spalte 3
+
+# testfit.py generiert einen verrauschten 3d gauss und fittet einen 3d gauss an die daten
+
+# in 3d_he_fit.py kann man sehen dass ein kappa fit auf einen gauss hinausläuft, einfach mal beide fits abwechselnd leaufen lassen.
+--> überholt (23.10.08), der helium peak ist tof mässig ein assymetrischer kappa ist, das rechte kappa wird mit grösser werdendem e-kanal grösser,
+--> links ist keine tendenz zu ergennen, da wärte man vielleicht mit einem gauss sogar ganz gut bedient
+
+# begründung der annahme, dass die tof sigmas proportional zum tof kanal sind:
+# habe mal srim simulationen für he2_50keV, (2_4_50.0_110.0.dot) [in /home/kleopatra/mu/Desktop/swics/efficiencies/srim//SRIM 2003/dotfiles] und analog 6_12_150.0_110.0, laufen lassen und mit dotfile2hst.py mir die tof verteilung angeguckt , d.h. gleiche energie pro ladung und gleiche masse pro ladung
+--> die sigmas scheinen gleich zu sein. hab versucht nen assymetrischen kappa ranzufitten (klappt nur bedingt, je nachdem wie man die ranges setzt, variieren die fitergebnisse), aber man sieht so schon, dass sie sigmas "gleich" sind.
+gehe in "/home/kleopatra/mu/Desktop/swics/c13/mystuff/experiments/hst_files" und gebe ein "plot "6_12_150.0_110.0.hstt" u 1:2:3 w e, "2_4_50.0_110.0.hstt" u ($1-1):2:3 w e"
+analog sind hier auch 7_14_175.0_110.0.hstt und 8_16_200.0_110.0.hstt --> d.h. gleiches e/q und gleiches m/q
+die peaks sehen ähnlich aus, die statistik ist halt ziemlich mies, evtl mal mit mehr teilchen nochmal machen.
+
+in den dotfiles und in den hst_files sind auch daten von O6_150keV und N6_150keV, d.h. gleiche energie pro ladung aber ein anderes m/q
+--> diese sind 1. gegen he bzw. c verschoben und sind 2. breiter. 
+breiter heisst in diesem fall (immer gleiche anzahl an teilchen [10000]), --> man kann anhand der höhenabweichung in etwa die breitenabweichung abschätzen--> Höhe~1/sigma.
+da diese breite aber noch mit dem instrumentenrauschen gefaltet wird ist das nur wenig aussagekräftig (allerhöchstens eine grobe abschätzung)
+
+nachtrag zu dotfile2hst.py (23.10.08)
+habe das skript erweitert, jetzt kann man sich damit auch energie histogramme bauen, um mehr zusehen müsste man allerdings das binning etwas feiner machen. so erkennt man vor allem bei niedrigen energien fast nix.

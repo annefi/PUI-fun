@@ -1,0 +1,39 @@
+
+; Filename: startup.idl
+;
+; Description:
+;   Provide IDL startup commands suitable for SHRG computers.
+;
+; Author: Jim Raines (jmr)
+;
+; Method:
+;
+;   
+; Revision controlled by CVS:
+; $Id: startup.idl,v 1.2 2004/07/28 17:14:29 jraines Exp $
+;
+; Major Modification History
+;   09Oct1999   jmr   initial coding
+;
+
+;; Add user and group-wide directories to path
+!path = "~/idl:/shrg1/local/idl_lib:" + !path
+
+
+;; this allows use of 8 bit color tables
+;; -------------------------------------
+; note: it seems to require 'idl.gr_visual: PseudoColor' and 
+; 'idl.colors=256' in .Xdefaults, even though the former is unsupported
+device, decomposed=0
+loadct, 34
+fix_ct_ends
+;; un-comment for testing 8 bit color
+;plot, findgen(10), color=50
+
+  ;; make some color utilities available
+.run color_util.pro
+
+;; ===> put user customizations after this line <===
+
+
+

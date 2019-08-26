@@ -1,0 +1,283 @@
+#!/usr/bin/python
+from os import system
+from scipy.linalg import inv
+from scipy import zeros, dot
+from numpy import float
+from Gnuplot import Gnuplot, GridData
+from math import sin,cos,tan,asin,acos,atan,exp,pi
+from os import popen2
+from sys import stdin
+import random
+from scipy.integrate import quad
+from Gnuplot.func_ext import *
+#from functions import *
+from libacepy.frange import frange
+import random
+
+
+Float=float
+matrixmultiply=dot
+gp=Gnuplot()
+
+c=zeros([101],Float)
+t_data=zeros([512,3],Float)
+e_data=zeros([128,3],Float)
+#ions=["he2","o8","n7","c12","mg11","c13","o7","n6","mg10","c5","ne8","mg9","o6","n5","c4"]
+ions=["He2","O8","N7","C6","13C6","O7","N6","C5","Mg8","Mg9","Mg10","Ne7","Ne8","O6","N5","Si9","Si10","Si11","Si12"]
+#ions=["He2","C5","C6","13C6","N5","N6","N7","O6","O7","O8","Ne8","Mg10"]
+x=zeros([len(ions)],Float)
+G=zeros([len(ions)],Float)
+sg=zeros([len(ions)],Float)
+sk=zeros([len(ions)],Float)
+sl=zeros([len(ions)],Float)
+sr=zeros([len(ions)],Float)
+kappa=zeros([len(ions)],Float)
+breite=zeros([len(ions)],Float)
+bg=zeros([len(ions)],Float)
+tp=zeros([len(ions),2],Float)
+tp_all1=zeros([len(ions),58,2],Float)
+tp_all2=zeros([len(ions),58,2],Float)
+cr=zeros([len(ions)],Float)
+res=zeros([30,6],Float)
+epq_array=zeros([58],Float)
+he_data=zeros([900,58,12],Float)
+he_data_2=zeros([58,10],Float)
+
+#de=0.682817 # bis februar 091
+#dt=5.80315 # bis februar 09
+#de=0.448 # neuer fit, februar 09
+#dt=6.41 # neuer fit, februar 09
+de=1.448055 # wie vorher nur genauer
+dt=7.41082818114 # wie vorher nur genauer
+#de=1.451238 # paps=23.8, thick=2.3
+#dt=7.48819922535 # paps=23.8, thick=2.3
+
+def f(m,v,q):
+    return (0.5*m/(6.0221415*10.**26.)*(v*1000.)**2)*(6.24150974*10.**15.)/q
+
+
+file0=open("../experiments/steps")
+for i in file0:
+    x=i.split()
+    for k in range(58):
+        epq_array[k]=float(x[k])
+file0.close()
+
+file0=open("hsf_results/linear/v_int_40/hsf_all")
+for i in file0:
+    x=i.split()
+    for j in range(12):
+        he_data[int(x[0]),int(x[1]),j]=float(x[j])
+file0.close()
+
+#file0=open("hsf_results/linear/all_under_he_speed/hsf_all_ave")
+file0=open("hsf_results/linear/v_int_40/hsf_all_ave")
+
+l=0
+for i in file0:
+    x=i.split()
+    for j in range(10):
+        he_data_2[l,j]=float(x[j])
+    l+=1
+file0.close()
+#print he_data_2
+
+# count rates von Lars
+
+cr[0]=100000.
+cr[1]=500. # O8 # geschätzt
+cr[2]=2546.91 # N7
+cr[3]=18186. # C12
+cr[4]=0. # Mg11 # geschätzt
+cr[5]=1000. # C13 geschätzt
+cr[6]=11054.63 # O7
+cr[7]=9591.11 # N6
+cr[8]=500. # Mg10 # geschätzt
+cr[9]=6940.99 # C5
+cr[10]=4254.4 # Ne8
+cr[11]=500. # Mg9
+#cr[12]=2858.22 # O6
+#cr[13]=1029.88 # N5
+#cr[14]=500. # C4 # gesschätzt
+
+v_int=445
+
+gp("max1(x)=x>0.5? x:0.5")
+
+# Theoretische Positionen aus dem Eff-Modell
+for j in range(len(ions)):
+    #file0=open("ion_pos/"+ions[j])
+    file0=open("/home/kleopatra/mu/Desktop/swics/efficiencies/lars/aspeff/003/"+ions[j]+"+_eff")
+    #file0=open("/data/wimmer/mu/appendix/000/"+ions[j]+"+.et")
+    l=0
+    for i in file0:
+        xx=i.split()
+#        for k in range(2):
+#            tp_all1[j,l,k]=float(xx[k])
+        tp_all1[j,l,0]=float(xx[2])+1
+        tp_all1[j,l,1]=float(xx[1])+1
+        l+=1
+    file0.close()
+
+
+#system("rm res_16")
+v_int_array=range(345,350,10)
+interval=int(20)
+v2_int_array=range(340+interval,500,interval*2)
+c12=zeros(len(v2_int_array),Float)
+c13=zeros(len(v2_int_array),Float)
+c13c12=zeros(len(v2_int_array),Float)
+dummy1=zeros([40,1000,len(v2_int_array)],Float)
+dummy2=zeros([40,1000,len(v2_int_array)],Float)
+epq=0.
+ll=0
+for v_int in v2_int_array:
+#if (1):
+    epq=f(12,v_int,6)
+    print epq
+    nepq=100.
+    for i in range(58):
+        if (nepq > (abs(epq-epq_array[i]))):
+            nepq=abs(epq-epq_array[i])
+            #print nepq
+            epqstep=i
+    print epqstep
+    kk=0
+    for step in range(epqstep-4,epqstep+4):
+    #for step in range(36,51):
+        for i in range(len(ions)):
+            for j in range(2):
+                tp[i,j]=0.9995*tp_all1[i,step,j]
+        #filex=open("/data/wimmer/mu/jahresdaten/all_data/step_files/all_under_he_speed/step_"+str(step)+"_o_cme")
+        filex=open("/data/wimmer/mu/jahresdaten/all_data/step_files/"+str(v_int)+"_"+str(interval)+"_he/step_"+str(step)+"_o_cme")
+        for i in filex:
+            et_data=i.split()
+            if (len(et_data) > 0):
+                for j in range(len(ions)):
+                    if ((int(et_data[0]) == int(tp[j,1])) and (int(et_data[1]) == int(tp[j,0]))):
+                        cr[j] = float(et_data[2])
+        pp=0
+        for rn in range(1):
+            if(1 == 1): 
+                for i in range(len(ions)):
+                    gp("ge"+str(i)+"(x)=Ge"+str(i)+"*exp(-(x-xge"+str(i)+")**2/(2*(sge*(xge"+str(i)+"-"+str(de)+"))**2))")
+                    gp("ktl"+str(i)+"(x,y)=(1+((x-xkt"+str(i)+")**2/((kappatl)*(sktl*(xkt"+str(i)+"-"+str(dt)+"))**2)))**-(kappatl)")
+                    gp("ktr"+str(i)+"(x,y)=(1+((x-xkt"+str(i)+")**2/(((max1((ksr1*("+str(he_data_2[step,1])+"-"+str(de)+")/(xge"+str(i)+"-"+str(de)+")*(y-xge"+str(i)+"))+ksr2))*ksr_error)*(sktr*(xkt"+str(i)+"-"+str(dt)+"))**2)))**-((max1((ksr1*("+str(he_data_2[step,1])+"-"+str(de)+")/(xge"+str(i)+"-"+str(de)+")*(y-xge"+str(i)+"))+ksr2))*ksr_error)")
+                    #gp("ktr"+str(i)+"(x,y)=(1+((x-xkt"+str(i)+")**2/(((max1((ksr1*("+str(he_data[int(v_int),step,2])+"-"+str(de)+")/(xge"+str(i)+"-"+str(de)+")*(y-xge"+str(i)+"))+ksr2))*ksr_error)*(sktr*(xkt"+str(i)+"-"+str(dt)+"))**2)))**-((max1((ksr1*("+str(he_data[int(v_int),step,2])+"-"+str(de)+")/(xge"+str(i)+"-"+str(de)+")*(y-xge"+str(i)+"))+ksr2))*ksr_error)")
+
+                    # Energie + ToF Gauss - alle gleiches sge und sgt, nämlich sge3 und sgt3, sge(i)=xge(i)*sge3
+                    #gp("ge"+str(i)+"(x)=Ge"+str(i)+"*exp(-(x-xge"+str(i)+")**2/(2*(sge*(xge"+str(i)+"-"+str(de)+"))**2))")
+                    #gp("ktl"+str(i)+"(x,y)=(1+((x-xkt"+str(i)+")**2/((kappatl)*(sktl*(xkt"+str(i)+"-"+str(dt)+"))**2)))**-(kappatl)")
+                    #gp("ktr"+str(i)+"(x,y)=(1+((x-xkt"+str(i)+")**2/((exp(ksr1*(y-xge"+str(i)+"))+ksr2)*(sktr*(xkt"+str(i)+"-"+str(dt)+"))**2)))**-(exp(ksr1*(y-xge"+str(i)+")+ksr2))")
+
+                    # zusammensetzen der kappa funktion
+                    gp("kt"+str(i)+"(x,y)=x<xkt"+str(i)+"? Kt"+str(i)+"*ktl"+str(i)+"(x,y):Kt"+str(i)+"*ktr"+str(i)+"(x,y)")
+
+                    # zusammensetzen der 3d funktion
+                    gp("s"+str(i)+"(x,y)=ge"+str(i)+"(x)*kt"+str(i)+"(y,x)")
+                    teststep=step-1
+                    # setzen der variablen
+                    gp("Ge"+str(i)+"="+str(cr[i]))
+                    gp("Kt"+str(i)+"=1")
+                    gp("xkt"+str(i)+"="+str(tp[i,0]))#+random.gauss(0.,0.26)))
+                    gp("xge"+str(i)+"="+str(tp[i,1]))#+random.gauss(0.,0.39)))
+                    gp("ksr_error="+str(1.))#*random.gauss(1.,0.03)))
+                    gp("kappatl="+str(he_data_2[teststep,7]))
+                    #gp("kappatl=6")
+                    #gp("kappatl="+str(he_data[int(v_int),step,9]))#*random.gauss(1.,0.05)))
+                    gp("ksr1="+str(he_data_2[teststep,8]))
+                    #gp("ksr1="+str(he_data[int(v_int),step,10]))
+                    gp("ksr2="+str(he_data_2[teststep,9]))
+                    #gp("ksr2="+str(he_data[int(v_int),step,11]))
+                    gp("sktl="+str(he_data_2[teststep,4]))#*random.gauss(1.,0.01)))
+                    #gp("sktl="+str(he_data[int(v_int),step,6]))#*random.gauss(1.,0.01)))
+                    gp("sktr="+str(he_data_2[teststep,5]))#*random.gauss(1.,0.01)))
+                    #gp("sktr="+str(he_data[int(v_int),step,7]))#*random.gauss(1.,0.01)))
+                    gp("sge="+str(he_data_2[teststep,3]))#*random.gauss(1.,0.1)))
+                    #gp("sge="+str(he_data[int(v_int),step,5]))#*random.gauss(1.,0.01)))
+                    #gp("sge=0.101537731920431")
+                    gp("sge=0.1")
+
+                # einige besonderheiten beim helium peak
+                gp("ge0(x)=Ge0*exp(-(x-xge0)**2/(2*(sge0*(xge0-"+str(de)+"))**2))")
+                gp("xkt0="+str(he_data[int(v_int),step,3]))#+random.gauss(0.,0.26)))
+                gp("xge0="+str(he_data[int(v_int),step,2]))#+random.gauss(0.,0.39)))
+                gp("sge0="+str(he_data[int(v_int),step,5]))#*random.gauss(1.,0.05)))
+                gp("Ge0="+str(he_data[int(v_int),step,4]))
+                #gp("xkt5="+str((tp[3,0]+tp[7,0])/2.))#+random.gauss(0.,0.25)))
+                #gp("xge5="+str((tp[3,1]+tp[7,1])/2.))#+random.gauss(0.,0.38)))
+                #gp("s(x,y)=s1(x,y)+s2(x,y)+s3(x,y)+s4(x,y)+s5(x,y)+s6(x,y)+s7(x,y)+s8(x,y)+s9(x,y)+s10(x,y)+s11(x,y)+s12(x,y)+s13(x,y)")
+                gp("s(x,y)=s1(x,y)+s2(x,y)+s3(x,y)+s4(x,y)+s5(x,y)+s6(x,y)+s7(x,y)+s8(x,y)+s9(x,y)+s10(x,y)+s11(x,y)+s12(x,y)+s13(x,y)+s14(x,y)+s15(x,y)+s16(x,y)+s17(x,y)+s18(x,y)")
+                for i in range(3):
+                    #gp("set zrange[10:*]")
+                    gp("set xrange["+str(tp[3,1]-5)+":"+str(tp[3,1]+15)+"]")
+                    gp("set yrange["+str(int(tp[3,0]-8))+":"+str(int(tp[3,0]+4))+"]")
+                    gp("fit s(x,y) '/data/wimmer/mu/jahresdaten/all_data/step_files/"+str(v_int)+"_"+str(interval)+"_he/step_"+str(step)+"_o_cme' u 1:2:3:4 via Ge1,Ge2,Ge3,sge")
+                    gp("set yrange["+str(int(tp[4,0])+2)+":"+str(tp[3,0]+35)+"]")
+                    gp("fit s(x,y) '/data/wimmer/mu/jahresdaten/all_data/step_files/"+str(v_int)+"_"+str(interval)+"_he/step_"+str(step)+"_o_cme' u 1:2:3:4 via Ge6,Ge7,Ge8,Ge9,Ge10,Ge11,Ge12,Ge13")
+                    gp("set yrange["+str(int(tp[3,0]-8))+":"+str(tp[3,0]+35)+"]")
+                    gp("fit s(x,y) '/data/wimmer/mu/jahresdaten/all_data/step_files/"+str(v_int)+"_"+str(interval)+"_he/step_"+str(step)+"_o_cme' u 1:2:3:4 via Ge1,Ge2,Ge3,Ge4,Ge5,Ge6,Ge7,Ge8,Ge9,Ge10,Ge11,Ge12,Ge13,Ge14,Ge15,Ge16,Ge17,Ge18")
+
+                gp("set isosamples 50")
+                #gp("set xrange[20:32]")
+                #gp("set yrange[150:200]")
+                
+                #gp("splot s(x,y), '/data/kleopatra/mu/jahresdaten/all_data/step_files/"+str(v_int)+"_he/step_"+str(step)+"_we' u 1:2:3:4 with errorbars")
+                gp("splot s(x,y), '/data/wimmer/mu/jahresdaten/all_data/step_files/"+str(v_int)+"_"+str(interval)+"_he/step_"+str(step)+"_o_cme' u 1:2:3:4 with errorbars")
+                for i in range(len(ions)):
+                    res[i,0]=float(str(gp.eval("xge"+str(i))))
+                    res[i,1]=float(str(gp.eval("xkt"+str(i))))
+                    res[i,2]=float(str(gp.eval("Ge"+str(i))))
+                    res[i,3]=float(str(gp.eval("sge")))
+                    res[i,4]=float(str(gp.eval("sktl")))
+                    res[i,5]=float(str(gp.eval("sktr")))
+
+                if (res[3,2] > 0):
+                    c12[ll]+=res[3,2]
+                dummy1[kk,pp,ll]=res[3,2]
+                if (res[5,2] > 0):
+                    c13[ll]+=res[5,2]
+                dummy2[kk,pp,ll]=res[5,2]
+                
+                #file0=open("results/all_under_he_speed","a")
+                file0=open("results/"+str(v_int),"a")
+                #file0.write(str(v_int))
+                #file0.write("   ")
+                file0.write(str(step))
+                file0.write("   ")
+                file0.write(str(rn+1))
+                file0.write("   ")
+                file0.write(str(res[3,2]))
+                file0.write("   ")
+                file0.write(str(res[4,2]))
+                file0.write("\n")
+                file0.close()
+                
+                pp+=1
+        kk+=1
+        
+        
+    """
+    c13c12[ll]=c13[ll]/c12[ll]
+    file1=open("results/"+str(v_int)+"_nominalwerte","a")
+    #file1.write(str(v2_int_array[ll]))
+    #file1.write("   ")
+    #file1.write(str(c12[ll]))
+    #file1.write("   ")
+    #file1.write(str(c13[ll]))
+    #file1.write("   ")
+    #file1.write(str(c13c12[ll]))
+    #file1.write("\n")
+    for i in range(kk):
+        for j in range(pp):
+            file1.write(str(epqstep-4+i))
+            file1.write("   ")
+            file1.write(str(dummy1[i,j,ll]))
+            file1.write("   ")
+            file1.write(str(dummy2[i,j,ll]))
+            file1.write("   ")
+            file1.write(str(dummy2[i,j,ll]/dummy1[i,j,ll]))
+            file1.write("\n")
+    file1.close()
+    """
+    ll+=1

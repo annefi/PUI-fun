@@ -1,0 +1,28 @@
+/*
+  File: AceSwicsConstants.h
+
+  Description:
+    Header file for AceSwicsConstants class, a derived class set up to
+    handle all fixed constants from ACE/SWICS.  The constants are set
+    in the constructor and may only be read from there.
+
+  Author(s): Jim Raines (jmr)
+
+  Method:
+
+  Revision controlled by CVS:
+  $Id: AceSwicsConstants.h,v 1.1 2004/04/27 20:39:20 jraines Exp $
+
+  Major Modification History:
+    20Feb2004   jmr   initial coding
+
+*/
+
+class AceSwicsConstants : public InstrumentConstants {
+ public:
+
+  AceSwicsConstants();
+
+ private:
+
+};

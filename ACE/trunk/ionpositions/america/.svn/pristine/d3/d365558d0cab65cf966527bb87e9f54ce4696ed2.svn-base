@@ -1,0 +1,12 @@
+alias rw='(./run-axlv2.sh >& run-axlv2.out &);watch tail -24 run-axlv2.out 
+'
+alias r='chmod a+x ./run-axlv2.sh; ./run-axlv2.sh >& run-axlv2.out & '
+alias l='less run-axlv2.out'
+alias lo='less run-axlv2.out'
+alias p='pico -wtz run-axlv2.sh'
+alias er='emacs -nw run-axlv2.sh'
+alias wo='watch tail -15 run-axlv2.out'
+alias gvl='gv `\ls -1rt *.ps | tail -1` &'
+
+alias new='mkdir $nd; cp run-axlv2.sh $nd; cd $nd; pwd'
+

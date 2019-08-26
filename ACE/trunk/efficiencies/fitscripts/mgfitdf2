@@ -1,0 +1,58 @@
+
+
+dcr_fsr(e)= "swxeff_gpt.so", "Mg"
+
+Ethr            = 25.33
+pf2             = 0.48
+C2              = 0.5
+defl            = 0.05
+FWHM            = 10
+thick           = 2.5
+C1              = 0.5
+pf1             = 0.5
+z               = 8
+rde             = 1.0
+C3              = 0.5
+
+z = 12
+Ethr = 23.9033842573106
+pf1 = 0.5
+pf2 = 0.785
+C1 = 0.5
+C2 = 0.99
+defl = 0.117
+FWHM = 14.8590975085215
+thick = 2.5
+rde = 1.0
+m = 24
+
+
+fit dcr_fsr(x,z,m,C1,C2,C3,pf1,pf2,Ethr,FWHM,thick,defl) "./caldat/mgdaten1p.f" u ($13/$1):16:34 via defl, C2
+
+plot dcr_fsr(x,z,m,C1,C2,C3,pf1,pf2,Ethr,FWHM,thick,defl) , "./caldat/mgdaten1p.f" u ($13/$1):16:34 with errorbars
+
+
+###############################################################################################################
+
+
+print "Z = " , z
+
+print "Ethr = " , Ethr
+
+print "pf1 = " , pf1
+
+print "pf2 = " , pf2
+
+print "C1 = " , C1
+
+print "C2 = " , C2
+
+print "defl = " , defl
+
+print "FWHM = " , FWHM
+
+print "thick = " , thick
+
+print "rde = " , rde
+
+print "C3 = " , C3

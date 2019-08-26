@@ -1,0 +1,195 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:928: checking for top-level source-directory
+configure:938: checking for m4 preprocessor
+configure:945: checking for m4
+configure:1012: checking m4 flags
+configure:1040: checking for xlc
+configure:1040: checking for c89
+configure:1085: checking C compiler "c89"
+configure:1094: c89 -c -O -Wno-deprecated conftest.c 1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:1121: checking how to make dependencies
+configure:1189: checking for CC
+configure:1189: checking for cxx
+configure:1189: checking for c++
+configure:1225: checking C++ compiler "c++"
+configure:1243: c++ -o conftest -Wno-deprecated -Wno-deprecated  conftest.C  1>&5
+configure:1294: checking how to run the C preprocessor
+configure:1315: c89 -E -Wno-deprecated conftest.c >/dev/null 2>conftest.out
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure: failed program was:
+#line 1309 "configure"
+#include "confdefs.h"
+#include <assert.h>
+Syntax Error
+configure:1332: c89 -E -traditional-cpp -Wno-deprecated conftest.c >/dev/null 2>conftest.out
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+In file included from /usr/include/features.h:295,
+                 from /usr/include/assert.h:36,
+                 from configure:1327:
+/usr/include/sys/cdefs.h:31: #error "You need a ISO C conforming compiler to use the glibc headers" 
+configure: failed program was:
+#line 1326 "configure"
+#include "confdefs.h"
+#include <assert.h>
+Syntax Error
+configure:1349: c89 -nologo -E -Wno-deprecated conftest.c >/dev/null 2>conftest.out
+gcc: unrecognized option `-nologo'
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure: failed program was:
+#line 1343 "configure"
+#include "confdefs.h"
+#include <assert.h>
+Syntax Error
+configure:1383: checking user-defined Fortran-77 compiler " "
+configure:1389:   -c  conftest.f
+./configure: line 1: -c: command not found
+configure:1548: checking for Fortran .F compiler
+configure:1589: checking for Fortran preprocessor
+configure:1608: checking user-defined Fortran-90 compiler ""
+configure:1615:  -c  conftest.f90
+./configure: line 1: -c: command not found
+configure:1740: checking for nm utility
+configure:1747: checking for nm
+configure:1814: checking nm flags
+configure:2451: checking for math library
+configure:2455: checking for tanh in -lc
+configure:2474: c89 -o conftest -O -Wno-deprecated  conftest.c -lc   1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+/tmp/ccWMiiIo.o(.text+0xa): In function `main':
+: undefined reference to `tanh'
+collect2: ld returned 1 exit status
+configure: failed program was:
+#line 2463 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char tanh();
+
+int main() {
+tanh()
+; return 0; }
+configure:2493: checking for tanh in -lm
+configure:2512: c89 -o conftest -O -Wno-deprecated  conftest.c -lm   1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:2544: checking for ar utility
+configure:2551: checking for ar
+configure:2618: checking ar flags
+configure:2627: checking for nm utility
+configure:2669: checking for nm
+configure:2701: checking nm flags
+configure:2711: checking for ranlib
+configure:2740: checking for stdlib.h
+configure:2750: /lib/cpp -Wno-deprecated conftest.c >/dev/null 2>conftest.out
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure: failed program was:
+#line 2745 "configure"
+#include "confdefs.h"
+#include <stdlib.h>
+configure:2777: checking for sys/types.h
+configure:2787: /lib/cpp -Wno-deprecated conftest.c >/dev/null 2>conftest.out
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure: failed program was:
+#line 2782 "configure"
+#include "confdefs.h"
+#include <sys/types.h>
+configure:2813: checking for strerror
+configure:2841: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:2866: checking for working ftruncate()
+configure:2919: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+/tmp/cc4KHoam.o(.text+0x15): In function `main':
+: warning: the use of `tmpnam' is dangerous, better use `mkstemp'
+configure:2941: checking for working alloca.h
+configure:2953: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:2974: checking for alloca
+configure:3007: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3173: checking for st_blksize in struct stat
+configure:3186: c89 -c -O -Wno-deprecated conftest.c 1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3208: checking for IEEE floating point format
+configure:3246: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3267: checking for ANSI C header files
+configure:3280: /lib/cpp -Wno-deprecated conftest.c >/dev/null 2>conftest.out
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure: failed program was:
+#line 3272 "configure"
+#include "confdefs.h"
+#include <stdlib.h>
+#include <stdarg.h>
+#include <string.h>
+#include <float.h>
+configure:3371: checking for size_t
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3404: checking for off_t
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3437: checking for ssize_t
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3470: checking for ptrdiff_t
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3503: checking for uchar
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3536: checking whether char is unsigned
+configure:3575: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure: failed program was:
+#line 3565 "configure"
+#include "confdefs.h"
+/* volatile prevents gcc2 from optimizing the test away on sparcs.  */
+#if !defined(__STDC__) || __STDC__ != 1
+#define volatile
+#endif
+main() {
+  volatile char c = 255; exit(c < 0);
+}
+configure:3599: checking whether byte ordering is bigendian
+configure:3617: c89 -c -O -Wno-deprecated conftest.c 1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure: In function `main':
+configure:3612: error: `bogus' undeclared (first use in this function)
+configure:3612: error: (Each undeclared identifier is reported only once
+configure:3612: error: for each function it appears in.)
+configure:3612: error: syntax error before "endian"
+configure: failed program was:
+#line 3606 "configure"
+#include "confdefs.h"
+#include <sys/types.h>
+#include <sys/param.h>
+int main() {
+
+#if !BYTE_ORDER || !BIG_ENDIAN || !LITTLE_ENDIAN
+ bogus endian macros
+#endif
+; return 0; }
+configure:3665: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3689: checking size of short
+configure:3708: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3728: checking size of int
+configure:3747: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3767: checking size of long
+configure:3786: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3806: checking size of float
+configure:3825: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3845: checking size of double
+configure:3864: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3884: checking size of off_t
+configure:3907: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:3927: checking size of size_t
+configure:3950: c89 -o conftest -O -Wno-deprecated  conftest.c  1>&5
+cc1: warning: "-Wno-deprecated" is valid for C++ but not for C/ObjC
+configure:4051: checking for manual-page index command
+configure:4055: checking binary distribution directory

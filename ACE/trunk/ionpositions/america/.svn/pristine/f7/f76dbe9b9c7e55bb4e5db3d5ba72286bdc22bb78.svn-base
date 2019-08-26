@@ -1,0 +1,26 @@
+After checkout :
+
+codir = directory you've checked out to
+
+- cd codir/axlv2
+- make
+- cd ..
+- mkdir runs
+- cd runs
+- mkdir "nameofrun" : nameofrun can be any name, e.g. "testrun" or "2005105_1h" for a run of the 105th day of the year 2005 in a 1h timeresolution.
+- cd "nameofrun"
+- cp ../../axlv2/tools/run-axlv2-many.pl ./
+- cp ../../axlv2/tools/axlv2.in ./
+
+modify if necessary axlv2.in (you have a whole bunch of parameter that can be set)
+
+create a shellfile :
+e.g. run_2005105_1h.sh
+"
+./run-axlv2-many.pl 2005105 --accum=1h --config_file='axlv2.in'
+"
+(for more information about how to use run-axlv2-many.pl, call ./run-axlv2-many.pl -help)
+
+execute shellfile
+
+done!

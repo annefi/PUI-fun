@@ -1,0 +1,19 @@
+/home/ivar/berger/projects/ionpositions/binneddata/axlv2_sumwhol_asp_00.0-15.0.dat  : Position and name of input data file!
+ion_para_sig_16-58.dat                                                          : "results file" for in- output
+ion_pos_clean_21.dat                                                           : input file -> first guess for parameters
+1                                                                              : Fit peak hight (1=true,0=false)
+0                                                                              : Fit ToF-pos (1=true,0=false)
+0                                                                              : Fit Enegy-pos (1=true,0=false)
+1                                                                              : Fit sigToF+ (1=true,0=false)
+1                                                                              : Fit sigToF- (1=true,0=false)
+1                                                                              : Fit sigE+ (1=true,0=false)
+1                                                                              : Fit sigE- (1=true,0=false)
+1                                                                              : Dbglevel
+16                                                                             : lower steplimit
+58                                                                             : upper steplimit 
+2.                                                                             : negative tolerance xpos fitting
+2.                                                                             : positive tolerance xpos fitting
+2.                                                                             : negative tolerance ypos fitting
+2.                                                                             : positive tolerance ypos fitting
+1                                                                              : fit ions from results file(true=1,false=0)
+3                                                                              : fitmode (0=each parameter for each ion alone;1=each parameter for all ions simultaniously,2=hight and position, sigxp sigxm and sigyp, sigym are fitted simultaniously for each single ion,3=all parameters of single ions are set to be fitted simultaniously (only parameters that are set to fit))

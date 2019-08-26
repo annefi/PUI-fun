@@ -1,0 +1,501 @@
+\documentclass[]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage[backend=biber,style=authoryear,maxcitenames=2,maxbibnames=99,natbib=true,uniquelist=minyear]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+\addbibresource{../MA_literatur.bib} % The filename of the bibliography
+%
+\begin{document}
+%
+\section{SW}
+Literatur: \cite{VasylSis, aschwanden_book, Geiss1995, Cranmer2012}
+\\ \\
+Andreas:
+\begin{itemize}
+\item Zusammensetzung: $97\,\% \,\,H^+$, $3\,\% \,\,He^{2+}$, schwerere Ionen
+\item langsamer SW: Bulk speed $400\,\mathrm{km\,s^{-1}}$, $n_p = 6 \, \mathrm{cm^{-3}}$, $T_P = 10^5 \,\mathrm{K}$ \\
+Ursprung: vage
+\item schneller SW: Bulk speed $700\,\mathrm{km\,s^{-1}}$, $n_p = 2 \, \mathrm{cm^{-3}}$, $T_P = 2.5 \cdot 10^5 \,\mathrm{K}$\\
+Ursprung: koronale Löcher mit offenen Magnetfeldlinien, außerdem andere andere Ladungszustandskomposition
+\item Stream Interaction Regions, Corotating Interaction Regions: CIRs
+\item CMEs
+\item Interplanetares Magnetfeld: Eingefroren ins SW-Plasma $\rightarrow$ wird nach außen in Heliosphäre getragen. Rotation der Sonne ($T \approx 24.5 \,\mathrm{Tage}$) führt zu Parkerspirale. Parkerwinkel gibt Orientierung des Magnetfeldes an.
+\end{itemize}
+%
+%
+%
+\subsection{Local Interstellar Medium und Grenzen}
+\begin{itemize}
+	\item von Andreas: Steckbrief, Elementhäufigkeiten...
+	\item Heliosphäre: Bereich, der von Sonnenwindplasma dominiert wird
+	\item Termination Schock: SW fließt innen supersonisch, muss aber abbremsen, weil er aufs LISM trifft. Hier wird er gerade subsonisch. Abstand: variabel ($94\,\mathrm{AU}$, $84\,\mathrm{AU}$) 
+	\item Dahinter: Heliosheath (gehört auch noch zur Heliosphäre)-- SW wird komprimiert und geheizt. Asymmetrie wegen relativer Bewegung der Heliosphäre gegen das LISM
+	\item Heliopause: Äußere Grenze der Heliosphäre: Zwei magnetisierte Plasmen (LISM, SW) können sich nicht durchdringen. LISM wird auch komprimiert $\rightarrow$ Bow Shock LISM-seitig. Existenz fraglich, s. Andreas S. 5
+	\item andere Elementekomp. als Heliosphäre $\rightarrow$ nicht aus der Sonne
+	\item die meisten Elemente liegen unionisiert vor, wegen geringem Strahlungseinfall
+	\item Relativbewegung: IBEX, Schwadron 2015; Magnetfeld: s. DissAndreas 1.2
+	\item Prölss S. 350 ff.
+	\item unterschiede geladenen und neutralen Anteil -- Neutralgas: kann ungehindert in Heliosphäre eindringen, wird vor Heliopause etwas ausgedünnt, trotzdem dichteste Population in äußerer Heliosphäre
+	\item Warum wenig C und Fe? niedriges Ionisationspotential $\rightarrow$ liegen nicht als Neutralteilchen vor
+\end{itemize}
+%
+%
+%
+\newpage
+\section{PUI}
+\begin{itemize}
+	\item Allgemein: frühere Neutralteilchen, die innerhalb der Ionosphäre ionisiert werden.
+	\item Auf Neutralteilchen wirken in der Heliosphäre nur: Gravitationskraft und Strahlungsdruck. Ionisierung: Zusätzlich em Kräfte $\rightarrow$ Lorentzkraft führt zu Gyration um Magnetfeldlinien und wird nach außen mitgezogen (``ge-pick-upt'')
+	\item Ionisierung durch:
+	\begin{itemize}
+		\item Photoionisation durch energiereiche UV-Strahlung (für He, C, Ne)
+		\item Ladungsaustausch mit SW-Protonen (für H, lt. Wimmer S. 105 ??) $\rightarrow$ Wasserstoffatom und PUI ??
+		\item $\rightarrow$ beide zu gleichen Teilen für O und Ar
+		\item Elektronenimpakt
+	\end{itemize}
+	\item Fluss an nose der Heliosphäre nach VuS-Modell:
+	\begin{align*}
+	f_{O+} = 6.13\cdot10^0\,cm^{-2}s^{-1} \\
+	f_{He+} = 3.06\cdot10^2\,cm^{-2}s^{-1}
+	\end{align*}
+\end{itemize}
+
+
+\subsubsection{Neutralteilchendichte} Berechnung s. Wimmer ca. S.100; damit Berechnung Neutralteilchendichte mit den beiden (s.u.) Ionisationsprozessen; Berechnung PUI-Fluss durch Intergration der Anzahl der ionisierten Teilchen entlang Radius-Vektor zu entsprechendem Ort.
+\\
+Ergebnis: Abhängig von Dichte ($n_{\inf} \approx \frac{0.05}{cm} - \frac{0.25}{cm}$) und Geschwindigkeit Neutralteilchen im LISM, Einfallwinkel, Ionisationsrate des Elements, Stoßparameter (?)\\
+$\rightarrow$ steigender Fluss mit heliozentrischer Distanz. @1AU z.B. $2.5*10^-5$-mal SW-Ne-Fluss
+%
+\subsubsection{Geschichte}
+\begin{itemize}
+	\item Vorhersage: u.a. Fahr 1971
+	\item Nachweis: Moebius 1985. SULEICA (suprathermal energy ionic charge analyser)/AMPTE(active magnetospheric particle tracer explorer).
+	\item SULEICA: Flugzeit-Massenspektrometer mit EpQ-Range $5-270\,keV/q$
+	\item über mehrere Beobachtungsperioden: Peak @ MpQ=4 in EpQ-Schritten, die zu höherer Energie gehören, als für SW-Helium+ zu erwarten wäre (Moebius 1985)
+\end{itemize}
+\subsubsection{Einfluss der PUIs \textit{auf} SW}
+\begin{itemize}
+	\item Ladungsaustausch führt zu energetic neutral atoms (ENAs), die Impuls aus SW nehmen
+	\item SW wird durch Beschleunigen der PUIs abgebremst (\textit{mass loading}, auch adiabatische Kühlrate wird verlangsamt? s. Wimmer) $\rightarrow$ wird irgendwann subsonisch; Wang: Abbremsen um 15$\%$ (aber irgendwie erst weiter außen? Frage Talk 2)
+	\item Photoionisation führt zur Dämpfung des Photonenflusses aus der Heliosphäre und zur Ionenflusszuwachs
+\end{itemize}
+\subsection{Interstellare PUIs}
+(Woher? Lars?)
+\begin{itemize}
+	\item besonders hier nicht-maxwellsche VDF
+	\item Grund: VDF vor PU-Prozess ist anisotrop: Torusform in v-Raum
+	\item PA-scattering würde dann zur schnellen Isotropisierung führen
+	\item Aber: neuerdings weiterhin Anisotropie beobachtet \\ \\
+	%
+	\item geben Aufschluss über Lokales Interstellares Medium (In-situ Information wird mitgetragen). Bsp. Einfallrichtung. Allerdings schwierig, weil VDF durch turbulenten SW geändert wird
+\end{itemize}
+Andreas Diss:
+\begin{itemize}
+	\item Neutralgaskomponente des LISM kann in die Heliosphäre eindringen und wird dann nur von der Gravitations- und Strahlungsdruckkraft der Sonne beeinflusst.
+	\item Strahlungsdruck beeinflusst for allem Wasserstoff $\rightarrow$ wenig Vorkommen in der inneren Heliosphäre (McComas 2004)
+	\item Wasserstoff wird auf dem Weg auch häufig ionisiert (Kallenbach 2000)
+	\item $\rightarrow$ Deshalb: @ 1AU ist $He^+$ häufigstes PUI (obwohl Verhältnis Helium zu Wasserstoff im LISM andersherum ist)
+	\item
+	\item unterscheide geladenen und neutralen Anteil -- Neutralgas: kann ungehindert in Heliosphäre eindringen, wird vor Heliopause etwas ausgedünnt, trotzdem dichteste Population in äußerer Heliosphäre
+	\item weiter innen: Ionisation durch 
+	\begin{itemize}
+		\item EUV-Strahlung der Sonne: Photoionisation
+		\item Ladungsaustauschstöße mit Sonnenwindprotonen \\
+		(beide Prozesse skalieren mit $r^{-2}$)
+	\end{itemize}
+	\item $\rightarrow$ auf Teilchen wirken dann em. Kräfte
+	\item höhere thermische Energie als SW-Teilchen: Relativgeschwindigkeit zum SW?
+	\item zwei Orte erhöhten PUI-Flusses:
+	\begin{itemize}
+		\item Focusing Cone: Downwind-Seite der Sonne @1AU mit erhöhtem Fluss (Möbius 1995). Grund: Gravitationskraft fokussiert Neutralteilchen (\textit{gravitational focusing}, nachgucken!) $\rightarrow$ höhere PUI-Produktionsrate
+		\item Crescent: Upwind-Seite (Drews 2012). Grund: In direkter Upwind-Seiten-Richtung wird geringster Weg zurückgelegt $\rightarrow$ weniger Ionisation
+		\item Beide Orte sollten auf einer Linie in Richtung des LISM-Flusses liegen $\rightarrow$ man kann Einfallsrichtung bestimmen. Problem: Transport der PUIs entlang Parkerspirale $\rightarrow$ systematischer Fehler 
+	\end{itemize}
+\end{itemize}
+%
+%
+%
+\subsection{Inner-Source PUIs}
+Entdeckung (Geiss 1995a): man hat global-verteilte $C^+$-PUIs gefunden (gleiche Häufigkeit wie einfach ionisierten Sauerstoff). Weil Kohlenstoff im LISM fast nicht neutral vorkommt, können sie auch nicht von außen in die Heliosphäre.
+\\
+\\
+Charakterisierung (Allegrini 2005):
+\begin{itemize}
+	\item Komposition ähnlich dem SW \\(Interpretation: SW muss irgendwie in Entstehung involviert sein)
+	\item VDF ähnlich einer thermalen Verteilung mit Peak bei $\omega \approx 1$ \\(Interpretation: Quelle nahe der Sonne, sodass PUIs mit SW thermalisieren können. Dafür müssten die Neutralteilchen aber relativ zum SW in Ruhe gewesen sein.)
+	\item Produktionsrate von etwa $2 \cdot 10^6 \,\mathrm{g\,s^{-1}}$ \\($\leftarrow$ Effizienter Prozess)
+	\item zufällig verteilter Fluss, der unabhängig vom solaren Zyklus variiert \\($\leftarrow$ Quelle zufällig um Sonne verteilt, wird nicht von z.B. CMEs beeinflusst); außerdem Wimmer S. 118: Fluss deutlich höher als der von SW-Ionen
+\end{itemize}
+Zusätzlich durch Berger 2015, Taut, Drews:
+\begin{itemize}
+	\item inner-source PUI-flow von $O^+$ korrelliert mit SW-Fluss $O^{6+}$ \\
+	$\rightarrow$ SW selbst muss Primärquelle sein)
+	\item Systematische Variation der inner source PUI-Komposititon mit SW Geschwindigkeit
+	\item Untersuchung der Anisotropie bzgl. interstellares MF \\
+	$\rightarrow$ Ein Teil der $C^+$-PUIs muss bei 1 AU entstehen
+\end{itemize}
+\subsubsection{Woher?}
+Drei Ideen:
+\begin{enumerate}
+	\item SW-Recycling: Staubkörner werden in der Nähe der Sonne mit SW-Ionen angereichert bis zur Sättigung. SW-Ionen können Staubkorn dann als Neutralteilchen wieder verlassen \\ \\
+	Problem: \\
+	Prozess zu ineffizient; \\
+	Wahrscheinlich würde Staub hierbei auch zerstäuben und das würde wiederum die Komposition ändern.
+	%
+	\item SW-Neutralisierung: SW-Ionen durchdringen kleine Staubkörner und verlieren dabei ihre Ladung \\ \\
+	Problem: \\
+	Solch kleine Staubkörner würden mir CMEs nach außen getragen -- daraus ergäbe sich eine Abhängigkeit vom solaren Zyklus.
+	%
+	\item Streifende Kometen: Wenn Kometen in die Nähe der Sonnen kommen, können sie Neutralmaterial freigeben oder sich auflösen $\rightarrow$ Material für inner-source PUIs \\ \\
+	Problem: \\
+	Elementkomposition von Kometen ist ganz anders als die des SW; 
+	\\ Zufällig verteilter Fluss ist so unwahrscheinlich
+	%
+	\item Staub-Staub-Kollisionen: Staubkörner laufen spiralförmig in die Sonne und kollidieren dabei. Irgendwann: Kollisionsverdampfung $\rightarrow$ schwere Neutralteilchen \\ \\
+	Problem: Auch Staubteilchen haben andere Elementkomposition als SW
+	%
+	\item Hochenergetische Neutralteilchen: Ladungsaustausch zwischen interstellaren PUIs und PUIs aus dem Kuiper-Gürtel (Staub). Dabei entstehende Neutralteilchen kehren dann zur Sonne zurück. \\ \\
+	Problem: \\
+	VDF würde mehr der von interstellaren PUIs ähneln; \\
+	Es gäbe kein $Si^+$, weil das auf dem Weg zur Sonne ionisiert würde
+\end{enumerate}
+Zu 1 und 2: Hier entstehen PUIs direkt aus SW-Ionen. Komposition muss trotzdem nur ähnlich aber nicht haargenau gelich sein, weil unterschiedliche Ionisationswahrscheinlichkeiten eine Rolle spielen können.
+%
+\subsubsection{Aus Wimmer S. 118}
+\begin{itemize}
+	\item mit SW thermalisiert $\rightarrow$ Ursprung nahe der Sonne
+\end{itemize}
+%
+%
+%
+\subsection{Geschwindigkeitsverteilung}
+Diss Andy:
+\begin{itemize}
+	\item Neutralteilchen haben Geschwindigkeit $v_n$ $<<$ Sonnenwindgeschwindigkeit $v_{sw}$ (jedenfalls interstellare PUI, bei inner-source PUIs weiß mans ja nicht so genau...)
+	\item $\rightarrow$ Interstellar PUIs: Neutralteilchen dringen in Heliosphäre ein mit $\approx 25.4\,\mathrm{km\,s^{-1}}$ und können dann bei 1 AU auf maximal $\approx 50\,\mathrm{km\,s^{-1}}$ beschleunigt werden (durch Gravitation). Vgl: $v_{sw}\approx 400\,\mathrm{km\,s^{-1}}$
+\end{itemize}
+Theorie:
+\begin{itemize}
+	\item langsamere PUI: \\ durch adiabatisches Kühlen. S. Wimmer ET2 in PUI-Kapitel
+	\item schnellere PUI: \\
+	(häufig übergangen:) Wie werden die beschleunigt?\\
+	wahrscheinlich durch kIR ($\leftarrow$ nur langsamer SW!)
+\end{itemize}
+Kladde S. 27: B-parallele Komponente zeigt: Phasenraumtransporte finden statt!\\ \\
+Drews 2015: Local Bfield determines inclination of torus distribution directly after injection process, but global field influences the evolution of the CDF, tightly related to spatial diffusion and transport (\cite{chalov1998}, Oka 2002, Drews 2013, Chalov 2014)
+%
+\subsubsection{Isotropisierung}
+%
+Vasyliunas und Siscoe:
+\begin{itemize}
+	\item Betrachtung für Wasserstoff 
+	\item Ideale VDF (anisotrop) ist instabil gegen verschiedene Plasmawellen : Pitch Angle- und Energiediffusion
+	\item davon unabhängig: adiabatisches Kühlen, während die Ionen nach außen transportiert  werden
+	\begin{itemize}
+		\item alte Annahme: Zeitskalen der Instabilitäten $\tau_{\kappa}, \tau_{\alpha} << \tau_f$, der Zeitskala für Sonnenwindausbreitungsgeschwindigkeit  $\rightarrow$ Thermalisierung durch Randomisierung durch Plasmawellen, Ununterscheidbarkeit von SW-Ionen
+		\item neue Annahme a: Zeitskalen der Instabilitäten größer als Flusszeitskala $\rightarrow$ Randomisierung, Isotropisierung vernachlässigbar, VDF wird nur geändert durch adiabatische Effekte \\
+		$\rightarrow$ Pitchwinkel bleibt gleich
+		\item neue Annahme b: nur Zeitskala der Pitch-Angle-Diffusion kleiner als Flusszeitskala: $\tau_{\alpha} << \tau_f << \tau_{\kappa}$ $\rightarrow$ schnelles Picht-angle-scattering bis hin zur Isotropie, Energieänderung vernachlässigbar \\
+		$\rightarrow$ Pitchwinkel wird randomisiert mit $cos(\alpha)$ zwischen 1 und -1
+	\end{itemize}
+	\item Beobachtung: keine Thermalisierung beobachtet $\rightarrow$ alte Annahme	falsch
+	\item Thermische Energie $K = K_0 \frac{1}{2} v_{SW}^2$ nimmt aufgrund adiabatischer Deceleration ab. \\
+	Fall a: Berechnung über Konstanz der 1. adiabtaischen Invarianten: $K^1 r= const$\\
+	Fall b: Berechnung über adiabatisches Gesetz für isotrope Gase: $K^{\frac{3}{4}} r= const$ \\
+	$\rightarrow$ Aus thermaler Energie lässt sich dann berechnen, bei welchem $r$ das Teilchen entstanden ist
+\end{itemize}
+%
+\subsubsection{Zweifel an PA-Scattering}
+\begin{itemize}
+	\item Gloeckler 1998, Möbius 1998: Flux hängt von B-Richtung ab
+	\item Saul 2007: irgendwas mit wave power
+	\item $\rightarrow$ Lösung: \begin{itemize}
+	\item Isenberg 1997: Hemispheric Model
+	\item Möbius 1998: Two-Stream-Model
+	\item beide: erklären Beobachtungen durch ineffektives Scattering über 90 Grad PA
+\end{itemize}	 
+\end{itemize}
+%
+\subsubsection{Oka, 2002 (Geotail)}
+\begin{itemize}
+	\item Für PAS braucht es kurzen mean free path
+	\item Für PUIs: verschiedene Ansichten (1AU oder 0.25 AU)
+	\item longer mean free path: geringe PAS-rate: Torus statt Isotropie
+	\item Torusform hängt von B-feld ab
+	\item Paper Drews 2013: \textit{unfortunately their observations lack the required angular resolution and collection power to resolve the relation between $v_P$ and the IMF}
+\end{itemize}
+%
+\subsubsection{Unterscheidung von SW-Ionen}
+\begin{itemize}
+	\item (außer Wasserstoff, ``Pickup-Protonen'':) PUI nur einfach ionisiert, SW-Ionen wegen Durchgang durch heiße Korona (Ionisierung durch heiße Elektronen) meistens sehr stark oder vollständig ionisiert 
+	\item PUIs haben andere Geschwindigkeitsverteilung (nicht-maxwellsch)
+	\item Dichte Pattern?
+\end{itemize}
+%
+%
+%
+\newpage
+\section{ULYSSES}
+	\subsection{Missionsziele und Allgemeines}
+	\begin{itemize}
+		\item  \cite[6.1.7]{Prlss2004}: Unterscheidung SW in höheren Breiten: erstmals durch Radioszintillationsmessungen
+		\item Eigentlich ist Ekliptik interessant für uns, weil Erde hier liegt. Um aber die Prozesse zu verstehen... (Magnetfeldstruktur außerhalb der Ekliptik: \cite[ch. 6.2.3]{Prlss2004})
+		\item Missionsziele und Aufbau: Lars Diss
+		\item Paper Glöckler1998. Bild mit 3 Detektoren
+		\item Sektorisierung durch Spin: 1 Spin dauert 12 Minuten (5 rot per min)
+		\item Unterschied zu ACE: AA oszilliert stärker
+		\item spin-stabilisiert (im Gegensatz zu PLASTIC, das 2-Achsen-stabilisiert ist)
+		\item Orbit period: 6.2 jahre
+		\item Weg raus zu Jupiter: da waren schon Pioneer und Voyager -- Über Pole der Sonne: unique!
+		\item gute Teilchenauflösung aber schlechte Statistik (weil so weit weg) $\rightarrow$ (schwere PUIs nicht so gut, He+ geht aber gut) \& lange Zeit gemessen
+		\item Probleme:
+		\begin{itemize}
+			\item Antenne muss immer zur Erde zeigen
+			\item teilweise großer AA: Blick durch VDF ändert sich! $\rightarrow$ dadurch ist Bulge-SW-Geschw verschoben, Zeichnung S. 49,5ß in Kladde
+			\item Kollimator im Phasenraum gebogen (nicht nur dort...?)
+			\item Sun Pulser/Parser: S. 49 in Kladde, \& ändert sich mit AA
+		\end{itemize}
+	\end{itemize}
+	%
+	%
+	\subsection{Datenübertragung}
+		\begin{itemize}
+			\item Datenübertragungsrate ULYSSES: 1024 bits/s während 'tracking', 512 bits/s während 'store' periods
+			\item Problem AD-Wandler: Kanal 256 Bit-Pattern 
+		\end{itemize}
+	%
+	%
+	%
+	\subsection{Sunpulse-Sensor}
+	Sun sensors are devices carried by pretty much every single deep-space spacecraft. Spacecraft use them to determine their orientation in space. For spacecraft like Ulysses that spin in order to stabilize their orientation, sun sensors also enable the spacecraft to measure its spin rate. Ulysses has two sun sensors, one a "cross-beam sun sensor" (abbreviated XBS) and the other a "meridian slit sun sensor" (abbreviated MS). Actually there are two meridian slit sensors, MS1 and MS2, each pointed 180 degrees to each other. For redundancy, there are two identical cross-beam sun sensors, named XBS1 and XBS2. The meridian slit sun sensors are internally redundant -- MS1 and MS2 each has a main and a standby unit. (For many more gory details, visit this website.)
+	\href{http://www.planetary.org/blogs/emily-lakdawalla/2008/1661.html}{Quelle}\\[0.6cm]
+	'Therefore, in the case of the Earth-oriented Ulysses frame, all that is required after determining the electron velocity distribution in the S/C reference frame is to transform it into a universal solar-oriented reference frame' (SWOOPS-Paper 5.2 Elektronen)\\[0.6cm]
+	"`The Spin Reference Pulse (SRP) is defined as a pulse issued when the sun crosses the positive XZ reference plane of the spacecraft."' (HISCALE 4.7)
+	%
+	%
+\subsection{SWICS}
+\subsubsection{Allg. \& Loose Ends}
+\begin{itemize}
+	\item hohe dynamical Range muss gecovert werden, da Abstand so sehr schwankt (und damit Fluss)
+	\item Problem Auflösung Prioritätsschema: Wenn ich keinen Count habe, kann ich ihn auch nicht gewichten
+	\item BRW 20 bedeutet: 20 Teilchen gemessen, nur eins übermittelt -> nach kleinem BWR filtern: Protonen loswerden weil hohe Flüsse raus; Zusammenfassung aus Drews: S. 54
+	\item Sektor 5 besonders prominent: vermutlich wegen Sun Pulser s. S. 49 Kladde
+	\item \textit{Direct Pulse-Height Analysis data and priority selection}: 24-bit PHA words (8 for energy, 10 for TOF, 3 for one of eight sectors, 2 bits for one of 3 detectors, 1 for priority). DPU sorgt dafür, dass alle Prioritäten im richtigen Verhältnis telemetriert werden
+\end{itemize}
+%
+%
+%
+\subsubsection{Trebles / Doubles}
+\begin{itemize}
+	\item He+ eher in den Doubles wegen geringer Energien
+	\item He ist in den Trebles deutlich häufiger als H+, weil Letzteres schneller unter Threshold fällt
+	\item doubles: \textit{mass-zero}, weil nur mass-per-charge-Messung
+\end{itemize}
+%
+%
+%
+\subsubsection{Priority Range}
+\begin{itemize}
+	\item Range 0,1 und 2
+	\item Wird gespeichert in 24-bit PHA-Words
+	\item RNG0 (Category-1): $m<8.7$ Protonen und Alphas, auch Doubles
+	\item RNG1 (Category-2): $m>8.7$, keine Doubles
+	\item RNG2 (Category-3): low-charge-state heavy elements ($m/q > 3.3$), likely to be $O^+, Ne^+$ etc., which do not trigger E-measurement. Nur Doubles!
+	\item Häufigere (RNG0) werden relativ seltener übermittelt
+	\item durch die Bevorzugung der schwereren Ionen wird aber die Komposition verfälscht! Lösung: \textit{Base-Rate-Weighting-Faktor b:}\\ $b = \frac{N_{PHA}}{T_{PHA}} = \frac{\text{No. of detected particles}}{\text{No. of transmitted particles}}$
+	\item BRW soll sicherstellen, dass für jeden EpQ-Step und für jede Box in ET-Matrix repräsentativ was runtergeschickt wird. Bsp: Es werden 100 Protonen gemessen und 5 Eisenteilchen, es kann aber nur ein PHA-Wort übermittelt werden. Dann würde ein statistischer Pick die Eisenteilchen unterrepräsentieren.
+	\item EpQ-vs-T-Plot mit allen Ranges maskiert gespeichert.
+	\item $He+$ liegt größtenteils in der He-Box und wird demnach niedrig prioritisiert.
+	\item Allerdings ist $He+$ so selten, dann brw meistens 1 ist.
+\end{itemize}
+\textbf{Sector Weights, Sektorgewichte:}
+\begin{itemize}
+	\item Bei ACE SWICS: Datenprodukt \textit{swt}
+	\item Ich kann nur 1 PHA-Wort pro Sektor übermitteln, messe aber 100 Teilchen. Dann wird eins gepickt und ein Gewicht mitgegeben.
+	\item Sobald dieses Gewicht größer als 1 ist, weiß man, dass es mindestens ein weiteres Teilchen gegeben hat, was nicht übermittelt wurde. Kleiner als 1 geht eigentlich nicht.
+	\item Datenprodukt \textit{twt}: Über Spin gemitteltes Sektorgewicht? (Da sind schon Informationen verloren gegangen, trotzdem wird das meistens verwendet. Man sollte eher swt verwenden!)
+\end{itemize}
+%
+%
+%
+\subsubsection{Detektor-IDs}
+\begin{itemize}
+	\item Vermutung: 1 Det-ID ist reserviert für Doubles (keine gültige SSD-Messung), 3 andere IDs für die richtigen Detektoren
+\end{itemize}
+%
+%
+%
+\subsubsection{Fehlkoinzidenzen \& Fehler:}
+\begin{itemize}
+	\item Pile-up: senkrechter Müll. Zufällig verteilte SSD-Messungen (wenn SSD schneller getroffen wird als Verarbeitungszeit. Jeweilige ToF wird durch Proton bestimmt?)
+	\item Zufallskoinzidenzen (bei Ulysses wenig wegen geringer Flüsse)
+	\item Ulysses SWICS 200ns-Kanal: Überlaufkanal in Flugzeitmessung (ADC-Fehler)
+	\item Delta-E-Fehler entsteht durch SSD-Deposit: schlimmer, je größer die Masse $\rightarrow$ verschmiert entlang von Bahnen (Hyperbeln)
+	\item Energieverlust Folie: asymmetrisch entlang Hyperbel
+	\item ESSD-Richtung: asymmetrisch wg. Landau/Pulse-Height Defect ?
+	\item Coincidences in EPQ vs ToF: leicht exponentiell - waagerecht. Liegen auf Höhe von He-Peak, weil  He am häufigsten ist und nur das Start-/Stop-Signal zählt. Segmentierung in EpQ-Richtung wegen SW-Geschwindigkeiten (S.56 Kladde)
+	\item links Müll: Threshold Triggerschwelle
+	\item Teilchen kann immer weiter rechts liegen wegen des Energieverlusts in der Folie -- aber nie weiter links (Protonen sind absolute Grenze)
+\end{itemize}
+%
+%
+%
+\subsubsection{Kollimator}
+Messung / Detektierung im V-Raum
+\begin{itemize}
+	\item Massenflugzeitspektrometer Messprinzip: S.11 Kladde
+	\item {EpQ, E, Tof} werden gemessen $\rightarrow$ {m, mpq, v} werden bestimmt
+	\item Zeichnungen s. Kladde s. 41 und 42
+	\item man muss He+ erstmal rausfiltern $\rightarrow$ eig. braucht man mpq-Algorithmus. Ist aber in Doubles gut sichtbar, deshalb gehts auch so. (Stelle Methodik vor, um He+ rauszustellen, S. 39)
+	\item Kollimatornormale muss antiparallel zu v-Vektor eines Teilchens ausgerichtet sein, damit es detektiert werden kann. (Teilchen variabler Gechwindigkeit entlang der Normalen rausschicken, in v-Raum eintragen, Punktspiegelung an Ursprung ergibt Akzeptanz)
+	\item im v-Raum: Kollimator ist Ausschnitt einer Kugelschale
+	\item s. S.34 u.a. Kladde: Proton-/Main-Channel (aus Glöckler)
+	\item 60 EpQ-Steps alle 12 Minuten: es wird von 100kV auf 0.5kV logarithmisch runtergesteppt
+	\item Unsicherheit $\Delta EpQ = 3\,\%$, daraus folgt Unsicherheit $\Delta v = 1.5\,\%$ in der Messung. Fehlerrechnung: Kladde S. 84.
+	\item Efficiencies: Wahrscheinlichkeit, wirklich ein Teilchen zu messen. Das ist abhängig von der Teilchenart und vom Step. Gründe: Auslösung der Sekundärelektronen aus Folie ist nicht garantiert; Teilchen können leicht divergent auf Folie auftreffen und ggf. zusätzlich gestreut werden, sodass sie nicht auf SDD treffen; aus SSD werden evtl. keine Sekundärteilchen ausgelöst; Threshold verschieden?. Effizienzen für viele Teilchenarten auf Asterix (ETPH/project/ACE/efficiencies). Drei Spalten: EpQ mit verwurstelt -- echte Effizienzen -- Unsicherheiten. Alles schon für Triples!
+\end{itemize}
+%
+\subsubsection{He+-Identifikation}
+\begin{itemize}
+	\item Kladde S. 39: manuell ausschneiden in ET-Matrix mit set\_mask2D()
+	\item wHe+ maskieren auf 1.1 -- 10 
+	\item
+\end{itemize}
+%
+%
+%
+\subsection{ET-Matrix}
+\begin{itemize}
+	\item $norm = ymax$ bedeutet: So normiert, dass es in jeder horizontalen \textit{Reihe} immer ein Maximum (= rotes Pixel) gibt
+\end{itemize}
+\subsubsection{ESA vs. Tof}
+\begin{itemize}
+	\item wHe+ filtern: Je höher untere Grenze, desto weiter rutschst Cut-Off runter. Macht Sinn: Oben sind die kleinen EpQs. Je größer v sein muss, desto kleiner muss mpq werden und das gibts irgendwann nicht mehr so klein.
+	\item Suprathermale sind unten
+	\item wHe+ der anderen Ionen ist kleiner als 1. ??
+	\item Jedes Ion auf einer Kurve. Oberer Teil: langsamer SW, unterer Teil: schneller SW
+\end{itemize}
+\subsubsection{ESSD vs. Tof}
+\begin{itemize}
+	\item wHe+ filtern: laut Lars sollen kleine wHE+ unten rechts liegen. Warum? Weil da kleine $E_{SSD}$ liegen und $v = \sqrt{\frac{2\,E}{m}}$. $He+$ kann noch das höchste wHe+ haben, denn $w_{He+} = \frac{v_{He+}}{v_{sw}}$ und $v_{He+} = \sqrt{\frac{2\,E}{m_{He+}}}$, alle anderen haben eigentlich ... TODO, drüber nachdenken!
+\end{itemize}
+\subsection{PUI-Messung}
+	\begin{itemize}
+		\item schlechte Zählstatistik
+		\item $\rightarrow$ 	schwere PUI (selten) nicht so gut zu untersuchen
+		\item $\rightarrow$ He+ aber gut zu untersuchen, denn:
+		\begin{itemize}
+			\item He+ hat ein hohes FIP, kommt deshalb weit in die Heliosphäre rein und ist damit das häufigste PUI @ 1AU
+			\item He+ ist nicht vollständig ionisiert: Kommt eher nicht als WS vor $\rightarrow$ Verteilungen separat und gut zu erkennen
+		\end{itemize}
+		\item bei relativ konstanter SW-geschw: EpQ-Steps entsprechen w
+	\end{itemize}
+\subsection{Richtungsauflösung}
+	\begin{itemize}
+		\item nur eine Achse fixiert $\rightarrow$  rotiert frei in einer Ebene
+		\item Problem Anstellwinkel: zwei Geschwindigkeiten gegeneinander verschoben
+	\end{itemize}
+%
+%
+%
+\newpage
+\section{Der Plan}
+	\begin{itemize}
+		\item ohne Richtungsauflösung untersuchen: \\
+			Ursprung der schnellen PUI: \\
+			gibts den Flügel auch außerhalb der Ekliptik / über den Polen (bei ruhigem SW) ?\\
+			$\rightarrow$ dann gezeigt, dass kIR Ursache für schnelle PUI sind
+		\item Zeigen, dass vermehrt äußere Detektoren angesprochen werden, je emhr man sich $w = 1$ nähert
+		\item Zeigen, dass man Detektor im VDF so darstellen kann: S. 42 Kladde
+		\item Schrottsignatur Kladde S. 37: EpQ kleiner 8, ToF 320 bis 360 -- was ist das? (maskieren und gucken, welche Zeitstempel das sind)
+		\item Rausfinden, welche Detektor-ID zu welchem Detektor gehört: Kladde S. 45 \& S. 46. S. 37: Plausibilitätscheck -- Richtungsunterschiede VDF zw. SW und PUI (warum?)
+		\item Sonnenwind (H+) angucken: isotroper als PUI-He+? AA Veränderung?
+	\end{itemize}
+\subsection{Wozu 3D?}
+\begin{itemize}
+	\item Christian (2015,2D...): Bis 2002 gabs nur auf 1D reduzierte Betrachtungen. Problem: PA-scattering, spatial diffusion, adiabatic cooling nur schwer nachzuweisen; Grund: Verteilung wird von allen eventuellen Prozessen gleichzeitig geformt
+	\item Man muss übergehen von SC-frame auf SW-frame. Dafür muss man 3D-Verteilung kennen, um korrekt zu subtrahieren
+	\item Lars Diss. Kapitel 5
+\end{itemize}
+%
+\subsection{Wozu SW-frame?}
+\begin{itemize}
+	\item Umrechnung SW-frame $\leftrightarrow$ SC-frame in Drews2015 und Drews2016
+	\item “The injection of interstellar pickup ions and the initial He+	ring beam signature is well described in the frame of the former	interstellar neutral atoms, i.e. in a spacecraft frame of reference (Figs. 2 and 4). However, their evolution is best described in a solar wind frame of reference as e.g. wave-particle interactions also occur in the frame of the solar wind (Saul et al. 2007).” (Aus Drews2015)
+	\item “First of all, PLASTIC’s angular resolution in azimuth, $\alpha$, and polar angle, $\theta$, allows us to determine the three components of the velocity vector uHe . With uHe
+	we can determine a reduced form of the 2D He+-VDF, and make
+	the correct transition from a spacecraft to a solar-wind frame of reference, i.e. we are able to derive w sw from the combination	of w, $\alpha$, and $\theta$ (see Fig. 4). Figure 8 shows a comparison between 1D He + spectra in the two frames of reference for an observation period in which $95^\circ < \phi B < 105 ^\circ$ . While the assumption of a fully isotropic He+ VDF would allow for the transition from the spacecraft to a solar-wind frame of reference even without knowing the three components of the He + velocity vector, uHe , a non-isotropic He+ VDF, as evidenced by the ring beam observation shown in Fig. 6, will result in a significant difference in shape and intensity of the observed He + spectra between the two frames of reference (see Fig. 8). Because most instruments, in particular SWICS, are limited to 1D velocity spectra in a spacecraft frame of reference, deduced quantities from the
+	observed w-spectra, like an adiabatic cooling index $\gamma$ (e.g. Chen et al. 2013) or a pitch-angle scattering rate $\tau$ (e.g. Saul et al.	2007), are systematically altered by the anisotropic nature of the He+ VDF and therefore questionable.”(Aus Drews2015)
+\end{itemize}
+%
+%
+%
+\subsection{Weitere Motivationen}
+\begin{itemize}
+	\item Drews 2015: Numerische Untersuchungen haben in den letzten 30 Jahren große Fortschritte gemacht und die tatsächlichen Beobachtungen weit überholt (weil: zu teuer, schwierig...). Jetzt ist also das Experiment wieder an der Reihe. 
+\end{itemize}
+%
+%
+%
+\newpage
+\section{Loose Ends}
+\begin{itemize}
+	\item Phase Space Density / Phasenraumdichte: \textit{number of states per element of volume in phase space}, also Anzahl der Messungen in zu einem bestimmten Impuls (einer bestimmten Geschwindigkeit). Der Ort ist fest, wegen des Detektors?\\
+	(Steht auf der y-Achse in Glöcklers VDFs)
+\end{itemize}
+%
+%
+%
+\newpage
+\section{Fragen}
+\begin{itemize}
+	\item warum ist man nicht schon vorher über die Pole geflogen? Was ist daran die Schwierigkeit?
+	\item SWOOPS-Paper: “Within typical low and high speed solar wind flows, the He2+ ions, which usually have local temperatures four to sic times higehr than those of H+ ions, can be resolved in E/q sprectra into separate hydrogen and helium components, except...
+	\item Nils: EpQ übersetzt sich in thermische(?) Geschwindigkeit. Wenn alle Counts in einen Bin fallen hat man Probleme, low temperature aufzulösen. Warum hat SWOOPS ein Problem,  heavy Ions mit hoher Temperatur zu messen? 
+	\item aus dem SWOOPS-Paper: “The solution to making adequate measurements is based on the fact that roughly $5^\circ$ spatial resolution is required in both polar angle and azimuth to make adequate solar wind ion measurements”
+	\item warum sind SW-Ionen so viel mehr “Beam” als breit verteilte SW-Elektronen (s. SWOOPS-Paper)?
+	\item wie war das nochmal mit dem Plasma-Beta/ Einfrieren?
+	\item CIRs, SIRs nachlesen
+	\item Wie viele Elektronen gibts im Sonnenwind?
+	\item nachlesen: Neutralteilchendichte Berechnung: Wimmer Masterskript
+	\item kann man nicht mal was schreiben, mit dem man direkt sieht, wie eine 3D-Verteilung auf 1D runtergebrochen aussieht?
+	\item PA-Scattering verstehen, Isotropisierung? (Resonante Welle-Teilchen-Wechselwirkungen und Alfvén-Waves)
+	\item 
+\end{itemize}
+%
+%
+%
+\section{Papers to read}
+%
+\subsection{Early PUI}
+\begin{itemize}
+	\item Semar 1970 (prediction interstellar PUI)
+	\item Fahr 1971 (prediction interstellar PUI)
+	\item Inner Source: Wnezel 1986, Hilchenbach 1992, Geiss 1995
+\end{itemize}
+%
+\subsection{Development after PU-process}
+\begin{itemize}
+	\item Chalov u. Fahr 1998 (Modellierung, Spatial Diffusion), Vasyliunas u. Siscoe 1976
+	\item Chalov u. Fahr 1999, Möbius 2004, Chalov 2014, Saul 2007
+	\item Adiabatic Cooling: Vasiliunas u. Siscoe 1976, Moebius 1988, Chen 2013
+	\item Acceleration: Isenberg 1987, chalov u. Fahr 1996, Fahr u Fichtner 2011, Fisk u. gloeckler 2012
+\end{itemize}
+%
+\subsection{Anisotropie und Erklärung}
+\begin{itemize}
+	\item Möbius 1998, Gloeckler 1995
+	\item Erklärungen 90 Grad Hemisphäre: Isenberg 1997, Fisk 1997
+	\item 2D: Oka 2002 (GEOTAIL), Drews 2013 (PLASTIC)
+\end{itemize}
+%
+%
+%
+\subsection{Am Rande}
+\begin{itemize}
+	\item Ionisation Rates: Rucinski u. Fahr 1989, cummungs 2002
+	\item Neutral Seed Population: Kallenbach 2000, Drews 2012, Geiss 1995, Allegrini 2005
+\end{itemize}
+\newpage
+\printbibliography[heading=bibintoc]
+\end{document}

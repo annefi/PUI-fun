@@ -1,0 +1,9 @@
+Makefiles in this project will build on pooh by default.  Since pooh
+has a non-standard configuration, build the targets described below:
+
+rh70 -- builds on a RedHat 7.0 system by setting location of netcdf,
+perl libraries and C compiler.
+
+ionstream -- builds on ionstream (for RH 5.2 only)
+
+Jim Raines, 26Apr2001

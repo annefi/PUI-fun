@@ -1,0 +1,8 @@
+# Use this make file to enable hitting the 'make' button from within DDD
+# Customize for use from particular runs/ directory and purpose at hand
+# JR, 04Nov2004
+
+default:
+	rm -f ./axlv2
+	cd ~/ace/axlv2; make DEBUG=TRUE
+	cp ~/ace/axlv2/axlv2 .

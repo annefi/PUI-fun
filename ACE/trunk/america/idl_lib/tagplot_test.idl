@@ -1,0 +1,9 @@
+.run tagplot.pro
+psplt, file='tagplot.ps'
+plot, findgen(10)
+tagplot, line1='tagplot.pro',line2='tagplot.ps',line3=USER_INFO
+plot, findgen(10)
+tagplot, line1='tagplot.pro',line2='tagplot.ps'
+ficlose
+$ ps2pdf tagplot.ps tagplot.pdf
+$ acroread tagplot.pdf &

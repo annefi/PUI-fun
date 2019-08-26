@@ -1,0 +1,3 @@
+.run axlv2_distfunc.pro
+.run ~/ace/axlv2/devel/A_norm/A_norm.pro
+

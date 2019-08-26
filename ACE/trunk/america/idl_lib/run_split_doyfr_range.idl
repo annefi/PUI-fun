@@ -1,0 +1,35 @@
+;; this is a sample program for running split_doyfr_range_by_cr.pro
+;; Jim Raines, 05May2005
+retall
+
+.run ydoyfr_diff.pro
+.run ydoyfr_sum.pro
+.run ydoyfr2crfr.pro
+.run crfr2ydoyfr.pro
+.run split_doyfr_range_by_cr.pro
+
+print, 'cr = ', ydoyfr2crfr(2004183.0, $
+			    save_file='/shrg1/local/idl_lib/cr_table.save', $
+			    data=d)
+
+print, 'crfr2ydoyfr(2024.99) = ',crfr2ydoyfr(2024.99)
+
+print, 'ydoyfr_sum(2004360, 15) = ',ydoyfr_sum(2004360, 15)
+
+cr_ranges = split_doyfr_range_by_cr([2004183.,2004365.])
+print, 'cr_ranges = '
+print, cr_ranges
+
+cr_ranges = split_doyfr_range_by_cr([2004183.,2004365.], /exact_range)
+print, '*exact* cr_ranges = '
+print, cr_ranges
+
+
+cr_ranges = split_doyfr_range_by_cr([2004183.,2004365.], /omit_year)
+print, 'doy only cr_ranges = '
+print, cr_ranges
+
+cr_ranges = split_doyfr_range_by_cr([2004001.,2004365.], /omit_year)
+print, 'doy only cr_ranges = '
+print, cr_ranges
+

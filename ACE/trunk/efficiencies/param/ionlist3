@@ -1,0 +1,4 @@
+paps        thicklow thickhigh thickstep    dllow  dlhigh  dlstep
+24.868179   25         25       1            500     500     10
+name zion    mionlow    mionhigh    mionstep    chargelow  chargehigh chargestep
+'O'   8      16         16          1           6           6           1

@@ -1,0 +1,775 @@
+===> Keep-at-Top To Do
+
+ - Change functions with pointer arguments (e.g. the .calc functions)
+ so they receive constant references, e.g.
+
+   const vector<Ion>& grp
+
+ - clean up method of returning single rates (by name maybe?)
+
+===> 9Oct2001 end-to-end testing for reasonable results (not validation)
+
+
+===> 24Sep2001 validating with SXD
+
+Nathan feels we should nail this down first.  So, he suggests 1)
+figure out exactly what sxd is doing and 2) run libhef boxes and/or
+swindal elipses to be sure we are comparing apples to apples.
+
+Here are some runs with different counting schemes:
+---------------------------------------------------
+shorthands: accidental coincidence filtering	ACF
+	    basic rate weighting		BRW
+	    geometric factor			GF
+
+sxd.pl uses elipses, ACF, BRW, GF
+factor, 
+0.836477     0.198850
+
+svs using boxcounts with BRW (no ACF, no GF)
+IDL> o7o6, file='~/ace/swindal/x2000158_box.svs', data=svs
+read_sxd: reading data...
+     0.793559  6.38987e-10    -0.373765    -0.487334
+
+svs using boxcounts (no BRW, no ACF, no GF)
+IDL> o7o6, file='~/ace/swindal/x2000158_wgtbox_1sigma.svs', data=svs
+read_sxd: reading data...
+     0.793566  5.79648e-09     0.605941      19.5108
+
+svs using boxcounts and 10sigma (no BRW, no ACF, no GF)
+IDL> o7o6, file='~/ace/swindal/x2000158_box_10sigma.svs', data=svs10
+read_sxd: reading data...
+     0.793559  6.38987e-10    -0.373765    -0.487334
+
+[I'm confused that these values are changing so little so I'm going to
+try to intentionally distort them and see what happens.]
+
+svs using boxcounts with tof/esd centers mult. by 5.0
+
+... Ok, I had a logic problem in the box counter which I only
+discovered after stripping the routine down to nothing (svsbare.pl).
+Here are some more real results:
+
+name: ./x2000158_wgt_halfsigma.svsbare
+nO6 O7 O8 nFe8 nFe9 nFe10 [counts/sec]
+o_6     o_7     o_8     fe8     fe9     fea     
+779.77  557.18  295.91  169.78  450.83  787.44  
+O7+/O6+ = 0.71
+
+
+name: ./x2000158.svsbare
+nO6 O7 O8 nFe8 nFe9 nFe10 [counts/sec]
+o_6     o_7     o_8     fe8     fe9     fea     
+726.08  540.00  310.17  188.08  452.92  753.33  
+O7+/O6+ = 0.74
+
+name: ./x2000158_wgt_2sigma.svsbare
+nO6 O7 O8 nFe8 nFe9 nFe10 [counts/sec]
+o_6     o_7     o_8     fe8     fe9     fea     
+1510.37 1090.85 610.10  368.34  903.84  1512.89 
+O7+/O6+ = 0.72
+
+Combining these with my old results from swindal:
+		     (1/2)s	    s		2s
+boxrates(libhef)     .71	    .74		.72
+Boxrates	     .51	    .57		.59
+Spillrates	     .49	    .55		.81
+
+-----
+25Sep2001:
+
+Working with Nathan, we decided to compare with svsbare.pl very
+carefully.  We found a few problems
+ - Eqtab was being pushed and was thus offset from forward model and
+   everything else -- FIXED
+ - loadPha was running over one more cycle than AnalysisInterval
+ - BoxRates::calc could have exceeded MA bounds 
+
+
+-----
+26Sep2001:
+
+For 5 cycles, axlv2 reads 52987 PHAs.  MeasurementArray::fill examines
+this same number of PHAs and the elements of MA sum to this same
+number (even in getSlice later).  I think MA is ok.
+
+svsbare.pl reads exactly this same number of PHAs as well.
+
+Also, for the first cycle in the file, 
+
+ rec 73576, Mon 05-Jun-2000 (157) 23:59:47
+
+There are exactly the same number of PHAs in each EDB in both
+programs.
+
+-----
+28Sep2001:  Further comparision with svsbare and tracking of PHAs
+through swindal to explain difference in boxrates (with svsbare)
+
+Summary of tracking/comparing PHAs for first cycle of 2000158.nc:
+
+ - loadPHA reads 10587 PHAs
+ - those PHAs all make into MA
+ - number of PHAs in each slice (of MA, from outputMA run after
+   Boxrates::calc) is exactly the same as the number for the
+   corresponding edb when read in *and* exactly the same in svsbare
+ - BOTTOM LINE:  The correct number of PHAs in the correct slice are
+   definitely making it into Boxrates::calc.
+
+Examining Boxrates::calc:
+
+ - the boxes look like the right sizes (approx.) -- they were not exactly!
+ - in edb 41, swindal gets 21 counts compared to 37 in svsbare
+   Since the same number of counts at edb 41 went *in* to both box
+   counters (526), the box counting procedure has to be the culprit.
+ - while it is possible that svsbare is wrong, the results, across
+   edbs, looks more reasonable: There is a notable peak (prev/subsequent
+   edbs having counts which lead up to the max) and there are a few
+   counts away from the peak.
+
+3Oct2001:
+---------
+
+I finally got svsbare.pl and swindal to produce the same boxcounts for
+the first cycle of 2000158.nc.
+
+I put in "by hand" box counters in BoxRates::calc and in
+svsbare::boxcount.  These had boxes of 338 <= tofch <= 350 and 44 <= esdch
+<= 59.  In swindal this box (called o7box) found 36 counts; in
+svsbare::boxcount it found 37 (round off difference, ok).  But, I
+realized that these boxes *WERE NOT* the exact sizes that would come
+from the foward model (when rounded to integers).  These boxes would
+be 340 <= tofch <= 348 and 46 <= esdch <= 57.  (I calculated these by
+hand from the forward model When I set both "by
+hand" box counters to these ranges, they came up with exactly the same
+results: 21 counts.  
+
+It turns out, there was a problem with my counting logic in
+svsbare::boxcount which was counting PHAs which fell into the esdch
+box only.  (Geez!)
+
+When I increased the number of cycles to 5, they two programs still
+gave the same answers. They were also the same for 10 cycles (one
+analysis interval).
+
+When I run the two for a whole day, the results are close but not
+identical.  This is because axlv2 reads more PHAs (993396) than
+svsbare (979356).  This may be related to running axlv2 in multiple
+analysis intervals.  I'm looking at the totals as they increment with
+each cycle to compare.  (I've tabled this examination for now.)
+
+I wrote a simple elipse counter (elipsecount).  It came up with less
+counts but the same ratio (.6) as the box counter.  (See svsbare_wd_el.out
+and x2000158_wd_el.svsbare.)
+
+I changed the sigmas to sqrt(sigma).  It came up with less counts
+again but a similar ratio to the others (.57).
+
+Nathan and I resolved that I should push my method through to
+completion now and deal with the sxd differences later.
+
+===> 20Sep2001 found error in SpillRates, got ProbRates working
+
+SpillRates:  Added - sign in numerator of Btil calc. (result of my
+algebra mistake)
+
+ProbRates:  Nathan made two suggestions after which I got actual
+numbers,
+
+1)  if |tof - fmtof| > 3stof (or likewise for esd), set G = 0.0
+
+2)  Instead of summing the prob. into Nprob, add integer counts
+whenever the prob. > PCutOff.  I set this cutoff to 0.7 and got actual
+values.  Now, there aren't rates but O7+/O6+ = .77  .
+
+He also suggested that I might be interpreting the foward model sigmas
+wrong, either as twice or half what they should be.
+
+We also came up with a better method for doing the prob. rates, which
+actually amounts to two methods which will provide a high and low
+bound.  These also integrate the measurements *back* into the rates directly.
+
+1)  upper bound -- Foreach location in MA, give counts to the species
+with the highest prob. at that location.
+
+2)  lower bound -- Foreach location in MA, the each species a fraction
+of the counts equal to it's probability at that location.
+
+===> 12Sep2001 referencing to sxd
+
+I fired up read_sxd.pro from sxd/devel/read_sxd.pro and read in the
+data from 2000158.  I then calculated the ave. O7+/O6+ ratio for the day. 
+
+read_sxd, file='/home/acedata/sxd/2000/x2000158.sxd', data=sxd
+o7o6 = sxd.no7/sxd.no6
+m = moment(o7o6, /nan)   ; /nan causes nan values to be discarded
+print, m
+
+I stuck these commands into a macro called o7o6.
+
+The result was (ave, std. dev, ...)
+
+    0.825485     0.212449      2.04040      7.80170
+
+axlv2 results were pretty far off:
+
+BoxRates      .5732
+SpillRates    .9031
+
+I also added functions for calculating these ratios withing axlv2.
+
+===> 11Sep2001 mmq has grid of zeros
+
+[I was distracted by the terrorist attack on the World Trade Center
+and Pentagon today and ended up going home to be with Stacey while she
+waited to hear from Tommy.
+
+He had been on Wall St., just 2 small blocks from the WTC. While
+watching the smoke from the first strike, he saw the second crash and
+had to take cover.  He was kept in his building by police until after
+the 1st tower collapse.  His building was hit with debris causing
+shaking, plaster falling and screams from the occupants.
+
+He fled the building and was a few blocks away when the second tower
+collapsed, having to run from the ensuing smoke cloud.  We didn't hear
+from him until about 1.5 hrs after the second collapse.
+
+He ended up shaken up but ok.  
+]
+
+
+Briefly, after long run there is a regular grid of zeros in the mmq
+plot but not in the ma plots.
+
+I ran it again over the bastille day event, 200019?, and stored it in
+runs/11Sep2001.  The MA look similar but with higher count levels and
+much higher background noise.  The mmq plot was compared similarly --
+including the zero grid.
+
+12Sep2001:
+
+I realized that the mmq plot was transposed relative to the axis
+labels/scale. This resulted in a large spot at mass 6, which was the
+tip-off that something was wrong.  (I did not believe Li was hugely
+prevalent in the solar wind that day.)
+
+This turned out to be a mistake of mine in two places: 1) The order of
+indices for mmq in MeasurementArray::EtSlice2Mmq.  2) I had
+inadvertently made the labels inconsistent with the order of indices
+so that *the labels/scale* looked ok.  I switch the indices  and the
+mmq plots look like they should now.
+
+===> 10Sep2001 He rates 0
+
+After running over all of 2000158, the He rates were still zero.  This
+*has* to be a problem.  Other rates seemed reasonable:
+
+axlv2 -I- dumping boxrates...
+He1+ 0
+He2+ 0
+C4+ 0.0221252
+C5+ 0.151242
+C6+ 0.0735497
+N5+ 0.0831191
+N6+ 0.190478
+O5+ 0.0119596
+O6+ 0.499359
+O7+ 0.286246
+O8+ 0.0343599
+20Ne6+ 0.00850973
+20Ne7+ 0.0408466
+20Ne8+ 0.1362
+Si7+ 0.0189513
+Si8+ 0.0386851
+Si9+ 0.0443424
+Si10+ 0.0452623
+Si11+ 0.0925483
+Si12+ 0.0764949
+Fe6+ 0.000459982
+Fe7+ 0.00354191
+Fe8+ 0.0119595
+Fe9+ 0.0184454
+Fe10+ 0.0216654
+Fe11+ 0.0215735
+Fe12+ 0.0183536
+Fe13+ 0.0137074
+Fe14+ 0.00929175
+Fe15+ 0.0128332
+Fe16+ 0.0281963
+
+Just to check, I dumped He rates per edb, they were still all exactly
+zero:
+
+He1+ 0( 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+He2+ 0( 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
+
+This cannot be right.
+
+My plan is to examine the relevant region (by eye) of the tof-esd
+matrix and see if there are counts there.  According to AnalysisData
+(with DbgLvl=4):
+
+He2+	tof		esd
+	178 +/- 2.21	66.0 +/- 2.52
+	339 +/- 4.20	17.8 +/- 1.82
+
+I used the the following idl commands to produce a nice postscript
+plot of MA (all slices summed):
+
+.run smrp.pro
+@loadct
+psplt, file='ma.ps', /color
+smrp, file='axlv2_ma.dat', data=ma
+hardcopy, file='ma.ps', label='swindal testing', printer='file'
+
+loadct contains the following two lines
+
+;this idl macro is used in the r* macros in this dir
+loadct, 33
+
+I realized that I am only selecting region 1, which, I believe, drops
+He.
+
+[I updated smrp.pro and smmq.pro to include postscript plotting to a
+file of the same name as the .dat matrix file but with a .ps
+extension.]
+
+===> 10Sep2001 (E/q, tof, esd) to (mass, m/q) conversion using functions
+
+The functions dswxlnm and dswxlnmq calculate mass and m/q (resp., from
+acetools/asxdpusim.c) from (E/q, tof, esd) for a given PHA word.  The
+only problem with using them, once I get the calling sequence straight
+(!), is that they also require a pointer to the adcnq array.  I'll
+have to think about how to use this array from libhef directly.
+
+After some searching, I discovered that I had worked on this already
+when trying to get conversion info. for Nathan.  In
+
+/usr/home/jraines/ace/nal2/parameters-for-nathan/
+
+See
+
+constants.txt
+
+and 
+
+getparams.pl
+
+
+===> 6Sep2001 ProbRates are too small
+
+[The results are from a run over 2000158 - 2000165.  I had similar
+results from just 2000158.]
+
+Main problem:  The Gs are very small because 
+
+Other things that don't look right:
+
+     BR                SR
+He1+ 0                 -4.38139e-08
+He2+ 0	               2.03353e-09
+
+Fe6+ 7.84662e-30       -2.37105e-09
+Fe7+ 5.29323e-08       1.038e-07
+
+Fe15+ 1.21767e-11      -3.10869e-05
+Fe17+ 0                -2.63465e-05
+	
+Ok, I figured out one of the problems:  I was doing the normalization
+(to counts/sec) wrong in MeasurementArray::fill.  I was simply
+accumulating into MA locations then dividing those values by the
+accumulation time during each analysis interval.  
+
+This is fine for one analysis interval, but for the next one the
+process causes counts to be added to rates, then the sum is divided by
+accumulation time -- resulting in *very* small numbers indeed.
+
+I fixed it by making a separate matrix for each, MA for the rates and
+MAcounts for the counts.  The latter is then only used for
+accumulating counts through one analysis interval. 
+
+===> 24Aug2001 work log -- debugging SpillRates
+
+First the elements of S were all zero.  I was using integer division
+(1/2) which returned zero.  Then, (I swear) the spill rates were
+giving reasonable values, but some were negative.  Finally , after
+accidentally deleting some code, they are large (70 - 100).
+
+Wait a minute.  I commented out code that tests the matrix inversion
+and the spill rates came back down.
+
+It turns out that declaring an ofstream 
+
+ofstream fout;
+
+is the culprit.  I don't know why.  If I use 
+
+cout << P; 
+
+to avoid the ofstream, everything is fine.
+
+===> 22Aug2001 work log -- passing big objects
+
+ - I figured out how to overload << properly; declare as friend (found
+ in Deitel and Deitel)
+
+ - realized that functions with pointer arguments (e.g. the .calc functions)
+ should receive constant references, e.g.
+
+   const vector<Ion>& grp
+
+ That way, they are not copied in (no overhead) but a) they cannot be
+changed in the function and b) they are called looking as though they
+are called by value.  The latter makes sense since they are not
+changed, contrary to the implication of passing them in as &var.  See
+Stroustrup section 5.5 and 7.2 for more info.
+
+ I tried to change the MA arg. in BoxRates.calc, but it won't allow
+any sort of constant:
+
+const MeasurementArray& MA		// recommended first choice
+const MeasurementArray* MA		
+
+all cause an error:
+
+BoxRates.cc: In method `int BoxRates::calc (const MeasurementArray *, 
+const vector<Ion, allocator<Ion> > &)':
+BoxRates.cc:95: passing `const MeasurementArray' as `this' argument of 
+`TNT::Matrix<float> MeasurementArray::getSlice (int)' discards 
+qualifiers
+
+Declaring a const. pointer, i.e. a pointer which holds a constant
+address, works but does not accomplish the same thing:
+
+MeasurementArray *const MA
+
+I tried to fix SpillRates.calc and got the same results for
+BoxRates::getBoxrates.  Since it works with the STL-vector group, I'm
+guessing it is something wrong with the way my functions are
+declared.  
+
+For now, I will just pass the rates into the subsequent functions, the
+arrays are only about 10kb and only get copied in once for each type
+of rate (minimal overhead IMO). At least this doesn't make it look
+like they are modified.  I changed all of the 'group' passing to
+const. references.
+
+
+
+===> 15Aug2001 work log -- model tof/esd out of range
+
+He2+:
+tof 170.0 +/- 2.108 -> 347.9 +/- 4.314
+esd 72.73 +/- 2.582 -> 16.90 +/- 1.800
+
+O6+:
+tof 193.7 +/- 2.402 -> 400.0 +/- 4.960
+esd 184.0 +/- 8.197 -> 37.33 +/- 4.990
+
+O7+:
+tof 179.3 +/- 2.224 -> 370.4 +/- 4.592
+esd 218.6 +/- 8.624 -> 44.06 +/- 5.214
+
+Fe9+:
+tof 293.1 +/- 3.634 -> 601.7 +/- 7.461
+esd 182.0 +/- 12.98 -> 28.46 +/- 4.875
+
+I looked carefully at AnalysisData::AnalysisData and realized that I
+was using a3gxpavdpu to get the post-accel. voltage (PAV).  When I was
+working with sxd.pl a few months ago, I discovered that I did not
+understand the output of that function -- it returned voltages which
+were different than the commanded ones, e.g., (pav is command voltage)
+
+a3gxpavdpu returned 24.868179
+pavlev=171 pav=26.100000
+
+a3gxpavdpu returned 21.299759
+pavlev=127 pav=22.800000
+
+Now, it could be that those lower voltages take into account the
+losses to the foil, but the offset doesn't seem to be quite constant
+(could it be a linear function?)
+
+Whatever a3gxpavdpu really returns, I am not using it (for now).  I
+set up a look up table of known levels to commanded voltages
+
+  map<int,float> pavlev2kv;
+  pavlev2kv[127] = 22.8;
+  pavlev2kv[171] = 26.1;
+
+and use a3xpavlev to get the level
+
+  PapsVolt = pavlev2kv[a3xpavlev()];
+
+
+
+
+===> 14Aug2001 work log -- inversion
+
+Got NR svdcmp and svbksb to work and solve a 2x2 linear system.
+(Yeah!)  It worked write out of the book except I printed the solution
+vector values (floats) as %d which gave confusing results until I
+discovered the error.
+
+Got inversion working for a 2 x 2 matrix.
+
+Figured out dim() and size() in TNT:
+
+A.dim(1) gives size of 1st dimension
+A.dim(2) gives size of 2nd dimension
+A.size() gives A.dim(1)*A.dim(2) 
+
+See exp/matdim.cc for example code.
+
+Got Invert working for test case.
+
+===> 13Aug2001 work log -- spillover aborts
+
+BoxRates.calc() causes abort because the tof2tofch returns out of
+bounds toflo.  This could be fixed but it doesn't solve the problem.
+I wrote exp/phaconv to explore the range of the function and found
+that it easily exceeds the size of MeasurementArray. 
+
+So, it looks like I'll have to implement the variable resolution that
+we talked about earlier and a different scheme for mass and m/q
+conversion.
+
+===> 27Jul2001 work log -- mmq plotting
+
+I'm trying to find that good color table that I used before.  So far
+the following are decent:
+
+27 Eos B	  great but white axis
+33 Blue-Red 2	  great but blue background and axis
+13 Rainbow	  fine but black background
+
+===> 23Jul2001 work log -- m-m/q matrix
+[Updated 24Jul2001.]
+
+Plan:
+----
+
+ - make log-scaled binning matrix
+   - 
+
+ - cycle through each grid point in E-T slice
+   - convert (esd,tch) -> (m,m/q)
+     - Which?
+       - equations
+       - axdpusim
+       - store from pha read in (keeps instrument specific stuff in
+       that module) into a look up table
+         - that would be another 70Mb cube!!  Bad idea.
+         - It looks like I will go with the look up matrix for now to
+	 keep things moving.
+
+   - increment value at (m,m/q) by one
+
+
+
+
+===> 19Jul2001 work log -- making a long run
+
+I created longrun.cc which is xboxrates.cc with looping over data
+files from start to finish.  This was not all that difficult, except
+for some fooling around with char arrays vs. strings.  I ended up
+using char array then copying it to gCurLv1File (string).
+
+I created a function for incrementing the day properly (incrementYdoy)
+and made sure the rest of the functions were skipped if loadPha
+returned an error.  loadPha was already set up to handle multiple
+files and that (actually!) worked as it was.
+
+The only other problem was mysterious core dumping.  Apparently I had
+not done 'make clean' on libhef since the upgrade and this was the
+cause of the problem.
+
+I had to add an include in hefnum/hefnum.i because DBL_MAX was not
+defined.  I found it (with find/grep) in
+/usr/include/kpathsea/c-minmax.h.  Apparently, Kpathsea is a directory
+searching package included with TeX stuff, such as Xdvik.  I have a
+hard time believing that Simon would use this arbitrary package, I'm
+guessing this used to be included so I will continue searching on pooh
+to find what (must have) been the original reference.  If worse comes
+to worse, I'll hardcoded it myself in libhef.h.
+
+I ran from 2000150 - 2000165.  It didn't crash!
+
+plotting:
+---------
+
+I moved smrp to the swindal directory but can't get the thing to plot
+in color again.  I knew I should have figured it out better back in June.
+
+27Jul2001:
+I was using color table 33 (Blue-red 2) and writing to a PS file with
+
+psplt,/color, file'tmp.ps'
+
+I gave up trying to use the screen graphics.
+
+===> 15Jun2001 work log -- why does tof vs. esd plot look random
+
+ - I checked that the arrays are being referrenced the same between
+ C++/TNT and IDL, this includes checking that the array is read into
+ IDL right.
+
+ **********WRONG*********See IDL item below
+
+ - MeasurementArray::fill seems to be adding to the correct MA
+element:
+
+MeasurementArray::fill -D- dumping meas. array coord.:  nedb=41 tofch=324 esdch=
+MeasurementArray::fill-D- before add MA[41,324,0]=0
+MeasurementArray::fill-D- after add MA[41,324,0]=1
+...
+MeasurementArray::fill -D- dumping meas. array coord.:  nedb=41 tofch=324 esdch=0
+MeasurementArray::fill-D- before add MA[41,324,0]=1
+MeasurementArray::fill-D- after add MA[41,324,0]=2
+...
+ MeasurementArray::fill -D- dumping meas. array coord.:  nedb=41 tofch=324 esdch=0
+MeasurementArray::fill-D- before add MA[41,324,0]=2
+MeasurementArray::fill-D- after add MA[41,324,0]=3
+...
+
+ - this seems to progress normally: (grepped for the add lines only)
+...
+MeasurementArray::fill-D- before add MA[41,324,0]=3
+MeasurementArray::fill-D- after add MA[41,324,0]=4
+MeasurementArray::fill-D- before add MA[41,324,0]=4
+MeasurementArray::fill-D- after add MA[41,324,0]=5
+MeasurementArray::fill-D- before add MA[41,324,0]=5
+MeasurementArray::fill-D- after add MA[41,324,0]=6
+MeasurementArray::fill-D- before add MA[41,324,0]=6
+MeasurementArray::fill-D- after add MA[41,324,0]=7
+MeasurementArray::fill-D- before add MA[41,324,0]=7
+MeasurementArray::fill-D- after add MA[41,324,0]=8
+MeasurementArray::fill-D- before add MA[41,324,0]=8
+MeasurementArray::fill-D- after add MA[41,324,0]=9
+MeasurementArray::fill-D- before add MA[41,324,0]=9
+MeasurementArray::fill-D- after add MA[41,324,0]=10
+...
+MeasurementArray::fill-D- before add MA[41,324,0]=57
+MeasurementArray::fill-D- after add MA[41,324,0]=58
+MeasurementArray::fill-D- before norm MA[41,324,0]=58
+MeasurementArray::fill-D- after norm MA[41,324,0]=58
+
+(normalization off)
+
+ - for fun I grabbed slice 41 and printed element (324,0) in
+xboxrates:
+
+  a = MA.getSlice(41);
+  cout << thisprog << " -D- MA[41,324,0]=" << a[324][0] << endl;
+
+output:
+
+xboxrates -D- MA[41,324,0]=58
+
+I figure it out and it was one big stupid mistake:  I tested IDL with
+symmetric matrices.  So, when I transposed them I got the same
+elements as in C++.  But, my region of interest was not symmetric, so
+when I read it in transposed it cycled the elements around.  To fix
+it, I changed my IDL code to 
+
+a) read in a matrix with the dimensions flipped
+
+mat = fltarr(coldim,rowdim)
+
+readf,lun, mat
+
+b) transpose the array
+
+mat = transpose(mat)
+
+Before the transpose, accessing element (324,0) does not give 58 (as
+it is known to be from C++).  After the transpose, several elements
+matched perfectly.  (I tried (324,0) and (328,19).  There should be no
+way for them to match by coincidence.)
+
+
+===> 3Jun2001 work log -- using TNT and LAPACK++
+
+I decided to use TNT (Template Numerical Toolkit) for most of the
+numerical matrix stuff.  It is organized in a way very similar to the
+STL so it's use is easy to learn.  
+
+There are two caveats:  
+
+1) It is a beta version.  This seems ok since the swindal code will be
+under development for the next several months anyway so changes to TNT
+could be incorporated relatively easily.
+
+2) It does not (yet I presume) include SVD.  I plan to use it's
+precursor, LAPACK++ for that.  I considered using just the latter, but
+it seems to make more sense to use TNT since it is current and seems
+cleaner to use.  I can isolate the LAPACK++ stuff to a few routines,
+most likely.  Or, I could use Numerical Recipes code for SVD.  Either
+way, I think it is better to use the up and coming package in a new
+project, rather than the one that is being replaced.
+
+===> 21May2001 work log -- making boxrates arrays
+===> 8May2001 work log -- running out of memory
+
+loadPha runs out of memory after loading 530612 PHA words (about
+half way through day 2000158).  I checked with top, it reported
+xboxrates using 66M before it ran out of memory and exited.
+
+Checking memory usage:  Each Pha should use
+
+10  doubles	4 bytes ea.	 40 bytes
+2   floats	2 bytes ea.	  4 bytes
+7   int		4 bytes ea.	 28 bytes
+1   string      ? bytes ea.       0 bytes
+-----------------------------------------
+				 72 bytes / Pha
+
+530612 * 72 = 38 204 064 =~ 38M
+
+This sounds possible.
+
+Nathan and I decided to analyze PHAs in 5 cycle blocks per now (with 5
+being a parameter).
+
+===> 2May2001 work log -- member iterators?
+
+Should iterators be declared in the class with the data object or
+locally?  For example, in AnalysisData, if an iterator to the Ions
+map<string,Ion> is declared in the local code where it is being used,
+then the type of Ions is hardcoded in to that local code.  This
+doesn't seem too encapsulated.  Come to think of it, since Ions is
+public, the type of this is hardcoded anyway whenever it is used (by
+syntax, since a key subscript is used for access).
+
+I guess the encapsulation is pretty much gone unless I make the data
+private and access it all with public functions.  Is this extra work
+worth it in this context?
+
+I'm saying no.  However, I will do the little bit of extra
+encapsulation that is provided by declaring the iterator in the class.
+
+===> 29Apr2001 work log -- no at() member function for vector
+
+I could not resolve this issue:  Both Stroustrup and Josuttis (The C++
+Standard Template Library) refer to an at member function for STL
+vectors.  This function provides range-checked random access.
+However, the library on hobbes (libstdc++-2.96-54) does not seem to
+contain this function.  I searched all headers in /usr/include/g++-3
+and found no mention of it.  And, I manually looked through all of the
+public member functions in stl_vector.h.  This library version (2.96)
+is more recent than the last on mentioned in the libstdc++ section on
+gnu.org, so I don't think it is out of date.  And, the SGI STL site
+does not include at in vector's member functions.  Also, compiling
+with g++ on login.engin.umich.edu yields the same result as hobbes,
+that there is no at member function.
+
+Go figure.  I'm moving on.
+
+===> 29Mar2001 Names
+
+Michigan Solar Wind Plasma Data Analysis Library
+M S W P D A L
+
+Michigan Solar Wind Data Analysis Library
+MiSoWiDAL
+MSoWiDAL

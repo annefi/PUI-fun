@@ -1,0 +1,2362 @@
+%!PS-Adobe-3.0
+%%Title: AceSwicsData.cc, AceSwicsData.h
+%%For: Jim Raines
+%%Creator: a2ps version 4.13
+%%CreationDate: Mon Aug  9 11:20:37 2004
+%%BoundingBox: 24 24 588 768
+%%DocumentData: Clean7Bit
+%%Orientation: Landscape
+%%Pages: 6
+%%PageOrder: Ascend
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: font Courier
+%%+ font Courier-Bold
+%%+ font Helvetica
+%%+ font Helvetica-Bold
+%%+ font Symbol
+%%+ font Times-Bold
+%%+ font Times-Roman
+%%DocumentProcessColors: Black Blue Green Red 
+%%DocumentSuppliedResources: procset a2ps-color-prolog
+%%+ encoding ISO-8859-1Encoding
+%%EndComments
+/a2psdict 200 dict def
+a2psdict begin
+%%BeginProlog
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+
+% EPSF import as in the Red Book
+/BeginInclude {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack 
+  userdict begin
+    0 setgray 0 setlinecap
+    1 setlinewidth 0 setlinejoin
+    10 setmiterlimit [ ] 0 setdash newpath
+    gs_languagelevel 1 ne {
+      false setstrokeadjust false setoverprint 
+    } if
+} bind def
+
+/EndInclude {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+/BeginEPSF {
+  BeginInclude
+  /showpage { } def
+} bind def
+
+/EndEPSF {
+  EndInclude
+} bind def
+
+% Page prefeed
+/page_prefeed {         % bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} bind def
+
+/deffont {
+  findfont exch scalefont def
+} bind def
+
+/reencode_font {
+  findfont reencode 2 copy definefont pop def
+} bind def
+
+% Function c-show (str => -)
+% centers text only according to x axis.
+/c-show { 
+  dup stringwidth pop
+  2 div neg 0 rmoveto
+  show
+} bind def
+
+% Function l-show (str => -)
+% prints texts so that it ends at currentpoint
+/l-show {
+  dup stringwidth pop neg 
+  0 
+  rmoveto show
+} bind def
+
+% center-fit show (str w => -)
+% show centered, and scale currentfont so that the width is less than w
+/cfshow {
+  exch dup stringwidth pop
+  % If the title is too big, try to make it smaller
+  3 2 roll 2 copy
+  gt
+  { % if, i.e. too big
+    exch div
+    currentfont exch scalefont setfont
+  } { % ifelse
+    pop pop 
+  }
+  ifelse
+  c-show			% center title
+} bind def
+
+% Return the y size of the current font
+% - => fontsize
+/currentfontsize {
+  currentfont /FontType get 0 eq {
+    currentfont /FontMatrix get 3 get
+  }{
+    currentfont /FontMatrix get 3 get 1000 mul
+  } ifelse
+} bind def
+
+% reencode the font
+% <encoding-vector> <fontdict> -> <newfontdict>
+/reencode { %def
+  dup length 5 add dict begin
+    { %forall
+      1 index /FID ne 
+      { def }{ pop pop } ifelse
+    } forall
+    /Encoding exch def
+
+    % Use the font's bounding box to determine the ascent, descent,
+    % and overall height; don't forget that these values have to be
+    % transformed using the font's matrix.
+    % We use `load' because sometimes BBox is executable, sometimes not.
+    % Since we need 4 numbers an not an array avoid BBox from being executed
+    /FontBBox load aload pop
+    FontMatrix transform /Ascent exch def pop
+    FontMatrix transform /Descent exch def pop
+    /FontHeight Ascent Descent sub def
+
+    % Define these in case they're not in the FontInfo (also, here
+    % they're easier to get to.
+    /UnderlinePosition 1 def
+    /UnderlineThickness 1 def
+    
+    % Get the underline position and thickness if they're defined.
+    currentdict /FontInfo known {
+      FontInfo
+      
+      dup /UnderlinePosition known {
+	dup /UnderlinePosition get
+	0 exch FontMatrix transform exch pop
+	/UnderlinePosition exch def
+      } if
+      
+      dup /UnderlineThickness known {
+	/UnderlineThickness get
+	0 exch FontMatrix transform exch pop
+	/UnderlineThickness exch def
+      } if
+      
+    } if
+    currentdict 
+  end 
+} bind def
+
+% composite fonts for ASCII-EUC mixed string
+% Version 1.2 1/31/1990
+% Orignal Ken'ichi HANDA (handa@etl.go.jp)
+% Modified Norio Katayama (katayama@rd.nacsis.ac.jp),1998
+% Extend & Fix Koji Nakamaru (maru@on.cs.keio.ac.jp), 1999
+% Anyone can freely copy, modify, distribute this program.
+
+/copyfont {	% font-dic extra-entry-count  copyfont  font-dic
+	1 index maxlength add dict begin
+	{	1 index /FID ne 2 index /UniqueID ne and
+		{def} {pop pop} ifelse
+	} forall
+	currentdict
+	end
+} bind def
+
+/compositefont { % ASCIIFontName EUCFontName RomanScale RomanOffset Rot(T/F) compositefont font
+    /RomanRotation exch def
+    /RomanOffset exch def
+    /RomanScale exch def
+    userdict /fixeucfont_dict known not {
+	userdict begin
+	    /fixeucfont_dict 2 dict begin
+		/UpperByteEncoding [
+		    16#00 1 16#20 { pop 0 } for
+		    16#21 1 16#28 { 16#20 sub } for
+		    16#29 1 16#2F { pop 0 } for
+		    16#30 1 16#74 { 16#27 sub } for
+		    16#75 1 16#FF { pop 0 } for
+		] def
+	        /LowerByteEncoding [
+		    16#00 1 16#A0 { pop /.notdef } for
+		    16#A1 1 16#FE { 16#80 sub 16 2 string cvrs
+				    (cXX) dup 1 4 -1 roll
+				    putinterval cvn } for
+		    /.notdef
+		] def
+		currentdict
+	    end def
+	end
+    } if
+    findfont dup /FontType get 0 eq {
+	14 dict begin
+	    %
+	    % 7+8 bit EUC font
+	    %
+	    12 dict begin
+		/EUCFont exch def
+		/FontInfo (7+8 bit EUC font) readonly def
+		/PaintType 0 def
+		/FontType 0 def
+		/FontMatrix matrix def
+		% /FontName
+		/Encoding fixeucfont_dict /UpperByteEncoding get def
+		/FMapType 2 def
+		EUCFont /WMode known
+		{ EUCFont /WMode get /WMode exch def }
+		{ /WMode 0 def } ifelse
+		/FDepVector [
+		    EUCFont /FDepVector get 0 get
+		    [ 16#21 1 16#28 {} for 16#30 1 16#74 {} for ]
+		    {
+			13 dict begin
+			    /EUCFont EUCFont def
+			    /UpperByte exch 16#80 add def	
+			    % /FontName
+			    /FontInfo (EUC lower byte font) readonly def
+			    /PaintType 0 def
+			    /FontType 3 def
+			    /FontMatrix matrix def
+			    /FontBBox {0 0 0 0} def
+			    /Encoding
+				fixeucfont_dict /LowerByteEncoding get def
+			    % /UniqueID
+			    % /WMode
+			    /BuildChar {
+				gsave
+				exch dup /EUCFont get setfont
+				/UpperByte get
+				2 string
+				dup 0 4 -1 roll put
+				dup 1 4 -1 roll put
+				dup stringwidth setcharwidth
+				0 0 moveto show
+				grestore
+			    } bind def
+			    currentdict
+			end
+			/lowerbytefont exch definefont
+		    } forall
+		] def
+		currentdict
+	    end
+	    /eucfont exch definefont
+	    exch
+	    findfont 1 copyfont dup begin
+		RomanRotation {
+			/FontMatrix FontMatrix
+			[ 0 RomanScale neg RomanScale 0 RomanOffset neg 0 ]
+			matrix concatmatrix def
+		}{
+			/FontMatrix FontMatrix
+			[ RomanScale 0 0 RomanScale 0 RomanOffset ] matrix concatmatrix
+			def
+			/CDevProc
+			    {pop pop pop pop 0 exch -1000 exch 2 div 880} def
+		} ifelse
+	    end
+	    /asciifont exch definefont
+	    exch
+	    /FDepVector [ 4 2 roll ] def
+	    /FontType 0 def
+	    /WMode 0 def
+	    /FMapType 4 def
+	    /FontMatrix matrix def
+	    /Encoding [0 1] def
+	    /FontBBox {0 0 0 0} def
+%	    /FontHeight 1.0 def % XXXX
+	    /FontHeight RomanScale 1.0 ge { RomanScale }{ 1.0 } ifelse def
+	    /Descent -0.3 def   % XXXX
+	    currentdict
+	end
+	/tmpfont exch definefont
+	pop
+	/tmpfont findfont
+    }{
+	pop findfont 0 copyfont
+    } ifelse
+} def	
+
+/slantfont {	% FontName slant-degree  slantfont  font'
+    exch findfont 1 copyfont begin
+    [ 1 0 4 -1 roll 1 0 0 ] FontMatrix exch matrix concatmatrix
+    /FontMatrix exch def
+    currentdict
+    end
+} def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+
+% -------- Some routines to enlight plain b/w printings ---------
+
+% Underline
+% width --
+/dounderline {
+  currentpoint
+  gsave
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    0 rlineto
+    stroke
+  grestore
+} bind def
+
+% Underline a string
+% string --
+/dounderlinestring {
+  stringwidth pop
+  dounderline
+} bind def
+
+/UL {
+  /ul exch store
+} bind def
+
+% Draw a box of WIDTH wrt current font
+% width --
+/dobox {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    stroke
+  grestore
+} bind def
+
+/BX {
+  /bx exch store
+} bind def
+
+% Box a string
+% string --
+/doboxstring {
+  stringwidth pop
+  dobox
+} bind def
+
+%
+% ------------- Color routines ---------------
+%
+/FG /setrgbcolor load def
+
+% Draw the background
+% width --
+/dobackground {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    bgcolor aload pop setrgbcolor
+    fill
+  grestore
+} bind def
+
+% Draw bg for a string
+% string --
+/dobackgroundstring {
+  stringwidth pop
+  dobackground
+} bind def
+
+
+/BG {
+  dup /bg exch store
+  { mark 4 1 roll ] /bgcolor exch store } if
+} bind def
+
+
+/Show {
+  bg { dup dobackgroundstring } if
+  ul { dup dounderlinestring } if
+  bx { dup doboxstring } if
+  show
+} bind def
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T {
+  cw mul x0 add
+  bg { dup currentpoint pop sub dobackground } if
+  ul { dup currentpoint pop sub dounderline } if
+  bx { dup currentpoint pop sub dobox } if
+  y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n {
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+/S {
+  Show
+} bind def
+
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Function title: prints page header.
+% <ct> <rt> <lt> are passed as argument
+/title { 
+  % 1. Draw the background
+  x v get y v get moveto
+  0 setgray
+  gsave
+    0 th 2 div neg rmoveto 
+    th setlinewidth
+    0.5 0.5 1 setrgbcolor
+    pw 0 rlineto stroke
+  grestore
+  % 2. Border it
+  gsave
+    0.7 setlinewidth
+    pw 0 rlineto
+    0 th neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+  % stk: ct rt lt
+  x v get y v get th sub 1 add moveto
+%%IncludeResource: font Helvetica
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  % 3. The left title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    fnfs 0.8 mul hm rmoveto
+    show			% left title
+  grestore
+  exch
+  % stk: ct ltw rt
+  % 4. the right title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    dup
+    pw exch stringwidth pop fnfs 0.8 mul add sub
+    hm
+    rmoveto
+    show			% right title
+  grestore
+  % stk: ct ltw rtw
+  % 5. the center title
+  gsave
+    pw 3 1 roll
+    % stk: ct pw ltw rtw
+    3 copy 
+    % Move to the center of the left room
+    sub add 2 div hm rmoveto
+    % What is the available space in here?
+    add sub fnfs 0.8 mul sub fnfs 0.8 mul sub
+    % stk: ct space_left
+%%IncludeResource: font Helvetica-Bold
+  fHelvetica-Bold fnfs scalefont setfont
+    1 setgray
+    cfshow
+  grestore
+} bind def
+
+% Function border: prints virtual page border
+/border { %def
+  gsave				% print four sides
+    0 setgray
+    x v get y v get moveto
+    0.7 setlinewidth		% of the square
+    pw 0 rlineto
+    0 ph neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+} bind def
+
+% Function water: prints a water mark in background
+/water { %def
+  gsave
+    scx scy moveto rotate
+%%IncludeResource: font Times-Bold
+  fTimes-Bold 100 scalefont setfont
+    .97 setgray
+    dup stringwidth pop 2 div neg -50 rmoveto
+    show
+  grestore
+} bind def
+
+% Function rhead: prints the right header
+/rhead {  %def
+  lx ly moveto
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  l-show
+} bind def
+
+% Function footer (cf rf lf -> -)
+/footer {
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  dx dy moveto
+  show
+
+  snx sny moveto
+  l-show
+  
+  fnx fny moveto
+  c-show
+} bind def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+%%BeginResource: procset a2ps-color-prolog 2.0 1
+
+%% Definition of the color faces.
+/p {
+  0 0 0 FG
+  false BG
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/sy {
+  0 0 0 FG
+  false BG
+  fSymbol bfs scalefont setfont
+  Show
+} bind def
+
+/k {
+  false BG
+  false UL
+  false BX
+  0 0 0.9 FG
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/K {
+  false BG
+  false UL
+  false BX
+  0 0 0.8 FG
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/c {
+  false BG
+  false UL
+  false BX
+  0.8 0 0 FG
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/C {
+  false BG
+  false UL
+  false BX
+  0.8 0 0 FG
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/l {
+  0 0 0 FG
+  0.8 0.8 0 true BG
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/L {
+  0 0 0 FG
+  1 1 0 true BG
+  false UL
+  false BX
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/str {
+  false BG
+  false UL
+  false BX
+  0 0.5 0 FG
+  fTimes-Roman bfs scalefont setfont
+  Show
+} bind def
+
+/e{
+  1 0 0 true BG
+  false UL
+  true BX
+  1 1 1 FG
+  fHelvetica-Bold bfs scalefont setfont
+  Show
+} bind def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul 2 div neg 0 rmoveto
+    f# setfont
+    0.8 0.1 0.1 FG
+    c-show
+  grestore
+} bind def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Times-Roman
+%%IncludeResource: font Symbol
+%%BeginResource: encoding ISO-8859-1Encoding
+/ISO-8859-1Encoding [
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quoteright 
+/parenleft /parenright /asterisk /plus /comma /minus /period /slash 
+/zero /one /two /three /four /five /six /seven 
+/eight /nine /colon /semicolon /less /equal /greater /question 
+/at /A /B /C /D /E /F /G 
+/H /I /J /K /L /M /N /O 
+/P /Q /R /S /T /U /V /W 
+/X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore 
+/quoteleft /a /b /c /d /e /f /g 
+/h /i /j /k /l /m /n /o 
+/p /q /r /s /t /u /v /w 
+/x /y /z /braceleft /bar /braceright /asciitilde /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclamdown /cent /sterling /currency /yen /brokenbar /section 
+/dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron 
+/degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph /bullet 
+/cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf /threequarters /questiondown 
+/Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla 
+/Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis 
+/Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply 
+/Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls 
+/agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla 
+/egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis 
+/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide 
+/oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis 
+] def
+%%EndResource
+% Initialize page description variables.
+/sh 612 def
+/sw 792 def
+/llx 24 def
+/urx 768 def
+/ury 588 def
+/lly 24 def
+/#copies 1 def
+/th 15.000000 def
+/fnfs 11 def
+/bfs 7.493857 def
+/cw 4.496314 def
+
+% Dictionary for ISO-8859-1 support
+/iso1dict 6 dict begin
+  /fCourier ISO-8859-1Encoding /Courier reencode_font
+  /fCourier-Bold ISO-8859-1Encoding /Courier-Bold reencode_font
+  /fHelvetica ISO-8859-1Encoding /Helvetica reencode_font
+  /fHelvetica-Bold ISO-8859-1Encoding /Helvetica-Bold reencode_font
+  /fTimes-Bold ISO-8859-1Encoding /Times-Bold reencode_font
+  /fTimes-Roman ISO-8859-1Encoding /Times-Roman reencode_font
+currentdict end def
+/bgcolor [ 0 0 0 ] def
+/bg false def
+/ul false def
+/bx false def
+% The font for line numbering
+/f# /Helvetica findfont bfs .6 mul scalefont def
+/fSymbol /Symbol findfont def
+/hm fnfs 0.25 mul def
+/pw
+   cw 81.400000 mul
+def
+/ph
+   522.321860 th add
+def
+/pmw urx llx sub pw 2 mul sub 1 div def
+/pmh 0 def
+/v 0 def
+/x [
+  0
+  dup pmw add pw add
+] def
+/y [
+  pmh ph add 0 mul ph add
+  dup
+] def
+/scx sw 2 div def
+/scy sh 2 div def
+/snx urx def
+/sny lly 2 add def
+/dx llx def
+/dy sny def
+/fnx scx def
+/fny dy def
+/lx snx def
+/ly ury fnfs 0.8 mul sub def
+/sx 0 def
+/tab 8 def
+/x0 0 def
+/y0 0 def
+%%EndSetup
+
+%%Page: (1-2) 1
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*) c n
+(  File: AceSwicsData.cc) N
+() N
+(  Description:) N
+() N
+(    Class of functions and containers for groups of Pha words.  This) N
+(    class, along with the Pha class contain all instrument-specific) N
+(    functions and containers.) N
+() N
+(  Author\(s\): Jim Raines \(jmr\)) N
+() N
+(  Revision controlled by CVS:) N
+(  $Id: AceSwicsData.cc,v 1.8 2004/07/28 13:28:35 jraines Exp $) N
+() N
+(  Method:) N
+(    ) N
+(  Major Modification History:) N
+(    01Sep2002   jmr   initial coding) N
+(    02Jul2003   jmr   Changed scet in load\(\) to ss1970 and ) N
+(                      added ss1970_to_doyfr ) N
+() N
+(*/) N
+() p n
+(#include) K
+( ") p
+(swindal.h) str
+(") p n
+() N
+(namespace) K
+( libhef {) p n
+(  ) S
+(extern) K
+( ") p
+(C) str
+(" {) p n
+(#include) K
+( ") p
+(libhef.h) str
+(") p n
+(  }) N
+(}) N
+() N
+(AceSwicsData::AceSwicsData\() S
+(void) k
+(\){) p n
+(  Eqtab.reserve\(MAXEDB\);) N
+(  Eqtab.assign\(MAXEDB, 0.0\); ) S
+(// init to 0.0;) c n
+() p n
+(  CycleTime = -1.0;) N
+(}) N
+() N
+(/*) c n
+(  Routine: AceSwicsData::load) N
+() N
+(  Description:  ) N
+(  Loads vector of Pha objects by reading data from Level 1 files. ) N
+() N
+(  Created by : Jim Raines \(jmr\)) N
+() N
+(  Major Modification History) N
+(    1Sep2002   jmr   Adapted from loadPha.cc) N
+(    1May2002   jmr   Adapted from al2c.c) N
+() N
+(*/) N
+() p n
+(int) k
+( AceSwicsData::load\() p
+(int) k
+( AnalysisInterval\){) p n
+(  ) S
+(/* parameters */) c n
+(  ) p
+(const) K
+( ) p
+(int) k
+( iPrintInterval=1;  ) p
+(// printing interval for per cycle stdout info.) c n
+() p n
+(  ) S
+(using) K
+( ) p
+(namespace) K
+( libhef;) p n
+() N
+(  ) S
+(/* local software housekeeping variables */) c n
+(  string thisprog = ") p
+(AceSwicsData::load) str
+(";) p n
+(  ) S
+(//const char thisprog[]="loadPha";  // name of this program) c n
+(  ) p
+(int) k
+( i,j,k;             ) p
+(// short range loop counters) c n
+(  ) p
+(int) k
+( status = 0;        ) p
+(// exit status of routine) c n
+() p n
+(  ) S
+(int) k
+( result;            ) p
+(// return value from libhef function) c n
+(  ) p
+(int) k
+( a3rcresult=0;      ) p
+(// return value from a3readcycle) c n
+() p n
+(  ) S
+(char) k
+( infile[150];      ) p
+(// input data filename) c n
+(  ) p
+(FILE) k
+( *pInfile;         ) p
+(// input file stream) c n
+(AceSwicsData.cc) (Page 1/10) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(  ) S
+(int) k
+( nedb;              ) p
+(// counter for looping over EDBs) c n
+(  ) p
+(int) k
+( npha;              ) p
+(// counter for looping over PHAs) c n
+(  ) p
+(int) k
+( irange;            ) p
+(// counter for counter for looping over ranges) c n
+() p n
+(  ) S
+(static) K
+( ) p
+(bool) k
+( fNewFile = ) p
+(true) k
+(;  ) p
+(// true => open new file) c n
+() p n
+(  ) S
+(int) k
+( DbgLvl= gDbgLvl;   ) p
+(// init local debugging level to global one) c n
+(  ) p
+(bool) k
+( dumpPhaFlag = ) p
+(false) k
+(;  ) p
+(// t=>pha info written to static file for debug) c n
+() p n
+(  ) S
+(bool) k
+( fKeep = ) p
+(true) k
+(;     ) p
+(// T => store PHA in big vector; F => discard) c n
+() p n
+(  ) S
+(/* data variables */) c n
+(  Pha lpha;              ) p
+(// local pha object, put into vector at end) c n
+(  std::list<Pha> cycpha;      ) p
+(// PHA words from current cycle) c n
+(  std::list<Pha>::iterator cycpha_it;) p n
+() N
+(  ) S
+(/* -- stats variables -- */) c n
+(  ) p n
+(  vector<) S
+(double) k
+(> xmr\(MAXEDB\);  ) p
+(// set of matrix rate values for ) c n
+(                               ) p
+(// solar wind speed calc) c n
+(  ) p
+(int) k
+( nphaedb[MAXEDB];   ) p
+(// number of pha words per EDB) c n
+(  ) p
+(static) K
+( ) p
+(long) k
+( ) p
+(int) k
+( nphatot = 0;      ) p
+(// total number of PHA words read thus far) c n
+(  ) p
+(double) k
+( swspeed;          ) p
+(// H+ speed for current cycle) c n
+() p n
+(  ) S
+(// for weights) c n
+(  ) p
+(long) k
+( br[MAXEDB][4];     ) p
+(// basic rates for this cycle) c n
+(  ) p
+(int) k
+( npharng[MAXEDB][4]; ) p
+(// npha with a range of second index) c n
+(  ) p
+(float) k
+( weight[MAXEDB][4]; ) p
+(// factor to scale nphaedb to actual if all) c n
+(                         ) p
+(// PHAs had been transmitted) c n
+() p n
+(  ) S
+(// misc. counters) c n
+(  ) p
+(int) k
+( ncycle=0;          ) p
+(// number of cycles successfully processed) c n
+() p 8 T () S 16 T () S 24 T ( ) S
+(// this call) c n
+(  ) p
+(static) K
+( ) p
+(int) k
+( ncycle_file = 1; ) p
+(// number of cycles successfully) c n
+() p 8 T () S 16 T () S 24 T (     ) S
+(// processed this file) c n
+(  ) p
+(int) k
+( ncyclemax;         ) p
+(// number of cycles to analyze) c n
+(  ) p
+(long) k
+( nlines=0;         ) p
+(// number of lines written to outfile) c n
+(  ) p
+(long) k
+( nto=0;            ) p
+(// number of PHAs thrown out) c n
+(  ) p
+(float) k
+( topercent;       ) p
+(// thrown-out % for PHAs) c n
+() p n
+(  ) S
+(/* ------------------------------------) c n
+(     initialize arrays -- just to be safe) N
+(     ------------------------------------*/) N
+(  ) p
+(for) K
+( \(nedb = 0; nedb < MAXEDB; nedb++\){) p n
+(    ) S
+(for) K
+(\( i = 0; i < 4; i++\){) p n
+(      br[nedb][i] = 0;) N
+(      npharng[nedb][i] = 0;) N
+(      weight[nedb][i] = 0.0;) N
+(    }) N
+() N
+(  }) N
+() N
+(  ) S
+(/* ---------) c n
+(     open file) N
+(     ---------) N
+(  */) N
+() p n
+(  ) S
+(if) K
+( \(fNewFile\){) p n
+(    strcpy\(infile,gCurLv1File.c_str\(\)\);) N
+(    printf\(") S
+(%s -D- %s\\n) str
+(",thisprog.c_str\(\),infile\);) p n
+() N
+(    result = a3opencyclefile\(infile\);) N
+(    ) S
+(if) K
+( \(result != 0\) {) p n
+(      printf\(") S
+(%s -F- error \(%d\) opening %s\\n) str
+(",thisprog.c_str\(\),result,infile\);) p n
+(      ) S
+(return) K
+(\(1\);) p n
+(    }) N
+() N
+(    fNewFile = ) S
+(false) k
+(;) p n
+(AceSwicsData.cc) (Page 2/10) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(AceSwicsData.cc) (1/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (3-4) 2
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  }) p n
+() N
+(  ) S
+(// for debugging dump only) c n
+(  ) p
+(if) K
+( \(gDbgLvl >= 2\) dumpPhaFlag = ) p
+(true) k
+(; ) p
+(// not permanent) c n
+(  ) p
+(FILE) k
+( *DUMP; ) p
+(// Forward Model Comparison File \(pointer\)) c n
+(  ) p
+(if) K
+( \(dumpPhaFlag\) DUMP = fopen\(") p
+(pha_dump.dat) str
+(", ") p
+(a) str
+("\);) p n
+() N
+(  ) S
+(/* ---------------- */) c n
+(  ) p
+(/* Loop over cycles */) c n
+(  ) p
+(/* ---------------- */) c n
+() p n
+(  ncyclemax = AnalysisInterval;) N
+(  ) S
+(if) K
+( \(DbgLvl > 0\){) p n
+(    printf\(") S
+(%s -I- reading %d cycles maximum\\n) str
+(",thisprog.c_str\(\), ncyclemax\);) p n
+(  }) N
+() N
+(  ) S
+(while) K
+( \(a3rcresult == 0 && ncycle < ncyclemax\){) p n
+() N
+(    ) S
+(/* re-init. some counters */) c n
+(    ) p
+(for) K
+( \(nedb = FIRSTEDB; nedb < MAXEDB; nedb++\)) p n
+(      ) S
+(for) K
+( \(i = 0; i < 4; i++\)) p n
+() S 8 T (npharng[nedb][i] = 0;) N
+() N
+(    ) S
+(/* Get ACE cycle and expand */) c n
+(    ) p
+(/* ------------------------ */) c n
+(    a3rcresult = a3readcycle\(\);) p n
+(    ) S
+(if) K
+( \(result > 0\){) p n
+() S 8 T (printf\(") S
+(%s -E- a3readcycle returned %d\\n) str
+(",thisprog.c_str\(\), result\);) p n
+(    }) N
+(    ) S
+(else) K
+({) p n
+(      result = a3expand\(\);) N
+(      ) S
+(if) K
+( \(result > 0\)) p n
+() S 8 T (printf\(") S
+(%s -E- a3readcycle returned %d\\n) str
+(",thisprog.c_str\(\), result\);) p n
+(    }) N
+( ) N
+(    ) S
+(/* set level of output messages from libhef */) c n
+(    result = perr_setlevel\(1\);) p n
+() N
+(    ) S
+(/* cycle time */) c n
+(    ) p
+(if) K
+( \(! \(ncycle % iPrintInterval\)\)) p n
+(      printf\(") S
+(%s -I- Cycle: %s\\n) str
+(",thisprog.c_str\(\),a3zrecid\(\)\);) p n
+() N
+(    ) S
+(/* check to see if everything is nominal before we continue */) c n
+(    ) p
+(if) K
+( \(a3cycx_nominal\(0\)\){  ) p
+(// 0 specifies E/q tab 0 is nominal) c n
+(      printf\(") p
+(%s -I- cycle not considered nominal; skipping...\\n) str
+(",) p n
+() S 8 T (     thisprog.c_str\(\)\);) N
+(      ) S
+(continue) K
+(;) p n
+(    }) N
+() N
+(    ) S
+(/* scet -- spacecraft event time in seconds since 1Jan1970 00:00:00*/) c n
+(    lpha.scet = a3gtime\(\);) p n
+() N
+(    ) S
+(/* THIS USED TO BE:) c n
+() N
+(       This is reported in seconds since 1Jan1950 to work with Nathan's ) N
+(       code.  The offset of seconds since 1Jan1970 to 1Jan1950 is:) N
+() N
+(       offset = 86400 sec/day * \( 20 year * 365 day/year + 5 days \(leap\)\)) N
+() N
+(    //lpha.scet = a3gtime\(\) + \(double\)\(86400*\(20*365 + 5\)\);) N
+(    */) N
+() p n
+(    ) S
+(/* set PAPS voltage to be used for post-accel. voltage throughout */) c n
+(    PapsVolt = a3gxpavdpu\(\);) p n
+() N
+(    ) S
+(if) K
+( \(DbgLvl >= 1\) ) p n
+(      printf\(") S
+(%s -D- read PAPS = %f kV \(level %d\)\\n) str
+(",) p n
+() S 8 T (     thisprog.c_str\(\),PapsVolt, a3xpavlev\(\)\);) N
+() N
+(AceSwicsData.cc) (Page 3/10) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    ) p
+(if) K
+( \(PapsVolt == 0.0\) {) p n
+(      cout << thisprog.c_str\(\) << ") S
+( -F- post-accel. voltage out of range \() str
+(" ) p n
+() S 8 T (   << PapsVolt << ") S
+(\).  This will cause foward model to fail.) str
+(" << endl;) p n
+(      ) S
+(return) K
+(\(1\);) p n
+(    }) N
+() N
+(    ) S
+(/* Get everything else */) c n
+(    ) p
+(/* ------------------- */) c n
+(    ) p
+(for) K
+( \(nedb=FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(      ) N
+(      ) S
+(/* get number of pha words */) c n
+(      nphaedb[nedb] = a3xnpha\(nedb\);) p n
+(      ) S
+(if) K
+( \(DbgLvl >= 3\){) p n
+() S 8 T (cout << thisprog.c_str\(\) << ") S
+( -D- nphaedb[) str
+(" <<nedb << ") p
+(]=) str
+(" ) p n
+() S 8 T (     << nphaedb[nedb] <<endl;) N
+(      }) N
+() N
+(      ) S
+(/* store edb number */) c n
+(      lpha.nedb = nedb;) p n
+() N
+(      ) S
+(/* get eq */) c n
+(      ) p
+(/* The -1 comes from the fact that PHA words are put into the TM) c n
+() S 8 T ( one EDB after they are actually read.  This re-aligns them) N
+() S 8 T ( with the E/q at which they were measured.) N
+() S 8 T ( See libhef docs for details. */) N
+(      lpha.eq = a3gxeqdpu_i\(nedb - 1\);) p n
+(      Eqtab[nedb] = a3gxeqdpu_i\(nedb - 1\);) N
+() N
+(      ) S
+(/* make BR table for calculating weights later */) c n
+(      ) p
+(for) K
+(\( i = 0; i < 4; i++\){) p n
+() S 8 T (br[nedb][i] = a3gxbr\(nedb, i, 8\);) N
+(      }) N
+() N
+(      ) S
+(/* get matrix rate for sw speed calc */) c n
+(      xmr[nedb] = a3gxmr\(1,nedb, 8\);) p n
+() N
+(      ) S
+(/* get items for each PHA */) c n
+(      ) p
+(for) K
+( \(npha = 0; npha < nphaedb[nedb]; npha++\){) p n
+() S 8 T () N
+() S 8 T () S
+(/* assign tof) c n
+() S 8 T (   tch is converted to ns by 0.1955 ns/ch \(from Simon Hefti\) */) N
+() p 8 T (lpha.tofch = a3gxtof_i\(nedb,npha\);) N
+() S 8 T (lpha.tof = lpha.tofch * TOF_NS_PER_CH;) N
+() N
+() S 8 T () S
+(/* assign energy */) c n
+() p 8 T () S
+(/* ech \(digital energy\) conv. to keV by 2.395 keV/ch \(from S. Hefti\)*/) c n
+() p 8 T (lpha.esdch = a3gxesd_i\(nedb,npha\);) N
+() S 8 T (lpha.esd = lpha.esdch * ESD_KEV_PER_CH;) N
+() S 8 T () N
+() S 8 T () S
+(/*assign sector */) c n
+(        lpha.sector = a3gxsec_i\(nedb,npha\);) p n
+() N
+() S 8 T () S
+(/* assign detector*/) c n
+() p 8 T (lpha.detector = a3gxdid_i\(nedb,npha\); ) S
+(// right func.?) c n
+() p n
+() S 8 T () S
+(/* assign range and count number in each range */) c n
+() p 8 T (lpha.range = a3gxrng_i\(nedb,npha\);) N
+() S 8 T () N
+() S 8 T () S
+(// keep track of number of pha in each range for weighting \(later\)) c n
+() p 8 T () S
+(if) K
+( \(lpha.range >= 0 && lpha.range <= 3\){) p n
+() S 8 T (  npharng[nedb][lpha.range]++;) N
+() S 8 T (}) N
+() S 8 T () S
+(else) K
+({) p n
+() S 8 T (  printf\(") S
+(%s -W- range out of limits) str
+(",thisprog.c_str\(\)\);) p n
+() S 8 T (}) N
+() N
+() S 8 T () S
+(/* assign br0-3 */) c n
+() p 8 T () S
+(for) K
+(\( i = 0; i < 4; i++\){) p n
+() S 8 T (  lpha.br[i] = br[nedb][i];) N
+(AceSwicsData.cc) (Page 4/10) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(AceSwicsData.cc) (2/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (5-6) 3
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p 8 T (}) N
+() N
+() S 8 T () S
+(/* assign TCR */) c n
+() p 8 T (lpha.tcr = a3gxtcr_i\(nedb,8\);) N
+() S 8 T () N
+() S 8 T () S
+(/* assign mass */) c n
+() p 8 T (lpha.mmch = a3gxmas_i\(nedb,npha\);) N
+() S 8 T () S
+(if) K
+( \(lpha.mmch == 0\){    ) p
+(// handle special channels, see libhef docs) c n
+() p 8 T (  ) S
+(/* signify mass zero events as zero */) c n
+() p 8 T (  lpha.mm = 0.0;) N
+() S 8 T (}) N
+() S 8 T () S
+(else) K
+( ) p
+(if) K
+( \(lpha.mmch >= 123\){) p n
+() S 8 T (  ) S
+(// just pass on the channel; beware in further processing) c n
+() p 8 T (  lpha.mm = lpha.mmch * 10.0;) N
+() S 8 T (}) N
+() S 8 T () S
+(else) K
+( {) p n
+() S 8 T (  ) S
+(// not a special channel, convert normally) c n
+() p 8 T (  lpha.mm = a3cxmas\(lpha.mmch\);) N
+() S 8 T (  ) S
+(if) K
+( \(lpha.mm == -1.0\){ ) p n
+() S 8 T (    printf\(") S
+(%s -W- a3cxmas returned error \(-1.0\) ) str
+(", thisprog.c_str\(\)\);) p n
+() S 8 T (    printf\(") S
+(for non-special channel.  Discarding pha.\\n) str
+("\);) p n
+() S 8 T (    printf\(") S
+(+ lpha.mmch = %d lpha.mm = %f\\n) str
+(",lpha.mmch,lpha.mm\);) p n
+() S 8 T (    fKeep = ) S
+(false) k
+(;) p n
+() S 8 T (  }) N
+() S 8 T (}) N
+() S 8 T () N
+() S 8 T () S
+(/* assign m/q */) c n
+() p 8 T (lpha.mqch = a3gxmoq_i\(nedb,npha\) ;) N
+(        ) S
+(/* handle special channels, see libhef docs */) c n
+() p 8 T () S
+(if) K
+( \(lpha.mqch == 0\){) p n
+() S 8 T (  ) S
+(/* just pass on the channel; beware in further) c n
+() S 8 T (     processing */) N
+() p 8 T (  lpha.mq = 0.0;) N
+() S 8 T (}) N
+() S 8 T () S
+(else) K
+( ) p
+(if) K
+( \(lpha.mqch < 1\){ ) p
+(// should never occur) c n
+() p 8 T (  printf\(") S
+(%s -W- 0 < mqch < 1 not handled correctly\\n) str
+(",thisprog.c_str\(\)\);) p n
+() S 8 T (  lpha.mq = lpha.mqch / 10.0;) N
+() S 8 T (}) S 16 T (      ) N
+() S 8 T () S
+(else) K
+( ) p
+(if) K
+( \(lpha.mqch > 124\){) p n
+() S 8 T (  ) S
+(/* just pass on the channel; beware in further) c n
+() S 8 T (     processing */) N
+() p 8 T (  lpha.mq = lpha.mqch * 10.0;) N
+() S 8 T (}) N
+() S 8 T () S
+(else) K
+( {) p n
+() S 8 T (  ) S
+(/* not a special channel, convert normally */) c n
+() p 8 T (  lpha.mq = a3cxmoq\(lpha.mqch\);) N
+() S 8 T (  ) S
+(if) K
+( \(lpha.mq == -1.0\){) p n
+() S 8 T (    printf\(") S
+(%s -W- a3cxmoq returned error \(-1.0\) ) str
+(", thisprog.c_str\(\)\);) p n
+() S 8 T (    printf\(") S
+(for non-special channel.  Discarding pha.\\n) str
+("\);) p n
+() S 8 T (    printf\(") S
+(+ lpha.mmch = %d lpha.mm = %f\\n) str
+(",lpha.mqch,lpha.mq\);) p n
+() S 8 T (    fKeep = ) S
+(false) k
+(;) p n
+() S 8 T (  }) N
+() S 8 T (}) N
+() N
+() S 8 T () S
+(/* calculate ion speed in km/s from kinetic energy, ) c n
+() N
+() S 8 T (   E/q=1/2 m/q v^2) N
+() N
+() S 8 T (   which, when solved for v and unit conversions are applied) N
+() S 8 T (   results in the formula used.) N
+() N
+() S 8 T (   The constant 439.0 km/s is just the product of unit) N
+() S 8 T (   conversion factors when E/q is in keV/e and m/q is in amu/e.) N
+() N
+() S 8 T (   note: speed = TOF_DISTANCE * 1.0E-5 km/cm * 1.0E9 ns/s / TOF) N
+() S 8 T (   DOES NOT work because it includes post-acceleration.) N
+() N
+() S 8 T (   note2:  Speeds are only calculated for valid mq; Values outside ) N
+() S 8 T (   range below are OVER/UNDERFLOW channels and cannot be used to ) N
+(AceSwicsData.cc) (Page 5/10) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() c 8 T (   calculated speed.) N
+() S 8 T (*/) S
+() p 16 T () N
+() S 8 T () S
+(if) K
+( \(lpha.mq > 0.0 && lpha.mq <= 124.0\){) p n
+() S 8 T (  lpha.speed = 439.0*sqrt\(lpha.eq/lpha.mq\);) N
+() S 8 T (}) N
+() S 8 T () S
+(else) K
+( {) p n
+() S 8 T (  lpha.speed = -1.0;) N
+() S 8 T (}) N
+() N
+() S 8 T () S
+(/* Add to this cycles PHA list if this is a good one */) c n
+() p 8 T () S
+(if) K
+( \(fKeep\) {) p n
+() S 8 T (  cycpha.push_back\(lpha\);) N
+() S 8 T (}) N
+() S 8 T () S
+(else) K
+( {) p n
+() S 8 T (  nto++;  ) S
+(// one more pha thrown out) c n
+() p n
+() S 8 T (  ) S
+(if) K
+( \(DbgLvl > 1\) {) p n
+() S 8 T (    cout << ") S
+(thisprog.c_str\(\) -I- discarded current PHA\\n) str
+(";) p n
+() S 8 T (  }) N
+() S 8 T (}) N
+() S 8 T () S 16 T () S 24 T (   ) N
+() N
+(      } ) S
+(/* loop over phas */) c n
+(    } ) p
+(/* loop over edbs */) c n
+() p n
+(    ) S
+(/* calculate solar wind speed for this cycle */) c n
+(    swspeed = calcSwSpeed\(Eqtab,xmr,2.0,0.8\); ) p
+(// moq = 2.0, cutoff = 0.8) c n
+() p n
+(    ) S
+(if) K
+( \(! \(ncycle % iPrintInterval\)\)) p n
+(      printf\(") S
+(%s -I- SW speed = %10.2f\\n) str
+(",thisprog.c_str\(\),swspeed\);) p n
+() N
+(    ) S
+(/* --- calculate PHA weighting for each EDB --- */) c n
+(    ) p
+(for) K
+( \(nedb = FIRSTEDB; nedb < MAXEDB; nedb ++\){) p n
+(      ) S
+(/* print number of PHA words by EDB */) c n
+(      nphatot += nphaedb[nedb];) p n
+(      ) N
+(      ) S
+(for) K
+(\(irange = 0; irange < 4; irange++\){) p n
+() S 8 T () S
+(if) K
+(\( npharng[nedb][irange] > 0 && br[nedb][irange] > 0\){) p n
+() S 8 T (  weight[nedb][irange] = \() S
+(float) k
+(\)br[nedb][irange] /) p n
+() S 8 T (    \() S
+(float) k
+(\)npharng[nedb][irange];) p n
+() S 8 T (}) N
+() S 8 T () S
+(else) K n
+() p 8 T (  weight[nedb][irange] = 1.0;) N
+() N
+() S 8 T (npharng[nedb][irange] = 0;) N
+(      ) N
+(      }) N
+(      ) N
+(    }) N
+() N
+(    ) S
+(if) K
+( \(DbgLvl > 0\) {) p n
+(      ) S
+(if) K
+( \(nphatot > 0\) {) p n
+() S 8 T (topercent = \() S
+(float) k
+(\)nto * 100.0 / \() p
+(float) k
+(\)nphatot ;) p n
+(      }) N
+(      ) S
+(else) K
+( {) p n
+() S 8 T (topercent = 0.0;) N
+(      }) N
+() N
+(      printf\(") S
+(%s -I- read %d PHAs so far, %d thrown out \(%03.1f%%\)\\n) str
+(",) p n
+() S 8 T (     thisprog.c_str\(\),nphatot, nto, topercent\);) N
+(    }) N
+() N
+(    ) S
+(// Store weights and swspeeds into phas from this cycle then) c n
+(    ) p
+(// add them to big vector) c n
+(    cycpha_it = cycpha.begin\(\);) p n
+(    ) S
+(while) K
+( \(cycpha_it != cycpha.end\(\)\){) p n
+() N
+(      ) S
+(if) K
+( \(cycpha.front\(\).nedb < MAXEDB\){) p n
+() S 8 T (cycpha.front\(\).weight = ) N
+(AceSwicsData.cc) (Page 6/10) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(AceSwicsData.cc) (3/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (7-8) 4
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p 8 T (  weight[cycpha.front\(\).nedb][cycpha.front\(\).range];) N
+(      }) N
+(      ) S
+(else) K
+( {) p n
+() S 8 T (printf\(") S
+(%s -W- nedb=%d \(out of range\)\\n) str
+(",thisprog.c_str\(\),cycpha.front\(\).nedb\);) p n
+(      }) N
+() N
+(      ) S
+(if) K
+( \( swspeed > 0.0 &&  swspeed < 10000.0 \){) p n
+() S 8 T (cycpha.front\(\).swspeed = swspeed;) N
+(      }) N
+(      ) S
+(else) K
+( {) p n
+() S 8 T (printf\(") S
+(%s -W- swspeed = %6.2f \(out of range\)\\n) str
+(",) p n
+() S 8 T (       thisprog.c_str\(\),swspeed\);) N
+(      }) N
+(      ) N
+(      ) S
+(if) K
+( \(dumpPhaFlag\) dumpPhaFile\(&cycpha.front\(\), npha, ncycle_file, DUMP\);) p n
+() N
+(      ) S
+(// add ) c n
+(      PhaData.push_back\(cycpha.front\(\)\);) p n
+() N
+(      ) S
+(// pop this element off) c n
+(      cycpha.pop_front\(\);) p n
+() N
+(      ) S
+(// set iterator to new beginning of vector \(pop changed it\)) c n
+(      cycpha_it = cycpha.begin\(\);) p n
+(    ) N
+(    }) N
+(  ) N
+(    ncycle++;  ) S
+(// increment counter *after* successfully processing cycle) c n
+(    ncycle_file++;) p n
+() N
+(  } ) S
+(/* loop over cycles */) c
+(  ) p n
+() N
+(  ) S
+(if) K
+( \(a3rcresult != 0\){) p n
+(    a3closecyclefile\(\);) N
+() N
+(    cout << thisprog.c_str\(\) << ") S
+( -I- end of file reached \() str
+(" << result << ") p
+(\)\\n) str
+(";) p n
+() N
+(    status = 2;) N
+(    fNewFile = ) S
+(true) k
+(;) p n
+(    ncycle_file = 0;) N
+(  }) N
+(  ) S
+(else) K
+( {) p n
+(    ) S
+(// Assign class-wide cycle time to cycle time for first PHA) c n
+(    CycleTime = PhaData[0].scet;) p n
+(    ) S
+(if) K
+( \(gDbgLvl >= 2\) printf\(") p
+(%s -D- CycleTime for PhaData set to %f\\n) str
+(",) p n
+() S 8 T () S 16 T () S 24 T (     thisprog.c_str\(\),CycleTime\);) N
+(  }) N
+() N
+(  ) S
+(// for debugging dump only) c n
+(  ) p
+(if) K
+( \(dumpPhaFlag\) fclose\(DUMP\);) p n
+() N
+(  ) S
+(return) K
+( status;) p n
+(}) N
+() N
+(/* print PHA info to stdout for debugging */) c n
+(int) k
+( AceSwicsData::dumpPha\(Pha *pha, ) p
+(int) k
+( npha, ) p
+(int) k
+( ncycle\) ) p
+(const) K
+({) p n
+() N
+(  ) S
+(/* scet, nedb, npha, eq */) c n
+(  printf\(") p
+(%010.0f %02d %03d %6.2f) str
+(",pha->scet, pha->nedb,npha,pha->eq\);) p n
+() N
+(  ) S
+(/* tof, esd, sector */) c n
+(  printf\(") p
+( %10.2f %10.2f %02d) str
+(",pha->tof,pha->esd,pha->sector\);) p n
+() N
+(  ) S
+(/* range, br0,br1, br2, wt */) c n
+(  printf\(") p
+( %01d %05d %05d %05d %10.2f) str
+(",pha->range,) p n
+() S 8 T (  pha->br[0],pha->br[1],pha->br[2], pha->weight\);) N
+(  ) N
+(  ) S
+(/* vi, vw, mm, mq, ncycle */) c n
+(  printf\(") p
+( %10.2f %10.2f %10.2f %10.2f %03d\\n) str
+(",pha->speed,pha->swspeed,) p n
+(AceSwicsData.cc) (Page 7/10) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p 8 T ( pha->mm,pha->mq,) N
+() S 8 T ( ncycle\);) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}  ) N
+() N
+(/* print PHA info to stdout for debugging */) c n
+(int) k
+( AceSwicsData::dumpPhaFile\(Pha *pha, ) p
+(int) k
+( npha, ) p
+(int) k
+( ncycle, ) p
+(FILE) k
+( *F\) ) p
+(const) K
+({) p n
+() N
+(  ) S
+(/* scet, nedb, npha, eq */) c n
+(  fprintf\(F,") p
+(%010.0f %02d %03d %6.2f) str
+(",pha->scet, pha->nedb,npha,pha->eq\);) p n
+() N
+(  ) S
+(/* tof, esd, sector */) c n
+(  fprintf\(F,") p
+( %10.2f %10.2f %02d) str
+(",pha->tof,pha->esd,pha->sector\);) p n
+() N
+(  ) S
+(/* range, br0, br1, br2, wt */) c n
+(  fprintf\(F,") p
+( %01d %05d %05d %05d %10.2f) str
+(",pha->range,) p n
+() S 8 T (  pha->br[0],pha->br[1],pha->br[2], pha->weight\);) N
+(  ) N
+(  ) S
+(/* vi, vw, mm, mq, ncycle*/) c n
+(  fprintf\(F,") p
+( %10.2f %10.2f %10.2f %10.2f %03d\\n) str
+(",pha->speed,pha->swspeed,pha->mm,pha->m) p n
+(q,) N
+() S 8 T ( ncycle\);) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}  ) N
+() N
+(Pha AceSwicsData::getPha\() S
+(int) k
+( i\) ) p
+(const) K
+( {) p n
+(  ) S
+(return) K
+(\(PhaData[i]\);) p n
+(}) N
+() N
+(long) k
+( AceSwicsData::getNpha\() p
+(void) k
+(\) ) p
+(const) K
+( {) p n
+(  ) S
+(return) K
+(\(PhaData.size\(\)\);) p n
+(}) N
+() N
+(/* get forward model \(FM\) data ) c n
+(   wrapper for libhef::xfm */) N
+(double) k
+(* AceSwicsData::getFM\() p
+(double) k
+( eoq, ) p
+(double) k
+( pav, ) p
+(double) k
+( mass, ) p n
+() S 8 T () S 16 T () S 24 T (    ) S
+(double) k
+( charge\) ) p
+(const) K
+( {) p n
+(  ) S
+(static) K
+( ) p
+(double) k
+(* tmp;) p n
+(  tmp = libhef::xfm\(eoq, pav, mass, charge\);) N
+(  ) S
+(return) K
+(\(tmp\);) p n
+(}) N
+() N
+(double) k
+( AceSwicsData::getPav\(\) ) p
+(const) K
+({) p n
+(  ) S
+(return) K
+(\(PapsVolt\);) p n
+(}) N
+() N
+(double) k
+( AceSwicsData::getEqtab\() p
+(int) k
+( nedb\) ) p
+(const) K
+({) p n
+(  ) S
+(return) K
+(\(Eqtab[nedb]\);) p n
+(}) N
+() N
+(float) k
+( AceSwicsData::ss1970_to_doyfr\() p
+(double) k
+( ss1970\) ) p
+(const) K
+({) p n
+(  ) S
+(float) k
+( doyfr;) p n
+(  ) S
+(long) k
+( alltime[14];) p n
+() N
+(  ) S
+(long) k
+( ss1970l = \() p
+(long) k
+(\) ss1970;) p n
+() N
+(  ) S
+(// use converter from libhef) c n
+(  ) p
+(// alltime = ) c n
+(  ) p
+(// 0     1      2    3   4   5     6    7  8   9   10) c n
+(  ) p
+(// sec70 julian secs DOY day month year hr min sec week-day \(0 for sunday\)) c n
+(  libhef::sec70_time\(alltime, &ss1970l\);) p n
+() N
+(  ) S
+(// doy + \(hr*3600 + min*60 + sec\)/86400.0) c n
+(  doyfr = alltime[3] + ) p n
+(    \() S
+(float) k
+(\)\(alltime[7]*3600 + alltime[8]*60 + alltime[9]\)/86400.0;) p n
+() N
+(  ) S
+(return) K
+(\(doyfr\);) p n
+(AceSwicsData.cc) (Page 8/10) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(AceSwicsData.cc) (4/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (9-10) 5
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(}) p n
+(  ) N
+(double) k
+( AceSwicsData::getCycleTime\(\) ) p
+(const) K
+({) p n
+(  ) S
+(return) K
+(\(CycleTime\);) p n
+(}) N
+() N
+(double) k
+( AceSwicsData::calcDutyCycle\(\) ) p
+(const) K
+({) p n
+(  ) S
+(// calls calculation with global cycle time, which is correct) c n
+(  ) p
+(// for standard usage) c n
+(  ) p
+(return) K
+(\(AceSwicsData::calcDutyCycle\(CycleTime\)\);) p n
+(}) N
+() N
+(double) k
+( AceSwicsData::calcDutyCycle\() p
+(double) k
+( cycle_time\) ) p
+(const) K
+({) p n
+(  AceSwicsDutyCycle duty;) N
+() N
+(  ) S
+(// bad values passed through as -1.0) c n
+(  ) p
+(return) K
+(\(duty.calcByInterpolation\(cycle_time\)\);) p n
+(}) N
+() N
+(/*) c n
+(   Routine: calcSwSpeed.cc) N
+() N
+(   Description: ) N
+(      Calculates solar wind speed \(km/s\) using a count-weighted average of E/q) N
+(      for all E/q >= cutoff*maximum.  ) N
+() N
+(   Author: Jim Raines, 30Nov2000) N
+(           \(Algorithm concept by Thomas Zurbuchen, Oct2000\)) N
+() N
+(   Method: ) N
+() N
+(   Requires: read\(-->\) written\(<--\)) N
+(   <called functions and globals read\(-->\)/written\(<--\)>) N
+() N
+(   Argument  list) N
+(      EPQ[n]            Energy Per charge value in keV/e) N
+(      cnt[n]            number of counts per E/q step) N
+(      float moq         mass / charge to use in speed calc. \(amu / ox. #\)) N
+(      float cutoff      % of max counts to qualify for inclusion) N
+() N
+() N
+(   See libh2n.doc for further documentation.) N
+() N
+(   This file is controlled by the Concurent Version System \(CVS\):) N
+(   $Id: AceSwicsData.cc,v 1.8 2004/07/28 13:28:35 jraines Exp $) N
+() N
+(   Major Modification History: \(keep this last section\)) N
+(     Translated to C++.  JR, 23May2001.) N
+() N
+(     Translated to C.  JR, 29Jan2001.) N
+(*/) N
+(double) k
+( AceSwicsData::calcSwSpeed\(vector<) p
+(double) k
+(> epq,vector<) p
+(double) k
+(> cnt,) p n
+() S 8 T () S 16 T () S 24 T () S 32 T ( ) S
+(double) k
+( moq, ) p
+(double) k
+( cutoff\){) p n
+(  ) S
+(/* constants */) c n
+(  ) p
+(const) K
+( string thisprog = ") p
+(AceSwicsData::calcSwSpeed) str
+(";) p n
+() N
+(  ) S
+(/* Local variables */) c n
+(  ) p
+(int) k
+( DbgLvl = gDbgLvl; ) p
+(/* init local debugging value to global  */) c n
+() p n
+(  ) S
+(/* dump args for debugging */) c n
+(  ) p
+(if) K
+( \(DbgLvl > 2\) {) p n
+(    ) S
+(for) K
+(\() p
+(int) k
+( i = FIRSTEDB; i < MAXEDB; i++\){) p n
+(      printf\(") S
+(%s -D- epq[%02d]=%10.2e cnt[%02d]=%05d\\n) str
+(",thisprog.c_str\(\)) p n
+() S 8 T (     ,i,epq[i],i,cnt[i]\);) N
+(    }) N
+(    printf\(") S
+(%s -D- moq=%10.2f cutoff=%10.2f\\n) str
+(",thisprog.c_str\(\),moq, cutoff\);) p n
+(  }) N
+() N
+(  ) S
+(/* find max */) c n
+(AceSwicsData.cc) (Page 9/10) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  ) p
+(/* -------- */) c n
+(  ) p
+(double) k
+( hi;                ) p
+(// maximum number of cnt words) c n
+(  ) p
+(for) K
+(\() p
+(int) k
+( i = 0; i < cnt.size\(\); i++\){) p n
+(    ) S
+(if) K
+( \(i == 0\) hi = cnt[i];) p n
+() N
+(    ) S
+(if) K
+( \(cnt[i] > hi\) hi = cnt[i];) p n
+(  }) N
+() N
+(  ) S
+(/* calculate count-weighted average energy */) c n
+(  ) p
+(/* --------------------------------------- */) c n
+(  ) p
+(double) k
+( sumepq = 0.0;       ) p
+(// sum of E/q for average) c n
+(  ) p
+(double) k
+( sumcnt = 0;        ) p
+(// number of cnt used for weighting) c n
+(  ) p
+(for) K
+(\() p
+(int) k
+( i = 0; i < epq.size\(\); i++\){) p n
+(    ) S
+(if) K
+( \(cnt[i] >= \(cutoff*hi\)\){) p n
+(      sumepq += epq[i] * cnt[i];) N
+(      sumcnt += cnt[i];) N
+(    }) N
+(  }) N
+() N
+(  ) S
+(double) k
+( energy;             ) p
+(// count-weighted average energy) c n
+(  energy = sumepq/sumcnt;) p n
+(  ) S
+(if) K
+( \(DbgLvl >= 3\) ) p n
+(    printf\(") S
+(%s -I- sumepq=%10.2f sumcnt=%10.2f energy=%10.2f \\n) str
+(",) p n
+() S 8 T (   thisprog.c_str\(\),sumepq,sumcnt,energy\);) N
+() N
+(  ) S
+(/* compute:  v = sqrt\( 2 E/q 9.648E4 / \(m/q\) \) */) c n
+(  ) p
+(/*           where 9.648E4 is conversion to C/g units */) c n
+(  ) p
+(double) k
+( swspeed;        ) p
+(// speed) c n
+(  swspeed = sqrt\(2*energy*9.648E4/moq\);) p n
+() N
+(  ) S
+(if) K
+( \(DbgLvl >= 3\) printf\(") p
+(%s -I-  swspeed=%10.2f\\n) str
+(",swspeed\);) p n
+() N
+(  ) S
+(return) K
+(\(swspeed\);) p n
+(}) N
+(AceSwicsData.cc) (Page 10/10) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(AceSwicsData.cc) (5/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (1-2) 6
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*) c n
+(  File: AceSwicsData.h) N
+() N
+(  Description:) N
+() N
+(    Class of functions and containers for groups of Pha words.  This) N
+(    class, along with the Pha class contain all instrument-specific) N
+(    functions and containers.) N
+() N
+(  Author\(s\): Jim Raines \(jmr\)) N
+() N
+(  Method:) N
+(    ) N
+(  Revision controlled by CVS:) N
+(  $Id: AceSwicsData.h,v 1.5 2003/11/20 21:36:15 jraines Exp $) N
+() N
+(  Major Modification History:) N
+(    01Sep2002   jmr   initial coding) N
+() N
+(*/) N
+() p n
+(class AceSwicsData {) N
+() N
+( public:) N
+(  AceSwicsData\() S
+(void) k
+(\);  ) p
+(// constructor) c n
+() p n
+(  ) S
+(int) k
+( load\() p
+(int) k
+( AnalysisInterval\);) p n
+(  Pha getPha\() S
+(int) k
+( i\) ) p
+(const) K
+(;) p n
+(  ) S
+(long) k
+( getNpha\() p
+(void) k
+(\) ) p
+(const) K
+(;   ) p
+(// number of PHA for looping getPha) c n
+() p n
+(  ) S
+(double) k
+( *getFM\() p
+(double) k
+(, ) p
+(double) k
+(, ) p
+(double) k
+(, ) p
+(double) k
+(\) ) p
+(const) K
+(;) p n
+() N
+(  ) S
+(double) k
+( getPav\(\) ) p
+(const) K
+(;   ) p
+(// get post acceleration voltage) c n
+(  ) p
+(double) k
+( getEqtab\() p
+(int) k
+( i\) ) p
+(const) K
+(;  ) p
+(// get E/q at step i) c n
+(  ) p
+(float) k
+(  ss1970_to_doyfr\() p
+(double) k
+( ss1970\) ) p
+(const) K
+(;) p n
+() N
+(  ) S
+(// Returns cycle time \(in sec. since 1970\) for first PHA in PhaData,) c n
+(  ) p
+(// set at the end of each load\(\).) c n
+(  ) p
+(double) k
+( getCycleTime\(\) ) p
+(const) K
+(;) p n
+() N
+(  ) S
+(/* call routines to calculate the duty cycle) c n
+(     note:  cycle_time is named to differentiate from the class) N
+(     variable CycleTime. ) N
+(  */) N
+(  ) p
+(double) k
+( calcDutyCycle\(\) ) p
+(const) K
+(;  ) p
+(// uses current CycleTime for object) c n
+(  ) p
+(double) k
+( calcDutyCycle\() p
+(double) k
+( cycle_time\) ) p
+(const) K
+(;  ) p
+(// calc. for any time) c n
+() p n
+(  ) S
+(// --- Solar Wind Speed ---) c n
+(  ) p
+(// calculates solar wind speed from count-weighed average E/q) c n
+(  ) p
+(// Used in load\(\) function to set values in indiv. PHA words.) c n
+(  ) p
+(double) k
+( calcSwSpeed \(vector<) p
+(double) k
+(> eoq, vector<) p
+(double) k
+(> cnt, ) p n
+() S 8 T () S 16 T (      ) S
+(double) k
+( moq, ) p
+(double) k
+( cutoff\);) p n
+() N
+(  ) S
+(// used only for debugging) c n
+(  ) p
+(int) k
+( dumpPha\(Pha *pha, ) p
+(int) k
+( npha, ) p
+(int) k
+( ncycle\) ) p
+(const) K
+(;) p n
+(  ) S
+(int) k
+( dumpPhaFile\(Pha *pha, ) p
+(int) k
+( npha, ) p
+(int) k
+( ncycle, ) p
+(FILE) k
+(* F\) ) p
+(const) K
+(;) p n
+() N
+( private:) N
+(  ) S
+(// create PHA vector) c n
+(  vector<Pha> PhaData;) p n
+() N
+(  ) S
+(//post-acceleration voltage in kV) c n
+(  ) p
+(double) k
+( PapsVolt;) p n
+() N
+(  ) S
+(// eqtab) c n
+(  vector<) p
+(double) k
+(> Eqtab;        ) p
+(// Commanded E/q values) c n
+() p n
+(  ) S
+(// Cycle time \(in sec. since 1970\) for first PHA in PhaData,) c n
+(  ) p
+(// set at the end of each load\(\).) c n
+(AceSwicsData.h) (Page 1/2) (Nov 20, 03 16:36) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  ) p
+(double) k
+( CycleTime;) p n
+(};) N
+(AceSwicsData.h) (Page 2/2) (Nov 20, 03 16:36) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(../include/AceSwicsData.h) (6/6) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+
+%%Trailer
+end
+%%EOF

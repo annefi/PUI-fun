@@ -1,0 +1,5 @@
+
+
+plot dcr_fsr(x,z,m,C1,C2,C3,pf1,pf2,Ethr,FWHM,thick,defl), "./caldat/o2daten1p.f" u ($13/$1):16:34 with errorbars, "./caldat/fe56daten1p.f" u ($13/$1):16:34 with errorbars, "./caldat/nedaten_ssd2_1p.f" u ($13/$1):16:34 with errorbars, "./caldat/mgdaten1p.f" u ($13/$1):16:34 with errorbars, "./caldat/sidaten1p.f" u ($13/$1):16:34 with errorbars
+
+#plot "./caldat/o2daten1p.f" u ($13):16:34 with errorbars, "./caldat/fe56daten1p.f" u ($13):16:34 with errorbars, "./caldat/nedaten_ssd2_1p.f" u ($13):16:34 with errorbars, "./caldat/mgdaten1p.f" u ($13):16:34 with errorbars, "./caldat/sidaten1p.f" u ($13):16:34 with errorbars

@@ -1,0 +1,18 @@
+       SUBROUTINE HESTOP(Z1,M1,Z2,M2,E,PCOEF,SE)
+c
+       IMPLICIT REAL*4(A-H,M-Z)
+       INTEGER Z1,Z2
+       DIMENSION PCOEF(5)
+c
+       HE0=1.
+       HE=AMAX1(HE0,E)
+       B=ALOG(HE)
+       A=.2865+.1266*B-.001429*B*B+.02402*B**3-.01135*B**4+.001475*B**5	
+       HEH=1.-EXP(-AMIN1(30.,A))
+       A=(1.+(.007+.00005*Z2)*EXP(-(7.6-AMAX1(0.,ALOG(HE)))**2))
+       HEH=HEH*A*A
+       CALL PSTOP(Z1,M1,Z2,M2,HE,PCOEF,SP)
+       SE=SP*HEH*Z1*Z1
+       IF (E.LE.HE0) SE=SE*SQRT(E/HE0)
+       RETURN
+       END

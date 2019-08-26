@@ -1,0 +1,13 @@
+in den ordnern entry_angle_0 und entra_angle_136 wurden die geometreien mit den entry angle?n 
+0.0 bzw. 1.36 grad berechnet.
+in den unterordnern macor  und 1mm wurden die geometrien für unterschiedliche aussenbereiche des detektors 
+gerechnet. in macor ist die gesamte umrandung drin. in 1mm nur die umrandung 1 mm ausserhalb der
+tatsächlich sensitiven detektorfläche.
+
+in dem file "fitgeomall.dat" sind die die probse und probst werte.
+aufbau:
+es sind immer 961 zeilen für einen winkel beta (0 bis 39)
+in der ersten spalte steht sigma
+in der zweiten spalte steht defl
+in der ersten spalte steht probst
+in der ersten spalte steht probse

@@ -1,0 +1,14 @@
+$ ln -fs /shrg1/ace/sw/src/axlv2/tools/axlv2_fmcomp_template.save .
+$ ln -fs /shrg1/ace/sw/src/axlv2/tools/axlv2_pccomp_template.save .
+.run /shrg1/ace/sw/src/axlv2/tools/read_fmc.pro
+.run /shrg1/ace/sw/src/axlv2/tools/read_pcc.pro
+.run /shrg1/ace/sw/src/axlv2/tools/read_ets.pro
+.run /shrg1/ace/sw/src/axlv2/tools/plot_ets.pro
+.run /shrg1/ace/sw/src/axlv2/tools/fmcomp.pro   
+
+doyfr_str = '288_002'
+
+file='axlv2_fmcomp.dat'
+if (file_exists(file)) then $
+  fmcomp, fmcfile=file, etsfile='axlv2_et_slices_'+doyfr_str+'.dat',$
+        tag='ydoy='+doyfr_str,fmcdata=fmc

@@ -1,0 +1,208 @@
+=== vvv libhef.txt === 15-Jul-98/hef =========================================
+
+How to produce this document:
+[] use cfuncproto.pl to get a list of routines defined in a .c file
+[] use a2ps -Plw -2 libhef.txt \
+       include/decoded.h \
+       include/acetools.h \
+         include/bittools.h \
+         include/asxdpusim.h \
+         include/swxtools.h \
+         include/expand.h \
+         include/expand_tools.h \
+       include/heffile.h \
+       include/hefnum.h \
+       include/libtim.h
+
+Contents
+========
+
+. csys --- core system .......................................................
+  |
+  | The idea is that there are no matrices. All there is are
+  | arrays, and an index function to access the correct element
+  | of a N-dim matrix easily. Currently only 2D matrices are
+  | supported, but this is easily changed.
+  |
+  | int    I(int ir, int Nc, int ic);   index function for matrices
+  | int    I3(int ir, int Nc, int ic, int ip, int Nr)
+  |                                     for cubes (with "planes")
+  | void   dvec_free (double *v);       get memory for double array
+  | double *dvec_get (long n);          ... and free it again
+  | int    *ivec_get (long n);
+  | void   ivec_free (int *v);
+  |
+  | typical usage:
+  |
+  |   double *adcvm;
+  |   adcvm  = dvec_get(Ng * Ng);
+  |   ...
+  |   adcvm[I(ir,Ng,ic)] = 1.1;
+  |   ...
+  |   dvec_free(adcvm);
+
+. hefnum --- numerical routines ..............................................
+  |
+  | double dratio                       x/y if y != 0 
+  | double draterr	                
+  | double dsqrt  	                sqrt(x)
+  | double dsqr   			x^2
+  |
+  | mfunctions --- matrix routines
+  |
+  |   void   minv      (double *a, int Nc);
+  |                                     matrix inversion using Gauss
+  | afunctions --- array handling
+  | 
+  |   double asum      (double *x, int istart, int ilen);
+  |                                     sum up element in array
+  |   void   aind      (double *x, int istart, int ilen);
+  |                                     x[i] = i
+  |   void   aset      (double *x, int istart, int ilen, double dval);
+  |                                     x[i] = dval
+  |   void   aprint    (double *x, int istart, int ilen, char *eztit);
+  |                                     print array
+  |
+  |   typical usage:
+  |
+  |   dtmp = asum(x,0,Nx);              sum i=0..Nx-1 of x[i]
+  |   aprint(y,0,Nx,"y");               print array y with title "y"
+  |
+  | cfit --- copy of "curevfit.pro", Levemberg-Marquardt fitting
+  |
+  |   typical usage:
+  |
+  |   adg[0] = 100.0;
+  |   adg[1] = 333.0;
+  |   adg[2] =  33.0;
+  |
+  |   for(i = 0; i < 5; i++) adx[i] = 100.0 * (i+1);
+  |   one_gauss(adx,ady,5,adg,3,adt);
+  |
+  |   for(i = 0; i < 5; i++) {
+  |     ady[i] += 10.0;
+  |     adw[i] =   1.0;
+  |   }
+  |
+  |   for(i = 0; i < 3; i++) {
+  |     adg[i] += 10.0;
+  |   }
+  |
+  |   cfit(adx,ady,adw,5,adg,ads,3,&dtmp,0,one_gauss,noconstraint);
+   
+   
+. acetools ...................................................................
+  |
+  | a3dif.c --- interface to ACE/S3 data
+  |
+  |   int   a3opencyclefile  (char *zfn);
+  |                                     open file with given name for reading
+  |   int   a3closecyclefile (void);    close file
+  |
+  |   int   a3readcycle      (void);    read a cycle (includes buffering)
+  |
+  |   int   a3rcyc           (BYTE abedb[NEDB][NBINEDB], 
+  |                           double adtime[NEDB], BYTE abQAC[NEDB]);
+  |
+  |                                     low-level reading routine; 
+  |                                     do not use
+  |                                  
+  |   SBCYC *a3expandcycle   (void);    expand data read previously
+  |
+  |   int   a3pxbrtab        (SBCYC *pcyc, FILE *fp);
+  |                                     print SWICS BR table to fp      
+  |   int   a3pxmrtab        (SBCYC *pcyc, FILE *fp);
+  |                                     print SWICS MR table to fp
+  |
+  |
+  +- bittools.c v1.1 (bittools.h v1.2)
+  |
+  |  int    getbits
+  |  double comp12n          "STOF-type" decompression
+  |  long   decmpa           Decompression using table A
+  |  long   decmpc           "                         C
+  |
+  +- asxdpusim.c v1.4  (asxdpusim.h v1.2, acetools.h v1.3)
+  |
+  |  double dswxu            u = ln(TOF)
+  |  double dswxeoq          E/q(Step)
+  |  double dswxpal          Post-Acceleration voltage (Level)
+  |  double dswxlnmq         ln(m/q) (DPU algorithm)
+  |  double dswxlnm          ln(m)   "
+  |
+  +- swxtools.c v1.8 (swxtools.h v1.3, acetools.h v1.3)
+  |
+  |  long   lax_tofcent_ch   Forward Model: center of TOF peak [ch]
+  |  double dax_tofsig1_ch   sigma_1
+  |  double dax_tofsig2_ch
+  |  long   lax_esdcent_ch
+  |  long   lax_esdcen_ch    /* OLD VERSION */
+  |  double dax_esdsig_ch
+  |  void   vax_peakpos_arg 
+  |  BYTE   bax_ellipse_isin Point within ellipse ?   
+  |  double dduty            duty cycle               
+  |  double dgeometryfactor                          
+  |  double deff             efficiency               
+  |  double dflux  	     differential flux        
+  |  double mrxxtot          total of counts in Matrix Rate xx
+  |  double mrxxdra          "density ratio" from matrix rates
+  |
+  +- expand.c,v 1.12 (expand.h,v 1.4, acetools.h,v 1.3)
+  |
+  |  double ddpudbl          
+  |  void   vxclassify       
+  |  void   gedbpos   	     
+  |  void   vxmascla  	     
+  |  void   vxmoqcla         
+  |  void   vxbrtab   	     
+  |  void   vxmrtab   	     
+  |  void   deccpha          
+  |  void   decmpha          
+  |  double convTmp                           
+  |  double convTmp2  
+  |
+  +- expand_tools.c
+  |
+  |  int    ccycg           (SBCYC *pcyc);
+  |                                     quality check: general 
+  |                                     (not instrument specific)
+  |  int    ccycg_recnrinc  (SBCYC *pcyc);
+  |                                     check for increasing rec number
+  |  int    ccycg_timeinc   (SBCYC *pcyc);
+  |                                     check for increasing s/c readout time
+  |  int    ccycx           (SBCYC *pcyc);
+  |                                     quality check for SWICS
+  |  int    ccycx_mcplev    (SBCYC *pcyc, int iexplev);
+  |                                     check for desired MCP level
+  |  int    ccycx_pavlev    (SBCYC *pcyc, int iexplev);
+  |                                     check for desired PAPS level
+  |  int    ccycx_eqhk      (SBCYC *pcyc);
+  |                                     make sure E/q stepping (housekeeping)
+  |                                     is ok
+  |  int    ccycx_eqtabnom  (SBCYC *pcyc);
+  |                                     make sure E/q stepping is nominal
+  |
+  |  int    cycok          
+  |  void   nc_handle_error
+
+  heffile
+  |
+  +- heffile.c,v 1.4 (heffile.h,v 1.4)
+  |
+  |  int    hefopen
+  |  int    hefclose
+  |  void   reset_filest
+
+  libtim
+  |
+  +- libtim.c,v 1.1 (libtim.h,v 1.1)
+  |
+  |  void   date_time 
+  |  void   doy_time  
+  |  void   sec70_time
+  |  void   ltjulday  
+  |  void   ltcaldat  
+  |  int    is_leap   
+  |  char   *timstr   
+
+=== ^^^ libhef.txt === 15-Jul-98/hef =========================================

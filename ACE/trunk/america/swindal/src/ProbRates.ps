@@ -1,0 +1,3087 @@
+%!PS-Adobe-3.0
+%%Title: ProbRates.cc, ProbRates.h
+%%For: Jim Raines
+%%Creator: a2ps version 4.13
+%%CreationDate: Mon Aug  9 11:20:38 2004
+%%BoundingBox: 24 24 588 768
+%%DocumentData: Clean7Bit
+%%Orientation: Landscape
+%%Pages: 9
+%%PageOrder: Ascend
+%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentNeededResources: font Courier
+%%+ font Courier-Bold
+%%+ font Helvetica
+%%+ font Helvetica-Bold
+%%+ font Symbol
+%%+ font Times-Bold
+%%+ font Times-Roman
+%%DocumentProcessColors: Black Blue Green Red 
+%%DocumentSuppliedResources: procset a2ps-color-prolog
+%%+ encoding ISO-8859-1Encoding
+%%EndComments
+/a2psdict 200 dict def
+a2psdict begin
+%%BeginProlog
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+
+% EPSF import as in the Red Book
+/BeginInclude {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack 
+  userdict begin
+    0 setgray 0 setlinecap
+    1 setlinewidth 0 setlinejoin
+    10 setmiterlimit [ ] 0 setdash newpath
+    gs_languagelevel 1 ne {
+      false setstrokeadjust false setoverprint 
+    } if
+} bind def
+
+/EndInclude {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+/BeginEPSF {
+  BeginInclude
+  /showpage { } def
+} bind def
+
+/EndEPSF {
+  EndInclude
+} bind def
+
+% Page prefeed
+/page_prefeed {         % bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} bind def
+
+/deffont {
+  findfont exch scalefont def
+} bind def
+
+/reencode_font {
+  findfont reencode 2 copy definefont pop def
+} bind def
+
+% Function c-show (str => -)
+% centers text only according to x axis.
+/c-show { 
+  dup stringwidth pop
+  2 div neg 0 rmoveto
+  show
+} bind def
+
+% Function l-show (str => -)
+% prints texts so that it ends at currentpoint
+/l-show {
+  dup stringwidth pop neg 
+  0 
+  rmoveto show
+} bind def
+
+% center-fit show (str w => -)
+% show centered, and scale currentfont so that the width is less than w
+/cfshow {
+  exch dup stringwidth pop
+  % If the title is too big, try to make it smaller
+  3 2 roll 2 copy
+  gt
+  { % if, i.e. too big
+    exch div
+    currentfont exch scalefont setfont
+  } { % ifelse
+    pop pop 
+  }
+  ifelse
+  c-show			% center title
+} bind def
+
+% Return the y size of the current font
+% - => fontsize
+/currentfontsize {
+  currentfont /FontType get 0 eq {
+    currentfont /FontMatrix get 3 get
+  }{
+    currentfont /FontMatrix get 3 get 1000 mul
+  } ifelse
+} bind def
+
+% reencode the font
+% <encoding-vector> <fontdict> -> <newfontdict>
+/reencode { %def
+  dup length 5 add dict begin
+    { %forall
+      1 index /FID ne 
+      { def }{ pop pop } ifelse
+    } forall
+    /Encoding exch def
+
+    % Use the font's bounding box to determine the ascent, descent,
+    % and overall height; don't forget that these values have to be
+    % transformed using the font's matrix.
+    % We use `load' because sometimes BBox is executable, sometimes not.
+    % Since we need 4 numbers an not an array avoid BBox from being executed
+    /FontBBox load aload pop
+    FontMatrix transform /Ascent exch def pop
+    FontMatrix transform /Descent exch def pop
+    /FontHeight Ascent Descent sub def
+
+    % Define these in case they're not in the FontInfo (also, here
+    % they're easier to get to.
+    /UnderlinePosition 1 def
+    /UnderlineThickness 1 def
+    
+    % Get the underline position and thickness if they're defined.
+    currentdict /FontInfo known {
+      FontInfo
+      
+      dup /UnderlinePosition known {
+	dup /UnderlinePosition get
+	0 exch FontMatrix transform exch pop
+	/UnderlinePosition exch def
+      } if
+      
+      dup /UnderlineThickness known {
+	/UnderlineThickness get
+	0 exch FontMatrix transform exch pop
+	/UnderlineThickness exch def
+      } if
+      
+    } if
+    currentdict 
+  end 
+} bind def
+
+% composite fonts for ASCII-EUC mixed string
+% Version 1.2 1/31/1990
+% Orignal Ken'ichi HANDA (handa@etl.go.jp)
+% Modified Norio Katayama (katayama@rd.nacsis.ac.jp),1998
+% Extend & Fix Koji Nakamaru (maru@on.cs.keio.ac.jp), 1999
+% Anyone can freely copy, modify, distribute this program.
+
+/copyfont {	% font-dic extra-entry-count  copyfont  font-dic
+	1 index maxlength add dict begin
+	{	1 index /FID ne 2 index /UniqueID ne and
+		{def} {pop pop} ifelse
+	} forall
+	currentdict
+	end
+} bind def
+
+/compositefont { % ASCIIFontName EUCFontName RomanScale RomanOffset Rot(T/F) compositefont font
+    /RomanRotation exch def
+    /RomanOffset exch def
+    /RomanScale exch def
+    userdict /fixeucfont_dict known not {
+	userdict begin
+	    /fixeucfont_dict 2 dict begin
+		/UpperByteEncoding [
+		    16#00 1 16#20 { pop 0 } for
+		    16#21 1 16#28 { 16#20 sub } for
+		    16#29 1 16#2F { pop 0 } for
+		    16#30 1 16#74 { 16#27 sub } for
+		    16#75 1 16#FF { pop 0 } for
+		] def
+	        /LowerByteEncoding [
+		    16#00 1 16#A0 { pop /.notdef } for
+		    16#A1 1 16#FE { 16#80 sub 16 2 string cvrs
+				    (cXX) dup 1 4 -1 roll
+				    putinterval cvn } for
+		    /.notdef
+		] def
+		currentdict
+	    end def
+	end
+    } if
+    findfont dup /FontType get 0 eq {
+	14 dict begin
+	    %
+	    % 7+8 bit EUC font
+	    %
+	    12 dict begin
+		/EUCFont exch def
+		/FontInfo (7+8 bit EUC font) readonly def
+		/PaintType 0 def
+		/FontType 0 def
+		/FontMatrix matrix def
+		% /FontName
+		/Encoding fixeucfont_dict /UpperByteEncoding get def
+		/FMapType 2 def
+		EUCFont /WMode known
+		{ EUCFont /WMode get /WMode exch def }
+		{ /WMode 0 def } ifelse
+		/FDepVector [
+		    EUCFont /FDepVector get 0 get
+		    [ 16#21 1 16#28 {} for 16#30 1 16#74 {} for ]
+		    {
+			13 dict begin
+			    /EUCFont EUCFont def
+			    /UpperByte exch 16#80 add def	
+			    % /FontName
+			    /FontInfo (EUC lower byte font) readonly def
+			    /PaintType 0 def
+			    /FontType 3 def
+			    /FontMatrix matrix def
+			    /FontBBox {0 0 0 0} def
+			    /Encoding
+				fixeucfont_dict /LowerByteEncoding get def
+			    % /UniqueID
+			    % /WMode
+			    /BuildChar {
+				gsave
+				exch dup /EUCFont get setfont
+				/UpperByte get
+				2 string
+				dup 0 4 -1 roll put
+				dup 1 4 -1 roll put
+				dup stringwidth setcharwidth
+				0 0 moveto show
+				grestore
+			    } bind def
+			    currentdict
+			end
+			/lowerbytefont exch definefont
+		    } forall
+		] def
+		currentdict
+	    end
+	    /eucfont exch definefont
+	    exch
+	    findfont 1 copyfont dup begin
+		RomanRotation {
+			/FontMatrix FontMatrix
+			[ 0 RomanScale neg RomanScale 0 RomanOffset neg 0 ]
+			matrix concatmatrix def
+		}{
+			/FontMatrix FontMatrix
+			[ RomanScale 0 0 RomanScale 0 RomanOffset ] matrix concatmatrix
+			def
+			/CDevProc
+			    {pop pop pop pop 0 exch -1000 exch 2 div 880} def
+		} ifelse
+	    end
+	    /asciifont exch definefont
+	    exch
+	    /FDepVector [ 4 2 roll ] def
+	    /FontType 0 def
+	    /WMode 0 def
+	    /FMapType 4 def
+	    /FontMatrix matrix def
+	    /Encoding [0 1] def
+	    /FontBBox {0 0 0 0} def
+%	    /FontHeight 1.0 def % XXXX
+	    /FontHeight RomanScale 1.0 ge { RomanScale }{ 1.0 } ifelse def
+	    /Descent -0.3 def   % XXXX
+	    currentdict
+	end
+	/tmpfont exch definefont
+	pop
+	/tmpfont findfont
+    }{
+	pop findfont 0 copyfont
+    } ifelse
+} def	
+
+/slantfont {	% FontName slant-degree  slantfont  font'
+    exch findfont 1 copyfont begin
+    [ 1 0 4 -1 roll 1 0 0 ] FontMatrix exch matrix concatmatrix
+    /FontMatrix exch def
+    currentdict
+    end
+} def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+
+% -------- Some routines to enlight plain b/w printings ---------
+
+% Underline
+% width --
+/dounderline {
+  currentpoint
+  gsave
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    0 rlineto
+    stroke
+  grestore
+} bind def
+
+% Underline a string
+% string --
+/dounderlinestring {
+  stringwidth pop
+  dounderline
+} bind def
+
+/UL {
+  /ul exch store
+} bind def
+
+% Draw a box of WIDTH wrt current font
+% width --
+/dobox {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    stroke
+  grestore
+} bind def
+
+/BX {
+  /bx exch store
+} bind def
+
+% Box a string
+% string --
+/doboxstring {
+  stringwidth pop
+  dobox
+} bind def
+
+%
+% ------------- Color routines ---------------
+%
+/FG /setrgbcolor load def
+
+% Draw the background
+% width --
+/dobackground {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    bgcolor aload pop setrgbcolor
+    fill
+  grestore
+} bind def
+
+% Draw bg for a string
+% string --
+/dobackgroundstring {
+  stringwidth pop
+  dobackground
+} bind def
+
+
+/BG {
+  dup /bg exch store
+  { mark 4 1 roll ] /bgcolor exch store } if
+} bind def
+
+
+/Show {
+  bg { dup dobackgroundstring } if
+  ul { dup dounderlinestring } if
+  bx { dup doboxstring } if
+  show
+} bind def
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T {
+  cw mul x0 add
+  bg { dup currentpoint pop sub dobackground } if
+  ul { dup currentpoint pop sub dounderline } if
+  bx { dup currentpoint pop sub dobox } if
+  y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n {
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+/S {
+  Show
+} bind def
+
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Function title: prints page header.
+% <ct> <rt> <lt> are passed as argument
+/title { 
+  % 1. Draw the background
+  x v get y v get moveto
+  0 setgray
+  gsave
+    0 th 2 div neg rmoveto 
+    th setlinewidth
+    0.5 0.5 1 setrgbcolor
+    pw 0 rlineto stroke
+  grestore
+  % 2. Border it
+  gsave
+    0.7 setlinewidth
+    pw 0 rlineto
+    0 th neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+  % stk: ct rt lt
+  x v get y v get th sub 1 add moveto
+%%IncludeResource: font Helvetica
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  % 3. The left title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    fnfs 0.8 mul hm rmoveto
+    show			% left title
+  grestore
+  exch
+  % stk: ct ltw rt
+  % 4. the right title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    dup
+    pw exch stringwidth pop fnfs 0.8 mul add sub
+    hm
+    rmoveto
+    show			% right title
+  grestore
+  % stk: ct ltw rtw
+  % 5. the center title
+  gsave
+    pw 3 1 roll
+    % stk: ct pw ltw rtw
+    3 copy 
+    % Move to the center of the left room
+    sub add 2 div hm rmoveto
+    % What is the available space in here?
+    add sub fnfs 0.8 mul sub fnfs 0.8 mul sub
+    % stk: ct space_left
+%%IncludeResource: font Helvetica-Bold
+  fHelvetica-Bold fnfs scalefont setfont
+    1 setgray
+    cfshow
+  grestore
+} bind def
+
+% Function border: prints virtual page border
+/border { %def
+  gsave				% print four sides
+    0 setgray
+    x v get y v get moveto
+    0.7 setlinewidth		% of the square
+    pw 0 rlineto
+    0 ph neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+} bind def
+
+% Function water: prints a water mark in background
+/water { %def
+  gsave
+    scx scy moveto rotate
+%%IncludeResource: font Times-Bold
+  fTimes-Bold 100 scalefont setfont
+    .97 setgray
+    dup stringwidth pop 2 div neg -50 rmoveto
+    show
+  grestore
+} bind def
+
+% Function rhead: prints the right header
+/rhead {  %def
+  lx ly moveto
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  l-show
+} bind def
+
+% Function footer (cf rf lf -> -)
+/footer {
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  dx dy moveto
+  show
+
+  snx sny moveto
+  l-show
+  
+  fnx fny moveto
+  c-show
+} bind def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+%%BeginResource: procset a2ps-color-prolog 2.0 1
+
+%% Definition of the color faces.
+/p {
+  0 0 0 FG
+  false BG
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/sy {
+  0 0 0 FG
+  false BG
+  fSymbol bfs scalefont setfont
+  Show
+} bind def
+
+/k {
+  false BG
+  false UL
+  false BX
+  0 0 0.9 FG
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/K {
+  false BG
+  false UL
+  false BX
+  0 0 0.8 FG
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/c {
+  false BG
+  false UL
+  false BX
+  0.8 0 0 FG
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/C {
+  false BG
+  false UL
+  false BX
+  0.8 0 0 FG
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/l {
+  0 0 0 FG
+  0.8 0.8 0 true BG
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/L {
+  0 0 0 FG
+  1 1 0 true BG
+  false UL
+  false BX
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/str {
+  false BG
+  false UL
+  false BX
+  0 0.5 0 FG
+  fTimes-Roman bfs scalefont setfont
+  Show
+} bind def
+
+/e{
+  1 0 0 true BG
+  false UL
+  true BX
+  1 1 1 FG
+  fHelvetica-Bold bfs scalefont setfont
+  Show
+} bind def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul 2 div neg 0 rmoveto
+    f# setfont
+    0.8 0.1 0.1 FG
+    c-show
+  grestore
+} bind def
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Times-Roman
+%%IncludeResource: font Symbol
+%%BeginResource: encoding ISO-8859-1Encoding
+/ISO-8859-1Encoding [
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quoteright 
+/parenleft /parenright /asterisk /plus /comma /minus /period /slash 
+/zero /one /two /three /four /five /six /seven 
+/eight /nine /colon /semicolon /less /equal /greater /question 
+/at /A /B /C /D /E /F /G 
+/H /I /J /K /L /M /N /O 
+/P /Q /R /S /T /U /V /W 
+/X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore 
+/quoteleft /a /b /c /d /e /f /g 
+/h /i /j /k /l /m /n /o 
+/p /q /r /s /t /u /v /w 
+/x /y /z /braceleft /bar /braceright /asciitilde /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclamdown /cent /sterling /currency /yen /brokenbar /section 
+/dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron 
+/degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph /bullet 
+/cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf /threequarters /questiondown 
+/Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla 
+/Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis 
+/Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply 
+/Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls 
+/agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla 
+/egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis 
+/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide 
+/oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis 
+] def
+%%EndResource
+% Initialize page description variables.
+/sh 612 def
+/sw 792 def
+/llx 24 def
+/urx 768 def
+/ury 588 def
+/lly 24 def
+/#copies 1 def
+/th 15.000000 def
+/fnfs 11 def
+/bfs 7.493857 def
+/cw 4.496314 def
+
+% Dictionary for ISO-8859-1 support
+/iso1dict 6 dict begin
+  /fCourier ISO-8859-1Encoding /Courier reencode_font
+  /fCourier-Bold ISO-8859-1Encoding /Courier-Bold reencode_font
+  /fHelvetica ISO-8859-1Encoding /Helvetica reencode_font
+  /fHelvetica-Bold ISO-8859-1Encoding /Helvetica-Bold reencode_font
+  /fTimes-Bold ISO-8859-1Encoding /Times-Bold reencode_font
+  /fTimes-Roman ISO-8859-1Encoding /Times-Roman reencode_font
+currentdict end def
+/bgcolor [ 0 0 0 ] def
+/bg false def
+/ul false def
+/bx false def
+% The font for line numbering
+/f# /Helvetica findfont bfs .6 mul scalefont def
+/fSymbol /Symbol findfont def
+/hm fnfs 0.25 mul def
+/pw
+   cw 81.400000 mul
+def
+/ph
+   522.321860 th add
+def
+/pmw urx llx sub pw 2 mul sub 1 div def
+/pmh 0 def
+/v 0 def
+/x [
+  0
+  dup pmw add pw add
+] def
+/y [
+  pmh ph add 0 mul ph add
+  dup
+] def
+/scx sw 2 div def
+/scy sh 2 div def
+/snx urx def
+/sny lly 2 add def
+/dx llx def
+/dy sny def
+/fnx scx def
+/fny dy def
+/lx snx def
+/ly ury fnfs 0.8 mul sub def
+/sx 0 def
+/tab 8 def
+/x0 0 def
+/y0 0 def
+%%EndSetup
+
+%%Page: (1-2) 1
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*) c n
+(  File: ProbRates.cc) N
+() N
+(  Description: ) N
+() N
+(    Calculates rates using a probabilistic model, in particular eq. 9) N
+(    \(ref. 1 in swindal.h\).) N
+() N
+(  Author: Jim Raines \(jmr\)) N
+() N
+(  Method:) N
+(    ) N
+(    Uses spillover rates and a gaussian function to calculate the) N
+(    probability that any particular data point \(tof, esd, e/q\) comes) N
+(    from a particular species.) N
+(    ) N
+(  Revision controlled by CVS:) N
+(  $Id: ProbRates.cc,v 1.8 2004/07/28 13:28:35 jraines Exp $) N
+() N
+(  Major Modification History:) N
+(    16Aug2001   jmr   Initial coding) N
+(    12Aug2003   jmr   Adding Ruedi von Steiger-style count assignment) N
+() N
+(*/) N
+() p n
+(#include) K
+( ") p
+(swindal.h) str
+(") p n
+(#include) K
+( <cfloat>) p n
+() N
+(// include files for creation time and mod. time) c n
+(#include) K
+( <sys/types.h>   ) p
+(// for FM mod. time \(open\)) c n
+(#include) K
+( <sys/stat.h>    ) p
+(// for FM mod. time \(fstat\)) c n
+(#include) K
+( <fcntl.h>       ) p
+(// for FM mod. time \(open\)) c n
+(#include) K
+( <unistd.h>      ) p
+(// for FM mod. time \(fstat\)) c n
+() p n
+(#include) K
+( <time.h>        ) p
+(// for creation time in header) c n
+() p n
+(using) K
+( std::ofstream;) p n
+() N
+(ProbRates::ProbRates\(InstrumentConstants ic, ) S
+(int) k
+( N\){ ) p n
+(  TNT::Vector<) S
+(float) k
+(> tmpv\(N, 0.0\);) p n
+(  TNT::Matrix<) S
+(float) k
+(> tmpm\(N,2,0.0\);) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( i = 0; i < MAXEDB; i++\){) p n
+(    Nprob.push_back\(tmpv\);) N
+(    ProbCenters.push_back\(tmpm\);) N
+(  }) N
+() N
+(  ) S
+(// set default values) c n
+(  GCutOff = 3.0;) p n
+(  PCutOff = FLT_MIN;  ) S
+(// smallest float allowed, from float.h) c n
+() p n
+(  DbgLvl = gDbgLvl;  ) S
+(// init. to global val. by default) c n
+() p n
+(  Method = 1;  ) S
+(// set method default) c n
+() p n
+(  outputPslices = ) S
+(false) k
+(;) p n
+() N
+(  IC = ic;) N
+(}) N
+() N
+(void) k
+( ProbRates::print\() p
+(void) k
+(\){) p n
+(  ) S
+(float) k
+( sum, sum2;) p n
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < names.size\(\); s++\){) p n
+(    sum = 0.0;) N
+(    sum2 = 0.0;) N
+() N
+(    ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(      sum += Nprob[nedb][s];) N
+(    }) N
+(ProbRates.cc) (Page 1/14) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(    cout << names[s] << ") S
+( ) str
+(" << sum << endl;) p n
+(  }) N
+() N
+(  ) S
+(return) K
+(;) p n
+(}) N
+() N
+(void) k
+( ProbRates::dump\() p
+(void) k
+(\){) p n
+(  ) S
+(float) k
+( sum;) p n
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < names.size\(\); s++\){) p n
+(    dump\(s\);) N
+(  }) N
+() N
+(  ) S
+(return) K
+(;) p n
+(}) N
+() N
+(void) k
+( ProbRates::dump\() p
+(int) k
+( s\){) p n
+(  ) S
+(float) k
+( sum;) p n
+() N
+(  sum = 0.0;) N
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    sum += Nprob[nedb][s];) N
+(  }) N
+() N
+(  cout << names[s] << ") S
+( ) str
+(" << sum << ") p
+(\() str
+(";) p n
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    cout << ") S
+( ) str
+(" << Nprob[nedb][s];) p n
+(  }) N
+() N
+(  cout << ") S
+( \)) str
+(" << endl;) p n
+() N
+(  ) S
+(return) K
+(;) p n
+(}) N
+() N
+(bool) k
+( ProbRates::) p
+(operator) K
+(<< \(ProbRates\) {) p n
+(  ) S
+(float) k
+( sum;) p n
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < names.size\(\); s++\){) p n
+(    sum = 0.0;) N
+() N
+(    ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(      sum += Nprob[nedb][s];) N
+(    }) N
+() N
+(    cout << names[s] << ") S
+( ) str
+(" << sum;) p n
+(  }) N
+() N
+(  ) S
+(return) K
+(\() p
+(true) k
+(\);) p n
+(}) N
+() N
+(int) k
+( ProbRates::calc\() p
+(const) K
+( vector<Ion>& grp, ) p
+(const) K
+( MeasurementArray& MA, ) p n
+() S 8 T () S 16 T (    SpillRates SR\){) N
+(  ) S
+(// init some variables) c n
+(  string thisprog = ") p
+(ProbRates::calc) str
+(";) p n
+(  ) S
+(//DbgLvl = 2;) c n
+() p n
+(  ) S
+(// a correctly dimensioned matrix of zeros) c n
+(  ) p
+(const) K
+( TNT::Matrix<) p
+(float) k
+(> zero\(MAXTOFCH,MAXESDCH, 0.0\);) p n
+() N
+(  ) S
+(// init some variables for each species) c n
+(  ) p
+(for) K
+( \() p
+(int) k
+( s = 0; s < grp.size\(\); s++\){) p n
+(    G.push_back\(zero\);) N
+(    P.push_back\(zero\);) N
+() N
+(    ) S
+(// while we are here, store names to be sure we do not get confused later) c n
+(    names.push_back\(grp[s].name\); ) p n
+(ProbRates.cc) (Page 2/14) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(ProbRates.cc) (1/9) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (3-4) 2
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  }) p n
+() N
+(  ) S
+(// denominator in swindal.h ref. 1, eq. 9) c n
+(  TNT::Matrix<) p
+(float) k
+(> denom\(MAXTOFCH,MAXESDCH, 0.0\);) p n
+() N
+(  ) S
+(float) k
+( tof, esd;  ) p
+(// float versions of the position in the) c n
+() p 8 T () S 16 T (   ) S
+(// measurement array slice ) c n
+() p n
+(  ) S
+(float) k
+( sum = 0.0; ) p
+(// sum of G for current ion, for debugging) c n
+() p n
+(  ) S
+(// tmp. var. for forward model values of current species and edb) c n
+(  ) p
+(float) k
+( fmtof, fmstof; ) p
+(//  tof and sigma tof) c n
+(  ) p
+(float) k
+( fmesd, fmsesd; ) p
+(//  esd and sigma esd) c n
+() p n
+(  ) S
+(// distances from forward model center for current tof,esd) c n
+(  ) p
+(float) k
+( delta_tof, delta_esd;) p n
+() N
+(  ) S
+(// variables for to ease debugging with DDD) c n
+(  ) p
+(float) k
+( sr; ) p
+(// current corrected spill rate) c n
+() p n
+(  ) S
+(// tmp variables for probabilistic centers) c n
+(  vector<) p
+(float) k
+(> center;  ) p
+(// \(tof,esd\)) c n
+(  center.assign\(2, 0.0\);) p n
+(  vector<) S
+(float) k
+(> ProbRateSum;) p n
+(  ProbRateSum.assign\(grp.size\(\), 0.0\);) N
+(  ) S
+(float) k
+( maelem;) p n
+() N
+(  ) S
+(// set up output file for P matrices if necessary) c n
+(  string bname = ") p
+(axlv2) str
+(";  ) p
+(//FIX: this should be passed in from top level) c n
+(  ofstream fout;) p n
+(  ) S
+(int) k
+( maxedb[43];) p n
+(  ) N
+(  ) S
+(if) K
+( \(outputPslices\){) p n
+(    cout << thisprog << ") S
+( -I- writing P slice for each charge step...) str
+(" << endl;) p n
+(    string outfile = bname + ") S
+(_p_slices.dat) str
+(";) p n
+(    fout.open\(outfile.c_str\(\)\);) N
+() N
+(    ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < grp.size\(\); s++\){) p n
+(      ) S
+(float) k
+( max = 0.0;) p n
+(      ) S
+(float) k
+( sr = 0.0;) p n
+(      ) S
+(float) k
+( srsum = 0.0;) p n
+(      ) S
+(// form spill rate weighted sum of s) c n
+(      ) p
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+() S 8 T (sr =  SR.getCorSpillRate\(nedb,s\); ) S
+(// to see in the debugger) c n
+() p 8 T (max += nedb*sr;) N
+() S 8 T (srsum += sr;) N
+(      }) N
+(      max = max/srsum; ) S
+(// normalize) c n
+() p n
+(      maxedb[s] = \() S
+(int) k
+(\)\(max + 0.5\);  ) p
+(// round and make into an integer) c n
+() p n
+(      ) S
+(// note:  bounds checking unecessary; out of range elements will ) c n
+(      ) p
+(// never satisfy P slice output logic) c n
+() p n
+(      ) S
+(if) K
+( \(DbgLvl >= 3\) {) p n
+() S 8 T (cout << thisprog << ") S
+( -I- P slice for ) str
+(" << grp[s].name) p n
+() S 8 T (     << ") S
+( will be output for EDB=) str
+(" << maxedb[s] << endl;) p n
+(      }) N
+(    }) N
+(  }) N
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    ) S
+(//for \(int nedb = 41; nedb < 42; nedb++\){  // few edbs for debugging) c n
+(    ) p
+(if) K
+( \(DbgLvl >= 1\) {) p n
+(      cout << thisprog << ") S
+( -I- Doing all calc. for nedb=) str
+(" << nedb << endl;) p n
+(    }) N
+() N
+(    denom = zero;) N
+() N
+(ProbRates.cc) (Page 3/14) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(    ) p
+(/* Calculate G by elements, swindal.h ref. 1, eq. 2 */) c n
+(    ) p
+(for) K
+( \() p
+(int) k
+( s = 0; s < grp.size\(\); s++\){) p n
+(      ) S
+(if) K
+( \(DbgLvl >= 2\) ) p n
+() S 8 T (cout << thisprog << ") S
+( -D- calc. G for ) str
+(" << grp[s].name << ") p
+(, ) str
+(";) p n
+() N
+(      ) S
+(/* grab forward model values for this ion and edb */) c n
+(      fmtof  = grp[s].tof[nedb];   ) p
+(// tof) c n
+(      fmstof = grp[s].stof[nedb];  ) p
+(// sigma tof) c n
+(      fmesd  = grp[s].esd[nedb];   ) p
+(// esd) c n
+(      fmsesd = grp[s].sesd[nedb];  ) p
+(// sigma esd) c n
+() p n
+(      ) S
+(for) K
+( \() p
+(int) k
+( tofch = 0; tofch < MAXTOFCH; tofch++\){) p n
+() S 8 T () S
+(for) K
+( \() p
+(int) k
+( esdch = 0; esdch < MAXESDCH; esdch++\){) p n
+() S 8 T (  tof = \() S
+(float) k
+(\) tofch;) p n
+() S 8 T (  esd = \() S
+(float) k
+(\) esdch;) p n
+() N
+() S 8 T (  ) S
+(// distances from centers) c n
+() p 8 T (  delta_tof = abs\(tof - fmtof\); ) N
+() S 8 T (  delta_esd = abs\(esd - fmesd\);) N
+() N
+() S 8 T (  ) S
+(/* probability from eq. 2) c n
+() S 8 T (     Note: G outside of GCutOff*sigma in each dim. to 0.0) N
+() S 8 T (  */) N
+() p 8 T (  ) S
+(if) K
+( \( \(delta_tof < GCutOff*fmstof\) && \(delta_esd < GCutOff*fmsesd\) \){) p n
+() S 8 T (    G[s][tofch][esdch] = ) N
+() S 8 T (      1.0/\(2.0*M_PI*sqrt\(fmstof*fmsesd\)\) *  ) S
+(// M_PI is pi from math.h) c n
+() p 8 T (      exp\(-pow\(tof - fmtof,2\)/\(2.0*pow\(fmstof,2\)\) ) N
+() S 8 T () S 16 T (  -pow\(esd - fmesd,2\)/\(2.0*pow\(fmsesd,2\)\)\);) N
+() S 8 T (  }) N
+() S 8 T (  ) S
+(else) K
+({) p n
+() S 8 T (    G[s][tofch][esdch] = 0.0;) N
+() S 8 T (  }) N
+() S 8 T (  ) N
+() S 8 T (  ) S
+(// denominator in eq. 9) c n
+() p 8 T (  sr =  SR.getCorSpillRate\(nedb,s\); ) S
+(// to see in the debugger) c n
+() p n
+() S 8 T (  ) S
+(if) K
+( \(DbgLvl >= 3\){) p n
+() S 8 T (    ) S
+(if) K
+( \( \(sr > 0.0\) && \(G[s][tofch][esdch] > 0.0\) \){) p n
+() S 8 T (      cout << thisprog << ") S
+( -D- getCorSpillRate\() str
+(" << nedb) p n
+() S 8 T () S 16 T (   << ") S
+(,) str
+(" << s << ") p
+(\)=) str
+(" << sr << endl;) p n
+() S 8 T (      cout << thisprog << ") S
+( -D- G[) str
+(" << s << ") p
+(][) str
+(" << tofch << ") p
+( ][) str
+(") p n
+() S 8 T () S 16 T (   << esdch << ") S
+(]=) str
+(" << G[s][tofch][esdch] << endl;) p n
+() S 8 T (    }) N
+() S 8 T (  }) N
+() N
+() S 8 T (  denom[tofch][esdch] += sr * G[s][tofch][esdch];) N
+() N
+() S 8 T (  ) S
+(// keep a running total for debugging) c n
+() p 8 T (  sum += G[s][tofch][esdch];) N
+() S 8 T (}) N
+(      }) N
+(      ) N
+(      ) S
+(if) K
+( \(DbgLvl >= 2\) cout << ") p
+(sum of G = ) str
+(" << sum << endl;) p n
+() N
+(    } ) S
+(// loop over species) c n
+() p n
+(    ) S
+(// careful! this is a matrix) c n
+(    ) p
+(//cout << thisprog << " -D- denom=" << denom << endl;) c n
+() p n
+(    ) S
+(/* Calculate P by elements, swindal.h ref. 1, eq. 9 */) c n
+(    sum = 0.0;) p n
+(    ) S
+(float) k
+( Pspecies = 0.0;) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < grp.size\(\); s++\){) p n
+(      ) S
+(if) K
+( \(DbgLvl >= 2\){) p n
+() S 8 T (cout << thisprog << ") S
+( -D- calc. P for ) str
+(" << grp[s].name << ") p
+(, ) str
+(";) p n
+(      }) N
+() N
+(      Pspecies = 0.0;) N
+(      ) N
+(ProbRates.cc) (Page 4/14) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(ProbRates.cc) (2/9) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (5-6) 3
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(      ) p
+(for) K
+( \() p
+(int) k
+( tofch = 0; tofch < MAXTOFCH; tofch++\){) p n
+() S 8 T () S
+(for) K
+( \() p
+(int) k
+( esdch = 0; esdch < MAXESDCH; esdch++\){) p n
+() S 8 T (  sr =  SR.getCorSpillRate\(nedb,s\); ) S
+(// to see in the debugger) c n
+() p 8 T (  P[s][tofch][esdch] = sr * G[s][tofch][esdch]/denom[tofch][esdch];) N
+() N
+() S 8 T (  ) S
+(// this avoids 'nan' results which mask valid values when summed) c n
+() p 8 T (  ) S
+(// note: a less than test will not work \(reason unknown\)) c n
+() p 8 T (  ) S
+(if) K
+( \(! \(P[s][tofch][esdch] > PCutOff\)\){) p n
+() S 8 T (    P[s][tofch][esdch] = 0.0;) N
+() S 8 T (  }) N
+() N
+() S 8 T (  sum += P[s][tofch][esdch];) N
+() S 8 T (  Pspecies += P[s][tofch][esdch];) N
+() N
+() S 8 T (  ) S
+(// write out O7+ box) c n
+(// ) S 8 T (  if \(DbgLvl >= 2\){) N
+(// ) S 8 T (    if \(nedb == 41 && grp[s].name == "O7+"\){) N
+(// ) S 8 T (      if \( \(tofch >= 340\) && \(tofch <= 348\) \){) N
+(// ) S 8 T () S 16 T (if \( \(esdch >= 46\) && \(esdch <= 57\) \){) N
+(// ) S 8 T () S 16 T (  cout << thisprog << " -D- ") N
+(// ) S 8 T () S 16 T (       << " " << nedb) N
+(// ) S 8 T () S 16 T (       << " " << tofch) N
+(// ) S 8 T () S 16 T (       << " " << esdch) N
+(// ) S 8 T () S 16 T (       << " sr=" << sr ) N
+(// ) S 8 T () S 16 T (       << " G=" << G[s][tofch][esdch]) N
+(// ) S 8 T () S 16 T (       << " denom=" << denom[tofch][esdch]) N
+(// ) S 8 T () S 16 T (       << " P=" << P[s][tofch][esdch]) N
+(// ) S 8 T () S 16 T (       << endl;) N
+(// ) S 8 T () S 16 T (}) N
+(// ) S 8 T (      }) N
+(// ) S 8 T (    }) N
+(// ) S 8 T (  }) N
+() p n
+() N
+() N
+() S 8 T (}) N
+(      }) N
+() N
+(      ) S
+(if) K
+( \(DbgLvl >= 2\){) p n
+() S 8 T (cout << ") S
+(sum of P = ) str
+(" << sum << endl;) p n
+() N
+() S 8 T (cout << thisprog << ") S
+( -D- Sum of P for ) str
+(" << grp[s].name) p n
+() S 8 T (     << ") S
+( is ) str
+(" << Pspecies << endl;) p n
+(      }) N
+(      ) N
+(      ) N
+(      ) S
+(if) K
+( \(outputPslices\){) p n
+() S 8 T () S
+(if) K
+( \(maxedb[s] == nedb\){) p n
+() S 8 T (  string title = ") S
+(AXLV2 Probability Matrix for ) str
+(" + grp[s].name;) p n
+() S 8 T (  outputSlice\(fout, P[s], nedb, title\);) N
+() S 8 T (}) N
+(      }) N
+() N
+(    } ) S
+(// loop over species) c n
+() p n
+(    ) S
+(/* -------------------------------------------------------------------- */) c n
+(    ) p
+(/* -------------- Calculate Probabilisic Rates ------------------------ */) c n
+(    ) p
+(/* -------------------------------------------------------------------- */) c n
+(    ) p
+(switch) K
+( \(Method\){) p n
+(    ) S
+(case) K
+( 1:) p n
+(      ) S
+(/* --- calculate probabilistic rates, swindal.h ref. 1, eq. 10  --- */) c n
+(      ) p
+(/* method:  At each \(tofch,esdch\), give MA\(tofch,esdch\) counts to each) c n
+() S 8 T ( species according to their probability, P\(tofch,esdch\).  This) N
+() S 8 T ( is referred to as the Counts Distributed \(CD\) method.) N
+(      */) N
+(      ) p
+(if) K
+( \(DbgLvl\) ) p n
+() S 8 T (cout << thisprog << ") S
+( -I- calculating prob. rates via Counts Distributed \(CD\) method) str
+(" << end) p n
+(l;) N
+() N
+(ProbRates.cc) (Page 5/14) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(      sum = 0.0;) p n
+(      ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < grp.size\(\); s++\){) p n
+() S 8 T () S
+(if) K
+( \(DbgLvl >= 2\)) p n
+() S 8 T (  cout << thisprog << ") S
+( -D- calc. Nprob for ) str
+(" << grp[s].name << ") p
+(, ) str
+("; ) p n
+() N
+() S 8 T () S
+(for) K
+( \() p
+(int) k
+( tofch = 0; tofch < MAXTOFCH; tofch++\){) p n
+() S 8 T (  ) S
+(for) K
+( \() p
+(int) k
+( esdch = 0; esdch < MAXESDCH; esdch++\){) p n
+() S 8 T (    maelem = MA.getElement\(nedb,tofch,esdch\);) N
+() N
+() S 8 T (    Nprob[nedb][s] += maelem * P[s][tofch][esdch];) N
+() S 8 T (    sum += Nprob[nedb][s];  ) S
+(// for debugging) c n
+() p n
+() S 8 T (    ) S
+(// calc. prob. center to compare to forward model) c n
+() p 8 T (    ProbCenters[nedb][s][0] += ) N
+() S 8 T (      \(\() S
+(float) k
+(\) tofch\) * maelem * P[s][tofch][esdch];) p n
+() S 8 T (    ProbCenters[nedb][s][1] += ) N
+() S 8 T (      \(\() S
+(float) k
+(\) esdch\) * maelem * P[s][tofch][esdch];) p n
+() S 8 T (    ProbRateSum[s] +=  maelem * P[s][tofch][esdch];) N
+() S 8 T (  }) N
+() S 8 T (}) N
+() N
+() S 8 T () S
+(// normalize probabilistic centers) c n
+() p 8 T (ProbCenters[nedb][s][0] = ProbCenters[nedb][s][0]/ProbRateSum[s];) N
+() S 8 T (ProbCenters[nedb][s][1] = ProbCenters[nedb][s][1]/ProbRateSum[s];) N
+() S 8 T () N
+() S 8 T () S
+(// re-init. for next time) c n
+() p 8 T (ProbRateSum[s] = 0.0;) N
+() N
+() S 8 T () S
+(if) K
+( \(DbgLvl >= 2\) cout << ") p
+(sum of Nprob = ) str
+(" << sum << endl;) p n
+() N
+(      ) N
+(      } ) S
+(// loop over species) c n
+(      ) p
+(break) K
+(;) p n
+() N
+(    ) S
+(case) K
+( 2:) p n
+(      ) S
+(/* -------------- calculate probabilistic rate max --------------- */) c n
+(      ) p
+(/* method: At each \(tofch,esdch\), give MA\(tofch,esdch\) counts to) c n
+() S 8 T ( species with highest probability.  This is referred to as the) N
+() S 8 T ( Counts to Max \(CM\) method.) N
+(      */) N
+(      ) p
+(if) K
+( \(DbgLvl\) cout << thisprog << ") p
+( -I- calculating prob. rates via Counts to Max. \(CM\) method) str
+() p n
+(" << endl;) N
+() N
+(      sum = 0.0;) N
+(      ) S
+(for) K
+( \() p
+(int) k
+( tofch = 0; tofch < MAXTOFCH; tofch++\){) p n
+() S 8 T () S
+(for) K
+( \() p
+(int) k
+( esdch = 0; esdch < MAXESDCH; esdch++\){) p n
+() N
+() S 8 T (  ) S
+(float) k
+( max = 0.0;) p n
+() S 8 T (  ) S
+(int) k
+( smax  = 0;) p n
+() S 8 T (  ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < grp.size\(\); s++\){) p n
+() S 8 T (    ) S
+(if) K
+( \(P[s][tofch][esdch] > max\){) p n
+() S 8 T (      max = P[s][tofch][esdch];) N
+() S 8 T (      smax = s;) N
+() S 8 T (    } ) S
+(// note: same smax could come up twice or an s may not come up) c n
+() p n
+() S 8 T (    ) S
+(// calc. prob. center to compare to forward model) c n
+() p 8 T (    ProbCenters[nedb][s][0] += ) N
+() S 8 T (      \(\() S
+(float) k
+(\) tofch\) * maelem * P[s][tofch][esdch];) p n
+() S 8 T (    ProbCenters[nedb][s][1] += ) N
+() S 8 T (      \(\() S
+(float) k
+(\) esdch\) * maelem * P[s][tofch][esdch];) p n
+() S 8 T (    ProbRateSum[s] +=  maelem * P[s][tofch][esdch];) N
+() S 8 T (  }) N
+() N
+() S 8 T (  Nprob[nedb][smax] += MA.getElement\(nedb,tofch,esdch\);) N
+() S 8 T (  sum += Nprob[nedb][smax];) N
+() N
+() S 8 T (}) N
+(      }) N
+() N
+(ProbRates.cc) (Page 6/14) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(ProbRates.cc) (3/9) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (7-8) 4
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(      ) p
+(// normalize probabilistic centers) c n
+(      ) p
+(for) K
+( \() p
+(int) k
+( s = 0; s < grp.size\(\); s++\){) p n
+() S 8 T (ProbCenters[nedb][s][0] = ProbCenters[nedb][s][0]/ProbRateSum[s];) N
+() S 8 T (ProbCenters[nedb][s][1] = ProbCenters[nedb][s][1]/ProbRateSum[s];) N
+() S 8 T () N
+() S 8 T () S
+(// re-init. for next time) c n
+() p 8 T (ProbRateSum[s] = 0.0;) N
+(      }) N
+() N
+(      ) S
+(if) K
+( \(DbgLvl >= 2\) cout << ") p
+(sum of Nprob = ) str
+(" << sum << endl;) p n
+() N
+(      ) S
+(break) K
+(;) p n
+(    ) S
+(case) K
+( 3:) p n
+(      ) S
+(/* ---------- calculate probabilistic rates via dice method ---------- */) c n
+(      ) p
+(/* method:  At each \(tofch,esdch\), use the probabilities for each) c n
+() S 8 T ( species to set up ranges of values assigned to each species.) N
+() S 8 T ( Then, generate a random number \(dice roll\).  Assign all counts) N
+() S 8 T ( to the species whose range the random number falls within.) N
+(      */) N
+() p n
+(      ) S
+(if) K
+( \(DbgLvl\) cout << thisprog << ") p
+( -I- calculating prob. rates via Dice Roll \(DR\) method) str
+(" <<) p n
+( endl;) N
+(    ) N
+(      ) S
+(float) k
+( lo,hi,dice_roll;) p n
+(      sum = 0.0;) N
+(      ) S
+(for) K
+( \() p
+(int) k
+( tofch = 0; tofch < MAXTOFCH; tofch++\){) p n
+() S 8 T () S
+(for) K
+( \() p
+(int) k
+( esdch = 0; esdch < MAXESDCH; esdch++\){) p n
+() S 8 T (  maelem = MA.getElement\(nedb,tofch,esdch\);) N
+() N
+() S 8 T (  lo = 0.0;) N
+() S 8 T (  hi = 0.0;) N
+() S 8 T (  dice_roll = \() S
+(float) k
+(\)random\(\)/\() p
+(float) k
+(\)RAND_MAX;) p n
+() N
+() S 8 T (  ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < grp.size\(\); s++\){) p n
+() S 8 T (    ) S
+(// set up interval for this species \(s\)) c n
+() p 8 T (    ) S
+(if) K
+(\(s == 0\){) p n
+() S 8 T (      lo = 0.0;) N
+() S 8 T (    }) N
+() S 8 T (    ) S
+(else) K
+( {) p n
+() S 8 T (      lo = lo + P[s-1][tofch][esdch];) N
+() S 8 T (    }) N
+() S 8 T (    hi = hi + P[s][tofch][esdch];) N
+() N
+() S 8 T (    ) S
+(// if dice_roll falls in interval for this species,) c n
+() p 8 T (    ) S
+(// assign counts at this \(tofch,esdch\) to that species) c n
+() p 8 T (    ) S
+(if) K
+( \(dice_roll >= lo && dice_roll < hi\){) p n
+() S 8 T (      Nprob[nedb][s] += maelem;) N
+() N
+() S 8 T (      ) S
+(// save assigned counts information for selected ion/nedb pairs) c n
+() p 8 T (      ) S
+(for) K
+( \() p
+(int) k
+( i = 0; i < AC.size\(\); i++\){) p n
+() S 8 T () S 16 T () S
+(if) K
+( \(AC[i].index == s && AC[i].nedb == nedb\){) p n
+() S 8 T () S 16 T (  AC[i].slice[tofch][esdch] =  maelem;) N
+() S 8 T () S 16 T (}) N
+() S 8 T (      }) N
+() N
+() S 8 T (      ) S
+(// save assigned counts into sum for single MMQ output) c n
+() p 8 T (      ) S
+(// \(summed over ion\)) c n
+() p 8 T (      ) S
+(if) K
+( \(ACSum.size\(\) > 0\){) p n
+() S 8 T () S 16 T (ACSum[nedb-IC.getFirstEdb\(\)].slice[tofch][esdch] = maelem;) N
+() S 8 T (      }) N
+() N
+() S 8 T (      ) S
+(// for debugging) c n
+() p 8 T (      sum += Nprob[nedb][s];) N
+() S 8 T (    }) N
+() N
+() S 8 T (    ) S
+(// calc. prob. center to compare to forward model) c n
+() p 8 T (    ProbCenters[nedb][s][0] += ) N
+() S 8 T (      \(\() S
+(float) k
+(\) tofch\) * maelem * P[s][tofch][esdch];) p n
+() S 8 T (    ProbCenters[nedb][s][1] += ) N
+(ProbRates.cc) (Page 7/14) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p 8 T (      \(\() S
+(float) k
+(\) esdch\) * maelem * P[s][tofch][esdch];) p n
+() S 8 T (    ProbRateSum[s] +=  maelem * P[s][tofch][esdch];) N
+() S 8 T (  }) N
+() S 8 T () N
+() S 8 T () N
+() S 8 T (}) N
+(      }) N
+() N
+(      ) S
+(// normalize probabilistic centers) c n
+(      ) p
+(for) K
+( \() p
+(int) k
+( s = 0; s < grp.size\(\); s++\){) p n
+() S 8 T (ProbCenters[nedb][s][0] = ProbCenters[nedb][s][0]/ProbRateSum[s];) N
+() S 8 T (ProbCenters[nedb][s][1] = ProbCenters[nedb][s][1]/ProbRateSum[s];) N
+() S 8 T () N
+() S 8 T () S
+(// re-init. for next time) c n
+() p 8 T (ProbRateSum[s] = 0.0;) N
+(      }) N
+() N
+(      ) S
+(if) K
+( \(DbgLvl >= 2\) cout << ") p
+(sum of Nprob = ) str
+(" << sum << endl;) p n
+() N
+(      ) S
+(break) K
+(;) p n
+(    } ) S
+(// end switch for prob rate method) c n
+(  } ) p
+(// loop over EDBs) c n
+() p n
+() N
+() N
+(  ) S
+(if) K
+( \(outputPslices\) fout.close\(\);) p n
+() N
+(  ) S
+(if) K
+( \(DbgLvl\) cout << thisprog << ") p
+( -D- returning normally) str
+(" << endl;) p n
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(TNT::Matrix<) S
+(float) k
+(> ProbRates::getProbCenter\() p
+(int) k
+( nedb\){) p n
+(  ) S
+(return) K
+(\(ProbCenters[nedb]\);) p n
+(}) N
+() N
+(// Note: this is a meaningless quantity.  JMR, 21Nov2003) c n
+(vector<) p
+(float) k
+(> ProbRates::calcAveProbCenter\() p
+(const) K
+( vector<Ion>& grp, ) p
+(int) k
+( s\){) p n
+(  ) S
+(/*  Description:) c n
+() N
+(        Calculates the probabilistic center of the peak for species s,) N
+(        averaged over charge step.  Checks to be sure element s of grp) N
+(        is the same as element s from getProbRate\(\).) N
+( ) N
+(  */) N
+(  string thisprog = ") p
+(ProbRates::calcAveProbCenter) str
+(";) p n
+(  ) S
+(using) K
+( std::cerr;) p n
+() N
+(  vector<) S
+(float) k
+(> center;  ) p
+(// \(tau,esd\)) c n
+(  center.assign\(2, 0.\);) p n
+() N
+(  ) S
+(// double check that argument s refers to same ion as in ProbRates) c n
+(  ) p
+(if) K
+( \(grp[s].name != names[s]\){) p n
+(    cerr << thisprog << ") S
+( -E- ions do not match.  ProbRates refers to ) str
+(") p n
+() S 8 T ( << names[s] << ") S
+( while argument group[s] refers to ) str
+(") p n
+() S 8 T ( << grp[s].name << endl;) N
+(    cerr << ") S
+(+ Re-calculate ProbRates with argument group.) str
+(" << endl;) p n
+(    ) S
+(return) K
+(\(center\);) p n
+(  }) N
+() N
+(  ) S
+(float) k
+( ProbRateSum = 0.0;  ) p
+(// sum over all ProbRates for normalization) c n
+(  ) p
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    ProbRateSum += getProbRate\(nedb,s\);) N
+(  }) N
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    center[0] += getProbRate\(nedb,s\) * grp[s].tof[nedb];) N
+(    center[1] += getProbRate\(nedb,s\) * grp[s].esd[nedb];) N
+(  }) N
+(ProbRates.cc) (Page 8/14) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(ProbRates.cc) (4/9) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (9-10) 5
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(  center[0] = center[0]/ProbRateSum;) N
+(  center[1] = center[1]/ProbRateSum;) N
+() N
+(  ) S
+(return) K
+( center;) p n
+(}  ) N
+() N
+(vector<vector<) S
+(float) k
+(> > ProbRates::calcAveProbCenter\() p
+(const) K
+( vector<Ion>& grp\){) p n
+(  ) S
+(/*  Description:) c n
+() N
+(        Calculates the probabilistic center of the peak, averaged over) N
+(        charge step \(nedb\), for all species in grp, using) N
+(        calcAveProbCenter for specified s.) N
+( ) N
+(  */) N
+(  vector<vector<) p
+(float) k
+(> > centers;) p n
+(  ) N
+(  ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < grp.size\(\); s++\){) p n
+(    centers.push_back\(calcAveProbCenter\(grp, s\)\);) N
+(  }) N
+() N
+(  ) S
+(return) K
+( centers;) p n
+(}) N
+() N
+(float) k
+( ProbRates::getProbRate\() p
+(int) k
+( nedb, ) p
+(int) k
+( s\){) p n
+(  ) S
+(return) K
+(\(Nprob[nedb][s]\);) p n
+(}) N
+() N
+(float) k
+( ProbRates::getProbRate\() p
+(int) k
+( s\){) p n
+() N
+(  ) S
+(float) k
+( sum = 0.0;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    sum += Nprob[nedb][s];) N
+(  }) N
+() N
+(  ) S
+(return) K
+(\(sum\);) p n
+(}  ) N
+() N
+(/* --- get/set parameters for probabilistic rate calculation --- */) c n
+() p n
+(float) k
+( ProbRates::setGaussCutOff\() p
+(float) k
+( val\){) p n
+(  GCutOff = val;) N
+(  ) S
+(return) K
+(\(GCutOff\);) p n
+(}) N
+() N
+(float) k
+( ProbRates::getGaussCutOff\() p
+(void) k
+(\){) p n
+(  ) S
+(return) K
+(\(GCutOff\);) p n
+(}) N
+() N
+(float) k
+( ProbRates::setProbCutOff\() p
+(float) k
+( val\){) p n
+(  PCutOff = val;) N
+(  ) S
+(return) K
+(\(PCutOff\);) p n
+(}) N
+() N
+(float) k
+( ProbRates::getProbCutOff\() p
+(void) k
+(\){) p n
+(  ) S
+(return) K
+(\(PCutOff\);) p n
+(};) N
+() N
+(void) k
+( ProbRates::setMethod\() p
+(int) k
+( method\){) p n
+(  Method = method;) N
+(  ) S
+(return) K
+(;) p n
+(}) N
+() N
+(int) k
+( ProbRates::getMethod\() p
+(void) k
+(\){) p n
+(  ) S
+(return) K
+(\(Method\);) p n
+(}) N
+(/* --- save/load --- */) c n
+() p n
+(int) k
+( ProbRates::save\(string file\){) p n
+(ProbRates.cc) (Page 9/14) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(  ofstream fout;) N
+(  fout.open\(file.c_str\(\)\);) N
+(  fout.precision\(10\);) N
+() N
+(  ) S
+(if) K
+( \(gDbgLvl\) {) p n
+(    cout << ") S
+(ProbRates::save -I- saving ProbRates to ) str
+(" << file << endl;) p n
+(  }) N
+() N
+(  fout << names.size\(\) << endl;) N
+(  ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < names.size\(\); s++\){) p n
+(    fout << names[s] << ") S
+( ) str
+(";) p n
+(  }) N
+(  fout << endl;) N
+(  ) N
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    fout << Nprob[nedb];) N
+(  }) N
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    fout << ProbCenters[nedb];) N
+(  }) N
+() N
+(  fout.close\(\);) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+() N
+(int) k
+( ProbRates::load\(string file\){) p n
+(  string thisprog = ") S
+(ProbRates::load) str
+(";) p n
+(  string name;) N
+(  ) S
+(int) k
+( nspecies = 0;) p n
+() N
+(  std::ifstream fin;) N
+(  fin.open\(file.c_str\(\)\);) N
+() N
+(  ) S
+(if) K
+( \(gDbgLvl\) {) p n
+(    cout << thisprog << ") S
+( -I- loading ProbRates from ) str
+(" << file << endl;) p n
+(  }) N
+() N
+(  fin >> nspecies;) N
+(  cout << thisprog << ") S
+( -D- loading rates for ) str
+(" ) p n
+(       << nspecies << ") S
+( species) str
+(" << endl;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < nspecies; s++\){ ) p
+(// ) c n
+(    ) p
+(//fin >> names[s];) c n
+(    fin >> name;) p n
+(    names.push_back\(name\);) N
+(  }) N
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    fin >> Nprob[nedb];) N
+(  }) N
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(    fin >> ProbCenters[nedb];) N
+(  }) N
+() N
+(  fin.close\(\);) N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(/*) c n
+(  Routine: outputSlice) N
+() N
+(  Description: ) N
+() N
+(    Output E-T matrix to file.) N
+() N
+(ProbRates.cc) (Page 10/14) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(ProbRates.cc) (5/9) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (11-12) 6
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  Author: Jim Raines \(jmr\)) c n
+() N
+(  Method:) N
+(    ) N
+(  Major Modification History:) N
+(    22Aug2003   jmr   Adapted from outputMA.cc and outputPR.cc) N
+(    15Mar2004   jmr   Generalized to work with AssignedCounts slices too) N
+() N
+(*/) N
+() p n
+(int) k
+( ProbRates::outputSlice\(ofstream &fout, TNT::Matrix<) p
+(float) k
+(> slice, ) p n
+() S 8 T () S 16 T () S 24 T (    ) S
+(int) k
+( nedb, string title\){) p n
+() N
+(  string thisprog = ") S
+(ProbRates::outputSlice) str
+(";) p n
+() N
+(  fout.precision\(3\);) N
+() N
+(  fout << title << endl;) N
+(  fout << ") S
+(TOF_CH_STEP_) str
+(" << nedb << ") p
+( ESD_CH) str
+(" << endl;) p n
+(  fout << ") S
+(0 1023 0 255) str
+(" << endl;) p n
+(  fout << slice; ) N
+(    ) N
+(  ) S
+(return) K
+( \(0\);) p n
+(}) N
+() N
+(void) k
+( ProbRates::setOutputPslices\() p
+(bool) k
+( value\){) p n
+(  outputPslices = value;) N
+(}) N
+() N
+(void) k
+( ProbRates::outputProbCenters\(string outfile,) p
+(const) K
+( AnalysisData& ad\){) p n
+() N
+(  ) S
+(FILE) k
+( *PCF; ) p
+(// Prob. Center Comparison File \(pointer\)) c n
+(  PCF = fopen\(outfile.c_str\(\), ") p
+(w+) str
+("\);) p n
+() N
+(  ) S
+(// keep fields the same total width!) c n
+(  ) p
+(char) k
+( hdrfmt[] =") p
+(# %3s %6s %6s %6s %6s %6s %6s %8s\\n) str
+(";) p n
+(  ) S
+(char) k
+( datafmt[]=) p n
+(  ") S
+(  %3d %6.2f %6s %6.2f %6.2f %6.2f %6.2f %8.2e\\n) str
+(";) p n
+() N
+(  ) S
+(// ----------------------- print file header --------------------------------) c n
+(  fprintf\(PCF,") p
+(# Probabilistic Centers from ACE Level II data processor \(v2.0\)\\n) str
+("\);) p n
+() N
+(  ) S
+(// get and format calendar time for header) c n
+(  time_t now;) p n
+(  ) S
+(char) k
+( timestr[19];) p n
+(  time\(&now\);) N
+(  strftime\(timestr, 19, ") S
+(%d%b%Y %H:%M:%S) str
+(", localtime\(&now\)\);) p n
+(  fprintf\(PCF,") S
+(# Created: %s\\n) str
+(", timestr\);) p n
+() N
+(  ) S
+(// print column headings) c n
+(  fprintf\(PCF,hdrfmt,") p
+(EDB) str
+(",") p
+(E/q) str
+(",") p
+(ion) str
+(",") p
+(tof) str
+(",") p
+(tofsig) str
+(",") p
+(esd) str
+(",") p
+(esdsig) str
+(",") p
+(Prate) str
+("\);) p n
+() N
+(  ) S
+(// ------------------------- output data -----------------------------------) c n
+(  ) p
+(// temporary variables for inside loop) c n
+(  ) p
+(// ----- probabilistic centers) c n
+(  TNT::Matrix<) p
+(float) k
+(> pcmat;  ) p
+(// centers for all s at this nedb) c n
+(  ) p
+(float) k
+( pctof, pcesd;        ) p
+(// centers for current s at this nedb) c n
+(  ) p
+(// ----- forward model sigmas for current nedb, s) c n
+(  ) p
+(float) k
+( stof, sesd;) p n
+() N
+(  ) S
+(//  write output line for each EDB for each species) c n
+(  ) p
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(  ) S
+(//for \(int nedb = 41; nedb < 42; nedb++\){ // for debugging) c n
+(    pcmat = getProbCenter\(nedb\);) p n
+() N
+(    ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < ad.Ions.size\(\); s++\){) p n
+(      pctof = pcmat[s][0];) N
+(      pcesd = pcmat[s][1];) N
+() N
+(ProbRates.cc) (Page 11/14) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(      stof = ad.Ions[s].stof[nedb];) p n
+(      sesd = ad.Ions[s].sesd[nedb];) N
+() N
+(      fprintf\(PCF, datafmt,nedb,ad.Eqtab[nedb],ad.Ions[s].name.c_str\(\),) N
+() S 8 T (      pctof,stof,pcesd,sesd,getProbRate\(nedb,s\)\);) N
+(    }) N
+(  }) N
+() N
+(  fclose\(PCF\);) N
+() N
+() N
+(  ) S
+(return) K
+(;) p n
+(}) N
+() N
+(int) k
+( ProbRates::registerACSlice\(string ion, ) p
+(int) k
+( nedb, ) p n
+() S 8 T () S 16 T () S 24 T (       AnalysisData ad\){) N
+(  ) S
+(if) K
+( \(nedb < IC.getNumEdb\(\)\){) p n
+(    AssignedCounts ac\(IC, ion, ad.IonsIndex[ion], nedb\);) N
+(    AC.push_back\(ac\);) N
+(  }) N
+(  ) S
+(else) K
+( ) p
+(if) K
+( \(gDbgLvl >= 1\) {) p n
+(    cout << ") S
+(ProbRates::registerACSlice -E- nedb \() str
+(" << nedb ) p n
+() S 8 T ( << ") S
+(\) out of range \() str
+(" << IC.getFirstEdb\(\) << ") p
+(..) str
+(") p n
+() S 8 T ( << IC.getNumEdb\(\)-1 << ") S
+(\)) str
+(" << endl;) p n
+(  }) N
+(}) N
+() N
+(int) k
+( ProbRates::registerACSum\() p
+(void) k
+(\){) p n
+(  ) S
+(if) K
+( \(AC.size\(\) > 0\){) p n
+(    ) S
+(if) K
+( \(gDbgLvl >= 1\){) p n
+(      cout << ") S
+(ProbRates::registerACSum ) str
+(") p n
+() S 8 T (   << ") S
+(-E- attempting to re-register ACSum) str
+(" << endl;) p n
+(    }) N
+(    ) S
+(return) K
+(\(1\);) p n
+(  }) N
+() N
+(  ) S
+(for) K
+( \() p
+(int) k
+( nedb = IC.getFirstEdb\(\); nedb < IC.getNumEdb\(\); nedb++\){) p n
+(    ) S
+(// only slice member and EDB are used for sum; rest initialized to null) c n
+(    AssignedCounts ac\(IC, "", -1, nedb\);) p n
+(    ACSum.push_back\(ac\);) N
+(  }) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+(void) k
+( ProbRates::outputACSlices\(string file\){) p n
+(  ) S
+(// output AssignedCounts slices if there are any) c n
+(  ) p
+(if) K
+( \(AC.size\(\) > 0\){) p n
+(    ) S
+(if) K
+( \(gDbgLvl >= 1\){) p n
+(      cout << ") S
+(ProbRates::outputACSlices ) str
+(") p n
+() S 8 T (   << ") S
+(-I- writing selected AssignedCount slices...) str
+(" << endl;) p n
+(    }) N
+() N
+(    ofstream ac_fout;) N
+(    ac_fout.open\(file.c_str\(\)\);) N
+() N
+(    ) S
+(for) K
+( \() p
+(int) k
+( i = 0; i < AC.size\(\); i++\){) p n
+(      string title = ") S
+(AXLV2 Assigned Counts for ) str
+(" + AC[i].ion;) p n
+(      outputSlice\(ac_fout, AC[i].slice, AC[i].nedb, title\);) N
+(    }) N
+() N
+(    ac_fout.close\(\);) N
+(  }) N
+(}) N
+() N
+(int) k
+( ProbRates::outputACSumMMQ) p n
+(  \(string file, ) S
+(const) K
+( AnalysisData& ad,) p n
+(   MeasurementArray& MA,) N
+(   ) S
+(double) k
+( mm0, ) p
+(double) k
+( mm1,) p
+(double) k
+( mq0, ) p
+(double) k
+( mq1\) {) p n
+(ProbRates.cc) (Page 12/14) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(ProbRates.cc) (6/9) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (13-14) 7
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+(  ) S
+(if) K
+( \(ACSum.size\(\) <= 0\) ) p
+(return) K
+(\(-1\);) p n
+() N
+(  ) S
+(if) K
+( \(gDbgLvl >= 1\){) p n
+(    cout << ") S
+(ProbRates::outputACSumMMQ ) str
+(") p n
+() S 8 T (   << ") S
+(-I- writing selected AssignedCount array in MMQ...) str
+(" << endl;) p n
+(  }) N
+() N
+(  ) S
+(// set up file) c n
+(  ofstream fout;) p n
+(  fout.open\(file.c_str\(\)\);) N
+() N
+(  TNT::Matrix<) S
+(float) k
+(> mmq\(IC.getNumMqCh\(\),IC.getNumMassCh\(\), 0.0\);) p n
+(  TNT::Matrix<) S
+(float) k
+(> mmqsum\(IC.getNumMqCh\(\),IC.getNumMassCh\(\), 0.0\);) p n
+() N
+(  string ions;) N
+(  ) S
+(for) K
+( \() p
+(int) k
+( i = 0; i < ACSum.size\(\); i++\){) p n
+(    ions = ions + ") S
+( ) str
+(" + ACSum[i].ion;) p n
+(    mmq = MA.EtSlice2Mmq\(ACSum[i].slice,ACSum[i].nedb,ad, mm0, mm1, mq0, mq1\);) N
+(    mmqsum = mmqsum + mmq;) N
+(  }) N
+() N
+(  ) S
+(// "ACE/SWICS m-m/q in counts/second for day\(s\) ") c n
+(  fout << ") p
+(ACE/SWICS Level II Assigned Counts) str
+(" << endl;) p n
+(  fout << ") S
+(m/q_\(amu/e\) mass_\(amu\)) str
+(" << endl;) p n
+(  fout << mq0 << ") S
+( ) str
+(" << mq1 << ") p
+( ) str
+(" << mm0 << ") p
+( ) str
+(" << mm1 << endl;) p n
+(  fout << mmqsum;) N
+() N
+(  fout.close\(\);) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+() N
+(int) k
+( ProbRates::output\() p
+(FILE) k
+( *PRF, ) p
+(float) k
+( doyfr, ) p
+(const) K
+( AnalysisData& ad\){) p n
+() N
+(  ) S
+(static) K
+( ) p
+(bool) k
+( FirstTime = ) p
+(true) k
+(;) p n
+() N
+(  ) S
+(// keep fields the same total width!) c n
+(  ) p
+(char) k
+( hdrfmt[] =") p
+(# %6s %3s %8s %6s %10s %10s\\n) str
+(";) p n
+(  ) S
+(char) k
+( datafmt[]=) p n
+(  ") S
+(  %6.2f %3d %8.2f %6s %10.2e %10.2e\\n) str
+(";) p n
+() N
+(  ) S
+(if) K
+( \(FirstTime\) {  ) p
+(// print header first time through ) c n
+(    fprintf\(PRF,") p
+(# Probabilistic rates from ACE Level II data processor \(v2.0\)\\n) str
+("\);) p n
+() N
+(    ) S
+(// get and format calendar time for header) c n
+(    time_t now;) p n
+(    ) S
+(char) k
+( timestr[19];) p n
+(    time\(&now\);) N
+(    strftime\(timestr, 19, ") S
+(%d%b%Y %H:%M:%S) str
+(", localtime\(&now\)\);) p n
+(    fprintf\(PRF,") S
+(# Created: %s\\n) str
+(", timestr\);) p n
+() N
+(    fprintf\(PRF,") S
+(# ProbRates: %s\\n) str
+(", ") p
+($Id: ProbRates.cc,v 1.8 2004/07/28 13:28:35 jraines Exp $) str
+("\);) p n
+() N
+(    ) S
+(// column headings) c n
+(    fprintf\(PRF,hdrfmt,") p
+(doyfr) str
+(", ") p
+(EDB) str
+(", ") p
+(E/q) str
+(",") p
+(ion) str
+(",") p
+(probrate) str
+(",) p n
+() S 8 T (    ") S
+(probcnt) str
+("\);) p n
+() N
+(    FirstTime = ) S
+(false) k
+(;) p n
+(  }) N
+() N
+(  ) S
+(float) k
+( pr;) p n
+(  ) S
+(for) K
+( \() p
+(int) k
+( s = 0; s < ad.Ions.size\(\); s++\){) p n
+(    ) S
+(for) K
+( \() p
+(int) k
+( nedb = FIRSTEDB; nedb < MAXEDB; nedb++\){) p n
+(      pr = getProbRate\(nedb, s\);) N
+(      fprintf\(PRF, datafmt, doyfr, nedb, ad.Eqtab[nedb], ) N
+() S 8 T (      ad.Ions[s].name.c_str\(\),) N
+() S 8 T (      getProbRate\(nedb, s\), gAccumTime*getProbRate\(nedb,s\)\);) N
+(ProbRates.cc) (Page 13/14) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(      ) p
+(// Note: last item is approx. counts) c n
+(    }) p n
+(  }) N
+() N
+(  ) S
+(return) K
+(\(0\);) p n
+(}) N
+() N
+() N
+(  ) N
+(ProbRates.cc) (Page 14/14) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(ProbRates.cc) (7/9) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (1-2) 8
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(/*) c n
+(  File: ProbRates.h) N
+() N
+(  Description: ) N
+(    This class contains the code and containers required to calculate) N
+(    probabilistically assigned rates.) N
+() N
+(  Author: Jim Raines, 13Aug2001) N
+() N
+(  Method:) N
+(    Perform calculations according to eq. 2, 9 and 10 from ref\(1\) in swindal.h.) N
+(    ) N
+(  Revision controlled by CVS:) N
+(  $Id: ProbRates.h,v 1.8 2004/07/28 13:28:35 jraines Exp $) N
+() N
+(  Major Modification History:) N
+(    ) N
+() N
+(*/) N
+() p n
+(class ProbRates {) N
+( public:) N
+(  ) S
+(// primary constructor) c n
+(  ) p
+(// N is number of rates \(species\)) c n
+(  ProbRates::ProbRates\(InstrumentConstants IC, ) p
+(int) k
+( N\);) p n
+() N
+(  ) S
+(void) k
+( ProbRates::print\() p
+(void) k
+(\);) p n
+(  ) S
+(void) k
+( ProbRates::dump\() p
+(int) k
+( s\); ) p
+(//prints sum and per edb ProbRates for species s) c n
+(  ) p
+(void) k
+( ProbRates::dump\() p
+(void) k
+(\);  ) p
+(// as above for all species) c n
+() p n
+() N
+(  bool ProbRates::operator<< \(ProbRates\);) N
+() N
+(  ) S
+(// calculate probabilistic rates) c n
+(  ) p
+(int) k
+( calc\() p
+(const) K
+( vector<Ion>& group, ) p
+(const) K
+( MeasurementArray& MA,) p n
+() S 8 T (   SpillRates SR\);) N
+() N
+(  ) S
+(// ----- for species s, averaged over charge steps) c n
+(  vector<) p
+(float) k
+(> calcAveProbCenter\() p
+(const) K
+( vector<Ion>& grp, ) p
+(int) k
+( s\);) p n
+(  ) S
+(// ----- for entire group grp, averaged over charge steps) c n
+(  vector<vector<) p
+(float) k
+(> > calcAveProbCenter\() p
+(const) K
+( vector<Ion>& grp\);) p n
+() N
+(  ) S
+(// returns matrix of prob centers, first index is species, second is ) c n
+(  ) p
+(// \(tof, esd\) as \(0,1\), resp.) c n
+(  TNT::Matrix<) p
+(float) k
+(> ProbRates::getProbCenter\() p
+(int) k
+( nedb\);) p n
+() N
+(  ) S
+(// outputs prob. centers for overlay onto E-T slices with ext. IDL code) c n
+(  ) p
+(void) k
+( outputProbCenters\(string outfile,) p
+(const) K
+( AnalysisData& ad\);) p n
+() N
+() N
+(  ) S
+(// get probabilistic a rate) c n
+(  ) p
+(float) k
+( getProbRate\() p
+(int) k
+( nedb, ) p
+(int) k
+( s\); ) p
+(//  for nedb species s) c n
+(  ) p
+(float) k
+( getProbRate\() p
+(int) k
+( s\); ) p
+(//  summed over edbs species s) c n
+() p n
+(  ) S
+(// ----- get/set parameters for probabilistic rate calculation -----) c n
+() p n
+(  ) S
+(// set multiple of sigma outside of which to zero G) c n
+(  ) p
+(float) k
+( setGaussCutOff\() p
+(float) k
+(\);) p n
+(  ) S
+(float) k
+( getGaussCutOff\() p
+(void) k
+(\);) p n
+() N
+(  ) S
+(// set cutoff below which probability matrix is set to 0.0) c n
+(  ) p
+(float) k
+( setProbCutOff\() p
+(float) k
+(\);) p n
+(  ) S
+(float) k
+( getProbCutOff\() p
+(void) k
+(\);) p n
+() N
+(  ) S
+(// Choose probabilistic rates calculation method) c n
+(  ) p
+(// 1 -- Counts Distributed \(CD\)) c n
+(  ) p
+(// 2 -- Counts to Max \(CM\)) c n
+(  ) p
+(// 3 -- Dice Roll \(DR\)) c n
+(  ) p
+(void) k
+(  setMethod\() p
+(int) k
+(\);) p n
+(ProbRates.h) (Page 1/3) (Jul 28, 04 9:28) title
+border
+/v 1 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  ) p
+(int) k
+(   getMethod\() p
+(void) k
+(\);) p n
+() N
+(  ) S
+(// ----- save and load -----) c n
+(  ) p
+(int) k
+( ProbRates::save\(string file\);) p n
+(  ) S
+(int) k
+( ProbRates::load\(string file\);) p n
+() N
+(  ) S
+(// write out rates) c n
+(  ) p
+(int) k
+( ProbRates::output\() p
+(FILE) k
+( *PRF, ) p
+(float) k
+( doyfr, ) p
+(const) K
+( AnalysisData& ad\);) p n
+() N
+(  ) S
+(// turn on/off output of P matrix slices) c n
+(  ) p
+(void) k
+( ProbRates::setOutputPslices\(bool\);) p n
+() N
+(  ) S
+(// register a ion/edb pair for E-T assigned counts accumulation) c n
+(  ) p
+(// increases program dynamic RAM by about 1.2Mb/pair during ProbRates calc.) c n
+(  ) p
+(int) k
+( ProbRates::registerACSlice\(string ion, ) p
+(int) k
+( nedb, ) p n
+() S 8 T () S 16 T () S 24 T () S 32 T ( AnalysisData ad\);) N
+() N
+(  ) S
+(// output all AC slices \(if present\)) c n
+(  ) p
+(void) k
+( ProbRates::outputACSlices\(string file\);) p n
+() N
+(  ) S
+(// turn on calculation of assigned counts, summed over ion) c n
+(  ) p
+(// increases program dynamic RAM by about 70Mb during ProbRates calc.) c n
+(  ) p
+(int) k
+( ProbRates::registerACSum\() p
+(void) k
+(\);) p n
+() N
+(  ) S
+(// output ACSum \(if present\) in mass-m/q units, summed over E/q) c n
+(  ) p
+(int) k
+( ProbRates::outputACSumMMQ) p n
+(    \(string file, ) S
+(const) K
+( AnalysisData& ad, MeasurementArray& MA,) p n
+(     ) S
+(double) k
+( mm0, ) p
+(double) k
+( mm1,) p
+(double) k
+( mq0, ) p
+(double) k
+( mq1\);) p n
+() N
+( private:) N
+(  ) S
+(// store this to use throughout class functions) c n
+(  InstrumentConstants IC;) p n
+() N
+(  ) S
+(// ion names, stored during calc\(\) as a failsafe against species misalignment) c n
+(  vector<string> names;              ) p n
+() N
+(  ) S
+(// prob rates, calculated as per Method variable) c n
+(  vector<TNT::Vector<) p
+(float) k
+(> > Nprob;) p n
+() N
+(  ) S
+(// probabilistic \(tof,esd\) centers to compare with forward model) c n
+(  ) p
+(// note: TNT::Matrix used for easy file I/O) c n
+(  vector<TNT::Matrix<) p
+(float) k
+(> > ProbCenters;) p n
+() N
+(  ) S
+(// gaussian, G\(tof,esd\) from eq. 2) c n
+(  vector<TNT::Matrix<) p
+(float) k
+(> > G;) p n
+() N
+(  ) S
+(// probability of pha \(tof,esd, e/q\) being species s at edb i from eq. 9) c n
+(  vector<TNT::Matrix<) p
+(float) k
+(> > P; ) p n
+() N
+(  ) S
+(float) k
+( GCutOff;  ) p
+(// mult. of sigma outside of which to zero G) c n
+(  ) p
+(float) k
+( PCutOff;  ) p
+(// P[nedb][ntof][nesd] set to 0.0 if it is below this value.) c n
+() p n
+(  ) S
+(int) k
+( DbgLvl;     ) p
+(// Debugging level for class methods) c n
+() p n
+(  ) S
+(// Choice of prob. method) c n
+(  ) p
+(// 1 -- Counts Distributed \(CD\)) c n
+(  ) p
+(// 2 -- Counts to Max \(CM\)) c n
+(  ) p
+(// 3 -- Dice Roll \(DR\)) c n
+(  ) p
+(int) k
+( Method;     ) p n
+() N
+(  ) S
+(int) k
+( ProbRates::outputSlice\(std::ofstream& fout, TNT::Matrix<) p
+(float) k
+(> Pslice, ) p n
+() S 8 T () S 16 T () S 24 T (      ) S
+(int) k
+( nedb, string title\);  ) p n
+() N
+() N
+(  bool outputPslices;) N
+() N
+(  ) S
+(// holds slices for individual ion/edb pairs) c n
+(  vector<AssignedCounts> AC;) p n
+() N
+(ProbRates.h) (Page 2/3) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(../include/ProbRates.h) (8/9) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (3) 9
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.147420 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(  ) p
+(// holds global average \(for timestep\) over all ions) c n
+(  vector<AssignedCounts> ACSum;) p n
+(};) N
+(ProbRates.h) (Page 3/3) (Jul 28, 04 9:28) title
+border
+grestore
+(Printed by Jim Raines) rhead
+(../include/ProbRates.h) (9/9) (Monday August 09, 2004) footer
+end % of iso1dict
+pagesave restore
+showpage
+
+%%Trailer
+end
+%%EOF

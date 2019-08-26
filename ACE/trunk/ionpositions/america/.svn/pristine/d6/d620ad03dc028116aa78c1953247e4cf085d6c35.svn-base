@@ -1,0 +1,21 @@
+ficlose
+retall
+
+$ ln -fs ~/ace/axlv2/tools/axlv2_nvt_template.save .
+
+.run nvt_fig.pro
+
+;ydoy_str = '2004208'
+ydoy_str = '2004183_242'
+!x.range = [208.5,210]
+
+ions = ['He2+','O6+','C5+','Fe10+']
+yranges = [ [1.,200.], [0.,0.], [1.e-6,1]]
+error_level = 1.0
+vth_level = 2.0
+tag = 'shock'
+
+nvt_fig, file='axlv2_nvt_'+ydoy_str+'.dat', data=d, $
+  ions=ions, tag=tag, yranges=yranges, error_level=error_level, $
+  vth_level=vth_level
+

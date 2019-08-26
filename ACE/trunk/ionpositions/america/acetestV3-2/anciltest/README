@@ -1,0 +1,52 @@
+This software demonstrates how to access the ACE ancillary data, which
+is distributed in HDF format, in a file called ACE_ANCIL.HDF. You'll also need
+HDF routines for your platform, available from http://hdf.ncsa.uiuc.edu/index.html.
+
+ACE_ANCIL.HDF is updated regularly by the ACE Science Center, as new ancillary
+data is generated.
+
+The routines which do the work are in ancil_subs.c. They should be enough to
+get you started using the data. Check the comments in the code to learn the
+limitations.
+
+Definition of the ACE ancillary data structures can be found in
+the header files aosr.h and ccr.h, which are in the include directory
+of this software package, and in the file README2, also part of this package.
+
+Makefile      You'll need to edit the paths in this file to suit your setup.
+
+NOTE: all the programs below require the full pathname to the file
+ACE_ANCIL.HDF file as a commandline input.
+
+The following two programs will be of greatest use to users:
+------------------------------------------------------------
+get_ACEepoch.c shows how to get ACE Epoch time for a given spacecraft clock.
+               ACE Epoch is seconds since Jan 1, 1996. This function uses
+	       the clock calibration data to correct for drifts in the
+	       spacecraft clock.
+
+get_aosr_struct.c shows how to get the complete set of attitude/orbit data
+               for a given spacecraft clock.
+
+
+The following programs are probably of lesser use:
+--------------------------------------------------
+ccr_data_rd.c shows how to get an ascii printout of all the clock calibration
+              data in an ancillary data file.
+
+aos_data_rd.c shows how to get an ascii printout of all the attitude/orbit
+              data in an ancillary data file.
+    
+get_attitude.c shows how to get RTN attitude for a given spacecraft clock.
+
+get_position.c shows how to get GSE position for a given spacecraft clock.
+
+get_velocity.c shows how to get GSE_velocity for a given spacecraft clock.
+
+
+------------------------
+ancil_subs.c  contains low-level routines for accessing the ancillary data.
+              These routines are used in the programs above.
+
+Note: all the routines in ancil_subs.c require the scclock to be passed as
+a float64, since some applications require sub-second resolution.

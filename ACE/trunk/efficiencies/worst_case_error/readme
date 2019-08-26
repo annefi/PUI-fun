@@ -1,0 +1,4 @@
+das test1.f hier ist das backup vom 20.11.2007.
+am 21.11.2007 habe ich die worst case error estimation (läuft unter run4)
+aus test1.f rausgeschmissen. 
+unter run4 läuft jetzt der durchlauf ohne fehlerrechnung. 

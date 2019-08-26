@@ -1,0 +1,134 @@
+# File:  libhef/libhef_notes.txt
+#
+# Description:
+#   Notes relating to the operation, function and modification of libhef.
+#   Does not contain notes about about instrument function except
+#   where it directly relates to libhef software operation.
+#
+# Author(s):  Jim Raines (jmr), started 16Aug2001.
+#
+
+===> 09Nov2003 updated coef. in swxtools.c:xfm
+
+I merged the Hefti-produced 1998-2000 coef. with my 2000-present
+coef. by making xfm switch based on input post-accel. voltage (pav).
+I decided to key off the actual pav returned by a3gxpavdpu() then
+correct it to the values used to get the best TOF fit in the forward
+model (22.8 and 25.8682 kV for levels 127 and 171 resp.).
+
+===> 20May2003 rate decompression
+
+I realized libhef::expand was not using the decompression code
+specified in the DPU document, acedocu.doc, 29Aug2000.  It was using
+code A (decmpa) rather than C (decmpc).  I changed it but noticed no
+change in the test days (2003125-135 high rates), likely because the
+rates never get to the point where the two codes diverge, raw=193.
+
+It is likely that swims rates are not using the same codes either, but
+I have not yet changed these.
+
+
+===> 08Oct2002 sectors revisited
+
+[There have been some puzzling moments dealing with this sector work,
+but it is resolved now -- I hope!  ]
+
+I changed the BR/MR back to the original and modified the sensor rates
+(SR) to be aligned with the PHA.  This was done because it became
+evident that it would be very difficult to have determined the sector
+in the PHA word wrong.  It is 3 bits of the PHA word.  Reversing the
+bits does not flip flop the maximum sector between sectors 1 and 5.
+
+Summary:
+[See also ace-s3-analysis-notes.txt for physical/instrument justifications.]
+
+14Feb2002:  BR/MR max. sector (sector 5) discovered to be out of
+alignment with SR max sector (1).  The BR/MR sector was reversed (wrt
+7) in the code.  This seemed reasonable because it was clearly being
+reversed in the code originally.  My change amounted to removing the
+reversing code.
+
+8Mar2002: Discovered PHA max. sector at 5 as well.  Reversed in code
+so it appeared at 1.  This was less logical because I inserted
+reversing code.
+
+30Sept2002:  PHA max sector returned to 5 again.  Mar2002 change
+somehow lost.
+
+07Oct2002:  PHA sector reversed again, max. at  1.
+
+08Oct2002:  PHA sector un-reversed , BR/MR re-reversed and SR reversed
+so that all sector maxima align with *original* PHA sector maximum,
+sector 5.  It was determined that it would be very hard to mis-decode
+the PHA sector.
+
+===> 14Feb2002 rates have differing max. sector
+
+The basic (and matrix) rates were found to have a maximum in a
+different sector from the engineering rates (FSR,DCR,TCR).  The former
+typically had a maximum in sector 5 while the latter had one in
+sector 2.  No physical reason could be determined for this behavior so
+it was assumed that this was a software error.  The fact the that the
+two numbers are the reverse of one another in a group of eight further
+bolstered this idea, i.e. 2 is third from 0 counting up and 5 is third
+from 7 counting down.
+
+When I changed the code in expand.c from 
+
+	  pcyc->alxbr[ie][NXBR-1-i][NSEC-1-j] = ltmp;
+
+to
+
+	  pcyc->alxbr[ie][NXBR-1-i][j] = ltmp;
+
+the basic rates maxima moved to the same sector as the engineering
+rates.
+
+===> 16Aug2001 a3gxpavlev
+
+Function a3gxpavlev (in a3dif.c) returns fxpav, which is set in expand.c:
+
+  pcyc->fxpav = dswxpal(pcyc->abxcmd[LXPAPS],0,pcyc->adcnq);
+
+The function dswxpal is defined in asxdpusim.c:
+
+/* ---------------------------------------------------------------------------
+   dswxpal --- calculate PAPS [kV]
+   -------------------------------------------------------------------------*/
+double dswxpal(BYTE bpaps, BYTE bred, double *adcnq)
+{
+  if( bred ) {
+    return(adcnq[LCNQPOF2] + adcnq[LCNQPSL2] * (double)bpaps);
+  } else {
+    return(adcnq[LCNQPOF1] + adcnq[LCNQPSL1] * (double)bpaps);
+  }
+}
+
+which appears to simply use a linear function to convert the digital
+level to a voltage.  As with other constants, LCNQPOF1 and [LCNQPSL1,
+just refer to the position in the cnq array (adcnq) where those
+constants are stored.  See libhef/include/decoded.h for the #defines.
+I cannot find the definitions of adcnq!
+
+Now, I discovered that I did not understand the output of this
+function -- it returned voltages which were different than the
+commanded ones, e.g., (pav is command voltage)
+
+a3gxpavdpu returned 24.868179
+pavlev=171 pav=26.100000
+
+a3gxpavdpu returned 21.299759
+pavlev=127 pav=22.800000
+
+Now, it could be that those lower voltages take into account the
+losses to the foil, but the offset doesn't seem to be quite constant
+(could it be a linear function?).  I did notice that libhef seems to
+use a3gxpavdpu throughout to get the pav.  Except, that in sxd.pl a
+value, 22.8, was hardcoded in.  Apparently xfm (forward model
+function) expects a different sort of pav.  (That really just confuses
+this issue.)
+
+
+
+
+

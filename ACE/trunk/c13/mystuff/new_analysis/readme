@@ -1,0 +1,19 @@
+neue datenanalyse für paper
+
+Datum: 24.8.09
+v_int_selection.py, gro_cme.py, gro_cme2.py, bin_v_int.py und merge_years.py sind in den ordnern wie bisher also in ../ oder ../experiments.
+
+v_int_selection.py: Selektion der Daten für 10 km/s Geschwindigkeitsintervalle -> Gespeichert in /data/wimmer/mu/jahresdaten/[jahr]_data/step_files/[v_int]_he/step_[step]
+[jahr] kann sein 2001,...,2007
+[v_int] kann sein 345,355,...,845 jeweils für 340-350,350-360,...,840-850
+[step] ist der E/q step 0,1,...,59 für 1,2,...,60
+
+gro_cme.py: Macht das gleiche für die CME-Tage -> Gespeichert in /data/wimmer/mu/jahresdaten/[jahr]_data/step_files/[v_int]_he/cme_step_[step]
+
+gro_cme2.py: Zieht die CME-Tage von den Gesamtdaten ab. Die Daten ohne die CME-Tage werden gespeichert in /data/wimmer/mu/jahresdaten/[jahr]_data/step_files/[v_int]_he/step_[step]_o_cme
+
+merge_years.py: Faßt die Daten für alle Jahre geschwindigkeitsintervallweise zusammen -> Gespeichert in /data/wimmer/mu/jahresdaten/all_data/step_files/[v_int]_he/step_[step]_o_cme
+
+bin_v_int.py: Faßt die Daten für größere Gescwindigkeitsintervalle zusammen -> Gespeichert in z.B. /data/wimmer/mu/jahresdaten/all_data/step_files/360_20/step_[step]_o_cme für das Geschwindigkeitsintervall 340-360
+
+der rest befindet sich in diesem Ordner:

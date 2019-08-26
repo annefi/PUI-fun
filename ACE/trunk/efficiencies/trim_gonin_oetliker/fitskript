@@ -1,0 +1,17 @@
+# Funktion von Gonin
+f(x)= A*((1/(4*pi*s**2)))*(1+(x**2/(4*s**2)))**-2 
+
+s=0.01
+A=1000
+fit f(x) "ang_dist_1000keV_50000.txt" u 1:2 via A,s 
+set autoscale
+plot f(x), "ang_dist_1000keV_50000.txt" u 1:2
+
+
+# Lorenzverteilung
+g(x)=B*(t*(1+(x**2/(t**2))))**-1 
+
+t=0.01
+B=1000
+#fit g(x) "ang_dist_200keV_500000.txt" u 1:2 via B,t
+#plot g(x), "ang_dist_200keV_500000.txt" u 1:2
