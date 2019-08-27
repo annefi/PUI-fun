@@ -4,6 +4,7 @@ sys.path.append('/home/asterix/fischer/PUI')
 from uswipha import uswipha
 from dist3D_pui_ulysses import Dist3D
 import numpy as np
+np.seterr(divide='ignore', invalid='ignore') # Ignore Ipython error messages
 from matplotlib import pylab
 
 ###
@@ -11,12 +12,11 @@ from matplotlib import pylab
 ###
 
 # load Ulysses data:
-d = uswipha(year=[1994],tf=[[1,2]])
+d = uswipha(year=[1994],tf=[[1,10]])
 d.sync_swoops()
 d.sync_traj()
 
 ## TODO: PUIs ausschneiden
-
 
 d.set_mask('Master','det',0,2,reset=True) # cut out det=3 (=rubbish?)
 d.set_mask('Master','ech',12,120,reset=True) # exclude doubles
@@ -29,13 +29,6 @@ print('*** Load Subset ***')
 d.load_subset(force=True)
 
 D = Dist3D(d)
-
-
-
-
-
-
-
 
 
 # artificial data:

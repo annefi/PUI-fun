@@ -5,11 +5,12 @@ import matplotlib.pyplot as plt
 
 
 class collimator(object):
-    def __init__(self, nrs_para=5, nrs_perp=3, nrs_sec=15, edges=False, aspphi=0., asptheta=0., vel=600., vsw=300, offset_sp = 135.):
+    def __init__(self, nrs_para=5, nrs_perp=3, nrs_sec=15, edges=False, aspphi=0., asptheta=0., vel=600., vsw=300,
+                 offset_sp=135.):
         """
         Class to calculate the field of view of SWICS (Ulysses) nrs_para,nrs_perp -> number of angle steps for
         collimator. The total number of point to represent each detector (three detectors in total) is
-        nrs_para*nrs_perp. Opening angles ranges are is +-2 deg (abs 4 deg) perpendicular and 30 deg parallel. Note :
+        nrs_para*nrs_perp. Opening angles ranges are +-2 deg (abs 4 deg) perpendicular and 30 deg parallel. Note :
         nrs_perp must be at least 1 and nrs_para- nrs_sec -> number of rotation steps that are used to build the
         sectorwise FoV. Each sector covers an angle of 45 deg. edges -> True means the outermost part of the
         detectors and the sector are included (for visualisation of the total FoV). False means the detector and
@@ -69,22 +70,22 @@ class collimator(object):
         ax.set_ylabel("y")
         ax.set_zlabel("z")
         # origin:
-        ax.plot([0,0],[0,0],[0,0], 'o', color="k")
+        ax.plot([0, 0], [0, 0], [0, 0], 'o', color="k")
         # x-axis:
-        ax.plot([-3,3],[0,0],[0,0], '-', color="k", lw=.5)
+        ax.plot([-3, 3], [0, 0], [0, 0], '-', color="k", lw=.5)
         # y-axis:
         ax.plot([0, 0], [-3, 3], [0, 0], '-', color="k", lw=.5)
         # z-axis:
         ax.plot([0, 0], [0, 0], [-3, 3], '-', color="k", lw=.5)
         # rax2: 56deg in x-y-sphere for rotating in the beginning
-        #ax.plot([0,self.rax2[0]],[0,self.rax2[1]],[0  ,self.rax2[2]],"-",color="peachpuff", ls=":")
+        # ax.plot([0,self.rax2[0]],[0,self.rax2[1]],[0  ,self.rax2[2]],"-",color="peachpuff", ls=":")
         ax.plot(self.det1[0, :], self.det1[1, :], self.det1[2, :], "o", color="k", ms=2.)
-        ax.plot(self.det2[0, :], self.det2[1, :], self.det2[2, :], "o", color="forestgreen",ms=2.)
-        ax.plot(self.det3[0, :], self.det3[1, :], self.det3[2, :], "o", color="lawngreen",ms=2.)
+        ax.plot(self.det2[0, :], self.det2[1, :], self.det2[2, :], "o", color="forestgreen", ms=2.)
+        ax.plot(self.det3[0, :], self.det3[1, :], self.det3[2, :], "o", color="lawngreen", ms=2.)
         # axes for AA-rotation:
-        ax.plot([0, self.rphiax[0]*2.5], [0, self.rphiax[1]*2.5], [0, self.rphiax[2]*2.5], "-", color="peru",
+        ax.plot([0, self.rphiax[0] * 2.5], [0, self.rphiax[1] * 2.5], [0, self.rphiax[2] * 2.5], "-", color="peru",
                 ls=":")
-        ax.plot([0, self.rthetaax[0]*2.5], [0, self.rthetaax[1]*2.5], [0, self.rthetaax[2]*2.5], "-",
+        ax.plot([0, self.rthetaax[0] * 2.5], [0, self.rthetaax[1] * 2.5], [0, self.rthetaax[2] * 2.5], "-",
                 color="burlywood",
                 ls=":")
         # Spacecraft Z-Axis (Spacecraft rotation axis, direction mostly Sunward):
@@ -92,7 +93,7 @@ class collimator(object):
         # Swics Z-Axis relative to rotation axis:
         ax.plot([0, self.rzax[0]], [0, self.rzax[1]], [0, self.rzax[2]], "-", color="lime")
         # viewing direction sunpulser when triggered (=sec0)
-        ax.plot([0, self.spax[0]*0.5], [0, self.spax[1]*0.5], [0, self.spax[2]*0.5], "-", color="yellow", lw=3.)
+        ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow", lw=3.)
         # rotated rzax
         ax.plot([0, self.rzaxrot[0]], [0, self.rzaxrot[1]], [0, self.rzaxrot[2]], "-", color="limegreen")
         return ax
@@ -123,7 +124,7 @@ class collimator(object):
         """
         Calculates axes for spacecraft spin axis taking into account the Aspect Angle (ang between vector SC-sun and
         SC's antenna which points to earth basically all the time.
-        For consistency with ACE cs (GSE) we use a reversed RTN system for Ulysses SWICS: (R: SC -sun (!); T:
+        For consistency with ACE coord.sys. (GSE) we use a reversed RTN system for Ulysses SWICS: (R: SC -sun (!); T:
         cross product w x R (where w is the suns's spin axis); N: completes this right-handed triad -- for
         in-ecliptic SC: R=X, T=Y, N=Z equvalent to GSE).
 
@@ -172,7 +173,7 @@ class collimator(object):
         self.spax /= sqrt(sum(self.spax ** 2))
         # Sunpulser angle relative to Swics Z-Axis 
         self.spang = arccos(dot(self.spax, self.rzax)) / pi * 180.
-        #print(self.spang)
+        # print(self.spang)
         # Rotate slit to Sector 0 starting Position, i.e. rotate by 90-spang
         if self.aspphi < 0.:
             self.sec0ang = self.offset_sp - self.spang
@@ -221,14 +222,17 @@ class collimator(object):
         self.FoV = zeros((3, 8, 3, self.nrp_sec))
         for sec in range(8):
             for ind, ang in enumerate(self.ang_sec):
+                # first det:
                 self.FoV[0, sec, :, ind * self.nrp_det:(ind + 1) * self.nrp_det] = rotate(self.det1, self.rax,
                                                                                           sec * 45. + ang,
                                                                                           deg=True).reshape(
                     self.det1.shape)
+                # second det:
                 self.FoV[1, sec, :, ind * self.nrp_det:(ind + 1) * self.nrp_det] = rotate(self.det2, self.rax,
                                                                                           sec * 45. + ang,
                                                                                           deg=True).reshape(
                     self.det2.shape)
+                # third det:
                 self.FoV[2, sec, :, ind * self.nrp_det:(ind + 1) * self.nrp_det] = rotate(self.det3, self.rax,
                                                                                           sec * 45. + ang,
                                                                                           deg=True).reshape(

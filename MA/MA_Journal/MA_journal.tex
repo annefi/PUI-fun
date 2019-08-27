@@ -247,7 +247,7 @@ Weiter: Neu auschecken, Kopien anlegen und alles zum Laufen bekommen
 		\item Unten ganz normal histogrammieren mit diversen Weights
 		\item twts: ? (wgts*swgt)
 		\item Loops darüber: Wie oft habe ich in eine Richtung geguckt. Um den Dichtegang rauszunehmen, der daraus resultiert, dass man häufig entlang der Radialen guckt und zu zeigen, dass darunter ein ähnlicher Dichtegang liegt, der nichts damit zu tun hat
-		\item zurückgegeben werden dann \verb|norm_arr| (proportional zur absoluten Messzeit, "`wie oft hat das Instrument in eine Richtung geguckt"'; Erwartung: häufig entlang der Spinachse, als radial) und Histogramm ungewichtet.
+		\item zurückgegeben werden dann \verb|norm_arr| (proportional zur absoluten Messzeit, "`wie oft hat das Instrument in eine Richtung geguckt"'; Erwartung: häufig entlang der Spinachse, also radial) und Histogramm ungewichtet.
 		\item Plot erzeugen: \\
 		\verb|norm_arr[norm_arr==0]=1.| Null-Werte auf 1 setzen (warum?) \\
 		\verb|H2 = H/norm_arr| Normierung durchführen \\
@@ -302,7 +302,7 @@ Morgen: Schauen, ob ich \verb|pui_ulysses| benutzen kann. Sonst anderes Main-Pro
 		\item \todo{Delta EpQ} Ist Delta EpQ dasselbe, 3\%?
 		\item \todo{Geomfak}Geometriefaktor ist wahrscheinlich derselbe, oder?
 		\item \todo{Eigengeschwindigkeit} In \verb|_calc_vspace_| wird bei ACE die Eigengeschwindigkeit nur in der y-Komponente abgezogen. Das muss bei Ulysses aber ja nicht so sein (?).
-		\item Ich bin gerade verwirrt von den Koordinatensystemen. GSE hat x-Achse ja vom SC zur Sonne positiv und später wird das umgedreht, damit der SW grob aus positiver Richtung kommt. RTN eigentlich andersrum. Soll ich das so beibehalten? Dann muss ich nochmal zurück zum Kollimator. Denn das FOV ist dann ja in negativer R-Richtung. \\ Ich hab jetzt erst einmal das RTN umgedreht, jetzt ist alles so wie beim GSE. Es ist ein bisschen inkonsistent, dass ich den AA ab der negativen R-Achse berechne. Jetzt tue ich halt so, als wär das die positive Achse, dann muss ich nichts ändern bei FoV. \todo{Koordinatensystem} Aber vielleicht wird das problematisch, wenn ich die Eigengeschwindigkeit einrechne, die ja evtl. in normalen RTN-Komponenten angegeben wird?
+		\item Ich bin gerade verwirrt von den Koordinatensystemen. GSE hat x-Achse ja vom SC zur Sonne positiv und später wird das umgedreht, damit der SW grob aus positiver Richtung kommt. RTN eigentlich andersrum. Soll ich das so beibehalten? Dann muss ich nochmal zurück zum Kollimator. Denn das FOV ist dann ja in negativer R-Richtung. \\ Ich hab jetzt erst einmal das RTN umgedreht (also eigentlich nur die Konvention in die Kommentare geschrieben), jetzt ist alles so wie beim GSE. Es ist ein bisschen inkonsistent, dass ich den AA ab der negativen R-Achse berechne (aber das habe ich irgendwie ja immer schon so gemacht. Jetzt auch in der \verb|calc_asp_angles|-Funktion deutlich kommentiert). Jetzt tue ich halt so, als wär das die positive Achse, dann muss ich nichts ändern bei FoV. \todo{Koordinatensystem} Aber vielleicht wird das problematisch, wenn ich die Eigengeschwindigkeit einrechne, die ja evtl. in normalen RTN-Komponenten angegeben wird?
 		\item In \verb|_add_3Dv| musste ich nochmal Datenproduktnamen ändern, außerdem \textit{det DCR to det 0} rausnehmen. Bei ACE gibts es offensichtlich $det = 7 $- Zuweisungen. \\
 		Außerdem geht der EpQ-Step über 60 hinaus. Das crasht, weil ja die getvelocity von ACE mit 60 Steps benutzt wird. Ich wollte Daten erstmal einfach vormaskieren, bekomme das aber nicht hin. Bei der Übergabe von \verb|d| wird die Mastermaske ignoriert! Ich suche quasi die subset-Funktion aus dbData -- nur "`live"', also ohne Wegschreiben.
 	\end{itemize}
@@ -313,14 +313,14 @@ Morgen: Schauen, ob ich \verb|pui_ulysses| benutzen kann. Sonst anderes Main-Pro
 	\item Bin jetzt den Umweg gegangen über \verb|save_subset| und \verb|load_subset|. Damit schreibe ich ein Subset von den gefilterten Daten (Det von 0 bis 2 und epq von 0 bis 59) in eine Binärdatei und lese sie wieder ein...
 	\todo{Subset} Da muss es aber doch noch einen anderen Weg geben? \\
 	Nachtrag: Ich habe EpQ schließlich von 1 bis 58 gefiltert, weil die ACE-Daten auch so vorliegen. 0-59 hat für \verb|get_velocities| funktioniert, aber nicht fürs Synchronisieren der Efficiencies.
-	\item \todo{Efficiencies} Efficiencies soll ich ja erstmal von ACE nehmen. Da die nur für die Triples gelten (?) filtere ich die Doubles jetzt auch mal raus: \verb|d.set_mask('Master','ech',12,120,reset=True)|
+	\item \todo{Efficiencies} Efficiencies soll ich ja erstmal von ACE nehmen. Da die nur für die Triples gelten (?) filtere ich die Doubles jetzt auch mal raus: \\ \verb|d.set_mask('Master','ech',12,120,reset=True)|
 	\item Für Ulysses gibt es das Datenprodukt \textit{swt}, das Sectorweight, nicht. \todo{Sectorweight} Lars fragen bzw. selbst nachgucken, evtl. wird das nur über uswipha nicht eingeladen. Bis dahin setzte ich alle Gewichte auf 1 (in \verb|calc_w3dspecs)|)
 	\item Es läuft durch!! Ich kann das Spektrum erzeugen!! Jetzt mal mehr Daten einladen...
 	\item Ständig Memory Error... \\ 200 Tage sind das Maximum.
-	\item Überlegung, warum jedes PHA-wort überhaupt 9 FoV-Punkte hat: Weil man nicht weiß, wo der Sektor getroffen wurde. Punkt 0 hat z.B. eine ganz andere w-Signatur als Punkt 5. Alle Möglichkeiten müssen betrachtet werden.\\
+	\item Überlegung, warum jedes PHA-Wort überhaupt 9 FoV-Punkte hat: Weil man nicht weiß, wo der Sektor getroffen wurde. Punkt 0 hat z.B. eine ganz andere w-Signatur als Punkt 5. Alle Möglichkeiten müssen betrachtet werden.\\
 	Aber: Macht eine w-Auflösung von 0.2 überhaupt Sinn?\\
 	Die größte Differenz im Betrag von w haben immer der erste und der letzte Eintrag. \\
-	Differenzen werden kleiner für größeren EpQ-Steps. Stimmt nicht ganz: Peaken bei einem mittleren EpQ-Step (abh. von vsw)\\
+	Differenzen werden kleiner für größere EpQ-Steps. Stimmt nicht ganz: Peaken bei einem mittleren EpQ-Step (abh. von vsw)\\
 	WARUM verändern sich die Differenzen für verschiedene Sektoren bei keinem AA?? $\rightarrow$ Weil irgendwie der AA doch nicht Null ist. Was geht da schief?\\
 	ToDo für morgen: \begin{itemize}
 		\item Methode basteln, um schnell irgendwelche Sachen zu plotten, z.B. wSpace. Das ist ja nicht mehr wirklich eine Sache in SwicsCollimator, weil ich mir ja mehrere Kollimatoren angucke.
@@ -329,5 +329,23 @@ Morgen: Schauen, ob ich \verb|pui_ulysses| benutzen kann. Sonst anderes Main-Pro
 		\item Oben weiter machen: Wollte eig. nur sicher gehen, dass sich die Diff mit den Sektoren nicht ändern und mit den Detektoren schon! (Tut es das dann?)
 	\end{itemize}
 \end{itemize}
+
+
+\DayInAug{Di}{26}
+Habe jetzt nach langer Pause nochmal neu angefangen, Dist3D durchzugucken.
+\begin{itemize}
+	\item \verb|calc_w3dspecs()|: 
+	\begin{itemize}
+		\item Was ist mit \textit{d00}? Ich habe nur \textit{d90}. \todo{d90, d00} Ist das egal? Hab das jetzt erstmal einfach auf \textit{d90} geändert. Ich frage mich, wie das vorher durchlief...?
+		
+		\item Warum suche ich eigentlich nur eine Kombi pro Tag? Warum histogrammiere ich nicht alle vorkommenden Kombis? \\ $\Rightarrow$ Verstanden: Das sind nur die Bingrenzen. Warum die gerade so gewählt werden, ist aber irgendwie trotzdem random? (Anne, das stimmte nicht)\\
+		AH! Alles falsch! Ich nehme die Uniquewerte, weil ich zum selben Zeitpunkt mehrere Messwerte habe. Ich will aber nur jeden Zeitpunkt einmal! Die Bingrenzen habe ich als Argument mitgegeben.
+		
+		\item \todo{ivoffset} Wozu ivoffset?
+	\end{itemize}
+\item Ich verstehe immer noch nicht so ganz, was ich da oben genau verstehen wollte -- warum soll sich die w-Diff. wann ändern?\\
+Aber kann es sein, dass ich die ersten Einträge beim AA genommen habe und das gar nicht 0 war, sondern eben der kleinste in diesem Zeitraum gemessene...?
+\end{itemize}
+
 
 \end{document}

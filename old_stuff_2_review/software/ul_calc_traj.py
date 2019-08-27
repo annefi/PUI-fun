@@ -85,8 +85,9 @@ def calc_asp_angles(sc_vec,earth_vec,cs = "hg", l_s_sc = 180.):
     :param earth_vec: Vector from sun to earth
     :param cs: "hg" for heliographic cartesian coordinates (default) or "rtn" for RTN cartesian coordinates
     :param l_s_sc: longitude shift. Needs to be 180 for Ulysses data in HG, otherwise 0.
-    :return: asp_phi, asp_theta
-    asp_phi increases to +90 deg towards negative T-axis ('left') from sun and -90 deg towards positive T-axis
+    :return: asp_phi, asp_theta (PoV from SC)
+    asp_phi increases to +90 deg towards negative T-axis ('left') from viewing line SC-sun and -90 deg towards positive
+    T-axis
     asp_theta increases from zero in sun direction (negative R-axis) to +90 deg towards N-axis
     '''
     if isinstance(sc_vec,list):
