@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 
 class collimator(object):
-    def __init__(self, nrs_para=5, nrs_perp=3, nrs_sec=15, edges=False, aspphi=0., asptheta=0., vel=600., vsw=300,
+    def __init__(self, nrs_para=5, nrs_perp=3, nrs_sec=1, edges=False, aspphi=0., asptheta=0.00001, vel=600., vsw=300,
                  offset_sp=135.):
         """
         Class to calculate the field of view of SWICS (Ulysses) nrs_para,nrs_perp -> number of angle steps for
@@ -237,6 +237,15 @@ class collimator(object):
                                                                                           sec * 45. + ang,
                                                                                           deg=True).reshape(
                     self.det3.shape)
+
+
+
+
+
+
+
+
+#_______________________ not used atm __________________________________
 
     def _calc_vspace(self):
         """

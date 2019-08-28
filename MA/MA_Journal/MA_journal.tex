@@ -348,4 +348,19 @@ Aber kann es sein, dass ich die ersten Einträge beim AA genommen habe und das g
 \end{itemize}
 
 
+\DayInAug{Mi}{27}
+\begin{itemize}
+	\item \textit{d00} wird oben berechnet! (in der \verb|init| von Dist3D)
+	\item Verwirrung: Warum sind die Werte des wspace (Betrag) \textit{immer} unterschiedlich? Bei der Konstruktion werden die doch auf 1 normiert und dann mit \textit{einer} Akzeptanzgeschwindigkeit malgenommen...(alle Sektoren, alle Detektoren)? \\
+	Gecheckt: FoV vom Collimator hat immer den Betrag 1 im Betrag. \\
+	Gecheckt: Bleibt auch so für verschiedene AA (in Dist3D) \\
+	Lösung gefunden: Die Unterschiede kommen rein, wenn man die Eigengeschwindigkeit betrachtet! \\
+	...Und natürlich, wenn man beim Umwandeln in w die SW-Geschwindigkeit nur in x-Richtung abzieht. Das ist ja dasselbe Problem, die Beträge SIND dann halt nicht mehr gleich. (Und das ist auch der Fall, wenn keine Eigengeschwindigkeit mit reinkommt!)	
+\end{itemize}
+Abschließend habe ich festgestellt, haha, dass die w-Werte für Detektorpunkte innerhalb einer Det-Sek-Kombi in allen(?) Fällen eine maximale Differenz unter 0.5 haben (Details: Die max. Differenz liegt bei mittleren EpQ, rutscht mit größeren vsw etwas weiter zu kleineren EpQ-Steps (evtl. mal überlegen, warum...), ändert sich vom Wert aber kaum).\\
+Damit schließe ich das Thema erstmal ab, wird bestimmt bei der Fehlerbetrachtung interessant... (Da muss man dann auch die Breite im EpQ-Step und die Variabilität ineinem einzigen Step betrachten)\\ Jetzt erst gesehen: Lars' w-Bins sind aber nur 0.2 breit... (\verb|nrs_sec|))\\ \\
+Jetzt: Sunpulser-Angle variabel übergebbar einbauen. hatte ich schon gemacht. \\
+Morgen: prüfen, warum das w-Spektrum nicht einfach gedreht ist, sondern komplett anders aussieht mit unterschiedlichen SP-Offset-Angles.
+
+
 \end{document}

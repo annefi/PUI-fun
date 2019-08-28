@@ -8,8 +8,8 @@ from custom_colours import lighten_color
 
 
 class Dist3D(object):
-    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., nrs_perp=1, nrs_para=3, nrs_sec=3,
-                 nrs_epq=1, vswbins=arange(300., 800.1, 10.), ion="He1+"):
+    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., nrs_perp=1, nrs_para=3, nrs_sec=1,
+                 nrs_epq=1, vswbins=arange(300., 800.1, 10.), ion="He1+", offset_sp = 135.):
         """
         d : dbData instance with species predifined by Master mask
         m : Ion mass in amu
@@ -25,6 +25,7 @@ class Dist3D(object):
         self.mass = mass
         self.charge = charge
         self.ion = ion
+        self.offset_sp = offset_sp
         self.col_dim = self.nrs_para * self.nrs_perp * self.nrs_sec
         self.sec_det_dim = self.col_dim * self.nrs_epq
         self.aspphi = arange(around(min(self.d.data["aspphi"])),
@@ -50,18 +51,24 @@ class Dist3D(object):
         self._calc_phspeff_wgt()
 
     def _calc_FoV(self):
+        # shape self.FoV: (#aspphi, #asptheta, #det, #sec, xyz, col_dim)
+        # (col_dim is nrs_para * nrs_perp * nrs_sec)
         self.FoV = zeros((self.aspphi.shape[0], self.asptheta.shape[0], 3, 8, 3, self.col_dim))
         for iphi, phi in enumerate(self.aspphi):
             for itheta, theta in enumerate(self.asptheta):
-                c = collimator(aspphi=phi, asptheta=theta, nrs_perp=self.nrs_perp, nrs_para=self.nrs_para,
-                               nrs_sec=self.nrs_sec)
+                c = collimator(aspphi = phi, asptheta = theta, nrs_perp = self.nrs_perp, nrs_para = self.nrs_para,
+                               nrs_sec = self.nrs_sec, offset_sp = self.offset_sp)
                 self.FoV[iphi, itheta] = c.FoV
 
     def _calc_vspace(self):
         """
         Calculates vx,vy,vz for all epqsteps and given aspect angles.
+        shape self.vspace: (#aspphi, #asptheta, #epq-steps, #det, #sec, xyz, sec_det_dim)
+        (sec_det_dim is col_dim * nrs_epq)
         """
         self.vspace = zeros((self.aspphi.shape[0], self.asptheta.shape[0], 60, 3, 8, 3, self.sec_det_dim))
+        # not used, just for testing:
+        #self.vabsspace = zeros((self.aspphi.shape[0], self.asptheta.shape[0], 60, 3, 8, 1, self.sec_det_dim))
         for i in range(self.nrs_epq):
             for iv, v in enumerate(self.vels):
                 self.vspace[:, :, iv, :, :, :, i * self.col_dim:(i + 1) * self.col_dim] = -self.FoV * v * self.vels_fac[
@@ -69,6 +76,7 @@ class Dist3D(object):
         self.vspace[:, :, :, :, :, 1, :] -= 30.
         self.vspace[:, :, :, :, :, 0, :] = -self.vspace[:, :, :, :, :, 0, :]
         self.vspace[:, :, :, :, :, 1, :] = -self.vspace[:, :, :, :, :, 1, :]
+        #self.vabsspace[..., 0, :] = sqrt(sum(self.vspace ** 2, axis = 5))
 
     def _calc_wspace(self, ):
         """
@@ -508,8 +516,7 @@ class Dist3D(object):
         # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
         #  to calculate the weights for normalising the final histograms.
         norm_arr = zeros((wxbins.shape[0] - 1, wybins.shape[0] - 1, wzbins.shape[0] - 1))
-        # uTall,Tallind = unique(self.d.get_data("Master","d00"),return_index=True)
-        uTall, Tallind = unique(self.d.get_data("Master", "d90"), return_index=True)
+        uTall,Tallind = unique(self.d.get_data("Master","d00"),return_index=True)
         uasphi = self.d.get_data("Master", "aspphi")[Tallind]
         uasptheta = self.d.get_data("Master", "asptheta")[Tallind]
         uvsw = self.d.get_data("Master", "vsw")[Tallind]
@@ -621,10 +628,12 @@ class Dist3D(object):
             sli /= amax(sli)
             ax.pcolormesh(wbins, wbins, sli.T, cmap="jet", vmax=1.)
 
-    def plot_wspace(self, ax=None, vsw=20, aspphi=0, asptheta=0, epq=30, sec='all'):
+    def plot_wspace(self, ax=None, vsw=2, aspphi=0, asptheta=0, epq=30, sec='all'):
         if ax == None:
-            fig = plt.figure()
+            fig = plt.figure(figsize=(6,6))
             ax = fig.add_subplot(111, projection='3d')
+            fig.canvas.set_window_title('W-Space')
+            #ax.set_title('W-Space')
             ax.set_xlim(-2.5, 2.5)
             ax.set_ylim(-2.5, 2.5)
             ax.set_zlim(-2.5, 2.5)
@@ -660,10 +669,53 @@ class Dist3D(object):
             print("no valid sector given")
         return ax
 
+    def plot_vspace(self, ax=None, vsw=20, aspphi=0, asptheta=0, epq=30, sec='all'):
+        if ax == None:
+            fig = plt.figure(figsize=(6,6))
+            ax = fig.add_subplot(111, projection='3d')
+            fig.canvas.set_window_title('V-Space')
+            #ax.set_title('W-Space')
+            ax.set_xlim(-600, 600)
+            ax.set_ylim(-600, 600)
+            ax.set_zlim(-600, 600)
+            ax.set_xlabel('x')
+            ax.set_ylabel('y')
+            ax.set_zlabel('z')
+        colors = array([[77, 77, 0], [77, 57, 0], [77, 0, 0], [77, 0, 57], [38, 0, 77], [0, 38, 77], [0, 77, 77],
+                        [0, 77, 19]])
+        if isinstance(sec, int):
+            v = self.vspace[aspphi, asptheta, epq, :, sec, :, :]
+            nrs = v.shape[-2] * v.shape[-1]
+            shade_arr = linspace(0.1, 3.5, nrs)
+            rgb = colors[sec]
+            cc = zeros((nrs, 3))
+            for j in range(nrs):
+                cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
+            ax.scatter(v[..., 0, :], v[..., 1, :], v[..., 2, :], c=cc)
+            ax.scatter(0, 0, 0, c='k', s=5)
+            ax.plot([0, 600], [0, 0], [0, 0], c='k', lw=0.8)
+        elif sec == 'all':
+            v = self.vspace[aspphi, asptheta, epq, :, :, :, :]
+            for i, s in enumerate(range(v.shape[-3])):
+                nrs = v.shape[-2] * v.shape[-1]
+                shade_arr = linspace(0.1, 3.5, nrs)
+                rgb = colors[i]
+                cc = zeros((nrs, 3))
+                for j in range(nrs):
+                    cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
+                ax.scatter(v[..., s, 0, :], v[..., s, 1, :], v[..., s, 2, :], c=cc)
+                ax.scatter(0, 0, 0, c='k', s=5)
+                ax.plot([0, 600], [0, 0], [0, 0], c='k', lw=0.8)
+        else:
+            print("no valid sector given")
+        return ax
+
     def plot_FoV(self, ax=None, aspphi=0, asptheta=0, sec='all'):
         if ax == None:
             fig = plt.figure()
             ax = fig.add_subplot(111, projection='3d')
+            fig.canvas.set_window_title('FoV')
+            #ax.set_title('FoV')
             ax.set_xlabel('x')
             ax.set_ylabel('y')
             ax.set_zlabel('z')

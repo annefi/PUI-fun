@@ -1,6 +1,9 @@
 # too large for github:
 /MA/Literatur/KoordSys/131123-explanatory-supplement-astronomical-almanac.pdf
 
+# binary file written by dbData:
+tmp.dat
+
 
 # Source for the following rules: https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore
 # Byte-compiled / optimized / DLL files
