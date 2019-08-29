@@ -362,5 +362,26 @@ Damit schließe ich das Thema erstmal ab, wird bestimmt bei der Fehlerbetrachtun
 Jetzt: Sunpulser-Angle variabel übergebbar einbauen. hatte ich schon gemacht. \\
 Morgen: prüfen, warum das w-Spektrum nicht einfach gedreht ist, sondern komplett anders aussieht mit unterschiedlichen SP-Offset-Angles.
 
+\DayInAug{Do}{29}
+Kurze Funktion geschrieben, um das Plotten des w-Spektrums zu automatisieren. \\ \\
+To Do: \\
+\todo{colorbar} Colorbar und passende Range. Wie beim Polarplot muss ich überlegen, ob ich auf einzelnen Steps oder auf alle Werte normieren möchte. \\
+\todo{Durchklicken} Animierte Funktio schreiben, mit der ich durch die Slices licken kann. Duncan gefragt: Stichwort \textit{ClickEvent}, Figure damit verbinden. Minimalbeispiel suchen: \textit{mpl.canvas.connect}. Nur machen, wenn das einigermaßen schnell geht...
+\\ \\
+Fehlersuche, warum offsetSP das Spektrum nicht nur dreht, sondern insgesamt verändert (habe einheitliche viridis-colormap. Die Range ist auch ganz unterschiedlich...):
+\begin{itemize}
+	\item Test mit offset 135 Grad und 45 Grad (90 Grad Versatz)
+	\item v-Space ist einfach gedreht um 2 Sektoren. W-Space auch.
+	\item Die den PHA-Worten zugeordneten v- und w-Werte unterscheiden sich, auch wenn man ein Wort mit dem entsprechenden sektor sucht: Denn dann ist ja der EpQ-Step, Detektor etc. anders.
+	\item Überlegung: Sollte sich das über viele Daten nicht trotzdem ausgleichen und in etwa ähnlich aussehen? (Ich glaube bei 200 Tagen sieht man es scho etwas!)
+	\item Und wie beeinflussen die Anzahlen der verschiedenen Steps (para,perp,epq,sec) das ganze? Test:
+	\begin{itemize}
+		\item Nur wenige (20) Tage einladen, damit ich mit der Anzahl hochgehen kann
+		\item Am meisten Einfluss haben nrs\_perp und nrs\_para, die \textit{weichen} das Spektrum etwas auf.
+	\end{itemize}
+\end{itemize}
+
+Wollte mir überlegen, wie das Spekturm bei einem falschen Offset aussähe, keine Ahnung. Wollte mir das angucken für verschiedene Offsets. Dafür die Maske wegnehmen, die auf He+ einschränkt. Das funktioniert irgendwie nicht. Das Quadmesh aus der Plotfunkton sieht immer gleich aus. Morgen untersuchen. \\
+Außerdem: Kann es sein, dass ich das falsche w\_He einschränke?
 
 \end{document}

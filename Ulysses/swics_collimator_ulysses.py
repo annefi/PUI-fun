@@ -84,18 +84,21 @@ class collimator(object):
         ax.plot(self.det3[0, :], self.det3[1, :], self.det3[2, :], "o", color="lawngreen", ms=2.)
         # axes for AA-rotation:
         ax.plot([0, self.rphiax[0] * 2.5], [0, self.rphiax[1] * 2.5], [0, self.rphiax[2] * 2.5], "-", color="peru",
-                ls=":")
+                ls=":", label = 'asp_phi rotation axis')
         ax.plot([0, self.rthetaax[0] * 2.5], [0, self.rthetaax[1] * 2.5], [0, self.rthetaax[2] * 2.5], "-",
                 color="burlywood",
-                ls=":")
+                ls=":", label = 'asp_phi rotation axis')
         # Spacecraft Z-Axis (Spacecraft rotation axis, direction mostly Sunward):
-        ax.plot([0, self.rax[0]], [0, self.rax[1]], [0, self.rax[2]], "-", color="orange")
+        ax.plot([0, self.rax[0]], [0, self.rax[1]], [0, self.rax[2]], "-", color="orange", label = 'SC rotation axis')
         # Swics Z-Axis relative to rotation axis:
-        ax.plot([0, self.rzax[0]], [0, self.rzax[1]], [0, self.rzax[2]], "-", color="lime")
+        ax.plot([0, self.rzax[0]], [0, self.rzax[1]], [0, self.rzax[2]], "-", color="lime", label = 'SWICS z-axis initial')
         # viewing direction sunpulser when triggered (=sec0)
-        ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow", lw=3.)
+        ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow",
+                lw=3., label = 'sunpulser viewing when triggered')
         # rotated rzax
-        ax.plot([0, self.rzaxrot[0]], [0, self.rzaxrot[1]], [0, self.rzaxrot[2]], "-", color="limegreen")
+        ax.plot([0, self.rzaxrot[0]], [0, self.rzaxrot[1]], [0, self.rzaxrot[2]], "-", color="limegreen",
+                label = 'SWICS z-axis rotated')
+        ax.legend(loc=4)
         return ax
 
     def _calc_points(self):
@@ -164,16 +167,15 @@ class collimator(object):
         (It looks like the detector view direction is 135 deg ahead of the sun-pulse. Which means that the sun-pulse
         direction is typically reached at sector 5!)
 
-        For Ulysses SWICS the positioning of sun pulse sensor direction vs. SWICS as the be found out. Due to that
+        For Ulysses SWICS the positioning of sun pulse sensor direction vs. SWICS has the be found out. Due to that
         we're working with a variable angle here...
         """
         # Sunpulser viewing direction at spin start,i.e. start of sec0 (in plane spanned by spin axis and SC-Sun
         # line, perpendicular to spin axis)
         self.spax = cross(self.rax, cross(array([1., 0., 0.]), self.rax))
         self.spax /= sqrt(sum(self.spax ** 2))
-        # Sunpulser angle relative to Swics Z-Axis 
+        # Sunpulser angle relative to Swics Z-Axis (always 90 deg?)
         self.spang = arccos(dot(self.spax, self.rzax)) / pi * 180.
-        # print(self.spang)
         # Rotate slit to Sector 0 starting Position, i.e. rotate by 90-spang
         if self.aspphi < 0.:
             self.sec0ang = self.offset_sp - self.spang

@@ -12,7 +12,7 @@ from matplotlib import pylab
 ###
 
 # load Ulysses data:
-d = uswipha(year=[1994],tf=[[1,100]])
+d = uswipha(year=[1994],tf=[[1,20]])
 d.sync_swoops()
 d.sync_traj()
 
@@ -29,10 +29,3 @@ print('*** Load Subset ***')
 d.load_subset(force=True)
 
 D = Dist3D(d)
-
-
-# artificial data:
-# N = 10000
-# np.random.seed(10)
-# r_art = np.random.randint(low=1,high=3+1,size=N)
-# phi_art = np.random.randint(low=0,high=7+1,size=N)
