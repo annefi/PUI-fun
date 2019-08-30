@@ -366,7 +366,7 @@ Morgen: prüfen, warum das w-Spektrum nicht einfach gedreht ist, sondern komplet
 Kurze Funktion geschrieben, um das Plotten des w-Spektrums zu automatisieren. \\ \\
 To Do: \\
 \todo{colorbar} Colorbar und passende Range. Wie beim Polarplot muss ich überlegen, ob ich auf einzelnen Steps oder auf alle Werte normieren möchte. \\
-\todo{Durchklicken} Animierte Funktion schreiben, mit der ich durch die Slices licken kann. Duncan gefragt: Stichwort \textit{ClickEvent}, Figure damit verbinden. Minimalbeispiel suchen: \textit{mpl.canvas.connect}. Nur machen, wenn das einigermaßen schnell geht...
+\todo{Durchklicken} Animierte Funktion schreiben, mit der ich durch die Slices klicken kann. Duncan gefragt: Stichwort \textit{ClickEvent}, Figure damit verbinden. Minimalbeispiel suchen: \textit{mpl.canvas.connect}. Nur machen, wenn das einigermaßen schnell geht...
 \\ \\
 Fehlersuche, warum offsetSP das Spektrum nicht nur dreht, sondern insgesamt verändert (habe einheitliche viridis-colormap. Die Range ist auch ganz unterschiedlich...):
 \begin{itemize}
@@ -390,6 +390,7 @@ Außerdem: Kann es sein, dass ich das falsche w\_He einschränke?
 	\item w\_He1+2 ist ein Datenprodukt, das in Dist3D zugefügt wird. Das sollte gleich sein mit dem wHe, das sowieso schon in den Ulysses-Daten ist -- allerdings erst dann, wenn die richtigen EpQ-Umsetzungen da sind. D.h., man könnte die evtl. finden, wenn man guckt, womit wHe auf der uswipha-Ebene berechnet wurde.
 	\item Habs gefunden, in uswiutils. \verb|getvelocity|-Funktion angepasst, Steps angepasst (64 bei Ulysses), aber EpQ-Filter muss trotzdem auf 58 Steps bleiben, \todo{efficiencies} weil immer noch die Efficiencies und die Sektorgewichte fehlen. Delta v / self.vels auch angepasst.
 	\item Jetzt: Loopfunktion schreiben
+	\item Schon fertig, das hat super geklappt! Ich habe das Spektrum zum Plotten in eine Klasse (WSpec) ausgelagert. Man kann jetzt durchslicen und auch drehen (auf Tastendruck oder über Funktion). Als nächstes möchte ich eine gute Anzeige, die angibt, wo ich gerade bin -- vielleicht auch eine entsprechende Skizze...? Die Colorbar vielleicht auch noch anpassen, damit man mehr sieht und Funktion, auf einzelnen Slice zu normieren...?
 \end{itemize}
 
 

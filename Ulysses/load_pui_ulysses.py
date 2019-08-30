@@ -12,7 +12,7 @@ from matplotlib import pylab
 ###
 
 # load Ulysses data:
-d = uswipha(year=[1994],tf=[[1,10]])
+d = uswipha(year=[1994],tf=[[1,52]])
 d.sync_swoops()
 d.sync_traj()
 
@@ -29,3 +29,5 @@ print('*** Load Subset ***')
 d.load_subset(force=True)
 
 D = Dist3D(d)
+from WSpec import WSpec
+ws = WSpec(D)

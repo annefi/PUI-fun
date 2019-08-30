@@ -36,10 +36,10 @@ def test_event_handle():
     import numpy as npy
     from numpy.random import rand
 
-
     # picking on a scatter plot (matplotlib.collections.RegularPolyCollection)
 
     x, y, c, s = rand(4, 100)
+
     def onpick3(event):
         ind = event.ind
         print 'onpick3 scatter:', ind, npy.take(x, ind), npy.take(y, ind)
