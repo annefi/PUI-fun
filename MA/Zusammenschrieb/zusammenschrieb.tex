@@ -3,12 +3,12 @@
 \usepackage{amsmath}
 \usepackage{hyperref}
 \usepackage[backend=biber,style=authoryear,maxcitenames=2,maxbibnames=99,natbib=true,uniquelist=minyear]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
-\addbibresource{../MA_literatur.bib} % The filename of the bibliography
+\addbibresource{../Dokument/MA_literatur.bib} % The filename of the bibliography
 %
 \begin{document}
-%
+
 \section{SW}
-Literatur: \cite{VasylSis, aschwanden_book, Geiss1995, Cranmer2012}
+Literatur: \cite{vasyl_siscoe_1976, aschwanden_book, geiss_1995, cranmer_2012}
 \\ \\
 Andreas:
 \begin{itemize}
@@ -182,7 +182,7 @@ Theorie:
 	wahrscheinlich durch kIR ($\leftarrow$ nur langsamer SW!)
 \end{itemize}
 Kladde S. 27: B-parallele Komponente zeigt: Phasenraumtransporte finden statt!\\ \\
-Drews 2015: Local Bfield determines inclination of torus distribution directly after injection process, but global field influences the evolution of the CDF, tightly related to spatial diffusion and transport (\cite{chalov1998}, Oka 2002, Drews 2013, Chalov 2014)
+Drews 2015: Local Bfield determines inclination of torus distribution directly after injection process, but global field influences the evolution of the CDF, tightly related to spatial diffusion and transport (\cite{chalov_1998}, Oka 2002, Drews 2013, Chalov 2014)
 %
 \subsubsection{Isotropisierung}
 %
@@ -239,7 +239,7 @@ Vasyliunas und Siscoe:
 	\subsection{Missionsziele und Allgemeines}
 	\begin{itemize}
 		\item  \cite[6.1.7]{Prlss2004}: Unterscheidung SW in höheren Breiten: erstmals durch Radioszintillationsmessungen
-		\item Eigentlich ist Ekliptik interessant für uns, weil Erde hier liegt. Um aber die Prozesse zu verstehen... (Magnetfeldstruktur außerhalb der Ekliptik: \cite[ch. 6.2.3]{Prlss2004})
+		\item Eigentlich ist Ekliptik interessant für uns, weil Erde hier liegt. Um aber die Prozesse zu verstehen... (Magnetfeldstruktur außerhalb der Ekliptik: \cite[ch. 6.2.3]{prlss_2004})
 		\item Missionsziele und Aufbau: Lars Diss
 		\item Paper Glöckler1998. Bild mit 3 Detektoren
 		\item Sektorisierung durch Spin: 1 Spin dauert 12 Minuten (5 rot per min)
@@ -340,8 +340,7 @@ Vasyliunas und Siscoe:
 %
 %
 %
-\subsubsection{Kollimator}
-Messung / Detektierung im V-Raum
+\subsubsection{Kollimator / Messung}
 \begin{itemize}
 	\item Massenflugzeitspektrometer Messprinzip: S.11 Kladde
 	\item {EpQ, E, Tof} werden gemessen $\rightarrow$ {m, mpq, v} werden bestimmt
@@ -349,10 +348,16 @@ Messung / Detektierung im V-Raum
 	\item man muss He+ erstmal rausfiltern $\rightarrow$ eig. braucht man mpq-Algorithmus. Ist aber in Doubles gut sichtbar, deshalb gehts auch so. (Stelle Methodik vor, um He+ rauszustellen, S. 39)
 	\item Kollimatornormale muss antiparallel zu v-Vektor eines Teilchens ausgerichtet sein, damit es detektiert werden kann. (Teilchen variabler Gechwindigkeit entlang der Normalen rausschicken, in v-Raum eintragen, Punktspiegelung an Ursprung ergibt Akzeptanz)
 	\item im v-Raum: Kollimator ist Ausschnitt einer Kugelschale
-	\item s. S.34 u.a. Kladde: Proton-/Main-Channel (aus Glöckler)
-	\item 60 EpQ-Steps alle 12 Minuten: es wird von 100kV auf 0.5kV logarithmisch runtergesteppt
-	\item Unsicherheit $\Delta EpQ = 3\,\%$, daraus folgt Unsicherheit $\Delta v = 1.5\,\%$ in der Messung. Fehlerrechnung: Kladde S. 84.
+	\item Channel \citep{gloeckler_1992}:
+	\begin{itemize}
+		\item Proton/Helium Channel (the smaller one): energy range $0.16 - 14 \frac{\mathrm{keV}}{\mathrm{charge}}$, resolution 4\%. For SW protons. He and heavier ions. Werden von einem einfachen SSd gezählt, es findet aber keine Zeitmessung statt? ... Aus EpQ-Sprektum lassen sich dann Temperatur, Bulk Speed, Density bestimmen...?
+		\item Main Channel (larger one): energy range $0.65 - 60 \frac{\mathrm{keV}}{\mathrm{charge}}$, resolution 5\%. For SW He, heavier ions and suprathermal ions. Full m vs. mpq analysis
+	\end{itemize}
+	\item 64 EpQ-Steps alle 12.8 Minuten: es wird von 100kV auf 0.5kV logarithmisch runtergesteppt. Ein Step pro SC-spin (= 12 Sekunden). Die einzelnen Steps sind in uswiutils in der getvelocity-Funktion. Ich verstehe nicht ganz, woher die Zahlen für die Folge kommen (138 ist max. Anzahl der Steps)
+	\item Unsicherheit $\Delta EpQ = 3\,\%$ (nur für ACE!), daraus folgt Unsicherheit $\Delta v = 1.5\,\%$ in der Messung. Fehlerrechnung: Kladde S. 84.
 	\item Efficiencies: Wahrscheinlichkeit, wirklich ein Teilchen zu messen. Das ist abhängig von der Teilchenart und vom Step. Gründe: Auslösung der Sekundärelektronen aus Folie ist nicht garantiert; Teilchen können leicht divergent auf Folie auftreffen und ggf. zusätzlich gestreut werden, sodass sie nicht auf SDD treffen; aus SSD werden evtl. keine Sekundärteilchen ausgelöst; Threshold verschieden?. Effizienzen für viele Teilchenarten auf Asterix (ETPH/project/ACE/efficiencies). Drei Spalten: EpQ mit verwurstelt -- echte Effizienzen -- Unsicherheiten. Alles schon für Triples!
+	\item Messmode: s. \citet{gloeckler_1992}: Mode 1,2,3,4. \\ 
+	Text: \textit{Modes of operation / voltage cycle mode}: Es gibt 6 modes für das deflection analyzer system. Unterschiedlicher Abstand der Voltage-Schritte abhängig vom Modus (7.44\% oder 3.65\%). Standard (und für die Daten verwendeter (?)) ist Mode-1 mit einem relativen Abstand von 7.44\% zwischen den Steps.
 \end{itemize}
 %
 \subsubsection{He+-Identifikation}

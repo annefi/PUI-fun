@@ -298,8 +298,8 @@ Morgen: Schauen, ob ich \verb|pui_ulysses| benutzen kann. Sonst anderes Main-Pro
 	\item Weiter Veränderungen in Dist3D:
 	\begin{itemize}
 		\item Das Skript heißt \verb|load_pui_ulysses|. Benutze ich jetzt.
-		\item Funktion \verb|getvelocity_allsteps| zum Umrechnen von EpQ-Steps in echte Energien pro Ladung bzw. in Geschwindigkeiten: s. Kommentar vom 15.04. Ist bei Ulysses SW eine andere als bei ACE. \todo{getvelocity} Die richtigen Werte müssen wir noch raussuchen. Ich benutze jetzt erstmal die ACE-Funktion. Später muss dann auch die Anzahl der Steps angepasst werden!
-		\item \todo{Delta EpQ} Ist Delta EpQ dasselbe, 3\%?
+		\item Funktion \verb|getvelocity_allsteps| zum Umrechnen von EpQ-Steps in echte Energien pro Ladung bzw. in Geschwindigkeiten: s. Kommentar vom 15.04. Ist bei Ulysses SW eine andere als bei ACE. \todo[color=green!40]{getvelocity} Die richtigen Werte müssen wir noch raussuchen. Ich benutze jetzt erstmal die ACE-Funktion. Später muss dann auch die Anzahl der Steps angepasst werden! DONE: s. 28.8.
+		\item \todo[color=green!40]{Delta EpQ} Ist Delta EpQ dasselbe, 3\%? DONE: Ist 5\%, s. Gloeckler. $\Delta v$ sind dann 2.5\%, s. Kladde S. 84.
 		\item \todo{Geomfak}Geometriefaktor ist wahrscheinlich derselbe, oder?
 		\item \todo{Eigengeschwindigkeit} In \verb|_calc_vspace_| wird bei ACE die Eigengeschwindigkeit nur in der y-Komponente abgezogen. Das muss bei Ulysses aber ja nicht so sein (?).
 		\item Ich bin gerade verwirrt von den Koordinatensystemen. GSE hat x-Achse ja vom SC zur Sonne positiv und später wird das umgedreht, damit der SW grob aus positiver Richtung kommt. RTN eigentlich andersrum. Soll ich das so beibehalten? Dann muss ich nochmal zurück zum Kollimator. Denn das FOV ist dann ja in negativer R-Richtung. \\ Ich hab jetzt erst einmal das RTN umgedreht (also eigentlich nur die Konvention in die Kommentare geschrieben), jetzt ist alles so wie beim GSE. Es ist ein bisschen inkonsistent, dass ich den AA ab der negativen R-Achse berechne (aber das habe ich irgendwie ja immer schon so gemacht. Jetzt auch in der \verb|calc_asp_angles|-Funktion deutlich kommentiert). Jetzt tue ich halt so, als wär das die positive Achse, dann muss ich nichts ändern bei FoV. \todo{Koordinatensystem} Aber vielleicht wird das problematisch, wenn ich die Eigengeschwindigkeit einrechne, die ja evtl. in normalen RTN-Komponenten angegeben wird?
@@ -336,7 +336,7 @@ Habe jetzt nach langer Pause nochmal neu angefangen, Dist3D durchzugucken.
 \begin{itemize}
 	\item \verb|calc_w3dspecs()|: 
 	\begin{itemize}
-		\item Was ist mit \textit{d00}? Ich habe nur \textit{d90}. \todo{d90, d00} Ist das egal? Hab das jetzt erstmal einfach auf \textit{d90} geändert. Ich frage mich, wie das vorher durchlief...?
+		\item Was ist mit \textit{d00}? Ich habe nur \textit{d90}. \todo[color=green!40]{d90, d00} Ist das egal? Hab das jetzt erstmal einfach auf \textit{d90} geändert. Ich frage mich, wie das vorher durchlief...? DONE: Wird weiter oben erzeugt
 		
 		\item Warum suche ich eigentlich nur eine Kombi pro Tag? Warum histogrammiere ich nicht alle vorkommenden Kombis? \\ $\Rightarrow$ Verstanden: Das sind nur die Bingrenzen. Warum die gerade so gewählt werden, ist aber irgendwie trotzdem random? (Anne, das stimmte nicht)\\
 		AH! Alles falsch! Ich nehme die Uniquewerte, weil ich zum selben Zeitpunkt mehrere Messwerte habe. Ich will aber nur jeden Zeitpunkt einmal! Die Bingrenzen habe ich als Argument mitgegeben.
@@ -366,7 +366,7 @@ Morgen: prüfen, warum das w-Spektrum nicht einfach gedreht ist, sondern komplet
 Kurze Funktion geschrieben, um das Plotten des w-Spektrums zu automatisieren. \\ \\
 To Do: \\
 \todo{colorbar} Colorbar und passende Range. Wie beim Polarplot muss ich überlegen, ob ich auf einzelnen Steps oder auf alle Werte normieren möchte. \\
-\todo{Durchklicken} Animierte Funktio schreiben, mit der ich durch die Slices licken kann. Duncan gefragt: Stichwort \textit{ClickEvent}, Figure damit verbinden. Minimalbeispiel suchen: \textit{mpl.canvas.connect}. Nur machen, wenn das einigermaßen schnell geht...
+\todo{Durchklicken} Animierte Funktion schreiben, mit der ich durch die Slices licken kann. Duncan gefragt: Stichwort \textit{ClickEvent}, Figure damit verbinden. Minimalbeispiel suchen: \textit{mpl.canvas.connect}. Nur machen, wenn das einigermaßen schnell geht...
 \\ \\
 Fehlersuche, warum offsetSP das Spektrum nicht nur dreht, sondern insgesamt verändert (habe einheitliche viridis-colormap. Die Range ist auch ganz unterschiedlich...):
 \begin{itemize}
@@ -383,5 +383,14 @@ Fehlersuche, warum offsetSP das Spektrum nicht nur dreht, sondern insgesamt ver�
 
 Wollte mir überlegen, wie das Spekturm bei einem falschen Offset aussähe, keine Ahnung. Wollte mir das angucken für verschiedene Offsets. Dafür die Maske wegnehmen, die auf He+ einschränkt. Das funktioniert irgendwie nicht. Das Quadmesh aus der Plotfunkton sieht immer gleich aus. Morgen untersuchen. \\
 Außerdem: Kann es sein, dass ich das falsche w\_He einschränke?
+
+
+\DayInAug{Fr}{28}
+\begin{itemize}
+	\item w\_He1+2 ist ein Datenprodukt, das in Dist3D zugefügt wird. Das sollte gleich sein mit dem wHe, das sowieso schon in den Ulysses-Daten ist -- allerdings erst dann, wenn die richtigen EpQ-Umsetzungen da sind. D.h., man könnte die evtl. finden, wenn man guckt, womit wHe auf der uswipha-Ebene berechnet wurde.
+	\item Habs gefunden, in uswiutils. \verb|getvelocity|-Funktion angepasst, Steps angepasst (64 bei Ulysses), aber EpQ-Filter muss trotzdem auf 58 Steps bleiben, \todo{efficiencies} weil immer noch die Efficiencies und die Sektorgewichte fehlen. Delta v / self.vels auch angepasst.
+	\item Jetzt: Loopfunktion schreiben
+\end{itemize}
+
 
 \end{document}

@@ -1,6 +1,6 @@
 % Encoding: UTF-8
 
-@Article{mccomas,
+@Article{mccomas_2004,
   author   = {McComas, D. J. and Schwadron, N. A. and Crary, F. J. and Elliott, H. A. and Young, D. T. and Gosling, J. T. and Thomsen, M. F. and Sittler, E. and Berthelier, J.-J. and Szego, K. and Coates, A. J.},
   title    = {The interstellar hydrogen shadow: Observations of interstellar pickup ions beyond Jupiter},
   journal  = {Journal of Geophysical Research: Space Physics},
@@ -14,7 +14,7 @@
   keywords = {interstellar hydrogen shadow, Jupiter, Cassini, pickup ions, heliosphere, hydrgen},
 }
 
-@Article{kallenbach2000,
+@Article{kallenbach_2000,
   author   = {Kallenbach, R. and Geiss, J. and Gloeckler, G. and von Steiger, R.},
   title    = {Pick-up Ion Measurements in the Heliosphere -- A Review},
   journal  = {Astrophysics and Space Science},
@@ -45,7 +45,7 @@
   keywords = {history PUI},
 }
 
-@Article{VasylSis,
+@Article{vasyl_siscoe_1976,
   author   = {Vasyliunas, V. M. and Siscoe, G. L.},
   title    = {On the flux and the energy spectrum of interstellar ions in the solar system},
   journal  = {Journal of Geophysical Research (1896-1977)},
@@ -62,7 +62,7 @@
   keywords = {solarwind},
 }
 
-@Article{Geiss1995,
+@Article{geiss_1995,
   author   = {J. Geiss and G. Gloeckler and R. von Steiger},
   title    = {Origin of the solar wind from composition data},
   journal  = {Space Science Reviews},
@@ -79,7 +79,7 @@
   keywords = {solarwind, ulysses},
 }
 
-@Article{Cranmer2012,
+@Article{cranmer_2012,
   author   = {Cranmer, Steven R.},
   title    = {Self-Consistent Models of the Solar Wind},
   journal  = {Space Science Reviews},
@@ -96,7 +96,7 @@
   keywords = {solarwind},
 }
 
-@Book{Prlss2004,
+@Book{prlss_2004,
   author    = {Gerd W. Prölss},
   title     = {Physik des erdnahen Weltraums},
   year      = {2004},
@@ -104,6 +104,93 @@
   publisher = {Springer Berlin Heidelberg},
   doi       = {10.1007/978-3-642-18807-7},
   url       = {https://doi.org/10.1007/978-3-642-18807-7},
+}
+Query Results from the ADS Database
+
+
+Retrieved 1 abstracts, starting with number 1.  Total number selected: 1.
+
+@Article{chalov_1996,
+  author   = {Chalov, S. V. and Fahr, H. J.},
+  title    = {Reflection of Pre-Accelerated Pick-up Ions at the Solar Wind Termination Shock: The Seed for Anomalous Cosmic Rays},
+  journal  = {Solar Physics},
+  year     = {1996},
+  volume   = {168},
+  month    = oct,
+  pages    = {389-411},
+  doi      = {10.1007/BF00148064},
+  abstract = {It has been hypothesized for quite some time that interplanetary pick-up
+ions due to energization taking place in the region close to the solar
+wind termination shock, at some fraction and as an outcome of a
+complicated chain of processes, eventually are converted into species of
+the anomalous cosmic-ray particles. For the actual conversion efficiency
+it is of great importance to know the energy distribution of these
+pick-up ions upon their arrival at the shock. It turns out that
+pre-acceleration of these ions during their passage through the
+heliosphere shall substantially increase their chances to become
+reflected at the shock into the upstream direction which is a
+prerequisite for a further climb-up in energy by virtue of Fermi-1
+acceleration processes. In this paper we start out from stochastically
+pre-accelerated pick-up ions and investigate their behaviour at the
+shock. With the use of adiabatic approaches in the de Hoffman-Teller
+frame of the shock, we calculate the energy distribution function of the
+reflected part of pick-up ions. From the calculated distribution
+functions it turns out that the reflected ions in the average suffer an
+energy increase by about a factor of 10, still not enough to let them
+move off the shock by spatial diffusion in the upstream direction. Thus,
+since converted back into the shock, they can undergo repeated
+reflections and energy gains till the diffusion-convection limit is
+reached. As we show in addition, the reflection probability for pick-up
+ions is about a factor of 10 higher than expected from the present
+literature and strongly varies with the off-axis angle, pointing to the
+fact that the termination shock represents a surface with a
+three-dimensionally varying source strength for the production of
+anomalous cosmic rays. The ACR source pattern is also expected to vary
+during the solar cycle and the relevant injection energies are expected
+to be larger by factors of 10 to 100 than the canonically adopted 1 keV
+nucl$^{-1}$.
+},
+}
+
+@Article{chalov_1998,
+  author   = {S. V. Chalov and H. J. Fahr},
+  title    = {Phase space diffusion and anisotropic pick-up ion distributions in the solar wind: an injection study},
+  journal  = {Astronomy and Astrophysics},
+  year     = {1998},
+  volume   = {335},
+  month    = {Jul},
+  pages    = {746-756},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/1998A&A...335..746C},
+  keywords = {TURBULENCE, ACCELERATION OF PARTICLES},
+}
+
+@Article{chalov_1999,
+  author  = {S. V. Chalov and H. J. Fahr},
+  title   = {Signatures of the Interplanetary Helium Cone Reflected by Pick-up Ions},
+  journal = {Solar Physics},
+  year    = {1999},
+  volume  = {187},
+  number  = {1},
+  month   = {Jun},
+  pages   = {123-144},
+  doi     = {10.1023/A:1005176229228},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl  = {https://ui.adsabs.harvard.edu/abs/1999SoPh..187..123C},
+}
+
+@Article{gloeckler_1992,
+  author   = {{Gloeckler}, G. and {Geiss}, J. and {Balsiger}, H. and {Bedini}, P. and {Cain}, J.~C. and {Fischer}, J. and {Fisk}, L.~A. and {Galvin}, A.~B. and {Gliem}, F. and {Hamilton}, D.~C. and {Hollweg}, J.~V. and {Ipavich}, F.~M. and {Joos}, R. and {Livi}, S. and {Lundgren}, R.~A. and {Mall}, U. and {McKenzie}, J.~F. and {Ogilvie}, K.~W. and {Ottens}, F. and {Rieck}, W. and {Tums}, E.~O. and {von Steiger}, R. and {Weiss}, W. and {Wilken}, B.},
+  title    = {{The Solar Wind Ion Composition Spectrometer}},
+  journal  = {\aaps},
+  year     = {1992},
+  volume   = {92},
+  number   = {2},
+  month    = {Jan},
+  pages    = {267-289},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/1992A&AS...92..267G},
+  keywords = {Interplanetary Medium, Mass Spectrometers, Plasma Composition, Satellite-Borne Instruments, Solar Wind Velocity, Ulysses Mission, Hydrogen Ions, Ion Charge, Ion Temperature, Metal Ions, Solar Protons, Spacecraft Instrumentation, SWICS},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}
