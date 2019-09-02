@@ -50,6 +50,13 @@
 	node [midway, fill=white] {\textbf{#2 -- #3. August}};
 }
 
+\newcommand{\DayInSep}[3][]{\vspace{2cm}%
+	\noindent \tikz \draw [draw=black, ultra thick, #1]
+	($(current page.center)-(0.5\linewidth,0)$) -- 
+	($(current page.center)+(0.5\linewidth,0)$)
+	node [midway, fill=white] {\textbf{#2 -- #3. September}};
+}
+
 
 %opening
 \title{Master Journal}
@@ -392,6 +399,24 @@ Außerdem: Kann es sein, dass ich das falsche w\_He einschränke?
 	\item Jetzt: Loopfunktion schreiben
 	\item Schon fertig, das hat super geklappt! Ich habe das Spektrum zum Plotten in eine Klasse (WSpec) ausgelagert. Man kann jetzt durchslicen und auch drehen (auf Tastendruck oder über Funktion). Als nächstes möchte ich eine gute Anzeige, die angibt, wo ich gerade bin -- vielleicht auch eine entsprechende Skizze...? Die Colorbar vielleicht auch noch anpassen, damit man mehr sieht und Funktion, auf einzelnen Slice zu normieren...?
 \end{itemize}
+
+\DayInSep{Mo}{2}
+\todo[color=green!40]{Trafo w-Spec} Irgendwie scheinen mir die Schnitte komisch. Nochmal checken, wie ich transformieren muss.\\
+DONE:
+\begin{itemize}
+	\item Wenn z mit in der Ebene: transformieren (weil die \textit{letzte} Dimension von pcolormesh standardmäßig auf die x-Achse geplottet wird. Das liegt einfach daran, in welchem Format der geslicte Arary vorliegt.)
+	\item Wenn y mit in der Ebene: x-Achse umdrehen (damit wir in positiver x-Richtung gucken)
+	\item Die Ebenen sind jetzt:
+	\begin{itemize}
+		\item x-Schnitt: oben pos. z, rechts neg. y, Blickrichtung von Sonne zu SC
+		\item y-Schnitt: oben pos. z, rechts pos. x. Blickrichtung: rechts geht zum CS, links zur Sonne
+		\item x-Schnitt: oben pos. x, rechts neg. y, Blick von oben auf die Ekliptik
+	\end{itemize} 
+\end{itemize}
+Textfeld/Annotation unabhänhig von Axes (relevant, wenn man Axes z.B. umdreht): \verb|ax.text(..., transform = self.ax.transAxes)| \\
+Colorbar-Range updaten: Mit \verb|update_bruteforce|.\\
+Aha.haha. Habe in sämtlichen Funktionen vergessen, durch den norm-Array zu teilen.\\
+Ändert das was? Sind da immer noch komische Signaturen? He ausschneiden, Offset testen, Lars dazu holen. SW rausfiltern, Unterschied min\_wHe angucken
 
 
 \end{document}

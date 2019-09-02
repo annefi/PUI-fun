@@ -9,7 +9,7 @@ import sys
 
 
 class Dist3D(object):
-    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., nrs_perp=1, nrs_para=3, nrs_sec=1,
+    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., nrs_perp=1, nrs_para=3, nrs_sec=3,
                  nrs_epq=1, vswbins=arange(300., 800.1, 10.), ion="He1+", offset_sp = 135.):
         """
         d : dbData instance with species predifined by Master mask
@@ -404,20 +404,27 @@ class Dist3D(object):
 
     def plot_wspec(self, dim = 'x', slice = 10, ax = None, min_wHe = 0.9):
         wbins = arange(-2,2.01,0.2)
-        norm_arr, H = self.calc_w3dspecs(min_whe = min_wHe)
+        norm_arr, H_0 = self.calc_w3dspecs(min_whe = min_wHe)
         norm_arr[norm_arr == 0] = 1
+        H = norm_arr/H_0
         if ax == None:
             fig, ax = plt.subplots()
             colormap = plt.cm.get_cmap("viridis")
             if dim == 'x':
-                self.Quadmesh = ax.pcolormesh(wbins, wbins, H[slice, :, :], cmap=colormap)
+                self.Quadmesh = ax.pcolormesh(wbins, wbins, H[slice, :, :].T, cmap=colormap)
+                ax.set_xlim(ax.get_xlim()[::-1])
+                print(H[slice, :, :])
             elif dim == 'y':
                 self.Quadmesh = ax.pcolormesh(wbins, wbins, H[:, slice, :].T, cmap=colormap)
+                print(H[:, slice, :])
             elif dim == 'z':
                 self.Quadmesh = ax.pcolormesh(wbins, wbins, H[:, :, slice], cmap=colormap)
+                ax.set_xlim(ax.get_xlim()[::-1])
+                print(H[:, slice, :])
             else:
                 print('No valid dimension given')
                 sys.exit()
+
             colorbar = plt.colorbar(self.Quadmesh, ax=ax)
 
 
