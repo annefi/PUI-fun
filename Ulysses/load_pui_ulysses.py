@@ -12,7 +12,7 @@ from matplotlib import pylab
 ###
 
 # load Ulysses data:
-d = uswipha(year=[1993],tf=[[1,115]])
+d = uswipha(year=[1993],tf=[[1,50]])
 d.sync_swoops()
 d.sync_traj()
 

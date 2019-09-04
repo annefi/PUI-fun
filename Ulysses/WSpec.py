@@ -1,6 +1,7 @@
 import sys
 import matplotlib.pyplot as plt
 from numpy import arange, min, max, unique
+#import matplotlib.ticker as ticker #for scientific notation at colorbar ticks
 
 
 class WSpec():
@@ -35,6 +36,8 @@ class WSpec():
         self.plot(dim = self.dim, slice = self.slice)
         self.ax.set_xlim(self.ax.get_xlim()[::-1])
         self.cb = plt.colorbar(self.Quadmesh, ax = self.ax)
+        self.cb.formatter.set_powerlimits((0, 0)) # limits for changing to scientific number notation -> (0,0): always
+        self.cb.update_bruteforce(self.Quadmesh) # force updating the colorbar
 
 
 
@@ -44,17 +47,17 @@ class WSpec():
         colormap = plt.cm.get_cmap("viridis")
         if self.color_norm == 'all':
             if dim == 'x':
-                self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[slice, :, :].T, cmap=colormap, vmin = 0,
+                self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[slice, :, :].T, cmap=colormap, vmin = 10,
                                                    vmax = max(self.H))
                 self.txt_plane.set_text('%s-plane'%'Y-Z')
                 self.txt_slice.set_text('Slice: %s' % str(slice))
             elif dim == 'y':
-                self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, slice, :].T, cmap=colormap, vmin = 0,
+                self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, slice, :].T, cmap=colormap, vmin = 10,
                                                    vmax = max(self.H))
                 self.txt_plane.set_text('%s-plane' % 'X-Z')
                 self.txt_slice.set_text('Slice: %s' % str(slice))
             elif dim == 'z':
-                self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, :, slice], cmap=colormap, vmin = 0,
+                self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, :, slice], cmap=colormap, vmin = 10,
                                                    vmax = max(
                     self.H))
                 self.txt_plane.set_text('%s-plane' % 'X-Y')
@@ -98,8 +101,10 @@ class WSpec():
                 self.slice -= 1
         else:
             raise(ValueError("'dir' must be '+' or '-'."))
+
         self.plot(dim = self.dim, slice = self.slice)
-        self.cb.update_bruteforce(self.Quadmesh)
+        self.cb.formatter.set_powerlimits((0, 0)) # limits for changing to scientific number notation -> (0,0): always
+        self.cb.update_bruteforce(self.Quadmesh) # force updating range of the colorbar
 
 
     def rot_plot(self):
@@ -112,9 +117,8 @@ class WSpec():
         elif self.dim == 'z':
             self.dim = 'x'
         self.plot(dim = self.dim, slice = self.slice)
-        self.cb.update_bruteforce(self.Quadmesh) # for updating the range of the colorbar
-
-
+        self.cb.formatter.set_powerlimits((0, 0)) # limits for changing to scientific number notation -> (0,0): always
+        self.cb.update_bruteforce(self.Quadmesh) # force updating range of the colorbar
 
 
 

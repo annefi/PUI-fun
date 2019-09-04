@@ -259,7 +259,7 @@ Weiter: Neu auschecken, Kopien anlegen und alles zum Laufen bekommen
 		\verb|norm_arr[norm_arr==0]=1.| Null-Werte auf 1 setzen (warum?) \\
 		\verb|H2 = H/norm_arr| Normierung durchführen \\
 		\verb|wbins = arange(-2.-2.01.0.2)| \\
-		\verb|pcolormesh(wbins,wbins,H2[10,:,:].T)| 10. Slice. Bei 11 geht man weiter nach vorne usw... (\todo{Slices} rausfinden, in welche Richtung)
+		\verb|pcolormesh(wbins,wbins,H2[10,:,:].T)| 10. Slice. Bei 11 geht man weiter nach vorne usw... (\todo[color=green!40]{Slices} rausfinden, in welche Richtung -- DONE s. Anfang September)
 	\end{itemize}
 	\item Die anderen eher sekundär (funktionieren auch nicht, weil die noch auf einem anderen Kollimator arbeiten?): Da hat L. nur mal schnell was ausprobiert oder der Versuch bzw. das auf 1D runterzubrechen (\verb|calc_wpecs2()|) oder für jedes w die PA-Verteilung zu zeigen (\verb|calc_muspec()|)
 	\item Plan: Quick and Dirty für Ulysses umschreiben, solange Lars im Urlaub ist. Lars denkt, dass fast nur der Sec0-Versatz zum Sunpulse-Analyser geändert werden muss. Hiefür soll ich diesen Versatz als variabel lassen, sodass man den übergeben kann bei Funktionsaufruf und ein bisschen ausprobieren kann. Man erwartet den Protonen-Bulk (Bereich ziemlich starke Intensität) relativ radial. Auf dem Wege kann man schon einiges ausschließen. Das kann ich auch schon ohne die Gewichtung sehen.
@@ -418,5 +418,36 @@ Colorbar-Range updaten: Mit \verb|update_bruteforce|.\\
 Aha.haha. Habe in sämtlichen Funktionen vergessen, durch den norm-Array zu teilen.\\
 Ändert das was? Sind da immer noch komische Signaturen? He ausschneiden, Offset testen, Lars dazu holen. SW rausfiltern, Unterschied min\_wHe angucken
 
+
+\DayInSep{Di}{3}
+Range weiter angepasst: Jetzt immer scientific Notation. \\ Color\_norm 'all' macht echt nur Sinn, wenn man gaaanz wenige Tage einlädt, sonst ist die Range zu groß und man sieht nichts.
+
+\DayInSep{Mi}{4}
+Hatte ein Problem, auf dbData ein Histogramm zu erstellen. Problem gelöst: Colormap \textit{spectral} wurde in meiner Matplotlib-Version abgeschafft. Ich glaube, \textit{nipy\_spectral} sieht ähnlich aus. \textit{Spectral} ist pastelliger und mit weniger Range. Sollte Lars davon berichten. Habe im Skript \verb|_dbData.py| in der Klasse \verb|plot_properties| die \textit{contourcolor} geändert. Jetzt läufts.
+\\ \\
+Besprechung Lars:
+\begin{itemize}
+	\item Problem Subset: Eigentlich arbeitet Dist3D ja nur auf d, d.h. die Masken sollte alle bleiben. Wird wahrscheinlich nur überschrieben/resettet in Dist3D. \\ \todo{Masken anpassen} checken
+	\item \todo{efficiencies} Efficiencies: Gibt es nicht direkt für Ulysses. Da kann ich mit den ACE-Werten vergleichen und dazwischen interpolieren -- denn es geht nur um den groben Gang, wenn man EpQ-Steps an verschiedenen Enden vergleichen will
+	\item \todo{sector weights} Sektorgewichte: Gibt es wahrscheinlich nicht in den Ulysses Daten. Base Rate Weights nehmen, die sind halt dasselbe, nur über einen gesamten Spin gemittelt. ($\Rightarrow$ Informationsverlust, denn es ist ja schon interessant zu wissen, ob in Sektor 1 20 Teilchen gemessen wurden oder über alle verteilt...(?))
+	\item \todo{w statt Slice} Im 3D-Schnitt w in der Ecke angeben statt dem Slice
+	\item \todo{Colormap Range} Wo kein Count ist weiß machen: \textit{v\_under}, white, vmin...
+	\item Sunpulse-Offset: \\ \\Zum Backward-Engineering: SW ausschneiden in 5-min-Intervallen und dann det-sec Histogramm erstellen. Da sollte man gut erkennen, was aufleuchtet.\\ \\ Robert Frage für Rudi (?) schicken.\\ \\
+	Lars hat was im DPU gefunden. 180 Grad $\pm$ 45 Grad...?
+	\item \todo{Eigengeschwindigkeit} Bestimmung, indem ich Ableitung zwischen zwei Koordinatenangaben bestimme ($\Delta V$ // $\Delta t$) $\Rightarrow$ Gibt dann vx,vy und vz grob an. Mit in die Trajektoriendateien schreiben.
+	\item Leider läuft He schnell in den Threshold mit höheren ESA-Steps (dann nur noch als Doubles). Robert: Da wurden andere, ältere SSDs verwendet als bei ACE oder bei PLASTIC: Goldschicht mit ziemlich hoher Totschicht. \todo{ESA-Grenze} Diesen Threshold nochmal prüfen! Denn He liegt weit unten, nicht versehentlich wichtige PHAs wegschneiden. \\
+	\todo{checken} D.h., dass wir uns nur die äußeren Schalen und nur den schnellen SW angucken können (bzw. die Schnitte, die mittig zu entsprechend großen ws gehören...?). Dafür haben wir da auch keinen störenden Hitnergrund.
+	\item He+ rausfiltern:
+	\begin{itemize}
+		\item erste Überlegung: Mit mpq-Algorithmus He sauber auf 4 abbilden (?). Dann liegen da noch ein paar andere drüber (oben rechts in EpQ vs ToF), die man über E vs ToF rausfiltern kann\\
+		Drüber nachdenken, aber es geht viel einfacher:
+		\\ \todo{He ausschneiden und wegschreiben} (Wie schreibe ich PHA-Worte weg? Wie liegen die eigentlich vor...?)
+		\item Range: In RNG0 sind He und Protonen, in RNG1 schwerere Ionen. Die Boxen sind einfache Rechtecke in m, mpq und dann in ToF vs EpQ Dreieck/Schlauch. D.h. als erstes nur RNG0 maskieren.
+		\item Dann eine \textit{wandernde Box} in E-vs-ToF-Darstellung (animate) legen: Evtl. per Mouseclick-Tracker: Bei welcher ToF ist der He-Bulk beim jeweiligen EpQ-Step? Wenn das PHA in einer Box innerhalb $\pm$ Kanäle liegt: PHA wegschreiben, dann habe ich mein Set, auf dem ich arbeiten kann und man braucht keinen komplizierten mpq-Algorithmus. In der senkrechten kann ich das genauso mitfiltern, aber bei unseren 50 Tagen lag da bei rng0 eigentlich auch nichts. \\ Super, dass das so sauber ist!
+	\end{itemize}
+	\item Doubles sind für uns nicht interessant, weil es für die keine Detektorinfo gibt $\rightarrow$ keine 3D-Auflösung
+	\item Geometriefaktor ist im Prinzip nur vom Instrument abhängig, soll ich also von ACE übernehmen
+	\item Robert hat DPU geschickt. \todo{DPU} Mal reingucken
+\end{itemize}
 
 \end{document}
