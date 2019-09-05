@@ -12,15 +12,16 @@ from matplotlib import pylab
 ###
 
 # load Ulysses data:
-d = uswipha(year=[1993],tf=[[1,50]])
+d = uswipha(year=[1993],tf=[[1,5]])
 d.sync_swoops()
 d.sync_traj()
 
 ## TODO: PUIs ausschneiden
 
 d.set_mask('Master','det',0,2,reset=True) # cut out det=3 (=rubbish?)
-d.set_mask('Master','ech',12,120,reset=True) # exclude doubles
-d.set_mask('Master','epq',1,58,reset=True) # transitional mask to match with the ACE velocity steps
+d.set_mask('Master','ech',12,250,reset=True) # exclude doubles
+
+#d.set_mask('Master','epq',1,58,reset=True) # transitional mask to match with the ACE velocity steps
 
 # get a real subset with masks applied:
 print('*** Save Subset ***')
