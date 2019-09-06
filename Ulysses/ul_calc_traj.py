@@ -1,3 +1,10 @@
+'''
+Heliocentric (HC, 'Solar ecliptic'): x-axis pointing towards vernal quinox (intersection celestial plane & ecliptic);
+z-axis normal to ecliptic
+Heliographic (HG): x-axis pointing towards intersection of solar equatorial plane & ecliptic; z-axis normal to solar
+equator
+'''
+
 from pylib import dbData
 from numpy import array,ndarray, cos, arccos, pi
 from pylib.etCoord import rotate, sph2cart, cart2sph

@@ -200,7 +200,6 @@ class Dist3D(object):
         fin = open("%s.eff" % (self.ion), "r")
         dat = loadtxt(fin)
         eff = dat[:, 1]
-        eff = append(array([0]), eff)
         if not "eff" in self.d.data.keys():
             self.d.add_data("eff", eff[self.d.data["epq"].astype(int)])
         else:
@@ -239,7 +238,6 @@ class Dist3D(object):
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
         self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
-        #self.d.set_mask("He1+", "wHe1+2", 0., 10., reset=True)
         self.d.set_mask("Master", "vsw", vswbins[0], vswbins[-1], reset=True)
         self.d.set_mask("Master", "aspphi", aspphi[0], aspphi[1], reset=True)
         # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
@@ -258,21 +256,20 @@ class Dist3D(object):
                     for it, t in enumerate(self.asptheta[:-1]):
                         if H[iv, ip, it] > 0:
                             whe = self.vels / (v + 5.)
-                            epqs = arange(0, 60, 1)[whe > min_whe]
+                            epqs = arange(0, 64, 1)[whe > min_whe]
                             H2, bs = histogramdd((self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 0, :].flatten(),
                                                   self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 1, :].flatten(),
                                                   self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 2, :].flatten()),
                                                  bins=(wxbins, wybins, wzbins))
                             norm_arr += H2 * H[iv, ip, it]
         wgts = self.d.get_data("He1+", "wgts_sec")
-        # swgt=self.d.get_data("He1+","swt") ###not available for Ulysses atm!
+        swgt = self.d.get_data("He1+","brw") ### real sector weight not available for Ulysses
         wxsw2 = self.d.get_data("He1+", "wxsw2")
         wysw2 = self.d.get_data("He1+", "wysw2")
         wzsw2 = self.d.get_data("He1+", "wzsw2")
         twts = zeros(wxsw2.shape)
         for i in range(wxsw2.shape[1]):
-            # twts[:,i]=wgts*swgt ### not available atm
-            twts[:, i] = wgts * 1
+            twts[:,i] = wgts*swgt
         H2, bs = histogramdd((wxsw2.flatten(), wysw2.flatten(), wzsw2.flatten()), bins=(wxbins, wybins, wzbins),
                              weights=twts.flatten())
         self.d.remove_submask("He1+", "wHe1+2")
