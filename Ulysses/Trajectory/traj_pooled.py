@@ -1,11 +1,12 @@
-from numpy import array
+from numpy import array, sqrt
 from matplotlib import pylab
+from ul_calc_traj import hc_to_hg, calc_v
 
 
 
 # Paths to the two data files
-path_h = "helio.dat"
-path_u = "ulysses_daily_heliocentric_data_1990-2009.txt"
+path_h = "trajectory_data/helio.dat"
+path_u = "trajectory_data/ulysses_daily_heliocentric_data_1990-2009.txt"
 
 # Read in Helio.dat
 year_h = []
@@ -50,6 +51,8 @@ esp_u = []
 spe_u = []
 sep_u = []
 r_u = []
+r_km_u = []
+v_u = []
 hg_lat_u = []
 hc_long_u = []
 hc_lat_u = []
@@ -74,6 +77,8 @@ for line in fin_u:
     spe_u.append(float(data[10]))
     sep_u.append(float(data[11]))
     r_u.append(float(data[12]))
+    r_km_u.append(float(data[13]))
+    v_u.append(float(data[15]))
     hg_lat_u.append(float(data[16]))
     hc_long_u.append(float(data[17]))
     hc_lat_u.append(float(data[18]))
@@ -103,10 +108,82 @@ esp_u = array(esp_u[:-548])
 spe_u = array(spe_u[:-548])
 sep_u = array(sep_u[:-548])
 r_u = array(r_u[:-548])
+r_km_u = array(r_km_u[:-548])
+v_u = array(v_u[:-548])
 hg_lat_u = array(hg_lat_u[:-548])
 hc_long_u = array(hc_long_u[:-548])
 hc_lat_u = array(hc_lat_u[:-548])
 hg_long_wrt_earth_u = array(hg_long_wrt_earth_u[:-548])
+
+
+
+# __________ fill up data gap ______________
+def fill_up_gap():
+    '''
+    No data in helio.dat for 20 year at the end of 2001, so HG long is missing there. Is getting calculated by
+    hc_to_hg-function. Plot shows that the transition is smooth.
+    '''
+    for i in range(4057,4076):
+        hc_arr = array([r_u[i],hc_long_u[i],hc_lat_u[i]])
+        hg_arr = hc_to_hg(hc_arr, degree = True, long_shift = 180.)
+        hg_long_h[i] = hg_arr[1]
+fill_up_gap()
+
+
+# __________ calc velocities _______________
+
+vr_list = []
+vt_list = []
+vn_list = []
+v_abs = []
+diff = []
+
+
+def calc_velocities():
+    '''
+    calculates velocities vR, vR, vN and v_abs based on the difference of position of one measurement and the next.
+    '''
+    for i in range(len(year_u)-1):
+        t = 24*60*60
+        R_vec_1 = array([r_km_u[i], hg_long_h[i], hg_lat_u[i]])
+        R_vec_2 = array([r_km_u[i + 1], hg_long_h[i + 1], hg_lat_u[i + 1]])
+        print(R_vec_1, R_vec_2)
+        vx, vy, vz = calc_v(R_vec_1, R_vec_2, t)
+        #print(doy_u[i], r_u[i], vx)
+        vr_list.append(vx)
+        vt_list.append(vy)
+        vn_list.append(vz)
+        v_abs.append(sqrt(vx ** 2 + vy ** 2 + vz ** 2))
+calc_velocities()
+
+
+
+# _________ MAIN: writing the file ______________
+
+def write_new_file():
+    fid_out = open('trajectory_data/traj_data_ulysses_pool.dat','w')
+    headline1 = 'Year   DOY MM DD     ESP   SPE    SEP       R       R_km       HC_Lat  HC_Long    HG_Lat HG_Long  ' \
+                'HG_Long_wrtE  v     v_R    v_T    v_N\n'
+    headline2 = '\t\t    [deg] [deg]  [deg]     [AU]     [km]       [deg]    [deg]      [deg]  [deg]      [deg]   ' \
+                ' [km/s] [km/s] [km/s] [km/s]\n'
+    fid_out.write(headline1)
+    fid_out.write(headline2)
+    fid_out.write('\n\n')
+    for i in range(len(year_u)-1):
+        fid_out.write('%i  %3i  %2i %2i  %6.2f %6.2f %6.2f     %4.3f %4.1f  '
+                      '%6.2f  %6.2f     %6.2f  %6.2f      %5.2f    %5.2f  %5.2f  %5.2f  %5.2f \n' %(year_u[i], doy_u[i],
+                                                                                           month_u[i],day_u[i],
+                                                                     esp_u[i],spe_u[i],sep_u[i],r_u[i],r_km_u[i],
+                                                                     hc_lat_u[i],hc_long_u[i],hg_lat_u[i],hg_long_h[i],
+                                                                     hg_long_wrt_earth_u[i], v_abs[i], vr_list[i],vt_list[i], vn_list[i]))
+    fid_out.close()
+
+
+
+
+
+
+
 
 
 # # Overview plot ESP angle
@@ -167,19 +244,3 @@ hg_long_wrt_earth_u = array(hg_long_wrt_earth_u[:-548])
 #
 #
 # pylab.show()
-
-
-def write_new_file():
-    fid_out = open('traj_data_ulysses_pool.dat','w')
-    headline1 = 'Year DOY MM DD    JD              ESP     SPE     SEP            R             HC_Lat  HC_Long        HG_Lat  HG_Long     HG_Long_wrt_E\n'
-    headline2 = '\t\t\t         [deg]   [deg]   [deg]          [AU]           [deg]    [deg]          [deg]   [deg]         [deg]\n'
-    fid_out.write(headline1)
-    fid_out.write(headline2)
-    fid_out.write('\n\n')
-    for i in range(len(year_u)):
-        fid_out.write('%i %3i %2i %2i %8.1f       %6.2f   %6.2f  %6.2f         %4.3f         '
-                      '%6.2f    %6.2f         %6.2f   %6.2f       %6.2f \n' %(year_u[i],doy_u[i],month_u[i],day_u[i],
-                                                                     jd_u[i],esp_u[i],spe_u[i],sep_u[i],r_u[i],
-                                                                     hc_lat_u[i],hc_long_u[i],hg_lat_u[i],hg_long_h[i],
-                                                                     hg_long_wrt_earth_u[i]))
-    fid_out.close()

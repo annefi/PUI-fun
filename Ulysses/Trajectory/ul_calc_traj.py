@@ -6,7 +6,7 @@ equator
 '''
 
 from pylib import dbData
-from numpy import array,ndarray, cos, arccos, pi
+from numpy import array, cos, arccos, pi, sqrt
 from pylib.etCoord import rotate, sph2cart, cart2sph
 from matplotlib import pylab
 
@@ -67,6 +67,37 @@ def hg_to_rtn(r_vec,sc_vec,spherical = True, degr = True, long_shift = 180.,long
         R,T,N = rotate(interim_2,'z',-90.,deg=True)
     return array([R,T,N])
 
+
+def calc_v(vec1, vec2, dt, R = "AU"):
+    '''
+    Calculates Ulysses' velocity components R,T and N as the "derivation" of position vectors with respect to the time.
+    v1 = (pos2 - pos1) / dt
+    dt = (t2 - t1) = 1 day as Ulysses' trajectory data is given daily
+    :param vec1: location of current measurement in spherical HG (R ,long,lat) coordinates in(AU,deg,deg)
+    :param vec2: location of next measurement in spherical HG (R,long,lat) coordinates
+    :param dt: time between measurement vec1 and vec2 in seconds
+    :return: average vx, vy, vz between measurement 1 and 2 in km/s
+    '''
+    # vec1 and vec2 in RTN coordinates based on SC being @ vec1:
+    vec1_RTN = hg_to_rtn(vec1,vec1,degr = True,long_shift = 180., long_shift_r = 180.)
+    vec2_RTN = hg_to_rtn(vec2,vec1,degr = True,long_shift = 180., long_shift_r = 180.)
+    print('HG:')
+    print(vec1)
+    print(vec2)
+
+    # print('RTN:')
+    # print(vec1_RTN)
+    # print(vec2_RTN)
+    # print('\n')
+    # differential quotient:
+    delta_RTN = (vec2_RTN - vec1_RTN)
+    if R == "AU":
+        vx,vy,vz = (delta_RTN / dt) * 1.496*10**8 # conversion from AU to km
+    elif R == "km":
+        vx, vy, vz = (delta_RTN / dt)
+    print(vx,vy,vz)
+    #print('\n')
+    return vx,vy,vz
 
 
 # def calc_earth(sc_vec, long_wrt_earth, deg=True, long_shift=180.):

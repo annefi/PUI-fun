@@ -1,9 +1,9 @@
 from pylib import dbData
 from numpy import array,ndarray,unique,histogram,append,isnan,shape
 from uswo import uswo
-from ulysses_traj import ulysses_traj
+from Trajectory.ulysses_traj import ulysses_traj
 from uswiutils import getvelocity
-from ul_calc_traj import calc_asp_angles
+
 class uswipha(dbData):
     def load_data(self,*args,**kwargs):
         if kwargs.has_key("year"):
@@ -123,6 +123,7 @@ class uswipha(dbData):
         Adds trajectory data products to uswipha instance by calling "ulysses_traj"
         '''
         traj = ulysses_traj(year=self.year,tf=self.timeframe)
+        self.traj = traj
         if not 'd90' in self.data.keys():
             self.calc_d90()
         traj.calc_d90()
@@ -152,6 +153,22 @@ class uswipha(dbData):
         mask = traj.data['asp_theta'] != 0.
         aa_theta, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["asp_theta"])
         self.add_data("asptheta", aa_theta[index_int])
+        # v_r_eigen
+        mask = traj.data['v_R'] != 0.
+        v_R, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["v_R"])
+        self.add_data("vr_eigen", v_R[index_int])
+        # v_t_eigen
+        mask = traj.data['v_T'] != 0.
+        v_T, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["v_T"])
+        self.add_data("vt_eigen", v_T[index_int])
+        # v_n_eigen
+        mask = traj.data['v_N'] != 0.
+        v_N, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["v_N"])
+        self.add_data("vn_eigen", v_N[index_int])
+        # v_abs
+        mask = traj.data['v'] != 0.
+        v_abs, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["v"])
+        self.add_data("v_abs_eigen", v_abs[index_int])
 
 
 ### _________________________________________________________________________________________

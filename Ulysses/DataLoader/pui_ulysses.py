@@ -1,3 +1,8 @@
+'''
+Different functions around Ulysses PUI, some of them ancient.
+'''
+
+
 import sys
 sys.path.append('/home/asterix/fischer/ulysses/swics/software/libulpy')
 from uswipha import uswipha
@@ -342,15 +347,39 @@ def plot_deviation_coord(data):
 
     ax.plot(d90, diff_lat, marker='D', ms='1', linestyle='none', label='Diff Lat (HC-HG)',c='blue')
     ax.plot(d90, diff_long, marker='D', ms = '1', linestyle='none', label='Diff Long (HC-HG)',c='red')
-
-
     ax.legend()
 
 
+def plot_eigen_velocities():
+    '''
+    Plots SC's eigen-velocities vR, vT, vN and v_abs
+    works on instance of class ulysses_traj (that is just trajectory data without having to load all of the other SC
+    data)
+    :return:
+    '''
+    from Trajectory.ulysses_traj import ulysses_traj
+    years = range(1991,2007)
+    traj = ulysses_traj(year = years, tf = 'all')
+    traj.calc_d90()
+    d90 = traj.data['d90']
+    vR = traj.data['v_R']
+    vT = traj.data['v_T']
+    vN = traj.data['v_N']
+    vabs = traj.data['v']
 
+    fig = pylab.figure(figsize=(12,8))
+    ax = pylab.subplot(111)
+    ax.set_xlim(0, 18 * 365 + 1)
+    ax.set_xticks(np.arange(0, 18 * 365 + 1, 365))
+    ax.set_xticklabels(np.arange(1990, 2009, 1))
 
+    ax.set_title('Ulysses\' velocity in RTN')
 
-
+    ax.plot(d90, vR, marker = 'o', markersize = '0.5', linestyle='-', linewidth = 0.5, label = 'v_R')
+    ax.plot(d90, vT, marker='o', markersize='0.5', linestyle='-', linewidth = 0.5, label='v_T')
+    ax.plot(d90, vN, marker='o', markersize='0.5', linestyle='-', linewidth = 0.5, label='v_N')
+    ax.plot(d90, vabs, marker='o', markersize='0.5', linestyle='-', linewidth = 0.5, label='|v|')
+    ax.legend()
 
 
 

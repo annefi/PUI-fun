@@ -307,7 +307,7 @@ Morgen: Schauen, ob ich \verb|pui_ulysses| benutzen kann. Sonst anderes Main-Pro
 		\item Das Skript heißt \verb|load_pui_ulysses|. Benutze ich jetzt.
 		\item Funktion \verb|getvelocity_allsteps| zum Umrechnen von EpQ-Steps in echte Energien pro Ladung bzw. in Geschwindigkeiten: s. Kommentar vom 15.04. Ist bei Ulysses SW eine andere als bei ACE. \todo[color=green!40]{getvelocity} Die richtigen Werte müssen wir noch raussuchen. Ich benutze jetzt erstmal die ACE-Funktion. Später muss dann auch die Anzahl der Steps angepasst werden! DONE: s. 28.8.
 		\item \todo[color=green!40]{Delta EpQ} Ist Delta EpQ dasselbe, 3\%? DONE: Ist 5\%, s. Gloeckler. $\Delta v$ sind dann 2.5\%, s. Kladde S. 84.
-		\item \todo{Geomfak}Geometriefaktor ist wahrscheinlich derselbe, oder?
+		\item \todo[color=green!40]{Geomfak}Geometriefaktor ist wahrscheinlich derselbe, oder? DONE: Joa
 		\item \todo{Eigengeschwindigkeit} In \verb|_calc_vspace_| wird bei ACE die Eigengeschwindigkeit nur in der y-Komponente abgezogen. Das muss bei Ulysses aber ja nicht so sein (?).
 		\item Ich bin gerade verwirrt von den Koordinatensystemen. GSE hat x-Achse ja vom SC zur Sonne positiv und später wird das umgedreht, damit der SW grob aus positiver Richtung kommt. RTN eigentlich andersrum. Soll ich das so beibehalten? Dann muss ich nochmal zurück zum Kollimator. Denn das FOV ist dann ja in negativer R-Richtung. \\ Ich hab jetzt erst einmal das RTN umgedreht (also eigentlich nur die Konvention in die Kommentare geschrieben), jetzt ist alles so wie beim GSE. Es ist ein bisschen inkonsistent, dass ich den AA ab der negativen R-Achse berechne (aber das habe ich irgendwie ja immer schon so gemacht. Jetzt auch in der \verb|calc_asp_angles|-Funktion deutlich kommentiert). Jetzt tue ich halt so, als wär das die positive Achse, dann muss ich nichts ändern bei FoV. \todo{Koordinatensystem} Aber vielleicht wird das problematisch, wenn ich die Eigengeschwindigkeit einrechne, die ja evtl. in normalen RTN-Komponenten angegeben wird?
 		\item In \verb|_add_3Dv| musste ich nochmal Datenproduktnamen ändern, außerdem \textit{det DCR to det 0} rausnehmen. Bei ACE gibts es offensichtlich $det = 7 $- Zuweisungen. \\
@@ -320,8 +320,8 @@ Morgen: Schauen, ob ich \verb|pui_ulysses| benutzen kann. Sonst anderes Main-Pro
 	\item Bin jetzt den Umweg gegangen über \verb|save_subset| und \verb|load_subset|. Damit schreibe ich ein Subset von den gefilterten Daten (Det von 0 bis 2 und epq von 0 bis 59) in eine Binärdatei und lese sie wieder ein...
 	\todo{Subset} Da muss es aber doch noch einen anderen Weg geben? \\
 	Nachtrag: Ich habe EpQ schließlich von 1 bis 58 gefiltert, weil die ACE-Daten auch so vorliegen. 0-59 hat für \verb|get_velocities| funktioniert, aber nicht fürs Synchronisieren der Efficiencies.
-	\item \todo{Efficiencies} Efficiencies soll ich ja erstmal von ACE nehmen. Da die nur für die Triples gelten (?) filtere ich die Doubles jetzt auch mal raus: \\ \verb|d.set_mask('Master','ech',12,120,reset=True)|
-	\item Für Ulysses gibt es das Datenprodukt \textit{swt}, das Sectorweight, nicht. \todo{Sectorweight} Lars fragen bzw. selbst nachgucken, evtl. wird das nur über uswipha nicht eingeladen. Bis dahin setzte ich alle Gewichte auf 1 (in \verb|calc_w3dspecs)|)
+	\item \todo[color=green!40]{Efficiencies} Efficiencies soll ich ja erstmal von ACE nehmen. Da die nur für die Triples gelten (?) filtere ich die Doubles jetzt auch mal raus: \\ \verb|d.set_mask('Master','ech',12,120,reset=True)| \\ DONE: 05.09.
+	\item Für Ulysses gibt es das Datenprodukt \textit{swt}, das Sectorweight, nicht. \todo[color=green!40]{Sectorweight} Lars fragen bzw. selbst nachgucken, evtl. wird das nur über uswipha nicht eingeladen. Bis dahin setzte ich alle Gewichte auf 1 (in \verb|calc_w3dspecs)|). DONE
 	\item Es läuft durch!! Ich kann das Spektrum erzeugen!! Jetzt mal mehr Daten einladen...
 	\item Ständig Memory Error... \\ 200 Tage sind das Maximum.
 	\item Überlegung, warum jedes PHA-Wort überhaupt 9 FoV-Punkte hat: Weil man nicht weiß, wo der Sektor getroffen wurde. Punkt 0 hat z.B. eine ganz andere w-Signatur als Punkt 5. Alle Möglichkeiten müssen betrachtet werden.\\
@@ -372,8 +372,8 @@ Morgen: prüfen, warum das w-Spektrum nicht einfach gedreht ist, sondern komplet
 \DayInAug{Do}{29}
 Kurze Funktion geschrieben, um das Plotten des w-Spektrums zu automatisieren. \\ \\
 To Do: \\
-\todo{colorbar} Colorbar und passende Range. Wie beim Polarplot muss ich überlegen, ob ich auf einzelnen Steps oder auf alle Werte normieren möchte. \\
-\todo{Durchklicken} Animierte Funktion schreiben, mit der ich durch die Slices klicken kann. Duncan gefragt: Stichwort \textit{ClickEvent}, Figure damit verbinden. Minimalbeispiel suchen: \textit{mpl.canvas.connect}. Nur machen, wenn das einigermaßen schnell geht...
+\todo[color=green!40]{colorbar} Colorbar und passende Range. Wie beim Polarplot muss ich überlegen, ob ich auf einzelnen Steps oder auf alle Werte normieren möchte. \\
+\todo[color=green!40]{Durchklicken} Animierte Funktion schreiben, mit der ich durch die Slices klicken kann. Duncan gefragt: Stichwort \textit{ClickEvent}, Figure damit verbinden. Minimalbeispiel suchen: \textit{mpl.canvas.connect}. Nur machen, wenn das einigermaßen schnell geht...
 \\ \\
 Fehlersuche, warum offsetSP das Spektrum nicht nur dreht, sondern insgesamt verändert (habe einheitliche viridis-colormap. Die Range ist auch ganz unterschiedlich...):
 \begin{itemize}
@@ -395,7 +395,7 @@ Außerdem: Kann es sein, dass ich das falsche w\_He einschränke?
 \DayInAug{Fr}{28}
 \begin{itemize}
 	\item w\_He1+2 ist ein Datenprodukt, das in Dist3D zugefügt wird. Das sollte gleich sein mit dem wHe, das sowieso schon in den Ulysses-Daten ist -- allerdings erst dann, wenn die richtigen EpQ-Umsetzungen da sind. D.h., man könnte die evtl. finden, wenn man guckt, womit wHe auf der uswipha-Ebene berechnet wurde.
-	\item Habs gefunden, in uswiutils. \verb|getvelocity|-Funktion angepasst, Steps angepasst (64 bei Ulysses), aber EpQ-Filter muss trotzdem auf 58 Steps bleiben, \todo{efficiencies} weil immer noch die Efficiencies und die Sektorgewichte fehlen. Delta v / self.vels auch angepasst.
+	\item Habs gefunden, in uswiutils. \verb|getvelocity|-Funktion angepasst, Steps angepasst (64 bei Ulysses), aber EpQ-Filter muss trotzdem auf 58 Steps bleiben, \todo[color=green!40]{efficiencies} weil immer noch die Efficiencies und die Sektorgewichte fehlen. Delta v / self.vels auch angepasst. Alles DONE
 	\item Jetzt: Loopfunktion schreiben
 	\item Schon fertig, das hat super geklappt! Ich habe das Spektrum zum Plotten in eine Klasse (WSpec) ausgelagert. Man kann jetzt durchslicen und auch drehen (auf Tastendruck oder über Funktion). Als nächstes möchte ich eine gute Anzeige, die angibt, wo ich gerade bin -- vielleicht auch eine entsprechende Skizze...? Die Colorbar vielleicht auch noch anpassen, damit man mehr sieht und Funktion, auf einzelnen Slice zu normieren...?
 \end{itemize}
@@ -427,11 +427,12 @@ Hatte ein Problem, auf dbData ein Histogramm zu erstellen. Problem gelöst: Colo
 \\ \\
 Besprechung Lars:
 \begin{itemize}
-	\item Problem Subset: Eigentlich arbeitet Dist3D ja nur auf d, d.h. die Masken sollte alle bleiben. Wird wahrscheinlich nur überschrieben/resettet in Dist3D. \\ \todo{Masken anpassen} checken
-	\item \todo{efficiencies} Efficiencies: Gibt es nicht direkt für Ulysses. Da kann ich mit den ACE-Werten vergleichen und dazwischen interpolieren -- denn es geht nur um den groben Gang, wenn man EpQ-Steps an verschiedenen Enden vergleichen will
-	\item \todo{sector weights} Sektorgewichte: Gibt es wahrscheinlich nicht in den Ulysses Daten. Base Rate Weights nehmen, die sind halt dasselbe, nur über einen gesamten Spin gemittelt. ($\Rightarrow$ Informationsverlust, denn es ist ja schon interessant zu wissen, ob in Sektor 1 20 Teilchen gemessen wurden oder über alle verteilt...(?))
-	\item \todo{w statt Slice} Im 3D-Schnitt w in der Ecke angeben statt dem Slice
-	\item \todo{Colormap Range} Wo kein Count ist weiß machen: \textit{v\_under}, white, vmin...
+	\item Problem Subset: Eigentlich arbeitet Dist3D ja nur auf d, d.h. die Masken sollte alle bleiben. Wird wahrscheinlich nur überschrieben/resettet in Dist3D. \\ \todo{Masken anpassen} checken $\Rightarrow$ verstanden, s. nächster Tag. Ist erstmal egal.
+	\item \todo[color=green!40]{efficiencies} Efficiencies: Gibt es nicht direkt für Ulysses. Da kann ich mit den ACE-Werten vergleichen und dazwischen interpolieren -- denn es geht nur um den groben Gang, wenn man EpQ-Steps an verschiedenen Enden vergleichen will
+	\item \todo[color=green!40]{sector weights} Sektorgewichte: Gibt es wahrscheinlich nicht in den Ulysses-Daten. Base Rate Weights nehmen, die sind halt dasselbe, nur über einen gesamten Spin gemittelt. ($\Rightarrow$ Informationsverlust, denn es ist ja schon interessant zu wissen, ob in Sektor 1 20 Teilchen gemessen wurden oder über alle verteilt...(?)) \\ BRW sind wahrscheinlich bei meinem He-Subset immer 1, weil da eh nicht viel gemessen wurde... \\
+	DONE: einfaches BRW als Sectorweight übergeben. \todo{brw} Später aber nochmal gucken, wie oft das nicht 1 ist.
+	\item \todo[color=green!40]{w statt Slice} Im 3D-Schnitt w in der Ecke angeben statt dem Slice\\DONE: vmin ist jetzt der kleinste Wert nach 0, sowohl für \textit{color\_norm = all} als auch \textit{color\_norm = sg} fürs gesamte H-Array.
+	\item \todo[color=green!40]{Colormap Range} Wo kein Count ist weiß machen: \textit{v\_under}, white, vmin... DONE
 	\item Sunpulse-Offset: \\ \\Zum Backward-Engineering: SW ausschneiden in 5-min-Intervallen und dann det-sec Histogramm erstellen. Da sollte man gut erkennen, was aufleuchtet.\\ \\ Robert Frage für Rudi (?) schicken.\\ \\
 	Lars hat was im DPU gefunden. 180 Grad $\pm$ 45 Grad...?
 	\item \todo{Eigengeschwindigkeit} Bestimmung, indem ich Ableitung zwischen zwei Koordinatenangaben bestimme ($\Delta V$ // $\Delta t$) $\Rightarrow$ Gibt dann vx,vy und vz grob an. Mit in die Trajektoriendateien schreiben.
@@ -450,4 +451,30 @@ Besprechung Lars:
 	\item Robert hat DPU geschickt. \todo{DPU} Mal reingucken
 \end{itemize}
 
+\DayInSep{Do}{5}
+Heute: Nach und nach die Todos von gestern abarbeiten:
+\begin{itemize}
+	\item Für die Effizienzen kurzes Skript geschrieben (\verb|guess_ul_eff.py|), das eine Funktion an die ACE-Effizienzen fittet und den Ulysses-EpQ-Werten passende Werte zuordnet, weggeschrieben in \verb|He1+.eff|, z.Zt. im Hauptskriptordner
+	\item Subset-Mastermaskenproblem verstanden: An vielen Stellen werden die Daten aus d geholt ohne die Mastermaske aufzurufen. Das sind dann \textit{alle} Daten. Mit dem Subset bin ich das umgangen, weil \textit{alle} Daten dann das Subset waren. Vielleicht farge ich Lars nochmal. Ich ändere das jetzt erstmal nicht alles um, sodass die Daten der Mastermaske genommen werden, weil das ganz schön viel ist. Vielleicht brauche ich das eh nicht mehr, wenn ich mir mein He-Subset weggeschrieben habe. Bis dahin mache ich das weiter mit dem künstlichen Subset.
+\end{itemize}
+
+\DayInSep{Fr}{6}
+Probleme beim BRW gelöst: Nuller wegmaskiert.\\Probleme bei den Efficiencies: angehängte 0 für ACE übersehen, jetzt passts. \\ \\
+Eigengeschwindigkeit: Lars meinte, ich soll die Differenzenquotienten zwischen zwei Trajektorienpunkten bilden und das mit in die Trajektorienfiles schreiben. Ich brauche die Geschwindigkeit ja in RTN-Koordinaten. Die Trajektorienfiles liegen ja aber gar nicht in RTN vor. Könnte ich v in HG-Koord. berechnen und dann genauso transformieren?
+
+
+\DayInSep{Mo}{9}
+Ich wandele jetzt beide Positionen von HG sphärisch in RTN kartesisch um und subtrahiere 2-1. In die Liste schreibe ich dann vx, vy, vz und den Betrag. \\ \\Habe den Betrag mit v aus \textit{ulysses\_daily\_heliocentric...dat} verglichen: Immer leichte Abweichung. Lars meint, da soll ich mir keine Gedanken drüber machen -- Rundung etc... \\ Hauptsachen, das SC durchläuft dieselbe Geschwindigkeit wieder im nächsten Orbit. \\
+Komische Werte Ende 2001 gefunden: Da stehen für ca. 20 Tage nur Nullen in \textit{helio.dat}. \todo[color=green!40]{Werte helio.dat} Die sollte ich mal interpolieren, vielleicht kann ich die auch exakt berechnen aus HC...? \\
+Done: Dafür habe ich ja eine Funktion, klappt super. Habe jetzt \verb|fill_up_gap()| und \verb|calc_velocities()| in \verb|traj_pooled| geschrieben -- dort wird die neue kompakte Trajektorienliste geschrieben. Die tatsächlichen etwas komplexeren Funktionen dazu stehe jetzt alle in \verb|ul_calc_traj|.\\ \\
+Jetzt muss ich \verb|Dist3D| damit verknüpfen.\\
+Datenprodukte zugefügt und Ordnerstruktur etwas aufgeräumt. \\
+Jetzt Riesenproblem: Wie soll ich das in das V-Space-registern integrieren? Ich kann doch nicht noch 3 Dimensionen mehr anlegen... Ich schaue mir den Verlauf der einzelnen Geschwindigkeiten jetzt erstmal an. Plotfunktion \verb|plot_eigen_velocities()| in \verb|pui_ulysses.pui|. \\
+Warum wackeln die Geschwindigkeiten so? Das kommt durch Rundungen und dadurch, dass ich von AU auf km gehe. Ich versuche jetzt, den Radius in km einzuladen, das ist in einer der Files gegeben. Etwas nervig, aber gut... Einen Versuch ist es Wert.\\
+Krass, das hat es voll gebracht. Ich sollte den Radius in km auch in die anderen Funktionen füttern, wo es geht.\\ Macht es irgendwie nicht:
+\begin{itemize}
+	\item von HG zu HC gibt es in beiden Fällen eine Abweichung zum HC-Wert, km und AU unterscheiden sich nicht.
+	\item von HC zu HG dito. Ich bräcuhte einfach genauere Winkelwerte. Egal. Ich nehme R\_km jetzt wieder aus der Pooled-Liste.\\
+\end{itemize}
+Ich bin SO verwirrt. Morgen weiter machen. In \verb|calc_v| Zwischenwerte umrechnen oder sogar zwei verschiedene Funktionen schreiben.
 \end{document}

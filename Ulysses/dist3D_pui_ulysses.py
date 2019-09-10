@@ -68,8 +68,6 @@ class Dist3D(object):
         (sec_det_dim is col_dim * nrs_epq)
         """
         self.vspace = zeros((self.aspphi.shape[0], self.asptheta.shape[0], 64, 3, 8, 3, self.sec_det_dim))
-        # not used, just for testing:
-        #self.vabsspace = zeros((self.aspphi.shape[0], self.asptheta.shape[0], 60, 3, 8, 1, self.sec_det_dim))
         for i in range(self.nrs_epq):
             for iv, v in enumerate(self.vels):
                 self.vspace[:, :, iv, :, :, :, i * self.col_dim:(i + 1) * self.col_dim] = -self.FoV * v * self.vels_fac[
@@ -77,7 +75,6 @@ class Dist3D(object):
         self.vspace[:, :, :, :, :, 1, :] -= 30.
         self.vspace[:, :, :, :, :, 0, :] = -self.vspace[:, :, :, :, :, 0, :]
         self.vspace[:, :, :, :, :, 1, :] = -self.vspace[:, :, :, :, :, 1, :]
-        #self.vabsspace[..., 0, :] = sqrt(sum(self.vspace ** 2, axis = 5))
 
     def _calc_wspace(self, ):
         """

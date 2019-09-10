@@ -49,10 +49,10 @@ class ulysses_traj(dbData):
             fin = open(self.path,"r")
             s = fin.readline()
             k = s.split() # keys
-            self.keys=[]
+            self.keys = []
             for key in k:
                 key = key.split()
-                self.data[key[0]]=[]
+                self.data[key[0]] = []
                 self.keys.append(key[0])
         except:
             print "Cannot get trajectory data product keys"
@@ -75,7 +75,7 @@ class ulysses_traj(dbData):
 
             if earth == False:
                 for key in self.data.keys():
-                    self.data[key]=array(self.data[key])
+                    self.data[key] = array(self.data[key])
                 print('...almost done')
 
 
@@ -134,6 +134,7 @@ class ulysses_traj(dbData):
     def calc_d90(self):
         offy = self.data["Year"] - 1990
         offd = offy*365 + (offy.astype(int)+2)/4
+        self.keys.append('d90')
         self.add_data("d90", self.data["DOY"] + offd)
 
     def test_aspect_angle(self):
