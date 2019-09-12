@@ -156,19 +156,19 @@ class uswipha(dbData):
         # v_r_eigen
         mask = traj.data['v_R'] != 0.
         v_R, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["v_R"])
-        self.add_data("vr_eigen", v_R[index_int])
+        self.add_data("vr_sc", v_R[index_int])
         # v_t_eigen
         mask = traj.data['v_T'] != 0.
         v_T, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["v_T"])
-        self.add_data("vt_eigen", v_T[index_int])
+        self.add_data("vt_sc", v_T[index_int])
         # v_n_eigen
         mask = traj.data['v_N'] != 0.
         v_N, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["v_N"])
-        self.add_data("vn_eigen", v_N[index_int])
+        self.add_data("vn_sc", v_N[index_int])
         # v_abs
         mask = traj.data['v'] != 0.
         v_abs, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["v"])
-        self.add_data("v_abs_eigen", v_abs[index_int])
+        self.add_data("v_abs_sc", v_abs[index_int])
 
 
 ### _________________________________________________________________________________________

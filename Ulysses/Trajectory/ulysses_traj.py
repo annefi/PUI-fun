@@ -100,14 +100,14 @@ class ulysses_traj(dbData):
             if len(keys_earth) > 0:
                 datalines = fin.readlines()
                 for year in self.year:
-                    print(year)
+                    #print(year)
                     for tf in self.timeframe:
                         try:
                             for line in datalines:
                                 k = line.split()
                                 if int(k[0]) == year:
                                     if int(k[1]) in range(int(tf[0]), int(tf[1])):
-                                        print(int(k[1]))
+                                        #print(int(k[1]))
                                         for i, key in enumerate(keys_earth):
                                             self.data[key].append(float(k[i]))
                         except:

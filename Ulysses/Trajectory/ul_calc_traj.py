@@ -81,22 +81,30 @@ def calc_v(vec1, vec2, dt, R = "AU"):
     # vec1 and vec2 in RTN coordinates based on SC being @ vec1:
     vec1_RTN = hg_to_rtn(vec1,vec1,degr = True,long_shift = 180., long_shift_r = 180.)
     vec2_RTN = hg_to_rtn(vec2,vec1,degr = True,long_shift = 180., long_shift_r = 180.)
-    print('HG:')
-    print(vec1)
-    print(vec2)
-
-    # print('RTN:')
-    # print(vec1_RTN)
-    # print(vec2_RTN)
-    # print('\n')
     # differential quotient:
     delta_RTN = (vec2_RTN - vec1_RTN)
     if R == "AU":
         vx,vy,vz = (delta_RTN / dt) * 1.496*10**8 # conversion from AU to km
+        # print('HG:')
+        # print(vec1)
+        # print(vec2)
+        # print('RTN:')
+        # print(vec1_RTN)
+        # print(vec2_RTN)
+        # print(delta_RTN)
     elif R == "km":
         vx, vy, vz = (delta_RTN / dt)
+        # print('HG:')
+        # vec1[0] /= 1.496*10**8
+        # vec2[0] /= 1.496 * 10 ** 8
+        # print(vec1)
+        # print(vec2)
+        # print('RTN:')
+        # print(vec1_RTN / (1.496 * 10 ** 8))
+        # print(vec2_RTN / (1.496 * 10 ** 8))
+        # d = delta_RTN / (1.496 * 10 ** 8)
+        # print(d)
     print(vx,vy,vz)
-    #print('\n')
     return vx,vy,vz
 
 

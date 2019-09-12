@@ -469,6 +469,8 @@ Komische Werte Ende 2001 gefunden: Da stehen für ca. 20 Tage nur Nullen in \tex
 Done: Dafür habe ich ja eine Funktion, klappt super. Habe jetzt \verb|fill_up_gap()| und \verb|calc_velocities()| in \verb|traj_pooled| geschrieben -- dort wird die neue kompakte Trajektorienliste geschrieben. Die tatsächlichen etwas komplexeren Funktionen dazu stehe jetzt alle in \verb|ul_calc_traj|.\\ \\
 Jetzt muss ich \verb|Dist3D| damit verknüpfen.\\
 Datenprodukte zugefügt und Ordnerstruktur etwas aufgeräumt. \\
+
+\DayInSep{Di}{10}
 Jetzt Riesenproblem: Wie soll ich das in das V-Space-registern integrieren? Ich kann doch nicht noch 3 Dimensionen mehr anlegen... Ich schaue mir den Verlauf der einzelnen Geschwindigkeiten jetzt erstmal an. Plotfunktion \verb|plot_eigen_velocities()| in \verb|pui_ulysses.pui|. \\
 Warum wackeln die Geschwindigkeiten so? Das kommt durch Rundungen und dadurch, dass ich von AU auf km gehe. Ich versuche jetzt, den Radius in km einzuladen, das ist in einer der Files gegeben. Etwas nervig, aber gut... Einen Versuch ist es Wert.\\
 Krass, das hat es voll gebracht. Ich sollte den Radius in km auch in die anderen Funktionen füttern, wo es geht.\\ Macht es irgendwie nicht:
@@ -477,4 +479,25 @@ Krass, das hat es voll gebracht. Ich sollte den Radius in km auch in die anderen
 	\item von HC zu HG dito. Ich bräcuhte einfach genauere Winkelwerte. Egal. Ich nehme R\_km jetzt wieder aus der Pooled-Liste.\\
 \end{itemize}
 Ich bin SO verwirrt. Morgen weiter machen. In \verb|calc_v| Zwischenwerte umrechnen oder sogar zwei verschiedene Funktionen schreiben.
+
+\DayInSep{Mi}{11}
+Heute mit klarem Kopf nochmal angeguckt:
+Verwendung der Radiusangabe in km macht einen Unterschied für v\_R, aber nicht für die anderen v-Komponenten, weil die Winkelangaben sowohl in HC als auch in HG zu ungenau sind. Umrechnen mit dem genauen Radius bringt nichts. Damit muss ich so leben. \\
+Jetzt weiter mit dem echten Problem. Lars fragen...?\\
+Nee, ich erweitere das Register jetzt einfach. Geht glaub ich eh kein Weg dran vorbei, nicht so schlimm, trägt zu meinem eigenen Verständnis bei -- hoffentlich.\\
+Wie groß sollen die Steps sein? Wenn ich abschätze, dass wir w auf 0.2 auflösen, entspricht das einer Geschwindigkeit von ca. $500\,\mathrm{\frac{km}{s}}$ ?!\\ \\
+Lars sagt, dass Translationen additiv sind, deshalb kann man auch beim Mappen der PHA-Worte mit den Geschwindigkeiten die Eigengeschwindigkeit dazuaddieren (so wie das mit w // der SW-Geschw. passiert). Ich probiere das kurz aus, ob dasselbe rauskommt (Eigengeschwindigkeit im Grid abziehen oder händisch verschieben). \\ \\
+Frage nach der Auflösung:
+\begin{itemize}
+	\item Beispielzeichnung w-Space mit 600 km/s: 30 km/s in y-Richtung verschoben (wie bei ACE): Teilchen auf Schale w = 1 (eig. 600) landet oben bei 630, w = 1.05 und unten bei 570, w = 0.95.
+	\item Ich kann die Bins auch mal anpassen und schauen, was passiert. eigentlich wären Bins wie bei PLASTIC besser, also welche, die sich an den Phasenraum anpassen (rund). Die momentanen Rechtecke haben ja immer unterschiedlich viel des Kreises überdeckt (Frage to self: \todo{Bin-Grid} Ist das nicht irgendwie beim Phasenraum mit eingerechnet?). Das wäre ein weit entferntes ToDo...
+\end{itemize}
+Kommentare zum Phasenraum:
+\begin{itemize}
+	\item Eigengeschwindigkeit dafür nicht mit rein, denn das ist rein instrumentenspezifisch (??).
+	\item Beispiel Autos: in meiner Richtung Autos mit 95, aus der Gegenrichtung auch (gleichverteilt). Ich fahre mit 100. Weiter weiß ich nicht, nochmal drüber nachdenken, fragen.
+\end{itemize}
+Meinen Plot zur zeitaufgelösten Geschwindigkeit könnte ich mit in die MA nehmen. Zeigen, dass der Verlauf so ist, man den Fast-Latitude-Scan sieht, besonders in einer Komponente (wir schauen uns aber eher den Bereich an, wo das nicht so eine große Rolle spielt, da sind die Komponenten alle nicht so groß)
+\\
+Morgen: weiter vergleichen.
 \end{document}

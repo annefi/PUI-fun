@@ -1,7 +1,7 @@
 import sys
 sys.path.append('/home/asterix/fischer/PUI/old_stuff/Ulysses/swics/software/libulpy')
 sys.path.append('/home/asterix/fischer/PUI')
-from uswipha import uswipha
+from DataLoader.uswipha import uswipha
 from dist3D_pui_ulysses import Dist3D
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore') # Ignore Ipython error messages
@@ -12,7 +12,7 @@ from matplotlib import pylab
 ###
 
 # load Ulysses data:
-d = uswipha(year=[1995],tf=[[1,10]])
+d = uswipha(year=[1995],tf=[[1,2]])
 d.sync_swoops()
 d.sync_traj()
 
@@ -30,5 +30,5 @@ print('*** Load Subset ***')
 d.load_subset(force=True)
 
 D = Dist3D(d)
-from WSpec import WSpec
-ws = WSpec(D,color_norm = 'sg')
+# from WSpec import WSpec
+# ws = WSpec(D,color_norm = 'sg')

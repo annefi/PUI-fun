@@ -94,7 +94,7 @@ def checken_ob_r():
 
 def analyse_why_eigen_v_wackelt(R = 'km'):
     traj = ulysses_traj(year = [1993], tf = [[1,10]])
-    for i in range(3):
+    for i in range(1,5):
         if R == 'km':
             vec1 = array([traj.data['R_km'][i],traj.data['HG_Long'][i],traj.data['HG_Lat'][i]])
             vec2 = array([traj.data['R_km'][i+1], traj.data['HG_Long'][i+1], traj.data['HG_Lat'][i+1]])
