@@ -85,13 +85,13 @@ def calc_v(vec1, vec2, dt, R = "AU"):
     delta_RTN = (vec2_RTN - vec1_RTN)
     if R == "AU":
         vx,vy,vz = (delta_RTN / dt) * 1.496*10**8 # conversion from AU to km
-        # print('HG:')
-        # print(vec1)
-        # print(vec2)
-        # print('RTN:')
-        # print(vec1_RTN)
-        # print(vec2_RTN)
-        # print(delta_RTN)
+        print('HG:')
+        print(vec1)
+        print(vec2)
+        print('RTN:')
+        print(vec1_RTN)
+        print(vec2_RTN)
+        #print(delta_RTN)
     elif R == "km":
         vx, vy, vz = (delta_RTN / dt)
         # print('HG:')
@@ -104,7 +104,7 @@ def calc_v(vec1, vec2, dt, R = "AU"):
         # print(vec2_RTN / (1.496 * 10 ** 8))
         # d = delta_RTN / (1.496 * 10 ** 8)
         # print(d)
-    print(vx,vy,vz)
+    #print(vx,vy,vz)
     return vx,vy,vz
 
 

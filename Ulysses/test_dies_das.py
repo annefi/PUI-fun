@@ -93,7 +93,7 @@ def checken_ob_r():
 
 
 def analyse_why_eigen_v_wackelt(R = 'km'):
-    traj = ulysses_traj(year = [1993], tf = [[1,10]])
+    traj = ulysses_traj(year = [1994], tf = [[1,10]])
     for i in range(1,5):
         if R == 'km':
             vec1 = array([traj.data['R_km'][i],traj.data['HG_Long'][i],traj.data['HG_Lat'][i]])
@@ -105,6 +105,12 @@ def analyse_why_eigen_v_wackelt(R = 'km'):
             calc_v(vec1,vec2,24*60*60, R = 'AU')
 
 
+def evolution_RTN():
+    traj = ulysses_traj(year = [1995], tf = [[1,10]])
+    for i in range(1,5):
+            vec1 = array([traj.data['R'][i],traj.data['HG_Long'][i],traj.data['HG_Lat'][i]])
+            vec2 = array([traj.data['R'][i+1], traj.data['HG_Long'][i+1], traj.data['HG_Lat'][i+1]])
+            calc_v(vec1,vec2,24*60*60, R = 'AU')
 
 
 

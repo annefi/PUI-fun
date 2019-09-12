@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 
 
 class collimator(object):
-    def __init__(self, nrs_para=5, nrs_perp=3, nrs_sec=1, edges=False, aspphi=0., asptheta=0.00001, vel=600., vsw=300,
+    def __init__(self, nrs_para=5, nrs_perp=3, nrs_sec=1, edges=False, aspphi=0.00001, asptheta=0.00001, vel=600.,
+                 vsw=300,
                  offset_sp=135.):
         """
         Class to calculate the field of view of SWICS (Ulysses) nrs_para,nrs_perp -> number of angle steps for
@@ -152,7 +153,7 @@ class collimator(object):
         det1_rot = rotate(self.det1, self.rphiax, self.aspphi, deg=True).reshape(self.det1.shape)
         det2_rot = rotate(self.det2, self.rphiax, self.aspphi, deg=True).reshape(self.det2.shape)
         det3_rot = rotate(self.det3, self.rphiax, self.aspphi, deg=True).reshape(self.det3.shape)
-        # Rotate detectors in theta direction (because of theta beeing defined with opposite sense of rotation,
+        # Rotate detectors in theta direction (because of theta being defined with opposite sense of rotation,
         # i.e. 0 in ecliptic and positive values northward out of the ecliptic)
         self.det1 = rotate(det1_rot, self.rthetaax, -self.asptheta, deg=True).reshape(self.det1.shape)
         self.det2 = rotate(det2_rot, self.rthetaax, -self.asptheta, deg=True).reshape(self.det2.shape)

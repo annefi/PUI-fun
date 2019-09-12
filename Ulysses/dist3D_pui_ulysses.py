@@ -56,8 +56,7 @@ class Dist3D(object):
         self.vswbins = vswbins
         self._calc_FoV()
         self._calc_vspace()
-        self._calc_vspace_w_sc()
-        #self._add_3Dv()
+        self._add_3Dv()
         # self._add_w()
         # print('*** calc w space ***')
         # self._calc_wspace()
@@ -85,21 +84,8 @@ class Dist3D(object):
                 self.vspace[:, :, iv, :, :, :, i * self.col_dim:(i + 1) * self.col_dim] = -self.FoV * v * \
                                                                                                    self.vels_fac[i]
 
-        # self.vspace[:, :, :, :, :, 0, :] = -self.vspace[:, :, :, :, :, 0, :]
-        # self.vspace[:, :, :, :, :, 1, :] = -self.vspace[:, :, :, :, :, 1, :]
-
-    def _calc_vspace_w_sc(self):
-        self.vspace_sc = zeros((self.aspphi.shape[0], self.asptheta.shape[0], self.vr.shape[0], self.vt.shape[0],
-                                self.vn.shape[0], 64, 3, 8, 3, self.sec_det_dim))
-        # considering the velocity of the SC:
-        for ivr, vr in enumerate(self.vr):
-            for ivt, vt in enumerate(self.vt):
-                for ivn, vn in enumerate(self.vn):
-                    print(ivr, vr)
-                    self.vspace_sc[:, :, ivr, ivt, ivn, :, :, :, 0, :] = self.vspace[:, :, :, :, :, 0, :] + vr
-                    #self.vspace_sc[:, :, ivr, ivt, ivn, :, :, :, 1, :] = self.vspace[:, :, :, :, :, 1,:] + vt
-                    #self.vspace_sc[:, :, ivr, ivt, ivn, :, :, :, 2, :] = self.vspace[:, :, :, :, :, 2,:] + vn
-
+        self.vspace[:, :, :, :, :, 0, :] = -self.vspace[:, :, :, :, :, 0, :]
+        self.vspace[:, :, :, :, :, 1, :] = -self.vspace[:, :, :, :, :, 1, :]
 
 
     def _calc_wspace(self, ):
@@ -117,51 +103,46 @@ class Dist3D(object):
             self.w3dspace[iv, ...] = tmpspace
             self.wspace[iv, ..., 0, :] = sqrt(sum(tmpspace ** 2, axis=5))
 
-    def _add_3Dv(self):
+    def _add_3Dv(self, sc_vel = True):
         """
         Adds vx,vy,vz in SC-frame and vxsw,vysw,vzsw in SW-frame based on aspect angles to pha data
         Also adds vxsw2,vysw2,vzsw2 in SW-frame based on aspect angles and rounded vsw to pha data 
         In the current version vsw is taken to be stricly radial, i.e. along v_x / v_R!
+        sc_vel determines, if the velocity of the SC itself should be considered in the v-space.
         """
-        vrind = searchsorted(self.vr, around(self.d.get_data('Master', "vr_sc")))
-        vtind = searchsorted(self.vt, around(self.d.get_data('Master', "vt_sc")))
-        vnind = searchsorted(self.vn, around(self.d.get_data('Master', "vn_sc")))
-
-
         phiind = searchsorted(self.aspphi, around(self.d.get_data('Master',"aspphi")))
-        self.phiind = phiind
         thetaind = searchsorted(self.asptheta, around(self.d.get_data('Master',"asptheta")))
-        #epqind = self.d.data["epq"].astype(int)
         epqind = self.d.get_data('Master', 'epq').astype(int)
         detind = self.d.get_data('Master', 'det').astype(int)
         secind = self.d.get_data('Master', 'sec').astype(int)
-        if not "vx" in self.d.data.keys():
-            self.d.add_data("vx", self.vspace[phiind, thetaind, epqind, detind, secind, 0])
-            # a list of 9 entries is added!
-        else:
-            self.d.data["vx"] = self.vspace[phiind, thetaind, epqind, detind, secind, 0]
-
-        if not "vx2" in self.d.data.keys():
-            self.d.add_data("vx2", self.vspace_sc[phiind, thetaind, vrind, vtind, vnind, epqind, detind, secind, 0])
-            # a list of 9 entries is added!
-        else:
-            self.d.data["vx2"] = self.vspace_sc[phiind, thetaind, vrind, vtind, vnind, epqind, detind, secind, 0]
-
-        if not "vx3" in self.d.data.keys():
-            self.d.add_data("vx3", self.vspace[phiind, thetaind, epqind, detind, secind, 0][0] + self.d.data['vr_sc'])
-        # a list of 9 entries is added!
-        else:
-            self.d.data["vx3"] = self.vspace[phiind, thetaind, epqind, detind, secind, 0][0] + self.d.data['vr_sc']
-
-
-        if not "vy" in self.d.data.keys():
-            self.d.add_data("vy", self.vspace[phiind, thetaind, epqind, detind, secind, 1])
-        else:
-            self.d.data["vy"] = self.vspace[phiind, thetaind, epqind, detind, secind, 1]
-        if not "vz" in self.d.data.keys():
-            self.d.add_data("vz", self.vspace[phiind, thetaind, epqind, detind, secind, 2])
-        else:
-            self.d.data["vz"] = self.vspace[phiind, thetaind, epqind, detind, secind, 2]
+        if sc_vel == False:
+            if not "vx" in self.d.data.keys():
+                self.d.add_data("vx", self.vspace[phiind, thetaind, epqind, detind, secind, 0]) # a list of 9 entries is added!
+            else:
+                self.d.data["vx"] = self.vspace[phiind, thetaind, epqind, detind, secind, 0]
+            if not "vy" in self.d.data.keys():
+                self.d.add_data("vy", self.vspace[phiind, thetaind, epqind, detind, secind, 1])
+            else:
+                self.d.data["vy"] = self.vspace[phiind, thetaind, epqind, detind, secind, 1]
+            if not "vz" in self.d.data.keys():
+                self.d.add_data("vz", self.vspace[phiind, thetaind, epqind, detind, secind, 2])
+            else:
+                self.d.data["vz"] = self.vspace[phiind, thetaind, epqind, detind, secind, 2]
+        elif sc_vel == True:
+            # considering the velocity of the SC
+            if not "vx" in self.d.data.keys():
+                self.d.add_data("vx", self.vspace[phiind, thetaind, epqind, detind, secind, 0][0] + self.d.data['vr_sc'])  # a list of 9 entries is added!
+            else:
+                self.d.data["vx"] = self.vspace[phiind, thetaind, epqind, detind, secind, 0][0] + self.d.data['vr_sc']
+            if not "vy" in self.d.data.keys():
+                self.d.add_data("vy", self.vspace[phiind, thetaind, epqind, detind, secind, 1][0] + self.d.data['vt_sc'])
+            else:
+                self.d.data["vy"] = self.vspace[phiind, thetaind, epqind, detind, secind, 1][0] + self.d.data['vt_sc']
+            if not "vz" in self.d.data.keys():
+                self.d.add_data("vz", self.vspace[phiind, thetaind, epqind, detind, secind, 2][0] + self.d.data['vn_sc'])
+            else:
+                self.d.data["vz"] = self.vspace[phiind, thetaind, epqind, detind, secind, 2][0] + self.d.data['vn_sc']
+        # __________ SW frame _____________________
         if not "vxsw" in self.d.data.keys():
             self.d.add_data("vxsw", (self.d.data["vx"].T - self.d.get_data('Master','vsw')).T)
         else:
@@ -174,7 +155,7 @@ class Dist3D(object):
             self.d.add_data("vzsw", self.d.data["vz"])
         else:
             self.d.data["vzsw"] = self.d.data["vz"]
-        # index 2 in names means vsw speed has been rounded
+        # _________index 2 in names means vsw speed has been rounded__________
         if not "vxsw2" in self.d.data.keys():
             self.d.add_data("vxsw2", (self.d.data["vx"].T - around(self.d.data["vsw"], -1)).T)
         else:
