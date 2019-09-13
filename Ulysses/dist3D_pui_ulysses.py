@@ -9,7 +9,7 @@ import sys
 
 
 class Dist3D(object):
-    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., v_sc_step = 1., nrs_perp=1, nrs_para=1,
+    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., v_sc_step = 1., nrs_perp=3, nrs_para=3,
                  nrs_sec=1,
                  nrs_epq=1, vswbins=arange(300., 800.1, 10.), ion="He1+", offset_sp = 135.):
         """
@@ -57,10 +57,10 @@ class Dist3D(object):
         self._calc_FoV()
         self._calc_vspace()
         self._add_3Dv()
-        # self._add_w()
-        # print('*** calc w space ***')
-        # self._calc_wspace()
-        # self._calc_phspeff_wgt()
+        self._add_w()
+        print('*** calc w space ***')
+        self._calc_wspace()
+        self._calc_phspeff_wgt()
 
     def _calc_FoV(self):
         # shape self.FoV: (#aspphi, #asptheta, #det, #sec, xyz, col_dim)
@@ -131,17 +131,24 @@ class Dist3D(object):
         elif sc_vel == True:
             # considering the velocity of the SC
             if not "vx" in self.d.data.keys():
-                self.d.add_data("vx", self.vspace[phiind, thetaind, epqind, detind, secind, 0][0] + self.d.data['vr_sc'])  # a list of 9 entries is added!
+                self.d.add_data("vx", self.vspace[phiind, thetaind, epqind, detind, secind, 0] + tile(self.d.data[
+                    'vr_sc'],(self.col_dim,1)).T)
+                # a list of 9 entries is added!
             else:
-                self.d.data["vx"] = self.vspace[phiind, thetaind, epqind, detind, secind, 0][0] + self.d.data['vr_sc']
+                self.d.data["vx"] = self.vspace[phiind, thetaind, epqind, detind, secind, 0] + tile(self.d.data[
+                    'vr_sc'],(self.col_dim,1)).T
             if not "vy" in self.d.data.keys():
-                self.d.add_data("vy", self.vspace[phiind, thetaind, epqind, detind, secind, 1][0] + self.d.data['vt_sc'])
+                self.d.add_data("vy", self.vspace[phiind, thetaind, epqind, detind, secind, 1] + tile(self.d.data[
+                    'vt_sc'],(self.col_dim,1)).T)
             else:
-                self.d.data["vy"] = self.vspace[phiind, thetaind, epqind, detind, secind, 1][0] + self.d.data['vt_sc']
+                self.d.data["vy"] = self.vspace[phiind, thetaind, epqind, detind, secind, 1] + tile(self.d.data[
+                    'vt_sc'],(self.col_dim,1)).T
             if not "vz" in self.d.data.keys():
-                self.d.add_data("vz", self.vspace[phiind, thetaind, epqind, detind, secind, 2][0] + self.d.data['vn_sc'])
+                self.d.add_data("vz", self.vspace[phiind, thetaind, epqind, detind, secind, 2] + tile(self.d.data[
+                    'vn_sc'],(self.col_dim,1)).T)
             else:
-                self.d.data["vz"] = self.vspace[phiind, thetaind, epqind, detind, secind, 2][0] + self.d.data['vn_sc']
+                self.d.data["vz"] = self.vspace[phiind, thetaind, epqind, detind, secind, 2] + tile(self.d.data[
+                    'vn_sc'],(self.col_dim,1)).T
         # __________ SW frame _____________________
         if not "vxsw" in self.d.data.keys():
             self.d.add_data("vxsw", (self.d.data["vx"].T - self.d.get_data('Master','vsw')).T)
@@ -221,7 +228,7 @@ class Dist3D(object):
         Loads ion efficiencies
         ion name, mass and charge must be given at the initialisation of the class object
         """
-        fin = open("%s.eff" % (self.ion), "r")
+        fin = open("data_misc/%s.eff" % (self.ion), "r")
         dat = loadtxt(fin)
         eff = dat[:, 1]
         if not "eff" in self.d.data.keys():

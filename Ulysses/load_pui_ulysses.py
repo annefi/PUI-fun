@@ -12,23 +12,24 @@ from matplotlib import pylab
 ###
 
 # load Ulysses data:
-d = uswipha(year=[1997],tf=[[1,5]])
+years = range(1993,2008)
+d = uswipha(year=years,tf=[[250,310]])
 d.sync_swoops()
 d.sync_traj()
 
 ## TODO: PUIs ausschneiden
 
-d.set_mask('Master','det',0,2,reset=True) # cut out det=3 (=rubbish?)
-d.set_mask('Master','ech',12,250,reset=True) # exclude doubles
-d.set_mask('Master','brw',1,np.inf,reset=True)
+# d.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
+# d.set_mask('Master','ech',12,250,reset=True) # exclude doubles
+# d.set_mask('Master','brw',1,np.inf,reset=True)
 #d.set_mask('Master','epq',1,58,reset=True) # transitional mask to match with the ACE velocity steps
 
-# get a real subset with masks applied:
-print('*** Save Subset ***')
-d.save_subset('Master')
-print('*** Load Subset ***')
-d.load_subset(force=True)
+# # get a real subset with masks applied:
+# print('*** Save Subset ***')
+# d.save_subset('Master')
+# print('*** Load Subset ***')
+# d.load_subset(force=True)
 
-D = Dist3D(d)
+#D = Dist3D(d)
 # from WSpec import WSpec
 # ws = WSpec(D,color_norm = 'sg')

@@ -292,7 +292,7 @@ Jetzt geht es an \verb|Dist3D|.
 			\item Det3 wird kaum angesprochen! (von 43 Mio PHAs nur 1225 auf Det3)
 			\item Wenn ich nur Ech unter Threshold nehme (26 Mio; = Doubles), landen fast alle in Det0. (Det1: 26, Det2: 88, Det3: 164)
 			\item $\rightarrow$ Ich würde denken, dass Det3 einfach Müll ist.
-			\item Das passt auch zum Kommentar vom 2.Mai. D.h., ich muss eine Maske setzen, bevor ich in Dist2D reingehe. \todo{Doubles} Soll ich eigentlich auch Doubles benutzen, macht das Sinn?
+			\item Das passt auch zum Kommentar vom 2.Mai. D.h., ich muss eine Maske setzen, bevor ich in Dist2D reingehe. \todo[color=green!40]{Doubles} Soll ich eigentlich auch Doubles benutzen, macht das Sinn? DONE: Lars: Nein, die bringen uns nichts, weil die keine Detektorinfo tragen (natürlich...)
 		\end{itemize}
 	\end{itemize}
 \end{itemize}
@@ -308,8 +308,8 @@ Morgen: Schauen, ob ich \verb|pui_ulysses| benutzen kann. Sonst anderes Main-Pro
 		\item Funktion \verb|getvelocity_allsteps| zum Umrechnen von EpQ-Steps in echte Energien pro Ladung bzw. in Geschwindigkeiten: s. Kommentar vom 15.04. Ist bei Ulysses SW eine andere als bei ACE. \todo[color=green!40]{getvelocity} Die richtigen Werte müssen wir noch raussuchen. Ich benutze jetzt erstmal die ACE-Funktion. Später muss dann auch die Anzahl der Steps angepasst werden! DONE: s. 28.8.
 		\item \todo[color=green!40]{Delta EpQ} Ist Delta EpQ dasselbe, 3\%? DONE: Ist 5\%, s. Gloeckler. $\Delta v$ sind dann 2.5\%, s. Kladde S. 84.
 		\item \todo[color=green!40]{Geomfak}Geometriefaktor ist wahrscheinlich derselbe, oder? DONE: Joa
-		\item \todo{Eigengeschwindigkeit} In \verb|_calc_vspace_| wird bei ACE die Eigengeschwindigkeit nur in der y-Komponente abgezogen. Das muss bei Ulysses aber ja nicht so sein (?).
-		\item Ich bin gerade verwirrt von den Koordinatensystemen. GSE hat x-Achse ja vom SC zur Sonne positiv und später wird das umgedreht, damit der SW grob aus positiver Richtung kommt. RTN eigentlich andersrum. Soll ich das so beibehalten? Dann muss ich nochmal zurück zum Kollimator. Denn das FOV ist dann ja in negativer R-Richtung. \\ Ich hab jetzt erst einmal das RTN umgedreht (also eigentlich nur die Konvention in die Kommentare geschrieben), jetzt ist alles so wie beim GSE. Es ist ein bisschen inkonsistent, dass ich den AA ab der negativen R-Achse berechne (aber das habe ich irgendwie ja immer schon so gemacht. Jetzt auch in der \verb|calc_asp_angles|-Funktion deutlich kommentiert). Jetzt tue ich halt so, als wär das die positive Achse, dann muss ich nichts ändern bei FoV. \todo{Koordinatensystem} Aber vielleicht wird das problematisch, wenn ich die Eigengeschwindigkeit einrechne, die ja evtl. in normalen RTN-Komponenten angegeben wird?
+		\item \todo[color=green!40]{Eigengeschwindigkeit} In \verb|_calc_vspace_| wird bei ACE die Eigengeschwindigkeit nur in der y-Komponente abgezogen. Das muss bei Ulysses aber ja nicht so sein (?). DONE: Nein, geregelt.
+		\item Ich bin gerade verwirrt von den Koordinatensystemen. GSE hat x-Achse ja vom SC zur Sonne positiv und später wird das umgedreht, damit der SW grob aus positiver Richtung kommt. RTN eigentlich andersrum. Soll ich das so beibehalten? Dann muss ich nochmal zurück zum Kollimator. Denn das FOV ist dann ja in negativer R-Richtung. \\ Ich hab jetzt erst einmal das RTN umgedreht (also eigentlich nur die Konvention in die Kommentare geschrieben), jetzt ist alles so wie beim GSE. Es ist ein bisschen inkonsistent, dass ich den AA ab der negativen R-Achse berechne (aber das habe ich irgendwie ja immer schon so gemacht. Jetzt auch in der \verb|calc_asp_angles|-Funktion deutlich kommentiert). Jetzt tue ich halt so, als wär das die positive Achse, dann muss ich nichts ändern bei FoV. \todo[color=green!40]{Koordinatensystem} Aber vielleicht wird das problematisch, wenn ich die Eigengeschwindigkeit einrechne, die ja evtl. in normalen RTN-Komponenten angegeben wird? DONE: Hoffentlich richtig gemacht
 		\item In \verb|_add_3Dv| musste ich nochmal Datenproduktnamen ändern, außerdem \textit{det DCR to det 0} rausnehmen. Bei ACE gibts es offensichtlich $det = 7 $- Zuweisungen. \\
 		Außerdem geht der EpQ-Step über 60 hinaus. Das crasht, weil ja die getvelocity von ACE mit 60 Steps benutzt wird. Ich wollte Daten erstmal einfach vormaskieren, bekomme das aber nicht hin. Bei der Übergabe von \verb|d| wird die Mastermaske ignoriert! Ich suche quasi die subset-Funktion aus dbData -- nur "`live"', also ohne Wegschreiben.
 	\end{itemize}
@@ -435,9 +435,9 @@ Besprechung Lars:
 	\item \todo[color=green!40]{Colormap Range} Wo kein Count ist weiß machen: \textit{v\_under}, white, vmin... DONE
 	\item Sunpulse-Offset: \\ \\Zum Backward-Engineering: SW ausschneiden in 5-min-Intervallen und dann det-sec Histogramm erstellen. Da sollte man gut erkennen, was aufleuchtet.\\ \\ Robert Frage für Rudi (?) schicken.\\ \\
 	Lars hat was im DPU gefunden. 180 Grad $\pm$ 45 Grad...?
-	\item \todo{Eigengeschwindigkeit} Bestimmung, indem ich Ableitung zwischen zwei Koordinatenangaben bestimme ($\Delta V$ // $\Delta t$) $\Rightarrow$ Gibt dann vx,vy und vz grob an. Mit in die Trajektoriendateien schreiben.
-	\item Leider läuft He schnell in den Threshold mit höheren ESA-Steps (dann nur noch als Doubles). Robert: Da wurden andere, ältere SSDs verwendet als bei ACE oder bei PLASTIC: Goldschicht mit ziemlich hoher Totschicht. \todo{ESA-Grenze} Diesen Threshold nochmal prüfen! Denn He liegt weit unten, nicht versehentlich wichtige PHAs wegschneiden. \\
-	\todo{checken} D.h., dass wir uns nur die äußeren Schalen und nur den schnellen SW angucken können (bzw. die Schnitte, die mittig zu entsprechend großen ws gehören...?). Dafür haben wir da auch keinen störenden Hitnergrund.
+	\item \todo[color=green!40]{Eigengeschwindigkeit} Bestimmung, indem ich Ableitung zwischen zwei Koordinatenangaben bestimme ($\Delta V$ // $\Delta t$) $\Rightarrow$ Gibt dann vx,vy und vz grob an. Mit in die Trajektoriendateien schreiben. Done, ewig am Einarbeiten in die PHAs gebastelt.
+	\item Leider läuft He schnell in den Threshold mit höheren ESA-Steps (dann nur noch als Doubles). Robert: Da wurden andere, ältere SSDs verwendet als bei ACE oder bei PLASTIC: Goldschicht mit ziemlich hoher Totschicht. \todo[color=green!40]{ECH-Grenze} Diesen Threshold nochmal prüfen! Denn He liegt weit unten, nicht versehentlich wichtige PHAs wegschneiden. \\	 
+	D.h., dass wir uns nur die äußeren Schalen und nur den schnellen SW angucken können (bzw. die Schnitte, die mittig zu entsprechend großen ws gehören...?) $\Rightarrow$ Klar, denn kleinere Geschwindigkeit heißt kleinere Energie und He hat kleine Masse. \todo{warum?} Dafür haben wir da auch keinen störenden Hintergrund.
 	\item He+ rausfiltern:
 	\begin{itemize}
 		\item erste Überlegung: Mit mpq-Algorithmus He sauber auf 4 abbilden (?). Dann liegen da noch ein paar andere drüber (oben rechts in EpQ vs ToF), die man über E vs ToF rausfiltern kann\\
@@ -455,7 +455,7 @@ Besprechung Lars:
 Heute: Nach und nach die Todos von gestern abarbeiten:
 \begin{itemize}
 	\item Für die Effizienzen kurzes Skript geschrieben (\verb|guess_ul_eff.py|), das eine Funktion an die ACE-Effizienzen fittet und den Ulysses-EpQ-Werten passende Werte zuordnet, weggeschrieben in \verb|He1+.eff|, z.Zt. im Hauptskriptordner
-	\item Subset-Mastermaskenproblem verstanden: An vielen Stellen werden die Daten aus d geholt ohne die Mastermaske aufzurufen. Das sind dann \textit{alle} Daten. Mit dem Subset bin ich das umgangen, weil \textit{alle} Daten dann das Subset waren. Vielleicht farge ich Lars nochmal. Ich ändere das jetzt erstmal nicht alles um, sodass die Daten der Mastermaske genommen werden, weil das ganz schön viel ist. Vielleicht brauche ich das eh nicht mehr, wenn ich mir mein He-Subset weggeschrieben habe. Bis dahin mache ich das weiter mit dem künstlichen Subset.
+	\item Subset-Mastermaskenproblem verstanden: An vielen Stellen werden die Daten aus d geholt ohne die Mastermaske aufzurufen. Das sind dann \textit{alle} Daten. Mit dem Subset bin ich das umgangen, weil \textit{alle} Daten dann das Subset waren. Vielleicht frage ich Lars nochmal. Ich ändere das jetzt erstmal nicht alles um, sodass die Daten der Mastermaske genommen werden, weil das ganz schön viel ist. Vielleicht brauche ich das eh nicht mehr, wenn ich mir mein He-Subset weggeschrieben habe. Bis dahin mache ich das weiter mit dem künstlichen Subset.
 \end{itemize}
 
 \DayInSep{Fr}{6}
@@ -505,4 +505,10 @@ Morgen: weiter vergleichen.
 Fazit: Es passt, macht also keinen Unterschied, ob ich den V-Raum im Grid anpasse oder das eigentliche Datenprodukt beim Adden zu den PHA-Worten (außer dass ich beim Grid gerundet habe ich z.B. nicht 9.5, 9.67 und 9.88 zufüge, sondern immer 10).\\
 Jetzt: Schauen, ob die Richtungen im RTN richtig sind, yay... \\
 Hab mir den Kopf zerdacht, s. S. 85 in Kladde. Hoffe die Richtung passt jetzt, ich bin zu blöd das zu prüfen. Muss morgen gucken, dass das auf mehrere Detektorpunkte auch klappt.
+
+\DayInSep{Fr}{13}
+Habe das gelöst mit der Funktion \verb|numpy.tile|, \verb|.T| \\und die Anzahl ist \verb|self.col_dim|. \\ \\
+Jetzt Threshold Ech-Detektor checken. Wollte mal mehr Daten einladen, gab Problem mit \verb|sync_traj|. Die Maske, die da gesetzt wird, ist glaube ich ziemlich sinnlos. Die war nur für \verb|sync_swoops|, weil da ggf. durch 0 geteilt wird. Das passiert hier nicht, weil ich keinen Mittlwert bilde, weil d90 gleich ist.\\
+Ergebnis: Stimmt wirklich. Ganz ohne Filter ist erst E-Channel 15 belegt. Manchmal gaaanz wenig in 12 oder 14 (?!).
+
 \end{document}
