@@ -434,7 +434,7 @@ Besprechung Lars:
 	\item \todo[color=green!40]{w statt Slice} Im 3D-Schnitt w in der Ecke angeben statt dem Slice\\DONE: vmin ist jetzt der kleinste Wert nach 0, sowohl für \textit{color\_norm = all} als auch \textit{color\_norm = sg} fürs gesamte H-Array.
 	\item \todo[color=green!40]{Colormap Range} Wo kein Count ist weiß machen: \textit{v\_under}, white, vmin... DONE
 	\item Sunpulse-Offset: \\ \\Zum Backward-Engineering: SW ausschneiden in 5-min-Intervallen und dann det-sec Histogramm erstellen. Da sollte man gut erkennen, was aufleuchtet.\\ \\ Robert Frage für Rudi (?) schicken.\\ \\
-	Lars hat was im DPU gefunden. 180 Grad $\pm$ 45 Grad...?
+	Lars hat was im DPU gefunden. \todo{Testen Offset} 180 Grad $\pm$ 45 Grad...?
 	\item \todo[color=green!40]{Eigengeschwindigkeit} Bestimmung, indem ich Ableitung zwischen zwei Koordinatenangaben bestimme ($\Delta V$ // $\Delta t$) $\Rightarrow$ Gibt dann vx,vy und vz grob an. Mit in die Trajektoriendateien schreiben. Done, ewig am Einarbeiten in die PHAs gebastelt.
 	\item Leider läuft He schnell in den Threshold mit höheren ESA-Steps (dann nur noch als Doubles). Robert: Da wurden andere, ältere SSDs verwendet als bei ACE oder bei PLASTIC: Goldschicht mit ziemlich hoher Totschicht. \todo[color=green!40]{ECH-Grenze} Diesen Threshold nochmal prüfen! Denn He liegt weit unten, nicht versehentlich wichtige PHAs wegschneiden. \\	 
 	D.h., dass wir uns nur die äußeren Schalen und nur den schnellen SW angucken können (bzw. die Schnitte, die mittig zu entsprechend großen ws gehören...?) $\Rightarrow$ Klar, denn kleinere Geschwindigkeit heißt kleinere Energie und He hat kleine Masse. \todo{warum?} Dafür haben wir da auch keinen störenden Hintergrund.
@@ -510,5 +510,17 @@ Hab mir den Kopf zerdacht, s. S. 85 in Kladde. Hoffe die Richtung passt jetzt, i
 Habe das gelöst mit der Funktion \verb|numpy.tile|, \verb|.T| \\und die Anzahl ist \verb|self.col_dim|. \\ \\
 Jetzt Threshold Ech-Detektor checken. Wollte mal mehr Daten einladen, gab Problem mit \verb|sync_traj|. Die Maske, die da gesetzt wird, ist glaube ich ziemlich sinnlos. Die war nur für \verb|sync_swoops|, weil da ggf. durch 0 geteilt wird. Das passiert hier nicht, weil ich keinen Mittlwert bilde, weil d90 gleich ist.\\
 Ergebnis: Stimmt wirklich. Ganz ohne Filter ist erst E-Channel 15 belegt. Manchmal gaaanz wenig in 12 oder 14 (?!).
+
+
+\DayInSep{Di}{17}
+Jetzt He+ filtern: \\
+Brauchte lange, um \verb|animate2d| aus \verb|dbData| zu erweitern, um die Mouseclickfunktion einzupflegen. Muss immer noch manuell die Fkt. zum Setzen der Masken aufrufen, will gern wissen, wie ich das in die \textit{init} bekomme. Musste \verb|animate2d| außerdem um ein Returnen der Figure erweitern. Die Funktion selbst ging dann aber gut.
+Morgen:
+\begin{itemize}
+	\item Headline in gefilterte PHAs schreiben
+	\item Überlegen, ob ich Epq noch runterzählen muss
+	\item Lars Diverses fragen (s. Liste)
+	\item jahrweise duchlaufen lassen
+\end{itemize}
 
 \end{document}
