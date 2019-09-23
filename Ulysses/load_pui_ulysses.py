@@ -12,8 +12,9 @@ from matplotlib import pylab
 ###
 
 # load Ulysses data:
-years = range(1993,2008)
-d = uswipha(year=years,tf=[[250,310]])
+years = range(1993,1994)
+d = uswipha(year=years,tf='all', path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/epq/')
+#d.set_mask('Master','rng',0,0,reset=True)
 d.sync_swoops()
 d.sync_traj()
 
