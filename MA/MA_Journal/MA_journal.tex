@@ -523,4 +523,55 @@ Morgen:
 	\item jahrweise duchlaufen lassen
 \end{itemize}
 
+\DayInSep{Mi}{18}
+Headlines und EpQ geregelt.\\
+Lars gefragt:
+\begin{itemize}
+	\item Komische Signatur in ET-Matrix rechts von He+: Lars weiß auch nicht, was das ist. Ganz komisch, er forscht nach. Man kann das einigermaßen gut von He+ trennen, aber es besteht die Gefahr, dass das He+ selbst ist, was zeitweise falsch zugewiesen wurde und was man dann wegschneiden würde. Zeitlich ist das auch nicht einchränkbar.\\ Es gibt zwei seltsame Peaks: Einr ist ein Doublepeak, der andere ein Treblepeak
+	\item Lars hat 2D-Maske gesetzt und dann die Zeiträume angeguckt bzw. sich die Daten zu diesen Zeiträumen angeguckt (bzw. die zur inversen Maske!). Es gibt aber nicht immer Parallelen zu den anderen komischen Signaturen und das He+-Signal gibts auch immer noch.\\
+	Könnte auch ein seltsamer Bitfehler sein...? Alle 64 Kanäle in Tch?
+	\item Lars hat mir \textit{mpq-Algorithmus}'erklärt: Todo
+	\item \todo[color=green!40]{mpq-Alg} Versuchen, das formelmäßig nachzuvollziehen und evtl. auch an H+, He2+ und He+ durchführen (gut zu erkennen in EpQ vs. ToF).\\
+	MpQ-Algorithmus:
+	\begin{itemize}
+		\item Wenn wir in EpQ vs. ToF Spezies identifizieren können, kennen wir die MpQ.
+		\item Bei fester EpQ kennen wir dann auch die v vor dem Analysator
+		\item Übr ToF kennen wir auch die v nach der Folie
+		\item Was wir nicht kennen: Energieverlust in der Folie, der abhängig von der Geschwindigkeit (u.a.) ist (die Breite in Tch-Richtung entspricht dieser Verteilung des Energieverlustes)
+		\item Aus dem Wissen, dass dieser Tch bei diesem EpQ-Step auf MpQ xy mappt, ergibt sich funktionaler Zusammenhang (Hyperbel?): Tch $\leftrightarrow$ MpQ (pro EpQ)
+		\item Dann kann man über MpQ statt über Tch plotten (\textit{hochbiegen})
+		\item Je mehr Spezies man mit rein nimmt, desto besser wird die Funktion. perfekt wird sie aber nie, weil der Energieverlust in der Folie sogar bei selber MpQ entartet ist (massenabhängig)
+		\item Wenn man jetzt noch ET-Matrix (Ech vs. ToF) dazu nimmt, kann man zuordnen, welche Masse auf welcher E-Tch-Kombi landet. Dann kann man theoretisch PHA reingeben und m gegen mpq plotten und erhält solche Boxen wie in Glöcklers SWICS-Paper 
+	\end{itemize}
+	\item He+ ist in EpQvsToF fast noch besser zu tracken als in der EchvsToF über die \verb|animate2d|-Funktion. Ich kann da auch einfach die EpQs entlangklicken. Die Dreckbubble rechts weglassen.
+	\item Erstmal genug Theorie. Jetzt Klickprogramm erweitern um Funktion, mit der ich einfach den Schlauch in EpQvsToF ausschneiden kann.
+\end{itemize}
+%
+Habe ich fast fertig. Man kann jetzt auswählen, welches Datenprodukt man möchte. Achtung beim Klicken: in der unteren Hälfte des Bins klicken, damit abgerundet wird. Oder achnee, der Index wird ja angeben, welchen EpQ-Step ich habe. \\
+Ich möchte morgen lieber zwei Grenzen angeben anstatt nur einen Tch-Wert, um den herum symmetrisch Kanäle genommen werden (weil die anderen Sachen teilweise sehr nah kommen un die Breite doch nicht so konstant ist)
+
+\DayInSep{Mo}{23}
+EpQ-Klicken läuft jetzt auf zwei Intervallgrenzen.\\
+Momentan teste ich, ob es einen Gang zwischen den Jahren gibt.\\
+Ergebnis: Nö, sieht immer ziemlich konstant aus. Aber ich bin beim Klicken manchmal sehr unsicher, ob ich was mit reinnehmen soll, oder ob das "'Rauschen"' ist. \\
+Muss Rng0 und Doubles raus noch händisch machen, stört aber nicht. \\
+Jetzt mache ich dasselbe auch noch für die Protonen, damit ich nur Sonnenwind habe und die Ausrichtung vom Kollimator prüfen kann.\\
+Die Protonen maskiere ich jetzt über ESSD, He+ über EpQ. Der Code ist entsprechend angepasst.
+\\ \\
+Nochmal Besprechung Lars:
+\begin{itemize}
+	\item Frage: Soll ich Kanäle $\textgreater$ 16 mitnehmen, obwohl da ja theoretisch auch schwerere Ionen in die RNG0 gekommen sein können?\\ Ja, besser jetzt eine grobe Vorselektion und dann später, z.B. über $w$-Filter, weiter filtern. Kann auch ruhig erstmal die Doubles mitnehmen.
+	\item Das Problem ist, dass man nicht weiß, welcher Anteil gerade unter den Threshold gewandert ist. Eine Möglichkeit wäre, sich Doubles und Trebles (bzw. alles und Trebles) nebeneinander anzugucken und zu schauen, welcher Anteil jeweils wo gelandet ist (pro EpQ-Slice). Das ergibt dann ein zusätzliches \textit{Gewicht}
+	\item Es ist zu erwarten, dass Tof-Intervall breiter wird für größere ToF (wegen Folie)
+	\item Die Protonen, die ich gerade versuche zu filtern, sind suprathermale! Denn die anderen sind nicht in den Trebles, sondern Doubles, weil auch unter Threshold. Bei den Suprathermalen ist nicht richtig bekannt, ob die wirklich im SW-Bulk sind. Wir brauchen was in den Doubles, weil wir ja an Sektor- und Detektorinfo wollen:
+	\item Besser He2+ nehmen: Weil das 2-fach geladen ist, bekommt es durch die Nachbeschleunigung die doppelte Energie (vgl. zu He1+ und H+) und wandert nicht so schnell unter den Threshold (die SSD misst ja nur die komplette Energie nach der Nachbeschleunigung)!\\
+	Sitzt schön im Bulk als schweres Ion; hat eine gute Statistik: auch wenn c6+ in die RNG0 rutscht, macht es nur ein Tausendstel oder so aus (sitzt außerdem wahrscheinlich auch im Bulk, allerdings weiß man nicht genau mit der Geschw...?)\\
+	Mit dem He2+-Filter gucke ich mir dann den Kollimator an. Stelle AA ein, schaue, welcher Sektor/Detektor in Richtung Sonne steht. Passt das zu den Daten oder gibt es einen Versatz?
+\end{itemize}
+
+\DayInSep{Di}{24}
+Habe gestern noch He2+ gefiltert, in EpQ-Matrix. \\
+Jetzt mache ich He1+ nochmal. Ich soll nämlich doch in höhere Kanäle gehen, wenn es geht. (Der Rest wird dann später über w gefiltert)\\
+Habe jetzt alle Jahre gefiltert. Probiere jetzt aus, ob das mit dem w-Spekturm noch geht
+
 \end{document}

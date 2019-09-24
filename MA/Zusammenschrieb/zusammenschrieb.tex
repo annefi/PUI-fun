@@ -287,9 +287,13 @@ Vasyliunas und Siscoe:
 %
 \subsubsection{Trebles / Doubles}
 \begin{itemize}
-	\item He+ eher in den Doubles wegen geringer Energien
+	\item Zwei Möglichkeiten, Double zu werden: energiemäßig unter Threshold fallen oder keine ordentliche Energiemessung auslösen.
+	\item He+ ist eher in den Doubles wegen geringer Energien (fallen unter Threshold)
 	\item He ist in den Trebles deutlich häufiger als H+, weil Letzteres schneller unter Threshold fällt
-	\item doubles: \textit{mass-zero}, weil nur mass-per-charge-Messung
+	\item Doubles: \textit{mass-zero}, weil nur mass-per-charge-Messung
+	\item Doubles werden häufiger bei kleinen Geschwindigkeiten, weil sie dann nicht mehr so gerade durch die Folie durchgehen und eher gestreut werden. Dann treffen sie evtl. nicht die sensitive SSD-Fläche, sondern auf den Rand, der die SSD umgibt. Da werden zwar Sekundärelektronen zur ToF-Messung ausgelöst, aber es erfolgt keine Energiemessung (geometrischer Effekt).
+	\item Die Streuung in der Folie ist abhängig von der Spezies
+	\item Evtl. sind Doubles etwas gegenüber den Doubles verschoben, weil der Flugzeitstop vielleicht durch Stop im Housing ausgelöst wird und die ToF dann systematisch etwas zu hoch ist.
 \end{itemize}
 %
 %
@@ -321,6 +325,8 @@ Vasyliunas und Siscoe:
 \subsubsection{Detektor-IDs}
 \begin{itemize}
 	\item Vermutung: 1 Det-ID ist reserviert für Doubles (keine gültige SSD-Messung), 3 andere IDs für die richtigen Detektoren
+	\item Vermutung falsch:
+	Det3 ist Müll. Det0, Det1, Det2 sind richtig, die Doubles sind alle mit in Det0.
 \end{itemize}
 %
 %
@@ -334,7 +340,7 @@ Vasyliunas und Siscoe:
 	\item Energieverlust Folie: asymmetrisch entlang Hyperbel
 	\item ESSD-Richtung: asymmetrisch wg. Landau/Pulse-Height Defect ?
 	\item Coincidences in EPQ vs ToF: leicht exponentiell - waagerecht. Liegen auf Höhe von He-Peak, weil  He am häufigsten ist und nur das Start-/Stop-Signal zählt. Segmentierung in EpQ-Richtung wegen SW-Geschwindigkeiten (S.56 Kladde)
-	\item links Müll: Threshold Triggerschwelle
+	\item links Müll: Threshold Triggerschwelle (Errorrange) -- die Dichte spiegelt eigentlich die Häufigkeit der Spezies wider
 	\item Teilchen kann immer weiter rechts liegen wegen des Energieverlusts in der Folie -- aber nie weiter links (Protonen sind absolute Grenze)
 \end{itemize}
 %
@@ -354,17 +360,21 @@ Vasyliunas und Siscoe:
 		\item Main Channel (larger one): energy range $0.65 - 60 \frac{\mathrm{keV}}{\mathrm{charge}}$, resolution 5\%. For SW He, heavier ions and suprathermal ions. Full m vs. mpq analysis
 	\end{itemize}
 	\item 64 EpQ-Steps alle 12.8 Minuten: es wird von 100kV auf 0.5kV logarithmisch runtergesteppt. Ein Step pro SC-spin (= 12 Sekunden). Die einzelnen Steps sind in uswiutils in der getvelocity-Funktion. Ich verstehe nicht ganz, woher die Zahlen für die Folge kommen (138 ist max. Anzahl der Steps)
-	\item Unsicherheit $\Delta EpQ = 3\,\%$ (nur für ACE!), daraus folgt Unsicherheit $\Delta v = 1.5\,\%$ in der Messung. Fehlerrechnung: Kladde S. 84.
+	\item Unsicherheit $\Delta EpQ = 3\,\%$ (nur für ACE!), daraus folgt Unsicherheit $\Delta v = 1.5\,\%$ in der Messung. Fehlerrechnung: Kladde S. 84. \\ \\
+	EpQ-Step 0 sollte man nicht so ernst nehmen, weil da die Spannung von ganz niedrig wieder hochgerampt wird und manchmal noch nicht alles umgestellt ist...
 	\item Efficiencies: Wahrscheinlichkeit, wirklich ein Teilchen zu messen. Das ist abhängig von der Teilchenart und vom Step. Gründe: Auslösung der Sekundärelektronen aus Folie ist nicht garantiert; Teilchen können leicht divergent auf Folie auftreffen und ggf. zusätzlich gestreut werden, sodass sie nicht auf SDD treffen; aus SSD werden evtl. keine Sekundärteilchen ausgelöst; Threshold verschieden?. Effizienzen für viele Teilchenarten auf Asterix (ETPH/project/ACE/efficiencies). Drei Spalten: EpQ mit verwurstelt -- echte Effizienzen -- Unsicherheiten. Alles schon für Triples!
 	\item Messmode: s. \citet{gloeckler_1992}: Mode 1,2,3,4. \\ 
 	Text: \textit{Modes of operation / voltage cycle mode}: Es gibt 6 modes für das deflection analyzer system. Unterschiedlicher Abstand der Voltage-Schritte abhängig vom Modus (7.44\% oder 3.65\%). Standard (und für die Daten verwendeter (?)) ist Mode-1 mit einem relativen Abstand von 7.44\% zwischen den Steps.
+	\item Zu hohen ToF-channels: Die Geschwindigkeit wird jetzt vor allem von der Nachbeschleunigung bestimmt. \\
+	ESA vs. ToF: Bei hohen ESA-Steps nähern sich die Kurven Senkrechten an\\
+	ECH vs. ToF: Bei kleinen Energien, großen ToFs nähern sich die Kurven Waagerechten an.
 \end{itemize}
 %
 \subsubsection{He+-Identifikation}
 \begin{itemize}
 	\item Kladde S. 39: manuell ausschneiden in ET-Matrix mit set\_mask2D()
 	\item wHe+ maskieren auf 1.1 -- 10 
-	\item
+	\item Fe14+ und Si7+ haben auch mpq 4 und landen in EpQ vs. ToF auf derselben Parabel. Die sind aber nicht so häufig und sind auch in RNG1.
 \end{itemize}
 %
 %
@@ -379,10 +389,20 @@ Vasyliunas und Siscoe:
 	\item Suprathermale sind unten
 	\item wHe+ der anderen Ionen ist kleiner als 1. ??
 	\item Jedes Ion auf einer Kurve. Oberer Teil: langsamer SW, unterer Teil: schneller SW
+	\item Zu großen ESA-Steps wird die Kurve eines Ions steiler, weil da die Flugzeit vor allem durch die Nachbeschleunigung bestimmt wird. 
 \end{itemize}
 \subsubsection{ESSD vs. Tof}
 \begin{itemize}
 	\item wHe+ filtern: laut Lars sollen kleine wHE+ unten rechts liegen. Warum? Weil da kleine $E_{SSD}$ liegen und $v = \sqrt{\frac{2\,E}{m}}$. $He+$ kann noch das höchste wHe+ haben, denn $w_{He+} = \frac{v_{He+}}{v_{sw}}$ und $v_{He+} = \sqrt{\frac{2\,E}{m_{He+}}}$, alle anderen haben eigentlich ... TODO, drüber nachdenken!
+	\item Durch EpQ-Steps durchklicken (Daten von komplett 1996, nur RNG0): 
+	\begin{itemize}
+		\item EpQ 0: Tch 130: Protonen (wandern schnell unter Threshold); Tch 260: He+
+		\item EpQ 1 bis ca. 6 rechts von He+ Blob sichtbar, den Lars nicht versteht
+		\item EpQ 17: He+ verschwindet bei Tch 380 unter Threshold, links davon bei Tch 320 He-3(1+), bei Tch 270 He2+
+		\item Ab EpQ 33 kommt noch He-2(2+) rechts davon rein mit der kleinsten MpQ nach den Protonen.
+	\end{itemize}
+	\item Zu hohen Flugzeiten wird die Kurve flacher, weil da die Flugzeit vor allem durch die Nachbeschleunigung bestimmt wird.
+	  
 \end{itemize}
 \subsection{PUI-Messung}
 	\begin{itemize}

@@ -64,7 +64,7 @@ class Filter_He(uswipha):
 
         #pmod = self.hist2d('tch', 'epq', binx=arange(265, 355), biny=arange(21, 55), norm='ymax', weights='brw') #He2+
         #pmod = self.hist2d('tch', 'epq', binx=arange(120,220), biny=arange(0, 22), norm='ymax', weights = 'brw') #H+
-        pmod = self.hist2d('tch', 'epq', binx=arange(240, 450), biny = arange(0, 30), norm = 'ymax') # He1+
+        pmod = self.hist2d('tch', 'epq', binx=arange(250, 420), biny = arange(0, 25), norm = 'ymax') # He1+
         fig = pmod.fig
         cid = fig.canvas.mpl_connect('button_press_event', mouseclick)
 
