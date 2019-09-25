@@ -199,7 +199,7 @@ Bei Lars gemeldet. Er hat den Kollimator und Dist3D weiter eintwickelt.
 Zu den Daten:
 \begin{itemize}
 \item Etwas veränderte Ordnerstruktur. Ich muss neu auschecken: \\ \textit{svn+ssh://asterix/data/subversion/etph/ACE} (Instrumentelles, die Dist3D die hier liegt ist eine alte Version) bzw. \textit{.../etph/PUIs} (datenspezifisches, neuere Dist3D, die zu PUIs passt)
-\item ACE-Datensatz zu Probieren auf \textit{data/etph/berger/mq...} \\ Dort liegen HE2+-gefilterte Daten aus 12 Jahren. Ich muss zusätzlich wHE einschränken auf 0.9 bis 10 (das ist w ganz einfach in 1D, Lars hat auch gezeigt, wie das in 3D abgebildet wird, Todo: überlegen!) und eine Maske von Hand legen (s. Zeichnung Kladde S. 83)
+\item ACE-Datensatz zu Probieren auf \textit{data/etph/berger/mq...} \\ Dort liegen HE+-gefilterte Daten aus 12 Jahren. Ich muss zusätzlich wHE einschränken auf 0.9 bis 10 (das ist w ganz einfach in 1D, Lars hat auch gezeigt, wie das in 3D abgebildet wird, Todo: überlegen!) und eine Maske von Hand legen (s. Zeichnung Kladde S. 83)
 \item Datensatz umfasst ca 800000 PHAs+. Nach Maskierung sollten etwa 400000 übrig bleiben.
 \item Pi mal Daumen ist das eine Messung pro 12-Minuten-Zyklus! (120 Cycles pro Tag mal 365 Tage mal 10 Jahre = 400000 Cycles)
 \item $\rightarrow$ Wir können nur nach Signaturen suchen, die sich langzeitmäßig oder regelmäßig ändern. Aussagen von Zyklus zu Zyklus sind überhaupt nicht sinnvoll!
@@ -572,6 +572,18 @@ Nochmal Besprechung Lars:
 \DayInSep{Di}{24}
 Habe gestern noch He2+ gefiltert, in EpQ-Matrix. \\
 Jetzt mache ich He1+ nochmal. Ich soll nämlich doch in höhere Kanäle gehen, wenn es geht. (Der Rest wird dann später über w gefiltert)\\
-Habe jetzt alle Jahre gefiltert. Probiere jetzt aus, ob das mit dem w-Spekturm noch geht
+Anzahl von einem Jahr (1995):
+\begin{itemize}
+	\item ungefiltert: 18861633 (ca. 18 Mio) Teilchen
+	\item He1-Maske: 140500 (0.7\%)
+	\item davon nur RNG0: 27291 (19\%)
+	\item davon Doubles: fast nichts
+\end{itemize}
+Habe jetzt alle Jahre gefiltert. Probiere jetzt aus, ob das mit dem w-Spektrum noch geht. \\
+Vielleicht sollte ich nochmal filtern, um die Doubles mitzubekommen (die sitzen in EpQ-Matrix in den höheren ESA-Kanälen, weil da die Energie so gering ist, dass sie unter den Threshold rutschen). Versucht, Systematik zu erkennen: Aber alle Jahre verschieden. Habe Halbjahresplots von 1993 bis 1997 in \verb|Ulysses/Plots/Halbjahre_EpQ_ToF|: Nur RNG0 und mit/ohne Maske auf Doubles.
+\\
+Habe jetzt nochmal großzügig Maske gesetzt: Kombi aus 93 und 96 ging weit hoch, aueßrdem alles etwas verbreitert. Jetzt lasse ich nochmal durchlaufen.\\
+ACHTUNG: Die Doubles mit $mpq > 3.3$ (also auch He1+!) landen in RNG2.
+
 
 \end{document}
