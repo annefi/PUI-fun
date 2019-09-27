@@ -586,4 +586,9 @@ Habe jetzt nochmal großzügig Maske gesetzt: Kombi aus 93 und 96 ging weit hoch
 ACHTUNG: Die Doubles mit $mpq > 3.3$ (also auch He1+!) landen in RNG2.
 
 
+\DayInSep{Do}{26}
+Hab jetzt viel rumgebastelt und eine eine Auswahl mithilfe mask2D getroffen, das geht viel einfacher. Ist nicht perfekt, aber bleibt erstmal so, ich muss weiter machen. (Ich habe immer noch nicht viele Doubles, denn: die sind für He1+ ja im Allg. in RNG2 und nicht in RNG0. Für He2+ und H+ liegen die nicht im ausgeschnittenen Schlauch.)\\
+Wollte das mit dem Subset-Wegschreiben reparieren, also in \verb|Dist3D| immer auf die Mastermaske zugreifen, aber das geht nicht: \verb|d.add_data| funktioniert nämlich nur auf dem gesamten d und z.B. \verb|d.vspace| hat nur die Größe des maskierten Datensatzes (aus (guten) Speichergründen). Was solls, ich behalte das mit dem Subset einfach bei. Dann ist der unmarkierte Datensatz genau gleich dem Master-Datensatz.
+
+
 \end{document}

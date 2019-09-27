@@ -2,12 +2,11 @@ from numpy import *
 from pylib.etCoord import rotate
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
-
+from custom_colours import lighten_color
 
 class collimator(object):
-    def __init__(self, nrs_para=5, nrs_perp=3, nrs_sec=1, edges=False, aspphi=0.00001, asptheta=0.00001, vel=600.,
-                 vsw=300,
-                 offset_sp=135.):
+    def __init__(self, nrs_para=5, nrs_perp=3, nrs_sec=5, edges=False, aspphi=0.00001, asptheta=0.00001, vel=600.,
+                 vsw=300, offset_sp = 135.):
         """
         Class to calculate the field of view of SWICS (Ulysses) nrs_para,nrs_perp -> number of angle steps for
         collimator. The total number of point to represent each detector (three detectors in total) is
@@ -16,7 +15,8 @@ class collimator(object):
         sectorwise FoV. Each sector covers an angle of 45 deg. edges -> True means the outermost part of the
         detectors and the sector are included (for visualisation of the total FoV). False means the detector and
         sector boundaries are not included, resulting in points representing almost equal phase space volumes (this
-        option should be used for data analysis). aspphi,ansptheta = Aspect angle in degrees, i.e. orientation of the
+        option should be used for data analysis).
+        aspphi,ansptheta = Aspect angle in degrees, i.e. orientation of the
         spacecraft spin axis. NOTE rotation around theta is against usual sense of direction therefore the rotation
         has to be by -asptheta!!!!
 
@@ -59,7 +59,7 @@ class collimator(object):
         self._rot_aspang()
         self._rot_seczero()
         self._calc_FoV()
-        # self._calc_vspace()
+        # # self._calc_vspace()
 
     def test_plot(self):
         fig = plt.figure()
@@ -112,7 +112,7 @@ class collimator(object):
         axis direction (_rot_aspang) , then to the direction where the rotation is started,i.e. the sun-pulse is
         triggered (_rot_seczero).
         """
-        self.rax2 = array([cos(56. / 180. * pi), sin(56. / 180. * pi), 0])
+        self.rax2 = array([cos(56. / 180. * pi), sin(56. / 180. * pi), 0]) # for the plot
         rax = array([cos(56. / 180. * pi), sin(56. / 180. * pi), 0])
         for i, ang in enumerate(self.ang_perp):
             self.base_points[:, i] = array([cos(ang / 180. * pi), sin(ang / 180. * pi), 0])
@@ -243,6 +243,45 @@ class collimator(object):
 
 
 
+    def plot_FoV(self, ax=None, sec='all'):
+        if ax == None:
+            fig = plt.figure()
+            ax = fig.add_subplot(111, projection='3d')
+            fig.canvas.set_window_title('FoV')
+            #ax.set_title('FoV')
+            ax.set_xlabel('x')
+            ax.set_ylabel('y')
+            ax.set_zlabel('z')
+        colors = array([[77, 77, 0], [77, 57, 0], [77, 0, 0], [77, 0, 57], [38, 0, 77], [0, 38, 77], [0, 77, 77],
+                        [0, 77, 19]])
+        if isinstance(sec, int):
+            f = self.FoV[:, sec, :, :]
+            nrs = f.shape[-2] * f.shape[-1]
+            shade_arr = linspace(0.1, 3.5, nrs)
+            rgb = colors[sec]
+            cc = zeros((nrs, 3))
+            for j in range(nrs):
+                cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
+            ax.scatter(f[..., 0, :], f[..., 1, :], f[..., 2, :], c=cc)
+            ax.scatter(0, 0, 0, c='k', s=5)
+            ax.plot([0, 4], [0, 0], [0, 0], c='k', lw=0.8)
+        elif sec == 'all':
+            f = self.FoV[:, :, :, :]
+            for i, s in enumerate(range(f.shape[-3])):
+                nrs = f.shape[-2] * f.shape[-1]
+                shade_arr = linspace(0.1, 3.5, nrs)
+                rgb = colors[i]
+                cc = zeros((nrs, 3))
+                for j in range(nrs):
+                    cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
+                ax.scatter(f[..., s, 0, :], f[..., s, 1, :], f[..., s, 2, :], c=cc)
+                ax.scatter(0, 0, 0, c='k', s=5)
+                ax.plot([0, 4], [0, 0], [0, 0], c='k', lw=0.8)
+        else:
+            print("no valid sector given")
+        return ax
+
+
 
 
 
@@ -320,7 +359,7 @@ class collimator(object):
                     markersize=5., alpha=1., color="k")
         return ax
 
-    def plot_FoV(self):
+    def plot_FoV_lars(self):
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
         ax.set_xlim(0., 2.)
