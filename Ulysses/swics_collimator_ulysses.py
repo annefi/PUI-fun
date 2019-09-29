@@ -277,6 +277,9 @@ class collimator(object):
                 ax.scatter(f[..., s, 0, :], f[..., s, 1, :], f[..., s, 2, :], c=cc)
                 ax.scatter(0, 0, 0, c='k', s=5)
                 ax.plot([0, 4], [0, 0], [0, 0], c='k', lw=0.8)
+                # viewing direction sunpulser when triggered (=sec0)
+                ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow",
+                        lw=3., label='sunpulser viewing when triggered')
         else:
             print("no valid sector given")
         return ax

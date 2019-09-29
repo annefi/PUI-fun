@@ -12,9 +12,9 @@ from matplotlib import pylab
 ###
 
 # load Ulysses data:
-years = [1993]
+years = [1994]
 #d1 = uswipha(year=years,tf=[[1,80]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
-d2 = uswipha(year=years,tf=[[200,366]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/epq/')
+d2 = uswipha(year=years,tf=[[250,366]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/epq/')
 # d1.sync_swoops()
 # d1.sync_traj()
 d2.sync_swoops()
@@ -32,8 +32,8 @@ d2.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
 d2.set_mask('Master','ech',12,250,reset=True) # exclude doubles
 d2.set_mask('Master','brw',1,np.inf,reset=True)
 
-d2.set_mask('Master','aspphi',13.,15.)
-d2.set_mask('Master','asptheta',2.,4.)
+d2.set_mask('Master','aspphi',-30,-25)
+# d2.set_mask('Master','asptheta',2.,4.)
 
 # d.set_mask('Master','epq',1,58,reset=True) # transitional mask to match with the ACE velocity steps
 
@@ -46,9 +46,9 @@ print('*** Load Subset ***')
 # d1.load_subset(filename = 'd1.tmp', force = True)
 d2.load_subset(filename = 'd2.tmp', force = True)
 
-#
-# D1 = Dist3D(d1)
-D0 = Dist3D(d2, offset_sp= 157.5)
-from WSpec import WSpec
-# ws1 = WSpec(D1,color_norm = 'sg')
-ws0 = WSpec(D0,color_norm = 'sg')
+# #
+# # D1 = Dist3D(d1)
+# D0 = Dist3D(d2, offset_sp= 157.5)
+# from WSpec import WSpec
+# # ws1 = WSpec(D1,color_norm = 'sg')
+# ws0 = WSpec(D0,color_norm = 'sg')

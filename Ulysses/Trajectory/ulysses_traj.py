@@ -7,7 +7,7 @@ Also calculates and adds Aspect Angle data products.
 
 from pylib import dbData
 from numpy import array,ndarray,shape
-import sys
+import sys, os
 from ul_calc_traj import calc_asp_angles, calc_SPE, hg_to_rtn
 
 earth = True
@@ -144,4 +144,7 @@ class ulysses_traj(dbData):
         for i, phi in enumerate(self.data['asp_phi']):
             print("calculated: %s" %calc_SPE(phi,self.data['asp_theta'][i]))
             print('data SPE: %s \n' %self.data['SPE'][i])
+
+
+
 

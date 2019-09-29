@@ -590,5 +590,22 @@ ACHTUNG: Die Doubles mit $mpq > 3.3$ (also auch He1+!) landen in RNG2.
 Hab jetzt viel rumgebastelt und eine eine Auswahl mithilfe mask2D getroffen, das geht viel einfacher. Ist nicht perfekt, aber bleibt erstmal so, ich muss weiter machen. (Ich habe immer noch nicht viele Doubles, denn: die sind für He1+ ja im Allg. in RNG2 und nicht in RNG0. Für He2+ und H+ liegen die nicht im ausgeschnittenen Schlauch.)\\
 Wollte das mit dem Subset-Wegschreiben reparieren, also in \verb|Dist3D| immer auf die Mastermaske zugreifen, aber das geht nicht: \verb|d.add_data| funktioniert nämlich nur auf dem gesamten d und z.B. \verb|d.vspace| hat nur die Größe des maskierten Datensatzes (aus (guten) Speichergründen). Was solls, ich behalte das mit dem Subset einfach bei. Dann ist der unmarkierte Datensatz genau gleich dem Master-Datensatz.
 
+\DayInSep{So}{29}
+Ich will rausfinden, welcher Offset-Winkel jetzt richtig ist.
+\begin{itemize}
+	\item Achtung, vx, wx, ... -Datenprodukte werden jedes Mal geändert, wenn ich eine neue Dist3D mit anderem Winkel instanziere.
+	\item Falschzuordnung würde folgendermaßen aussehen: \\
+	Weil der Winkel tatsächlich ca. 180 Grad ist, ist der angesprochene Sektor für den SW-Bulk fast immer 4, das steht in den PHA-Daten. Wenn ich jetzt denke, dass der Winkel nur 90 Grad ist, bin ich bei Sektor 4 schon 90 Grad über die SW-Richtung hinweg. Da gibt es dann einen recht großen Anteil in y- und z-Geschwindigkeitskomponente, wenn ein Teilchen von dort käme. Wenn der AA jetzt in die andere Richtung zeigt, zeigt dieser Winkel in einer ganz anderen Richtung am Bulk vorbei. Im W-Spektrum ordne ich die SW-Teilchen dann also auf ganz utnerschiedliche Richtungen aus, d.h. der Bulk wird verschmiert bzw. es ergibt sich ein Ring (abh. von der Variation des AA). Wenn der AA lange konstant ist, ist der Bulk zwar relativ scharf, aber verschoben.\\
+	Ich muss das mit großem AA testen, denn:
+	\begin{itemize}
+		\item Bei kleinem AA ist jeder Sektor Sonnenrichtung (unabhängig von Rotation)
+		\item Bei kleinem AA sind die Sektorgrenzen so nah beineinander, dass der Bulk eh irgendwie auf allen landet.
+	\end{itemize}
+	Gut wäre es also, Zeiten zu finden, in denen der mittlere Detektor angesprochen wird.
+	
+	\todo[color=green!40]{AA Plot} Ich bräuchte mal einen ordentlichen Plot für den Verlauf des AA. Done: Funktion in \verb|DataLoader/pui_ulysses.py|
+\end{itemize}
+\todo{w} W\_he in Dist2D checken: Das gibts auch für He2+, aber scheint etwa dasselbe zu sein...? \\
+Ich gehe jetzt über die vz und vy- Geschwindigkeiten, histogrammiere die und schaue, wie sehr die von 0 abweichen. 180 Grad scheint am besten zu sein. Was in mit den fehlenden 22.5 Grad? Und warum verändert sich das wspec mit Schnitten in x-Richtung?
 
 \end{document}

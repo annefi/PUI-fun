@@ -270,5 +270,3 @@ def plot_deviation_hg():
 
 
 
-
-

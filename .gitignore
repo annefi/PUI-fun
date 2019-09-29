@@ -3,6 +3,7 @@
 
 # binary file written by dbData:
 tmp.dat
+*.tmp
 
 
 # Source for the following rules: https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore

@@ -260,7 +260,7 @@ class Dist3D(object):
             self.d.data["wgts_sec"] = wgts_sec
 
     def calc_w3dspecs(self, vswbins=arange(500., 800.1, 10.), wxbins=arange(-2., 2.01, 0.2),
-                      wybins=arange(-2., 2.01, 0.2), wzbins=arange(-2., 2.01, 0.2), min_whe=0.9, aspphi=(-20., 20.)):
+                      wybins=arange(-2., 2.01, 0.2), wzbins=arange(-2., 2.01, 0.2), min_whe=0.0, aspphi=(-30., 30.)):
         """
         Calculates w spectra. Data preselected by Master mask, i.e. Magnetic field direction.
         vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins

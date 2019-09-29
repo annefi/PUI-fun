@@ -382,6 +382,46 @@ def plot_eigen_velocities():
     ax.legend()
 
 
+def collect_AA():
+    '''
+    creates a file with the two aspect angles in RTN-coordinates for all years
+    '''
+    from Trajectory.ulysses_traj import ulysses_traj
+    out = open('/home/asterix/fischer/PUI/Ulysses/Trajectory/trajectory_data/aa_data.dat', 'w')
+    out.write('YEAR      DOY     D90    ASP_PHI     ASP_THETA\n')
+    for y in range(1991, 2007):
+        t = ulysses_traj(year= y, tf = 'all')
+        t.calc_d90()
+        doy = t.data['DOY']
+        d90 = t.data['d90']
+        asp_phi = t.data['asp_phi']
+        asp_theta = t.data['asp_theta']
+        for i in range(len(t.data['DOY'])):
+            out.write('%i   %5.i   %5.i   %10.4f   %10.4f\n' % (y, doy[i], d90[i], asp_phi[i], asp_theta[i]))
+    out.close()
+
+
+def plot_AA():
+        d90 = []
+        asp_phi = []
+        asp_theta = []
+        fid = open('/home/asterix/fischer/PUI/Ulysses/Trajectory/trajectory_data/aa_data.dat', 'r')
+        fid.readline()
+        for line in fid:
+            l = line.split()
+            d90.append(float(l[2]))
+            asp_phi.append(float(l[3]))
+            asp_theta.append(float(l[4]))
+        fig = pylab.figure(figsize=(12,8))
+        ax = pylab.subplot(111)
+        ax.set_xlim(0,18*365 +1)
+        ax.set_xticks(np.arange(365, 18 * 365 + 1, 365))
+        ax.set_xticklabels(np.arange(1991, 2008, 1))
+        ax.plot(d90, asp_phi, linestyle='-', linewidth = 2.0, label = 'phi')
+        ax.plot(d90, asp_theta, linestyle='-', linewidth=2.0, label='theta')
+        ax.legend()
+        ax.grid()
+        ax.set_ylabel('Aspect Angle / deg')
 
 
 
