@@ -64,9 +64,9 @@ class collimator(object):
     def test_plot(self):
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        ax.set_xlim(0., 1)
-        ax.set_ylim(0., 1)
-        ax.set_zlim(-1., 0)
+        ax.set_xlim(0., .1)
+        ax.set_ylim(0., .1)
+        ax.set_zlim(-.1, 0)
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.set_zlabel("z")
@@ -79,11 +79,11 @@ class collimator(object):
         # z-axis:
         ax.plot([0, 0], [0, 0], [-3, 3], '-', color="k", lw=.5)
         # rax2: 56deg in x-y-sphere for rotating in the beginning
-        # ax.plot([0,self.rax2[0]],[0,self.rax2[1]],[0  ,self.rax2[2]],"-",color="peachpuff", ls=":")
-        ax.plot(self.det1[0, :], self.det1[1, :], self.det1[2, :], "o", color="k", ms=2.)
-        ax.plot(self.det2[0, :], self.det2[1, :], self.det2[2, :], "o", color="forestgreen", ms=2.)
-        ax.plot(self.det3[0, :], self.det3[1, :], self.det3[2, :], "o", color="lawngreen", ms=2.)
-        # axes for AA-rotation:
+        #ax.plot([0,self.rax2[0]],[0,self.rax2[1]],[0  ,self.rax2[2]],"-",color="peachpuff", ls=":")
+        ax.plot(self.det1[0, :], self.det1[1, :], self.det1[2, :], "o", color="k", ms=4.)
+        ax.plot(self.det2[0, :], self.det2[1, :], self.det2[2, :], "o", color="forestgreen", ms=4.)
+        ax.plot(self.det3[0, :], self.det3[1, :], self.det3[2, :], "o", color="lawngreen", ms=4.)
+        # # axes for AA-rotation:
         ax.plot([0, self.rphiax[0] * 2.5], [0, self.rphiax[1] * 2.5], [0, self.rphiax[2] * 2.5], "-", color="peru",
                 ls=":", label = 'asp_phi rotation axis')
         ax.plot([0, self.rthetaax[0] * 2.5], [0, self.rthetaax[1] * 2.5], [0, self.rthetaax[2] * 2.5], "-",
@@ -95,8 +95,8 @@ class collimator(object):
         ax.plot([0, self.rzax[0]], [0, self.rzax[1]], [0, self.rzax[2]], "-", color="lime", label = 'SWICS z-axis initial')
         # viewing direction sunpulser when triggered (=sec0)
         ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow",
-                lw=3., label = 'sunpulser viewing when triggered')
-        # rotated rzax
+               lw=3., label = 'sunpulser viewing when triggered')
+        #rotated rzax
         ax.plot([0, self.rzaxrot[0]], [0, self.rzaxrot[1]], [0, self.rzaxrot[2]], "-", color="limegreen",
                 label = 'SWICS z-axis rotated')
         ax.legend(loc=4)
@@ -179,13 +179,13 @@ class collimator(object):
         self.spang = arccos(dot(self.spax, self.rzax)) / pi * 180.
         # Rotate slit to Sector 0 starting Position, i.e. rotate by 90-spang
         if self.aspphi < 0.:
-            self.sec0ang = self.offset_sp - self.spang
+            self.sec0ang = self.offset_sp + self.spang
         else:
-            self.sec0ang = (self.offset_sp + self.spang)
-        self.det1 = rotate(self.det1, self.rax, self.sec0ang, deg=True).reshape(self.det1.shape)
-        self.det2 = rotate(self.det2, self.rax, self.sec0ang, deg=True).reshape(self.det2.shape)
-        self.det3 = rotate(self.det3, self.rax, self.sec0ang, deg=True).reshape(self.det3.shape)
-        self.rzaxrot = rotate(self.rzax, self.rax, self.sec0ang, deg=True).reshape(self.rzax.shape)
+            self.sec0ang = (self.offset_sp - self.spang)
+        self.det1 = rotate(self.det1, self.rax, -self.sec0ang, deg=True).reshape(self.det1.shape)
+        self.det2 = rotate(self.det2, self.rax, -self.sec0ang, deg=True).reshape(self.det2.shape)
+        self.det3 = rotate(self.det3, self.rax, -self.sec0ang, deg=True).reshape(self.det3.shape)
+        self.rzaxrot = rotate(self.rzax, self.rax, -self.sec0ang, deg=True).reshape(self.rzax.shape)
 
     def plot(self):
         fig = plt.figure()

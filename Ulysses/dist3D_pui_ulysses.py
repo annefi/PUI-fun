@@ -5,7 +5,10 @@ from pylib.etCoord import rotate
 from numpy import *
 import matplotlib.pyplot as plt
 from custom_colours import lighten_color
+import matplotlib.colors as colors
+import matplotlib.ticker as ticker
 import sys
+import matplotlib
 
 
 class Dist3D(object):
@@ -456,19 +459,34 @@ class Dist3D(object):
 
             colorbar = plt.colorbar(self.Quadmesh, ax=ax)
 
+    def hist_sec_det(self, aspphi, asptheta, binx = arange(0,4,1), biny = arange(0,9,1)):
+        fig, ax = plt.subplots()
+        ax.set_xlabel('Detector')
+        ax.set_xticks(arange(0,4,1))
+        ax.set_ylabel('Sector')
+        ax.set_xticks(arange(0, 9, 1))
+        ax.xaxis.set_major_formatter(ticker.NullFormatter())
+        ax.xaxis.set_minor_locator(ticker.FixedLocator([0.5, 1.5, 2.5]))
+        ax.xaxis.set_minor_formatter(ticker.FixedFormatter(['1','2','3']))
 
+        ax.yaxis.set_major_formatter(ticker.NullFormatter())
+        ax.yaxis.set_minor_locator(ticker.FixedLocator([0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]))
+        ax.yaxis.set_minor_formatter(ticker.FixedFormatter(['0', '1', '2', '3', '4', '5', '6', '7']))
 
+        for tick in ax.xaxis.get_minor_ticks():
+            tick.tick1line.set_markersize(0)
+            #tick.label1.set_horizontalalignment('center')
+        for tick in ax.yaxis.get_minor_ticks():
+            tick.tick1line.set_markersize(0)
+            #tick.label1.set_horizontalalignment('center')
 
-
-
-
-
-
-
-
-
-
-
+        colormap = plt.cm.get_cmap("viridis")
+        valsec = self.d.data['sec']
+        valdet = self.d.data['det']
+        C, X, Y = histogram2d(valdet,valsec, bins = [binx,biny])
+        Mesh = ax.pcolormesh(X, Y, C.T, cmap=colormap, norm = colors.LogNorm())
+        colormap.set_under('white')
+        cb = plt.colorbar(Mesh, ax=ax, extend='max')
 
 
 # _________________ not used atm ________________________________
