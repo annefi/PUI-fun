@@ -57,6 +57,13 @@
 	node [midway, fill=white] {\textbf{#2 -- #3. September}};
 }
 
+\newcommand{\DayInOkt}[3][]{\vspace{2cm}%
+	\noindent \tikz \draw [draw=black, ultra thick, #1]
+	($(current page.center)-(0.5\linewidth,0)$) -- 
+	($(current page.center)+(0.5\linewidth,0)$)
+	node [midway, fill=white] {\textbf{#2 -- #3. Oktober}};
+}
+
 
 %opening
 \title{Master Journal}
@@ -630,5 +637,7 @@ Was sind die wiss. Fragestellungen, die ich als nächstes bearbeiten kann:
 
 Winkel umgekehrt, um den der Sektor 0 gegen SunPulser gedreht wird, denn man muss ja \textit{zurück} drehen (gegen den normalen Drehsinn), s. DPU
 
+\DayInOkt{Di}{1}
+Oh! Die Detektoren sind andersrum angeordnet, als ich die ganze Zeit dachte: Det0 ist außen, wird also bei großen AA angesprochen, Det1 der in der Mitte und Det2 der ganz innen.
 
 \end{document}

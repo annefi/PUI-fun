@@ -14,7 +14,7 @@ import matplotlib
 class Dist3D(object):
     def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., v_sc_step = 1., nrs_perp=3, nrs_para=3,
                  nrs_sec=1,
-                 nrs_epq=1, vswbins=arange(300., 800.1, 10.), ion="He1+", offset_sp = 135.):
+                 nrs_epq=1, vswbins=arange(300., 800.1, 10.), ion="He1+", offset_sp = 180.):
         """
         d : dbData instance with species predifined by Master mask
         m : Ion mass in amu

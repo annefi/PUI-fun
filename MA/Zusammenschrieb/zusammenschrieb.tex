@@ -243,7 +243,7 @@ Vasyliunas und Siscoe:
 \section{ULYSSES}
 	\subsection{Missionsziele und Allgemeines}
 	\begin{itemize}
-		\item  \cite[6.1.7]{Prlss2004}: Unterscheidung SW in höheren Breiten: erstmals durch Radioszintillationsmessungen
+		\item  \cite[6.1.7]{prlss_2004}: Unterscheidung SW in höheren Breiten: erstmals durch Radioszintillationsmessungen
 		\item Eigentlich ist Ekliptik interessant für uns, weil Erde hier liegt. Um aber die Prozesse zu verstehen... (Magnetfeldstruktur außerhalb der Ekliptik: \cite[ch. 6.2.3]{prlss_2004})
 		\item Missionsziele und Aufbau: Lars Diss
 		\item Paper Glöckler1998. Bild mit 3 Detektoren
@@ -272,15 +272,25 @@ Vasyliunas und Siscoe:
 	%
 	%
 	\subsection{Sunpulse-Sensor}
+	\begin{itemize}
+		\item \cite{swics_dpu}: "The S/C signal \textit{spin rate} is used to divide each spin into 8 sectors. (...) A measuring period alsways starts with sector 0." Sector adjustment command ML3.2 definiert die Orientierung (den Winkel) zwischen Sun Pulse und der Sektorierung. Normalfall: Sun direction fällt zusammen mit dem Zentrum von Sektor 4. 
+		\item Sector adjustment command conists of two parts:
+		\begin{itemize}
+			\item Sun Pulse Sector SPS: \\ Determines within which sector the sun pulse shall occur
+			\item Fine Adjustment FA: \\ Determines the offset of the sun from the center line of the sun pulse sector
+		\end{itemize}
+	\end{itemize}
 	Sun sensors are devices carried by pretty much every single deep-space spacecraft. Spacecraft use them to determine their orientation in space. For spacecraft like Ulysses that spin in order to stabilize their orientation, sun sensors also enable the spacecraft to measure its spin rate. Ulysses has two sun sensors, one a "cross-beam sun sensor" (abbreviated XBS) and the other a "meridian slit sun sensor" (abbreviated MS). Actually there are two meridian slit sensors, MS1 and MS2, each pointed 180 degrees to each other. For redundancy, there are two identical cross-beam sun sensors, named XBS1 and XBS2. The meridian slit sun sensors are internally redundant -- MS1 and MS2 each has a main and a standby unit. (For many more gory details, visit this website.)
 	\href{http://www.planetary.org/blogs/emily-lakdawalla/2008/1661.html}{Quelle}\\[0.6cm]
-	'Therefore, in the case of the Earth-oriented Ulysses frame, all that is required after determining the electron velocity distribution in the S/C reference frame is to transform it into a universal solar-oriented reference frame' (SWOOPS-Paper 5.2 Elektronen)\\[0.6cm]
 	"`The Spin Reference Pulse (SRP) is defined as a pulse issued when the sun crosses the positive XZ reference plane of the spacecraft."' (HISCALE 4.7)
 	%
 	%
 \subsection{SWICS}
 \subsubsection{Allg. \& Loose Ends}
 \begin{itemize}
+	\item Accumulation time for data is one period (= one EpQ-step) except for the matrix elements: 64 periods = 1 cycle
+	\item constant deflection voltage during 1 period. After 64 steps (between 63 and 0): Sync spin without measurements
+	\item Pro sektor 1.5 Sekunden $\Rightarrow$ 12 Sekunden für eine Period
 	\item hohe dynamical Range muss gecovert werden, da Abstand so sehr schwankt (und damit Fluss)
 	\item Problem Auflösung Prioritätsschema: Wenn ich keinen Count habe, kann ich ihn auch nicht gewichten
 	\item BRW 20 bedeutet: 20 Teilchen gemessen, nur eins übermittelt -> nach kleinem BWR filtern: Protonen loswerden weil hohe Flüsse raus; Zusammenfassung aus Drews: S. 54

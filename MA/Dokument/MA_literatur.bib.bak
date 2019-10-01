@@ -193,10 +193,4 @@ nucl$^{-1}$.
   keywords = {Interplanetary Medium, Mass Spectrometers, Plasma Composition, Satellite-Borne Instruments, Solar Wind Velocity, Ulysses Mission, Hydrogen Ions, Ion Charge, Ion Temperature, Metal Ions, Solar Protons, Spacecraft Instrumentation, SWICS},
 }
 
-@Booklet{swics_dpu,
-  author = {F. Gliem and W. Rieck and H. Dinse},
-  title  = {SWICS DPU},
-  year   = {1988},
-}
-
 @Comment{jabref-meta: databaseType:biblatex;}
