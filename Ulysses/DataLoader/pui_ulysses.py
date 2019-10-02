@@ -388,7 +388,7 @@ def collect_AA():
     '''
     from Trajectory.ulysses_traj import ulysses_traj
     out = open('/home/asterix/fischer/PUI/Ulysses/Trajectory/trajectory_data/aa_data.dat', 'w')
-    out.write('YEAR      DOY     D90    ASP_PHI     ASP_THETA\n')
+    out.write('YEAR      DOY     D90    ASP_PHI     ASP_THETA    ASP_total\n')
     for y in range(1991, 2007):
         t = ulysses_traj(year= y, tf = 'all')
         t.calc_d90()
@@ -396,8 +396,10 @@ def collect_AA():
         d90 = t.data['d90']
         asp_phi = t.data['asp_phi']
         asp_theta = t.data['asp_theta']
+        asp_tot = t.data['SPE']
         for i in range(len(t.data['DOY'])):
-            out.write('%i   %5.i   %5.i   %10.4f   %10.4f\n' % (y, doy[i], d90[i], asp_phi[i], asp_theta[i]))
+            out.write('%i   %5.i   %5.i   %10.4f   %10.4f   %10.4f\n' % (y, doy[i], d90[i], asp_phi[i], asp_theta[i],
+                                                                         asp_tot[i]))
     out.close()
 
 
@@ -405,6 +407,7 @@ def plot_AA():
         d90 = []
         asp_phi = []
         asp_theta = []
+        asp_tot = []
         fid = open('/home/asterix/fischer/PUI/Ulysses/Trajectory/trajectory_data/aa_data.dat', 'r')
         fid.readline()
         for line in fid:
@@ -412,13 +415,15 @@ def plot_AA():
             d90.append(float(l[2]))
             asp_phi.append(float(l[3]))
             asp_theta.append(float(l[4]))
+            asp_tot.append(float(l[5]))
         fig = pylab.figure(figsize=(12,8))
         ax = pylab.subplot(111)
         ax.set_xlim(0,18*365 +1)
         ax.set_xticks(np.arange(365, 18 * 365 + 1, 365))
         ax.set_xticklabels(np.arange(1991, 2008, 1))
         ax.plot(d90, asp_phi, linestyle='-', linewidth = 2.0, label = 'phi')
-        ax.plot(d90, asp_theta, linestyle='-', linewidth=2.0, label='theta')
+        ax.plot(d90, asp_theta, linestyle='-', linewidth = 2.0, label='theta')
+        ax.plot(d90, asp_tot, linestyle='-', linewidth=1.0, label='total')
         ax.legend()
         ax.grid()
         ax.set_ylabel('Aspect Angle / deg')

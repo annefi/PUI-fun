@@ -61,15 +61,16 @@ class collimator(object):
         self._calc_FoV()
         # # self._calc_vspace()
 
-    def test_plot(self):
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        ax.set_xlim(0., .1)
-        ax.set_ylim(0., .1)
-        ax.set_zlim(-.1, 0)
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
-        ax.set_zlabel("z")
+    def test_plot(self, ax = None):
+        if ax == None:
+            fig = plt.figure()
+            ax = fig.add_subplot(111, projection='3d')
+            ax.set_xlim(0., .1)
+            ax.set_ylim(0., .1)
+            ax.set_zlim(-.1, 0)
+            ax.set_xlabel("x")
+            ax.set_ylabel("y")
+            ax.set_zlabel("z")
         # origin:
         ax.plot([0, 0], [0, 0], [0, 0], 'o', color="k")
         # x-axis:
@@ -83,22 +84,22 @@ class collimator(object):
         ax.plot(self.det1[0, :], self.det1[1, :], self.det1[2, :], "o", color="k", ms=4.)
         ax.plot(self.det2[0, :], self.det2[1, :], self.det2[2, :], "o", color="forestgreen", ms=4.)
         ax.plot(self.det3[0, :], self.det3[1, :], self.det3[2, :], "o", color="lawngreen", ms=4.)
-        # # axes for AA-rotation:
-        ax.plot([0, self.rphiax[0] * 2.5], [0, self.rphiax[1] * 2.5], [0, self.rphiax[2] * 2.5], "-", color="peru",
-                ls=":", label = 'asp_phi rotation axis')
-        ax.plot([0, self.rthetaax[0] * 2.5], [0, self.rthetaax[1] * 2.5], [0, self.rthetaax[2] * 2.5], "-",
-                color="burlywood",
-                ls=":", label = 'asp_phi rotation axis')
+        # # # axes for AA-rotation:
+        # ax.plot([0, self.rphiax[0] * 2.5], [0, self.rphiax[1] * 2.5], [0, self.rphiax[2] * 2.5], "-", color="peru",
+        #         ls=":", label = 'asp_phi rotation axis')
+        # ax.plot([0, self.rthetaax[0] * 2.5], [0, self.rthetaax[1] * 2.5], [0, self.rthetaax[2] * 2.5], "-",
+        #         color="burlywood",
+        #         ls=":", label = 'asp_phi rotation axis')
         # Spacecraft Z-Axis (Spacecraft rotation axis, direction mostly Sunward):
         ax.plot([0, self.rax[0]], [0, self.rax[1]], [0, self.rax[2]], "-", color="orange", label = 'SC rotation axis')
         # Swics Z-Axis relative to rotation axis:
         ax.plot([0, self.rzax[0]], [0, self.rzax[1]], [0, self.rzax[2]], "-", color="lime", label = 'SWICS z-axis initial')
-        # viewing direction sunpulser when triggered (=sec0)
-        ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow",
-               lw=3., label = 'sunpulser viewing when triggered')
-        #rotated rzax
-        ax.plot([0, self.rzaxrot[0]], [0, self.rzaxrot[1]], [0, self.rzaxrot[2]], "-", color="limegreen",
-                label = 'SWICS z-axis rotated')
+        # # viewing direction sunpulser when triggered (=sec0)
+        # ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow",
+        #        lw=3., label = 'sunpulser viewing when triggered')
+        # #rotated rzax
+        # ax.plot([0, self.rzaxrot[0]], [0, self.rzaxrot[1]], [0, self.rzaxrot[2]], "-", color="limegreen",
+        #         label = 'SWICS z-axis rotated')
         ax.legend(loc=4)
         return ax
 

@@ -12,8 +12,8 @@ import matplotlib
 
 
 class Dist3D(object):
-    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., v_sc_step = 1., nrs_perp=3, nrs_para=3,
-                 nrs_sec=1,
+    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., v_sc_step = 1., nrs_perp=2, nrs_para=6,
+                 nrs_sec=6,
                  nrs_epq=1, vswbins=arange(300., 800.1, 10.), ion="He1+", offset_sp = 180.):
         """
         d : dbData instance with species predifined by Master mask
@@ -62,8 +62,8 @@ class Dist3D(object):
         self._add_3Dv()
         self._add_w()
         print('*** calc w space ***')
-        self._calc_wspace()
-        self._calc_phspeff_wgt()
+        #self._calc_wspace()
+        #self._calc_phspeff_wgt()
 
     def _calc_FoV(self):
         # shape self.FoV: (#aspphi, #asptheta, #det, #sec, xyz, col_dim)
@@ -135,23 +135,23 @@ class Dist3D(object):
             # considering the velocity of the SC
             if not "vx" in self.d.data.keys():
                 self.d.add_data("vx", self.vspace[phiind, thetaind, epqind, detind, secind, 0] + tile(self.d.data[
-                    'vr_sc'],(self.col_dim,1)).T)
+                    'vr_sc'],(self.sec_det_dim,1)).T)
                 # a list of 9 entries is added!
             else:
                 self.d.data["vx"] = self.vspace[phiind, thetaind, epqind, detind, secind, 0] + tile(self.d.data[
-                    'vr_sc'],(self.col_dim,1)).T
+                    'vr_sc'],(self.sec_det_dim,1)).T
             if not "vy" in self.d.data.keys():
                 self.d.add_data("vy", self.vspace[phiind, thetaind, epqind, detind, secind, 1] + tile(self.d.data[
-                    'vt_sc'],(self.col_dim,1)).T)
+                    'vt_sc'],(self.sec_det_dim,1)).T)
             else:
                 self.d.data["vy"] = self.vspace[phiind, thetaind, epqind, detind, secind, 1] + tile(self.d.data[
-                    'vt_sc'],(self.col_dim,1)).T
+                    'vt_sc'],(self.sec_det_dim,1)).T
             if not "vz" in self.d.data.keys():
                 self.d.add_data("vz", self.vspace[phiind, thetaind, epqind, detind, secind, 2] + tile(self.d.data[
-                    'vn_sc'],(self.col_dim,1)).T)
+                    'vn_sc'],(self.sec_det_dim,1)).T)
             else:
                 self.d.data["vz"] = self.vspace[phiind, thetaind, epqind, detind, secind, 2] + tile(self.d.data[
-                    'vn_sc'],(self.col_dim,1)).T
+                    'vn_sc'],(self.sec_det_dim,1)).T
         # __________ SW frame _____________________
         if not "vxsw" in self.d.data.keys():
             self.d.add_data("vxsw", (self.d.data["vx"].T - self.d.get_data('Master','vsw')).T)
@@ -354,7 +354,7 @@ class Dist3D(object):
             print("no valid sector given")
         return ax
 
-    def plot_vspace(self, ax=None, vsw=20, aspphi=0, asptheta=0, epq=30, sec='all'):
+    def plot_vspace(self, ax=None, aspphi=-1, asptheta=-1, epq=50, sec='all'):
         if ax == None:
             fig = plt.figure(figsize=(6,6))
             ax = fig.add_subplot(111, projection='3d')
@@ -459,32 +459,46 @@ class Dist3D(object):
 
             colorbar = plt.colorbar(self.Quadmesh, ax=ax)
 
-    def hist_sec_det(self, aspphi, asptheta, binx = arange(0,4,1), biny = arange(0,9,1)):
-        fig, ax = plt.subplots()
-        ax.set_xlabel('Detector')
-        ax.set_xticks(arange(0,4,1))
-        ax.set_ylabel('Sector')
-        ax.set_xticks(arange(0, 9, 1))
-        ax.xaxis.set_major_formatter(ticker.NullFormatter())
-        ax.xaxis.set_minor_locator(ticker.FixedLocator([0.5, 1.5, 2.5]))
-        ax.xaxis.set_minor_formatter(ticker.FixedFormatter(['1','2','3']))
-
-        ax.yaxis.set_major_formatter(ticker.NullFormatter())
-        ax.yaxis.set_minor_locator(ticker.FixedLocator([0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]))
-        ax.yaxis.set_minor_formatter(ticker.FixedFormatter(['0', '1', '2', '3', '4', '5', '6', '7']))
-
-        for tick in ax.xaxis.get_minor_ticks():
-            tick.tick1line.set_markersize(0)
-            #tick.label1.set_horizontalalignment('center')
-        for tick in ax.yaxis.get_minor_ticks():
-            tick.tick1line.set_markersize(0)
-            #tick.label1.set_horizontalalignment('center')
-
+    def hist_sec_det(self, polar = True, binx = arange(0,4,1), biny = arange(0,9,1)):
         colormap = plt.cm.get_cmap("viridis")
         valsec = self.d.data['sec']
         valdet = self.d.data['det']
-        C, X, Y = histogram2d(valdet,valsec, bins = [binx,biny])
-        Mesh = ax.pcolormesh(X, Y, C.T, cmap=colormap, norm = colors.LogNorm())
+        C, bins_det, bins_sec = histogram2d(valdet, valsec, bins=[binx, biny])
+        self.C = C
+        self.bins_det = bins_det
+        self.bins_sec = bins_sec
+        if polar == True:
+            fig = plt.figure()
+            ax = plt.subplot(111, projection='polar')
+            ax.set_ylim(0,2.8)
+            ax.set_yticks([])
+            ax.set_theta_zero_location('N')
+            ax.set_xticks([x + (2 * pi / 16.) for x in linspace(0, 2 * pi, 8, endpoint=False)])
+            ax.set_xticklabels([str(i) for i in arange(0, 8, 1)])
+            radbins_sec = linspace(0,2*pi,9)
+            fullbins_det = array([3.2,2,1,0])
+            Mesh = ax.pcolormesh(radbins_sec, fullbins_det, C, cmap = colormap, norm = colors.LogNorm())
+        else:
+            fig, ax = plt.subplots()
+            ax.set_xlabel('Detector')
+            ax.set_xticks(arange(0,4,1))
+            ax.set_ylabel('Sector')
+            ax.set_xticks(arange(0, 9, 1))
+            ax.xaxis.set_major_formatter(ticker.NullFormatter())
+            ax.xaxis.set_minor_locator(ticker.FixedLocator([0.5, 1.5, 2.5]))
+            ax.xaxis.set_minor_formatter(ticker.FixedFormatter(['1','2','3']))
+
+            ax.yaxis.set_major_formatter(ticker.NullFormatter())
+            ax.yaxis.set_minor_locator(ticker.FixedLocator([0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]))
+            ax.yaxis.set_minor_formatter(ticker.FixedFormatter(['0', '1', '2', '3', '4', '5', '6', '7']))
+
+            for tick in ax.xaxis.get_minor_ticks():
+                tick.tick1line.set_markersize(0)
+                #tick.label1.set_horizontalalignment('center')
+            for tick in ax.yaxis.get_minor_ticks():
+                tick.tick1line.set_markersize(0)
+                #tick.label1.set_horizontalalignment('center')
+            Mesh = ax.pcolormesh(bins_det, bins_sec, C.T, cmap=colormap, norm = colors.LogNorm())
         colormap.set_under('white')
         cb = plt.colorbar(Mesh, ax=ax, extend='max')
 
