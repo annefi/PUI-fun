@@ -14,7 +14,7 @@ import matplotlib
 class Dist3D(object):
     def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., v_sc_step = 1., nrs_perp=2, nrs_para=6,
                  nrs_sec=6,
-                 nrs_epq=1, vswbins=arange(300., 800.1, 10.), ion="He1+", offset_sp = 180.):
+                 nrs_epq=1, vswbins=arange(300., 800.1, 10.), ion="He1+", offset_sp = 180., sc_vel = True):
         """
         d : dbData instance with species predifined by Master mask
         m : Ion mass in amu
@@ -30,6 +30,7 @@ class Dist3D(object):
         self.mass = mass
         self.charge = charge
         self.ion = ion
+        self.sc_vel = sc_vel
         self.offset_sp = offset_sp
         self.col_dim = self.nrs_para * self.nrs_perp * self.nrs_sec
         self.sec_det_dim = self.col_dim * self.nrs_epq
@@ -62,8 +63,8 @@ class Dist3D(object):
         self._add_3Dv()
         self._add_w()
         print('*** calc w space ***')
-        #self._calc_wspace()
-        #self._calc_phspeff_wgt()
+        self._calc_wspace()
+        self._calc_phspeff_wgt()
 
     def _calc_FoV(self):
         # shape self.FoV: (#aspphi, #asptheta, #det, #sec, xyz, col_dim)
@@ -118,7 +119,7 @@ class Dist3D(object):
         epqind = self.d.get_data('Master', 'epq').astype(int)
         detind = self.d.get_data('Master', 'det').astype(int)
         secind = self.d.get_data('Master', 'sec').astype(int)
-        if sc_vel == False:
+        if self.sc_vel == False:
             if not "vx" in self.d.data.keys():
                 self.d.add_data("vx", self.vspace[phiind, thetaind, epqind, detind, secind, 0]) # a list of 9 entries is added!
             else:
@@ -131,7 +132,7 @@ class Dist3D(object):
                 self.d.add_data("vz", self.vspace[phiind, thetaind, epqind, detind, secind, 2])
             else:
                 self.d.data["vz"] = self.vspace[phiind, thetaind, epqind, detind, secind, 2]
-        elif sc_vel == True:
+        elif self.sc_vel == True:
             # considering the velocity of the SC
             if not "vx" in self.d.data.keys():
                 self.d.add_data("vx", self.vspace[phiind, thetaind, epqind, detind, secind, 0] + tile(self.d.data[
@@ -274,16 +275,25 @@ class Dist3D(object):
         self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
         self.d.set_mask("Master", "vsw", vswbins[0], vswbins[-1], reset=True)
         self.d.set_mask("Master", "aspphi", aspphi[0], aspphi[1], reset=True)
-        # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
-        #  to calculate the weights for normalising the final histograms.
-        norm_arr = zeros((wxbins.shape[0] - 1, wybins.shape[0] - 1, wzbins.shape[0] - 1))
+
+
+        # find unique time stamps and the resp. AAs and vsw:
         uTall,Tallind = unique(self.d.get_data("Master","d00"),return_index=True)
         uasphi = self.d.get_data("Master", "aspphi")[Tallind]
         uasptheta = self.d.get_data("Master", "asptheta")[Tallind]
         uvsw = self.d.get_data("Master", "vsw")[Tallind]
+        # H indicates how often a particular aspphi-asptheta-usw combination occurs (= how often did ULYSSES see this
+        # angle with this vsw?)
         H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, self.aspphi, self.asptheta))
-        ivoffset = int(around(vswbins[0] - self.vswbins[0],
-                              -1) / 10)  # funktioniert so nur, wenn beide die gleiche Schrittgroesse haben
+        # synchronise vsw indices: (funktioniert so nur, wenn beide die gleiche Schrittgroesse haben)
+        ivoffset = int(around(vswbins[0] - self.vswbins[0], -1) / 10)
+
+        # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
+        # to calculate the weights for normalising the final histograms:
+
+        # norm_arr indicates how often a wx-wy-wz combination "is hit" with the given AA-vsw combinations and their
+        # resp. occurrences
+        norm_arr = zeros((wxbins.shape[0] - 1, wybins.shape[0] - 1, wzbins.shape[0] - 1))
         for iv, v in enumerate(vswbins[:-1]):
             for ip, p in enumerate(self.aspphi[:-1]):
                 if (p >= aspphi[0]) * (p <= aspphi[1]):
@@ -296,7 +306,9 @@ class Dist3D(object):
                                                   self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 2, :].flatten()),
                                                  bins=(wxbins, wybins, wzbins))
                             norm_arr += H2 * H[iv, ip, it]
-        wgts = self.d.get_data("He1+", "wgts_sec")
+
+        # consider the PHA words *only now*:
+        wgts = self.d.get_data("He1+", "wgts_sec") # 1 / (phase space volume * eff)
         swgt = self.d.get_data("He1+","brw") ### real sector weight not available for Ulysses
         wxsw2 = self.d.get_data("He1+", "wxsw2")
         wysw2 = self.d.get_data("He1+", "wysw2")
@@ -503,351 +515,399 @@ class Dist3D(object):
         cb = plt.colorbar(Mesh, ax=ax, extend='max')
 
 
+    def calc_vabs(self, vsw_val = 400, doy_val = False):
+        '''
+        Calculates the absolute |v| from vx, vy and vz to compare it with the solar wind velocity in a small window
+        of time
+        :return:
+        '''
+
+        if doy_val == False:
+            self.d.set_mask('vsw_mask','vsw',vsw_val-20, vsw_val+20, reset = True)
+        else:
+            self.d.set_mask('mmask', 'doy', doy_val - 0.3, doy_val + 0.3, reset=True)
+        vsw = self.d.get_data('mmask', 'vsw').flatten()
+        vx = self.d.get_data('mmask','vx').flatten()
+        vy = self.d.get_data('mmask','vy').flatten()
+        vz = self.d.get_data('mmask','vz').flatten()
+        v = sqrt(vx**2 + vy**2 + vz**2)
+        fig = plt.figure()
+        ax = plt.subplot(111)
+        #v_bins = arange(vsw_val - 360, vsw_val + 160, 10)
+        v_bins = arange(0,1000,20)
+        hist_bulk, bins = histogram(v, bins = v_bins)
+        hist_bulk = append(hist_bulk,0)
+
+        hist_vsw, bins = histogram(tile(vsw,self.sec_det_dim), bins= v_bins)
+        hist_vsw = append(hist_vsw, 0)
+
+        ax.plot(bins[:], hist_bulk, ls='steps-post-', color='r', label='calculated bulk velocity')
+        ax.plot(bins[:], hist_vsw, ls='steps-post-', color='b', label='SWOOPS solar wind velocity')
+        ax.legend()
+
+        return v
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # _________________ not used atm ________________________________
 
-    #
-    # def _calc_pitchangle(self):
-    #     # recalc abs(B)
-    #     absB = sqrt(self.d.data["Bx"] ** 2 + self.d.data["By"] ** 2 + self.d.data["Bz"] ** 2)
-    #     # Calculate unit Vector along B-field
-    #     if not "eBx" in self.d.data.keys():
-    #         self.d.add_data("eBx", self.d.data["Bx"] / absB)
-    #     else:
-    #         self.d.data["eBx"] = self.d.data["Bx"] / absB
-    #     if not "eBy" in self.d.data.keys():
-    #         self.d.add_data("eBy", self.d.data["By"] / absB)
-    #     else:
-    #         self.d.data["eBy"] = self.d.data["By"] / absB
-    #     if not "eBz" in self.d.data.keys():
-    #         self.d.add_data("eBz", self.d.data["Bz"] / absB)
-    #     else:
-    #         self.d.data["eBz"] = self.d.data["Bz"] / absB
-    #     # Calculate unit Vector along w vector in solar wind frame
-    #     if not "ewx" in self.d.data.keys():
-    #         self.d.add_data("ewx", self.d.data["wxsw"] / self.d.data["wsw"])
-    #     else:
-    #         self.d.data["ewx"] = self.d.data["wxsw"] / self.d.data["wsw"]
-    #     if not "ewy" in self.d.data.keys():
-    #         self.d.add_data("ewy", self.d.data["wysw"] / self.d.data["wsw"])
-    #     else:
-    #         self.d.data["ewy"] = self.d.data["wysw"] / self.d.data["wsw"]
-    #     if not "ewz" in self.d.data.keys():
-    #         self.d.add_data("ewz", self.d.data["wzsw"] / self.d.data["wsw"])
-    #     else:
-    #         self.d.data["ewz"] = self.d.data["wzsw"] / self.d.data["wsw"]
-    #     # Calculate cosine of pitch angle mu by scalar product of eB and and ew.
-    #     # Cosmup stands for B-field is still important,i.e. inward field cosmup=1 means the opposite direction
-    #     # compared to the solar wind bulk than for outward polarity!
-    #     if not "cosmup" in self.d.data.keys():
-    #         self.d.add_data("cosmup",
-    #                         self.d.data["eBx"] * self.d.data["ewx"] + self.d.data["eBy"] * self.d.data["ewy"] +
-    #                         self.d.data["eBz"] * self.d.data["ewz"])
-    #     else:
-    #         self.d.data["cosmup"] = self.d.data["eBx"] * self.d.data["ewx"] + self.d.data["eBy"] * self.d.data["ewy"]\
-    #                                 + \
-    #                                 self.d.data["eBz"] * self.d.data["ewz"]
-    #     # Cosmu is the cosine on the outward projected B field, i.e. if the polarity is inward cosmu 1 is now
-    #     # pointing away from the Sun
-    #     if not "cosmu" in self.d.data.keys():
-    #         self.d.add_data("cosmu", self.d.data["cosmup"])
-    #     else:
-    #         self.d.data["cosmu"] = self.d.data["cosmup"]
-    #     # inmask very brutally assumes each polarity to be separated in hemispheres (out -45(~parker angle)+-90
-    #     # degree -> in 135+-90 degree)
-    #     inmask = ~((self.d.data["Bphi"] > -135) * (self.d.data["Bphi"] < 45))
-    #     self.d.data["cosmu"][inmask] = -self.d.data["cosmu"][inmask]
-    #
-    # def _calc_sw_bulk_properties(self):
-    #     """
-    #     Calculate the solar wind Bulk vector, assuming that the proton core is shifted along B by the alfven speed
-    #     from the radial axis
-    #     """
-    #     # Add alfven speed
-    #     if not "valf" in self.d.data.keys():
-    #         self.d.add_data("valf", 21.8 * self.d.data["B"] / sqrt(self.d.data["dsw"]))
-    #     else:
-    #         self.d.data["valf"] = 21.8 * self.d.data["B"] / sqrt(self.d.data["dsw"])
-    #     vswy = self.d.data["valf"] * self.d.data["eBy"]
-    #     vswz = self.d.data["valf"] * self.d.data["eBz"]
-    #     phi = self.d.data["Bphi"]
-    #     vswy[(phi > -135) * (phi < 45)] *= -1.
-    #     vswz[(phi > -135) * (phi < 45)] *= -1.
-    #     vswx = sqrt(self.d.data["vsw"] ** 2 - vswy ** 2 - vswz ** 2)
-    #     if not "vswx" in self.d.data.keys():
-    #         self.d.add_data("vswx", vswx)
-    #     else:
-    #         self.d.data["vswx"] = vswx
-    #     if not "vswy" in self.d.data.keys():
-    #         self.d.add_data("vswy", vswy)
-    #     else:
-    #         self.d.data["vswy"] = vswy
-    #     if not "vswz" in self.d.data.keys():
-    #         self.d.add_data("vswz", vswz)
-    #     else:
-    #         self.d.data["vswz"] = vswz
-    #     if not "vxswa" in self.d.data.keys():
-    #         self.d.add_data("vxswa", self.d.data["vx"] - vswx)
-    #     else:
-    #         self.d.data["vxswa"] = self.d.data["vx"] - vswx
-    #     if not "vyswa" in self.d.data.keys():
-    #         self.d.add_data("vyswa", self.d.data["vy"] - vswy)
-    #     else:
-    #         self.d.data["vyswa"] = self.d.data["vy"] - vswy
-    #     if not "vzswa" in self.d.data.keys():
-    #         self.d.add_data("vzswa", self.d.data["vz"] - vswz)
-    #     else:
-    #         self.d.data["vzswa"] = self.d.data["vz"] - vswz
-    #     if not "wxswa" in self.d.data.keys():
-    #         self.d.add_data("wxswa", self.d.data["vxswa"] / self.d.data["vsw"])
-    #     else:
-    #         self.d.data["wxswa"] = self.d.data["vxswa"] / self.d.data["vsw"]
-    #     if not "wyswa" in self.d.data.keys():
-    #         self.d.add_data("wyswa", self.d.data["vyswa"] / self.d.data["vsw"])
-    #     else:
-    #         self.d.data["wyswa"] = self.d.data["vyswa"] / self.d.data["vsw"]
-    #     if not "wzswa" in self.d.data.keys():
-    #         self.d.add_data("wzswa", self.d.data["vzswa"] / self.d.data["vsw"])
-    #     else:
-    #         self.d.data["wzswa"] = self.d.data["vzswa"] / self.d.data["vsw"]
-    #     if not "wswa" in self.d.data.keys():
-    #         self.d.add_data("wswa",
-    #                         sqrt(self.d.data["wxswa"] ** 2 + self.d.data["wyswa"] ** 2 + self.d.data["wzswa"] ** 2))
-    #     else:
-    #         self.d.data["wswa"] = sqrt(
-    #             self.d.data["wxswa"] ** 2 + self.d.data["wyswa"] ** 2 + self.d.data["wzswa"] ** 2)
-    #
-    # def calc_wspec_norm(self, vsws=arange(495., 800., 10.), wbins=arange(-1., 5.1, .1), min_whe=0.9):
-    #     """
-    #     Calculates w spectra. Data preselected by Master mask, i.e. Magnetic field direction.
-    #     vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
-    #     """
-    #     self.d.remove_submask("Master", "vsw")
-    #     self.d.remove_submask("Master", "aspphi")
-    #     self.d.remove_submask("Master", "asptheta")
-    #     self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
-    #     # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
-    #     #  to calculate the weights for normalising the final histograms.
-    #     norm_arr = zeros((wbins.shape[0] - 1))
-    #     cts_arr = zeros((wbins.shape[0] - 1))
-    #     for v in vsws.astype(int):
-    #         self.d.set_mask("Master", "vsw", v, v + 10., reset=True)
-    #         for phi in self.aspphi[:-1]:
-    #             self.d.set_mask("Master", "aspphi", phi - 0.5, phi + 0.5, reset=True)
-    #             for theta in self.asptheta[:-1]:
-    #                 self.d.set_mask("Master", "asptheta", theta - 0.5, theta + 0.5, reset=True)
-    #                 # All times (after Master mask) under which particles could have been measured under given aspect
-    #                 #  angle and solar wind speed
-    #                 uTall, Tallind = unique(self.d.get_data("Master", "d00"), return_index=True)
-    #                 if uTall.shape[0] == 0.:
-    #                     pass
-    #                 else:
-    #                     phiind = searchsorted(self.aspphi, phi)
-    #                     thetaind = searchsorted(self.asptheta, theta)
-    #                     whe = self.vels[1] / (v + 5.)
-    #                     epqs = arange(0, 60, 1)[whe > min_whe]
-    #                     wspace = self.vspace[phiind, thetaind, epqs]
-    #                     wspace[:, :, :, 0, :] -= (v + 5.)
-    #                     wspace /= (v + 5.)
-    #                     wcov = sqrt(sum(wspace ** 2, axis=3))
-    #                     wcov[wspace[:, :, :, 0, :] < 0] *= -1.
-    #                     H, xbins = histogram(wcov.flatten(), bins=wbins)
-    #                     norm_arr += H * uTall.shape[0]
-    #                     wgts = self.d.get_data("He1+", "wgts_sec")
-    #                     ws = self.d.get_data("He1+", "wsw2")
-    #                     wxsw = self.d.get_data("He1+", "wxsw2")
-    #                     ws[wxsw < 0] *= -1.
-    #                     swgt = self.d.get_data("He1+", "swt")
-    #                     H, xbins = histogram(ws, bins=wbins, weights=wgts * swgt)
-    #                     cts_arr += H
-    #     self.d.remove_submask("He1+", "wHe1+2")
-    #     self.d.remove_submask("Master", "vsw")
-    #     self.d.remove_submask("Master", "aspphi")
-    #     self.d.remove_submask("Master", "asptheta")
-    #     return cts_arr, norm_arr
-    #
-    # def calc_muspec(self, vsws=arange(495., 800., 10.), wbins=arange(0., 5.1, .1), min_whe=0.9, bphi=90., btheta=0.,
-    #                 dbphi=10., dbtheta=10., cosmubins=arange(-1., 1.01, .1)):
-    #     """
-    #     Calculates pitch-angle over w spectra. Data preselected by Master mask.
-    #     vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
-    #     """
-    #     self.d.remove_submask("Master", "vsw")
-    #     self.d.remove_submask("Master", "aspphi")
-    #     self.d.remove_submask("Master", "asptheta")
-    #     self.d.remove_submask("Master", "Bphi")
-    #     self.d.remove_submask("Master", "Btheta")
-    #     self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
-    #     self.d.set_mask("Master", "Bphi", bphi - dbphi, bphi + dbphi, reset=True)
-    #     self.d.set_mask("Master", "Btheta", btheta - dbtheta, btheta + dbtheta, reset=True)
-    #     # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
-    #     #  to calculate the weights for normalising the final histograms.
-    #     norm_arr = zeros((wbins.shape[0] - 1, cosmubins.shape[0] - 1))
-    #     cts_arr = zeros((wbins.shape[0] - 1, cosmubins.shape[0] - 1))
-    #     B0 = array([1., 0., 0.])
-    #     rphiax = array([0., 0., 1.])
-    #     rthetaax = rotate(array([0., 1., 0]), rphiax, bphi, deg=True)
-    #     B = rotate(B0, rphiax, bphi, deg=True)
-    #     B = rotate(B, rthetaax, btheta, deg=True)
-    #
-    #     for v in vsws.astype(int):
-    #         self.d.set_mask("Master", "vsw", v, v + 10., reset=True)
-    #         for phi in self.aspphi[:-1]:
-    #             self.d.set_mask("Master", "aspphi", phi - 0.5, phi + 0.5, reset=True)
-    #             for theta in self.asptheta[:-1]:
-    #                 self.d.set_mask("Master", "asptheta", theta - 0.5, theta + 0.5, reset=True)
-    #                 # All times (after Master mask) under which particles could have been measured under given aspect
-    #                 #  angle and solar wind speed
-    #                 uTall, Tallind = unique(self.d.get_data("Master", "d00"), return_index=True)
-    #                 if uTall.shape[0] == 0.:
-    #                     pass
-    #                 else:
-    #                     phiind = searchsorted(self.aspphi, phi)
-    #                     thetaind = searchsorted(self.asptheta, theta)
-    #                     whe = self.vels[1] / (v + 5.)
-    #                     epqs = arange(0, 60, 1)[whe > min_whe]
-    #                     wspace = self.vspace[phiind, thetaind, epqs]
-    #                     wspace[:, :, :, 0, :] -= (v + 5.)
-    #                     wspace /= (v + 5.)
-    #                     wcov = sqrt(sum(wspace ** 2, axis=3))
-    #                     ewspace = 1. * wspace
-    #                     ewspace[:, :, :, 0] = wspace[:, :, :, 0] / wcov[:, :, :]
-    #                     ewspace[:, :, :, 1] = wspace[:, :, :, 1] / wcov[:, :, :]
-    #                     ewspace[:, :, :, 2] = wspace[:, :, :, 2] / wcov[:, :, :]
-    #                     cosmu = ewspace[:, :, :, 0, :] * B[0] + ewspace[:, :, :, 1, :] * B[1] + ewspace[:, :, :, 2,
-    #                                                                                             :] * \
-    #                             B[2]
-    #                     H, xbins, ybins = histogram2d(wcov.flatten(), cosmu.flatten(), bins=(wbins, cosmubins))
-    #                     norm_arr += H * uTall.shape[0]
-    #                     wgts = self.d.get_data("He1+", "wgts_sec")
-    #                     ws = self.d.get_data("He1+", "wsw2")
-    #                     wxsw = self.d.get_data("He1+", "wxsw2")
-    #                     cmu = self.d.get_data("He1+", "cosmu")
-    #                     swgt = self.d.get_data("He1+", "swt")
-    #                     H, xbins, ybins = histogram2d(ws, cmu, bins=(wbins, cosmubins), weights=wgts * swgt)
-    #                     cts_arr += H
-    #     self.d.remove_submask("He1+", "wHe1+2")
-    #     self.d.remove_submask("Master", "vsw")
-    #     self.d.remove_submask("Master", "aspphi")
-    #     self.d.remove_submask("Master", "asptheta")
-    #     self.d.remove_submask("Master", "Bphi")
-    #     self.d.remove_submask("Master", "Btheta")
-    #     return cts_arr, norm_arr, xbins, ybins
-    #
-    # def calc_wpecs2(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-1., 2.01, 0.1), min_whe=0.9):
-    #     """
-    #     Calculates w spectra. Data preselected by Master mask, i.e. Magnetic field direction.
-    #     vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
-    #     """
-    #     self.d.remove_submask("Master", "vsw")
-    #     self.d.remove_submask("Master", "aspphi")
-    #     self.d.remove_submask("Master", "asptheta")
-    #     self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
-    #     # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
-    #     #  to calculate the weights for normalising the final histograms.
-    #     norm_arr = zeros((wbins.shape[0] - 1))
-    #     cts_arr = zeros((wbins.shape[0] - 1))
-    #     self.d.set_mask("Master", "vsw", vswbins[0], vswbins[-1], reset=True)
-    #     # self.d.set_mask("Master","wxsw",0.,10000,reset=True)
-    #     uTall, Tallind = unique(self.d.get_data("Master", "d00"), return_index=True)
-    #     uasphi = self.d.get_data("Master", "aspphi")[Tallind]
-    #     uasptheta = self.d.get_data("Master", "asptheta")[Tallind]
-    #     uvsw = self.d.get_data("Master", "vsw")[Tallind]
-    #     H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, self.aspphi, self.asptheta))
-    #     ivoffset = int(around(vswbins[0] - 300, -1) / 10)
-    #     for iv, v in enumerate(vswbins[:-1]):
-    #         for ip, p in enumerate(self.aspphi[:-1]):
-    #             for it, t in enumerate(self.asptheta[:-1]):
-    #                 if H[iv, ip, it] > 0:
-    #                     whe = self.vels / (v + 5.)
-    #                     epqs = arange(0, 60, 1)[whe > min_whe]
-    #                     mask = self.w3dspace[iv + ivoffset, ip, it, epqs, :, :, 0, 0] < 0
-    #                     wspace = self.wspace[iv + ivoffset, ip, it, epqs]
-    #                     wspace[mask] *= -1.
-    #                     # H2,xb = histogram(self.wspace[iv,ip,it,epqs][mask],bins=wbins)
-    #                     H2, xb = histogram(wspace, bins=wbins)
-    #                     norm_arr += H2 * H[iv, ip, it]
-    #     wgts = self.d.get_data("He1+", "wgts_sec")
-    #     swgt = self.d.get_data("He1+", "swt")
-    #     ws = self.d.get_data("He1+", "wsw2")
-    #     wxsw = self.d.get_data("He1+", "wxsw2")
-    #     ws[wxsw < 0] *= -1.
-    #     H2, xb = histogram(ws, bins=wbins, weights=wgts * swgt)
-    #     self.d.remove_submask("He1+", "wHe1+2")
-    #     self.d.remove_submask("Master", "vsw")
-    #     self.d.remove_submask("Master", "aspphi")
-    #     self.d.remove_submask("Master", "asptheta")
-    #     return norm_arr, H2
-    #
-    # def calc_cosmuspecs(self, vswbins=arange(500., 800.1, 10.), cosmubins=arange(-1., 1.01, .2),
-    #                     wbins=arange(-0., 2.1, .2), min_whe=0.9, bphibins=arange(-110, -69.9, 10.),
-    #                     bthetabins=arange(-20, 20.1, 10.)):
-    #     """
-    #     Calculates w spectra. Data preselected by Master mask, i.e. Magnetic field direction.
-    #     vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
-    #     """
-    #     self.d.remove_submask("Master", "vsw")
-    #     self.d.remove_submask("Master", "aspphi")
-    #     self.d.remove_submask("Master", "asptheta")
-    #     self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
-    #     # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
-    #     #  to calculate the weights for normalising the final histograms.
-    #     norm_arr = zeros((wbins.shape[0] - 1, cosmubins.shape[0] - 1))
-    #     cts_arr = zeros((wbins.shape[0] - 1, cosmubins.shape[0] - 1))
-    #     ivoffset = int(around(vswbins[0] - 500, -1) / 10)
-    #     self.d.set_mask("Master", "vsw", vswbins[0], vswbins[-1], reset=True)
-    #     for iphi, bphi in enumerate(bphibins[:-1]):
-    #         for itheta, btheta in enumerate(bphibins[:-1]):
-    #             self.d.set_mask("Master", "Bphi", bphi, bphibins[iphi + 1], reset=True)
-    #             self.d.set_mask("Master", "Btheta", btheta, bthetabins[iphi + 1], reset=True)
-    #             uTall, Tallind = unique(self.d.get_data("Master", "d00"), return_index=True)
-    #             uasphi = self.d.get_data("Master", "aspphi")[Tallind]
-    #             uasptheta = self.d.get_data("Master", "asptheta")[Tallind]
-    #             uvsw = self.d.get_data("Master", "vsw")[Tallind]
-    #             H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, self.aspphi, self.asptheta))
-    #             B0 = array([1., 0., 0.])
-    #             rphiax = array([0., 0., 1.])
-    #             rthetaax = rotate(array([0., 1., 0]), rphiax, bphi + 5, deg=True)
-    #             B = rotate(B0, rphiax, bphi + 5, deg=True)
-    #             B = rotate(B, rthetaax, btheta + 5, deg=True)
-    #             for iv, v in enumerate(vswbins[:-1]):
-    #                 for ip, p in enumerate(self.aspphi[:-1]):
-    #                     for it, t in enumerate(self.asptheta[:-1]):
-    #                         if H[iv, ip, it] > 0:
-    #                             whe = self.vels / (v + 5.)
-    #                             epqs = arange(0, 60, 1)[whe > min_whe]
-    #                             w3dspace = self.w3dspace[iv + ivoffset, ip, it, epqs]
-    #                             wspace = self.wspace[iv + ivoffset, ip, it, epqs]
-    #                             w3dspace[..., 0, 0] /= wspace[..., 0, 0]
-    #                             w3dspace[..., 1, 0] /= wspace[..., 0, 0]
-    #                             w3dspace[..., 2, 0] /= wspace[..., 0, 0]
-    #                             cosmuspace = w3dspace[..., 0, 0] * B[0] + w3dspace[..., 1, 0] * B[1] + w3dspace[
-    #                                 ..., 2, 0] * B[2]
-    #                             H2, xb, yb = histogram2d(wspace.flatten(), cosmuspace.flatten(),
-    #                                                      bins=(wbins, cosmubins))
-    #                             norm_arr += H2 * H[iv, ip, it]
-    #     self.d.set_mask("Master", "Bphi", bphibins[0], bphibins[-1], reset=True)
-    #     self.d.set_mask("Master", "Btheta", bthetabins[0], bthetabins[-1], reset=True)
-    #     wgts = self.d.get_data("He1+", "wgts_sec")
-    #     swgt = self.d.get_data("He1+", "swt")
-    #     wsw2 = self.d.get_data("He1+", "wsw2")
-    #     cosmu = self.d.get_data("He1+", "cosmu")
-    #     H2, xb, yb = histogram2d(wsw2, cosmu, bins=(wbins, cosmubins), weights=(wgts * swgt))
-    #     self.d.remove_submask("Master", "Bphi")
-    #     self.d.remove_submask("Master", "Btheta")
-    #     self.d.remove_submask("He1+", "wHe1+2")
-    #     self.d.remove_submask("Master", "vsw")
-    #     self.d.remove_submask("Master", "aspphi")
-    #     self.d.remove_submask("Master", "asptheta")
-    #     return norm_arr, H2
-    #
-    # def plot_stuff(self, H, wxbins, wybins, wzbins):
-    #     """
-    #     Just from ipython shell ... will be done next time
-    #     """
-    #     fig = figure()
-    #     for i in range(0, 9):
-    #         fig.add_subplot("33%i" % (i + 1))
-    #         ax = fig.gca()
-    #         sli = H[i + 9]
-    #         sli /= amax(sli)
-    #         ax.pcolormesh(wbins, wbins, sli.T, cmap="jet", vmax=1.)
+
+    def _calc_pitchangle(self):
+        # recalc abs(B)
+        absB = sqrt(self.d.data["Bx"] ** 2 + self.d.data["By"] ** 2 + self.d.data["Bz"] ** 2)
+        # Calculate unit Vector along B-field
+        if not "eBx" in self.d.data.keys():
+            self.d.add_data("eBx", self.d.data["Bx"] / absB)
+        else:
+            self.d.data["eBx"] = self.d.data["Bx"] / absB
+        if not "eBy" in self.d.data.keys():
+            self.d.add_data("eBy", self.d.data["By"] / absB)
+        else:
+            self.d.data["eBy"] = self.d.data["By"] / absB
+        if not "eBz" in self.d.data.keys():
+            self.d.add_data("eBz", self.d.data["Bz"] / absB)
+        else:
+            self.d.data["eBz"] = self.d.data["Bz"] / absB
+        # Calculate unit Vector along w vector in solar wind frame
+        if not "ewx" in self.d.data.keys():
+            self.d.add_data("ewx", self.d.data["wxsw"] / self.d.data["wsw"])
+        else:
+            self.d.data["ewx"] = self.d.data["wxsw"] / self.d.data["wsw"]
+        if not "ewy" in self.d.data.keys():
+            self.d.add_data("ewy", self.d.data["wysw"] / self.d.data["wsw"])
+        else:
+            self.d.data["ewy"] = self.d.data["wysw"] / self.d.data["wsw"]
+        if not "ewz" in self.d.data.keys():
+            self.d.add_data("ewz", self.d.data["wzsw"] / self.d.data["wsw"])
+        else:
+            self.d.data["ewz"] = self.d.data["wzsw"] / self.d.data["wsw"]
+        # Calculate cosine of pitch angle mu by scalar product of eB and and ew.
+        # Cosmup stands for B-field is still important,i.e. inward field cosmup=1 means the opposite direction
+        # compared to the solar wind bulk than for outward polarity!
+        if not "cosmup" in self.d.data.keys():
+            self.d.add_data("cosmup",
+                            self.d.data["eBx"] * self.d.data["ewx"] + self.d.data["eBy"] * self.d.data["ewy"] +
+                            self.d.data["eBz"] * self.d.data["ewz"])
+        else:
+            self.d.data["cosmup"] = self.d.data["eBx"] * self.d.data["ewx"] + self.d.data["eBy"] * self.d.data["ewy"]\
+                                    + \
+                                    self.d.data["eBz"] * self.d.data["ewz"]
+        # Cosmu is the cosine on the outward projected B field, i.e. if the polarity is inward cosmu 1 is now
+        # pointing away from the Sun
+        if not "cosmu" in self.d.data.keys():
+            self.d.add_data("cosmu", self.d.data["cosmup"])
+        else:
+            self.d.data["cosmu"] = self.d.data["cosmup"]
+        # inmask very brutally assumes each polarity to be separated in hemispheres (out -45(~parker angle)+-90
+        # degree -> in 135+-90 degree)
+        inmask = ~((self.d.data["Bphi"] > -135) * (self.d.data["Bphi"] < 45))
+        self.d.data["cosmu"][inmask] = -self.d.data["cosmu"][inmask]
+
+    def _calc_sw_bulk_properties(self):
+        """
+        Calculate the solar wind Bulk vector, assuming that the proton core is shifted along B by the alfven speed
+        from the radial axis
+        """
+        # Add alfven speed
+        if not "valf" in self.d.data.keys():
+            self.d.add_data("valf", 21.8 * self.d.data["B"] / sqrt(self.d.data["dsw"]))
+        else:
+            self.d.data["valf"] = 21.8 * self.d.data["B"] / sqrt(self.d.data["dsw"])
+        vswy = self.d.data["valf"] * self.d.data["eBy"]
+        vswz = self.d.data["valf"] * self.d.data["eBz"]
+        phi = self.d.data["Bphi"]
+        vswy[(phi > -135) * (phi < 45)] *= -1.
+        vswz[(phi > -135) * (phi < 45)] *= -1.
+        vswx = sqrt(self.d.data["vsw"] ** 2 - vswy ** 2 - vswz ** 2)
+        if not "vswx" in self.d.data.keys():
+            self.d.add_data("vswx", vswx)
+        else:
+            self.d.data["vswx"] = vswx
+        if not "vswy" in self.d.data.keys():
+            self.d.add_data("vswy", vswy)
+        else:
+            self.d.data["vswy"] = vswy
+        if not "vswz" in self.d.data.keys():
+            self.d.add_data("vswz", vswz)
+        else:
+            self.d.data["vswz"] = vswz
+        if not "vxswa" in self.d.data.keys():
+            self.d.add_data("vxswa", self.d.data["vx"] - vswx)
+        else:
+            self.d.data["vxswa"] = self.d.data["vx"] - vswx
+        if not "vyswa" in self.d.data.keys():
+            self.d.add_data("vyswa", self.d.data["vy"] - vswy)
+        else:
+            self.d.data["vyswa"] = self.d.data["vy"] - vswy
+        if not "vzswa" in self.d.data.keys():
+            self.d.add_data("vzswa", self.d.data["vz"] - vswz)
+        else:
+            self.d.data["vzswa"] = self.d.data["vz"] - vswz
+        if not "wxswa" in self.d.data.keys():
+            self.d.add_data("wxswa", self.d.data["vxswa"] / self.d.data["vsw"])
+        else:
+            self.d.data["wxswa"] = self.d.data["vxswa"] / self.d.data["vsw"]
+        if not "wyswa" in self.d.data.keys():
+            self.d.add_data("wyswa", self.d.data["vyswa"] / self.d.data["vsw"])
+        else:
+            self.d.data["wyswa"] = self.d.data["vyswa"] / self.d.data["vsw"]
+        if not "wzswa" in self.d.data.keys():
+            self.d.add_data("wzswa", self.d.data["vzswa"] / self.d.data["vsw"])
+        else:
+            self.d.data["wzswa"] = self.d.data["vzswa"] / self.d.data["vsw"]
+        if not "wswa" in self.d.data.keys():
+            self.d.add_data("wswa",
+                            sqrt(self.d.data["wxswa"] ** 2 + self.d.data["wyswa"] ** 2 + self.d.data["wzswa"] ** 2))
+        else:
+            self.d.data["wswa"] = sqrt(
+                self.d.data["wxswa"] ** 2 + self.d.data["wyswa"] ** 2 + self.d.data["wzswa"] ** 2)
+
+    def calc_wspec_norm(self, vsws=arange(495., 800., 10.), wbins=arange(-1., 5.1, .1), min_whe=0.9):
+        """
+        Calculates w spectra. Data preselected by Master mask, i.e. Magnetic field direction.
+        vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
+        """
+        self.d.remove_submask("Master", "vsw")
+        self.d.remove_submask("Master", "aspphi")
+        self.d.remove_submask("Master", "asptheta")
+        self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
+        # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
+        #  to calculate the weights for normalising the final histograms.
+        norm_arr = zeros((wbins.shape[0] - 1))
+        cts_arr = zeros((wbins.shape[0] - 1))
+        for v in vsws.astype(int):
+            self.d.set_mask("Master", "vsw", v, v + 10., reset=True)
+            for phi in self.aspphi[:-1]:
+                self.d.set_mask("Master", "aspphi", phi - 0.5, phi + 0.5, reset=True)
+                for theta in self.asptheta[:-1]:
+                    self.d.set_mask("Master", "asptheta", theta - 0.5, theta + 0.5, reset=True)
+                    # All times (after Master mask) under which particles could have been measured under given aspect
+                    #  angle and solar wind speed
+                    uTall, Tallind = unique(self.d.get_data("Master", "d00"), return_index=True)
+                    if uTall.shape[0] == 0.:
+                        pass
+                    else:
+                        phiind = searchsorted(self.aspphi, phi)
+                        thetaind = searchsorted(self.asptheta, theta)
+                        whe = self.vels[1] / (v + 5.)
+                        epqs = arange(0, 60, 1)[whe > min_whe]
+                        wspace = self.vspace[phiind, thetaind, epqs]
+                        wspace[:, :, :, 0, :] -= (v + 5.)
+                        wspace /= (v + 5.)
+                        wcov = sqrt(sum(wspace ** 2, axis=3))
+                        wcov[wspace[:, :, :, 0, :] < 0] *= -1.
+                        H, xbins = histogram(wcov.flatten(), bins=wbins)
+                        norm_arr += H * uTall.shape[0]
+                        wgts = self.d.get_data("He1+", "wgts_sec")
+                        ws = self.d.get_data("He1+", "wsw2")
+                        wxsw = self.d.get_data("He1+", "wxsw2")
+                        ws[wxsw < 0] *= -1.
+                        swgt = self.d.get_data("He1+", "swt")
+                        H, xbins = histogram(ws, bins=wbins, weights=wgts * swgt)
+                        cts_arr += H
+        self.d.remove_submask("He1+", "wHe1+2")
+        self.d.remove_submask("Master", "vsw")
+        self.d.remove_submask("Master", "aspphi")
+        self.d.remove_submask("Master", "asptheta")
+        return cts_arr, norm_arr
+
+    def calc_muspec(self, vsws=arange(495., 800., 10.), wbins=arange(0., 5.1, .1), min_whe=0.9, bphi=90., btheta=0.,
+                    dbphi=10., dbtheta=10., cosmubins=arange(-1., 1.01, .1)):
+        """
+        Calculates pitch-angle over w spectra. Data preselected by Master mask.
+        vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
+        """
+        self.d.remove_submask("Master", "vsw")
+        self.d.remove_submask("Master", "aspphi")
+        self.d.remove_submask("Master", "asptheta")
+        self.d.remove_submask("Master", "Bphi")
+        self.d.remove_submask("Master", "Btheta")
+        self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
+        self.d.set_mask("Master", "Bphi", bphi - dbphi, bphi + dbphi, reset=True)
+        self.d.set_mask("Master", "Btheta", btheta - dbtheta, btheta + dbtheta, reset=True)
+        # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
+        #  to calculate the weights for normalising the final histograms.
+        norm_arr = zeros((wbins.shape[0] - 1, cosmubins.shape[0] - 1))
+        cts_arr = zeros((wbins.shape[0] - 1, cosmubins.shape[0] - 1))
+        B0 = array([1., 0., 0.])
+        rphiax = array([0., 0., 1.])
+        rthetaax = rotate(array([0., 1., 0]), rphiax, bphi, deg=True)
+        B = rotate(B0, rphiax, bphi, deg=True)
+        B = rotate(B, rthetaax, btheta, deg=True)
+
+        for v in vsws.astype(int):
+            self.d.set_mask("Master", "vsw", v, v + 10., reset=True)
+            for phi in self.aspphi[:-1]:
+                self.d.set_mask("Master", "aspphi", phi - 0.5, phi + 0.5, reset=True)
+                for theta in self.asptheta[:-1]:
+                    self.d.set_mask("Master", "asptheta", theta - 0.5, theta + 0.5, reset=True)
+                    # All times (after Master mask) under which particles could have been measured under given aspect
+                    #  angle and solar wind speed
+                    uTall, Tallind = unique(self.d.get_data("Master", "d00"), return_index=True)
+                    if uTall.shape[0] == 0.:
+                        pass
+                    else:
+                        phiind = searchsorted(self.aspphi, phi)
+                        thetaind = searchsorted(self.asptheta, theta)
+                        whe = self.vels[1] / (v + 5.)
+                        epqs = arange(0, 60, 1)[whe > min_whe]
+                        wspace = self.vspace[phiind, thetaind, epqs]
+                        wspace[:, :, :, 0, :] -= (v + 5.)
+                        wspace /= (v + 5.)
+                        wcov = sqrt(sum(wspace ** 2, axis=3))
+                        ewspace = 1. * wspace
+                        ewspace[:, :, :, 0] = wspace[:, :, :, 0] / wcov[:, :, :]
+                        ewspace[:, :, :, 1] = wspace[:, :, :, 1] / wcov[:, :, :]
+                        ewspace[:, :, :, 2] = wspace[:, :, :, 2] / wcov[:, :, :]
+                        cosmu = ewspace[:, :, :, 0, :] * B[0] + ewspace[:, :, :, 1, :] * B[1] + ewspace[:, :, :, 2,
+                                                                                                :] * \
+                                B[2]
+                        H, xbins, ybins = histogram2d(wcov.flatten(), cosmu.flatten(), bins=(wbins, cosmubins))
+                        norm_arr += H * uTall.shape[0]
+                        wgts = self.d.get_data("He1+", "wgts_sec")
+                        ws = self.d.get_data("He1+", "wsw2")
+                        wxsw = self.d.get_data("He1+", "wxsw2")
+                        cmu = self.d.get_data("He1+", "cosmu")
+                        swgt = self.d.get_data("He1+", "swt")
+                        H, xbins, ybins = histogram2d(ws, cmu, bins=(wbins, cosmubins), weights=wgts * swgt)
+                        cts_arr += H
+        self.d.remove_submask("He1+", "wHe1+2")
+        self.d.remove_submask("Master", "vsw")
+        self.d.remove_submask("Master", "aspphi")
+        self.d.remove_submask("Master", "asptheta")
+        self.d.remove_submask("Master", "Bphi")
+        self.d.remove_submask("Master", "Btheta")
+        return cts_arr, norm_arr, xbins, ybins
+
+    def calc_wpecs2(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-1., 2.01, 0.1), min_whe=0.9):
+        """
+        Calculates w spectra. Data preselected by Master mask, i.e. Magnetic field direction.
+        vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
+        """
+        self.d.remove_submask("Master", "vsw")
+        self.d.remove_submask("Master", "aspphi")
+        self.d.remove_submask("Master", "asptheta")
+        self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
+        # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
+        #  to calculate the weights for normalising the final histograms.
+        norm_arr = zeros((wbins.shape[0] - 1))
+        cts_arr = zeros((wbins.shape[0] - 1))
+        self.d.set_mask("Master", "vsw", vswbins[0], vswbins[-1], reset=True)
+        # self.d.set_mask("Master","wxsw",0.,10000,reset=True)
+        uTall, Tallind = unique(self.d.get_data("Master", "d00"), return_index=True)
+        uasphi = self.d.get_data("Master", "aspphi")[Tallind]
+        uasptheta = self.d.get_data("Master", "asptheta")[Tallind]
+        uvsw = self.d.get_data("Master", "vsw")[Tallind]
+        H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, self.aspphi, self.asptheta))
+        ivoffset = int(around(vswbins[0] - 300, -1) / 10)
+        for iv, v in enumerate(vswbins[:-1]):
+            for ip, p in enumerate(self.aspphi[:-1]):
+                for it, t in enumerate(self.asptheta[:-1]):
+                    if H[iv, ip, it] > 0:
+                        whe = self.vels / (v + 5.)
+                        epqs = arange(0, 60, 1)[whe > min_whe]
+                        mask = self.w3dspace[iv + ivoffset, ip, it, epqs, :, :, 0, 0] < 0
+                        wspace = self.wspace[iv + ivoffset, ip, it, epqs]
+                        wspace[mask] *= -1.
+                        # H2,xb = histogram(self.wspace[iv,ip,it,epqs][mask],bins=wbins)
+                        H2, xb = histogram(wspace, bins=wbins)
+                        norm_arr += H2 * H[iv, ip, it]
+        wgts = self.d.get_data("He1+", "wgts_sec")
+        swgt = self.d.get_data("He1+", "swt")
+        ws = self.d.get_data("He1+", "wsw2")
+        wxsw = self.d.get_data("He1+", "wxsw2")
+        ws[wxsw < 0] *= -1.
+        H2, xb = histogram(ws, bins=wbins, weights=wgts * swgt)
+        self.d.remove_submask("He1+", "wHe1+2")
+        self.d.remove_submask("Master", "vsw")
+        self.d.remove_submask("Master", "aspphi")
+        self.d.remove_submask("Master", "asptheta")
+        return norm_arr, H2
+
+    def calc_cosmuspecs(self, vswbins=arange(500., 800.1, 10.), cosmubins=arange(-1., 1.01, .2),
+                        wbins=arange(-0., 2.1, .2), min_whe=0.9, bphibins=arange(-110, -69.9, 10.),
+                        bthetabins=arange(-20, 20.1, 10.)):
+        """
+        Calculates w spectra. Data preselected by Master mask, i.e. Magnetic field direction.
+        vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
+        """
+        self.d.remove_submask("Master", "vsw")
+        self.d.remove_submask("Master", "aspphi")
+        self.d.remove_submask("Master", "asptheta")
+        self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
+        # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
+        #  to calculate the weights for normalising the final histograms.
+        norm_arr = zeros((wbins.shape[0] - 1, cosmubins.shape[0] - 1))
+        cts_arr = zeros((wbins.shape[0] - 1, cosmubins.shape[0] - 1))
+        ivoffset = int(around(vswbins[0] - 500, -1) / 10)
+        self.d.set_mask("Master", "vsw", vswbins[0], vswbins[-1], reset=True)
+        for iphi, bphi in enumerate(bphibins[:-1]):
+            for itheta, btheta in enumerate(bphibins[:-1]):
+                self.d.set_mask("Master", "Bphi", bphi, bphibins[iphi + 1], reset=True)
+                self.d.set_mask("Master", "Btheta", btheta, bthetabins[iphi + 1], reset=True)
+                uTall, Tallind = unique(self.d.get_data("Master", "d00"), return_index=True)
+                uasphi = self.d.get_data("Master", "aspphi")[Tallind]
+                uasptheta = self.d.get_data("Master", "asptheta")[Tallind]
+                uvsw = self.d.get_data("Master", "vsw")[Tallind]
+                H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, self.aspphi, self.asptheta))
+                B0 = array([1., 0., 0.])
+                rphiax = array([0., 0., 1.])
+                rthetaax = rotate(array([0., 1., 0]), rphiax, bphi + 5, deg=True)
+                B = rotate(B0, rphiax, bphi + 5, deg=True)
+                B = rotate(B, rthetaax, btheta + 5, deg=True)
+                for iv, v in enumerate(vswbins[:-1]):
+                    for ip, p in enumerate(self.aspphi[:-1]):
+                        for it, t in enumerate(self.asptheta[:-1]):
+                            if H[iv, ip, it] > 0:
+                                whe = self.vels / (v + 5.)
+                                epqs = arange(0, 60, 1)[whe > min_whe]
+                                w3dspace = self.w3dspace[iv + ivoffset, ip, it, epqs]
+                                wspace = self.wspace[iv + ivoffset, ip, it, epqs]
+                                w3dspace[..., 0, 0] /= wspace[..., 0, 0]
+                                w3dspace[..., 1, 0] /= wspace[..., 0, 0]
+                                w3dspace[..., 2, 0] /= wspace[..., 0, 0]
+                                cosmuspace = w3dspace[..., 0, 0] * B[0] + w3dspace[..., 1, 0] * B[1] + w3dspace[
+                                    ..., 2, 0] * B[2]
+                                H2, xb, yb = histogram2d(wspace.flatten(), cosmuspace.flatten(),
+                                                         bins=(wbins, cosmubins))
+                                norm_arr += H2 * H[iv, ip, it]
+        self.d.set_mask("Master", "Bphi", bphibins[0], bphibins[-1], reset=True)
+        self.d.set_mask("Master", "Btheta", bthetabins[0], bthetabins[-1], reset=True)
+        wgts = self.d.get_data("He1+", "wgts_sec")
+        swgt = self.d.get_data("He1+", "swt")
+        wsw2 = self.d.get_data("He1+", "wsw2")
+        cosmu = self.d.get_data("He1+", "cosmu")
+        H2, xb, yb = histogram2d(wsw2, cosmu, bins=(wbins, cosmubins), weights=(wgts * swgt))
+        self.d.remove_submask("Master", "Bphi")
+        self.d.remove_submask("Master", "Btheta")
+        self.d.remove_submask("He1+", "wHe1+2")
+        self.d.remove_submask("Master", "vsw")
+        self.d.remove_submask("Master", "aspphi")
+        self.d.remove_submask("Master", "asptheta")
+        return norm_arr, H2
+
+    def plot_stuff(self, H, wxbins, wybins, wzbins):
+        """
+        Just from ipython shell ... will be done next time
+        """
+        fig = figure()
+        for i in range(0, 9):
+            fig.add_subplot("33%i" % (i + 1))
+            ax = fig.gca()
+            sli = H[i + 9]
+            sli /= amax(sli)
+            ax.pcolormesh(wbins, wbins, sli.T, cmap="jet", vmax=1.)

@@ -24,6 +24,7 @@ def poly(x,a,b,c,d,e,f):
 # do the fit:
 init_vals = [-3.97167435e-03,  2.01624045e-03,  8.28846505e-05, -7.20948144e-07, 2.41401215e-08,2.41401215e-08]
 best_vals, covar = curve_fit(poly,epq_ace,eff_ace, p0=init_vals)
+print(best_vals)
 
 # plot the fitted values:
 ax.plot(epq_ace,poly(epq_ace,best_vals[0],best_vals[1],best_vals[2],best_vals[3],best_vals[4],best_vals[5]))

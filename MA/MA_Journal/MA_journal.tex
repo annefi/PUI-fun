@@ -535,7 +535,7 @@ Headlines und EpQ geregelt.\\
 Lars gefragt:
 \begin{itemize}
 	\item Komische Signatur in ET-Matrix rechts von He+: Lars weiß auch nicht, was das ist. Ganz komisch, er forscht nach. Man kann das einigermaßen gut von He+ trennen, aber es besteht die Gefahr, dass das He+ selbst ist, was zeitweise falsch zugewiesen wurde und was man dann wegschneiden würde. Zeitlich ist das auch nicht einchränkbar.\\ Es gibt zwei seltsame Peaks: Einr ist ein Doublepeak, der andere ein Treblepeak
-	\item Lars hat 2D-Maske gesetzt und dann die Zeiträume angeguckt bzw. sich die Daten zu diesen Zeiträumen angeguckt (bzw. die zur inversen Maske!). Es gibt aber nicht immer Parallelen zu den anderen komischen Signaturen und das He+-Signal gibts auch immer noch.\\
+	\item Lars hat 2D-Maske gesetzt und dann die Zeiträume angeguckt bzw. sich die Dat\part{title}en zu diesen Zeiträumen angeguckt (bzw. die zur inversen Maske!). Es gibt aber nicht immer Parallelen zu den anderen komischen Signaturen und das He+-Signal gibts auch immer noch.\\
 	Könnte auch ein seltsamer Bitfehler sein...? Alle 64 Kanäle in Tch?
 	\item Lars hat mir \textit{mpq-Algorithmus}'erklärt: Todo
 	\item \todo[color=green!40]{mpq-Alg} Versuchen, das formelmäßig nachzuvollziehen und evtl. auch an H+, He2+ und He+ durchführen (gut zu erkennen in EpQ vs. ToF).\\
@@ -647,7 +647,18 @@ Ich habe jetzt das Histogramm Det/Sec polar umgebaut. Man sieht, dass bei das Ma
 	\item Ob der Winkel 180 Grad sind oder 202.5 oder was dazwischen: Keine Ahnung. Mit dem Kollimatormodell kann man das auch nicht so richtig feststellen (wo geht die x-Achse durch?), weil auch nicht ganz klar ist, ob wir die rz-Achse richtig angebracht haben. Man könnte die BAse-Points auch links mit negativem Sinus beginnen, dann verschiebt sich alles ein bisschen in Richtung der konvexen Sektorkante. \todo{Offset Angle Sunpulser} Ich behalte das jetzt einfach auf 180 Grad und mache weiter und frage Lars bzw. schaue, ob das mit He+ einen Unterschied macht.
 \end{itemize}
 
-
-
+\DayInOkt{Fr}{4}
+Mache jetzt weiter mit der He2+-Bulk-Velocity-Berechnung, um sie mit der von SWOOPS gemessenen vsw zu vergleichen. \\ \todo{Gewichtung Bulk Velocity} Frage: Muss die Gewichtung auch hier mit rein? \\ Überlegung:
+\begin{itemize}
+	\item Die Guckrichtungshäufigkeit (Phasenraumabdeckung) ist vielleicht eher nicht so wichtig, weil die SW-Richtung ja immer drin ist?
+	\item Wenn ich das Phasenraumvolumen richtig verstanden habe, sollte das mit rein, weil sonst schnellere Teilchen überhöht gemessen werden. Und SWOOPS' vsw-Messung ist ja unabhängig. 
+	\\
+	(Allerdings ist die berechnete Bulkgeschwindigkeit in einem ersten Test deutlich geringer als die vsw...) $\Leftarrow$ Fehler gefunden! Die charge-Angabe war noch nicht angepasst auf He2+! Die getvelocity-Funktion hat Geschwindigkeiten für He1+ berechnet, die natürlich kleiner sind...\\
+	Habe gleich auch noch die Effizienzen für He2+ angepasst und weggeschrieben von den ACE-Effizienzen, falls ich die Gewichtung noch einbaue.
+\end{itemize}
+Jetzt passt es! (He2+-Verteilung ist nur etwas breiter)\\
+Und supernice: wenn ich die SC-Eigengeschwindigkeit rausnehme, passt es nicht mehr, d.h. das scheine ich richtig gemacht zu haben.
+\\
+Morgen: Überlegen, ob ich vielleicht auch noch was über den Winkel rausfinden kann. Überlegen: Verändert sich der Betrag...?
 
 \end{document}
