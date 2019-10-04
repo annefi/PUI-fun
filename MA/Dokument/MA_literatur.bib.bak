@@ -193,4 +193,25 @@ nucl$^{-1}$.
   keywords = {Interplanetary Medium, Mass Spectrometers, Plasma Composition, Satellite-Borne Instruments, Solar Wind Velocity, Ulysses Mission, Hydrogen Ions, Ion Charge, Ion Temperature, Metal Ions, Solar Protons, Spacecraft Instrumentation, SWICS},
 }
 
+@Booklet{swics_dpu,
+  author = {F. Gliem and W. Rieck and H. Dinse},
+  title  = {SWICS DPU},
+  year   = {1988},
+}
+
+@Article{drews_2013,
+  author   = {Christian Drews and Lars Berger and Robert F. Wimmer-Schweingruber and Antoinette B. Galvin},
+  title    = {Interstellar He$^{+}$ ring-beam distributions: Observations and implications},
+  journal  = {Geophysical Research Letters},
+  year     = {2013},
+  volume   = {40},
+  number   = {8},
+  month    = {Apr},
+  pages    = {1468-1473},
+  doi      = {10.1002/grl.50368},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/2013GeoRL..40.1468D},
+  keywords = {Pickup He$^{+}$, Interstellar Helium, Injection of Pickup Ion, He$^{+}$ Pitch Angle},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}
