@@ -12,9 +12,9 @@ from matplotlib import pylab
 ###
 
 # load Ulysses data:
-years = [1995]
+years = [1993]
 #d1 = uswipha(year=years,tf=[[1,80]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
-d2 = uswipha(year=years,tf='all', path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/epq/')
+d2 = uswipha(year=years,tf=[[1,30]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/epq/')
 # d1.sync_swoops()
 # d1.sync_traj()
 d2.sync_swoops()
@@ -32,10 +32,10 @@ d2.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
 d2.set_mask('Master','ech',12,250,reset=True) # exclude doubles
 d2.set_mask('Master','brw',1,np.inf,reset=True)
 
-d2.set_mask('Master','aa_tot', 15,30)
-
-#d2.set_mask('Master','aspphi', -5, 5)
-d2.set_mask('Master','asptheta',5,7)
+# d2.set_mask('Master','aa_tot', 15,30)
+#
+# #d2.set_mask('Master','aspphi', -5, 5)
+# d2.set_mask('Master','asptheta',5,7)
 
 
 # get a real subset with masks applied:
@@ -46,7 +46,9 @@ print('*** Load Subset ***')
 # d1.load_subset(filename = 'd1.tmp', force = True)
 d2.load_subset(filename = 'd2.tmp', force = True)
 
-D = Dist3D(d2)
+
+# He2+
+D = Dist3D(d2, mass = 4, charge = 2)
 # D0 = Dist3D(d2, offset_sp= 157.5)
 # from WSpec import WSpec
 # # ws1 = WSpec(D1,color_norm = 'sg')
