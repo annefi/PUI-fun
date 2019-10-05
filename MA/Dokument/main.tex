@@ -41,6 +41,13 @@ consistentlayout, % Uncomment to change the layout of the declaration, abstract 
 \usepackage[utf8]{inputenc} % Required for inputting international characters
 \usepackage[T1]{fontenc} % Output font encoding for international characters
 
+\usepackage[%
+	left     = ``,%
+	right    = '',%
+	leftsub  = ``,%
+	rightsub = ''%
+	]{dirtytalk}
+
 \usepackage{mathpazo} % Use the Palatino font by default
 
 \usepackage[backend=biber,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
@@ -181,7 +188,7 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 
 \include{Chapters/motivation}
 \include{Chapters/theory}
-%\include{Chapters/Chapter2} 
+\include{Chapters/instrumentation} 
 %\include{Chapters/Chapter3}
 %\include{Chapters/Chapter4} 
 %\include{Chapters/Chapter5} 
