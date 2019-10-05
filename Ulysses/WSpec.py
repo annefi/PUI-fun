@@ -101,8 +101,6 @@ class WSpec():
                 raise (ValueError("'dim' must be 'x', 'y' or 'z'."))
 
 
-
-
     def update_plot(self, dir = '+'):
         if dir == '+':
             if self.slice == 19:

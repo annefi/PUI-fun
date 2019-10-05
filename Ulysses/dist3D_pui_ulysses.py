@@ -91,7 +91,6 @@ class Dist3D(object):
         self.vspace[:, :, :, :, :, 0, :] = -self.vspace[:, :, :, :, :, 0, :]
         self.vspace[:, :, :, :, :, 1, :] = -self.vspace[:, :, :, :, :, 1, :]
 
-
     def _calc_wspace(self, ):
         """
         Calculates vx,vy,vz for all epqsteps and given aspect angles
@@ -107,7 +106,7 @@ class Dist3D(object):
             self.w3dspace[iv, ...] = tmpspace
             self.wspace[iv, ..., 0, :] = sqrt(sum(tmpspace ** 2, axis=5))
 
-    def _add_3Dv(self, sc_vel = True):
+    def _add_3Dv(self):
         """
         Adds vx,vy,vz in SC-frame and vxsw,vysw,vzsw in SW-frame based on aspect angles to pha data
         Also adds vxsw2,vysw2,vzsw2 in SW-frame based on aspect angles and rounded vsw to pha data 
@@ -226,6 +225,25 @@ class Dist3D(object):
         else:
             self.d.data["wHe1+2"] = getvelocity(4., 1., self.d.data["epq"].astype(int)) / around(
                 self.d.data["vsw"], -1)
+        # ___________________ SC frame __________________________
+        if not "wx" in self.d.data.keys():
+            self.d.add_data("wx", (self.d.data["vx"].T / self.d.data["vsw"]).T)
+        else:
+            self.d.data["wx"] = (self.d.data["vx"].T / self.d.data["vsw"]).T
+        if not "wysw" in self.d.data.keys():
+            self.d.add_data("wy", (self.d.data["vy"].T / self.d.data["vsw"]).T)
+        else:
+            self.d.data["wy"] = (self.d.data["vy"].T / self.d.data["vsw"]).T
+        if not "wz" in self.d.data.keys():
+            self.d.add_data("wz", (self.d.data["vz"].T / self.d.data["vsw"]).T)
+        else:
+            self.d.data["wz"] = (self.d.data["vz"].T / self.d.data["vsw"]).T
+        if not "w" in self.d.data.keys():
+            self.d.add_data("wsw", sqrt(self.d.data["wx"] ** 2 + self.d.data["wy"] ** 2 + self.d.data["wz"] ** 2))
+        else:
+            self.d.data["w"] = sqrt(self.d.data["wx"] ** 2 + self.d.data["wy"] ** 2 + self.d.data["wz"] ** 2)
+
+
 
     def _calc_phspeff_wgt(self):
         """
@@ -323,6 +341,7 @@ class Dist3D(object):
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
         return norm_arr, H2
+
 
 
     def plot_wspace(self, ax=None, vsw=2, aspphi=0, asptheta=0, epq=30, sec='all'):
@@ -468,8 +487,9 @@ class Dist3D(object):
             else:
                 print('No valid dimension given')
                 sys.exit()
-
             colorbar = plt.colorbar(self.Quadmesh, ax=ax)
+
+
 
     def hist_sec_det(self, polar = True, binx = arange(0,4,1), biny = arange(0,9,1)):
         colormap = plt.cm.get_cmap("viridis")
@@ -523,8 +543,16 @@ class Dist3D(object):
         '''
 
         if doy_val == False:
-            self.d.set_mask('vsw_mask','vsw',vsw_val-20, vsw_val+20, reset = True)
+            try:
+                self.d.remove_submask('mmask', 'doy')
+            except:
+                pass
+            self.d.set_mask('mmask','vsw',vsw_val-20, vsw_val+20, reset = True)
         else:
+            try:
+                self.d.remove_submask('mmask', 'vsw')
+            except:
+                pass
             self.d.set_mask('mmask', 'doy', doy_val - 0.3, doy_val + 0.3, reset=True)
         vsw = self.d.get_data('mmask', 'vsw').flatten()
         vx = self.d.get_data('mmask','vx').flatten()
@@ -533,23 +561,74 @@ class Dist3D(object):
         v = sqrt(vx**2 + vy**2 + vz**2)
         fig = plt.figure()
         ax = plt.subplot(111)
-        #v_bins = arange(vsw_val - 360, vsw_val + 160, 10)
-        v_bins = arange(0,1000,20)
+        v_bins = arange(200,1000,10)
         hist_bulk, bins = histogram(v, bins = v_bins)
         hist_bulk = append(hist_bulk,0)
 
-        hist_vsw, bins = histogram(tile(vsw,self.sec_det_dim), bins= v_bins)
+        hist_vsw, bins = histogram(tile(vsw,self.sec_det_dim), bins = v_bins)
         hist_vsw = append(hist_vsw, 0)
 
         ax.plot(bins[:], hist_bulk, ls='steps-post-', color='r', label='calculated bulk velocity')
         ax.plot(bins[:], hist_vsw, ls='steps-post-', color='b', label='SWOOPS solar wind velocity')
         ax.legend()
-
         return v
 
 
+    def spec_1d(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-2., 2.01, 0.2), min_whe=0.0, aspphi=(-30., 30.)):
+        """
+
+        """
+        self.d.remove_submask("Master", "vsw")
+        self.d.remove_submask("Master", "aspphi")
+        self.d.remove_submask("Master", "asptheta")
+        self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
+        self.d.set_mask("Master", "vsw", vswbins[0], vswbins[-1], reset=True)
+        self.d.set_mask("Master", "aspphi", aspphi[0], aspphi[1], reset=True)
 
 
+        # find unique time stamps and the resp. AAs and vsw:
+        uTall,Tallind = unique(self.d.get_data("Master","d00"),return_index=True)
+        uasphi = self.d.get_data("Master", "aspphi")[Tallind]
+        uasptheta = self.d.get_data("Master", "asptheta")[Tallind]
+        uvsw = self.d.get_data("Master", "vsw")[Tallind]
+        # H indicates how often a particular aspphi-asptheta-usw combination occurs (= how often did ULYSSES see this
+        # angle with this vsw?)
+        H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, self.aspphi, self.asptheta))
+        # synchronise vsw indices: (funktioniert so nur, wenn beide die gleiche Schrittgroesse haben)
+        ivoffset = int(around(vswbins[0] - self.vswbins[0], -1) / 10)
+
+        # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
+        # to calculate the weights for normalising the final histograms:
+
+        # norm_arr indicates how often a wx-wy-wz combination "is hit" with the given AA-vsw combinations and their
+        # resp. occurrences
+        norm_arr = zeros((wbins.shape[0] - 1))
+        for iv, v in enumerate(vswbins[:-1]):
+            for ip, p in enumerate(self.aspphi[:-1]):
+                if (p >= aspphi[0]) * (p <= aspphi[1]):
+                    for it, t in enumerate(self.asptheta[:-1]):
+                        if H[iv, ip, it] > 0:
+                            whe = self.vels / (v + 5.)
+                            epqs = arange(0, 64, 1)[whe > min_whe]
+                            H2, bs = histogram(wspace[], bins = wbins)
+                            norm_arr += H2 * H[iv, ip, it]
+
+        # consider the PHA words *only now*:
+        wgts = self.d.get_data("He1+", "wgts_sec") # 1 / (phase space volume * eff)
+        swgt = self.d.get_data("He1+","brw") ### real sector weight not available for Ulysses
+        wxsw2 = self.d.get_data("He1+", "wxsw2")
+        wysw2 = self.d.get_data("He1+", "wysw2")
+        wzsw2 = self.d.get_data("He1+", "wzsw2")
+        twts = zeros(wxsw2.shape)
+        for i in range(wxsw2.shape[1]):
+            twts[:,i] = wgts*swgt
+        H2, bs = histogramdd((wxsw2.flatten(), wysw2.flatten(), wzsw2.flatten()), bins=(wxbins, wybins, wzbins),
+                             weights=twts.flatten())
+        self.d.remove_submask("He1+", "wHe1+2")
+        self.d.remove_submask("Master", "vsw")
+        self.d.remove_submask("Master", "aspphi")
+        self.d.remove_submask("Master", "asptheta")
+        return norm_arr, H2
 
 
 

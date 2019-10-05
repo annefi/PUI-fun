@@ -275,7 +275,7 @@ Weiter: Neu auschecken, Kopien anlegen und alles zum Laufen bekommen
 \DayInJuly{Mi}{31}
 \begin{itemize}
 	\item Habe jetzt Dist3D für ACE durchgeguckt und das meiste gecheckt.
-	\item Umbau für Ulysses. \todo{Ordnerstruktur} Neue Ordnerstruktur. Bisher liegt alles in \verb|old_stuff|.
+	\item Umbau für Ulysses. \todo[color=green!40]{Ordnerstruktur} Neue Ordnerstruktur. Bisher liegt alles in \verb|old_stuff|.
 	\item Muss ich an \verb|swics_collimator| was ändern?
 \end{itemize}
 
@@ -294,7 +294,7 @@ Jetzt geht es an \verb|Dist3D|.
 	\item \verb|swics_collimator_ulysses| muss schon ein FieldOfView zum Kollimator zufügen!
 	\item Changes:
 	\begin{itemize}
-		\item \textit{did} $\rightarrow$ \textit{det}. \todo{Det-ID} Welchen Detektor muss ich jetzt nochmal rausschmeißen? Beobachtungen auf 3 Jahren Daten (1993,94,95):
+		\item \textit{did} $\rightarrow$ \textit{det}. \todo[color=green!40]{Det-ID} Welchen Detektor muss ich jetzt nochmal rausschmeißen? Beobachtungen auf 3 Jahren Daten (1993,94,95):
 		\begin{itemize}
 			\item Det3 wird kaum angesprochen! (von 43 Mio PHAs nur 1225 auf Det3)
 			\item Wenn ich nur Ech unter Threshold nehme (26 Mio; = Doubles), landen fast alle in Det0. (Det1: 26, Det2: 88, Det3: 164)
@@ -325,7 +325,7 @@ Morgen: Schauen, ob ich \verb|pui_ulysses| benutzen kann. Sonst anderes Main-Pro
 \DayInAug{Di}{6}
 \begin{itemize}
 	\item Bin jetzt den Umweg gegangen über \verb|save_subset| und \verb|load_subset|. Damit schreibe ich ein Subset von den gefilterten Daten (Det von 0 bis 2 und epq von 0 bis 59) in eine Binärdatei und lese sie wieder ein...
-	\todo{Subset} Da muss es aber doch noch einen anderen Weg geben? \\
+	\todo[color=green!40]{Subset} Da muss es aber doch noch einen anderen Weg geben? \\
 	Nachtrag: Ich habe EpQ schließlich von 1 bis 58 gefiltert, weil die ACE-Daten auch so vorliegen. 0-59 hat für \verb|get_velocities| funktioniert, aber nicht fürs Synchronisieren der Efficiencies.
 	\item \todo[color=green!40]{Efficiencies} Efficiencies soll ich ja erstmal von ACE nehmen. Da die nur für die Triples gelten (?) filtere ich die Doubles jetzt auch mal raus: \\ \verb|d.set_mask('Master','ech',12,120,reset=True)| \\ DONE: 05.09.
 	\item Für Ulysses gibt es das Datenprodukt \textit{swt}, das Sectorweight, nicht. \todo[color=green!40]{Sectorweight} Lars fragen bzw. selbst nachgucken, evtl. wird das nur über uswipha nicht eingeladen. Bis dahin setzte ich alle Gewichte auf 1 (in \verb|calc_w3dspecs)|). DONE
@@ -355,7 +355,7 @@ Habe jetzt nach langer Pause nochmal neu angefangen, Dist3D durchzugucken.
 		\item Warum suche ich eigentlich nur eine Kombi pro Tag? Warum histogrammiere ich nicht alle vorkommenden Kombis? \\ $\Rightarrow$ Verstanden: Das sind nur die Bingrenzen. Warum die gerade so gewählt werden, ist aber irgendwie trotzdem random? (Anne, das stimmte nicht)\\
 		AH! Alles falsch! Ich nehme die Uniquewerte, weil ich zum selben Zeitpunkt mehrere Messwerte habe. Ich will aber nur jeden Zeitpunkt einmal! Die Bingrenzen habe ich als Argument mitgegeben.
 		
-		\item \todo{ivoffset} Wozu ivoffset?
+		\item \todo[color=green!40]{ivoffset} Wozu ivoffset? Done: Synchronisiert die Indizes, steht auf Blatt im Ordner)
 	\end{itemize}
 \item Ich verstehe immer noch nicht so ganz, was ich da oben genau verstehen wollte -- warum soll sich die w-Diff. wann ändern?\\
 Aber kann es sein, dass ich die ersten Einträge beim AA genommen habe und das gar nicht 0 war, sondern eben der kleinste in diesem Zeitraum gemessene...?
@@ -434,7 +434,7 @@ Hatte ein Problem, auf dbData ein Histogramm zu erstellen. Problem gelöst: Colo
 \\ \\
 Besprechung Lars:
 \begin{itemize}
-	\item Problem Subset: Eigentlich arbeitet Dist3D ja nur auf d, d.h. die Masken sollte alle bleiben. Wird wahrscheinlich nur überschrieben/resettet in Dist3D. \\ \todo{Masken anpassen} checken $\Rightarrow$ verstanden, s. nächster Tag. Ist erstmal egal.
+	\item Problem Subset: Eigentlich arbeitet Dist3D ja nur auf d, d.h. die Masken sollte alle bleiben. Wird wahrscheinlich nur überschrieben/resettet in Dist3D. \\ \todo[color=green!40]{Masken anpassen} checken $\Rightarrow$ verstanden, s. nächster Tag. Ist erstmal egal.
 	\item \todo[color=green!40]{efficiencies} Efficiencies: Gibt es nicht direkt für Ulysses. Da kann ich mit den ACE-Werten vergleichen und dazwischen interpolieren -- denn es geht nur um den groben Gang, wenn man EpQ-Steps an verschiedenen Enden vergleichen will
 	\item \todo[color=green!40]{sector weights} Sektorgewichte: Gibt es wahrscheinlich nicht in den Ulysses-Daten. Base Rate Weights nehmen, die sind halt dasselbe, nur über einen gesamten Spin gemittelt. ($\Rightarrow$ Informationsverlust, denn es ist ja schon interessant zu wissen, ob in Sektor 1 20 Teilchen gemessen wurden oder über alle verteilt...(?)) \\ BRW sind wahrscheinlich bei meinem He-Subset immer 1, weil da eh nicht viel gemessen wurde... \\
 	DONE: einfaches BRW als Sectorweight übergeben. \todo{brw} Später aber nochmal gucken, wie oft das nicht 1 ist.
@@ -449,13 +449,13 @@ Besprechung Lars:
 	\begin{itemize}
 		\item erste Überlegung: Mit mpq-Algorithmus He sauber auf 4 abbilden (?). Dann liegen da noch ein paar andere drüber (oben rechts in EpQ vs ToF), die man über E vs ToF rausfiltern kann\\
 		Drüber nachdenken, aber es geht viel einfacher:
-		\\ \todo{He ausschneiden und wegschreiben} (Wie schreibe ich PHA-Worte weg? Wie liegen die eigentlich vor...?)
+		\\ \todo[color=green!40]{He ausschneiden und wegschreiben} (Wie schreibe ich PHA-Worte weg? Wie liegen die eigentlich vor...?) DONE: Einfache txt-Files...
 		\item Range: In RNG0 sind He und Protonen, in RNG1 schwerere Ionen. Die Boxen sind einfache Rechtecke in m, mpq und dann in ToF vs EpQ Dreieck/Schlauch. D.h. als erstes nur RNG0 maskieren.
 		\item Dann eine \textit{wandernde Box} in E-vs-ToF-Darstellung (animate) legen: Evtl. per Mouseclick-Tracker: Bei welcher ToF ist der He-Bulk beim jeweiligen EpQ-Step? Wenn das PHA in einer Box innerhalb $\pm$ Kanäle liegt: PHA wegschreiben, dann habe ich mein Set, auf dem ich arbeiten kann und man braucht keinen komplizierten mpq-Algorithmus. In der senkrechten kann ich das genauso mitfiltern, aber bei unseren 50 Tagen lag da bei rng0 eigentlich auch nichts. \\ Super, dass das so sauber ist!
 	\end{itemize}
 	\item Doubles sind für uns nicht interessant, weil es für die keine Detektorinfo gibt $\rightarrow$ keine 3D-Auflösung
 	\item Geometriefaktor ist im Prinzip nur vom Instrument abhängig, soll ich also von ACE übernehmen
-	\item Robert hat DPU geschickt. \todo{DPU} Mal reingucken
+	\item Robert hat DPU geschickt. \todo[color=green!40]{DPU} Mal reingucken
 \end{itemize}
 
 \DayInSep{Do}{5}
@@ -535,7 +535,7 @@ Headlines und EpQ geregelt.\\
 Lars gefragt:
 \begin{itemize}
 	\item Komische Signatur in ET-Matrix rechts von He+: Lars weiß auch nicht, was das ist. Ganz komisch, er forscht nach. Man kann das einigermaßen gut von He+ trennen, aber es besteht die Gefahr, dass das He+ selbst ist, was zeitweise falsch zugewiesen wurde und was man dann wegschneiden würde. Zeitlich ist das auch nicht einchränkbar.\\ Es gibt zwei seltsame Peaks: Einr ist ein Doublepeak, der andere ein Treblepeak
-	\item Lars hat 2D-Maske gesetzt und dann die Zeiträume angeguckt bzw. sich die Dat\part{title}en zu diesen Zeiträumen angeguckt (bzw. die zur inversen Maske!). Es gibt aber nicht immer Parallelen zu den anderen komischen Signaturen und das He+-Signal gibts auch immer noch.\\
+	\item Lars hat 2D-Maske gesetzt und dann die Zeiträume angeguckt bzw. sich die Daten zu diesen Zeiträumen angeguckt (bzw. die zur inversen Maske!). Es gibt aber nicht immer Parallelen zu den anderen komischen Signaturen und das He+-Signal gibts auch immer noch.\\
 	Könnte auch ein seltsamer Bitfehler sein...? Alle 64 Kanäle in Tch?
 	\item Lars hat mir \textit{mpq-Algorithmus}'erklärt: Todo
 	\item \todo[color=green!40]{mpq-Alg} Versuchen, das formelmäßig nachzuvollziehen und evtl. auch an H+, He2+ und He+ durchführen (gut zu erkennen in EpQ vs. ToF).\\
@@ -612,7 +612,7 @@ Ich will rausfinden, welcher Offset-Winkel jetzt richtig ist.
 	
 	\todo[color=green!40]{AA Plot} Ich bräuchte mal einen ordentlichen Plot für den Verlauf des AA. Done: Funktion in \verb|DataLoader/pui_ulysses.py|
 \end{itemize}
-\todo{w} W\_he in Dist2D checken: Das gibts auch für He2+, aber scheint etwa dasselbe zu sein...? \\
+\todo{w} W\_he in Dist3D checken: Das gibts auch für He2+, aber scheint etwa dasselbe zu sein...? \\
 Ich gehe jetzt über die vz und vy- Geschwindigkeiten, histogrammiere die und schaue, wie sehr die von 0 abweichen. 180 Grad scheint am besten zu sein. Was in mit den fehlenden 22.5 Grad? Und warum verändert sich das wspec mit Schnitten in x-Richtung?
 
 
@@ -623,7 +623,7 @@ Zum Offset:
 	\item DPU: Angeblich können die noch einen Versatz eingestellt haben. Nachgucken.
 	\item Vielleicht kommt dieser Effekt auch dadurch zustande, dass bei 202.5 Grad vy = 0 zwar nicht im Zentrum des Sektors liegt, aber schon mit drin ist? Prüfen.
 	\item Außerdem prüfen, wie das aussieht, wenn ich die Eigengeschwindigkeit ausstelle. So kann ich die auch verifizieren.
-	\item Mit in die Arbeit: Irgendwie schön darstellen, dass die Überlegungen richtig sind: Für verschiedene AA Sektor- und Detektorinformationen (das Maximum / den Schwerpunkt) historgrammieren (He2+)
+	\item Mit in die Arbeit: Irgendwie schön darstellen, dass die Überlegungen richtig sind: Für verschiedene AA Sektor- und Detektorinformationen (das Maximum / den Schwerpunkt) histogrammieren (He2+)
 \end{itemize} 
 Was sind die wiss. Fragestellungen, die ich als nächstes bearbeiten kann:
 \begin{itemize}
@@ -641,10 +641,10 @@ Winkel umgekehrt, um den der Sektor 0 gegen SunPulser gedreht wird, denn man mus
 Oh! Die Detektoren sind andersrum angeordnet, als ich die ganze Zeit dachte: Det0 ist außen, wird also bei großen AA angesprochen, Det1 der in der Mitte und Det2 der ganz innen.
 
 \DayInOkt{Mi}{2}
-Ich habe jetzt das Histogramm Det/Sec polar umgebaut. Man sieht, dass bei das Maximum bei kleinen AA eher auf Sektor 3 rutscht und bei größeren AA auf Sektor 4:
+Ich habe jetzt das Histogramm Det/Sec polar umgebaut. Man sieht, dass das Maximum bei kleinen AA eher auf Sektor 3 rutscht und bei größeren AA auf Sektor 4:
 \begin{itemize}
 	\item Das spricht dafür, dass wir die richtige Krümmung haben
-	\item Ob der Winkel 180 Grad sind oder 202.5 oder was dazwischen: Keine Ahnung. Mit dem Kollimatormodell kann man das auch nicht so richtig feststellen (wo geht die x-Achse durch?), weil auch nicht ganz klar ist, ob wir die rz-Achse richtig angebracht haben. Man könnte die BAse-Points auch links mit negativem Sinus beginnen, dann verschiebt sich alles ein bisschen in Richtung der konvexen Sektorkante. \todo{Offset Angle Sunpulser} Ich behalte das jetzt einfach auf 180 Grad und mache weiter und frage Lars bzw. schaue, ob das mit He+ einen Unterschied macht.
+	\item Ob der Winkel 180 Grad sind oder 202.5 oder was dazwischen: Keine Ahnung. Mit dem Kollimatormodell kann man das auch nicht so richtig feststellen (wo geht die x-Achse durch?), weil auch nicht ganz klar ist, ob wir die rz-Achse richtig angebracht haben. Man könnte die Base-Points auch links mit negativem Sinus beginnen, dann verschiebt sich alles ein bisschen in Richtung der konvexen Sektorkante. \todo{Offset Angle Sunpulser} Ich behalte das jetzt einfach auf 180 Grad und mache weiter und frage Lars bzw. schaue, ob das mit He+ einen Unterschied macht.
 \end{itemize}
 
 \DayInOkt{Fr}{4}
@@ -657,8 +657,14 @@ Mache jetzt weiter mit der He2+-Bulk-Velocity-Berechnung, um sie mit der von SWO
 	Habe gleich auch noch die Effizienzen für He2+ angepasst und weggeschrieben von den ACE-Effizienzen, falls ich die Gewichtung noch einbaue.
 \end{itemize}
 Jetzt passt es! (He2+-Verteilung ist nur etwas breiter)\\
-Und supernice: wenn ich die SC-Eigengeschwindigkeit rausnehme, passt es nicht mehr, d.h. das scheine ich richtig gemacht zu haben.
+Und supernice (ist leider falsch, s.u.): wenn ich die SC-Eigengeschwindigkeit rausnehme, passt es nicht mehr, d.h. das scheine ich richtig gemacht zu haben.
 \\
 Morgen: Überlegen, ob ich vielleicht auch noch was über den Winkel rausfinden kann. Überlegen: Verändert sich der Betrag...?
+
+
+\DayInOkt{Sa}{5}
+Das war Quatsch mit der Eigengeschwindigkeit, ich hatte nur wieder vergessen, die Ladung an He2+ anzupassen...\\
+Fazit: Sowohl für Eigengechwindigkeit als auch für SP-Angle ändert sich die Verteilung zwar, aber nur im Detail und nicht wirklich (von mir) beurteilbar.
+
 
 \end{document}

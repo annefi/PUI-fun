@@ -273,6 +273,41 @@ Vasyliunas und Siscoe:
 	%
 	%
 	%
+	\subsection{Aspect Angle}
+	\begin{itemize}
+		\item Große Variation sorgt dafür, dass ein größerer Bereich im Geschwindigkeitsraum abgescannt werden kann!
+	\end{itemize}
+	%
+	%
+	%
+	\subsection{Koordinatensysteme}
+	\begin{itemize}
+	\item ACE benutzt GSE: 
+		\begin{itemize}
+			\item G: from SC/Earth to Sun
+			\item S: against SC orbit motion in ecliptic
+			\item E: completes right handed triad (ecliptic north pole)
+		\end{itemize}
+	\item RTN system:
+		\begin{itemize}
+			\item R: from Sun to SC
+			\item T: w x R (w = Sun's spin axis) (Richtung Erdrotation)
+			\item N: completes right-handed triad (ecliptic north when SC in ecliptic)
+		\end{itemize}
+	\item Koordinaten für den Kollimator sind reversed RTN:
+		\begin{itemize}
+			\item R: from SC to Sun
+			\item T: w x R (w = Sun's spin axis) (entgegen Erdrotation)
+			\item N: completes right-handed triad (ecliptic north when SC in ecliptic
+		\end{itemize}
+	Grund: Konsistenz mit GSE: FoV zeigt vom SC Richtung Sonne und ist x/R-POSITIV.\\
+	Beim Übergang zum VSpace: Einmal umdrehen, sodass von der Sonne zum SC strömende Teilchen positive Geschwindigkeit haben. Damit dreht sich auch T wieder um und ich bin wieder im \textit{echten} RTN-System. \\ \\
+	Aspect-Phi wird positiv für nun negative T-Achse (Guckrichtung SC-Sonne: links)
+	\end{itemize}
+	%
+	%
+	%
+
 	\subsection{Sunpulse-Sensor}
 	\begin{itemize}
 		\item \cite{swics_dpu}: "The S/C signal \textit{spin rate} is used to divide each spin into 8 sectors. (...) A measuring period alsways starts with sector 0." Sector adjustment command ML3.2 definiert die Orientierung (den Winkel) zwischen Sun Pulse und der Sektorierung. Normalfall: Sun direction fällt zusammen mit dem Zentrum von Sektor 4. 
@@ -370,6 +405,7 @@ Vasyliunas und Siscoe:
 	\item Zeichnungen s. Kladde s. 41 und 42
 	\item man muss He+ erstmal rausfiltern $\rightarrow$ eig. braucht man mpq-Algorithmus. Ist aber in Doubles gut sichtbar, deshalb gehts auch so. (Stelle Methodik vor, um He+ rauszustellen, S. 39)
 	\item Kollimatornormale muss antiparallel zu v-Vektor eines Teilchens ausgerichtet sein, damit es detektiert werden kann. (Teilchen variabler Gechwindigkeit entlang der Normalen rausschicken, in v-Raum eintragen, Punktspiegelung an Ursprung ergibt Akzeptanz)
+	\item Abdeckung flach ist 69 Grad (rausfinden, woher Lars das hat). $\Rightarrow$ $\pm$ 69 Grad FoV. PLASTIC: Nur $\pm$ 22.5 Grad
 	\item im v-Raum: Kollimator ist Ausschnitt einer Kugelschale
 	\item Channel \citep{gloeckler_1992}:
 	\begin{itemize}

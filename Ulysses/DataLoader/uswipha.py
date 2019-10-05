@@ -69,7 +69,7 @@ class uswipha(dbData):
         self.data["det"]=array(self.data["det"])
         self.data["rng"]=array(self.data["rng"])
         self.data["brw"]=array(self.data["brw"])
-        self.data["vHe+"]=getvelocity(4.,1.,self.data["epq"])
+        self.data["vHe+"] = getvelocity(4.,1.,self.data["epq"])
 
     def calc_d90(self):
         offy = self.data["year"] - 1990
