@@ -227,20 +227,20 @@ class collimator(object):
         for sec in range(8):
             for ind, ang in enumerate(self.ang_sec):
                 # first det:
-                self.FoV[0, sec, :, ind * self.nrp_det:(ind + 1) * self.nrp_det] = rotate(self.det1, self.rax,
+                self.FoV[0, sec, :, ind * self.nrp_det:(ind + 1) * self.nrp_det] = rotate(self.det3, self.rax,
                                                                                           sec * 45. + ang,
                                                                                           deg=True).reshape(
-                    self.det1.shape)
+                    self.det3.shape)
                 # second det:
                 self.FoV[1, sec, :, ind * self.nrp_det:(ind + 1) * self.nrp_det] = rotate(self.det2, self.rax,
                                                                                           sec * 45. + ang,
                                                                                           deg=True).reshape(
                     self.det2.shape)
                 # third det:
-                self.FoV[2, sec, :, ind * self.nrp_det:(ind + 1) * self.nrp_det] = rotate(self.det3, self.rax,
+                self.FoV[2, sec, :, ind * self.nrp_det:(ind + 1) * self.nrp_det] = rotate(self.det1, self.rax,
                                                                                           sec * 45. + ang,
                                                                                           deg=True).reshape(
-                    self.det3.shape)
+                    self.det1.shape)
 
 
 

@@ -18,10 +18,10 @@ He1 =  True #False
 He2 =  False #True
 
 # load Ulysses data:
-years = [1995]
+years = [1993]
 
 if He1:
-    d1 = uswipha(year=years, tf=[[1, 3]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
+    d1 = uswipha(year=years, tf=[[1, 10]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
     d1.sync_swoops()
     d1.sync_traj()
 
@@ -41,9 +41,9 @@ if He1:
     print('*** Load Subset ***')
     d1.load_subset(filename = 'd1.tmp', force = True)
 
-    D = Dist3D(d1, mass = 4, charge = 1)
+    D = Dist3D(d1, mass = 4, charge = 1, sc_vel = False)
 
-    ws = WSpec(D, color_norm = 'sg')
+    #ws = WSpec(D, color_norm = 'sg')
 
 
 

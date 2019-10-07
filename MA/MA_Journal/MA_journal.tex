@@ -666,5 +666,14 @@ Morgen: Überlegen, ob ich vielleicht auch noch was über den Winkel rausfinden 
 Das war Quatsch mit der Eigengeschwindigkeit, ich hatte nur wieder vergessen, die Ladung an He2+ anzupassen...\\
 Fazit: Sowohl für Eigengechwindigkeit als auch für SP-Angle ändert sich die Verteilung zwar, aber nur im Detail und nicht wirklich (von mir) beurteilbar.
 
-
+\DayInOkt{Mo}{7}
+Seit Samstag dabei, die 1D-Sachen zu bauen:
+\\ \\
+\todo{Frage Lars} Mit \textit{1D} meinte Lars den Betrag, oder? \\ Jedenfalls baue ich eine Funktion \verb|spec_1d|, die den Betrag im SC- und im SW-frame nimmt und histogrammiert. Dabei muss ich die gesamte Gewichtung für beide Fälles durchführen.\\
+\todo[color=green!40]{Norm auslagern} Erstellung des Norm-Arrays auslagern? Das nimmt immer viel Platz weg und mit den entsprechenden Paramatern sollte das gut zu verallgemeinern sein.
+\\ \\
+Ich hatte richtig komische 1D-Spektren mit krass hohen Werten (w = 2 im SW-Frame, also quasi dreifache vsw). Der Grund war, dass die Detektorinformation noch falsch war. Angeblich sind jetzt immer viele Teilchen mit krass großer vx und vy-Komponente reingekommen, die eigentlich ganz moderate GEschwindigkeit hatten. Habe die Detektoren jetzt richtig getauscht (von innen nach außen 2 -- 1 --0)\\ \\
+Anderes Problem mit der Normierung: 
+Wie norm\_arr-w-Bins beziehen sich auf den SC-frame. Wenn ich die w-Werte der PHA-Worte in den SW-frame verschiebe, ordne ich falsche w-Normen zu. Bsp: Die Norm sieht für w = 1 den Wert 5 vor. Jetzt habe ich einen w-Wert, der im SC-frame 2 ist, im SW-frame aber 1. Dann wird derfälschlicherweise mit 5 normiert, obwohl er eigentlich den Wert von w=2 braucht.\\
+Ich habe keine Ahnung, wie ich das lösen kann. Bins verschieben bringt nichts beim Betrag. Vielleicht noch einen neuen WSpace für den SW-frame?
 \end{document}
