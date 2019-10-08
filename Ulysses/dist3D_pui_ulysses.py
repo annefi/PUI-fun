@@ -558,7 +558,6 @@ class Dist3D(object):
         (Built for comparing the He2+ velocity with SWOOPS' measured vsw)
         :return:
         '''
-
         if doy_val == False:
             try:
                 self.d.remove_submask('mmask', 'doy')
@@ -668,17 +667,15 @@ class Dist3D(object):
         # consider the PHA words *only now*:
         wgts = self.d.get_data("He1+", "wgts_sec") # 1 / (phase space volume * eff)
         swgt = self.d.get_data("He1+","brw") ### real sector weight not available for Ulysses
-        wxsw = self.d.get_data('He1+', 'wxsw')  # 1D data in solar wind frame
-        wxsc = self.d.get_data('He1+', 'wx')  # 1D data in space craft frame
+        wxsw = self.d.get_data('He1+', 'wsw')  # 1D data in solar wind frame
+        wxsc = self.d.get_data('He1+', 'wsc')  # 1D data in space craft frame
 
         twts = zeros(wxsc.shape)
         for i in range(wxsc.shape[1]):
             twts[:,i] = wgts*swgt
 
-        wbins_shifted = wbins - 1.
-
         H2_sc, bs = histogram(wxsc.flatten(), bins = wbins, weights = twts.flatten())
-        H2_sw, bs = histogram(wxsw.flatten(), bins = wbins_shifted, weights = twts.flatten())
+        H2_sw, bs = histogram(wxsw.flatten(), bins = wbins, weights = twts.flatten())
 
 
         self.d.remove_submask("He1+", "wHe1+2")
@@ -689,8 +686,6 @@ class Dist3D(object):
         fig, ax = plt.subplots()
         norm_arr[norm_arr == 0] = 1
 
-
-
         H_sc = H2_sc/norm_arr
         H_sw = H2_sw/norm_arr
 
@@ -700,15 +695,14 @@ class Dist3D(object):
         self.H_sc = H_sc
         self.H_sw = H_sw
 
+        H_sc = append(H_sc,0)
+        H_sw = append(H_sw, 0)
 
-        # # shifted bins for sw frame:
-        # #wbins_sc = wbins - 1.
-        # ax.plot(wbins, H_sc, ls='steps-post', label= 'SC frame', color='b')
-        # ax.plot(wbins, H_sw, ls='steps-post', label='SW frame', color='r')
-        # ax.set_xlim(-0.5,3)
-        # ax.legend()
-        #
-        # return H
+        ax.plot(wbins, H_sc, ls='steps-post', label= 'SC frame', color='b')
+        ax.plot(wbins, H_sw, ls='steps-post', label='SW frame', color='r')
+        #ax.set_xlim(-0.5,3)
+        ax.legend()
+
 
     def get_norm(self, vswbins=arange(500., 800.1, 10.), aspphi=(-30., 30.), min_whe = 0.0, wbins=arange(-2., 2.01,
                                                                                                          0.2), dim = 3):
@@ -764,6 +758,28 @@ class Dist3D(object):
                                                      bins=(wbins, wbins, wbins))
                             norm_arr += H2 * H[iv, ip, it]
         return norm_arr
+
+
+
+    def skymap(self, w_int):
+        '''
+        w atm in SC frame
+
+        :return:
+        '''
+        # mask w interval
+        self.d.set_mask('w_shell', 'wsc', w_int[0], w_int[1], reset = True)
+        wr = self.d.get_data('w_shell','wx')
+        wt = self.d.get_data('w_shell','wy')
+        wn = self.d.get_data('w_shell','wz')
+
+
+
+
+
+
+
+
 
 
 

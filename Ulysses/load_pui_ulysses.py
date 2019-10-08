@@ -13,15 +13,19 @@ from WSpec import WSpec
 ###
 
 
+# # He1+
+# He1 = True #False #
+# He2 = False #True #
 
-He1 =  True #False
-He2 =  False #True
+# He2+
+He1 = False #
+He2 = True #
 
 # load Ulysses data:
-years = [1993]
+years = [1997]
 
 if He1:
-    d1 = uswipha(year=years, tf=[[1, 10]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
+    d1 = uswipha(year=years, tf=[[350,365]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
     d1.sync_swoops()
     d1.sync_traj()
 
@@ -48,7 +52,7 @@ if He1:
 
 
 if He2:
-    d2 = uswipha(year=years,tf=[[150,170]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/epq/')
+    d2 = uswipha(year=years,tf=[[241,242]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/epq/')
     d2.sync_swoops()
     d2.sync_traj()
 
@@ -57,8 +61,8 @@ if He2:
     d2.set_mask('Master','ech',12,250,reset=True) # exclude doubles
     d2.set_mask('Master','brw',1,np.inf,reset=True)
 
-    d2.set_mask('Master','aa_tot', 20,30)
-    # d2.set_mask('Master','aspphi', -5, 5)
+    # d2.set_mask('Master','aa_tot', 0 , 5)
+    # d2.set_mask('Master','aspphi', 1,5)
     # d2.set_mask('Master','asptheta',5,7)
 
 
@@ -71,6 +75,9 @@ if He2:
     d2.load_subset(filename = 'd2.tmp', force = True)
 
     D = Dist3D(d2, mass = 4, charge = 2)
+
+    print('aspphi: ',D.d.get_data('Master','aspphi')[0])
+    print('asptheta: ', D.d.get_data('Master', 'asptheta')[0])
     #ws = WSpec(D, color_norm = 'sg')
 
 

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from custom_colours import lighten_color
 
 class collimator(object):
-    def __init__(self, nrs_para=5, nrs_perp=3, nrs_sec=5, edges=False, aspphi=0.00001, asptheta=0.00001, vel=600.,
+    def __init__(self, nrs_para=5, nrs_perp=2, nrs_sec=5, edges=True, aspphi=0.00001, asptheta=0.00001, vel=600.,
                  vsw=300, offset_sp = 135.):
         """
         Class to calculate the field of view of SWICS (Ulysses) nrs_para,nrs_perp -> number of angle steps for
@@ -44,7 +44,7 @@ class collimator(object):
             self.angoffs_sec = 45. / self.nrs_sec / 2.
 
         self.ang_para = linspace(-self.angoffs_para, -30. + self.angoffs_para, nrs_para)
-        self.ang_perp = linspace(self.angoffs_perp, 4. - self.angoffs_perp, nrs_perp)
+        self.ang_perp = linspace(-2 + self.angoffs_perp, 2. - self.angoffs_perp, nrs_perp)
         self.ang_sec = linspace(self.angoffs_sec, 45. - self.angoffs_sec, nrs_sec)
 
         self.base_points = zeros((3, self.ang_perp.shape[0]))
@@ -85,21 +85,26 @@ class collimator(object):
         ax.plot(self.det2[0, :], self.det2[1, :], self.det2[2, :], "o", color="forestgreen", ms=4.)
         ax.plot(self.det3[0, :], self.det3[1, :], self.det3[2, :], "o", color="lawngreen", ms=4.)
         # # # axes for AA-rotation:
-        # ax.plot([0, self.rphiax[0] * 2.5], [0, self.rphiax[1] * 2.5], [0, self.rphiax[2] * 2.5], "-", color="peru",
-        #         ls=":", label = 'asp_phi rotation axis')
-        # ax.plot([0, self.rthetaax[0] * 2.5], [0, self.rthetaax[1] * 2.5], [0, self.rthetaax[2] * 2.5], "-",
-        #         color="burlywood",
-        #         ls=":", label = 'asp_phi rotation axis')
+        ax.plot([0, self.rphiax[0] * 2.5], [0, self.rphiax[1] * 2.5], [0, self.rphiax[2] * 2.5], "-", color="peru",
+                ls=":", label = 'asp_phi rotation axis')
+        ax.plot([0, self.rthetaax[0] * 2.5], [0, self.rthetaax[1] * 2.5], [0, self.rthetaax[2] * 2.5], "-",
+                color="burlywood",
+                ls=":", label = 'asp_phi rotation axis')
         # Spacecraft Z-Axis (Spacecraft rotation axis, direction mostly Sunward):
         ax.plot([0, self.rax[0]], [0, self.rax[1]], [0, self.rax[2]], "-", color="orange", label = 'SC rotation axis')
         # Swics Z-Axis relative to rotation axis:
         ax.plot([0, self.rzax[0]], [0, self.rzax[1]], [0, self.rzax[2]], "-", color="lime", label = 'SWICS z-axis initial')
         # # viewing direction sunpulser when triggered (=sec0)
-        # ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow",
-        #        lw=3., label = 'sunpulser viewing when triggered')
+        ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow",
+               lw=3., label = 'sunpulser viewing when triggered')
         # #rotated rzax
-        # ax.plot([0, self.rzaxrot[0]], [0, self.rzaxrot[1]], [0, self.rzaxrot[2]], "-", color="limegreen",
-        #         label = 'SWICS z-axis rotated')
+        ax.plot([0, self.rzaxrot[0]], [0, self.rzaxrot[1]], [0, self.rzaxrot[2]], "-", color="limegreen",
+                label = 'SWICS z-axis rotated')
+        sectors = True
+        if sectors == True:
+            for i in range(8):
+                rot_ax = rotate(self.rzaxrot, self.rax, i* (45), deg = True)
+                ax.plot([0, rot_ax[0]], [0, rot_ax[1]], [0, rot_ax[2]], "-", color="k")
         ax.legend(loc=4)
         return ax
 
@@ -285,6 +290,91 @@ class collimator(object):
             print("no valid sector given")
         return ax
 
+    def grid_plot_FoV(self, ax=None, sec='all'):
+        '''
+        works for nrs_para even(2), nrs_perp uneven (3), edges True, nrs_sec even (2)
+        :param ax:
+        :param sec:
+        :return:
+        '''
+        if ax == None:
+            fig = plt.figure()
+            ax = fig.add_subplot(111, projection='3d')
+            fig.canvas.set_window_title('FoV')
+            #ax.set_title('FoV')
+            ax.set_xlabel('x')
+            ax.set_ylabel('y')
+            ax.set_zlabel('z')
+            ax.scatter(0, 0, 0, c='k', s=5)
+            ax.plot([0, 4], [0, 0], [0, 0], c='k', lw=0.8)
+        colors = array([[77, 77, 0], [77, 57, 0], [77, 0, 0], [77, 0, 57], [38, 0, 77], [0, 38, 77], [0, 77, 77],
+                        [0, 77, 19]])
+        if isinstance(sec, int):
+            f = self.FoV[:, sec, :, :]
+            nrs = f.shape[-2] * f.shape[-1]
+            shade_arr = linspace(0.1, 3.5, nrs)
+            rgb = colors[sec]
+            cc = zeros((nrs, 3))
+            for j in range(nrs):
+                cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
+            ax.scatter(f[..., 0, :], f[..., 1, :], f[..., 2, :], c=cc)
+            # for det in range(3):
+            #     ax.plot([f[det,0,2],f[det,0,5]], [f[det,1,2],f[det,1,5]], [f[det,2,2],f[det,2,5]], c = 'k',
+            #             alpha=0.5)
+            #     ax.plot([f[det,0,6],f[det,0,9]], [f[det,1,6],f[det,1,9]], [f[det,2,6],f[det,2,9]], c = 'k', alpha=0.5)
+            for det in range(3):
+                # for p in range(2,3*self.nrs_para - 3,3):
+                #     ax.plot([f[det, 0, p], f[det, 0, p+3 ]], [f[det, 1, p], f[det, 1, p+ 3 ]], [f[det, 2, p], f[det, 2, p+ 3]],
+                #             c='k', alpha=0.5)
+                for p in range(1,3*self.nrs_para - 4,3):
+                    ax.plot([f[det, 0, p], f[det, 0, p+3 ]], [f[det, 1, p], f[det, 1, p+ 3 ]], [f[det, 2, p], f[det, 2, p+ 3]],
+                            c='k', alpha=0.5)
+                for p in range(19,32,3):
+                    ax.plot([f[det, 0, p], f[det, 0, p+3 ]], [f[det, 1, p], f[det, 1, p+ 3 ]], [f[det, 2, p], f[det, 2, p+ 3]],
+                            c='k', alpha=0.5)
+
+
+
+
+
+
+        elif sec == 'all':
+            f = self.FoV[:, :, :, :]
+            for i, s in enumerate(range(f.shape[-3])):
+                nrs = f.shape[-2] * f.shape[-1]
+                shade_arr = linspace(0.1, 3.5, nrs)
+                rgb = colors[i]
+                cc = zeros((nrs, 3))
+                for j in range(nrs):
+                    cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
+                ax.scatter(f[..., s, 0, :], f[..., s, 1, :], f[..., s, 2, :], c=cc)
+
+                # for det in range(3):
+                #     ax.plot([f[det, s,0, 2], f[det,s, 0, 5]], [f[det, s,1, 2], f[det, s,1, 5]], [f[det,s, 2, 2], f[det, s,2, 5]],
+                #             c='k',
+                #             alpha=0.5)
+                #     ax.plot([f[det,s, 0, 6], f[det,s, 0, 9]], [f[det,s, 1, 6], f[det,s, 1, 9]], [f[det,s, 2, 6], f[det,s, 2, 9]],
+                #             c='k', alpha=0.5)
+                for det in range(3):
+                    # for p in range(2,3*self.nrs_para - 3,3):
+                    #     ax.plot([f[det, 0, p], f[det, 0, p+3 ]], [f[det, 1, p], f[det, 1, p+ 3 ]], [f[det, 2, p],
+                    # f[det, 2, p+ 3]],
+                    #             c='k', alpha=0.5)
+                    for p in range(1, 3 * self.nrs_para - 4, 3):
+                        ax.plot([f[det, s,0, p], f[det, s,0, p + 3]], [f[det,s, 1, p], f[det, s,1, p + 3]],
+                                [f[det, s,2, p], f[det,s, 2, p + 3]],
+                                c='k', alpha=0.5)
+                    for p in range(19, 32, 3):
+                        ax.plot([f[det,s, 0, p], f[det, s,0, p + 3]], [f[det,s, 1, p], f[det, s,1, p + 3]],
+                                [f[det,s, 2, p], f[det,s, 2, p + 3]],
+                                c='k', alpha=0.5)
+
+                # # viewing direction sunpulser when triggered (=sec0)
+                # ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow",
+                #         lw=3., label='sunpulser viewing when triggered')
+        else:
+            print("no valid sector given")
+        return ax
 
 
 
