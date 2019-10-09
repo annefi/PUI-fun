@@ -100,11 +100,6 @@ class collimator(object):
         # #rotated rzax
         ax.plot([0, self.rzaxrot[0]], [0, self.rzaxrot[1]], [0, self.rzaxrot[2]], "-", color="limegreen",
                 label = 'SWICS z-axis rotated')
-        sectors = True
-        if sectors == True:
-            for i in range(8):
-                rot_ax = rotate(self.rzaxrot, self.rax, i* (45), deg = True)
-                ax.plot([0, rot_ax[0]], [0, rot_ax[1]], [0, rot_ax[2]], "-", color="k")
         ax.legend(loc=4)
         return ax
 
@@ -290,7 +285,7 @@ class collimator(object):
             print("no valid sector given")
         return ax
 
-    def grid_plot_FoV(self, ax=None, sec='all'):
+    def fancy_plot_FoV(self, ax=None, sec='all'):
         '''
         works for nrs_para even(2), nrs_perp uneven (3), edges True, nrs_sec even (2)
         :param ax:
@@ -298,7 +293,7 @@ class collimator(object):
         :return:
         '''
         if ax == None:
-            fig = plt.figure()
+            fig = plt.figure(figsize=(14., 14.))
             ax = fig.add_subplot(111, projection='3d')
             fig.canvas.set_window_title('FoV')
             #ax.set_title('FoV')
@@ -318,25 +313,25 @@ class collimator(object):
             for j in range(nrs):
                 cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
             ax.scatter(f[..., 0, :], f[..., 1, :], f[..., 2, :], c=cc)
-            # for det in range(3):
-            #     ax.plot([f[det,0,2],f[det,0,5]], [f[det,1,2],f[det,1,5]], [f[det,2,2],f[det,2,5]], c = 'k',
-            #             alpha=0.5)
-            #     ax.plot([f[det,0,6],f[det,0,9]], [f[det,1,6],f[det,1,9]], [f[det,2,6],f[det,2,9]], c = 'k', alpha=0.5)
+            # draw grid:
             for det in range(3):
-                # for p in range(2,3*self.nrs_para - 3,3):
-                #     ax.plot([f[det, 0, p], f[det, 0, p+3 ]], [f[det, 1, p], f[det, 1, p+ 3 ]], [f[det, 2, p], f[det, 2, p+ 3]],
-                #             c='k', alpha=0.5)
-                for p in range(1,3*self.nrs_para - 4,3):
-                    ax.plot([f[det, 0, p], f[det, 0, p+3 ]], [f[det, 1, p], f[det, 1, p+ 3 ]], [f[det, 2, p], f[det, 2, p+ 3]],
-                            c='k', alpha=0.5)
-                for p in range(19,32,3):
-                    ax.plot([f[det, 0, p], f[det, 0, p+3 ]], [f[det, 1, p], f[det, 1, p+ 3 ]], [f[det, 2, p], f[det, 2, p+ 3]],
-                            c='k', alpha=0.5)
-
-
-
-
-
+                # ___draw edges parallel (borders between sectors)
+                # _____ starting edge:
+                for p in range(self.nrs_perp/2, self.nrs_perp * (self.nrs_para -1), self.nrs_perp):
+                    ax.plot([f[det, 0, p], f[det, 0, p+self.nrs_perp]], [f[det, 1, p], f[det, 1, p+self.nrs_perp]],
+                            [f[det, 2, p],  f[det, 2,p+self.nrs_perp]],c='k',lw = 2., alpha=1)
+                # ____ ending edge:
+                sp = self.nrs_perp*self.nrs_para*(self.nrs_sec - 1) # starting point end ede:
+                for q in range(sp + self.nrs_perp/2, sp + self.nrs_perp * (self.nrs_para -1), self.nrs_perp):
+                    ax.plot([f[det, 0, q], f[det, 0, q+self.nrs_perp]], [f[det, 1, q], f[det, 1, q+self.nrs_perp]],
+                            [f[det, 2, q],  f[det, 2,q+self.nrs_perp]],c='k',lw = 2., alpha=1)
+                # ___draw edges perpendicular (border between detectors)
+                for sec in range(0, self.nrs_sec - 1):
+                    p = self.nrs_para * self.nrs_perp -1 - self.nrs_perp/2 + (sec * self.nrs_perp * self.nrs_para)
+                    print(p)
+                    step = self.nrs_perp * self.nrs_para
+                    ax.plot([f[det, 0, p], f[det, 0, p+step]], [f[det, 1, p], f[det, 1, p + step]],
+                            [f[det, 2, p],  f[det, 2,p + step]],c='k',lw = 2., alpha=1)
 
         elif sec == 'all':
             f = self.FoV[:, :, :, :]
@@ -347,27 +342,28 @@ class collimator(object):
                 cc = zeros((nrs, 3))
                 for j in range(nrs):
                     cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
-                ax.scatter(f[..., s, 0, :], f[..., s, 1, :], f[..., s, 2, :], c=cc)
-
-                # for det in range(3):
-                #     ax.plot([f[det, s,0, 2], f[det,s, 0, 5]], [f[det, s,1, 2], f[det, s,1, 5]], [f[det,s, 2, 2], f[det, s,2, 5]],
-                #             c='k',
-                #             alpha=0.5)
-                #     ax.plot([f[det,s, 0, 6], f[det,s, 0, 9]], [f[det,s, 1, 6], f[det,s, 1, 9]], [f[det,s, 2, 6], f[det,s, 2, 9]],
-                #             c='k', alpha=0.5)
+                ax.scatter(f[..., s, 0, :], f[..., s, 1, :], f[..., s, 2, :], c=cc, alpha = 0.5)
+                # draw grid:
                 for det in range(3):
-                    # for p in range(2,3*self.nrs_para - 3,3):
-                    #     ax.plot([f[det, 0, p], f[det, 0, p+3 ]], [f[det, 1, p], f[det, 1, p+ 3 ]], [f[det, 2, p],
-                    # f[det, 2, p+ 3]],
-                    #             c='k', alpha=0.5)
-                    for p in range(1, 3 * self.nrs_para - 4, 3):
-                        ax.plot([f[det, s,0, p], f[det, s,0, p + 3]], [f[det,s, 1, p], f[det, s,1, p + 3]],
-                                [f[det, s,2, p], f[det,s, 2, p + 3]],
-                                c='k', alpha=0.5)
-                    for p in range(19, 32, 3):
-                        ax.plot([f[det,s, 0, p], f[det, s,0, p + 3]], [f[det,s, 1, p], f[det, s,1, p + 3]],
-                                [f[det,s, 2, p], f[det,s, 2, p + 3]],
-                                c='k', alpha=0.5)
+                    # ___draw edges parallel (borders between sectors)
+                    # _____ starting edge:
+                    for p in range(self.nrs_perp / 2, self.nrs_perp * (self.nrs_para - 1), self.nrs_perp):
+                        ax.plot([f[det, s, 0, p], f[det, s, 0, p + self.nrs_perp]],
+                                [f[det, s, 1, p], f[det, s, 1, p + self.nrs_perp]],
+                                [f[det, s, 2, p], f[det, s, 2, p + self.nrs_perp]], c='k', lw = 2., alpha=1)
+                    # ____ ending edge:
+                    sp = self.nrs_perp * self.nrs_para * (self.nrs_sec - 1)  # starting point end ede:
+                    for q in range(sp + self.nrs_perp / 2, sp + self.nrs_perp * (self.nrs_para - 1), self.nrs_perp):
+                        ax.plot([f[det, s, 0, q], f[det, s, 0, q + self.nrs_perp]],
+                                [f[det, s, 1, q], f[det, s, 1, q + self.nrs_perp]],
+                                [f[det, s, 2, q], f[det, s, 2, q + self.nrs_perp]], c='k', lw = 2., alpha=1)
+                    # ___draw edges perpendicular (border between detectors)
+                    for sec in range(0, self.nrs_sec - 1):
+                        p = self.nrs_para * self.nrs_perp - 1 - self.nrs_perp / 2 + (
+                                    sec * self.nrs_perp * self.nrs_para)
+                        step = self.nrs_perp * self.nrs_para
+                        ax.plot([f[det, s, 0, p], f[det, s, 0, p + step]], [f[det, s, 1, p], f[det, s, 1, p + step]],
+                                [f[det, s, 2, p], f[det, s, 2, p + step]], c='k', lw = 2., alpha=1)
 
                 # # viewing direction sunpulser when triggered (=sec0)
                 # ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow",

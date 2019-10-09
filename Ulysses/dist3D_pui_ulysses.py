@@ -516,7 +516,7 @@ class Dist3D(object):
         self.bins_det = bins_det
         self.bins_sec = bins_sec
         if polar == True:
-            fig = plt.figure()
+            fig = plt.figure(figsize=(3,3))
             ax = plt.subplot(111, projection='polar')
             ax.set_ylim(0,2.8)
             ax.set_yticks([])
@@ -589,63 +589,8 @@ class Dist3D(object):
         ax.legend()
         return v
 
-
-    # def fail_wspec_1d(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-2., 4.01, 0.2), min_whe=0.0, aspphi=(-30.,
-    #                                                                                                          30.)):
-    #     self.d.remove_submask("Master", "vsw")
-    #     self.d.remove_submask("Master", "aspphi")
-    #     self.d.remove_submask("Master", "asptheta")
-    #     self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
-    #     self.d.set_mask("Master", "vsw", vswbins[0], vswbins[-1], reset=True)
-    #     self.d.set_mask("Master", "aspphi", aspphi[0], aspphi[1], reset=True)
-    #
-    #     # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
-    #     # to calculate the weights for normalising the final histograms:
-    #
-    #     norm_arr = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins=wbins, dim = 1)
-    #
-    #     # consider the PHA words *only now*:
-    #     wgts = self.d.get_data("He1+", "wgts_sec") # 1 / (phase space volume * eff)
-    #     swgt = self.d.get_data("He1+","brw") ### real sector weight not available for Ulysses
-    #     w_sw = self.d.get_data('He1+', 'wsw') # 1D data in solar wind frame
-    #     w_sc = self.d.get_data('He1+', 'wsc')  # 1D data in space craft frame
-    #
-    #     twts = zeros(w_sc.shape)
-    #     for i in range(w_sc.shape[1]):
-    #         twts[:,i] = wgts*swgt
-    #
-    #     H2_sc, bs = histogram(w_sc.flatten(), bins = wbins, weights = twts.flatten())
-    #     H2_sw, bs = histogram(w_sw.flatten(), bins = wbins, weights = twts.flatten())
-    #
-    #     self.H2_sc = H2_sc
-    #     self.H2_sw = H2_sw
-    #     self.norm_arr = norm_arr
-    #
-    #     self.d.remove_submask("He1+", "wHe1+2")
-    #     self.d.remove_submask("Master", "vsw")
-    #     self.d.remove_submask("Master", "aspphi")
-    #     self.d.remove_submask("Master", "asptheta")
-    #
-    #     #return norm_arr, H2
-    #
-    #     # plot:
-    #     fig, ax = plt.subplots()
-    #     norm_arr[norm_arr == 0] = 1
-    #
-    #     H_sc = H2_sc/norm_arr
-    #     H_sw = H2_sw/norm_arr
-    #
-    #     H_sc = append(H_sc,0)
-    #     H_sw = append(H_sw,0)
-    #     self.H_sc = H_sc
-    #     self.H_sw = H_sw
-    #
-    #     # shifted bins for sw frame:
-    #     wbins_sc = wbins - 1.
-    #     ax.plot(wbins, H_sc, ls='steps-post', label= 'SC frame', color='b')
-    #     ax.plot(wbins, H_sw, ls='steps-post', label='SW frame', color='r')
-    #     ax.set_xlim(-0.5,3)
-    #     ax.legend()
+    def calc_bulk_vel(self):
+        pass
 
     def wspec_1d(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-2., 2.01, 0.2), min_whe=0.0, aspphi=(-30.,
                                                                                                              30.)):

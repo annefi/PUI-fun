@@ -79,14 +79,14 @@ class Filter_He(uswipha):
         self.esa_fin = []
         self.tch_fin = []
         self.tch_fin_right = []
-        fout = open('data_misc/clicks_epq_ch_he_mask2Ds.txt', 'w')
+        fout = open('data_misc/clicks_epq_ch_he2+test_mask2Ds.txt', 'w')
         fout.write('Result of the manual clicking for He+ in EpQ vs. Tch'
                    '\nESA Tch_left Tch_right\n')
         for esa_i in unique(esa):
             ind = where(esa == esa_i)[0]
             t1 = min(tch[ind])
             t2 = max(tch[ind])
-            fout.write('%i   %f   %f3 \n'%(esa_i, t1, t2))
+            fout.write('%i   %i   %i \n'%(esa_i, t1, t2))
             self.esa_fin.append(esa_i)
             self.tch_fin.append(t1)
             self.tch_fin_right.append(t2)
@@ -142,7 +142,7 @@ class Filter_He(uswipha):
             fout.close()
 
 
-    def read_clicks(self, data_type = 'epq', species = 'He1+'):
+    def read_clicks(self, data_type = 'epq', species = 'He2+'):
         '''
         Reads in file in which the clicks for He+ Tof and Ech channels per Epq step are stored
         '''
@@ -155,7 +155,7 @@ class Filter_He(uswipha):
             elif species == 'H+':
                 fin = open('data_misc/clicks_epq_ch_h.txt', 'r')
             elif species == 'He2+':
-                fin = open('data_misc/clicks_epq_ch_he2.txt', 'r')
+                fin = open('data_misc/clicks_epq_ch_he2+test_mask2Ds.txt', 'r')
             for i in range(2):
                 fin.readline()
             for line in fin:
@@ -183,7 +183,7 @@ class Filter_He(uswipha):
             self.ech_fin = array(self.ech_clicks).astype(int)
             self.tch_fin = array(self.tch_clicks).astype(int)
 
-    def filter_pha(self, year, dt = 'epq', species = 'He1+'):
+    def filter_pha(self, year, dt = 'epq', species = 'He2+'):
         try:
             len(self.tch_fin)
         except:
@@ -195,7 +195,7 @@ class Filter_He(uswipha):
                 elif species == 'H+':
                     os.mkdir("%s%s/%.4i" % ('data_misc/pha_h/', dt, year))
                 elif species == 'He2+':
-                    os.mkdir("%s%s/%.4i" % ('data_misc/pha_he2/', dt, year))
+                    os.mkdir("%s%s/%.4i" % ('data_misc/pha_he2_new/', dt, year))
             except:
                 pass
             if species == 'He1+':
@@ -203,7 +203,7 @@ class Filter_He(uswipha):
             elif species == 'H+':
                 fout = open("%s%s/%.4i/%.3i.pha" % ('data_misc/pha_h/', dt, year, doy),'w')
             elif species == 'He2+':
-                fout = open("%s%s/%.4i/%.3i.pha" % ('data_misc/pha_he2/', dt, year, doy),'w')
+                fout = open("%s%s/%.4i/%.3i.pha" % ('data_misc/pha_he2_new/', dt, year, doy),'w')
             fname = "%s%.4i/%.3i.pha" % (self.path, year, doy) # path to PHAs
             print fname
             try:
