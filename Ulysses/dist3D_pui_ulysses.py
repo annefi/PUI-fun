@@ -590,7 +590,10 @@ class Dist3D(object):
         return v
 
     def calc_bulk_vel(self):
-        pass
+        '''
+        :return:
+        '''
+        # unique vsw
 
     def wspec_1d(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-2., 2.01, 0.2), min_whe=0.0, aspphi=(-30.,
                                                                                                              30.)):

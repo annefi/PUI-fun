@@ -676,4 +676,31 @@ Ich hatte richtig komische 1D-Spektren mit krass hohen Werten (w = 2 im SW-Frame
 Anderes Problem mit der Normierung: 
 Wie norm\_arr-w-Bins beziehen sich auf den SC-frame. Wenn ich die w-Werte der PHA-Worte in den SW-frame verschiebe, ordne ich falsche w-Normen zu. Bsp: Die Norm sieht für w = 1 den Wert 5 vor. Jetzt habe ich einen w-Wert, der im SC-frame 2 ist, im SW-frame aber 1. Dann wird derfälschlicherweise mit 5 normiert, obwohl er eigentlich den Wert von w=2 braucht.\\
 Ich habe keine Ahnung, wie ich das lösen kann. Bins verschieben bringt nichts beim Betrag. Vielleicht noch einen neuen WSpace für den SW-frame?
+
+\DayInOkt{Do}{10}
+Habe ei Grid ins Kollimatormodell gebaut und den ersten Sektor zentriert (so muss das richtig sein).\\
+Lars Besprechung:
+\begin{itemize}
+	\item Wichtig: BRW drauf gewichten, damit nicht einzelne suprathermale Teilchen überproportional gezählt werden
+	\item Dass die nominelle (Richtung Sonne) radiale Richtung unseres Kollimatormodells nicht mit dem hist\_sec\_det-Maximum übereinstimmt, ist komisch. Das könnte man selbst sehr ausführlich untersuchen:
+	\begin{itemize}
+		\item Evtl. strömt der He2-Bulk also doch nicht immer radial
+		\item Langzeitdaten angucken, damit man nicht einzelne Ausreißer trifft (CIRs etc.)
+		\item Abweichung quantifizieren und in Abhängigkeit vom AA oder vom Sonenzylus, von der Latitude untersuchen (Erwartung: über den Polen strömt der SW bsodners radial ab) 
+	\end{itemize}
+	\item Ich will aber PUIs machen: Es wäre schön eine Begründung zu haben aber naja, Zeit... in die Arbeit schreiben, dass es meistens passt, nachvollziehbar darstellen. Schreiben, dass wir das nach bestem Wissen bestimmt haben.
+	\item Struktur der Arbeit: s. Blatt
+	\item Weiter mit PUI:
+	\begin{itemize}
+		\item Skymaps, anfangen mit w=1, dann andere ws, dann auf B-Feld und Zeit und Sonnenabstand untersuchen
+		\item Erwartung: bei kleineren ws erwartet man, dass der SW eher entlang des B-Feldes strömt, bei größeren eher senkrecht (Torus)
+		\item zurück auf 1D, SW-frame und SC-frame vergleichen
+		\item erstmal aber: Phasenraumvolumennormierung versuchen selbst zu bauen ohne Lars' Histogramme:
+		\begin{itemize}
+			\item v**3 kommt durch die Kollimatorakzeptanz zustande: Zwar immer derselbe Winkel, aber eine Aktezptanz von 3 Prozent sind bei 800 km/s was anderes als bei 400 km/s!
+			\item Kollimatorpunkte im äußeren Detektor haben größeren Abstand zueinander: überstreichen in gleicher Zeit größere Flächen $\rightarrow$ größeres Phasenvolumen.
+			\item Effekte müssen wir bedenken, weil das rein instrumentelle Sachen sind und nicht welcher der Physik, die wir untersuchen wollen.
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
 \end{document}
