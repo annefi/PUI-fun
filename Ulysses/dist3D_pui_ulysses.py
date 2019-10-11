@@ -12,7 +12,7 @@ import matplotlib
 
 
 class Dist3D(object):
-    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., v_sc_step = 1., nrs_perp=2, nrs_para=6,
+    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., v_sc_step = 1., nrs_perp=2, nrs_para=4,
                  nrs_sec=6,
                  nrs_epq=1, vswbins=arange(300., 800.1, 10.), ion="He1+", offset_sp = 180., sc_vel = True):
         """
@@ -99,12 +99,22 @@ class Dist3D(object):
             (self.vswbins.shape[0], self.aspphi.shape[0], self.asptheta.shape[0], 64, 3, 8, 3, self.sec_det_dim))
         self.wspace = zeros(
             (self.vswbins.shape[0], self.aspphi.shape[0], self.asptheta.shape[0], 64, 3, 8, 1, self.sec_det_dim))
+        self.w3dspace_sc = zeros(
+            (self.vswbins.shape[0], self.aspphi.shape[0], self.asptheta.shape[0], 64, 3, 8, 3, self.sec_det_dim))
+        self.wspace_sc = zeros(
+            (self.vswbins.shape[0], self.aspphi.shape[0], self.asptheta.shape[0], 64, 3, 8, 1, self.sec_det_dim))
         for iv, v in enumerate(self.vswbins[:-1]):
             tmpspace = 1. * self.vspace
             tmpspace[..., 0, :] -= (v + 5.)
             tmpspace /= (v + 5.)
             self.w3dspace[iv, ...] = tmpspace
             self.wspace[iv, ..., 0, :] = sqrt(sum(tmpspace ** 2, axis=5))
+            # SC frame:
+            tmpspace_sc = 1. * self.vspace
+            tmpspace_sc /= v
+            self.w3dspace_sc[iv, ...] = tmpspace_sc
+            self.wspace_sc[iv, ..., 0, :] = sqrt(sum(tmpspace_sc ** 2, axis=5))
+
 
     def _add_3Dv(self):
         """
@@ -340,24 +350,35 @@ class Dist3D(object):
 
         # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
         # to calculate the weights for normalising the final histograms:
-        norm_arr = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wxbins, dim = 3)
+        norm_arr_sw = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wxbins, dim = 3,
+                                    frame = 'sw')
+        norm_arr_sc = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wxbins, dim = 3,
+                                    frame = 'sc')
 
         # consider the PHA words *only now*:
         wgts = self.d.get_data("He1+", "wgts_sec") # 1 / (phase space volume * eff)
         swgt = self.d.get_data("He1+","brw") ### real sector weight not available for Ulysses
+
         wxsw2 = self.d.get_data("He1+", "wxsw2")
         wysw2 = self.d.get_data("He1+", "wysw2")
         wzsw2 = self.d.get_data("He1+", "wzsw2")
+
+        wxsc = self.d.get_data("He1+", "wx")
+        wysc = self.d.get_data("He1+", "wy")
+        wzsc = self.d.get_data("He1+", "wz")
+
         twts = zeros(wxsw2.shape)
         for i in range(wxsw2.shape[1]):
             twts[:,i] = wgts*swgt
-        H2, bs = histogramdd((wxsw2.flatten(), wysw2.flatten(), wzsw2.flatten()), bins=(wxbins, wybins, wzbins),
+        H2_sw, bs = histogramdd((wxsw2.flatten(), wysw2.flatten(), wzsw2.flatten()), bins=(wxbins, wybins, wzbins),
+                             weights=twts.flatten())
+        H2_sc, bs = histogramdd((wxsc.flatten(), wysc.flatten(), wzsc.flatten()), bins=(wxbins, wybins, wzbins),
                              weights=twts.flatten())
         self.d.remove_submask("He1+", "wHe1+2")
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
-        return norm_arr, H2
+        return norm_arr_sw, H2_sw, norm_arr_sc, H2_sc
 
 
 
@@ -505,8 +526,6 @@ class Dist3D(object):
                 sys.exit()
             colorbar = plt.colorbar(self.Quadmesh, ax=ax)
 
-
-
     def hist_sec_det(self, polar = True, binx = arange(0,4,1), biny = arange(0,9,1)):
         colormap = plt.cm.get_cmap("viridis")
         valsec = self.d.data['sec']
@@ -549,7 +568,6 @@ class Dist3D(object):
             Mesh = ax.pcolormesh(bins_det, bins_sec, C.T, cmap=colormap, norm = colors.LogNorm())
         colormap.set_under('white')
         cb = plt.colorbar(Mesh, ax=ax, extend='max')
-
 
     def calc_vabs(self, vsw_val = 400, doy_val = False):
         '''
@@ -595,11 +613,8 @@ class Dist3D(object):
         '''
         # unique vsw
 
-    def wspec_1d(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-2., 2.01, 0.2), min_whe=0.0, aspphi=(-30.,
-                                                                                                             30.)):
-        """
-
-        """
+    def wspec_1d(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-2., 4.01, 0.2), min_whe=0.0, aspphi=(-30.,
+                                                                                                         30.)):
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
@@ -610,11 +625,15 @@ class Dist3D(object):
         # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
         # to calculate the weights for normalising the final histograms:
 
-        norm_arr = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins=wbins, dim = 1)
+        norm_arr_sw = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins=wbins, dim = 1,
+                                    frame = 'sw')
+        norm_arr_sc = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins=wbins, dim = 1,
+                                    frame = 'sc')
 
         # consider the PHA words *only now*:
         wgts = self.d.get_data("He1+", "wgts_sec") # 1 / (phase space volume * eff)
         swgt = self.d.get_data("He1+","brw") ### real sector weight not available for Ulysses
+
         wxsw = self.d.get_data('He1+', 'wsw')  # 1D data in solar wind frame
         wxsc = self.d.get_data('He1+', 'wsc')  # 1D data in space craft frame
 
@@ -625,6 +644,8 @@ class Dist3D(object):
         H2_sc, bs = histogram(wxsc.flatten(), bins = wbins, weights = twts.flatten())
         H2_sw, bs = histogram(wxsw.flatten(), bins = wbins, weights = twts.flatten())
 
+        self.H2_sc = H2_sc
+        self.H2_sw = H2_sw
 
         self.d.remove_submask("He1+", "wHe1+2")
         self.d.remove_submask("Master", "vsw")
@@ -632,28 +653,31 @@ class Dist3D(object):
         self.d.remove_submask("Master", "asptheta")
 
         fig, ax = plt.subplots()
-        norm_arr[norm_arr == 0] = 1
+        norm_arr_sw[norm_arr_sw == 0] = 1
+        norm_arr_sc[norm_arr_sc == 0] = 1
 
-        H_sc = H2_sc/norm_arr
-        H_sw = H2_sw/norm_arr
+        H_sc = H2_sc/norm_arr_sc
+        H_sw = H2_sw/norm_arr_sw
+        H_sc2 = H2_sc/norm_arr_sw
 
-        self.H2_sc = H2_sc
-        self.H2_sw = H2_sw
-        self.norm_arr = norm_arr
         self.H_sc = H_sc
         self.H_sw = H_sw
+        self.H_sc2 = H_sc2
 
         H_sc = append(H_sc,0)
         H_sw = append(H_sw, 0)
+        H_sc2 = append(H_sc2, 0)
 
-        ax.plot(wbins, H_sc, ls='steps-post', label= 'SC frame', color='b')
+        ax.plot(wbins-1, H_sc, ls='steps-post', label= 'SC frame - 1', color='b')
+        ax.plot(wbins - 1, H_sc2, ls='steps-post', label='SC frame, false', color='lightblue')
         ax.plot(wbins, H_sw, ls='steps-post', label='SW frame', color='r')
         #ax.set_xlim(-0.5,3)
         ax.legend()
 
 
     def get_norm(self, vswbins=arange(500., 800.1, 10.), aspphi=(-30., 30.), min_whe = 0.0, wbins=arange(-2., 2.01,
-                                                                                                         0.2), dim = 3):
+                                                                                                         0.2),
+                 dim = 3, frame = 'sw'):
         '''
         :param vswbins: vsw bins over which the normalisation is performed
         :param aspphi: aspphi bins over which the normalisation is performed
@@ -686,7 +710,7 @@ class Dist3D(object):
 
         # norm_arr indicates how often a wx-wy-wz combination "is hit" with the given AA-vsw combinations and their
         # resp. occurrences
-        if dim == 1:
+        if dim == 1 or dim == 'x':
             norm_arr = zeros((wbins.shape[0] - 1))
         if dim == 3:
             norm_arr = zeros((wbins.shape[0] - 1,wbins.shape[0] - 1,wbins.shape[0] - 1))
@@ -698,12 +722,23 @@ class Dist3D(object):
                             whe = self.vels / (v + 5.)
                             epqs = arange(0, 64, 1)[whe > min_whe]
                             if dim == 1:
-                                H2, bs = histogram(self.wspace[iv + ivoffset, ip, it, epqs, ...].flatten(), bins = wbins)
+                                if frame == "sw":
+                                    H2, bs = histogram(self.wspace[iv + ivoffset, ip, it, epqs, ...].flatten(), bins = wbins)
+                                elif frame == "sc":
+                                    H2, bs = histogram(self.wspace_sc[iv + ivoffset, ip, it, epqs, ...].flatten(),
+                                                       bins=wbins)
                             if dim == 3:
-                                H2, bs = histogramdd((self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 0, :].flatten(),
-                                                      self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 1, :].flatten(),
-                                                      self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 2, :].flatten()),
-                                                     bins=(wbins, wbins, wbins))
+                                if frame == 'sw':
+                                    H2, bs = histogramdd((self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 0, :].flatten(),
+                                                          self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 1, :].flatten(),
+                                                          self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 2, :].flatten()),
+                                                         bins=(wbins, wbins, wbins))
+                                elif frame == 'sc':
+                                    H2, bs = histogramdd(
+                                        (self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 0, :].flatten(),
+                                         self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 1, :].flatten(),
+                                         self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 2, :].flatten()),
+                                        bins=(wbins, wbins, wbins))
                             norm_arr += H2 * H[iv, ip, it]
         return norm_arr
 
