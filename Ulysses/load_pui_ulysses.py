@@ -25,7 +25,7 @@ He2 = False #True #
 years = [1994]
 
 if He1:
-    d1 = uswipha(year=years, tf=[[250,280]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
+    d1 = uswipha(year=years, tf=[[1,3]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
     d1.sync_swoops()
     d1.sync_traj()
 

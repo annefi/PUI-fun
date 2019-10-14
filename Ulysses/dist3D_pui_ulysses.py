@@ -12,8 +12,8 @@ import matplotlib
 
 
 class Dist3D(object):
-    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., v_sc_step = 1., nrs_perp=2, nrs_para=4,
-                 nrs_sec=6,
+    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., v_sc_step = 1., nrs_perp=2, nrs_para=2,
+                 nrs_sec=2,
                  nrs_epq=1, vswbins=arange(300., 800.1, 10.), ion="He1+", offset_sp = 180., sc_vel = True):
         """
         d : dbData instance with species predifined by Master mask
@@ -78,7 +78,7 @@ class Dist3D(object):
 
     def _calc_vspace(self):
         """
-        Calculates vx,vy,vz for all epqsteps and given aspect angles.
+        Calculates vR,vT,vN for all epqsteps and given aspect angles.
         shape self.vspace: (#aspphi, #asptheta, #vr, #vt, #vn, #epq-steps, #det, #sec, xyz, sec_det_dim)
         (sec_det_dim is col_dim * nrs_epq)
         """
@@ -88,12 +88,12 @@ class Dist3D(object):
                 self.vspace[:, :, iv, :, :, :, i * self.col_dim:(i + 1) * self.col_dim] = -self.FoV * v * \
                                                                                                    self.vels_fac[i]
 
-        self.vspace[:, :, :, :, :, 0, :] = -self.vspace[:, :, :, :, :, 0, :]
-        self.vspace[:, :, :, :, :, 1, :] = -self.vspace[:, :, :, :, :, 1, :]
+        self.vspace[:, :, :, :, :, 0, :] = -self.vspace[:, :, :, :, :, 0, :] # R defined positive from Sun to SC
+        self.vspace[:, :, :, :, :, 1, :] = -self.vspace[:, :, :, :, :, 1, :] # positive T in the regular definition
 
     def _calc_wspace(self, ):
         """
-        Calculates vx,vy,vz for all epqsteps and given aspect angles
+        Calculates vR,vT,vN for all epqsteps and given aspect angles
         """
         self.w3dspace = zeros(
             (self.vswbins.shape[0], self.aspphi.shape[0], self.asptheta.shape[0], 64, 3, 8, 3, self.sec_det_dim))
@@ -118,8 +118,8 @@ class Dist3D(object):
 
     def _add_3Dv(self):
         """
-        Adds vx,vy,vz in SC-frame and vxsw,vysw,vzsw in SW-frame based on aspect angles to pha data
-        Also adds vxsw2,vysw2,vzsw2 in SW-frame based on aspect angles and rounded vsw to pha data 
+        Adds vR,vT,vN in SC-frame and vRsw,vTsw,vNsw in SW-frame based on aspect angles to pha data
+        Also adds vRsw2,vTsw2,vNsw2 in SW-frame based on aspect angles and rounded vsw to pha data 
         In the current version vsw is taken to be stricly radial, i.e. along v_x / v_R!
         sc_vel determines, if the velocity of the SC itself should be considered in the v-space.
         """
@@ -129,98 +129,105 @@ class Dist3D(object):
         detind = self.d.get_data('Master', 'det').astype(int)
         secind = self.d.get_data('Master', 'sec').astype(int)
         if self.sc_vel == False:
-            if not "vx" in self.d.data.keys():
-                self.d.add_data("vx", self.vspace[phiind, thetaind, epqind, detind, secind, 0]) # a list of 9 entries is added!
+            if not "vR" in self.d.data.keys():
+                self.d.add_data("vR", self.vspace[phiind, thetaind, epqind, detind, secind, 0]) # a list of 9 entries
+                #  is added!
             else:
-                self.d.data["vx"] = self.vspace[phiind, thetaind, epqind, detind, secind, 0]
-            if not "vy" in self.d.data.keys():
-                self.d.add_data("vy", self.vspace[phiind, thetaind, epqind, detind, secind, 1])
+                self.d.data["vR"] = self.vspace[phiind, thetaind, epqind, detind, secind, 0]
+            if not "vT" in self.d.data.keys():
+                self.d.add_data("vT", self.vspace[phiind, thetaind, epqind, detind, secind, 1])
             else:
-                self.d.data["vy"] = self.vspace[phiind, thetaind, epqind, detind, secind, 1]
-            if not "vz" in self.d.data.keys():
-                self.d.add_data("vz", self.vspace[phiind, thetaind, epqind, detind, secind, 2])
+                self.d.data["vT"] = self.vspace[phiind, thetaind, epqind, detind, secind, 1]
+            if not "vN" in self.d.data.keys():
+                self.d.add_data("vN", self.vspace[phiind, thetaind, epqind, detind, secind, 2])
             else:
-                self.d.data["vz"] = self.vspace[phiind, thetaind, epqind, detind, secind, 2]
+                self.d.data["vN"] = self.vspace[phiind, thetaind, epqind, detind, secind, 2]
 
             if not "v" in self.d.data.keys():
                 self.d.add_data("v",
-                                sqrt(self.d.data["vx"] ** 2 + self.d.data["vy"] ** 2 + self.d.data["vz"] ** 2))
+                                sqrt(self.d.data["vR"] ** 2 + self.d.data["vT"] ** 2 + self.d.data["vN"] ** 2))
             else:
                 self.d.data["v"] = sqrt(
-                    self.d.data["vx"] ** 2 + self.d.data["vy"] ** 2 + self.d.data["vz"] ** 2)
+                    self.d.data["vR"] ** 2 + self.d.data["vT"] ** 2 + self.d.data["vN"] ** 2)
 
         elif self.sc_vel == True:
             # considering the velocity of the SC
-            if not "vx" in self.d.data.keys():
-                self.d.add_data("vx", self.vspace[phiind, thetaind, epqind, detind, secind, 0] + tile(self.d.data[
+            if not "vR" in self.d.data.keys():
+                self.d.add_data("vR", self.vspace[phiind, thetaind, epqind, detind, secind, 0] + tile(self.d.data[
                     'vr_sc'],(self.sec_det_dim,1)).T)
                 # a list of 9 entries is added!
             else:
-                self.d.data["vx"] = self.vspace[phiind, thetaind, epqind, detind, secind, 0] + tile(self.d.data[
+                self.d.data["vR"] = self.vspace[phiind, thetaind, epqind, detind, secind, 0] + tile(self.d.data[
                     'vr_sc'],(self.sec_det_dim,1)).T
-            if not "vy" in self.d.data.keys():
-                self.d.add_data("vy", self.vspace[phiind, thetaind, epqind, detind, secind, 1] + tile(self.d.data[
+            if not "vT" in self.d.data.keys():
+                self.d.add_data("vT", self.vspace[phiind, thetaind, epqind, detind, secind, 1] + tile(self.d.data[
                     'vt_sc'],(self.sec_det_dim,1)).T)
             else:
-                self.d.data["vy"] = self.vspace[phiind, thetaind, epqind, detind, secind, 1] + tile(self.d.data[
+                self.d.data["vT"] = self.vspace[phiind, thetaind, epqind, detind, secind, 1] + tile(self.d.data[
                     'vt_sc'],(self.sec_det_dim,1)).T
-            if not "vz" in self.d.data.keys():
-                self.d.add_data("vz", self.vspace[phiind, thetaind, epqind, detind, secind, 2] + tile(self.d.data[
+            if not "vN" in self.d.data.keys():
+                self.d.add_data("vN", self.vspace[phiind, thetaind, epqind, detind, secind, 2] + tile(self.d.data[
                     'vn_sc'],(self.sec_det_dim,1)).T)
             else:
-                self.d.data["vz"] = self.vspace[phiind, thetaind, epqind, detind, secind, 2] + tile(self.d.data[
+                self.d.data["vN"] = self.vspace[phiind, thetaind, epqind, detind, secind, 2] + tile(self.d.data[
                     'vn_sc'],(self.sec_det_dim,1)).T
 
             if not "v" in self.d.data.keys():
                 self.d.add_data("v",
-                                sqrt(self.d.data["vx"] ** 2 + self.d.data["vy"] ** 2 + self.d.data["vz"] ** 2))
+                                sqrt(self.d.data["vR"] ** 2 + self.d.data["vT"] ** 2 + self.d.data["vN"] ** 2))
             else:
                 self.d.data["v"] = sqrt(
-                    self.d.data["vx"] ** 2 + self.d.data["vy"] ** 2 + self.d.data["vz"] ** 2)
+                    self.d.data["vR"] ** 2 + self.d.data["vT"] ** 2 + self.d.data["vN"] ** 2)
 
         # __________ SW frame _____________________
-        if not "vxsw" in self.d.data.keys():
-            self.d.add_data("vxsw", (self.d.data["vx"].T - self.d.get_data('Master','vsw')).T)
+        if not "vRsw" in self.d.data.keys():
+            self.d.add_data("vRsw", (self.d.data["vR"].T - self.d.get_data('Master','vsw')).T)
         else:
-            self.d.data["vxsw"] = (self.d.data["vx"].T - self.d.get_data('Master','vsw')).T
-        if not "vysw" in self.d.data.keys():
-            self.d.add_data("vysw", self.d.data["vy"])
+            self.d.data["vRsw"] = (self.d.data["vR"].T - self.d.get_data('Master','vsw')).T
+        if not "vTsw" in self.d.data.keys():
+            self.d.add_data("vTsw", self.d.data["vT"])
         else:
-            self.d.data["vysw"] = self.d.data["vy"]
-        if not "vzsw" in self.d.data.keys():
-            self.d.add_data("vzsw", self.d.data["vz"])
+            self.d.data["vTsw"] = self.d.data["vT"]
+        if not "vNsw" in self.d.data.keys():
+            self.d.add_data("vNsw", self.d.data["vN"])
         else:
-            self.d.data["vzsw"] = self.d.data["vz"]
+            self.d.data["vNsw"] = self.d.data["vN"]
 
         if not "v_sw" in self.d.data.keys():
             self.d.add_data("v_sw",
-                            sqrt(self.d.data["vxsw"] ** 2 + self.d.data["vysw"] ** 2 + self.d.data["vzsw"] ** 2))
+                            sqrt(self.d.data["vRsw"] ** 2 + self.d.data["vTsw"] ** 2 + self.d.data["vNsw"] ** 2))
         else:
             self.d.data["v_sw"] = sqrt(
-                self.d.data["vxsw"] ** 2 + self.d.data["vysw"] ** 2 + self.d.data["vzsw"] ** 2)
+                self.d.data["vRsw"] ** 2 + self.d.data["vTsw"] ** 2 + self.d.data["vNsw"] ** 2)
 
         # _________index 2 in names means vsw speed has been rounded__________
-        if not "vxsw2" in self.d.data.keys():
-            self.d.add_data("vxsw2", (self.d.data["vx"].T - around(self.d.data["vsw"], -1)).T)
+        if not "vRsw2" in self.d.data.keys():
+            self.d.add_data("vRsw2", (self.d.data["vR"].T - around(self.d.data["vsw"], -1)).T)
         else:
-            self.d.data["vxsw2"] = (self.d.data["vx"].T - around(self.d.data["vsw"], -1)).T
-        if not "vysw2" in self.d.data.keys():
-            self.d.add_data("vysw2", self.d.data["vy"])
+            self.d.data["vRsw2"] = (self.d.data["vR"].T - around(self.d.data["vsw"], -1)).T
+        if not "vTsw2" in self.d.data.keys():
+            self.d.add_data("vTsw2", self.d.data["vT"])
         else:
-            self.d.data["vysw2"] = self.d.data["vy"]
-        if not "vzsw2" in self.d.data.keys():
-            self.d.add_data("vzsw2", self.d.data["vz"])
+            self.d.data["vTsw2"] = self.d.data["vT"]
+        if not "vNsw2" in self.d.data.keys():
+            self.d.add_data("vNsw2", self.d.data["vN"])
         else:
-            self.d.data["vzsw2"] = self.d.data["vz"]
+            self.d.data["vNsw2"] = self.d.data["vN"]
+
+
+
+
+
+
 
     def test_func(self):
         for i in range(self.d.data['year'].shape[0]):
             if self.d.get_data('Master', 'wsw')[i][0] > 1.9:
                 print(i)
                 print(self.d.get_data('Master', 'wsw')[i][0])
-                print(self.d.get_data('Master', 'vx')[i][0])
-                print(self.d.get_data('Master', 'vy')[i][0])
-                print(self.d.get_data('Master', 'vz')[i][0])
+                print(self.d.get_data('Master', 'vR')[i][0])
+                print(self.d.get_data('Master', 'vT')[i][0])
+                print(self.d.get_data('Master', 'vN')[i][0])
                 print(self.d.get_data('Master', 'vsw')[i])
                 print('\n\n')
             # print(self.d.get_data('Master','v')[i][0])
@@ -231,45 +238,45 @@ class Dist3D(object):
 
     def _add_w(self):
         """
-        Adds wxsw,wysw,wzsw and wsw in SW-frame to pha data
-        Adds wxsw2,wysw2,wzsw2 and wsw2 in SW-frame to pha data based on rounded vsws!
-        Adds wx, wy, wz and wsc in SC-frame to pha data
+        Adds wRsw,wTsw,wNsw and wsw in SW-frame to pha data
+        Adds wRsw2,wTsw2,wNsw2 and wsw2 in SW-frame to pha data based on rounded vsws!
+        Adds wR, wT, wN and wsc in SC-frame to pha data
         """
-        if not "wxsw" in self.d.data.keys():
-            self.d.add_data("wxsw", (self.d.data["vxsw"].T / self.d.data["vsw"]).T)
+        if not "wRsw" in self.d.data.keys():
+            self.d.add_data("wRsw", (self.d.data["vRsw"].T / self.d.data["vsw"]).T)
         else:
-            self.d.data["wxsw"] = (self.d.data["vxsw"].T / self.d.data["vsw"]).T
-        if not "wysw" in self.d.data.keys():
-            self.d.add_data("wysw", (self.d.data["vysw"].T / self.d.data["vsw"]).T)
+            self.d.data["wRsw"] = (self.d.data["vRsw"].T / self.d.data["vsw"]).T
+        if not "wTsw" in self.d.data.keys():
+            self.d.add_data("wTsw", (self.d.data["vTsw"].T / self.d.data["vsw"]).T)
         else:
-            self.d.data["wysw"] = (self.d.data["vysw"].T / self.d.data["vsw"]).T
-        if not "wzsw" in self.d.data.keys():
-            self.d.add_data("wzsw", (self.d.data["vzsw"].T / self.d.data["vsw"]).T)
+            self.d.data["wTsw"] = (self.d.data["vTsw"].T / self.d.data["vsw"]).T
+        if not "wNsw" in self.d.data.keys():
+            self.d.add_data("wNsw", (self.d.data["vNsw"].T / self.d.data["vsw"]).T)
         else:
-            self.d.data["wzsw"] = (self.d.data["vzsw"].T / self.d.data["vsw"]).T
+            self.d.data["wNsw"] = (self.d.data["vNsw"].T / self.d.data["vsw"]).T
         if not "wsw" in self.d.data.keys():
-            self.d.add_data("wsw", sqrt(self.d.data["wxsw"] ** 2 + self.d.data["wysw"] ** 2 + self.d.data["wzsw"] ** 2))
+            self.d.add_data("wsw", sqrt(self.d.data["wRsw"] ** 2 + self.d.data["wTsw"] ** 2 + self.d.data["wNsw"] ** 2))
         else:
-            self.d.data["wsw"] = sqrt(self.d.data["wxsw"] ** 2 + self.d.data["wysw"] ** 2 + self.d.data["wzsw"] ** 2)
+            self.d.data["wsw"] = sqrt(self.d.data["wRsw"] ** 2 + self.d.data["wTsw"] ** 2 + self.d.data["wNsw"] ** 2)
         # _________index 2 in names means vsw speed has been rounded__________
-        if not "wxsw2" in self.d.data.keys():
-            self.d.add_data("wxsw2", (self.d.data["vxsw2"].T / self.d.data["vsw"]).T)
+        if not "wRsw2" in self.d.data.keys():
+            self.d.add_data("wRsw2", (self.d.data["vRsw2"].T / self.d.data["vsw"]).T)
         else:
-            self.d.data["wxsw2"] = (self.d.data["vxsw2"].T / self.d.data["vsw"]).T
-        if not "wysw2" in self.d.data.keys():
-            self.d.add_data("wysw2", (self.d.data["vysw2"].T / self.d.data["vsw"]).T)
+            self.d.data["wRsw2"] = (self.d.data["vRsw2"].T / self.d.data["vsw"]).T
+        if not "wTsw2" in self.d.data.keys():
+            self.d.add_data("wTsw2", (self.d.data["vTsw2"].T / self.d.data["vsw"]).T)
         else:
-            self.d.data["wysw2"] = (self.d.data["vysw2"].T / self.d.data["vsw"]).T
-        if not "wzsw2" in self.d.data.keys():
-            self.d.add_data("wzsw2", (self.d.data["vzsw2"].T / self.d.data["vsw"]).T)
+            self.d.data["wTsw2"] = (self.d.data["vTsw2"].T / self.d.data["vsw"]).T
+        if not "wNsw2" in self.d.data.keys():
+            self.d.add_data("wNsw2", (self.d.data["vNsw2"].T / self.d.data["vsw"]).T)
         else:
-            self.d.data["wzsw2"] = (self.d.data["vzsw2"].T / self.d.data["vsw"]).T
+            self.d.data["wNsw2"] = (self.d.data["vNsw2"].T / self.d.data["vsw"]).T
         if not "wsw2" in self.d.data.keys():
             self.d.add_data("wsw2",
-                            sqrt(self.d.data["wxsw2"] ** 2 + self.d.data["wysw2"] ** 2 + self.d.data["wzsw2"] ** 2))
+                            sqrt(self.d.data["wRsw2"] ** 2 + self.d.data["wTsw2"] ** 2 + self.d.data["wNsw2"] ** 2))
         else:
             self.d.data["wsw2"] = sqrt(
-                self.d.data["wxsw2"] ** 2 + self.d.data["wysw2"] ** 2 + self.d.data["wzsw2"] ** 2)
+                self.d.data["wRsw2"] ** 2 + self.d.data["wTsw2"] ** 2 + self.d.data["wNsw2"] ** 2)
         if not "wHe1+2" in self.d.data.keys():
             self.d.add_data("wHe1+2",
                             getvelocity(4., 1., self.d.data["epq"].astype(int)) / around(self.d.data["vsw"],
@@ -280,22 +287,22 @@ class Dist3D(object):
 
 
         # ___________________ SC frame __________________________
-        if not "wx" in self.d.data.keys():
-            self.d.add_data("wx", (self.d.data["vx"].T / self.d.data["vsw"]).T)
+        if not "wR" in self.d.data.keys():
+            self.d.add_data("wR", (self.d.data["vR"].T / self.d.data["vsw"]).T)
         else:
-            self.d.data["wx"] = (self.d.data["vx"].T / self.d.data["vsw"]).T
-        if not "wy" in self.d.data.keys():
-            self.d.add_data("wy", (self.d.data["vy"].T / self.d.data["vsw"]).T)
+            self.d.data["wR"] = (self.d.data["vR"].T / self.d.data["vsw"]).T
+        if not "wT" in self.d.data.keys():
+            self.d.add_data("wT", (self.d.data["vT"].T / self.d.data["vsw"]).T)
         else:
-            self.d.data["wy"] = (self.d.data["vy"].T / self.d.data["vsw"]).T
-        if not "wz" in self.d.data.keys():
-            self.d.add_data("wz", (self.d.data["vz"].T / self.d.data["vsw"]).T)
+            self.d.data["wT"] = (self.d.data["vT"].T / self.d.data["vsw"]).T
+        if not "wN" in self.d.data.keys():
+            self.d.add_data("wN", (self.d.data["vN"].T / self.d.data["vsw"]).T)
         else:
-            self.d.data["wz"] = (self.d.data["vz"].T / self.d.data["vsw"]).T
+            self.d.data["wN"] = (self.d.data["vN"].T / self.d.data["vsw"]).T
         if not "wsc" in self.d.data.keys():
-            self.d.add_data("wsc", sqrt(self.d.data["wx"] ** 2 + self.d.data["wy"] ** 2 + self.d.data["wz"] ** 2))
+            self.d.add_data("wsc", sqrt(self.d.data["wR"] ** 2 + self.d.data["wT"] ** 2 + self.d.data["wN"] ** 2))
         else:
-            self.d.data["wsc"] = sqrt(self.d.data["wx"] ** 2 + self.d.data["wy"] ** 2 + self.d.data["wz"] ** 2)
+            self.d.data["wsc"] = sqrt(self.d.data["wR"] ** 2 + self.d.data["wT"] ** 2 + self.d.data["wN"] ** 2)
 
 
 
@@ -335,8 +342,8 @@ class Dist3D(object):
         else:
             self.d.data["wgts_sec"] = wgts_sec
 
-    def calc_w3dspecs(self, vswbins=arange(500., 800.1, 10.), wxbins=arange(-2., 2.01, 0.2),
-                      wybins=arange(-2., 2.01, 0.2), wzbins=arange(-2., 2.01, 0.2), min_whe=0.0, aspphi=(-30., 30.)):
+    def calc_w3dspecs(self, vswbins=arange(500., 800.1, 10.), wRbins=arange(-2., 2.01, 0.2),
+                      wTbins=arange(-2., 2.01, 0.2), wNbins=arange(-2., 2.01, 0.2), min_whe=0.0, aspphi=(-30., 30.)):
         """
         Calculates w spectra. Data preselected by Master mask, i.e. Magnetic field direction.
         vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
@@ -350,29 +357,29 @@ class Dist3D(object):
 
         # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
         # to calculate the weights for normalising the final histograms:
-        norm_arr_sw = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wxbins, dim = 3,
+        norm_arr_sw = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wRbins, dim = 3,
                                     frame = 'sw')
-        norm_arr_sc = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wxbins, dim = 3,
+        norm_arr_sc = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wRbins, dim = 3,
                                     frame = 'sc')
 
         # consider the PHA words *only now*:
         wgts = self.d.get_data("He1+", "wgts_sec") # 1 / (phase space volume * eff)
         swgt = self.d.get_data("He1+","brw") ### real sector weight not available for Ulysses
 
-        wxsw2 = self.d.get_data("He1+", "wxsw2")
-        wysw2 = self.d.get_data("He1+", "wysw2")
-        wzsw2 = self.d.get_data("He1+", "wzsw2")
+        wRsw2 = self.d.get_data("He1+", "wRsw2")
+        wTsw2 = self.d.get_data("He1+", "wTsw2")
+        wNsw2 = self.d.get_data("He1+", "wNsw2")
 
-        wxsc = self.d.get_data("He1+", "wx")
-        wysc = self.d.get_data("He1+", "wy")
-        wzsc = self.d.get_data("He1+", "wz")
+        wRsc = self.d.get_data("He1+", "wR")
+        wTsc = self.d.get_data("He1+", "wT")
+        wNsc = self.d.get_data("He1+", "wN")
 
-        twts = zeros(wxsw2.shape)
-        for i in range(wxsw2.shape[1]):
+        twts = zeros(wRsw2.shape)
+        for i in range(wRsw2.shape[1]):
             twts[:,i] = wgts*swgt
-        H2_sw, bs = histogramdd((wxsw2.flatten(), wysw2.flatten(), wzsw2.flatten()), bins=(wxbins, wybins, wzbins),
+        H2_sw, bs = histogramdd((wRsw2.flatten(), wTsw2.flatten(), wNsw2.flatten()), bins=(wRbins, wTbins, wNbins),
                              weights=twts.flatten())
-        H2_sc, bs = histogramdd((wxsc.flatten(), wysc.flatten(), wzsc.flatten()), bins=(wxbins, wybins, wzbins),
+        H2_sc, bs = histogramdd((wRsc.flatten(), wTsc.flatten(), wNsc.flatten()), bins=(wRbins, wTbins, wNbins),
                              weights=twts.flatten())
         self.d.remove_submask("He1+", "wHe1+2")
         self.d.remove_submask("Master", "vsw")
@@ -571,7 +578,7 @@ class Dist3D(object):
 
     def calc_vabs(self, vsw_val = 400, doy_val = False):
         '''
-        Calculates the absolute |v| from vx, vy and vz to compare it with the solar wind velocity in a small window
+        Calculates the absolute |v| from vR, vT and vN to compare it with the solar wind velocity in a small window
         of time
         (Built for comparing the He2+ velocity with SWOOPS' measured vsw)
         :return:
@@ -589,10 +596,10 @@ class Dist3D(object):
                 pass
             self.d.set_mask('mmask', 'doy', doy_val - 0.3, doy_val + 0.3, reset=True)
         vsw = self.d.get_data('mmask', 'vsw').flatten()
-        vx = self.d.get_data('mmask','vx').flatten()
-        vy = self.d.get_data('mmask','vy').flatten()
-        vz = self.d.get_data('mmask','vz').flatten()
-        v = sqrt(vx**2 + vy**2 + vz**2)
+        vR = self.d.get_data('mmask','vR').flatten()
+        vT = self.d.get_data('mmask','vT').flatten()
+        vN = self.d.get_data('mmask','vN').flatten()
+        v = sqrt(vR**2 + vT**2 + vN**2)
         fig = plt.figure()
         ax = plt.subplot(111)
         v_bins = arange(200,1000,10)
@@ -634,15 +641,15 @@ class Dist3D(object):
         wgts = self.d.get_data("He1+", "wgts_sec") # 1 / (phase space volume * eff)
         swgt = self.d.get_data("He1+","brw") ### real sector weight not available for Ulysses
 
-        wxsw = self.d.get_data('He1+', 'wsw')  # 1D data in solar wind frame
-        wxsc = self.d.get_data('He1+', 'wsc')  # 1D data in space craft frame
+        wsw = self.d.get_data('He1+', 'wsw')  # 1D data in solar wind frame
+        wsc = self.d.get_data('He1+', 'wsc')  # 1D data in space craft frame
 
-        twts = zeros(wxsc.shape)
-        for i in range(wxsc.shape[1]):
+        twts = zeros(wsc.shape)
+        for i in range(wsc.shape[1]):
             twts[:,i] = wgts*swgt
 
-        H2_sc, bs = histogram(wxsc.flatten(), bins = wbins, weights = twts.flatten())
-        H2_sw, bs = histogram(wxsw.flatten(), bins = wbins, weights = twts.flatten())
+        H2_sc, bs = histogram(wsc.flatten(), bins = wbins, weights = twts.flatten())
+        H2_sw, bs = histogram(wsw.flatten(), bins = wbins, weights = twts.flatten())
 
         self.H2_sc = H2_sc
         self.H2_sw = H2_sw
@@ -653,13 +660,17 @@ class Dist3D(object):
         self.d.remove_submask("Master", "asptheta")
 
         fig, ax = plt.subplots()
+
         norm_arr_sw[norm_arr_sw == 0] = 1
         norm_arr_sc[norm_arr_sc == 0] = 1
 
         H_sc = H2_sc/norm_arr_sc
         H_sw = H2_sw/norm_arr_sw
+
         H_sc2 = H2_sc/norm_arr_sw
 
+        self.norm_sw = norm_arr_sw
+        self.norm_sc = norm_arr_sc
         self.H_sc = H_sc
         self.H_sw = H_sw
         self.H_sc2 = H_sc2
@@ -708,7 +719,7 @@ class Dist3D(object):
         # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
         # to calculate the weights for normalising the final histograms:
 
-        # norm_arr indicates how often a wx-wy-wz combination "is hit" with the given AA-vsw combinations and their
+        # norm_arr indicates how often a wR-wT-wN combination "is hit" with the given AA-vsw combinations and their
         # resp. occurrences
         if dim == 1 or dim == 'x':
             norm_arr = zeros((wbins.shape[0] - 1))
@@ -726,7 +737,7 @@ class Dist3D(object):
                                     H2, bs = histogram(self.wspace[iv + ivoffset, ip, it, epqs, ...].flatten(), bins = wbins)
                                 elif frame == "sc":
                                     H2, bs = histogram(self.wspace_sc[iv + ivoffset, ip, it, epqs, ...].flatten(),
-                                                       bins=wbins)
+                                                       bins = wbins)
                             if dim == 3:
                                 if frame == 'sw':
                                     H2, bs = histogramdd((self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 0, :].flatten(),
@@ -744,17 +755,22 @@ class Dist3D(object):
 
 
 
-    def skymap(self, w_int):
+    def skymap(self, w_int = [1.0,1.2]):
         '''
-        w atm in SC frame
-
         :return:
         '''
         # mask w interval
-        self.d.set_mask('w_shell', 'wsc', w_int[0], w_int[1], reset = True)
-        wr = self.d.get_data('w_shell','wx')
-        wt = self.d.get_data('w_shell','wy')
-        wn = self.d.get_data('w_shell','wz')
+        w = self.d.get_data('Master','wsw')
+        ind0, ind1 = where((w_int[0] <= w) & (w <= w_int[1]))
+        self.ind0 = ind0
+        self.ind1 = ind1
+        wr = self.d.get_data('Master','wR')
+        wt = self.d.get_data('Master','wT')
+        wn = self.d.get_data('Master','wN')
+        self.wr1 = wr[ind0,ind1]
+        self.wt1 = wt[ind0, ind1]
+        self.wn1 = wn[ind0, ind1]
+
 
 
 
@@ -790,29 +806,29 @@ class Dist3D(object):
 #         else:
 #             self.d.data["eBz"] = self.d.data["Bz"] / absB
 #         # Calculate unit Vector along w vector in solar wind frame
-#         if not "ewx" in self.d.data.keys():
-#             self.d.add_data("ewx", self.d.data["wxsw"] / self.d.data["wsw"])
+#         if not "ewR" in self.d.data.keys():
+#             self.d.add_data("ewR", self.d.data["wRsw"] / self.d.data["wsw"])
 #         else:
-#             self.d.data["ewx"] = self.d.data["wxsw"] / self.d.data["wsw"]
-#         if not "ewy" in self.d.data.keys():
-#             self.d.add_data("ewy", self.d.data["wysw"] / self.d.data["wsw"])
+#             self.d.data["ewR"] = self.d.data["wRsw"] / self.d.data["wsw"]
+#         if not "ewT" in self.d.data.keys():
+#             self.d.add_data("ewT", self.d.data["wTsw"] / self.d.data["wsw"])
 #         else:
-#             self.d.data["ewy"] = self.d.data["wysw"] / self.d.data["wsw"]
-#         if not "ewz" in self.d.data.keys():
-#             self.d.add_data("ewz", self.d.data["wzsw"] / self.d.data["wsw"])
+#             self.d.data["ewT"] = self.d.data["wTsw"] / self.d.data["wsw"]
+#         if not "ewN" in self.d.data.keys():
+#             self.d.add_data("ewN", self.d.data["wNsw"] / self.d.data["wsw"])
 #         else:
-#             self.d.data["ewz"] = self.d.data["wzsw"] / self.d.data["wsw"]
+#             self.d.data["ewN"] = self.d.data["wNsw"] / self.d.data["wsw"]
 #         # Calculate cosine of pitch angle mu by scalar product of eB and and ew.
 #         # Cosmup stands for B-field is still important,i.e. inward field cosmup=1 means the opposite direction
 #         # compared to the solar wind bulk than for outward polarity!
 #         if not "cosmup" in self.d.data.keys():
 #             self.d.add_data("cosmup",
-#                             self.d.data["eBx"] * self.d.data["ewx"] + self.d.data["eBy"] * self.d.data["ewy"] +
-#                             self.d.data["eBz"] * self.d.data["ewz"])
+#                             self.d.data["eBx"] * self.d.data["ewR"] + self.d.data["eBy"] * self.d.data["ewT"] +
+#                             self.d.data["eBz"] * self.d.data["ewN"])
 #         else:
-#             self.d.data["cosmup"] = self.d.data["eBx"] * self.d.data["ewx"] + self.d.data["eBy"] * self.d.data["ewy"]\
+#             self.d.data["cosmup"] = self.d.data["eBx"] * self.d.data["ewR"] + self.d.data["eBy"] * self.d.data["ewT"]\
 #                                     + \
-#                                     self.d.data["eBz"] * self.d.data["ewz"]
+#                                     self.d.data["eBz"] * self.d.data["ewN"]
 #         # Cosmu is the cosine on the outward projected B field, i.e. if the polarity is inward cosmu 1 is now
 #         # pointing away from the Sun
 #         if not "cosmu" in self.d.data.keys():
@@ -834,54 +850,54 @@ class Dist3D(object):
 #             self.d.add_data("valf", 21.8 * self.d.data["B"] / sqrt(self.d.data["dsw"]))
 #         else:
 #             self.d.data["valf"] = 21.8 * self.d.data["B"] / sqrt(self.d.data["dsw"])
-#         vswy = self.d.data["valf"] * self.d.data["eBy"]
-#         vswz = self.d.data["valf"] * self.d.data["eBz"]
+#         vswT = self.d.data["valf"] * self.d.data["eBy"]
+#         vswN = self.d.data["valf"] * self.d.data["eBz"]
 #         phi = self.d.data["Bphi"]
-#         vswy[(phi > -135) * (phi < 45)] *= -1.
-#         vswz[(phi > -135) * (phi < 45)] *= -1.
-#         vswx = sqrt(self.d.data["vsw"] ** 2 - vswy ** 2 - vswz ** 2)
-#         if not "vswx" in self.d.data.keys():
-#             self.d.add_data("vswx", vswx)
+#         vswT[(phi > -135) * (phi < 45)] *= -1.
+#         vswN[(phi > -135) * (phi < 45)] *= -1.
+#         vswR = sqrt(self.d.data["vsw"] ** 2 - vswT ** 2 - vswN ** 2)
+#         if not "vswR" in self.d.data.keys():
+#             self.d.add_data("vswR", vswR)
 #         else:
-#             self.d.data["vswx"] = vswx
-#         if not "vswy" in self.d.data.keys():
-#             self.d.add_data("vswy", vswy)
+#             self.d.data["vswR"] = vswR
+#         if not "vswT" in self.d.data.keys():
+#             self.d.add_data("vswT", vswT)
 #         else:
-#             self.d.data["vswy"] = vswy
-#         if not "vswz" in self.d.data.keys():
-#             self.d.add_data("vswz", vswz)
+#             self.d.data["vswT"] = vswT
+#         if not "vswN" in self.d.data.keys():
+#             self.d.add_data("vswN", vswN)
 #         else:
-#             self.d.data["vswz"] = vswz
-#         if not "vxswa" in self.d.data.keys():
-#             self.d.add_data("vxswa", self.d.data["vx"] - vswx)
+#             self.d.data["vswN"] = vswN
+#         if not "vRswa" in self.d.data.keys():
+#             self.d.add_data("vRswa", self.d.data["vR"] - vswR)
 #         else:
-#             self.d.data["vxswa"] = self.d.data["vx"] - vswx
-#         if not "vyswa" in self.d.data.keys():
-#             self.d.add_data("vyswa", self.d.data["vy"] - vswy)
+#             self.d.data["vRswa"] = self.d.data["vR"] - vswR
+#         if not "vTswa" in self.d.data.keys():
+#             self.d.add_data("vTswa", self.d.data["vT"] - vswT)
 #         else:
-#             self.d.data["vyswa"] = self.d.data["vy"] - vswy
-#         if not "vzswa" in self.d.data.keys():
-#             self.d.add_data("vzswa", self.d.data["vz"] - vswz)
+#             self.d.data["vTswa"] = self.d.data["vT"] - vswT
+#         if not "vNswa" in self.d.data.keys():
+#             self.d.add_data("vNswa", self.d.data["vN"] - vswN)
 #         else:
-#             self.d.data["vzswa"] = self.d.data["vz"] - vswz
-#         if not "wxswa" in self.d.data.keys():
-#             self.d.add_data("wxswa", self.d.data["vxswa"] / self.d.data["vsw"])
+#             self.d.data["vNswa"] = self.d.data["vN"] - vswN
+#         if not "wRswa" in self.d.data.keys():
+#             self.d.add_data("wRswa", self.d.data["vRswa"] / self.d.data["vsw"])
 #         else:
-#             self.d.data["wxswa"] = self.d.data["vxswa"] / self.d.data["vsw"]
-#         if not "wyswa" in self.d.data.keys():
-#             self.d.add_data("wyswa", self.d.data["vyswa"] / self.d.data["vsw"])
+#             self.d.data["wRswa"] = self.d.data["vRswa"] / self.d.data["vsw"]
+#         if not "wTswa" in self.d.data.keys():
+#             self.d.add_data("wTswa", self.d.data["vTswa"] / self.d.data["vsw"])
 #         else:
-#             self.d.data["wyswa"] = self.d.data["vyswa"] / self.d.data["vsw"]
-#         if not "wzswa" in self.d.data.keys():
-#             self.d.add_data("wzswa", self.d.data["vzswa"] / self.d.data["vsw"])
+#             self.d.data["wTswa"] = self.d.data["vTswa"] / self.d.data["vsw"]
+#         if not "wNswa" in self.d.data.keys():
+#             self.d.add_data("wNswa", self.d.data["vNswa"] / self.d.data["vsw"])
 #         else:
-#             self.d.data["wzswa"] = self.d.data["vzswa"] / self.d.data["vsw"]
+#             self.d.data["wNswa"] = self.d.data["vNswa"] / self.d.data["vsw"]
 #         if not "wswa" in self.d.data.keys():
 #             self.d.add_data("wswa",
-#                             sqrt(self.d.data["wxswa"] ** 2 + self.d.data["wyswa"] ** 2 + self.d.data["wzswa"] ** 2))
+#                             sqrt(self.d.data["wRswa"] ** 2 + self.d.data["wTswa"] ** 2 + self.d.data["wNswa"] ** 2))
 #         else:
 #             self.d.data["wswa"] = sqrt(
-#                 self.d.data["wxswa"] ** 2 + self.d.data["wyswa"] ** 2 + self.d.data["wzswa"] ** 2)
+#                 self.d.data["wRswa"] ** 2 + self.d.data["wTswa"] ** 2 + self.d.data["wNswa"] ** 2)
 #
 #     def calc_wspec_norm(self, vsws=arange(495., 800., 10.), wbins=arange(-1., 5.1, .1), min_whe=0.9):
 #         """
@@ -921,8 +937,8 @@ class Dist3D(object):
 #                         norm_arr += H * uTall.shape[0]
 #                         wgts = self.d.get_data("He1+", "wgts_sec")
 #                         ws = self.d.get_data("He1+", "wsw2")
-#                         wxsw = self.d.get_data("He1+", "wxsw2")
-#                         ws[wxsw < 0] *= -1.
+#                         wRsw = self.d.get_data("He1+", "wRsw2")
+#                         ws[wRsw < 0] *= -1.
 #                         swgt = self.d.get_data("He1+", "swt")
 #                         H, xbins = histogram(ws, bins=wbins, weights=wgts * swgt)
 #                         cts_arr += H
@@ -987,7 +1003,7 @@ class Dist3D(object):
 #                         norm_arr += H * uTall.shape[0]
 #                         wgts = self.d.get_data("He1+", "wgts_sec")
 #                         ws = self.d.get_data("He1+", "wsw2")
-#                         wxsw = self.d.get_data("He1+", "wxsw2")
+#                         wRsw = self.d.get_data("He1+", "wRsw2")
 #                         cmu = self.d.get_data("He1+", "cosmu")
 #                         swgt = self.d.get_data("He1+", "swt")
 #                         H, xbins, ybins = histogram2d(ws, cmu, bins=(wbins, cosmubins), weights=wgts * swgt)
@@ -1014,7 +1030,7 @@ class Dist3D(object):
 #         norm_arr = zeros((wbins.shape[0] - 1))
 #         cts_arr = zeros((wbins.shape[0] - 1))
 #         self.d.set_mask("Master", "vsw", vswbins[0], vswbins[-1], reset=True)
-#         # self.d.set_mask("Master","wxsw",0.,10000,reset=True)
+#         # self.d.set_mask("Master","wRsw",0.,10000,reset=True)
 #         uTall, Tallind = unique(self.d.get_data("Master", "d00"), return_index=True)
 #         uasphi = self.d.get_data("Master", "aspphi")[Tallind]
 #         uasptheta = self.d.get_data("Master", "asptheta")[Tallind]
@@ -1036,8 +1052,8 @@ class Dist3D(object):
 #         wgts = self.d.get_data("He1+", "wgts_sec")
 #         swgt = self.d.get_data("He1+", "swt")
 #         ws = self.d.get_data("He1+", "wsw2")
-#         wxsw = self.d.get_data("He1+", "wxsw2")
-#         ws[wxsw < 0] *= -1.
+#         wRsw = self.d.get_data("He1+", "wRsw2")
+#         ws[wRsw < 0] *= -1.
 #         H2, xb = histogram(ws, bins=wbins, weights=wgts * swgt)
 #         self.d.remove_submask("He1+", "wHe1+2")
 #         self.d.remove_submask("Master", "vsw")
@@ -1107,7 +1123,7 @@ class Dist3D(object):
 #         self.d.remove_submask("Master", "asptheta")
 #         return norm_arr, H2
 #
-#     def plot_stuff(self, H, wxbins, wybins, wzbins):
+#     def plot_stuff(self, H, wRbins, wTbins, wNbins):
 #         """
 #         Just from ipython shell ... will be done next time
 #         """
