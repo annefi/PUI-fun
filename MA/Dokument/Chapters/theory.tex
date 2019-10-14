@@ -74,11 +74,21 @@ Beneath those two characteristics there are other aspects concerning inner-sourc
 \section{VDF}
 After the particle has been ionised it is forced onto a gyro motion about the local field line of the heliospheric magnetic field due to the Lorentz force. 
 \\ \\
-B field is convected by the SW and moves radially outwards from the sun
+To examine the velocity distribution of PUIs after they have been ionized we need to consider the initial speed $v_{ini}$ of the neutral particle. 
+For neutrals from the LISM this is mainly given by the inflow speed $v_{ISM}$ of the local interstellar medium with which they enter the heliosphere. As we don't exactly know about the production mechanism of inner-source PUIs, the following considerations mainly relate to interstellar PUIs.
+\citet{schwadron_2015_ibex} obtained $v_{ISM} \approx 25 \,\mathrm{km\,s^{-1}}$ with the IBEX satellite for helium. Considering the acceleration by the sun's gravitational force we have a maximum initial speed of $v_ini \approx 50 \,\mathrm{km\,s^{-1}}$ at $1\,\mathrm{AU}$. Compared to an average solar wind speed of $v_{sw} \approx 400\,\mathrm{km\,s^{-1}}$ one can neglect this initial speed in a first step.
+
+For simplicity we thus consider a neutral particle at rest that becomes ionized by one of the aforementioned processes. The freshly created ion now is subjected to the electromagnetic forces of the solar wind plasma. In particular, it finds itself at a velocity $v_{sw}$ relative to the magnetic field which is convected outwards by the solar wind that is assumed to flow radially outwards. Due to the Lorentz force the PUI starts to gyrate about the magnetic field line on a orbit that is perpendicular to it.
+When we further consider a magnetic field's orientation that is perpendicular to the solar wind flow, $\vec{B} \perp \vec{v}_{sw}$, the ion's gyration speed is $v_{sw}$ while its guiding center moves together with the field line at a speed of $v_{sw}$ as well.
+Thus, the total speed of the PUI ranges between $0\, \mathrm{v_{sw}} $ and $2 \, \mathrm{v_{sw}}$ in a sun frame of reference.
 \\ \\
-Under the assumption that the particle is at rest (compared to vsw. Holds true for interstellar PUIs. Durchrechnen, warum das angemessen ist) and the HMF's orientation is perpendicular to the direction of vsw: relative motion between particle and HMF
-\\ \\
-ionization of particle: Lorentz force. Forced onto a gyro orbit perpendicular to the field line with Bahngeschwindigkeit vsw and at the same time bound to the field line. Total speed ranges from 0 to 2 vsw in a sun frame of reference
+
+As the heliospheric magnetic field lines are shaped like an Archimedean spiral, the so called \textit{Parker spiral}, the assumption of a perpendicular magnetic field only applies when solar wind speed $v_{sw}$ and solar distance $r_\odot$ follow the relation
+\begin{align*}
+90 ^\circ \approx  arctan \left( \frac{2\pi}{T_\odot \cdot v_{sw}} r_\odot \right)
+\end{align*}
+with sun's sidereal period $T_\odot \approx 25\,d$ \citep{prlss_2004}.
+When this is not the case, e.g. for solar distances about $1\,\mathrm{AU}$ at which the angle between solar wind and magnet field direction is approximately $45^\circ$, 
 \\ \\
 Figure: Velocity Space. Torus shape around solar wind
 In a SW frame: velocity is always vsw
@@ -102,9 +112,9 @@ Adiabatic cooling and acceleration processes
 \\ \\
 However: early findings of anisotropy (Moebius), following explanations
 \\ \\
-Observations Drews etc: anisotropy perpendicular to IMF! Torus distribution persists in parts
+Observations Drews etc.: anisotropy perpendicular to IMF! Torus distribution persists in parts
 \\ \\ \\
 
 Instrument that is capable of measuring this distribution: large acceptance in absolute velocity, large variation and resolution in angles
 
-\subsection{1D reduced VDF}
+\subsection{1D reduced VDF, aim of this work...?}
