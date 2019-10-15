@@ -318,4 +318,20 @@ nucl$^{-1}$.
   keywords  = {2129 Interplanetary dust, 2152 Pickup ions},
 }
 
+@Article{schwadron_2015_ibex,
+  author   = {Schwadron, N. A. and Möbius, E. and Leonard, T. and Fuselier, S. A. and McComas, D. J. and Heirtzler, D. and Kucharek, H. and Rahmanifard, F. and Bzowski, M. and Kubiak, M. A. and Sokół, J. M. and Swaczyna, P. and Frisch, P.},
+  title    = {Determination of Interstellar He Parameters Using Five Years of Data from the IBEX: Beyond Closed Form Approximations},
+  journal  = {The Astrophysical Journal Supplement Series},
+  year     = {2015},
+  volume   = {220},
+  number   = {2},
+  eid      = {25},
+  month    = {Oct},
+  pages    = {25},
+  doi      = {10.1088/0067-0049/220/2/25},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/2015ApJS..220...25S},
+  keywords = {ISM: atoms, ISM: clouds, ISM: general, local interstellar matter},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}
