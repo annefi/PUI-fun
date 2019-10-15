@@ -60,11 +60,13 @@ class Dist3D(object):
         self.vswbins = vswbins
         self._calc_FoV()
         self._calc_vspace()
-        self._add_3Dv()
-        self._add_w()
         print('*** calc w space ***')
         self._calc_wspace()
-        self._calc_phspeff_wgt()
+        print('*** add data products ***')
+        self._add_3Dv()
+        self._add_w()
+        self._add_phspeff_wgt()
+        self._add_angles()
 
     def _calc_FoV(self):
         # shape self.FoV: (#aspphi, #asptheta, #det, #sec, xyz, col_dim)
@@ -114,7 +116,6 @@ class Dist3D(object):
             tmpspace_sc /= v
             self.w3dspace_sc[iv, ...] = tmpspace_sc
             self.wspace_sc[iv, ..., 0, :] = sqrt(sum(tmpspace_sc ** 2, axis=5))
-
 
     def _add_3Dv(self):
         """
@@ -214,28 +215,6 @@ class Dist3D(object):
         else:
             self.d.data["vNsw2"] = self.d.data["vN"]
 
-
-
-
-
-
-
-    def test_func(self):
-        for i in range(self.d.data['year'].shape[0]):
-            if self.d.get_data('Master', 'wsw')[i][0] > 1.9:
-                print(i)
-                print(self.d.get_data('Master', 'wsw')[i][0])
-                print(self.d.get_data('Master', 'vR')[i][0])
-                print(self.d.get_data('Master', 'vT')[i][0])
-                print(self.d.get_data('Master', 'vN')[i][0])
-                print(self.d.get_data('Master', 'vsw')[i])
-                print('\n\n')
-            # print(self.d.get_data('Master','v')[i][0])
-            # print(self.d.get_data('Master', 'vsw')[i])
-            # print(self.d.get_data('Master', 'v_sw')[i][0])
-            # print('\n')
-
-
     def _add_w(self):
         """
         Adds wRsw,wTsw,wNsw and wsw in SW-frame to pha data
@@ -304,9 +283,18 @@ class Dist3D(object):
         else:
             self.d.data["wsc"] = sqrt(self.d.data["wR"] ** 2 + self.d.data["wT"] ** 2 + self.d.data["wN"] ** 2)
 
+    def _add_angles(self):
+        if not "wphi" in self.d.data.keys():
+            self.d.add_data("wphi", arctan( - self.d.data['wTsw'] / self.d.data['wRsw']) )
+        else:
+            self.d.data["wphi"] = arctan( - self.d.data['wTsw'] / self.d.data['wRsw'])
+        if not "wtheta" in self.d.data.keys():
+            self.d.add_data("wtheta", arctan(self.d.data['wNsw'] / self.d.data['wRsw']) )
+        else:
+            self.d.data["wtheta"] = arctan(self.d.data['wNsw'] / self.d.data['wRsw'])
 
 
-    def _calc_phspeff_wgt(self):
+    def _add_phspeff_wgt(self):
         """
         Loads ion efficiencies
         ion name, mass and charge must be given at the initialisation of the class object
@@ -342,10 +330,128 @@ class Dist3D(object):
         else:
             self.d.data["wgts_sec"] = wgts_sec
 
+    def get_norm(self, vswbins = arange(500., 800.1, 10.), aspphi = (-30., 30.), min_whe = 0.0,
+                        wbins = arange(-2., 2.01, 0.2), dim = 3, frame = 'sw'):
+        '''
+        Calculates norm_array for weighting the histogram bins relative to how often a bins has been seen:
+        For each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
+        to calculate the weights for normalising the final histograms
+
+        :param vswbins: vsw bins over which the normalisation is performed
+        :param aspphi: aspphi bins over which the normalisation is performed
+        :param min_whe: Lower border for w_He
+        :param wbins: bins for the final histogram and also range of the resulting norm_array. Attention: Atm
+        wbins are used for all three dimension even with 3D
+        :param dim: can be 1 (for spectrum of absolute values) or 3 (for 3D representation)
+        :return: norm_array that is either an 1D or 3D array with the range of wbins in each dimension
+        '''
+        self.d.remove_submask("Master", "vsw")
+        self.d.remove_submask("Master", "aspphi")
+        self.d.remove_submask("Master", "asptheta")
+        self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
+        self.d.set_mask("Master", "vsw", vswbins[0], vswbins[-1], reset=True)
+        self.d.set_mask("Master", "aspphi", aspphi[0], aspphi[1], reset=True)
+
+        # find unique time stamps and the resp. AAs and vsw:
+        uTall,Tallind = unique(self.d.get_data("Master","d00"),return_index=True)
+        uasphi = self.d.get_data("Master", "aspphi")[Tallind]
+        uasptheta = self.d.get_data("Master", "asptheta")[Tallind]
+        uvsw = self.d.get_data("Master", "vsw")[Tallind]
+        # H indicates how often a particular aspphi-asptheta-usw combination occurs (= how often did ULYSSES see this
+        # angle with this vsw?)
+        H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, self.aspphi, self.asptheta))
+        # synchronise vsw indices: (funktioniert so nur, wenn beide die gleiche Schrittgroesse haben)
+        ivoffset = int(around(vswbins[0] - self.vswbins[0], -1) / 10)
+
+        # norm_arr indicates how often a wR-wT-wN combination "is hit" with the given AA-vsw combinations and their
+        # resp. occurrences
+        if dim == 1 or dim == 'x':
+            norm_arr = zeros((wbins.shape[0] - 1))
+        if dim == 3:
+            norm_arr = zeros((wbins.shape[0] - 1,wbins.shape[0] - 1,wbins.shape[0] - 1))
+        for iv, v in enumerate(vswbins[:-1]):
+            for ip, p in enumerate(self.aspphi[:-1]):
+                if (p >= aspphi[0]) * (p <= aspphi[1]):
+                    for it, t in enumerate(self.asptheta[:-1]):
+                        if H[iv, ip, it] > 0:
+                            whe = self.vels / (v + 5.)
+                            epqs = arange(0, 64, 1)[whe > min_whe]
+                            if dim == 1:
+                                if frame == "sw":
+                                    H2, bs = histogram(self.wspace[iv + ivoffset, ip, it, epqs, ...].flatten(), bins = wbins)
+                                # elif frame == "sc":
+                                #     H2, bs = histogram(self.wspace_sc[iv + ivoffset, ip, it, epqs, ...].flatten(),
+                                #                        bins = wbins)
+                            if dim == 3:
+                                if frame == 'sw':
+                                    H2, bs = histogramdd((self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 0, :].flatten(),
+                                                          self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 1, :].flatten(),
+                                                          self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 2, :].flatten()),
+                                                         bins=(wbins, wbins, wbins))
+                                # elif frame == 'sc':
+                                #     H2, bs = histogramdd(
+                                #         (self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 0, :].flatten(),
+                                #          self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 1, :].flatten(),
+                                #          self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 2, :].flatten()),
+                                #         bins=(wbins, wbins, wbins))
+                            norm_arr += H2 * H[iv, ip, it]
+        return norm_arr
+
+    def get_norm_shells(self, vswbins = arange(500., 800.1, 10.), aspphi = (-30., 30.), min_whe = 0.0,
+             phibins = arange(-180, 180, 10.), thetabins = arange(-180, 180, 10.), wshellbins = arange(0, 2, 0.2)):
+        '''
+        Calculates norm_array for weighting the histogram bins relative to how often a bins has been seen:
+        For each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
+        to calculate the weights for normalising the final histograms
+
+        :param vswbins: vsw bins over which the normalisation is performed
+        :param aspphi: aspphi bins over which the normalisation is performed
+        :param min_whe: Lower border for w_He
+        :param wbins: bins for the final histogram and also range of the resulting norm_array. Attention: Atm
+        wbins are used for all three dimension even with 3D
+        :param dim: can be 1 (for spectrum of absolute values) or 3 (for 3D representation)
+        :return: norm_array that is either an 1D or 3D array with the range of wbins in each dimension
+        '''
+        self.d.remove_submask("Master", "vsw")
+        self.d.remove_submask("Master", "aspphi")
+        self.d.remove_submask("Master", "asptheta")
+        self.d.set_mask("He1+", "wHe1+2", min_whe, 10., reset=True)
+        self.d.set_mask("Master", "vsw", vswbins[0], vswbins[-1], reset=True)
+        self.d.set_mask("Master", "aspphi", aspphi[0], aspphi[1], reset=True)
+
+        # find unique time stamps and the resp. AAs and vsw:
+        uTall,Tallind = unique(self.d.get_data("Master","d00"),return_index=True)
+        uasphi = self.d.get_data("Master", "aspphi")[Tallind]
+        uasptheta = self.d.get_data("Master", "asptheta")[Tallind]
+        uvsw = self.d.get_data("Master", "vsw")[Tallind]
+        # H indicates how often a particular aspphi-asptheta-usw combination occurs (= how often did ULYSSES see this
+        # angle with this vsw?)
+        H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, self.aspphi, self.asptheta))
+        # synchronise vsw indices: (funktioniert so nur, wenn beide die gleiche Schrittgroesse haben)
+        ivoffset = int(around(vswbins[0] - self.vswbins[0], -1) / 10)
+
+        # norm_arr indicates how often a wR-wT-wN combination "is hit" with the given AA-vsw combinations and their
+        # resp. occurrences
+        norm_arr = zeros((phibins.shape[0] - 1,thetabins.shape[0] - 1,wshellbins.shape[0] - 1))
+        for iv, v in enumerate(vswbins[:-1]):
+            for ip, p in enumerate(self.aspphi[:-1]):
+                if (p >= aspphi[0]) * (p <= aspphi[1]):
+                    for it, t in enumerate(self.asptheta[:-1]):
+                        if H[iv, ip, it] > 0:
+                            whe = self.vels / (v + 5.)
+                            epqs = arange(0, 64, 1)[whe > min_whe]
+                            H2, bs = histogramdd((self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 0, :].flatten(),
+                                                      self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 1, :].flatten(),
+                                                      self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 2, :].flatten()),
+                                                     bins=(phibins, thetabins, wshellbins))
+                            norm_arr += H2 * H[iv, ip, it]
+        return norm_arr
+
+
     def calc_w3dspecs(self, vswbins=arange(500., 800.1, 10.), wRbins=arange(-2., 2.01, 0.2),
                       wTbins=arange(-2., 2.01, 0.2), wNbins=arange(-2., 2.01, 0.2), min_whe=0.0, aspphi=(-30., 30.)):
         """
-        Calculates w spectra. Data preselected by Master mask, i.e. Magnetic field direction.
+        Calculates w spectra in slices
         vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
         """
         self.d.remove_submask("Master", "vsw")
@@ -359,8 +465,8 @@ class Dist3D(object):
         # to calculate the weights for normalising the final histograms:
         norm_arr_sw = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wRbins, dim = 3,
                                     frame = 'sw')
-        norm_arr_sc = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wRbins, dim = 3,
-                                    frame = 'sc')
+        # norm_arr_sc = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wRbins, dim = 3,
+        #                             frame = 'sc')
 
         # consider the PHA words *only now*:
         wgts = self.d.get_data("He1+", "wgts_sec") # 1 / (phase space volume * eff)
@@ -370,144 +476,24 @@ class Dist3D(object):
         wTsw2 = self.d.get_data("He1+", "wTsw2")
         wNsw2 = self.d.get_data("He1+", "wNsw2")
 
-        wRsc = self.d.get_data("He1+", "wR")
-        wTsc = self.d.get_data("He1+", "wT")
-        wNsc = self.d.get_data("He1+", "wN")
+        # wRsc = self.d.get_data("He1+", "wR")
+        # wTsc = self.d.get_data("He1+", "wT")
+        # wNsc = self.d.get_data("He1+", "wN")
 
         twts = zeros(wRsw2.shape)
         for i in range(wRsw2.shape[1]):
             twts[:,i] = wgts*swgt
         H2_sw, bs = histogramdd((wRsw2.flatten(), wTsw2.flatten(), wNsw2.flatten()), bins=(wRbins, wTbins, wNbins),
                              weights=twts.flatten())
-        H2_sc, bs = histogramdd((wRsc.flatten(), wTsc.flatten(), wNsc.flatten()), bins=(wRbins, wTbins, wNbins),
-                             weights=twts.flatten())
+        # H2_sc, bs = histogramdd((wRsc.flatten(), wTsc.flatten(), wNsc.flatten()), bins=(wRbins, wTbins, wNbins),
+        #                      weights=twts.flatten())
         self.d.remove_submask("He1+", "wHe1+2")
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
-        return norm_arr_sw, H2_sw, norm_arr_sc, H2_sc
+        #return norm_arr_sw, H2_sw, norm_arr_sc, H2_sc
+        return norm_arr_sw, H2_sw
 
-
-
-    def plot_wspace(self, ax=None, vsw=2, aspphi=0, asptheta=0, epq=30, sec='all'):
-        if ax == None:
-            fig = plt.figure(figsize=(6,6))
-            ax = fig.add_subplot(111, projection='3d')
-            fig.canvas.set_window_title('W-Space')
-            #ax.set_title('W-Space')
-            ax.set_xlim(-2.5, 2.5)
-            ax.set_ylim(-2.5, 2.5)
-            ax.set_zlim(-2.5, 2.5)
-            ax.set_xlabel('x')
-            ax.set_ylabel('y')
-            ax.set_zlabel('z')
-        colors = array([[77, 77, 0], [77, 57, 0], [77, 0, 0], [77, 0, 57], [38, 0, 77], [0, 38, 77], [0, 77, 77],
-                        [0, 77, 19]])
-        if isinstance(sec, int):
-            w = self.w3dspace[vsw, aspphi, asptheta, epq, :, sec, :, :]
-            nrs = w.shape[-2] * w.shape[-1]
-            shade_arr = linspace(0.1, 3.5, nrs)
-            rgb = colors[sec]
-            cc = zeros((nrs, 3))
-            for j in range(nrs):
-                cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
-            ax.scatter(w[..., 0, :], w[..., 1, :], w[..., 2, :], c=cc)
-            ax.scatter(0, 0, 0, c='k', s=5)
-            ax.plot([0, 4], [0, 0], [0, 0], c='k', lw=0.8)
-        elif sec == 'all':
-            w = self.w3dspace[vsw, aspphi, asptheta, epq, :, :, :, :]
-            for i, s in enumerate(range(w.shape[-3])):
-                nrs = w.shape[-2] * w.shape[-1]
-                shade_arr = linspace(0.1, 3.5, nrs)
-                rgb = colors[i]
-                cc = zeros((nrs, 3))
-                for j in range(nrs):
-                    cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
-                ax.scatter(w[..., s, 0, :], w[..., s, 1, :], w[..., s, 2, :], c=cc)
-                ax.scatter(0, 0, 0, c='k', s=5)
-                ax.plot([0, 4], [0, 0], [0, 0], c='k', lw=0.8)
-        else:
-            print("no valid sector given")
-        return ax
-
-    def plot_vspace(self, ax=None, aspphi=-1, asptheta=-1, epq=50, sec='all'):
-        if ax == None:
-            fig = plt.figure(figsize=(6,6))
-            ax = fig.add_subplot(111, projection='3d')
-            fig.canvas.set_window_title('V-Space')
-            #ax.set_title('W-Space')
-            ax.set_xlim(-600, 600)
-            ax.set_ylim(-600, 600)
-            ax.set_zlim(-600, 600)
-            ax.set_xlabel('x')
-            ax.set_ylabel('y')
-            ax.set_zlabel('z')
-        colors = array([[77, 77, 0], [77, 57, 0], [77, 0, 0], [77, 0, 57], [38, 0, 77], [0, 38, 77], [0, 77, 77],
-                        [0, 77, 19]])
-        if isinstance(sec, int):
-            v = self.vspace[aspphi, asptheta, epq, :, sec, :, :]
-            nrs = v.shape[-2] * v.shape[-1]
-            shade_arr = linspace(0.1, 3.5, nrs)
-            rgb = colors[sec]
-            cc = zeros((nrs, 3))
-            for j in range(nrs):
-                cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
-            ax.scatter(v[..., 0, :], v[..., 1, :], v[..., 2, :], c=cc)
-            ax.scatter(0, 0, 0, c='k', s=5)
-            ax.plot([0, 600], [0, 0], [0, 0], c='k', lw=0.8)
-        elif sec == 'all':
-            v = self.vspace[aspphi, asptheta, epq, :, :, :, :]
-            for i, s in enumerate(range(v.shape[-3])):
-                nrs = v.shape[-2] * v.shape[-1]
-                shade_arr = linspace(0.1, 3.5, nrs)
-                rgb = colors[i]
-                cc = zeros((nrs, 3))
-                for j in range(nrs):
-                    cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
-                ax.scatter(v[..., s, 0, :], v[..., s, 1, :], v[..., s, 2, :], c=cc)
-                ax.scatter(0, 0, 0, c='k', s=5)
-                ax.plot([0, 600], [0, 0], [0, 0], c='k', lw=0.8)
-        else:
-            print("no valid sector given")
-        return ax
-
-    def plot_FoV(self, ax=None, aspphi=0, asptheta=0, sec='all'):
-        if ax == None:
-            fig = plt.figure()
-            ax = fig.add_subplot(111, projection='3d')
-            fig.canvas.set_window_title('FoV')
-            #ax.set_title('FoV')
-            ax.set_xlabel('x')
-            ax.set_ylabel('y')
-            ax.set_zlabel('z')
-        colors = array([[77, 77, 0], [77, 57, 0], [77, 0, 0], [77, 0, 57], [38, 0, 77], [0, 38, 77], [0, 77, 77],
-                        [0, 77, 19]])
-        if isinstance(sec, int):
-            f = self.FoV[aspphi, asptheta, :, sec, :, :]
-            nrs = f.shape[-2] * f.shape[-1]
-            shade_arr = linspace(0.1, 3.5, nrs)
-            rgb = colors[sec]
-            cc = zeros((nrs, 3))
-            for j in range(nrs):
-                cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
-            ax.scatter(f[..., 0, :], f[..., 1, :], f[..., 2, :], c=cc)
-            ax.scatter(0, 0, 0, c='k', s=5)
-            ax.plot([0, 4], [0, 0], [0, 0], c='k', lw=0.8)
-        elif sec == 'all':
-            f = self.FoV[aspphi, asptheta, :, :, :, :]
-            for i, s in enumerate(range(f.shape[-3])):
-                nrs = f.shape[-2] * f.shape[-1]
-                shade_arr = linspace(0.1, 3.5, nrs)
-                rgb = colors[i]
-                cc = zeros((nrs, 3))
-                for j in range(nrs):
-                    cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
-                ax.scatter(f[..., s, 0, :], f[..., s, 1, :], f[..., s, 2, :], c=cc)
-                ax.scatter(0, 0, 0, c='k', s=5)
-                ax.plot([0, 4], [0, 0], [0, 0], c='k', lw=0.8)
-        else:
-            print("no valid sector given")
-        return ax
 
     def plot_wspec(self, dim = 'x', slice = 10, ax = None, min_wHe = 0.9):
         wbins = arange(-2,2.01,0.2)
@@ -614,14 +600,7 @@ class Dist3D(object):
         ax.legend()
         return v
 
-    def calc_bulk_vel(self):
-        '''
-        :return:
-        '''
-        # unique vsw
-
-    def wspec_1d(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-2., 4.01, 0.2), min_whe=0.0, aspphi=(-30.,
-                                                                                                         30.)):
+    def wspec_1d(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-2., 4.01, 0.2), min_whe=0.0, aspphi=(-30.,30.)):
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
@@ -686,18 +665,15 @@ class Dist3D(object):
         ax.legend()
 
 
-    def get_norm(self, vswbins=arange(500., 800.1, 10.), aspphi=(-30., 30.), min_whe = 0.0, wbins=arange(-2., 2.01,
-                                                                                                         0.2),
-                 dim = 3, frame = 'sw'):
-        '''
-        :param vswbins: vsw bins over which the normalisation is performed
-        :param aspphi: aspphi bins over which the normalisation is performed
-        :param min_whe: Lower border for w_He
-        :param wbins: bins for the final histogram and also range of the resulting norm_array. Attention: Atm
-        wbins are used for all three dimension even with 3D
-        :param dim: can be 1 (for spectrum of absolute values) or 3 (for 3D representation)
-        :return: norm_array that is either an 1D or 3D array with the range of wbins in each dimension
-        '''
+
+    def calc_skymapspec(self, vswbins = arange(500., 800.1, 10.), phibins = arange(-180, 180, 10), thetabins =
+    arange(-180, 180, 10), wshellbins=arange(0., 2.01, 0.2), min_whe=0.0, aspphi=(-30.,30.)):
+        """
+
+
+        Calculates w spectra. Data preselected by Master mask, i.e. Magnetic field direction.
+        vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
+        """
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
@@ -705,83 +681,166 @@ class Dist3D(object):
         self.d.set_mask("Master", "vsw", vswbins[0], vswbins[-1], reset=True)
         self.d.set_mask("Master", "aspphi", aspphi[0], aspphi[1], reset=True)
 
-        # find unique time stamps and the resp. AAs and vsw:
-        uTall,Tallind = unique(self.d.get_data("Master","d00"),return_index=True)
-        uasphi = self.d.get_data("Master", "aspphi")[Tallind]
-        uasptheta = self.d.get_data("Master", "asptheta")[Tallind]
-        uvsw = self.d.get_data("Master", "vsw")[Tallind]
-        # H indicates how often a particular aspphi-asptheta-usw combination occurs (= how often did ULYSSES see this
-        # angle with this vsw?)
-        H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, self.aspphi, self.asptheta))
-        # synchronise vsw indices: (funktioniert so nur, wenn beide die gleiche Schrittgroesse haben)
-        ivoffset = int(around(vswbins[0] - self.vswbins[0], -1) / 10)
+        # DOESNT WORK YET
+        norm_arr = ones([len(phibins)-1, len(thetabins)-1, len(wshellbins)-1])
 
-        # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
-        # to calculate the weights for normalising the final histograms:
+        # consider the PHA words *only now*:
+        wgts = self.d.get_data("He1+", "wgts_sec") # 1 / (phase space volume * eff)
+        swgt = self.d.get_data("He1+","brw") ### real sector weight not available for Ulysses
 
-        # norm_arr indicates how often a wR-wT-wN combination "is hit" with the given AA-vsw combinations and their
-        # resp. occurrences
-        if dim == 1 or dim == 'x':
-            norm_arr = zeros((wbins.shape[0] - 1))
-        if dim == 3:
-            norm_arr = zeros((wbins.shape[0] - 1,wbins.shape[0] - 1,wbins.shape[0] - 1))
-        for iv, v in enumerate(vswbins[:-1]):
-            for ip, p in enumerate(self.aspphi[:-1]):
-                if (p >= aspphi[0]) * (p <= aspphi[1]):
-                    for it, t in enumerate(self.asptheta[:-1]):
-                        if H[iv, ip, it] > 0:
-                            whe = self.vels / (v + 5.)
-                            epqs = arange(0, 64, 1)[whe > min_whe]
-                            if dim == 1:
-                                if frame == "sw":
-                                    H2, bs = histogram(self.wspace[iv + ivoffset, ip, it, epqs, ...].flatten(), bins = wbins)
-                                elif frame == "sc":
-                                    H2, bs = histogram(self.wspace_sc[iv + ivoffset, ip, it, epqs, ...].flatten(),
-                                                       bins = wbins)
-                            if dim == 3:
-                                if frame == 'sw':
-                                    H2, bs = histogramdd((self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 0, :].flatten(),
-                                                          self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 1, :].flatten(),
-                                                          self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 2, :].flatten()),
-                                                         bins=(wbins, wbins, wbins))
-                                elif frame == 'sc':
-                                    H2, bs = histogramdd(
-                                        (self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 0, :].flatten(),
-                                         self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 1, :].flatten(),
-                                         self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 2, :].flatten()),
-                                        bins=(wbins, wbins, wbins))
-                            norm_arr += H2 * H[iv, ip, it]
-        return norm_arr
+        wphi = self.d.get_data("He1+", "wphi")
+        wtheta = self.d.get_data("He1+", "wtheta")
+        w = self.d.get_data("He1+", "wsw")
 
+        twts = zeros(wphi.shape)
+        for i in range(wphi.shape[1]):
+            twts[:,i] = wgts*swgt
+        H, bs = histogramdd((wphi.flatten(), wtheta.flatten(), w.flatten()), bins=(phibins, thetabins, wshellbins),
+                             weights=twts.flatten())
 
+        self.d.remove_submask("He1+", "wHe1+2")
+        self.d.remove_submask("Master", "vsw")
+        self.d.remove_submask("Master", "aspphi")
+        self.d.remove_submask("Master", "asptheta")
+        return norm_arr, H
 
-    def skymap(self, w_int = [1.0,1.2]):
-        '''
-        :return:
-        '''
-        # mask w interval
-        w = self.d.get_data('Master','wsw')
-        ind0, ind1 = where((w_int[0] <= w) & (w <= w_int[1]))
-        self.ind0 = ind0
-        self.ind1 = ind1
-        wr = self.d.get_data('Master','wR')
-        wt = self.d.get_data('Master','wT')
-        wn = self.d.get_data('Master','wN')
-        self.wr1 = wr[ind0,ind1]
-        self.wt1 = wt[ind0, ind1]
-        self.wn1 = wn[ind0, ind1]
+    def plot_skymapspec(self, shell = 5 , ax = None, min_wHe = 0.9):
+        phibins = arange(-180, 180, 10)
+        thetabins = arange(-180, 180, 10)
+        wshellbins = arange(0., 2.01, 0.2)
+
+        norm_arr, H = self.calc_skymapspec(min_whe = min_wHe)
+
+        if ax == None:
+            fig, ax = plt.subplots(figsize=(10,8))
+            colormap = plt.cm.get_cmap("viridis")
+            self.Quadmesh = ax.pcolormesh(phibins, thetabins, H[:, :, shell], cmap=colormap)
+            colorbar = plt.colorbar(self.Quadmesh, ax=ax)
+            txt_shell = ax.text(0.8, 1.05, 'Shell: %s' % shell, bbox={"facecolor": "grey", "alpha": 0.4,
+                                                                   "pad": 10}, transform = ax.transAxes)
 
 
 
 
+# ____________________ standard plot functions _____________________
 
-
-
-
-
-
-
-
+    def plot_wspace(self, ax=None, vsw=2, aspphi=0, asptheta=0, epq=30, sec='all'):
+        if ax == None:
+            fig = plt.figure(figsize=(6,6))
+            ax = fig.add_subplot(111, projection='3d')
+            fig.canvas.set_window_title('W-Space')
+            #ax.set_title('W-Space')
+            ax.set_xlim(-2.5, 2.5)
+            ax.set_ylim(-2.5, 2.5)
+            ax.set_zlim(-2.5, 2.5)
+            ax.set_xlabel('x')
+            ax.set_ylabel('y')
+            ax.set_zlabel('z')
+        colors = array([[77, 77, 0], [77, 57, 0], [77, 0, 0], [77, 0, 57], [38, 0, 77], [0, 38, 77], [0, 77, 77],
+                        [0, 77, 19]])
+        if isinstance(sec, int):
+            w = self.w3dspace[vsw, aspphi, asptheta, epq, :, sec, :, :]
+            nrs = w.shape[-2] * w.shape[-1]
+            shade_arr = linspace(0.1, 3.5, nrs)
+            rgb = colors[sec]
+            cc = zeros((nrs, 3))
+            for j in range(nrs):
+                cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
+            ax.scatter(w[..., 0, :], w[..., 1, :], w[..., 2, :], c=cc)
+            ax.scatter(0, 0, 0, c='k', s=5)
+            ax.plot([0, 4], [0, 0], [0, 0], c='k', lw=0.8)
+        elif sec == 'all':
+            w = self.w3dspace[vsw, aspphi, asptheta, epq, :, :, :, :]
+            for i, s in enumerate(range(w.shape[-3])):
+                nrs = w.shape[-2] * w.shape[-1]
+                shade_arr = linspace(0.1, 3.5, nrs)
+                rgb = colors[i]
+                cc = zeros((nrs, 3))
+                for j in range(nrs):
+                    cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
+                ax.scatter(w[..., s, 0, :], w[..., s, 1, :], w[..., s, 2, :], c=cc)
+                ax.scatter(0, 0, 0, c='k', s=5)
+                ax.plot([0, 4], [0, 0], [0, 0], c='k', lw=0.8)
+        else:
+            print("no valid sector given")
+        return ax
+    def plot_vspace(self, ax=None, aspphi=-1, asptheta=-1, epq=50, sec='all'):
+        if ax == None:
+            fig = plt.figure(figsize=(6,6))
+            ax = fig.add_subplot(111, projection='3d')
+            fig.canvas.set_window_title('V-Space')
+            #ax.set_title('W-Space')
+            ax.set_xlim(-600, 600)
+            ax.set_ylim(-600, 600)
+            ax.set_zlim(-600, 600)
+            ax.set_xlabel('x')
+            ax.set_ylabel('y')
+            ax.set_zlabel('z')
+        colors = array([[77, 77, 0], [77, 57, 0], [77, 0, 0], [77, 0, 57], [38, 0, 77], [0, 38, 77], [0, 77, 77],
+                        [0, 77, 19]])
+        if isinstance(sec, int):
+            v = self.vspace[aspphi, asptheta, epq, :, sec, :, :]
+            nrs = v.shape[-2] * v.shape[-1]
+            shade_arr = linspace(0.1, 3.5, nrs)
+            rgb = colors[sec]
+            cc = zeros((nrs, 3))
+            for j in range(nrs):
+                cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
+            ax.scatter(v[..., 0, :], v[..., 1, :], v[..., 2, :], c=cc)
+            ax.scatter(0, 0, 0, c='k', s=5)
+            ax.plot([0, 600], [0, 0], [0, 0], c='k', lw=0.8)
+        elif sec == 'all':
+            v = self.vspace[aspphi, asptheta, epq, :, :, :, :]
+            for i, s in enumerate(range(v.shape[-3])):
+                nrs = v.shape[-2] * v.shape[-1]
+                shade_arr = linspace(0.1, 3.5, nrs)
+                rgb = colors[i]
+                cc = zeros((nrs, 3))
+                for j in range(nrs):
+                    cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
+                ax.scatter(v[..., s, 0, :], v[..., s, 1, :], v[..., s, 2, :], c=cc)
+                ax.scatter(0, 0, 0, c='k', s=5)
+                ax.plot([0, 600], [0, 0], [0, 0], c='k', lw=0.8)
+        else:
+            print("no valid sector given")
+        return ax
+    def plot_FoV(self, ax=None, aspphi=0, asptheta=0, sec='all'):
+        if ax == None:
+            fig = plt.figure()
+            ax = fig.add_subplot(111, projection='3d')
+            fig.canvas.set_window_title('FoV')
+            #ax.set_title('FoV')
+            ax.set_xlabel('x')
+            ax.set_ylabel('y')
+            ax.set_zlabel('z')
+        colors = array([[77, 77, 0], [77, 57, 0], [77, 0, 0], [77, 0, 57], [38, 0, 77], [0, 38, 77], [0, 77, 77],
+                        [0, 77, 19]])
+        if isinstance(sec, int):
+            f = self.FoV[aspphi, asptheta, :, sec, :, :]
+            nrs = f.shape[-2] * f.shape[-1]
+            shade_arr = linspace(0.1, 3.5, nrs)
+            rgb = colors[sec]
+            cc = zeros((nrs, 3))
+            for j in range(nrs):
+                cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
+            ax.scatter(f[..., 0, :], f[..., 1, :], f[..., 2, :], c=cc)
+            ax.scatter(0, 0, 0, c='k', s=5)
+            ax.plot([0, 4], [0, 0], [0, 0], c='k', lw=0.8)
+        elif sec == 'all':
+            f = self.FoV[aspphi, asptheta, :, :, :, :]
+            for i, s in enumerate(range(f.shape[-3])):
+                nrs = f.shape[-2] * f.shape[-1]
+                shade_arr = linspace(0.1, 3.5, nrs)
+                rgb = colors[i]
+                cc = zeros((nrs, 3))
+                for j in range(nrs):
+                    cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
+                ax.scatter(f[..., s, 0, :], f[..., s, 1, :], f[..., s, 2, :], c=cc)
+                ax.scatter(0, 0, 0, c='k', s=5)
+                ax.plot([0, 4], [0, 0], [0, 0], c='k', lw=0.8)
+        else:
+            print("no valid sector given")
+        return ax
 
 
 

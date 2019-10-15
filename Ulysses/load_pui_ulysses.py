@@ -7,6 +7,7 @@ import numpy as np
 np.seterr(divide='ignore', invalid='ignore') # Ignore Ipython error messages
 from matplotlib import pylab
 from WSpec import WSpec
+from WShell import WShell
 
 ###
 # Script for creating an instance d of uswipha and setting masks (s.b.)
@@ -25,7 +26,7 @@ He2 = False #True #
 years = [1994]
 
 if He1:
-    d1 = uswipha(year=years, tf=[[1,3]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
+    d1 = uswipha(year=years, tf=[[1,20]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
     d1.sync_swoops()
     d1.sync_traj()
 
@@ -35,7 +36,7 @@ if He1:
     d1.set_mask('Master','brw',1,np.inf,reset=True)
 
     # d1.set_mask('Master','aa_tot', 10,30)
-    # d1.set_mask('Master','aspphi', -5, 5)
+    d1.set_mask('Master','aspphi', 5,30)
     # d1.set_mask('Master','asptheta',5,7)
 
 

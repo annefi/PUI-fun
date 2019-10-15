@@ -706,4 +706,24 @@ Lars Besprechung:
 
 \DayInOkt{Mo}{14}
 Dachte ich hätte eine gute Lösung gefunden, in beiden Frames (SC und SW) zu normieren: Indem ich einen zweiten w-Space im SC frame erstelle. Aber irgendwie komme ich trotzdem nicht auf dieselben Summen, wahrscheinlich wegen des Binnings. Ich lasse das erstmal und mache weiter mit der Skymap.
+\\
+Wollte erst einfach über die Datenprodukte \verb|wsw| bzw. \verb|w| Masken setzen, aber das geht nicht, weil die einzelnen Datenprodukte ja Arrays sind. Jetzt maskiere ich einfach das Ergebnis aus \verb|get_data()| immer einzeln
+
+\DayInOkt{Di}{15}
+Skymap funktioniert. \\
+Ich wähle die w-Schalen im sw-frame aus. Wenn ich die Winkel im SC-frame nehme, wird die Winkelabdeckung natürlich kleiner, je weiter innen ich auf der Schale bin. Deshalb muss ich auch hier sw-Frame nehmen. \\ \\
+\todo{Normierung} Ich muss auch hier Normierung einbauen. \\
+\todo{Skymap-Darstellung} Ich muss den Plot irgendwie weltkartenmäßig machen. \\
+\todo[color=green!40]{Durchklicken} Ich will Klickprogramm auch hierauf anwenden.
+\\ \\
+Ich muss das einfach wie beim w3Dspec machen, vorher normieren. Baue das entsprechend um.\\
+Überlegung: Heir muss ich aber zusätzlich noch die Größe der Bins mit reinrechnen, oder? Vielleicht einfach über eine Gewichtung beim Histogrammieren? \\
+\todo{aufräumen} Funktionen ordentlich benennen, Auswahl Countrate / Spektrum \\
+Das mit dem SC-frame-space kommentiere ich erstmal wieder aus.
+\\ \\
+Konnte die Winkel doch den Datenprodukten zufügen. Habe aber keine Ahnung, wie ich das mit der Normierung machen soll...
+\\ \\
+Morgen: Einzelplotfunktionen weiter anpassen, dass die so schön werden wie in der Loop und allgemein verschönern
+
+
 \end{document}
