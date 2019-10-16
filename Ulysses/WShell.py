@@ -10,15 +10,15 @@ class WShell():
         self.shell = shell
         self.color_norm = color_norm
 
-        self.phibins = around(arange(-180, 180, 10),decimals=1)
-        self.thetabins = around(arange(-180, 180, 10), decimals=1)
-        self.wshellbins = arange(0., 2.01, 0.2)
+        self.phibins = around(arange(-180, 180, 20),decimals=1)
+        self.thetabins = around(arange(-180, 180, 20), decimals=1)
+        self.wshellbins = arange(-1., 3.01, 0.2)
 
         norm_arr, H0 = self.D.calc_skymapspec(min_whe = min_wHe)
         norm_arr[norm_arr == 0] = 1
         self.H = H0/norm_arr
 
-    def init_plot(self, dim = 'x'):
+    def init_plot(self):
         def keypress(event):
             if event.key == 'right':
                 self.update_plot(dir='+')
@@ -31,6 +31,8 @@ class WShell():
         fig.canvas.mpl_connect('key_press_event', keypress)
         self.txt_shell = self.ax.text(0.8, 1.05, 'Shell: %s' % self.shell, bbox = {"facecolor":"grey","alpha":0.4,
                                                                    "pad":10},  transform = self.ax.transAxes)
+        self.txt_w = self.ax.text(0.5, 1.05, r'$w = [%2.1f, %2.1f]$' % (self.wshellbins[self.shell], self.wshellbins[
+            self.shell+1]), bbox={"facecolor": "grey","alpha": 0.4,"pad": 10}, transform=self.ax.transAxes)
         self.plot(shell = self.shell)
         self.ax.set_xlim(self.ax.get_xlim()[::-1])
         self.cb = plt.colorbar(self.Quadmesh, ax = self.ax)
@@ -50,7 +52,9 @@ class WShell():
             self.Quadmesh = self.ax.pcolormesh(phibins, thetabins, self.H[:, :, shell].T, cmap=colormap, vmin = vmin,
                                                vmax = vmax)
             colormap.set_under('white')
-            self.txt_shell.set_text(r'$w = [%2.1f, %2.1f]$' % (wshellbins[shell], wshellbins[shell+1]))
+            self.txt_shell.set_text('Shell: %s' % self.shell)
+            self.txt_w.set_text(r'$w = [%2.1f, %2.1f]$' % (self.wshellbins[self.shell], self.wshellbins[
+                self.shell+1]))
 
         if self.color_norm == 'sg':
             vmin = amin(self.H[self.H > 0])
@@ -60,19 +64,19 @@ class WShell():
             self.Quadmesh = self.ax.pcolormesh(phibins, thetabins, self.H[:, :, shell].T, cmap=colormap, vmin = vmin,
                                                vmax=vmax)
             colormap.set_under('white')
-            self.txt_shell.set_text(r'$w = [%2.1f, %2.1f]$' % (wshellbins[shell], wshellbins[shell+1]))
-
-
+            self.txt_shell.set_text('Shell: %s' % self.shell)
+            self.txt_w.set_text(r'$w = [%2.1f, %2.1f]$' % (self.wshellbins[self.shell], self.wshellbins[
+                self.shell+1]))
 
     def update_plot(self, dir = '+'):
         if dir == '+':
-            if self.shell == 10:
+            if self.wshellbins[self.shell] == self.wshellbins[-2]:
                 self.txt_shell.set_color('r')
             else:
                 self.txt_shell.set_color('k')
                 self.shell += 1
         elif dir == '-':
-            if self.shell == 0:
+            if self.wshellbins[self.shell] == self.wshellbins[0]:
                 self.txt_shell.set_color('r')
             else:
                 self.txt_shell.set_color('k')

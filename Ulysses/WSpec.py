@@ -5,16 +5,21 @@ from numpy import arange, min, max, amin, amax, unique, around
 
 
 class WSpec():
-    def __init__(self, D, min_wHe = 0.01, slice = 10, dim = 'x', color_norm = 'sg'):
+    def __init__(self, D, min_wHe = 0.9, slice = 10, dim = 'x', color_norm = 'sg', mode = 'ps'):
         self.D = D
         self.slice = slice
         self.dim = dim
         self.color_norm = color_norm
-
         self.wbins = around(arange(-2, 2.01, 0.2),decimals=1)
+
         norm_arr, H0 = self.D.calc_w3dspecs(min_whe = min_wHe)
-        norm_arr[norm_arr == 0] = 1
-        self.H = H0/norm_arr
+        if mode == 'norm':
+            self.H = norm_arr
+        elif mode == 'counts':
+            self.H = H0
+        elif mode == 'ps':
+            norm_arr[norm_arr == 0] = 1
+            self.H = H0 / norm_arr
 
     def init_plot(self, dim = 'x'):
         def keypress(event):

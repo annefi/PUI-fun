@@ -14,6 +14,10 @@ from WShell import WShell
 ###
 
 
+# # both:
+# He1 = True
+# He2 = True
+
 # He1+
 He1 = True #False #
 He2 = False #True #
@@ -23,10 +27,10 @@ He2 = False #True #
 # He2 = True #
 
 # load Ulysses data:
-years = [1994]
+years = [1993]
 
 if He1:
-    d1 = uswipha(year=years, tf=[[1,20]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
+    d1 = uswipha(year=years, tf=[[1,10]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
     d1.sync_swoops()
     d1.sync_traj()
 
@@ -35,8 +39,8 @@ if He1:
     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
     d1.set_mask('Master','brw',1,np.inf,reset=True)
 
-    # d1.set_mask('Master','aa_tot', 10,30)
-    d1.set_mask('Master','aspphi', 5,30)
+    #d1.set_mask('Master','aa_tot', 0, 10)
+    # d1.set_mask('Master','aspphi', -5,5)
     # d1.set_mask('Master','asptheta',5,7)
 
 
@@ -46,7 +50,7 @@ if He1:
     print('*** Load Subset ***')
     d1.load_subset(filename = 'd1.tmp', force = True)
 
-    D = Dist3D(d1, mass = 4, charge = 1, sc_vel = False)
+    D1 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
 
     #ws = WSpec(D, color_norm = 'sg')
 
@@ -54,7 +58,7 @@ if He1:
 
 if He2:
 
-    d2 = uswipha(year=years,tf=[[181,182]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/epq/')
+    d2 = uswipha(year=years,tf=[[1,200]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/epq/')
     d2.sync_swoops()
     d2.sync_traj()
 
@@ -63,7 +67,7 @@ if He2:
     d2.set_mask('Master','ech',12,250,reset=True) # exclude doubles
     d2.set_mask('Master','brw',1,np.inf,reset=True)
 
-    # d2.set_mask('Master','aa_tot', 0 , 5)
+    #d2.set_mask('Master','aa_tot', 0 , 10)
     # d2.set_mask('Master','aspphi', 1,5)
     # d2.set_mask('Master','asptheta',5,7)
 
@@ -76,21 +80,21 @@ if He2:
     # d1.load_subset(filename = 'd1.tmp', force = True)
     d2.load_subset(filename = 'd2.tmp', force = True)
 
-    D = Dist3D(d2, mass = 4, charge = 2)
-    D.hist_sec_det()
+    D2 = Dist3D(d2, mass = 4, charge = 2)
+    #D.hist_sec_det()
 
-    aa_phi = D.d.get_data('Master','aspphi')[0]
-    aa_theta = D.d.get_data('Master', 'asptheta')[0]
-    print('aspphi: ', aa_phi)
-    print('asptheta: ', aa_theta)
-    #ws = WSpec(D, color_norm = 'sg')
-
-    from swics_collimator_ulysses import collimator
-    c = collimator(aspphi = aa_phi, asptheta = aa_theta, offset_sp=185., nrs_para=6, nrs_perp = 3, edges = True,
-                   nrs_sec = 5)
-    c.fancy_plot_FoV()
-
-    pylab.show()
+    # aa_phi = D.d.get_data('Master','aspphi')[0]
+    # aa_theta = D.d.get_data('Master', 'asptheta')[0]
+    # print('aspphi: ', aa_phi)
+    # print('asptheta: ', aa_theta)
+    # #ws = WSpec(D, color_norm = 'sg')
+    #
+    # # from swics_collimator_ulysses import collimator
+    # # c = collimator(aspphi = aa_phi, asptheta = aa_theta, offset_sp=185., nrs_para=6, nrs_perp = 3, edges = True,
+    # #                nrs_sec = 5)
+    # # c.fancy_plot_FoV()
+    # #
+    # # pylab.show()
 
 
 

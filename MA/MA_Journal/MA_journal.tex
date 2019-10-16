@@ -726,4 +726,21 @@ Konnte die Winkel doch den Datenprodukten zufügen. Habe aber keine Ahnung, wie 
 Morgen: Einzelplotfunktionen weiter anpassen, dass die so schön werden wie in der Loop und allgemein verschönern
 
 
+\DayInOkt{Mi}{16}
+\todo{Normierung} Muss noch auf Phasenraumvolumen = 1 normieren beim WSpec. \\ \\
+\todo{Achsenbeschriftungen} Achsenbeschriftungen bei WSpec. \\ \\
+\todo{Auflösung} Testen, wie sich die Auflösungen der Bins und Steps auswirken \\ \\
+Nur Countrates auf WSpec und verglichen mit Phasenraumvolumen: Nur Counts sind in der Mitte immer stark erhöht, das passt. Normiert sieht man hingegen kaum irgendwas!\\
+Problem: man sieht nichts, weil manche Bins krass überhöht sind. Grund ist, dass der Norm-Array dort den Eintrag 0 hat, auf 1 gesetzt wird und die Counts dort aber (normal) groß sind.\\ 
+Mögliche Probleme:
+\begin{itemize}
+	\item w in den Datenprodukten wird nicht aus wspace genommen, sondern aus modifiziertem vspace. Der Normarray wird aber aus wspace genommen. Da ist ein Offset drin!
+	\item Warum werden in der get\_norm vsw und die aspect angles so unterschiedlich behandelt?
+	\item Eigengeschwindigkeit?
+	\item Bins/Steps feinere Auflösung?
+	\item Zur Not die Nuller im normarray erstmal nicht auf 1 sondern auf 100 oder so setzen...
+\end{itemize}
+
+
+
 \end{document}

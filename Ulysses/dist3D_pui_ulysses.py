@@ -12,9 +12,8 @@ import matplotlib
 
 
 class Dist3D(object):
-    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., v_sc_step = 1., nrs_perp=2, nrs_para=2,
-                 nrs_sec=2,
-                 nrs_epq=1, vswbins=arange(300., 800.1, 10.), ion="He1+", offset_sp = 180., sc_vel = True):
+    def __init__(self, d, mass=4., charge=1., aspphistep=4., aspthetastep=4., v_sc_step = 1., nrs_perp=2, nrs_para=2,
+                 nrs_sec=2, nrs_epq=1, vswbins=arange(300., 800.1, 10.), ion="He1+", offset_sp = 180., sc_vel = True):
         """
         d : dbData instance with species predifined by Master mask
         m : Ion mass in amu
@@ -60,6 +59,8 @@ class Dist3D(object):
         self.vswbins = vswbins
         self._calc_FoV()
         self._calc_vspace()
+        print('aspphi: ', self.aspphi.shape)
+        print('asptheta: ', self.asptheta.shape)
         print('*** calc w space ***')
         self._calc_wspace()
         print('*** add data products ***')
@@ -221,6 +222,22 @@ class Dist3D(object):
         Adds wRsw2,wTsw2,wNsw2 and wsw2 in SW-frame to pha data based on rounded vsws!
         Adds wR, wT, wN and wsc in SC-frame to pha data
         """
+
+        phiind = searchsorted(self.aspphi, around(self.d.get_data('Master',"aspphi")))
+        thetaind = searchsorted(self.asptheta, around(self.d.get_data('Master',"asptheta")))
+        vswind = searchsorted(self.vswbins, around(self.d.get_data('Master', "vsw")))
+        epqind = self.d.get_data('Master', 'epq').astype(int)
+        detind = self.d.get_data('Master', 'det').astype(int)
+        secind = self.d.get_data('Master', 'sec').astype(int)
+
+        if not "wR_s" in self.d.data.keys():
+            self.d.add_data("wR_s", self.wspace[vswind, phiind, thetaind, epqind, detind, secind, 0])
+        else:
+            self.d.data["wR_s"] = self.wspace[vswind, phiind, thetaind, epqind, detind, secind, 0]
+
+
+
+
         if not "wRsw" in self.d.data.keys():
             self.d.add_data("wRsw", (self.d.data["vRsw"].T / self.d.data["vsw"]).T)
         else:
@@ -264,34 +281,43 @@ class Dist3D(object):
             self.d.data["wHe1+2"] = getvelocity(4., 1., self.d.data["epq"].astype(int)) / around(
                 self.d.data["vsw"], -1)
 
-
         # ___________________ SC frame __________________________
-        if not "wR" in self.d.data.keys():
-            self.d.add_data("wR", (self.d.data["vR"].T / self.d.data["vsw"]).T)
-        else:
-            self.d.data["wR"] = (self.d.data["vR"].T / self.d.data["vsw"]).T
-        if not "wT" in self.d.data.keys():
-            self.d.add_data("wT", (self.d.data["vT"].T / self.d.data["vsw"]).T)
-        else:
-            self.d.data["wT"] = (self.d.data["vT"].T / self.d.data["vsw"]).T
-        if not "wN" in self.d.data.keys():
-            self.d.add_data("wN", (self.d.data["vN"].T / self.d.data["vsw"]).T)
-        else:
-            self.d.data["wN"] = (self.d.data["vN"].T / self.d.data["vsw"]).T
-        if not "wsc" in self.d.data.keys():
-            self.d.add_data("wsc", sqrt(self.d.data["wR"] ** 2 + self.d.data["wT"] ** 2 + self.d.data["wN"] ** 2))
-        else:
-            self.d.data["wsc"] = sqrt(self.d.data["wR"] ** 2 + self.d.data["wT"] ** 2 + self.d.data["wN"] ** 2)
+        # if not "wR" in self.d.data.keys():
+        #     self.d.add_data("wR", (self.d.data["vR"].T / self.d.data["vsw"]).T)
+        # else:
+        #     self.d.data["wR"] = (self.d.data["vR"].T / self.d.data["vsw"]).T
+        # if not "wT" in self.d.data.keys():
+        #     self.d.add_data("wT", (self.d.data["vT"].T / self.d.data["vsw"]).T)
+        # else:
+        #     self.d.data["wT"] = (self.d.data["vT"].T / self.d.data["vsw"]).T
+        # if not "wN" in self.d.data.keys():
+        #     self.d.add_data("wN", (self.d.data["vN"].T / self.d.data["vsw"]).T)
+        # else:
+        #     self.d.data["wN"] = (self.d.data["vN"].T / self.d.data["vsw"]).T
+        # if not "wsc" in self.d.data.keys():
+        #     self.d.add_data("wsc", sqrt(self.d.data["wR"] ** 2 + self.d.data["wT"] ** 2 + self.d.data["wN"] ** 2))
+        # else:
+        #     self.d.data["wsc"] = sqrt(self.d.data["wR"] ** 2 + self.d.data["wT"] ** 2 + self.d.data["wN"] ** 2)
 
     def _add_angles(self):
         if not "wphi" in self.d.data.keys():
-            self.d.add_data("wphi", arctan( - self.d.data['wTsw'] / self.d.data['wRsw']) )
+            self.d.add_data("wphi", arctan( - self.d.data['wTsw'] / self.d.data['wRsw']) / pi * 180)
         else:
-            self.d.data["wphi"] = arctan( - self.d.data['wTsw'] / self.d.data['wRsw'])
+            self.d.data["wphi"] = arctan( - self.d.data['wTsw'] / self.d.data['wRsw'] / pi * 180)
         if not "wtheta" in self.d.data.keys():
-            self.d.add_data("wtheta", arctan(self.d.data['wNsw'] / self.d.data['wRsw']) )
+            self.d.add_data("wtheta", arctan(self.d.data['wNsw'] / self.d.data['wRsw']) / pi * 180)
         else:
-            self.d.data["wtheta"] = arctan(self.d.data['wNsw'] / self.d.data['wRsw'])
+            self.d.data["wtheta"] = arctan(self.d.data['wNsw'] / self.d.data['wRsw'] / pi * 180)
+
+        if not "wphi_r" in self.d.data.keys():
+            self.d.add_data("wphi_r", arctan( - self.d.data['wTsw'] / self.d.data['wRsw']))
+        else:
+            self.d.data["wphi_r"] = arctan( - self.d.data['wTsw'] / self.d.data['wRsw'])
+        if not "wtheta_r" in self.d.data.keys():
+            self.d.add_data("wtheta_r", arctan(self.d.data['wNsw'] / self.d.data['wRsw']))
+        else:
+            self.d.data["wtheta_r"] = arctan(self.d.data['wNsw'] / self.d.data['wRsw'])
+
 
 
     def _add_phspeff_wgt(self):
@@ -330,7 +356,7 @@ class Dist3D(object):
         else:
             self.d.data["wgts_sec"] = wgts_sec
 
-    def get_norm(self, vswbins = arange(500., 800.1, 10.), aspphi = (-30., 30.), min_whe = 0.0,
+    def get_norm(self, vswbins = arange(500., 800.1, 10.), aspphi = (-30., 30.), min_whe = 0.9,
                         wbins = arange(-2., 2.01, 0.2), dim = 3, frame = 'sw'):
         '''
         Calculates norm_array for weighting the histogram bins relative to how often a bins has been seen:
@@ -449,7 +475,7 @@ class Dist3D(object):
 
 
     def calc_w3dspecs(self, vswbins=arange(500., 800.1, 10.), wRbins=arange(-2., 2.01, 0.2),
-                      wTbins=arange(-2., 2.01, 0.2), wNbins=arange(-2., 2.01, 0.2), min_whe=0.0, aspphi=(-30., 30.)):
+                      wTbins=arange(-2., 2.01, 0.2), wNbins=arange(-2., 2.01, 0.2), min_whe=0.9, aspphi=(-30., 30.)):
         """
         Calculates w spectra in slices
         vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
@@ -495,28 +521,46 @@ class Dist3D(object):
         return norm_arr_sw, H2_sw
 
 
-    def plot_wspec(self, dim = 'x', slice = 10, ax = None, min_wHe = 0.9):
+    def plot_wspec(self, dim = 'x', slice = 10, ax = None, min_wHe = 0.9, mode = 'ps'):
+        '''
+        :param dim:
+        :param slice:
+        :param ax:
+        :param min_wHe:
+        :param mode: Decides whether counts, phase space or norm array are plotted
+        :return:
+        '''
         wbins = arange(-2,2.01,0.2)
         norm_arr, H_0 = self.calc_w3dspecs(min_whe = min_wHe)
-        norm_arr[norm_arr == 0] = 1
-        H = norm_arr/H_0
+        if mode == 'norm':
+            H = norm_arr
+        elif mode == 'counts':
+            H = H_0
+        elif mode == 'ps':
+            norm_arr[norm_arr == 0] = 1
+            H = H_0/norm_arr
         if ax == None:
-            fig, ax = plt.subplots()
+            fig, ax = plt.subplots(figsize=(10,8))
             colormap = plt.cm.get_cmap("viridis")
             if dim == 'x':
                 self.Quadmesh = ax.pcolormesh(wbins, wbins, H[slice, :, :].T, cmap=colormap)
                 ax.set_xlim(ax.get_xlim()[::-1])
-                print(H[slice, :, :])
+                plane = 'Y-Z'
             elif dim == 'y':
                 self.Quadmesh = ax.pcolormesh(wbins, wbins, H[:, slice, :].T, cmap=colormap)
-                print(H[:, slice, :])
+                plane = 'X-Z'
             elif dim == 'z':
                 self.Quadmesh = ax.pcolormesh(wbins, wbins, H[:, :, slice], cmap=colormap)
+                plane = 'X-Y'
                 ax.set_xlim(ax.get_xlim()[::-1])
-                print(H[:, slice, :])
             else:
                 print('No valid dimension given')
                 sys.exit()
+            # Text boxes:
+            ax.text(0.1, 1.05, '%s-plane' % plane, bbox={"facecolor": "grey", "alpha": 0.4, "pad": 10},
+                       transform=ax.transAxes)
+            ax.text(0.8, 1.05, r'$w_x = [%2.1f, %2.1f]$' % (wbins[slice], wbins[slice+1]), bbox={"facecolor": "grey",
+                                  "alpha": 0.4, "pad": 10}, transform=ax.transAxes)
             colorbar = plt.colorbar(self.Quadmesh, ax=ax)
 
     def hist_sec_det(self, polar = True, binx = arange(0,4,1), biny = arange(0,9,1)):
@@ -599,7 +643,6 @@ class Dist3D(object):
         ax.plot(bins[:], hist_vsw, ls='steps-post-', color='b', label='SWOOPS solar wind velocity')
         ax.legend()
         return v
-
     def wspec_1d(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-2., 4.01, 0.2), min_whe=0.0, aspphi=(-30.,30.)):
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
@@ -664,15 +707,9 @@ class Dist3D(object):
         #ax.set_xlim(-0.5,3)
         ax.legend()
 
-
-
-    def calc_skymapspec(self, vswbins = arange(500., 800.1, 10.), phibins = arange(-180, 180, 10), thetabins =
-    arange(-180, 180, 10), wshellbins=arange(0., 2.01, 0.2), min_whe=0.0, aspphi=(-30.,30.)):
+    def calc_skymapspec(self, vswbins = arange(500., 800.1, 10.), phibins = arange(-180, 180, 20), thetabins =
+    arange(-180, 180, 20), wshellbins=arange(-1., 3.01, 0.2), min_whe=0.0, aspphi=(-30.,30.)):
         """
-
-
-        Calculates w spectra. Data preselected by Master mask, i.e. Magnetic field direction.
-        vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
         """
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
@@ -697,7 +734,6 @@ class Dist3D(object):
             twts[:,i] = wgts*swgt
         H, bs = histogramdd((wphi.flatten(), wtheta.flatten(), w.flatten()), bins=(phibins, thetabins, wshellbins),
                              weights=twts.flatten())
-
         self.d.remove_submask("He1+", "wHe1+2")
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
@@ -705,19 +741,32 @@ class Dist3D(object):
         return norm_arr, H
 
     def plot_skymapspec(self, shell = 5 , ax = None, min_wHe = 0.9):
-        phibins = arange(-180, 180, 10)
-        thetabins = arange(-180, 180, 10)
-        wshellbins = arange(0., 2.01, 0.2)
+        phibins = arange(-180, 180, 20)
+        thetabins = arange(-180, 180, 20)
+        wshellbins = arange(-1., 3.01, 0.2)
 
-        norm_arr, H = self.calc_skymapspec(min_whe = min_wHe)
+        norm_arr, H0 = self.calc_skymapspec(min_whe = min_wHe)
+        norm_arr[norm_arr == 0] = 1
+        H = H0 / norm_arr
+
+        colormap = plt.cm.get_cmap("viridis")
+        vmin = amin(H[:,:,shell][H[:,:,shell] > 0])
+        vmax = amax(H[:,:,shell])
+        if vmax < 1.:
+            vmax = 10.
 
         if ax == None:
             fig, ax = plt.subplots(figsize=(10,8))
             colormap = plt.cm.get_cmap("viridis")
-            self.Quadmesh = ax.pcolormesh(phibins, thetabins, H[:, :, shell], cmap=colormap)
+            self.Quadmesh = ax.pcolormesh(phibins, thetabins, H[:, :, shell], cmap=colormap, vmin = vmin, vmax = vmax)
             colorbar = plt.colorbar(self.Quadmesh, ax=ax)
-            txt_shell = ax.text(0.8, 1.05, 'Shell: %s' % shell, bbox={"facecolor": "grey", "alpha": 0.4,
-                                                                   "pad": 10}, transform = ax.transAxes)
+            colormap.set_under('white')
+            ax.text(0.8, 1.05, 'Shell: %s' % shell, bbox={"facecolor": "grey", "alpha": 0.4, "pad": 10},
+                    transform=ax.transAxes)
+            ax.text(0.5, 1.05, r'$w = [%2.1f, %2.1f]$' % (wshellbins[shell], wshellbins[shell + 1]),
+                    bbox={"facecolor": "grey", "alpha": 0.4, "pad": 10}, transform=ax.transAxes)
+        return H
+
 
 
 
