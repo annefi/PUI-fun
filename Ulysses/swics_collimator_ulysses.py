@@ -6,7 +6,7 @@ from custom_colours import lighten_color
 
 class collimator(object):
     def __init__(self, nrs_para=5, nrs_perp=2, nrs_sec=5, edges=True, aspphi=0.00001, asptheta=0.00001, vel=600.,
-                 vsw=300, offset_sp = 135.):
+                 vsw=300, offset_sp = 180.):
         """
         Class to calculate the field of view of SWICS (Ulysses) nrs_para,nrs_perp -> number of angle steps for
         collimator. The total number of point to represent each detector (three detectors in total) is
