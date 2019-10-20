@@ -5,19 +5,21 @@ from numpy import arange, min, max, amin, amax, unique, around
 
 
 class WSpec():
-    def __init__(self, D, min_wHe = 0.9, slice = 10, dim = 'x', color_norm = 'sg', mode = 'ps'):
+    def __init__(self, D, min_wHe = 1.0, slice = 5, dim = 'x', color_norm = 'sg', mode = 'ps', wbins = arange(-2,
+                                                                                                              2.01, 0.2)):
         self.D = D
         self.slice = slice
         self.dim = dim
         self.color_norm = color_norm
-        self.wbins = around(arange(-2, 2.01, 0.2),decimals=1)
+        self.wbins = around(wbins,decimals=1)
 
-        norm_arr, H0 = self.D.calc_w3dspecs(min_whe = min_wHe)
+        norm_arr, H0 = self.D.calc_w3dspecs(min_whe = min_wHe, wbins = wbins)
         if mode == 'norm':
             self.H = norm_arr
         elif mode == 'counts':
             self.H = H0
         elif mode == 'ps':
+            H0[norm_arr == 0] = 0.
             norm_arr[norm_arr == 0] = 1
             self.H = H0 / norm_arr
 
@@ -108,13 +110,13 @@ class WSpec():
 
     def update_plot(self, dir = '+'):
         if dir == '+':
-            if self.slice == 19:
+            if self.wbins[self.slice] == self.wbins[-2]:
                 self.txt_slice.set_color('r')
             else:
                 self.txt_slice.set_color('k')
                 self.slice += 1
         elif dir == '-':
-            if self.slice == 0:
+            if self.wbins[self.slice] == self.wbins[0]:
                 self.txt_slice.set_color('r')
             else:
                 self.txt_slice.set_color('k')

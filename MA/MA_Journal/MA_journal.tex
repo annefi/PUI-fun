@@ -742,9 +742,18 @@ Mögliche Probleme:
 \end{itemize}
 
 \DayInOkt{Fr}{18}
-Endlich hab ich die Indices gefixt!! \\
-\todo{+5} Überlegen, ob das mit den vsw-Steps jetzt einfacher ist \\
-\todo{whe} Überlegen, wie ich jetzt whe einschränke \\
-\todo{vsw} Überlegen, wie ich vsw einschränken kann: Das klappt einfach nicht, weil ich nicht nur einen Teil der PHA-Worte mit einem w versehen kann. Deshalb hat Lars das wahrscheinlich auch nicht über den w-Space gemacht sondern über den modifizierten v-Space. Ich nehme das Begrenzen einfach raus. Dann muss ich die Daten halt vorher auf d filtern. Morgen weiter mit Einschränkungen im WSpec... 
+Endlich hab ich die Indices gefixt!! Das Problem war, dass der norm array über den wspace erstellt wurde und H über den modifizierten vspace. Die sind dann nicht deckungsgleich (ging auch ein bisschen was mit den Histogrammgrenzen schief) Neues Binning ist in der Kladde S. 86 dokumentiert\\ \\
+\todo[color=green!40]{+5} Überlegen, ob das mit den vsw-Steps jetzt einfacher ist: Japp! Denn beim Runden lande ich genau auf den vsw-Werten, mit denen ich auch den v-Space erstellt habe. Der Index 2, also mit gerundeten Werten, ist also "korrekter" \\ \\
+\todo[color=green!40]{whe} Überlegen, wie ich jetzt whe einschränke: Ganz einfach, muss gar nichts komisch maskieren in norm und H: Einfach die Masken mit übergeben bei der Erstellung von norm, dann sind die ja zeingend gleich (Jetzt! Wo alles aus dem gleichen Space genommen wird!) \\ \\
+\todo[color=green!40]{vsw} Überlegen, wie ich vsw einschränken kann: Das klappt einfach nicht, weil ich nicht nur einen Teil der PHA-Worte mit einem w versehen kann. Deshalb hat Lars das wahrscheinlich auch nicht über den w-Space gemacht sondern über den modifizierten v-Space. Ich nehme das Begrenzen einfach raus. Dann muss ich die Daten halt vorher auf d filtern. Morgen weiter mit Einschränkungen im WSpec...
+
+\DayInOkt{So}{20}
+\todo[color=green!40]{vspace} vspace entsprechend anpassen und \\ \\
+\todo[color=green!40]{wspace} im wspace die anderen datenprodukte erstellen, evtl. schauen wie sehr sich die Werte unterscheiden! Done: s.u.\\ \\
+
+Oh! Das geht natürlich alles nicht mehr, wenn ich die Eigengeschwindigkeit mitnehme... Und da steckt auch das Problem: Auch wenn die Bins wirklich gleich sind, kann es sein, dass ich im letzten Histogrammierschritt durch die Eigengeschw. in einem anderen Bin lande als norm (das ja strikt aus dem Space ohne Eigengeschwindigkeit gebildet wird). \\
+Allerdings scheinen sich die Werte echt nicht weit auseinander zu liegen. Es gibt auch eine kleine Differenz, wenn ich die Eigengeschwindigkeit ausstelle zwischen dem w aus dem vspace und dem wspace (wR\_s usw. Das ist genau das w, aus dem auch der Normarray gebildet wird). Die Differenz aus vspace mit Eigengeschw. ist ca. nochmal so groß. Man kann natürlich Pech haben, wenn die Differenz genau über eine Bingrenze geht. Solche Fälle müsste man dann hinnehmen? (Differenz ist ca. 0.01 w)\\
+Getestet auf 1995, 200 Tage: Ab einer Bingröße (in den wSpecs) von 0.05 (normal war 0.2) kommt es zu Überschreitungen. \\
+Unabhängig davon, wie sinnvoll dieses Binning ist, fange ich das jetzt mal an diesem Fall ab. Es war eine Zeile...
 
 \end{document}

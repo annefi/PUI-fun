@@ -9,11 +9,12 @@ import matplotlib.colors as colors
 import matplotlib.ticker as ticker
 import sys
 import matplotlib
+import time
 
 
 class Dist3D(object):
-    def __init__(self, d, mass=4., charge=1., aspphistep=3., aspthetastep=3., v_sc_step = 1., nrs_perp=1, nrs_para=1,
-                 nrs_sec=2, nrs_epq=1, vsw_int = [300, 800], ion="He1+", offset_sp = 180., sc_vel = True):
+    def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step = 1., nrs_perp=1, nrs_para=4,
+                 nrs_sec=9, nrs_epq=1, ion="He1+", offset_sp = 180., sc_vel = True):
         """
         d : dbData instance with species predifined by Master mask
         m : Ion mass in amu
@@ -39,17 +40,15 @@ class Dist3D(object):
                                around(max(self.d.data["asptheta"])) + aspthetastep + 0.0001, aspthetastep)
 
 
-        vswbins = arange(around(min(self.d.data["vsw"]), decimals = -1),
+        self.vswbins = arange(around(min(self.d.data["vsw"]), decimals = -1),
                                around(max(self.d.data["vsw"]), decimals = -1) + 10. + 0.0001, 10)
-        self.vswbins = vswbins[((vswbins >= vsw_int[0])& (vswbins <= vsw_int[1] + 10 + 0.0001))]
+
         self.vr = arange(around(min(self.d.data["vr_sc"])),
                                around(max(self.d.data["vr_sc"])) + v_sc_step + 0.0001, v_sc_step)
         self.vt = arange(around(min(self.d.data["vt_sc"])),
                                around(max(self.d.data["vt_sc"])) + v_sc_step + 0.0001, v_sc_step)
         self.vn = arange(around(min(self.d.data["vn_sc"])),
                                around(max(self.d.data["vn_sc"])) + v_sc_step + 0.0001, v_sc_step)
-
-
 
         self.vels = getvelocity(self.mass, self.charge, arange(0, 64, 1), frac=1.)
         # nrs_epq -> deltaEpQ is +-5% -> delta v is +-2.5% -> nrs_epq equal spaced velocities in epq direction are
@@ -68,9 +67,9 @@ class Dist3D(object):
         print('*** calc w space ***')
         self._calc_wspace()
         print('*** add data products ***')
-        self._add_3Dv()
-        self._add_w()
-        self._add_phspeff_wgt()
+        #self._add_3Dv()
+        #self._add_w()
+        #self._add_phspeff_wgt()
         #self._add_angles()
 
     def _calc_FoV(self):
@@ -102,10 +101,13 @@ class Dist3D(object):
         """
         Calculates vR,vT,vN for all epqsteps and given aspect angles
         """
+
         self.w3dspace = zeros(
             (self.vswbins.shape[0], self.aspphi.shape[0], self.asptheta.shape[0], 64, 3, 8, 3, self.sec_det_dim))
+
         self.wspace = zeros(
             (self.vswbins.shape[0], self.aspphi.shape[0], self.asptheta.shape[0], 64, 3, 8, 1, self.sec_det_dim))
+
         # self.w3dspace_sc = zeros(
         #     (self.vswbins.shape[0], self.aspphi.shape[0], self.asptheta.shape[0], 64, 3, 8, 3, self.sec_det_dim))
         # self.wspace_sc = zeros(
@@ -116,6 +118,11 @@ class Dist3D(object):
             tmpspace /= (v)
             self.w3dspace[iv, ...] = tmpspace
             self.wspace[iv, ..., 0, :] = sqrt(sum(tmpspace ** 2, axis=5))
+            print(iv)
+
+
+
+
             ## SC frame:
             # tmpspace_sc = 1. * self.vspace
             # tmpspace_sc /= v
@@ -129,8 +136,13 @@ class Dist3D(object):
         In the current version vsw is taken to be stricly radial, i.e. along v_x / v_R!
         sc_vel determines, if the velocity of the SC itself should be considered in the v-space.
         """
-        phiind = searchsorted(self.aspphi, around(self.d.get_data('Master',"aspphi")))
-        thetaind = searchsorted(self.asptheta, around(self.d.get_data('Master',"asptheta")))
+
+        searcharr_phi = arange(self.aspphi[0] + self.aspphistep / 2., self.aspphi[-1], self.aspphistep)
+        searcharr_theta = arange(self.asptheta[0] + self.aspthetastep / 2., self.asptheta[-1], self.aspthetastep)
+
+        phiind = searchsorted(searcharr_phi, self.d.get_data('Master', "aspphi"))
+        thetaind = searchsorted(searcharr_theta, self.d.get_data('Master', "asptheta"))
+
         epqind = self.d.get_data('Master', 'epq').astype(int)
         detind = self.d.get_data('Master', 'det').astype(int)
         secind = self.d.get_data('Master', 'sec').astype(int)
@@ -251,10 +263,6 @@ class Dist3D(object):
         else:
             self.d.data["wN_s"] = self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 2]
 
-        # for i in range(len(self.d.data['wN_s'])):
-        #     print(vswind[i], phiind[i], thetaind[i], epqind[i], detind[i], secind[i])
-        #
-
 
         if not "wRsw" in self.d.data.keys():
             self.d.add_data("wRsw", (self.d.data["vRsw"].T / self.d.data["vsw"]).T)
@@ -299,23 +307,6 @@ class Dist3D(object):
             self.d.data["wHe1+2"] = getvelocity(4., 1., self.d.data["epq"].astype(int)) / around(
                 self.d.data["vsw"], -1)
 
-        # ___________________ SC frame __________________________
-        # if not "wR" in self.d.data.keys():
-        #     self.d.add_data("wR", (self.d.data["vR"].T / self.d.data["vsw"]).T)
-        # else:
-        #     self.d.data["wR"] = (self.d.data["vR"].T / self.d.data["vsw"]).T
-        # if not "wT" in self.d.data.keys():
-        #     self.d.add_data("wT", (self.d.data["vT"].T / self.d.data["vsw"]).T)
-        # else:
-        #     self.d.data["wT"] = (self.d.data["vT"].T / self.d.data["vsw"]).T
-        # if not "wN" in self.d.data.keys():
-        #     self.d.add_data("wN", (self.d.data["vN"].T / self.d.data["vsw"]).T)
-        # else:
-        #     self.d.data["wN"] = (self.d.data["vN"].T / self.d.data["vsw"]).T
-        # if not "wsc" in self.d.data.keys():
-        #     self.d.add_data("wsc", sqrt(self.d.data["wR"] ** 2 + self.d.data["wT"] ** 2 + self.d.data["wN"] ** 2))
-        # else:
-        #     self.d.data["wsc"] = sqrt(self.d.data["wR"] ** 2 + self.d.data["wT"] ** 2 + self.d.data["wN"] ** 2)
 
     def _add_angles(self):
         if not "wphi" in self.d.data.keys():
@@ -404,7 +395,7 @@ class Dist3D(object):
         # H indicates how often a particular aspphi-asptheta-vsw combination occurs (= how often did ULYSSES see this
         # angle with this vsw?)
 
-        # "sophisticated" bins: take the edges again from inbetween the aspphisteps and insert outer borders to not
+        # new bins: take the edges again from inbetween the aspphisteps and insert outer borders to not
         # exclude counts
         phibins = arange(self.aspphi[0] - self.aspphistep/2., self.aspphi[-1] + self.aspthetastep, self.aspphistep)
         thetabins = arange(self.asptheta[0] - self.aspthetastep / 2., self.asptheta[-1] + self.aspthetastep, self.aspthetastep)
@@ -437,7 +428,9 @@ class Dist3D(object):
                                 #                        bins = wbins)
                             if dim == 3:
                                 if frame == 'sw':
-                                    print(iv, ip, it)
+
+
+
                                     H2, bs = histogramdd((self.w3dspace[iv , ip, it, epqs, ..., 0, :].flatten(),
                                                           self.w3dspace[iv , ip, it, epqs, ..., 1, :].flatten(),
                                                           self.w3dspace[iv , ip, it, epqs, ..., 2, :].flatten()),
@@ -502,8 +495,7 @@ class Dist3D(object):
         return norm_arr
 
 
-    def calc_w3dspecs(self, vswbins=arange(500., 800.1, 10.), wRbins=arange(-2., 2.01, 0.2),
-                      wTbins=arange(-2., 2.01, 0.2), wNbins=arange(-2., 2.01, 0.2), min_whe=0.9, aspphi=(-30., 30.)):
+    def calc_w3dspecs(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-2., 2.01, 0.2), min_whe=1.0, aspphi=(-30., 30.)):
         """
         Calculates w spectra in slices
         vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
@@ -517,7 +509,7 @@ class Dist3D(object):
 
         # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
         # to calculate the weights for normalising the final histograms:
-        norm_arr_sw = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wRbins, dim = 3,
+        norm_arr_sw = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wbins, dim = 3,
                                     frame = 'sw')
         # norm_arr_sc = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wRbins, dim = 3,
         #                             frame = 'sc')
@@ -526,9 +518,9 @@ class Dist3D(object):
         wgts = self.d.get_data("He1+", "wgts_sec") # 1 / (phase space volume * eff)
         swgt = self.d.get_data("He1+","brw") ### real sector weight not available for Ulysses
 
-        wRsw2 = self.d.get_data("He1+", "wRsw2")
-        wTsw2 = self.d.get_data("He1+", "wTsw2")
-        wNsw2 = self.d.get_data("He1+", "wNsw2")
+        wR_sw2 = self.d.get_data("He1+", "wRsw")
+        wT_sw2 = self.d.get_data("He1+", "wTsw")
+        wN_sw2 = self.d.get_data("He1+", "wNsw")
 
         wR_s = self.d.get_data("He1+", "wR_s")
         wT_s = self.d.get_data("He1+", "wT_s")
@@ -538,10 +530,10 @@ class Dist3D(object):
         # wTsc = self.d.get_data("He1+", "wT")
         # wNsc = self.d.get_data("He1+", "wN")
 
-        twts = zeros(wRsw2.shape)
-        for i in range(wRsw2.shape[1]):
+        twts = zeros(wR_sw2.shape)
+        for i in range(wR_sw2.shape[1]):
             twts[:,i] = wgts*swgt
-        H2_sw, bs = histogramdd((wR_s.flatten(), wT_s.flatten(), wN_s.flatten()), bins=(wRbins, wTbins, wNbins),
+        H2_sw, bs = histogramdd((wR_sw2.flatten(), wT_sw2.flatten(), wN_sw2.flatten()), bins=(wbins, wbins, wbins),
                                     weights=twts.flatten())
         # H2_sw, bs = histogramdd((wRsw2.flatten(), wTsw2.flatten(), wNsw2.flatten()), bins=(wRbins, wTbins, wNbins),
         #                      weights=twts.flatten())
@@ -551,11 +543,10 @@ class Dist3D(object):
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
-        #return norm_arr_sw, H2_sw, norm_arr_sc, H2_sc
         return norm_arr_sw, H2_sw
 
 
-    def plot_wspec(self, dim = 'x', slice = 10, ax = None, min_wHe = 0.9, mode = 'ps'):
+    def plot_wspec(self, dim = 'x', slice = 10, ax = None, min_wHe = 1.0, mode = 'ps'):
         '''
         :param dim:
         :param slice:
@@ -571,6 +562,7 @@ class Dist3D(object):
         elif mode == 'counts':
             H = H_0
         elif mode == 'ps':
+            H_0[norm_arr == 0] = 0
             norm_arr[norm_arr == 0] = 1
             H = H_0/norm_arr
         if ax == None:
@@ -803,17 +795,19 @@ class Dist3D(object):
 
 
     def test_func(self, norm, H):
+        # for testing if the norm array covers every bin of the H array (which should be the case!)
         wbins = arange(-2., 2.01, 0.2)
         norm_p = norm.sum(axis = 0)
         H_p = H.sum(axis=0)
         colormap = plt.cm.get_cmap("viridis")
         vmin = amin(H_p[H_p>0])
+        H_p[norm_p != 0] = 0.
+        print(unique(H_p))
 
         fig, ax = plt.subplots(figsize=(10, 8))
         ax.set_title('H')
         Quadmesh = ax.pcolormesh(wbins, wbins, H_p, vmin = vmin)
         plt.colorbar(Quadmesh, ax=ax)
-        #colormap.set_under('white')
 
         fign, axn = plt.subplots(figsize=(10, 8))
         axn.set_title('norm')
@@ -822,26 +816,31 @@ class Dist3D(object):
         colormap.set_under('white')
 
 
-    def plot_diff(self):
+    def plot_diff(self, axR = None):
+        # mit Rundung aus Vspace
         wRsw2 = self.d.get_data("Master", "wRsw2")
         wTsw2 = self.d.get_data("Master", "wTsw2")
         wNsw2 = self.d.get_data("Master", "wNsw2")
 
+        # ohne Rundung aus vSpace
         wRsw = self.d.get_data("Master", "wRsw")
         wTsw = self.d.get_data("Master", "wTsw")
         wNsw = self.d.get_data("Master", "wNsw")
 
+        # aus wSpace, also ohne Beruecksichtigung der Eigengeschwindigkeit
         wR_s = self.d.get_data("Master", "wR_s")
         wT_s = self.d.get_data("Master", "wT_s")
         wN_s = self.d.get_data("Master", "wN_s")
 
         x = range(len(wRsw2))
-
-        fig, axR = plt.subplots()
+        if axR == None:
+            fig, axR = plt.subplots()
         axR.plot(x, wRsw2, '.', label= "sw2")
-        axR.plot(x, wRsw, '.', label="sw1")
+        #axR.plot(x, wRsw, '.', label="sw1")
         axR.plot(x, wR_s, '.', label="sw_s")
         axR.legend()
+        print(mean(wRsw2 - wR_s))
+        return axR
 
 
 
