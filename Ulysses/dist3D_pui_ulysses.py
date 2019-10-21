@@ -12,6 +12,17 @@ import matplotlib
 import time
 
 
+matplotlib.rcParams.update({'font.size': 18,
+                            'xtick.major.size': 13,
+                            'xtick.major.width': 2,
+                            'xtick.minor.size': 8,
+                            'xtick.minor.width': 1,
+                            'ytick.major.size': 13,
+                            'ytick.major.width': 2,
+                            'ytick.minor.size': 8,
+                            'ytick.minor.width': 1})
+
+
 class Dist3D(object):
     def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step = 1., nrs_perp=1, nrs_para=4,
                  nrs_sec=9, nrs_epq=1, ion="He1+", offset_sp = 180., sc_vel = True):
@@ -65,12 +76,12 @@ class Dist3D(object):
         print('aspphi: ', self.aspphi.shape)
         print('asptheta: ', self.asptheta.shape)
         print('*** calc w space ***')
-        self._calc_wspace()
+        #self._calc_wspace()
         print('*** add data products ***')
-        #self._add_3Dv()
-        #self._add_w()
-        #self._add_phspeff_wgt()
-        #self._add_angles()
+        self._add_3Dv()
+        self._add_w()
+        self._add_phspeff_wgt()
+        self._add_angles()
 
     def _calc_FoV(self):
         # shape self.FoV: (#aspphi, #asptheta, #det, #sec, xyz, col_dim)
@@ -250,18 +261,18 @@ class Dist3D(object):
         detind = self.d.get_data('Master', 'det').astype(int)
         secind = self.d.get_data('Master', 'sec').astype(int)
 
-        if not "wR_s" in self.d.data.keys():
-            self.d.add_data("wR_s", self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 0])
-        else:
-            self.d.data["wR_s"] = self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 0]
-        if not "wT_s" in self.d.data.keys():
-            self.d.add_data("wT_s", self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 1])
-        else:
-            self.d.data["wT_s"] = self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 1]
-        if not "wN_s" in self.d.data.keys():
-            self.d.add_data("wN_s", self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 2])
-        else:
-            self.d.data["wN_s"] = self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 2]
+        # if not "wR_s" in self.d.data.keys():
+        #     self.d.add_data("wR_s", self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 0])
+        # else:
+        #     self.d.data["wR_s"] = self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 0]
+        # if not "wT_s" in self.d.data.keys():
+        #     self.d.add_data("wT_s", self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 1])
+        # else:
+        #     self.d.data["wT_s"] = self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 1]
+        # if not "wN_s" in self.d.data.keys():
+        #     self.d.add_data("wN_s", self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 2])
+        # else:
+        #     self.d.data["wN_s"] = self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 2]
 
 
         if not "wRsw" in self.d.data.keys():
@@ -280,6 +291,7 @@ class Dist3D(object):
             self.d.add_data("wsw", sqrt(self.d.data["wRsw"] ** 2 + self.d.data["wTsw"] ** 2 + self.d.data["wNsw"] ** 2))
         else:
             self.d.data["wsw"] = sqrt(self.d.data["wRsw"] ** 2 + self.d.data["wTsw"] ** 2 + self.d.data["wNsw"] ** 2)
+
         # _________index 2 in names means vsw speed has been rounded__________
         if not "wRsw2" in self.d.data.keys():
             self.d.add_data("wRsw2", (self.d.data["vRsw2"].T / self.d.data["vsw"]).T)
@@ -299,33 +311,42 @@ class Dist3D(object):
         else:
             self.d.data["wsw2"] = sqrt(
                 self.d.data["wRsw2"] ** 2 + self.d.data["wTsw2"] ** 2 + self.d.data["wNsw2"] ** 2)
+
         if not "wHe1+2" in self.d.data.keys():
             self.d.add_data("wHe1+2",
-                            getvelocity(4., 1., self.d.data["epq"].astype(int)) / around(self.d.data["vsw"],
-                                                                                                  -1))
+                            getvelocity(4., 1., self.d.data["epq"].astype(int)) / around(self.d.data["vsw"], -1))
         else:
             self.d.data["wHe1+2"] = getvelocity(4., 1., self.d.data["epq"].astype(int)) / around(
                 self.d.data["vsw"], -1)
 
 
     def _add_angles(self):
+        '''
+        Adds phi and theta angle data products
+        :return:
+        '''
+        # degree values:
         if not "wphi" in self.d.data.keys():
-            self.d.add_data("wphi", arctan( - self.d.data['wTsw'] / self.d.data['wRsw']) / pi * 180)
+            self.d.add_data("wphi", arctan( - self.d.data['wTsw2'] / self.d.data['wRsw2']) / pi * 180)
         else:
-            self.d.data["wphi"] = arctan( - self.d.data['wTsw'] / self.d.data['wRsw'] / pi * 180)
+            self.d.data["wphi"] = arctan( - self.d.data['wTsw2'] / self.d.data['wRsw2'] / pi * 180)
         if not "wtheta" in self.d.data.keys():
-            self.d.add_data("wtheta", arctan(self.d.data['wNsw'] / self.d.data['wRsw']) / pi * 180)
+            self.d.add_data("wtheta", arctan(self.d.data['wNsw2'] / self.d.data['wRsw2']) / pi * 180)
         else:
-            self.d.data["wtheta"] = arctan(self.d.data['wNsw'] / self.d.data['wRsw'] / pi * 180)
+            self.d.data["wtheta"] = arctan(self.d.data['wNsw2'] / self.d.data['wRsw2'] / pi * 180)
 
+        # radiant values:
         if not "wphi_r" in self.d.data.keys():
-            self.d.add_data("wphi_r", arctan( - self.d.data['wTsw'] / self.d.data['wRsw']))
+            self.d.add_data("wphi_r", arctan( - self.d.data['wTsw2'] / self.d.data['wRsw2']))
         else:
-            self.d.data["wphi_r"] = arctan( - self.d.data['wTsw'] / self.d.data['wRsw'])
+            self.d.data["wphi_r"] = arctan( - self.d.data['wTsw2'] / self.d.data['wRsw2'])
         if not "wtheta_r" in self.d.data.keys():
-            self.d.add_data("wtheta_r", arctan(self.d.data['wNsw'] / self.d.data['wRsw']))
+            self.d.add_data("wtheta_r", arctan(self.d.data['wNsw2'] / self.d.data['wRsw2']))
         else:
-            self.d.data["wtheta_r"] = arctan(self.d.data['wNsw'] / self.d.data['wRsw'])
+            self.d.data["wtheta_r"] = arctan(self.d.data['wNsw2'] / self.d.data['wRsw2'])
+
+
+
 
     def _add_phspeff_wgt(self):
         """
@@ -411,6 +432,7 @@ class Dist3D(object):
             norm_arr = zeros((wbins.shape[0] - 1))
         if dim == 3:
             norm_arr = zeros((wbins.shape[0] - 1,wbins.shape[0] - 1,wbins.shape[0] - 1))
+            #norm_arr_old = zeros((wbins.shape[0] - 1, wbins.shape[0] - 1, wbins.shape[0] - 1))
         #for iv, v in enumerate(vswbins[:-1]):
         for iv, v in enumerate(self.vswbins):
             #for ip, p in enumerate(self.aspphi[:-1]):
@@ -420,32 +442,36 @@ class Dist3D(object):
                         if H[iv, ip, it] > 0:
                             whe = self.vels / (v + 5.)
                             epqs = arange(0, 64, 1)[whe > min_whe]
-                            if dim == 1:
-                                if frame == "sw":
-                                    H2, bs = histogram(self.wspace[iv + ivoffset, ip, it, epqs, ...].flatten(), bins = wbins)
-                                # elif frame == "sc":
-                                #     H2, bs = histogram(self.wspace_sc[iv + ivoffset, ip, it, epqs, ...].flatten(),
-                                #                        bins = wbins)
                             if dim == 3:
                                 if frame == 'sw':
+                                    tmpwx = self.vspace[ip,it,epqs, ..., 0, :]- v
+                                    wx = tmpwx / v
+                                    wy = self.vspace[ip, it, epqs, ..., 1, :] / v
+                                    wz = self.vspace[ip, it, epqs, ..., 2, :] / v
+
+                                    H2, bs = histogramdd((wx.flatten(),wy.flatten(),wz.flatten()),
+                                                         bins = (wbins,wbins,wbins))
+                                    norm_arr += H2 * H[iv,ip,it]
 
 
 
-                                    H2, bs = histogramdd((self.w3dspace[iv , ip, it, epqs, ..., 0, :].flatten(),
-                                                          self.w3dspace[iv , ip, it, epqs, ..., 1, :].flatten(),
-                                                          self.w3dspace[iv , ip, it, epqs, ..., 2, :].flatten()),
-                                                         bins=(wbins, wbins, wbins))
+                                    # H3, bs = histogramdd((self.w3dspace[iv , ip, it, epqs, ..., 0, :].flatten(),
+                                    #                       self.w3dspace[iv , ip, it, epqs, ..., 1, :].flatten(),
+                                    #                       self.w3dspace[iv , ip, it, epqs, ..., 2, :].flatten()),
+                                    #                      bins=(wbins, wbins, wbins))
+                                    # norm_arr_old += H3 * H[iv, ip, it]
+
                                 # elif frame == 'sc':
                                 #     H2, bs = histogramdd(
                                 #         (self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 0, :].flatten(),
                                 #          self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 1, :].flatten(),
                                 #          self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 2, :].flatten()),
                                 #         bins=(wbins, wbins, wbins))
-                            norm_arr += H2 * H[iv, ip, it]
+
         return norm_arr
 
     def get_norm_shells(self, vswbins = arange(500., 800.1, 10.), aspphi = (-30., 30.), min_whe = 0.0,
-             phibins = arange(-180, 180, 10.), thetabins = arange(-180, 180, 10.), wshellbins = arange(0, 2, 0.2)):
+             phirange =[-180, 180.001], thetarange =[-90, 90.001], angstep = 10, wshellbins = arange(0, 2.01, 0.2)):
         '''
         Calculates norm_array for weighting the histogram bins relative to how often a bins has been seen:
         For each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
@@ -479,6 +505,10 @@ class Dist3D(object):
 
         # norm_arr indicates how often a wR-wT-wN combination "is hit" with the given AA-vsw combinations and their
         # resp. occurrences
+
+        phibins = arange(phirange[0], phirange[1], angstep)
+        thetabins = arange(thetarange[0], thetarange[1], angstep)
+
         norm_arr = zeros((phibins.shape[0] - 1,thetabins.shape[0] - 1,wshellbins.shape[0] - 1))
         for iv, v in enumerate(vswbins[:-1]):
             for ip, p in enumerate(self.aspphi[:-1]):
@@ -487,15 +517,30 @@ class Dist3D(object):
                         if H[iv, ip, it] > 0:
                             whe = self.vels / (v + 5.)
                             epqs = arange(0, 64, 1)[whe > min_whe]
-                            H2, bs = histogramdd((self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 0, :].flatten(),
-                                                      self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 1, :].flatten(),
-                                                      self.w3dspace[iv + ivoffset, ip, it, epqs, ..., 2, :].flatten()),
-                                                     bins=(phibins, thetabins, wshellbins))
+                            tmpwx = self.vspace[ip, it, epqs, ..., 0, :] - v
+                            wx = tmpwx / v
+                            wy = self.vspace[ip, it, epqs, ..., 1, :] / v
+                            wz = self.vspace[ip, it, epqs, ..., 2, :] / v
+
+                            H2, bs = histogramdd((wx.flatten(), wy.flatten(), wz.flatten()),
+                                                 bins=(phibins, thetabins, wshellbins))
                             norm_arr += H2 * H[iv, ip, it]
+
+        # consider the different volumes of the bins:
+        vol_arr = zeros((phibins.shape[0] - 1,thetabins.shape[0] - 1,wshellbins.shape[0] - 1))
+        thetabins = arange(0, pi+0.001, pi/18.)
+        as_rad = angstep * pi / 180.
+        for ip, p in enumerate(phibins[:-1]):
+            for it, t in enumerate(thetabins[:-1]):
+                for iw, w in enumerate(wshellbins[:-1]):
+                    vol_arr[ip, it, iw] = 1/3. * (wshellbins[iw + 1]**3 - wshellbins[iw]**3) * (cos(t) - cos(
+                        t + as_rad)) * (as_rad)
+                    #vol_arr[ip,iv,iw] = as_rad * (1 - cos(as_rad)) * 1/3 * (wshellbins[iw +1]**3 - wshellbins[iw]**3)
+        norm_arr *= vol_arr
         return norm_arr
 
 
-    def calc_w3dspecs(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-2., 2.01, 0.2), min_whe=1.0, aspphi=(-30., 30.)):
+    def calc_w3dspecs(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-2., 2.01, 0.2), min_whe=1, aspphi=(-30., 30.)):
         """
         Calculates w spectra in slices
         vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
@@ -518,27 +563,16 @@ class Dist3D(object):
         wgts = self.d.get_data("He1+", "wgts_sec") # 1 / (phase space volume * eff)
         swgt = self.d.get_data("He1+","brw") ### real sector weight not available for Ulysses
 
-        wR_sw2 = self.d.get_data("He1+", "wRsw")
-        wT_sw2 = self.d.get_data("He1+", "wTsw")
-        wN_sw2 = self.d.get_data("He1+", "wNsw")
-
-        wR_s = self.d.get_data("He1+", "wR_s")
-        wT_s = self.d.get_data("He1+", "wT_s")
-        wN_s = self.d.get_data("He1+", "wN_s")
-
-        # wRsc = self.d.get_data("He1+", "wR")
-        # wTsc = self.d.get_data("He1+", "wT")
-        # wNsc = self.d.get_data("He1+", "wN")
+        wR_sw2 = self.d.get_data("He1+", "wRsw2")
+        wT_sw2 = self.d.get_data("He1+", "wTsw2")
+        wN_sw2 = self.d.get_data("He1+", "wNsw2")
 
         twts = zeros(wR_sw2.shape)
         for i in range(wR_sw2.shape[1]):
             twts[:,i] = wgts*swgt
         H2_sw, bs = histogramdd((wR_sw2.flatten(), wT_sw2.flatten(), wN_sw2.flatten()), bins=(wbins, wbins, wbins),
                                     weights=twts.flatten())
-        # H2_sw, bs = histogramdd((wRsw2.flatten(), wTsw2.flatten(), wNsw2.flatten()), bins=(wRbins, wTbins, wNbins),
-        #                      weights=twts.flatten())
-        # H2_sc, bs = histogramdd((wRsc.flatten(), wTsc.flatten(), wNsc.flatten()), bins=(wRbins, wTbins, wNbins),
-        #                      weights=twts.flatten())
+
         self.d.remove_submask("He1+", "wHe1+2")
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
@@ -568,15 +602,19 @@ class Dist3D(object):
         if ax == None:
             fig, ax = plt.subplots(figsize=(10,8))
             colormap = plt.cm.get_cmap("viridis")
+            vmin = amin(H[H > 0])
             if dim == 'x':
-                self.Quadmesh = ax.pcolormesh(wbins, wbins, H[slice, :, :].T, cmap=colormap)
+                self.Quadmesh = ax.pcolormesh(wbins, wbins, H[slice, :, :].T, cmap=colormap, vmin = vmin)
+                colormap.set_under('white')
                 ax.set_xlim(ax.get_xlim()[::-1])
                 plane = 'Y-Z'
             elif dim == 'y':
-                self.Quadmesh = ax.pcolormesh(wbins, wbins, H[:, slice, :].T, cmap=colormap)
+                self.Quadmesh = ax.pcolormesh(wbins, wbins, H[:, slice, :].T, cmap=colormap, vmin = vmin)
+                colormap.set_under('white')
                 plane = 'X-Z'
             elif dim == 'z':
-                self.Quadmesh = ax.pcolormesh(wbins, wbins, H[:, :, slice], cmap=colormap)
+                self.Quadmesh = ax.pcolormesh(wbins, wbins, H[:, :, slice], cmap=colormap, vmin = vmin)
+                colormap.set_under('white')
                 plane = 'X-Y'
                 ax.set_xlim(ax.get_xlim()[::-1])
             else:
@@ -585,8 +623,10 @@ class Dist3D(object):
             # Text boxes:
             ax.text(0.1, 1.05, '%s-plane' % plane, bbox={"facecolor": "grey", "alpha": 0.4, "pad": 10},
                        transform=ax.transAxes)
-            ax.text(0.8, 1.05, r'$w_x = [%2.1f, %2.1f]$' % (wbins[slice], wbins[slice+1]), bbox={"facecolor": "grey",
-                                  "alpha": 0.4, "pad": 10}, transform=ax.transAxes)
+            ax.text(0.8, 1.05, r'$\mathrm{w_{sw,%s} = [%2.1f, %2.1f]}$' % (dim, wbins[slice], wbins[slice+1]),
+                    bbox={"facecolor": "grey", "alpha": 0.4, "pad": 10}, transform=ax.transAxes)
+            ax.set_xlabel(r'$\mathrm{w_{sw,%s}}$' % plane[0].lower())
+            ax.set_ylabel(r'$\mathrm{w_{sw,%s}}$' % plane[-1].lower())
             colorbar = plt.colorbar(self.Quadmesh, ax=ax)
 
     def hist_sec_det(self, polar = True, binx = arange(0,4,1), biny = arange(0,9,1)):
@@ -733,8 +773,8 @@ class Dist3D(object):
         #ax.set_xlim(-0.5,3)
         ax.legend()
 
-    def calc_skymapspec(self, vswbins = arange(500., 800.1, 10.), phibins = arange(-180, 180, 20), thetabins =
-    arange(-180, 180, 20), wshellbins=arange(-1., 3.01, 0.2), min_whe=0.0, aspphi=(-30.,30.)):
+    def calc_skymapspec(self, vswbins = arange(500., 800.1, 10.), phirange = [-180,180.001], thetarange =[-90,90.001],
+                        angstep = 10, wshellbins=arange(0, 2.01, 0.2), min_whe = 1.0, aspphi=(-30.,30.)):
         """
         """
         self.d.remove_submask("Master", "vsw")
@@ -745,7 +785,9 @@ class Dist3D(object):
         self.d.set_mask("Master", "aspphi", aspphi[0], aspphi[1], reset=True)
 
         # DOESNT WORK YET
-        norm_arr = ones([len(phibins)-1, len(thetabins)-1, len(wshellbins)-1])
+        #norm_arr = ones([len(phibins)-1, len(thetabins)-1, len(wshellbins)-1])
+        norm_arr = self.get_norm_shells(vswbins = vswbins, min_whe = min_whe, phirange = phirange, thetarange =
+        thetarange, angstep = angstep, wshellbins = wshellbins)
 
         # consider the PHA words *only now*:
         wgts = self.d.get_data("He1+", "wgts_sec") # 1 / (phase space volume * eff)
@@ -753,7 +795,10 @@ class Dist3D(object):
 
         wphi = self.d.get_data("He1+", "wphi")
         wtheta = self.d.get_data("He1+", "wtheta")
-        w = self.d.get_data("He1+", "wsw")
+        w = self.d.get_data("He1+", "wsw2")
+
+        phibins = arange(phirange[0], phirange[1], angstep)
+        thetabins = arange(thetarange[0], thetarange[1], angstep)
 
         twts = zeros(wphi.shape)
         for i in range(wphi.shape[1]):
@@ -766,17 +811,30 @@ class Dist3D(object):
         self.d.remove_submask("Master", "asptheta")
         return norm_arr, H
 
-    def plot_skymapspec(self, shell = 5 , ax = None, min_wHe = 0.9):
-        phibins = arange(-180, 180, 20)
-        thetabins = arange(-180, 180, 20)
-        wshellbins = arange(-1., 3.01, 0.2)
+    def plot_skymapspec(self, shell = 5 , ax = None, min_wHe = 0.9, mode = 'ps'):
 
         norm_arr, H0 = self.calc_skymapspec(min_whe = min_wHe)
-        norm_arr[norm_arr == 0] = 1
-        H = H0 / norm_arr
+
+        if mode == 'norm':
+            H = norm_arr
+        elif mode == 'counts':
+            H = H0
+        elif mode == 'ps':
+            H0[norm_arr == 0] = 0
+            norm_arr[norm_arr == 0] = 1
+            H = H0/norm_arr
+        self.H = H
+
+
+        phibins = arange(-180, 180., 10)
+        thetabins = arange(-90, 90., 10)
+        wshellbins = arange(0, 2.01, 0.2)
 
         colormap = plt.cm.get_cmap("viridis")
-        vmin = amin(H[:,:,shell][H[:,:,shell] > 0])
+        try:
+            vmin = amin(H[:,:,shell][H[:,:,shell] > 0])
+        except:
+            vmin = 0.
         vmax = amax(H[:,:,shell])
         if vmax < 1.:
             vmax = 10.
@@ -784,12 +842,12 @@ class Dist3D(object):
         if ax == None:
             fig, ax = plt.subplots(figsize=(10,8))
             colormap = plt.cm.get_cmap("viridis")
-            self.Quadmesh = ax.pcolormesh(phibins, thetabins, H[:, :, shell], cmap=colormap, vmin = vmin, vmax = vmax)
+            self.Quadmesh = ax.pcolormesh(phibins, thetabins, H[:, :, shell].T, cmap=colormap, vmin = vmin, vmax = vmax)
             colorbar = plt.colorbar(self.Quadmesh, ax=ax)
             colormap.set_under('white')
-            ax.text(0.8, 1.05, 'Shell: %s' % shell, bbox={"facecolor": "grey", "alpha": 0.4, "pad": 10},
+            ax.text(0.05, 1.05, 'Shell: %s' % shell, bbox={"facecolor": "grey", "alpha": 0.4, "pad": 10},
                     transform=ax.transAxes)
-            ax.text(0.5, 1.05, r'$w = [%2.1f, %2.1f]$' % (wshellbins[shell], wshellbins[shell + 1]),
+            ax.text(0.6, 1.05, r'$\mathrm{w_{sw} = [%2.1f, %2.1f]}$' % (wshellbins[shell], wshellbins[shell + 1]),
                     bbox={"facecolor": "grey", "alpha": 0.4, "pad": 10}, transform=ax.transAxes)
         return H
 

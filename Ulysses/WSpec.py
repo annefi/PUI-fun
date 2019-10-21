@@ -38,7 +38,7 @@ class WSpec():
         fig.canvas.mpl_connect('key_press_event', keypress)
         self.txt_plane = self.ax.text(0.1, 1.05, '%s-plane'%'Y-Z', bbox = {"facecolor":"grey","alpha":0.4,"pad":10},
                                       transform = self.ax.transAxes)
-        self.txt_slice = self.ax.text(0.8, 1.05, 'Slice: %s' % '10', bbox = {"facecolor":"grey","alpha":0.4,"pad":10},
+        self.txt_slice = self.ax.text(0.6, 1.05, 'Slice: %s' % '10', bbox = {"facecolor":"grey","alpha":0.4,"pad":10},
                                       transform = self.ax.transAxes)
         self.plot(dim = self.dim, slice = self.slice)
         self.ax.set_xlim(self.ax.get_xlim()[::-1])
@@ -59,19 +59,25 @@ class WSpec():
                                                    vmax = vmax)
                 colormap.set_under('white')
                 self.txt_plane.set_text('%s-plane'%'Y-Z')
-                self.txt_slice.set_text(r'$w_x = [%2.1f, %2.1f]$' % (wbins[slice], wbins[slice+1]))
+                self.txt_slice.set_text(r'$\mathrm{w_{sw,x} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
+                self.ax.set_xlabel(r'$\mathrm{w_{sw,y}}$')
+                self.ax.set_ylabel(r'$\mathrm{w_{sw,z}}$')
             elif dim == 'y':
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, slice, :].T, cmap=colormap, vmin = vmin,
                                                    vmax = vmax)
                 colormap.set_under('white')
                 self.txt_plane.set_text('%s-plane' % 'X-Z')
-                self.txt_slice.set_text(r'$w_y = [%2.1f, %2.1f]$' % (wbins[slice], wbins[slice+1]))
+                self.txt_slice.set_text(r'$\mathrm{w_{sw,y} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
+                self.ax.set_xlabel(r'$\mathrm{w_{sw,x}}$')
+                self.ax.set_ylabel(r'$\mathrm{w_{sw,z}}$')
             elif dim == 'z':
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, :, slice], cmap=colormap, vmin = vmin,
                                                    vmax = vmax)
                 colormap.set_under('white')
                 self.txt_plane.set_text('%s-plane' % 'X-Y')
-                self.txt_slice.set_text(r'$w_z = [%2.1f, %2.1f]$' % (wbins[slice], wbins[slice+1]))
+                self.txt_slice.set_text(r'$\mathrm{w_{sw,z} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
+                self.ax.set_xlabel(r'$\mathrm{w_{sw,x}}$')
+                self.ax.set_ylabel(r'$\mathrm{w_{sw,y}}$')
             else:
                 raise (ValueError("'dim' must be 'x', 'y' or 'z'."))
         if self.color_norm == 'sg':
@@ -85,6 +91,8 @@ class WSpec():
                 colormap.set_under('white')
                 self.txt_plane.set_text('%s-plane' % 'Y-Z')
                 self.txt_slice.set_text(r'$w_x = [%2.1f, %2.1f]$' % (wbins[slice], wbins[slice + 1]))
+                self.ax.set_xlabel(r'$\mathrm{w_{sw,y}}$')
+                self.ax.set_ylabel(r'$\mathrm{w_{sw,z}}$')
             elif dim == 'y':
                 vmax = amax(self.H[:, slice, :])
                 if vmax < 1.:
@@ -95,6 +103,8 @@ class WSpec():
                 colormap.set_under('white')
                 self.txt_plane.set_text('%s-plane' % 'X-Z')
                 self.txt_slice.set_text(r'$w_y = [%2.1f, %2.1f]$' % (wbins[slice], wbins[slice + 1]))
+                self.ax.set_xlabel(r'$\mathrm{w_{sw,x}}$')
+                self.ax.set_ylabel(r'$\mathrm{w_{sw,z}}$')
             elif dim == 'z':
                 vmax = amax(self.H[:, :, slice])
                 if vmax < 1.:
@@ -104,6 +114,8 @@ class WSpec():
                 colormap.set_under('white')
                 self.txt_plane.set_text('%s-plane' % 'X-Y')
                 self.txt_slice.set_text(r'$w_z = [%2.1f, %2.1f]$' % (wbins[slice], wbins[slice + 1]))
+                self.ax.set_xlabel(r'$\mathrm{w_{sw,x}}$')
+                self.ax.set_ylabel(r'$\mathrm{w_{sw,y}}$')
             else:
                 raise (ValueError("'dim' must be 'x', 'y' or 'z'."))
 
