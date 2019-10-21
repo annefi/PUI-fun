@@ -29,9 +29,10 @@ class WShell():
             print 'click'
         fig, self.ax = plt.subplots(figsize=(10,8))
         fig.canvas.mpl_connect('key_press_event', keypress)
-        self.txt_shell = self.ax.text(0.8, 1.05, 'Shell: %s' % self.shell, bbox = {"facecolor":"grey","alpha":0.4,
+        self.txt_shell = self.ax.text(0.05, 1.05, 'Shell: %s' % self.shell, bbox = {"facecolor":"grey","alpha":0.4,
                                                                    "pad":10},  transform = self.ax.transAxes)
-        self.txt_w = self.ax.text(0.5, 1.05, r'$w = [%2.1f, %2.1f]$' % (self.wshellbins[self.shell], self.wshellbins[
+        self.txt_w = self.ax.text(0.6, 1.05, r'$\mathrm{w_{sw} = [%2.1f, %2.1f]}$' % (self.wshellbins[self.shell],
+                                                                            self.wshellbins[
             self.shell+1]), bbox={"facecolor": "grey","alpha": 0.4,"pad": 10}, transform=self.ax.transAxes)
         self.plot(shell = self.shell)
         self.ax.set_xlim(self.ax.get_xlim()[::-1])
