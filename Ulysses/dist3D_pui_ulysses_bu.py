@@ -758,8 +758,6 @@ class Dist3D(object):
 
         H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, asp_phibins, asp_thetabins))
 
-        self.H = H
-
         # norm_arr indicates how often a wR-wT-wN combination "is hit" with the given AA-vsw combinations and their
         # resp. occurrences
 
@@ -791,8 +789,6 @@ class Dist3D(object):
 
 
         # consider the different volumes of the bins:
-        # 'real' theta in spherical coordinate system goes from 0 to 180 degree:
-        thetabins = arange(0., pi + 0.0001, angstep)
         vol_arr = zeros((phibins.shape[0] - 1,thetabins.shape[0] - 1,wshellbins.shape[0] - 1))
         for ip, p in enumerate(phibins[:-1]):
             for it, t in enumerate(thetabins[:-1]):
@@ -800,7 +796,7 @@ class Dist3D(object):
                     vol_arr[ip, it, iw] = 1/3. * (wshellbins[iw + 1]**3 - wshellbins[iw]**3) * (cos(t) - cos(
                         t + angstep)) * (angstep)
         #norm_arr *= vol_arr
-        return norm_arr
+        return norm_arr, vol_arr
 
 
     def calc_skymapspec(self, vswbins = arange(500., 800.1, 10.), min_whe = 1.0, aspphi=(-30.,30.),
@@ -860,8 +856,8 @@ class Dist3D(object):
         thetabins = arange(-90., 90.1, 10.)
         wshellbins = arange(0, 2.01, 0.2)
 
-        # phibins = phibins/180.*pi
-        # thetabins = thetabins/180.*pi
+        phibins = phibins/180.*pi
+        thetabins = thetabins/180.*pi
 
 
         colormap = plt.cm.get_cmap("viridis")

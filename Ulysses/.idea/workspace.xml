@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/dist3D_pui_ulysses.py" line="736" />
-  </component>
   <component name="ChangeListManager">
     <list default="true" id="0c58623c-1821-4880-9e22-06c9e1193331" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../MA/MA_Journal/MA_journal.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/MA_Journal/MA_journal.tex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WShell.py" beforeDir="false" afterPath="$PROJECT_DIR$/WShell.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WSpec.py" beforeDir="false" afterPath="$PROJECT_DIR$/WSpec.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist3D_pui_ulysses.py" beforeDir="false" afterPath="$PROJECT_DIR$/dist3D_pui_ulysses.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/load_pui_ulysses.py" beforeDir="false" afterPath="$PROJECT_DIR$/load_pui_ulysses.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -58,7 +53,7 @@
     <session id="2091974253">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="63" />
+          <entry key="project.closed" value="64" />
           <entry key="project.open.time.10" value="7" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.12" value="1" />
@@ -69,47 +64,47 @@
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="2" />
           <entry key="project.open.time.7" value="8" />
-          <entry key="project.open.time.8" value="26" />
+          <entry key="project.open.time.8" value="27" />
           <entry key="project.open.time.9" value="16" />
-          <entry key="project.opened" value="69" />
+          <entry key="project.opened" value="70" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="dat" value="1" />
-          <entry key="py" value="268" />
+          <entry key="py" value="272" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="267" />
+          <entry key="Python" value="271" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="14" />
-          <entry key="py" value="54685" />
+          <entry key="py" value="56326" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="14" />
-          <entry key="Python" value="54685" />
+          <entry key="Python" value="56326" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.57289773">
+    <splitter split-orientation="horizontal" split-proportion="0.5952813">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-501">
-                  <caret line="29" column="13" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
+                <state relative-caret-position="240">
+                  <caret line="32" column="36" selection-start-line="32" selection-start-column="36" selection-end-line="32" selection-end-column="36" />
                 </state>
               </provider>
             </entry>
@@ -117,18 +112,10 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/dist3D_pui_ulysses.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="599">
-                  <caret line="849" column="66" selection-start-line="849" selection-start-column="66" selection-end-line="849" selection-end-column="66" />
+                <state relative-caret-position="288">
+                  <caret line="864" lean-forward="true" selection-start-line="862" selection-start-column="10" selection-end-line="864" />
                   <folding>
-                    <element signature="e#0#47#0" expanded="true" />
-                    <element signature="e#4787#6005#0" />
-                    <element signature="e#31837#33917#0" />
-                    <element signature="e#33984#35453#0" />
-                    <element signature="e#35582#38130#0" />
-                    <element signature="e#42790#44582#0" />
-                    <element signature="e#44670#46452#0" />
-                    <element signature="e#46527#48163#0" />
-                    <marker date="1571676112834" expanded="true" signature="17593:17598" ph="..." />
+                    <element signature="e#32904#35452#0" />
                   </folding>
                 </state>
               </provider>
@@ -153,7 +140,7 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/WSpec.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="525">
+                <state relative-caret-position="615">
                   <caret line="74" column="52" selection-start-line="74" selection-start-column="52" selection-end-line="74" selection-end-column="52" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
@@ -165,7 +152,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/WShell.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="495">
+                <state relative-caret-position="465">
                   <caret line="33" column="80" selection-start-line="33" selection-start-column="80" selection-end-line="33" selection-end-column="80" />
                   <folding>
                     <element signature="e#0#10#0" expanded="true" />
@@ -277,9 +264,9 @@
         <option value="$PROJECT_DIR$/DataLoader/uswipha.py" />
         <option value="$PROJECT_DIR$/filter_He.py" />
         <option value="$PROJECT_DIR$/swics_collimator_ulysses.py" />
-        <option value="$PROJECT_DIR$/load_pui_ulysses.py" />
         <option value="$PROJECT_DIR$/WShell.py" />
         <option value="$PROJECT_DIR$/WSpec.py" />
+        <option value="$PROJECT_DIR$/load_pui_ulysses.py" />
         <option value="$PROJECT_DIR$/dist3D_pui_ulysses.py" />
       </list>
     </option>
@@ -430,7 +417,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/uswo.py" />
     <entry file="file://$PROJECT_DIR$/uswipha.py" />
     <entry file="file://$PROJECT_DIR$/pui_ulysses.py" />
     <entry file="file://$PROJECT_DIR$/../MA/Literatur/Skripte_etc/hist_lars_23_07_18.py">
@@ -686,16 +672,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-501">
-          <caret line="29" column="13" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/WShell.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
+        <state relative-caret-position="465">
           <caret line="33" column="80" selection-start-line="33" selection-start-column="80" selection-end-line="33" selection-end-column="80" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -705,7 +684,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/WSpec.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
+        <state relative-caret-position="615">
           <caret line="74" column="52" selection-start-line="74" selection-start-column="52" selection-end-line="74" selection-end-column="52" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -713,20 +692,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dist3D_pui_ulysses.py">
+    <entry file="file://$PROJECT_DIR$/dist3D_pui_ulysses_bu.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="599">
-          <caret line="849" column="66" selection-start-line="849" selection-start-column="66" selection-end-line="849" selection-end-column="66" />
+        <state relative-caret-position="165">
+          <caret line="11" column="11" lean-forward="true" selection-start-line="11" selection-start-column="11" selection-end-line="11" selection-end-column="11" />
           <folding>
             <element signature="e#0#47#0" expanded="true" />
-            <element signature="e#4787#6005#0" />
-            <element signature="e#31837#33917#0" />
-            <element signature="e#33984#35453#0" />
-            <element signature="e#35582#38130#0" />
-            <element signature="e#42790#44582#0" />
-            <element signature="e#44670#46452#0" />
-            <element signature="e#46527#48163#0" />
-            <marker date="1571676112834" expanded="true" signature="17593:17598" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="32" column="36" selection-start-line="32" selection-start-column="36" selection-end-line="32" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist3D_pui_ulysses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="864" lean-forward="true" selection-start-line="862" selection-start-column="10" selection-end-line="864" />
+          <folding>
+            <element signature="e#32904#35452#0" />
           </folding>
         </state>
       </provider>
