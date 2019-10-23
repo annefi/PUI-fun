@@ -712,13 +712,13 @@ Wollte erst einfach über die Datenprodukte \verb|wsw| bzw. \verb|w| Masken setz
 \DayInOkt{Di}{15}
 Skymap funktioniert. \\
 Ich wähle die w-Schalen im sw-frame aus. Wenn ich die Winkel im SC-frame nehme, wird die Winkelabdeckung natürlich kleiner, je weiter innen ich auf der Schale bin. Deshalb muss ich auch hier sw-Frame nehmen. \\ \\
-\todo{Normierung} Ich muss auch hier Normierung einbauen. \\
+\todo[color=green!40]{Normierung} Ich muss auch hier Normierung einbauen. \\
 \todo{Skymap-Darstellung} Ich muss den Plot irgendwie weltkartenmäßig machen. \\
 \todo[color=green!40]{Durchklicken} Ich will Klickprogramm auch hierauf anwenden.
 \\ \\
 Ich muss das einfach wie beim w3Dspec machen, vorher normieren. Baue das entsprechend um.\\
 Überlegung: Heir muss ich aber zusätzlich noch die Größe der Bins mit reinrechnen, oder? Vielleicht einfach über eine Gewichtung beim Histogrammieren? \\
-\todo{aufräumen} Funktionen ordentlich benennen, Auswahl Countrate / Spektrum \\
+\todo[color=green!40]{aufräumen} Funktionen ordentlich benennen, Auswahl Countrate / Spektrum DONE, aber: neverending Story.. \\
 Das mit dem SC-frame-space kommentiere ich erstmal wieder aus.
 \\ \\
 Konnte die Winkel doch den Datenprodukten zufügen. Habe aber keine Ahnung, wie ich das mit der Normierung machen soll...
@@ -749,7 +749,7 @@ Endlich hab ich die Indices gefixt!! Das Problem war, dass der norm array über 
 
 \DayInOkt{So}{20}
 \todo[color=green!40]{vspace} vspace entsprechend anpassen und \\ \\
-\todo[color=green!40]{wspace} im wspace die anderen datenprodukte erstellen, evtl. schauen wie sehr sich die Werte unterscheiden! Done: s.u.\\ \\
+\todo[color=green!40]{wspace} im wspace die anderen Datenprodukte erstellen, evtl. schauen wie sehr sich die Werte unterscheiden! Done: s.u.\\ \\
 
 Oh! Das geht natürlich alles nicht mehr, wenn ich die Eigengeschwindigkeit mitnehme... Und da steckt auch das Problem: Auch wenn die Bins wirklich gleich sind, kann es sein, dass ich im letzten Histogrammierschritt durch die Eigengeschw. in einem anderen Bin lande als norm (das ja strikt aus dem Space ohne Eigengeschwindigkeit gebildet wird). \\
 Allerdings scheinen sich die Werte echt nicht weit auseinander zu liegen. Es gibt auch eine kleine Differenz, wenn ich die Eigengeschwindigkeit ausstelle zwischen dem w aus dem vspace und dem wspace (wR\_s usw. Das ist genau das w, aus dem auch der Normarray gebildet wird). Die Differenz aus vspace mit Eigengeschw. ist ca. nochmal so groß. Man kann natürlich Pech haben, wenn die Differenz genau über eine Bingrenze geht. Solche Fälle müsste man dann hinnehmen? (Differenz ist ca. 0.01 w)\\
@@ -759,5 +759,14 @@ Unabhängig davon, wie sinnvoll dieses Binning ist, fange ich das jetzt mal an d
 
 \DayInOkt{Di}{22}
 Habe die Winkelberechnung nochmal umgeschrieben, jetzt ist es wirklich im SW-Frame. S. Kladde S. 88.
+
+\DayInOkt{Mi}{23}
+Da waren komische Lücken in der Skymap. Die sind jetzt beseitigt, ich hatte bei der Winkelberechnung was falsch gemacht. Die endgültigen Formeln sind in der Kladde. Sieht jetzt alles gut aus, auch die Normierung ist prima, glaube ich!\\
+Ich kann jetzt auch eine w-Kugel in den w-Space zeichnen, um die Abdeckung zu zeigen. Und die passt gut zu dem, was man auf der Skymap sieht.\\
+Weiter: \\
+\todo{Basemap} Die Skymap soll vom eckigen Format auf eine richtige Map mit dem Basemap-Modul \\
+\todo{EpQ-Plot} EpQ-Verlauf mit Akzeptanz plotten \\ 
+\todo{Phasenraumvolumen} Lars fragen: Einheit, Normierung Phasenraumvolumen
+
 
 \end{document}

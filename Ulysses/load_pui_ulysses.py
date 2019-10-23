@@ -27,10 +27,10 @@ He2 = False #True #
 # He2 = True #
 
 # load Ulysses data:
-years = [1994]
+years = [1993]
 
 if He1:
-    d1 = uswipha(year=years, tf=[[1,35]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
+    d1 = uswipha(year=years, tf=[[1,139]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
     d1.sync_swoops()
     d1.sync_traj()
 
@@ -41,7 +41,7 @@ if He1:
     d1.set_mask('Master','brw',1,np.inf,reset=True)
 
     #d1.set_mask('Master','aa_tot', 0, 10)
-    # d1.set_mask('Master','aspphi', -5,5)
+    d1.set_mask('Master','aspphi', 5,7)
     # d1.set_mask('Master','asptheta',5,7)
 
 
