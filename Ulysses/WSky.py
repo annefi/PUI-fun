@@ -1,11 +1,9 @@
-
 import matplotlib.pyplot as plt
 from numpy import *
 from numpy import arange, min, max, amin, amax, unique, around
 
 
-
-class WShell():
+class WSky():
     def __init__(self, D, min_wHe=0.9, shell=5, color_norm='sg', mode='ps', phirange = [-pi, pi + 0.001], thetarange
     = [-pi / 2., pi / 2. + 0.001], angstep = 10 * pi / 180., wshellbins = arange(0, 2.01, 0.2), vol = True):
         self.D = D
@@ -38,8 +36,12 @@ class WShell():
             print(self.shell)
             print 'click'
 
-        fig, self.ax = plt.subplots(figsize=(10, 8))
+        fig = plt.figure()
+        self.ax = plt.subplot(111, projection="mollweide")
         fig.canvas.mpl_connect('key_press_event', keypress)
+        self.ax.set_xlabel(r'$\varphi \, / \, \degree$')
+        self.ax.set_ylabel(r'$\vartheta \, / \, \degree$')
+        self.ax.grid()
         self.txt_shell = self.ax.text(0.05, 1.05, 'Shell: %s' % self.shell, bbox={"facecolor": "grey", "alpha": 0.4,
                                                                                   "pad": 10},
                                       transform=self.ax.transAxes)
@@ -53,8 +55,8 @@ class WShell():
 
     def plot(self, shell):
         # bins that are shown in the plot. Have to have the dimension of the histogram.
-        phibins = arange(-180., 180.1, self.angstep * 180. / pi)
-        thetabins = arange(-90., 90.1, self.angstep * 180. / pi)
+        phibins = arange(-pi, pi + 0.001, self.angstep)
+        thetabins = arange(-pi/2., pi/2. + 0.0001, self.angstep)
 
         colormap = plt.cm.get_cmap("viridis")
         if self.color_norm == 'all':
@@ -100,3 +102,5 @@ class WShell():
         self.plot(shell=self.shell)
         self.cb.formatter.set_powerlimits((0, 0))  # limits for changing to scientific number notation -> (0,0): always
         self.cb.update_bruteforce(self.Quadmesh)  # force updating range of the colorbar
+
+

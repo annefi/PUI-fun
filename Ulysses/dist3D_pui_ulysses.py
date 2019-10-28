@@ -10,6 +10,8 @@ import matplotlib.ticker as ticker
 import sys
 import matplotlib
 import time
+from matplotlib.ticker import (MultipleLocator, FormatStrFormatter,
+                               AutoMinorLocator)
 
 matplotlib.rcParams.update({'font.size': 18,
                             'xtick.major.size': 13,
@@ -407,7 +409,6 @@ class Dist3D(object):
         uasphi = self.d.get_data("Master", "aspphi")[Tallind]
         uasptheta = self.d.get_data("Master", "asptheta")[Tallind]
         uvsw = self.d.get_data("Master", "vsw")[Tallind]
-        print(uvsw, uasphi, uasptheta)
         # H indicates how often a particular aspphi-asptheta-vsw combination occurs (= how often did ULYSSES see this
         # angle with this vsw?)
 
@@ -419,8 +420,6 @@ class Dist3D(object):
         vswbins = arange(self.vswbins[0] - 10 / 2., self.vswbins[-1] + 10, 10)
 
         H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, phibins, thetabins))
-        # synchronise vsw indices: (funktioniert so nur, wenn beide die gleiche Schrittgroesse haben)
-        # ivoffset = int(around(vswbins[0] - self.vswbins[0], -1) / 10)
         self.H = H
 
         # norm_arr indicates how often a wR-wT-wN combination "is hit" with the given AA-vsw combinations and their
@@ -429,12 +428,8 @@ class Dist3D(object):
             norm_arr = zeros((wbins.shape[0] - 1))
         if dim == 3:
             norm_arr = zeros((wbins.shape[0] - 1, wbins.shape[0] - 1, wbins.shape[0] - 1))
-            # norm_arr_old = zeros((wbins.shape[0] - 1, wbins.shape[0] - 1, wbins.shape[0] - 1))
-        # for iv, v in enumerate(vswbins[:-1]):
-
 
         for iv, v in enumerate(self.vswbins):
-            # for ip, p in enumerate(self.aspphi[:-1]):
             for ip, p in enumerate(self.aspphi):
                 if (p >= aspphi[0]) * (p <= aspphi[1]):
                     for it, t in enumerate(self.asptheta):
@@ -442,29 +437,23 @@ class Dist3D(object):
                             whe = self.vels / (v + 5.)
                             epqs = arange(0, 64, 1)[whe > min_whe]
                             if dim == 3:
-                                if frame == 'sw':
-                                    tmpwx = self.vspace[ip, it, epqs, ..., 0, :] - v
-                                    wx = tmpwx / v
-                                    wy = self.vspace[ip, it, epqs, ..., 1, :] / v
-                                    wz = self.vspace[ip, it, epqs, ..., 2, :] / v
+                                tmpwx = self.vspace[ip, it, epqs, ..., 0, :] - v
+                                wx = tmpwx / v
+                                wy = self.vspace[ip, it, epqs, ..., 1, :] / v
+                                wz = self.vspace[ip, it, epqs, ..., 2, :] / v
 
-                                    H2, bs = histogramdd((wx.flatten(), wy.flatten(), wz.flatten()),
-                                                         bins=(wbins, wbins, wbins))
-                                    norm_arr += H2 * H[iv, ip, it]
+                                H2, bs = histogramdd((wx.flatten(), wy.flatten(), wz.flatten()),
+                                                     bins=(wbins, wbins, wbins))
+                                norm_arr += H2 * H[iv, ip, it]
 
-                                    # H3, bs = histogramdd((self.w3dspace[iv , ip, it, epqs, ..., 0, :].flatten(),
-                                    #                       self.w3dspace[iv , ip, it, epqs, ..., 1, :].flatten(),
-                                    #                       self.w3dspace[iv , ip, it, epqs, ..., 2, :].flatten()),
-                                    #                      bins=(wbins, wbins, wbins))
-                                    # norm_arr_old += H3 * H[iv, ip, it]
-
-                                # elif frame == 'sc':
-                                #     H2, bs = histogramdd(
-                                #         (self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 0, :].flatten(),
-                                #          self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 1, :].flatten(),
-                                #          self.w3dspace_sc[iv + ivoffset, ip, it, epqs, ..., 2, :].flatten()),
-                                #         bins=(wbins, wbins, wbins))
-
+                            if dim == 1:
+                                tmpwx = self.vspace[ip, it, epqs, ..., 0, :] - v
+                                wx = tmpwx / v
+                                wy = self.vspace[ip, it, epqs, ..., 1, :] / v
+                                wz = self.vspace[ip, it, epqs, ..., 2, :] / v
+                                w = sqrt(wx**2 + wy**2 + wz**2)
+                                H2, bs = histogram(w.flatten(), bins = wbins)
+                                norm_arr += H2 * H[iv, ip, it]
         return norm_arr
 
     def calc_w3dspecs(self, vswbins=arange(0., 1800.1, 10.), wbins=arange(-2., 2.01, 0.2), min_whe=1,
@@ -637,7 +626,9 @@ class Dist3D(object):
         ax.legend()
         return v
 
-    def wspec_1d(self, vswbins=arange(500., 800.1, 10.), wbins=arange(-2., 4.01, 0.2), min_whe=0.0, aspphi=(-30., 30.)):
+    def wspec_1d(self, vswbins= arange(0,1000,10), wbins=arange(-2., 5.01, 0.2), min_whe=0.0,
+                 aspphi=(-30.,30.), mode = 'ps', year = '1993', ax = None):
+
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
@@ -648,58 +639,49 @@ class Dist3D(object):
         # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
         # to calculate the weights for normalising the final histograms:
 
-        norm_arr_sw = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe=min_whe, wbins=wbins, dim=1,
+        norm_arr = self.get_norm(vswbins = vswbins, aspphi=aspphi, min_whe=min_whe, wbins=wbins, dim=1,
                                     frame='sw')
-        norm_arr_sc = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe=min_whe, wbins=wbins, dim=1,
-                                    frame='sc')
 
         # consider the PHA words *only now*:
         wgts = self.d.get_data("He1+", "wgts_sec")  # 1 / (phase space volume * eff)
         swgt = self.d.get_data("He1+", "brw")  ### real sector weight not available for Ulysses
 
-        wsw = self.d.get_data('He1+', 'wsw')  # 1D data in solar wind frame
-        wsc = self.d.get_data('He1+', 'wsc')  # 1D data in space craft frame
+        wsw = self.d.get_data('He1+', 'wsw2')  # 1D data in solar wind frame
 
-        twts = zeros(wsc.shape)
-        for i in range(wsc.shape[1]):
+        twts = zeros(wsw.shape)
+        for i in range(wsw.shape[1]):
             twts[:, i] = wgts * swgt
 
-        H2_sc, bs = histogram(wsc.flatten(), bins=wbins, weights=twts.flatten())
-        H2_sw, bs = histogram(wsw.flatten(), bins=wbins, weights=twts.flatten())
-
-        self.H2_sc = H2_sc
-        self.H2_sw = H2_sw
+        H0, bs = histogram(wsw.flatten(), bins=wbins, weights=twts.flatten())
 
         self.d.remove_submask("He1+", "wHe1+2")
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
 
-        fig, ax = plt.subplots()
+        if ax == None:
+            fig, ax = plt.subplots(figsize=(12,8))
+            ax.set_xlim(-1.05,4)
+            ax.xaxis.set_minor_locator(MultipleLocator(.5))
+            ax.set_xlabel(r'$\mathrm{w_{sw}}$')
+            ax.set_ylabel('phase space density')
 
-        norm_arr_sw[norm_arr_sw == 0] = 1
-        norm_arr_sc[norm_arr_sc == 0] = 1
-
-        H_sc = H2_sc / norm_arr_sc
-        H_sw = H2_sw / norm_arr_sw
-
-        H_sc2 = H2_sc / norm_arr_sw
-
-        self.norm_sw = norm_arr_sw
-        self.norm_sc = norm_arr_sc
-        self.H_sc = H_sc
-        self.H_sw = H_sw
-        self.H_sc2 = H_sc2
-
-        H_sc = append(H_sc, 0)
-        H_sw = append(H_sw, 0)
-        H_sc2 = append(H_sc2, 0)
-
-        ax.plot(wbins - 1, H_sc, ls='steps-post', label='SC frame - 1', color='b')
-        ax.plot(wbins - 1, H_sc2, ls='steps-post', label='SC frame, false', color='lightblue')
-        ax.plot(wbins, H_sw, ls='steps-post', label='SW frame', color='r')
-        # ax.set_xlim(-0.5,3)
+        if mode == 'norm':
+            H = norm_arr
+        elif mode == 'counts':
+            H = H0
+        elif mode == 'ps':
+            H0[norm_arr == 0] = 0
+            norm_arr[norm_arr == 0] = 1
+            H = H0 / norm_arr
+        ax.plot(wbins[:-1], H, ls='steps-post', label='%s'%year)
         ax.legend()
+        self.Hw = H
+        return ax
+
+
+
+
 
     def get_norm_shells(self, vswbins=arange(500., 800.1, 10.), aspphi=(-30., 30.), min_whe=0.0,
                         phirange=[-pi, pi + 0.001], thetarange=[-pi / 2., pi / 2. + 0.001], angstep=10 * pi / 180,
@@ -835,7 +817,7 @@ class Dist3D(object):
         self.d.remove_submask("Master", "asptheta")
         return norm_arr, H
 
-    def plot_skymapspec(self, shell = 5, ax = None, min_wHe = 0.9, phirange=[-pi, pi + 0.001],
+    def plot_shellspec(self, shell = 5, ax = None, min_wHe = 0.9, phirange=[-pi, pi + 0.001],
                                             thetarange=[-pi / 2., pi / 2. + 0.001], angstep= 30 * pi / 180.,
                                             wshellbins=arange(0, 2.01, 0.2), mode='ps', vol = True):
 
@@ -876,6 +858,60 @@ class Dist3D(object):
             ax.text(0.6, 1.05, r'$\mathrm{w_{sw} = [%2.1f, %2.1f]}$' % (wshellbins[shell], wshellbins[shell + 1]),
                     bbox={"facecolor": "grey", "alpha": 0.4, "pad": 10}, transform=ax.transAxes)
         return H
+
+
+
+    def plot_skyspec(self, shell = 5, ax = None, min_wHe = 0.9, phirange=[-pi, pi + 0.001],
+                                            thetarange=[-pi / 2., pi / 2. + 0.001], angstep= 30 * pi / 180.,
+                                            wshellbins=arange(0, 2.01, 0.2), mode='ps', vol = True):
+
+        norm_arr, H0 = self.calc_skymapspec(min_whe = min_wHe, phirange = phirange,
+                 thetarange = thetarange, angstep = angstep, wshellbins = wshellbins, vol = vol)
+
+        if mode == 'norm':
+            H = norm_arr
+        elif mode == 'counts':
+            H = H0
+        elif mode == 'ps':
+            H0[norm_arr == 0] = 0
+            norm_arr[norm_arr == 0] = 1
+            H = H0 / norm_arr
+        self.H = H
+
+        # bins that are shown in the plot. Have to have the dimension of the histogram.
+        phibins = arange(-pi, pi + 0.001, angstep)
+        thetabins = arange(-pi/2., pi/2. + 0.0001, angstep)
+
+        # phibins = arange(-180., 180.1, angstep * 180. / pi)
+        # thetabins = arange(-90., 90.1, angstep * 180. / pi)
+
+        colormap = plt.cm.get_cmap("viridis")
+        try:
+            vmin = amin(H[:, :, shell][H[:, :, shell] > 0])
+        except:
+            vmin = 0.
+        vmax = amax(H[:, :, shell])
+        if vmax < 1.:
+            vmax = 10.
+
+        if ax == None:
+            plt.figure()
+            ax = plt.subplot(111, projection="mollweide")
+            #fig, ax = plt.subplots(figsize=(10, 8), projection = 'hammer')
+            colormap = plt.cm.get_cmap("viridis")
+            self.Quadmesh = ax.pcolormesh(phibins, thetabins, H[:, :, shell].T, cmap=colormap, vmin=vmin, vmax=vmax)
+            colorbar = plt.colorbar(self.Quadmesh, ax=ax, shrink = 0.8)
+            ax.set_xlabel(r'$\varphi \, / \, \degree$')
+            ax.set_ylabel(r'$\vartheta \, / \, \degree$')
+            ax.grid()
+            colormap.set_under('white')
+            ax.text(0.05, 1.5, 'Shell: %s' % shell, bbox={"facecolor": "grey", "alpha": 0.4, "pad": 10},
+                    transform=ax.transAxes)
+            ax.text(0.6, 1.5, r'$\mathrm{w_{sw} = [%2.1f, %2.1f]}$' % (wshellbins[shell], wshellbins[shell + 1]),
+                    bbox={"facecolor": "grey", "alpha": 0.4, "pad": 10}, transform=ax.transAxes)
+        #return H
+
+
 
     def test_func(self, norm, H):
         # for testing if the norm array covers every bin of the H array (which should be the case!)
@@ -923,26 +959,6 @@ class Dist3D(object):
         axR.legend()
         print(mean(wRsw2 - wR_s))
         return axR
-
-
-    def test_func_bug(self):
-        wr = self.d.data['wRsw2'].flatten()
-        wt = self.d.data['wTsw2'].flatten()
-        wn = self.d.data['wNsw2'].flatten()
-        wphi = self.d.data['wphi'].flatten()
-        wtheta = self.d.data['wtheta'].flatten()
-        ww = self.d.data['wsw2'].flatten()
-        for d in range(len(wr)):
-            if 130.*pi/180. < wphi[d] < 130*pi/180.:
-                print(wr[d])
-                print(wt[d])
-                print(wn[d])
-                print('\n')
-
-
-
-
-
 
 
 

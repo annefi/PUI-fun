@@ -8,6 +8,7 @@ np.seterr(divide='ignore', invalid='ignore') # Ignore Ipython error messages
 from matplotlib import pylab
 from WSpec import WSpec
 from WShell import WShell
+from WSky import WSky
 
 ###
 # Script for creating an instance d of uswipha and setting masks (s.b.)
@@ -27,21 +28,21 @@ He2 = False #True #
 # He2 = True #
 
 # load Ulysses data:
-years = [1993]
+years = [1994]
 
 if He1:
-    d1 = uswipha(year=years, tf=[[1,139]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
+    d1 = uswipha(year=years, tf=[[1,366]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
     d1.sync_swoops()
     d1.sync_traj()
 
-    d1.set_mask('Master','vsw',200,1000,reset = True)
+    #d1.set_mask('Master','vsw',600,700,reset = True)
     d1.set_mask('Master','rng',0,0,reset=True)
     d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
     d1.set_mask('Master','brw',1,np.inf,reset=True)
 
     #d1.set_mask('Master','aa_tot', 0, 10)
-    d1.set_mask('Master','aspphi', 5,7)
+    #d1.set_mask('Master','aspphi', 0,30)
     # d1.set_mask('Master','asptheta',5,7)
 
 
@@ -51,7 +52,7 @@ if He1:
     print('*** Load Subset ***')
     d1.load_subset(filename = 'd1.tmp', force = True)
 
-    D1 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
+    D4 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
 
     #ws = WSpec(D, color_norm = 'sg')
 
