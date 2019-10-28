@@ -28,7 +28,7 @@ He2 = False #True #
 # He2 = True #
 
 # load Ulysses data:
-years = [1994]
+years = [1994, 1995, 1996, 1998]
 
 if He1:
     d1 = uswipha(year=years, tf=[[1,366]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
