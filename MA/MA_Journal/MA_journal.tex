@@ -6,7 +6,7 @@
 \usepackage{enumitem} %for customising itemize, enumerate etc.
 \usepackage{tikz} % for the date lines
 \usetikzlibrary{calc} % for coordinate calculations of date lines
-
+\usepackage{amsmath}
 \usepackage[textsize=footnotesize]{todonotes} % selbsterklärend
 
 \setlength{\marginparwidth}{3.5cm} % größerer Seitenrand für Todo-Notes
@@ -772,4 +772,24 @@ Weiter: \\
 Lars war verwundert über viele Cpunts bei $w=0$ im 1D-Spektrum. Eigentlich können wir doch gar nicht so weit runter messen, weil wir ja nicht auf so hohe ESA-Steps kommen. Da hatte er recht, ich habe mir die gefilterten Daten nochmal asl Tof vs ECH angeguckt und da war oben noch ein anderer Streifen mit drin von was Schwererem. D.h., ich filtere He jetzt nochmal.\\
 Bei He2+ habe ich den Pile-Up mitgenommen. Ist vielleicht blöd, weil die Zuordnung dann auch nicht richtig ist...? kP. Ich filtere das auch nochmal als zweite Version.
 
+\DayInOkt{Di}{29}
+Gefilterte Daten gibt es jetzt jeweils in der Version \textit{...pileUp} und ohne (das ist die akutellere Version, wo ich den Filter im Tof vs EpQ noch ergänzt habe um einen Filter in Tof vs Ech).
+\\
+Dann habe ich angefangen, die B-Feld-Daten von Thies aufzubereiten. Die liegen in 2-Sekunden-Auflösung vor. Lars gefragt, ob ich einfach immer 13 Minuten mitteln kann oder man den genauen Ausschnitt braucht.\\
+Antwort: Interessant ist die Zeitskala, gegen die sich die Pitchwinkelverteilung vom Ion ändern kann. Zeitskalen, die kleiner sind als die Gyrofrequenz, bringen nichts, weil das Teilchen dann nichtmal eine Gyration vollführen konnte. Zeitskalen die viel größer sind sorgen dafür, dass sich die Verteilung mitdreht. Lars' Gefühl: ca. eine Minute.\\
+Verschiedene Ideen:
+\begin{itemize}
+	\item eine Minute mitteln, die jeweilige Minute nehmen
+	\item eine Minute mitteln und anhand der EpQ-Steps die SWICS Zeitauflösung genauer unterteilen (das könnte man entweder per For-Schleife machen oder --viel schneller -- mit einem Histogramm, wobei man da überlapende Bins bräuchte und das ist nicht so einfach. Steine hat das schonmal gemacht...? Zweimal histogrammieren: Einmal ganz fein und dann...?)
+	\item genauso, nur anhand der jeweiligen Magnetfeldstärke die Zeit anpassen, über die gemittelt wird (weil sich die Gyrofrequenz ändert)
+\end{itemize}
+
+Dann kann man noch überlegen, von wo man die z.B. Minute nimmt -- denn welches B-Feld ist überhaupt relevant für das Ion? Hängt auch davon ab, wie sich das Teilchen bewegt: entlang, quer, von oben...?\\ \\
+Wie mittlere ich das B-Feld? Am besten einfach die Komponenten mitteln, dann hab ich eine Repräsentation des mittleren Vektors. (Das ist aber was anderes als die Winkel zu mitteln und auch der mittlere Betrag ist ein anderer...) \\ \\
+Erstmal jetzt die Gyrogrößen ausrechnen:
+\begin{align*}
+Gyro- / Larmor-Radius: r &= \frac{m v_{\perp}}{q B} = \frac{4\cdot 1.6605\cdot10^{-27}\,\mathrm{kg} \cdot v_{sw}} {1.602\cdot10^{-19} \,\mathrm{C} \cdot 4\,\mathrm{nT}} \approx 4000\,\mathrm{km} \\
+Gyroperiode: T &= \frac{2\pi \cdot r}{v_{\perp}} = \frac{2\pi\cdot m}{q \cdot B} = 65 \,\mathrm{s}
+\end{align*}
+$\Rightarrow$ passt mit einer Minute!
 \end{document}

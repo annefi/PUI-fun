@@ -28,10 +28,10 @@ He2 = False #True #
 # He2 = True #
 
 # load Ulysses data:
-years = [1994, 1995, 1996, 1998]
+years = [1994]
 
 if He1:
-    d1 = uswipha(year=years, tf=[[1,366]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/epq/')
+    d1 = uswipha(year=years, tf='all', path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/')
     d1.sync_swoops()
     d1.sync_traj()
 

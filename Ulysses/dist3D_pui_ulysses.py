@@ -382,7 +382,7 @@ class Dist3D(object):
         else:
             self.d.data["wgts_sec"] = wgts_sec
 
-    def get_norm(self, vswbins=arange(0., 1000.1, 10.), aspphi=(-30., 30.), min_whe=0.0,
+    def get_norm(self, vswbins=arange(0., 1000.1, 10.), aspphi=(-30., 45.), min_whe=0.0,
                  wbins=arange(-2., 2.01, 0.2), dim=3, frame='sw'):
         '''
         Calculates norm_array for weighting the histogram bins relative to how often a bins has been seen:
@@ -457,7 +457,7 @@ class Dist3D(object):
         return norm_arr
 
     def calc_w3dspecs(self, vswbins=arange(0., 1800.1, 10.), wbins=arange(-2., 2.01, 0.2), min_whe=1,
-                      aspphi=(-30., 30.)):
+                      aspphi=(-30., 45.)):
         """
         Calculates w spectra in slices
         vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
@@ -593,7 +593,6 @@ class Dist3D(object):
         Calculates the absolute |v| from vR, vT and vN to compare it with the solar wind velocity in a small window
         of time
         (Built for comparing the He2+ velocity with SWOOPS' measured vsw)
-        :return:
         '''
         if doy_val == False:
             try:
@@ -626,8 +625,8 @@ class Dist3D(object):
         ax.legend()
         return v
 
-    def wspec_1d(self, vswbins= arange(0,1000,10), wbins=arange(-2., 5.01, 0.2), min_whe=0.0,
-                 aspphi=(-30.,30.), mode = 'ps', year = '1993', ax = None):
+    def wspec_1d(self, vswbins = arange(0,1000,10), wbins = arange(-2., 5.01, 0.2), min_whe = 0.0,
+                 aspphi = (-30.,45.), mode = 'ps', year = '1993', ax = None):
 
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
@@ -639,7 +638,7 @@ class Dist3D(object):
         # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
         # to calculate the weights for normalising the final histograms:
 
-        norm_arr = self.get_norm(vswbins = vswbins, aspphi=aspphi, min_whe=min_whe, wbins=wbins, dim=1,
+        norm_arr = self.get_norm(vswbins = vswbins, aspphi = aspphi, min_whe = min_whe, wbins = wbins, dim = 1,
                                     frame='sw')
 
         # consider the PHA words *only now*:
@@ -680,10 +679,7 @@ class Dist3D(object):
         return ax
 
 
-
-
-
-    def get_norm_shells(self, vswbins=arange(500., 800.1, 10.), aspphi=(-30., 30.), min_whe=0.0,
+    def get_norm_shells(self, vswbins=arange(500., 800.1, 10.), aspphi=(-30., 45.), min_whe=0.0,
                         phirange=[-pi, pi + 0.001], thetarange=[-pi / 2., pi / 2. + 0.001], angstep=10 * pi / 180,
                         wshellbins=
                         arange(0, 2.01, 0.2), vol = True):
@@ -775,7 +771,7 @@ class Dist3D(object):
             norm_arr *= vol_arr
         return norm_arr
 
-    def calc_skymapspec(self, vswbins=arange(500., 800.1, 10.), min_whe=1.0, aspphi=(-30., 30.),
+    def calc_skymapspec(self, vswbins=arange(500., 800.1, 10.), min_whe=1.0, aspphi=(-30., 45.),
                         phirange=[-pi, pi + 0.001], thetarange=[-pi / 2., pi / 2. + 0.001], angstep=10 * pi / 180,
                         wshellbins=arange(0, 2.01, 0.2), vol = True):
         """

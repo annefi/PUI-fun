@@ -2,6 +2,7 @@ from pylib import dbData
 from numpy import array,ndarray,unique,histogram,append,isnan,shape
 from uswo import uswo
 from Trajectory.ulysses_traj import ulysses_traj
+from ulysses_mag_loader import mag_loader
 from uswiutils import getvelocity
 
 class uswipha(dbData):
@@ -82,8 +83,8 @@ class uswipha(dbData):
             self.calc_d90()
         swo.calc_d90()
         uTi,index=unique(self.data["d90"],return_inverse=True)
-        uTi=append(uTi,uTi[-1]+1./24./5.) #?
-        uTi=uTi+1./24./30. #?
+        uTi=append(uTi,uTi[-1]+1./24./5.) # 12 minutes
+        uTi=uTi+1./24./30. # 2 minutes?
         mask = swo.data["vges"]>0
         nrT,x = histogram(swo.data["d90"][mask],bins=uTi)
         vsw,x = histogram(swo.data["d90"][mask],bins=uTi,weights=swo.data["vges"])
@@ -116,14 +117,11 @@ class uswipha(dbData):
         self.add_data("rau",rau[index])
         self.add_data("wHe+",self.data["vHe+"]/self.data["vsw"])
 
-
-
     def sync_traj(self):
         '''
         Adds trajectory data products to uswipha instance by calling "ulysses_traj"
         '''
         traj = ulysses_traj(year=self.year,tf=self.timeframe)
-        self.traj = traj
         if not 'd90' in self.data.keys():
             self.calc_d90()
         traj.calc_d90()
@@ -171,44 +169,55 @@ class uswipha(dbData):
         self.add_data("v_abs_sc", v_abs[index_int])
 
 
-### _________________________________________________________________________________________
+    def sync_mag(self):
+        '''
+        todo
+        '''
+        mag = mag_loader(year = self.year, tf = self.timeframe)
+        self.mag = mag
+        if not 'd90_epq' in self.data.keys():
+            self.calc_d90_epq()
+        mag.calc_d90()
+        uTi, index = unique(self.data["d90_epq"], return_inverse = True)
+        self.uTi = uTi
+        uTi = append(uTi, )  # insert right border for histogram bins
+        # absolute B-field
+        mask = mag.data["Babs"] > 0
+        nrT, x = histogram(mag.data["d90"][mask], bins = uTi)
+        Babs, x = histogram(mag.data["d90"][mask], bins = uTi, weights = mag.data["Babs"])
+        Babs = Babs / nrT  # mean
+        Babs[isnan(Babs)] = 0.
+        self.add_data("Babs", Babs[index])
+        # # R component B-field
+        # mask = mag.data["Br"] > 0
+        # nrT, x = histogram(mag.data["d90"][mask], bins = uTi)
+        # Br, x = histogram(mag.data["d90"][mask], bins = uTi, weights = mag.data["Br"])
+        # Br = Br / nrT  # mean
+        # Br[isnan(Br)] = 0.
+        # self.add_data("Br", Br[index])
+        # # T component B-field
+        # mask = mag.data["Bt"] > 0
+        # nrT, x = histogram(mag.data["d90"][mask], bins = uTi)
+        # Bt, x = histogram(mag.data["d90"][mask], bins = uTi, weights = mag.data["Bt"])
+        # Bt = Bt / nrT  # mean
+        # Bt[isnan(Bt)] = 0.
+        # self.add_data("Bt", Bt[index])
+        # # N component B-field
+        # mask = mag.data["Bn"] > 0
+        # nrT, x = histogram(mag.data["d90"][mask], bins = uTi)
+        # Bn, x = histogram(mag.data["d90"][mask], bins = uTi, weights = mag.data["Bn"])
+        # Bn = Bn / nrT  # mean
+        # Bn[isnan(Bn)] = 0.
+        # self.add_data("Bn", Bn[index])
 
-    def sync_traj_old(self):
+    def calc_d90_epq(self):
         '''
-        replaced by "sync_traj()" @03.04.19
-        (this m. works on old separate lists 'helio.dat' and "ulysses_daily_heliocentric_data_1990-2009.txt")
+        calculates refined time since 1990 with epq fraction (= 12 sec)
+        :return:
         '''
-        traj = ulysses_traj(year=self.year,tf=self.timeframe)
-        if not 'd90' in self.data.keys():
-            self.calc_d90()
-        traj.calc_d90() #  TODO: wozu denn nochmal?
-        uTi_int, index_int = unique(self.data['d90'].astype(int),return_inverse=True)
-        uTi_int = append(uTi_int,uTi_int[-1]+1) # insert right border for histogram bins
-        #Aspect Angle:
-        mask = traj.data['SPE']>0.
-        aa, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["SPE"])
-        self.add_data("aa", aa[index_int])
-        # Radius (/AE):
-        mask = traj.data['R_AU'] > 0.
-        r, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["R_AU"])
-        self.add_data("r", r[index_int])
-        #lat (latitude in HG):
-        mask = traj.data['lat'] != 0.
-        lat, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["lat"])
-        self.add_data("lat_hg", lat[index_int])
-        # RA (longitude in HC):
-        mask = traj.data['RA'] != 0.
-        ra, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["RA"])
-        self.add_data("long_hc", ra[index_int])
-        # Dec (latitude in HC):
-        mask = traj.data['DEC'] != 0.
-        dec, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["DEC"])
-        self.add_data("lat_hc", dec[index_int])
-        # long wrt earth (in heliocentric system):
-        mask = traj.data['long'] != 0.
-        long, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["long"])
-        self.add_data("long_wrt_earth", long[index_int])
-        # heliographic RA aus helio.dat (longitude in HG)
-        mask = traj.data['ra_hg'] != 0.
-        ra_hg, x = histogram(traj.data["d90"][mask], bins=uTi_int, weights=traj.data["ra_hg"])
-        self.add_data("long_hg", ra_hg[index_int])
+        offy = self.data["year"] - 1990
+        offd = offy*365 + (offy.astype(int)+2)/4
+        off_epq = self.data['epq'] * 1./24./60./60. *12.
+        self.add_data("d90_epq",self.data["doy"] + offd + off_epq)
+
+
