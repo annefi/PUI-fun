@@ -1,5 +1,5 @@
 from pylib import dbData
-from numpy import array,ndarray,unique,histogram,append,isnan,shape
+from numpy import *
 from uswo import uswo
 from Trajectory.ulysses_traj import ulysses_traj
 from ulysses_mag_loader import mag_loader
@@ -174,41 +174,45 @@ class uswipha(dbData):
         todo
         '''
         mag = mag_loader(year = self.year, tf = self.timeframe)
+        mag.calc_d90()
         self.mag = mag
+
         if not 'd90_epq' in self.data.keys():
             self.calc_d90_epq()
-        mag.calc_d90()
-        uTi, index = unique(self.data["d90_epq"], return_inverse = True)
-        self.uTi = uTi
-        uTi = append(uTi, )  # insert right border for histogram bins
-        # absolute B-field
-        mask = mag.data["Babs"] > 0
-        nrT, x = histogram(mag.data["d90"][mask], bins = uTi)
-        Babs, x = histogram(mag.data["d90"][mask], bins = uTi, weights = mag.data["Babs"])
-        Babs = Babs / nrT  # mean
-        Babs[isnan(Babs)] = 0.
-        self.add_data("Babs", Babs[index])
-        # # R component B-field
-        # mask = mag.data["Br"] > 0
-        # nrT, x = histogram(mag.data["d90"][mask], bins = uTi)
-        # Br, x = histogram(mag.data["d90"][mask], bins = uTi, weights = mag.data["Br"])
-        # Br = Br / nrT  # mean
-        # Br[isnan(Br)] = 0.
-        # self.add_data("Br", Br[index])
-        # # T component B-field
-        # mask = mag.data["Bt"] > 0
-        # nrT, x = histogram(mag.data["d90"][mask], bins = uTi)
-        # Bt, x = histogram(mag.data["d90"][mask], bins = uTi, weights = mag.data["Bt"])
-        # Bt = Bt / nrT  # mean
-        # Bt[isnan(Bt)] = 0.
-        # self.add_data("Bt", Bt[index])
-        # # N component B-field
-        # mask = mag.data["Bn"] > 0
-        # nrT, x = histogram(mag.data["d90"][mask], bins = uTi)
-        # Bn, x = histogram(mag.data["d90"][mask], bins = uTi, weights = mag.data["Bn"])
-        # Bn = Bn / nrT  # mean
-        # Bn[isnan(Bn)] = 0.
-        # self.add_data("Bn", Bn[index])
+
+        bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1./24./60.)
+        N, bins = histogram(mag.data['d90'], bins = bins1min)
+        N[N==0] = 1.
+
+        Babs, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Babs'])
+        Babs = Babs / N
+        index_Babs = searchsorted(bins1min[1:-1], self.data['d90_epq'])
+        self.add_data('Babs', Babs[index_Babs])
+        Br, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Br'])
+        Br = Br / N
+        index_Br = searchsorted(bins1min[1:-1], self.data['d90_epq'])
+        self.add_data('Br', Br[index_Br])
+        Bt, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Bt'])
+        Bt = Bt / N
+        index_Bt = searchsorted(bins1min[1:-1], self.data['d90_epq'])
+        self.add_data('Bt', Bt[index_Bt])
+        Bn, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Bn'])
+        Bn = Bn / N
+        index_Bn = searchsorted(bins1min[1:-1], self.data['d90_epq'])
+        self.add_data('Bn', Bn[index_Bn])
+        # add magnetic field angles in radian:
+        self.Br = Br
+        # Todo: Achtung: NaNs drin
+        Br = self.data['Br']
+        Bt = self.data['Bt']
+        Bn = self.data['Bn']
+        self.add_data('Bphi', (arctan(Bt / Br) + (((sign(Br) - 1) / -2.) * (sign(Bt) * pi))))
+        self.add_data('Btheta', arctan(Bn / abs(Br)))
+
+        # add magnetic field angles in degree:
+        self.add_data('Bphi_deg', (self.data['Bphi'] * 180. / pi))
+        self.add_data('Btheta_deg', (self.data['Btheta'] * 180. / pi))
+
 
     def calc_d90_epq(self):
         '''

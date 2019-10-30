@@ -5,8 +5,8 @@ from numpy import arange, min, max, amin, amax, unique, around
 
 
 class WSpec():
-    def __init__(self, D, min_wHe = 1.0, slice = 5, dim = 'x', color_norm = 'sg', mode = 'ps', wbins = arange(-2,
-                                                                                                              2.01, 0.2)):
+    def __init__(self, D, min_wHe = 1.0, slice = 5, dim = 'x', color_norm = 'sg', mode = 'ps',
+                 wbins = arange(-2,2.01, 0.2)):
         self.D = D
         self.slice = slice
         self.dim = dim

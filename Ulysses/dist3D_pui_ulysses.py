@@ -246,32 +246,32 @@ class Dist3D(object):
         Adds wRsw2,wTsw2,wNsw2 and wsw2 in SW-frame to pha data based on rounded vsws!
         Adds wR, wT, wN and wsc in SC-frame to pha data
         """
-        # divide the bins each into half and match every count to the central binedge.
-        searcharr_phi = arange(self.aspphi[0] + self.aspphistep / 2., self.aspphi[-1], self.aspphistep)
-        searcharr_theta = arange(self.asptheta[0] + self.aspthetastep / 2., self.asptheta[-1], self.aspthetastep)
-        searcharr_vsw = arange(self.vswbins[0] + 10. / 2, self.vswbins[-1], 10.)
-
-        vswind = searchsorted(searcharr_vsw, self.d.get_data('Master', "vsw"))
-        phiind = searchsorted(searcharr_phi, self.d.get_data('Master', "aspphi"))
-        # phiind = searchsorted(self.aspphi, around(self.d.get_data('Master',"aspphi")))
-        thetaind = searchsorted(searcharr_theta, self.d.get_data('Master', "asptheta"))
-
-        epqind = self.d.get_data('Master', 'epq').astype(int)
-        detind = self.d.get_data('Master', 'det').astype(int)
-        secind = self.d.get_data('Master', 'sec').astype(int)
-
-        # if not "wR_s" in self.d.data.keys():
-        #     self.d.add_data("wR_s", self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 0])
-        # else:
-        #     self.d.data["wR_s"] = self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 0]
-        # if not "wT_s" in self.d.data.keys():
-        #     self.d.add_data("wT_s", self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 1])
-        # else:
-        #     self.d.data["wT_s"] = self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 1]
-        # if not "wN_s" in self.d.data.keys():
-        #     self.d.add_data("wN_s", self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 2])
-        # else:
-        #     self.d.data["wN_s"] = self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 2]
+        # # divide the bins each into half and match every count to the central binedge.
+        # searcharr_phi = arange(self.aspphi[0] + self.aspphistep / 2., self.aspphi[-1], self.aspphistep)
+        # searcharr_theta = arange(self.asptheta[0] + self.aspthetastep / 2., self.asptheta[-1], self.aspthetastep)
+        # searcharr_vsw = arange(self.vswbins[0] + 10. / 2, self.vswbins[-1], 10.)
+        #
+        # vswind = searchsorted(searcharr_vsw, self.d.get_data('Master', "vsw"))
+        # phiind = searchsorted(searcharr_phi, self.d.get_data('Master', "aspphi"))
+        # # phiind = searchsorted(self.aspphi, around(self.d.get_data('Master',"aspphi")))
+        # thetaind = searchsorted(searcharr_theta, self.d.get_data('Master', "asptheta"))
+        #
+        # epqind = self.d.get_data('Master', 'epq').astype(int)
+        # detind = self.d.get_data('Master', 'det').astype(int)
+        # secind = self.d.get_data('Master', 'sec').astype(int)
+        #
+        # # if not "wR_s" in self.d.data.keys():
+        # #     self.d.add_data("wR_s", self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 0])
+        # # else:
+        # #     self.d.data["wR_s"] = self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 0]
+        # # if not "wT_s" in self.d.data.keys():
+        # #     self.d.add_data("wT_s", self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 1])
+        # # else:
+        # #     self.d.data["wT_s"] = self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 1]
+        # # if not "wN_s" in self.d.data.keys():
+        # #     self.d.add_data("wN_s", self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 2])
+        # # else:
+        # #     self.d.data["wN_s"] = self.w3dspace[vswind, phiind, thetaind, epqind, detind, secind, 2]
 
         if not "wRsw" in self.d.data.keys():
             self.d.add_data("wRsw", (self.d.data["vRsw"].T / self.d.data["vsw"]).T)
@@ -340,7 +340,7 @@ class Dist3D(object):
         if not "wphi_deg" in self.d.data.keys():
             self.d.add_data("wphi_deg", (arctan(wT / wR) + (((sign(wR) - 1) / -2.) * (sign(wT) * pi))) * 180. / pi)
         else:
-            self.d.data["wphi_deg"] = (arctan(wT / wR) + (((sign(wR) - 1) / -2.) * (sign(wT) * pi)))
+            self.d.data["wphi_deg"] = (arctan(wT / wR) + (((sign(wR) - 1) / -2.) * (sign(wT) * pi)) *180. / pi)
         if not "wtheta_deg" in self.d.data.keys():
             self.d.add_data("wtheta_deg", (arctan(wN / abs(wR)) * 180. / pi))
         else:
@@ -457,7 +457,7 @@ class Dist3D(object):
         return norm_arr
 
     def calc_w3dspecs(self, vswbins=arange(0., 1800.1, 10.), wbins=arange(-2., 2.01, 0.2), min_whe=1,
-                      aspphi=(-30., 45.)):
+                      aspphi=(-30., 45.), weights = None):
         """
         Calculates w spectra in slices
         vsws -> bins for solar wind speed that are taken to calculate the instrumental coverage at w-bins
@@ -473,8 +473,6 @@ class Dist3D(object):
         # to calculate the weights for normalising the final histograms:
         norm_arr_sw = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe=min_whe, wbins=wbins, dim=3,
                                     frame='sw')
-        # norm_arr_sc = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe = min_whe, wbins= wRbins, dim = 3,
-        #                             frame = 'sc')
 
         # consider the PHA words *only now*:
         wgts = self.d.get_data("He1+", "wgts_sec")  # 1 / (phase space volume * eff)
@@ -486,7 +484,10 @@ class Dist3D(object):
 
         twts = zeros(wR_sw2.shape)
         for i in range(wR_sw2.shape[1]):
-            twts[:, i] = wgts * swgt
+            twts[:, i] = swgt * wgts
+
+        self.t = twts
+
         H2_sw, bs = histogramdd((wR_sw2.flatten(), wT_sw2.flatten(), wN_sw2.flatten()), bins=(wbins, wbins, wbins),
                                 weights=twts.flatten())
 
@@ -625,7 +626,7 @@ class Dist3D(object):
         ax.legend()
         return v
 
-    def wspec_1d(self, vswbins = arange(0,1000,10), wbins = arange(-2., 5.01, 0.2), min_whe = 0.0,
+    def wspec_1d(self, vswbins = arange(0,1000,10), wbins = arange(-2., 5.01, 0.1), min_whe = 0.0,
                  aspphi = (-30.,45.), mode = 'ps', year = '1993', ax = None):
 
         self.d.remove_submask("Master", "vsw")

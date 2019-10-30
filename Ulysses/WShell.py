@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 from numpy import *
 from numpy import arange, min, max, amin, amax, unique, around
 
-
-
 class WShell():
     def __init__(self, D, min_wHe=0.9, shell=5, color_norm='sg', mode='ps', phirange = [-pi, pi + 0.001], thetarange
     = [-pi / 2., pi / 2. + 0.001], angstep = 10 * pi / 180., wshellbins = arange(0, 2.01, 0.2), vol = True):
@@ -12,13 +10,11 @@ class WShell():
         self.shell = shell
         self.color_norm = color_norm
 
-
         self.angstep = angstep
         self.wshellbins = wshellbins
 
         norm_arr, H0 = self.D.calc_skymapspec(min_whe = min_wHe, phirange = phirange, thetarange = thetarange,
                                               angstep = angstep, wshellbins = wshellbins, vol = vol)
-
         if mode == 'norm':
             self.H = norm_arr
         elif mode == 'counts':

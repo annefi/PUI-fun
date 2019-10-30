@@ -27,15 +27,17 @@ He2 = False #True #
 # He1 = False #
 # He2 = True #
 
+
 # load Ulysses data:
-years = [1994]
+years = [1993]
 
 if He1:
     d1 = uswipha(year=years, tf='all', path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/')
     d1.sync_swoops()
     d1.sync_traj()
+    d1.sync_mag()
 
-    #d1.set_mask('Master','vsw',600,700,reset = True)
+    ##d1.set_mask('Master','vsw',600,670,reset = True)
     d1.set_mask('Master','rng',0,0,reset=True)
     d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
@@ -45,17 +47,13 @@ if He1:
     #d1.set_mask('Master','aspphi', 0,30)
     # d1.set_mask('Master','asptheta',5,7)
 
-
     # get a real subset with masks applied:
     print('*** Save Subset ***')
     d1.save_subset('Master', filename = 'd1.tmp')
     print('*** Load Subset ***')
     d1.load_subset(filename = 'd1.tmp', force = True)
 
-    D4 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
-
-    #ws = WSpec(D, color_norm = 'sg')
-
+    D7 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
 
 
 if He2:

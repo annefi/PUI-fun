@@ -792,4 +792,16 @@ Gyro- / Larmor-Radius: r &= \frac{m v_{\perp}}{q B} = \frac{4\cdot 1.6605\cdot10
 Gyroperiode: T &= \frac{2\pi \cdot r}{v_{\perp}} = \frac{2\pi\cdot m}{q \cdot B} = 65 \,\mathrm{s}
 \end{align*}
 $\Rightarrow$ passt mit einer Minute!
+
+
+\DayInOkt{Mi}{30}
+Magnetfeldkomponenten jetzt den PHA-Worten zugefügt: Gemittelt auf eine Minute und dann die PHA-Worte entsprechend ihrem Epq-Step einen refined Doy90 gegeben und einsortiert. Sollte passen.\\
+Jetzt will ich noch den Phi- und Thetawinkel des B-Feldes zufügen. Netterweise hat Thies das schon in RTN-Koordinaten. Allerdings im SC-Frame, d.h. ich kann nicht dieselben Formeln nehmen wie für den v-Space. ...Doch! Kann ich natürlich, die Geometire ist ja dieselbe. Vspace hat den Ursprung nur woanders. \\
+Fertig. \todo{NaNs} Achtung: Da sind noch NaNs drin. Macht wahrscheinlich mehr Sinn, als das auf 0 zu setzen. Vielleicht crasht das auch...? Dann muss das auch sowas wie 1000 Grad?
+\\
+\todo{PHA um B ergänzen?} Außerdem dauert das ganz schön lange. Vielleicht schreib ich das direkt einmal mit weg...? \\ \\
+Das komische Spektrum in 1997 lag an den Baserateweights! \todo{brw 1997} Keine Ahnung, warum die in 1997 so oft über 1 hinaus gehen... Ein bisschen geguckt: BRW $\ge$ 1 verteilt sich vor allem bei kleinen vsw und geht dann sprunghaft nach unten. Es gibt dazu einen Plot: \verb|1997_brw_groesser_1.png|
+%
+%
+%
 \end{document}
