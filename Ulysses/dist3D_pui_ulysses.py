@@ -26,7 +26,7 @@ matplotlib.rcParams.update({'font.size': 18,
 
 class Dist3D(object):
     def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=1, nrs_para=4,
-                 nrs_sec=9, nrs_epq=1, ion="He1+", offset_sp=180., sc_vel=True):
+                 nrs_sec=9, nrs_epq=3, ion="He1+", offset_sp=180., sc_vel=True):
         """
         d : dbData instance with species predifined by Master mask
         m : Ion mass in amu
@@ -434,7 +434,7 @@ class Dist3D(object):
                 if (p >= aspphi[0]) * (p <= aspphi[1]):
                     for it, t in enumerate(self.asptheta):
                         if H[iv, ip, it] > 0:
-                            whe = self.vels / (v + 5.)
+                            whe = self.vels / (v)
                             epqs = arange(0, 64, 1)[whe > min_whe]
                             if dim == 3:
                                 tmpwx = self.vspace[ip, it, epqs, ..., 0, :] - v
@@ -497,7 +497,7 @@ class Dist3D(object):
         self.d.remove_submask("Master", "asptheta")
         return norm_arr_sw, H2_sw
 
-    def plot_wspec(self, dim='x', slice=10, ax=None, min_wHe=1.0, mode='ps'):
+    def plot_wspec(self, dim='R', slice=10, ax=None, min_wHe=1.0, mode='ps'):
         '''
         :param dim:
         :param slice:
@@ -516,24 +516,24 @@ class Dist3D(object):
             H_0[norm_arr == 0] = 0
             norm_arr[norm_arr == 0] = 1
             H = H_0 / norm_arr
+
         if ax == None:
             fig, ax = plt.subplots(figsize=(10, 8))
             colormap = plt.cm.get_cmap("viridis")
             vmin = amin(H[H > 0])
-            if dim == 'x':
+            if dim == 'R':
                 self.Quadmesh = ax.pcolormesh(wbins, wbins, H[slice, :, :].T, cmap=colormap, vmin=vmin)
                 colormap.set_under('white')
-                ax.set_xlim(ax.get_xlim()[::-1])
-                plane = 'Y-Z'
-            elif dim == 'y':
+                plane = 'T-N'
+            elif dim == 'T':
                 self.Quadmesh = ax.pcolormesh(wbins, wbins, H[:, slice, :].T, cmap=colormap, vmin=vmin)
                 colormap.set_under('white')
-                plane = 'X-Z'
-            elif dim == 'z':
-                self.Quadmesh = ax.pcolormesh(wbins, wbins, H[:, :, slice], cmap=colormap, vmin=vmin)
+                plane = 'R-N'
+            elif dim == 'N':
+                self.Quadmesh = ax.pcolormesh(wbins, wbins, H[:, :, slice].T, cmap=colormap, vmin=vmin)
                 colormap.set_under('white')
-                plane = 'X-Y'
-                ax.set_xlim(ax.get_xlim()[::-1])
+                plane = 'R-T'
+                #ax.set_xlim(ax.get_xlim()[::-1])
             else:
                 print('No valid dimension given')
                 sys.exit()
@@ -546,85 +546,8 @@ class Dist3D(object):
             ax.set_ylabel(r'$\mathrm{w_{sw,%s}}$' % plane[-1].lower())
             colorbar = plt.colorbar(self.Quadmesh, ax=ax)
 
-    def hist_sec_det(self, polar=True, binx=arange(0, 4, 1), biny=arange(0, 9, 1)):
-        colormap = plt.cm.get_cmap("viridis")
-        valsec = self.d.data['sec']
-        valdet = self.d.data['det']
-        C, bins_det, bins_sec = histogram2d(valdet, valsec, bins=[binx, biny])
-        self.C = C
-        self.bins_det = bins_det
-        self.bins_sec = bins_sec
-        if polar == True:
-            fig = plt.figure(figsize=(3, 3))
-            ax = plt.subplot(111, projection='polar')
-            ax.set_ylim(0, 2.8)
-            ax.set_yticks([])
-            ax.set_theta_zero_location('N')
-            ax.set_xticks([x + (2 * pi / 16.) for x in linspace(0, 2 * pi, 8, endpoint=False)])
-            ax.set_xticklabels([str(i) for i in arange(0, 8, 1)])
-            radbins_sec = linspace(0, 2 * pi, 9)
-            fullbins_det = array([3.2, 2, 1, 0])
-            Mesh = ax.pcolormesh(radbins_sec, fullbins_det, C, cmap=colormap, norm=colors.LogNorm())
-        else:
-            fig, ax = plt.subplots()
-            ax.set_xlabel('Detector')
-            ax.set_xticks(arange(0, 4, 1))
-            ax.set_ylabel('Sector')
-            ax.set_xticks(arange(0, 9, 1))
-            ax.xaxis.set_major_formatter(ticker.NullFormatter())
-            ax.xaxis.set_minor_locator(ticker.FixedLocator([0.5, 1.5, 2.5]))
-            ax.xaxis.set_minor_formatter(ticker.FixedFormatter(['1', '2', '3']))
 
-            ax.yaxis.set_major_formatter(ticker.NullFormatter())
-            ax.yaxis.set_minor_locator(ticker.FixedLocator([0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]))
-            ax.yaxis.set_minor_formatter(ticker.FixedFormatter(['0', '1', '2', '3', '4', '5', '6', '7']))
 
-            for tick in ax.xaxis.get_minor_ticks():
-                tick.tick1line.set_markersize(0)
-                # tick.label1.set_horizontalalignment('center')
-            for tick in ax.yaxis.get_minor_ticks():
-                tick.tick1line.set_markersize(0)
-                # tick.label1.set_horizontalalignment('center')
-            Mesh = ax.pcolormesh(bins_det, bins_sec, C.T, cmap=colormap, norm=colors.LogNorm())
-        colormap.set_under('white')
-        cb = plt.colorbar(Mesh, ax=ax, extend='max')
-
-    def calc_vabs(self, vsw_val=400, doy_val=False):
-        '''
-        Calculates the absolute |v| from vR, vT and vN to compare it with the solar wind velocity in a small window
-        of time
-        (Built for comparing the He2+ velocity with SWOOPS' measured vsw)
-        '''
-        if doy_val == False:
-            try:
-                self.d.remove_submask('mmask', 'doy')
-            except:
-                pass
-            self.d.set_mask('mmask', 'vsw', vsw_val - 20, vsw_val + 20, reset=True)
-        else:
-            try:
-                self.d.remove_submask('mmask', 'vsw')
-            except:
-                pass
-            self.d.set_mask('mmask', 'doy', doy_val - 0.3, doy_val + 0.3, reset=True)
-        vsw = self.d.get_data('mmask', 'vsw').flatten()
-        vR = self.d.get_data('mmask', 'vR').flatten()
-        vT = self.d.get_data('mmask', 'vT').flatten()
-        vN = self.d.get_data('mmask', 'vN').flatten()
-        v = sqrt(vR ** 2 + vT ** 2 + vN ** 2)
-        fig = plt.figure()
-        ax = plt.subplot(111)
-        v_bins = arange(200, 1000, 10)
-        hist_bulk, bins = histogram(v, bins=v_bins)
-        hist_bulk = append(hist_bulk, 0)
-
-        hist_vsw, bins = histogram(tile(vsw, self.sec_det_dim), bins=v_bins)
-        hist_vsw = append(hist_vsw, 0)
-
-        ax.plot(bins[:], hist_bulk, ls='steps-post-', color='r', label='calculated bulk velocity')
-        ax.plot(bins[:], hist_vsw, ls='steps-post-', color='b', label='SWOOPS solar wind velocity')
-        ax.legend()
-        return v
 
     def wspec_1d(self, vswbins = arange(0,1000,10), wbins = arange(-2., 5.01, 0.1), min_whe = 0.0,
                  aspphi = (-30.,45.), mode = 'ps', year = '1993', ax = None):
@@ -739,7 +662,7 @@ class Dist3D(object):
                 if (p >= aspphi[0]) * (p <= aspphi[1]):
                     for it, t in enumerate(self.asptheta):
                         if H[iv, ip, it] > 0:
-                            whe = self.vels / (v + 5.)
+                            whe = self.vels / (v)
                             epqs = arange(0, 64, 1)[whe > min_whe]
                             tmpwR = self.vspace[ip, it, epqs, ..., 0, :] - v
                             wR = tmpwR / v
@@ -750,6 +673,8 @@ class Dist3D(object):
                             wT = wT.flatten()
                             wN = wN.flatten()
                             w = sqrt(wR ** 2 + wT ** 2 + wN ** 2)
+
+
 
                             wphi = arctan(wT / wR) + (((sign(wR) - 1) / -2.) * (sign(wT) * pi))
                             wtheta = arctan(wN / abs(wR))
@@ -775,8 +700,6 @@ class Dist3D(object):
     def calc_skymapspec(self, vswbins=arange(500., 800.1, 10.), min_whe=1.0, aspphi=(-30., 45.),
                         phirange=[-pi, pi + 0.001], thetarange=[-pi / 2., pi / 2. + 0.001], angstep=10 * pi / 180,
                         wshellbins=arange(0, 2.01, 0.2), vol = True):
-        """
-        """
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
@@ -815,7 +738,7 @@ class Dist3D(object):
         return norm_arr, H
 
     def plot_shellspec(self, shell = 5, ax = None, min_wHe = 0.9, phirange=[-pi, pi + 0.001],
-                                            thetarange=[-pi / 2., pi / 2. + 0.001], angstep= 30 * pi / 180.,
+                                            thetarange=[-pi / 2., pi / 2. + 0.001], angstep= 10 * pi / 180.,
                                             wshellbins=arange(0, 2.01, 0.2), mode='ps', vol = True):
 
         norm_arr, H0 = self.calc_skymapspec(min_whe = min_wHe, phirange = phirange,
@@ -831,6 +754,7 @@ class Dist3D(object):
             H = H0 / norm_arr
         self.H = H
 
+
         # bins that are shown in the plot. Have to have the dimension of the histogram.
         phibins = arange(-180., 180.1, angstep * 180. / pi)
         thetabins = arange(-90., 90.1, angstep * 180. / pi)
@@ -841,8 +765,8 @@ class Dist3D(object):
         except:
             vmin = 0.
         vmax = amax(H[:, :, shell])
-        if vmax < 1.:
-            vmax = 10.
+        # if vmax < 1.:
+        #     vmax = 1.
 
         if ax == None:
             fig, ax = plt.subplots(figsize=(10, 8))
@@ -888,8 +812,8 @@ class Dist3D(object):
         except:
             vmin = 0.
         vmax = amax(H[:, :, shell])
-        if vmax < 1.:
-            vmax = 10.
+        # if vmax < 1.:
+        #     vmax = 1.
 
         if ax == None:
             plt.figure()
@@ -910,6 +834,50 @@ class Dist3D(object):
 
 
 
+
+
+    def hist_sec_det(self, polar=True, binx=arange(0, 4, 1), biny=arange(0, 9, 1)):
+        colormap = plt.cm.get_cmap("viridis")
+        valsec = self.d.data['sec']
+        valdet = self.d.data['det']
+        C, bins_det, bins_sec = histogram2d(valdet, valsec, bins=[binx, biny])
+        self.C = C
+        self.bins_det = bins_det
+        self.bins_sec = bins_sec
+        if polar == True:
+            fig = plt.figure(figsize=(3, 3))
+            ax = plt.subplot(111, projection='polar')
+            ax.set_ylim(0, 2.8)
+            ax.set_yticks([])
+            ax.set_theta_zero_location('N')
+            ax.set_xticks([x + (2 * pi / 16.) for x in linspace(0, 2 * pi, 8, endpoint=False)])
+            ax.set_xticklabels([str(i) for i in arange(0, 8, 1)])
+            radbins_sec = linspace(0, 2 * pi, 9)
+            fullbins_det = array([3.2, 2, 1, 0])
+            Mesh = ax.pcolormesh(radbins_sec, fullbins_det, C, cmap=colormap, norm=colors.LogNorm())
+        else:
+            fig, ax = plt.subplots()
+            ax.set_xlabel('Detector')
+            ax.set_xticks(arange(0, 4, 1))
+            ax.set_ylabel('Sector')
+            ax.set_xticks(arange(0, 9, 1))
+            ax.xaxis.set_major_formatter(ticker.NullFormatter())
+            ax.xaxis.set_minor_locator(ticker.FixedLocator([0.5, 1.5, 2.5]))
+            ax.xaxis.set_minor_formatter(ticker.FixedFormatter(['1', '2', '3']))
+
+            ax.yaxis.set_major_formatter(ticker.NullFormatter())
+            ax.yaxis.set_minor_locator(ticker.FixedLocator([0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5]))
+            ax.yaxis.set_minor_formatter(ticker.FixedFormatter(['0', '1', '2', '3', '4', '5', '6', '7']))
+
+            for tick in ax.xaxis.get_minor_ticks():
+                tick.tick1line.set_markersize(0)
+                # tick.label1.set_horizontalalignment('center')
+            for tick in ax.yaxis.get_minor_ticks():
+                tick.tick1line.set_markersize(0)
+                # tick.label1.set_horizontalalignment('center')
+            Mesh = ax.pcolormesh(bins_det, bins_sec, C.T, cmap=colormap, norm=colors.LogNorm())
+        colormap.set_under('white')
+        cb = plt.colorbar(Mesh, ax=ax, extend='max')
     def test_func(self, norm, H):
         # for testing if the norm array covers every bin of the H array (which should be the case!)
         wbins = arange(-2., 2.01, 0.2)
@@ -930,6 +898,42 @@ class Dist3D(object):
         Quadmeshn = axn.pcolormesh(wbins, wbins, norm_p, vmin=vmin)
         plt.colorbar(Quadmeshn, ax=axn)
         colormap.set_under('white')
+    def calc_vabs(self, vsw_val=400, doy_val=False):
+        '''
+        Calculates the absolute |v| from vR, vT and vN to compare it with the solar wind velocity in a small window
+        of time
+        (Built for comparing the He2+ velocity with SWOOPS' measured vsw)
+        '''
+        if doy_val == False:
+            try:
+                self.d.remove_submask('mmask', 'doy')
+            except:
+                pass
+            self.d.set_mask('mmask', 'vsw', vsw_val - 20, vsw_val + 20, reset=True)
+        else:
+            try:
+                self.d.remove_submask('mmask', 'vsw')
+            except:
+                pass
+            self.d.set_mask('mmask', 'doy', doy_val - 0.3, doy_val + 0.3, reset=True)
+        vsw = self.d.get_data('mmask', 'vsw').flatten()
+        vR = self.d.get_data('mmask', 'vR').flatten()
+        vT = self.d.get_data('mmask', 'vT').flatten()
+        vN = self.d.get_data('mmask', 'vN').flatten()
+        v = sqrt(vR ** 2 + vT ** 2 + vN ** 2)
+        fig = plt.figure()
+        ax = plt.subplot(111)
+        v_bins = arange(200, 1000, 10)
+        hist_bulk, bins = histogram(v, bins=v_bins)
+        hist_bulk = append(hist_bulk, 0)
+
+        hist_vsw, bins = histogram(tile(vsw, self.sec_det_dim), bins=v_bins)
+        hist_vsw = append(hist_vsw, 0)
+
+        ax.plot(bins[:], hist_bulk, ls='steps-post-', color='r', label='calculated bulk velocity')
+        ax.plot(bins[:], hist_vsw, ls='steps-post-', color='b', label='SWOOPS solar wind velocity')
+        ax.legend()
+        return v
 
     def plot_diff(self, axR=None):
         # mit Rundung aus Vspace

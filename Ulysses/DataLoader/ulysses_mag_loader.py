@@ -26,7 +26,7 @@ class mag_loader(dbData):
         else:
             self.path="/data/projects/Ulysses/umag_tp/1sec_data/" # (is only 2 sec data!)
 
-        # initialise keys%ru
+        # initialise keys
         self.keys = ['year', 'doy', 'hour', 'min', 'sec' ,'Br', 'Bt', 'Bn', 'Babs']
         for key in self.keys:
             self.data[key] = []

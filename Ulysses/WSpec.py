@@ -5,7 +5,7 @@ from numpy import arange, min, max, amin, amax, unique, around
 
 
 class WSpec():
-    def __init__(self, D, min_wHe = 1.0, slice = 5, dim = 'x', color_norm = 'sg', mode = 'ps',
+    def __init__(self, D, min_wHe = 1.0, slice = 5, dim = 'R', color_norm = 'sg', mode = 'ps',
                  wbins = arange(-2,2.01, 0.2)):
         self.D = D
         self.slice = slice
@@ -23,7 +23,7 @@ class WSpec():
             norm_arr[norm_arr == 0] = 1
             self.H = H0 / norm_arr
 
-    def init_plot(self, dim = 'x'):
+    def init_plot(self):
         def keypress(event):
             if event.key == 'right':
                 self.update_plot(dir='+')
@@ -36,12 +36,11 @@ class WSpec():
             print 'click'
         fig, self.ax = plt.subplots(figsize=(10,8))
         fig.canvas.mpl_connect('key_press_event', keypress)
-        self.txt_plane = self.ax.text(0.1, 1.05, '%s-plane'%'Y-Z', bbox = {"facecolor":"grey","alpha":0.4,"pad":10},
+        self.txt_plane = self.ax.text(0.1, 1.05, '%s-plane'%'T-N', bbox = {"facecolor":"grey","alpha":0.4,"pad":10},
                                       transform = self.ax.transAxes)
         self.txt_slice = self.ax.text(0.6, 1.05, 'Slice: %s' % '10', bbox = {"facecolor":"grey","alpha":0.4,"pad":10},
                                       transform = self.ax.transAxes)
         self.plot(dim = self.dim, slice = self.slice)
-        self.ax.set_xlim(self.ax.get_xlim()[::-1])
         self.cb = plt.colorbar(self.Quadmesh, ax = self.ax)
         self.cb.formatter.set_powerlimits((0, 0)) # limits for changing to scientific number notation -> (0,0): always
         self.cb.update_bruteforce(self.Quadmesh) # force updating the colorbar
@@ -54,71 +53,69 @@ class WSpec():
             vmax = amax(self.H)
             if vmax < 1.:
                 vmax = 10.
-            if dim == 'x':
+            if dim == 'R':
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[slice, :, :].T, cmap=colormap, vmin = vmin,
                                                    vmax = vmax)
                 colormap.set_under('white')
-                self.txt_plane.set_text('%s-plane'%'Y-Z')
-                self.txt_slice.set_text(r'$\mathrm{w_{sw,x} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
-                self.ax.set_xlabel(r'$\mathrm{w_{sw,y}}$')
-                self.ax.set_ylabel(r'$\mathrm{w_{sw,z}}$')
-            elif dim == 'y':
+                self.txt_plane.set_text('%s-plane'%'T-N')
+                self.txt_slice.set_text(r'$\mathrm{w_{sw,R} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
+                self.ax.set_xlabel(r'$\mathrm{w_{sw,T}}$')
+                self.ax.set_ylabel(r'$\mathrm{w_{sw,N}}$')
+            elif dim == 'T':
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, slice, :].T, cmap=colormap, vmin = vmin,
                                                    vmax = vmax)
                 colormap.set_under('white')
-                self.txt_plane.set_text('%s-plane' % 'X-Z')
-                self.txt_slice.set_text(r'$\mathrm{w_{sw,y} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
-                self.ax.set_xlabel(r'$\mathrm{w_{sw,x}}$')
-                self.ax.set_ylabel(r'$\mathrm{w_{sw,z}}$')
-            elif dim == 'z':
-                self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, :, slice], cmap=colormap, vmin = vmin,
+                self.txt_plane.set_text('%s-plane' % 'R-N')
+                self.txt_slice.set_text(r'$\mathrm{w_{sw,T} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
+                self.ax.set_xlabel(r'$\mathrm{w_{sw,R}}$')
+                self.ax.set_ylabel(r'$\mathrm{w_{sw,N}}$')
+            elif dim == 'N':
+                self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, :, slice].T, cmap=colormap, vmin = vmin,
                                                    vmax = vmax)
                 colormap.set_under('white')
-                self.txt_plane.set_text('%s-plane' % 'X-Y')
-                self.txt_slice.set_text(r'$\mathrm{w_{sw,z} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
-                self.ax.set_xlabel(r'$\mathrm{w_{sw,x}}$')
-                self.ax.set_ylabel(r'$\mathrm{w_{sw,y}}$')
+                self.txt_plane.set_text('%s-plane' % 'R-T')
+                self.txt_slice.set_text(r'$\mathrm{w_{sw,N} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
+                self.ax.set_xlabel(r'$\mathrm{w_{sw,R}}$')
+                self.ax.set_ylabel(r'$\mathrm{w_{sw,T}}$')
             else:
-                raise (ValueError("'dim' must be 'x', 'y' or 'z'."))
+                raise (ValueError("'dim' must be 'R', 'T' or 'N'."))
         if self.color_norm == 'sg':
             vmin = amin(self.H[self.H > 0])
-            if dim == 'x':
+            if dim == 'R':
                 vmax = amax(self.H[slice, :, :])
                 if vmax < 1.:
                     vmax = 10.
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[slice, :, :].T, cmap=colormap, vmin = vmin,
-                                                   vmax=vmax)
+                                                   vmax = vmax)
                 colormap.set_under('white')
-                self.txt_plane.set_text('%s-plane' % 'Y-Z')
-                self.txt_slice.set_text(r'$w_x = [%2.1f, %2.1f]$' % (wbins[slice], wbins[slice + 1]))
-                self.ax.set_xlabel(r'$\mathrm{w_{sw,y}}$')
-                self.ax.set_ylabel(r'$\mathrm{w_{sw,z}}$')
-            elif dim == 'y':
+                self.txt_plane.set_text('%s-plane'%'T-N')
+                self.txt_slice.set_text(r'$\mathrm{w_{sw,R} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
+                self.ax.set_xlabel(r'$\mathrm{w_{sw,T}}$')
+                self.ax.set_ylabel(r'$\mathrm{w_{sw,N}}$')
+            elif dim == 'T':
                 vmax = amax(self.H[:, slice, :])
                 if vmax < 1.:
                     vmax = 10.
-                self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, slice, :].T, cmap=colormap, vmin=vmin,
-                                                   vmax=vmax)
-
+                self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, slice, :].T, cmap=colormap, vmin = vmin,
+                                                   vmax = vmax)
                 colormap.set_under('white')
-                self.txt_plane.set_text('%s-plane' % 'X-Z')
-                self.txt_slice.set_text(r'$w_y = [%2.1f, %2.1f]$' % (wbins[slice], wbins[slice + 1]))
-                self.ax.set_xlabel(r'$\mathrm{w_{sw,x}}$')
-                self.ax.set_ylabel(r'$\mathrm{w_{sw,z}}$')
-            elif dim == 'z':
+                self.txt_plane.set_text('%s-plane' % 'R-N')
+                self.txt_slice.set_text(r'$\mathrm{w_{sw,T} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
+                self.ax.set_xlabel(r'$\mathrm{w_{sw,R}}$')
+                self.ax.set_ylabel(r'$\mathrm{w_{sw,N}}$')
+            elif dim == 'N':
                 vmax = amax(self.H[:, :, slice])
                 if vmax < 1.:
                     vmax = 10.
-                self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, :, slice], cmap=colormap, vmin=vmin,
+                self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, :, slice].T, cmap=colormap, vmin=vmin,
                                                    vmax=vmax)
                 colormap.set_under('white')
-                self.txt_plane.set_text('%s-plane' % 'X-Y')
-                self.txt_slice.set_text(r'$w_z = [%2.1f, %2.1f]$' % (wbins[slice], wbins[slice + 1]))
-                self.ax.set_xlabel(r'$\mathrm{w_{sw,x}}$')
-                self.ax.set_ylabel(r'$\mathrm{w_{sw,y}}$')
+                self.txt_plane.set_text('%s-plane' % 'R-T')
+                self.txt_slice.set_text(r'$\mathrm{w_{sw,N} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice + 1]))
+                self.ax.set_xlabel(r'$\mathrm{w_{sw,R}}$')
+                self.ax.set_ylabel(r'$\mathrm{w_{sw,T}}$')
             else:
-                raise (ValueError("'dim' must be 'x', 'y' or 'z'."))
-
+                raise (ValueError("'dim' must be 'R', 'T' or 'N'."))
 
     def update_plot(self, dir = '+'):
         if dir == '+':
@@ -142,14 +139,12 @@ class WSpec():
 
 
     def rot_plot(self):
-        if self.dim == 'x':
-            self.dim = 'y'
-            self.ax.set_xlim(self.ax.get_xlim()[::-1])
-        elif self.dim == 'y':
-            self.dim = 'z'
-            self.ax.set_xlim(self.ax.get_xlim()[::-1])
-        elif self.dim == 'z':
-            self.dim = 'x'
+        if self.dim == 'R':
+            self.dim = 'T'
+        elif self.dim == 'T':
+            self.dim = 'N'
+        elif self.dim == 'N':
+            self.dim = 'R'
         self.plot(dim = self.dim, slice = self.slice)
         self.cb.formatter.set_powerlimits((0, 0)) # limits for changing to scientific number notation -> (0,0): always
         self.cb.update_bruteforce(self.Quadmesh) # force updating range of the colorbar
