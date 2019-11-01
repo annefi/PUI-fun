@@ -6,32 +6,45 @@ import os, sys
 
 path = '/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/'
 
-header = 'doy\t\tepqst\ttch\tech\tsect\tdet\trange\tbrw\tBphi\t\tBtheta\n'
+header = 'doy\t\tepqst\ttch\tech\tsect\tdet\trange\tbrw      Bphi       Btheta    B_R       B_T      B_N\n'
+
+fail = []
 
 for y in [1993,1994, 1995, 1996, 1997, 1998, 1999, 2000]:
     if os.path.exists('%s%s/' % (path, str(y))) == False:
         os.mkdir('%s%s/' % (path, str(y)))
     for doy in arange(1,366):
-        d = uswipha(year=y, tf=[[doy, doy+1]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/')
-        d.sync_swoops()
-        d.sync_traj()
-        d.sync_mag()
+        try:
+            d = uswipha(year=y, tf=[[doy, doy+1]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/')
 
-        fname = "%s%.4i/%.3i.pha" % (path, y, doy)
-        out = open(fname, 'w')
+            d.sync_swoops()
+            d.sync_traj()
+            d.sync_mag()
 
-        out.write(header)
-        for i in arange(len(d.data['year'])):
-            do = d.data['doy'][i]
-            epq = str(d.data['epq'][i])
-            tch = str(d.data['tch'][i])
-            ech = str(d.data['ech'][i])
-            sec = str(d.data['sec'][i])
-            det = str(d.data['det'][i])
-            range = str(d.data['rng'][i])
-            brw = str(d.data['brw'][i])
-            bp = d.data['Bphi'][i]
-            bt = d.data['Btheta'][i]
-            line = "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%8.5f\t%8.5f\n" %(do,epq,tch,ech,sec,det,range,brw,bp,bt)
-            out.write(line)
-        out.close()
+            fname = "%s%.4i/%.3i.pha" % (path, y, doy)
+            out = open(fname, 'w')
+
+            out.write(header)
+            for i in arange(len(d.data['year'])):
+                do = d.data['doy'][i]
+                epq = str(d.data['epq'][i])
+                tch = str(d.data['tch'][i])
+                ech = str(d.data['ech'][i])
+                sec = str(d.data['sec'][i])
+                det = str(d.data['det'][i])
+                range = str(d.data['rng'][i])
+                brw = str(d.data['brw'][i])
+                bp = d.data['Bphi'][i]
+                bt = d.data['Btheta'][i]
+
+                br = d.data['Br'][i]
+                bt = d.data['Bt'][i]
+                bn = d.data['Bn'][i]
+
+                line = "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%8.5f   %8.5f  %8.5f  %8.5f  %8.5f\n" %(do,epq,tch,ech,sec,
+                                                                                               det,range,brw,bp,bt,
+                                                                                               br,bt,bn)
+                out.write(line)
+            out.close()
+        except:
+            fail.append("%i_%i" %(y,doy))

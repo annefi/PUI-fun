@@ -31,6 +31,8 @@ class uswipha(dbData):
             self.path="/data/projects/Ulysses/swics/pha/"
             #self.path="/data/ivar/ulysses/swics/pha/"
 
+
+
         self.data["year"]=[]
         self.data["doy"]=[]
         self.data["epq"]=[]
@@ -40,6 +42,11 @@ class uswipha(dbData):
         self.data["det"]=[]
         self.data["rng"]=[]
         self.data["brw"]=[]
+        if self.path =="/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/":
+            self.data["Bphi"] = []
+            self.data["Btheta"] = []
+
+
         for year in self.year:
             for tf in self.timeframe:
                 for doy in range(int(tf[0]),int(tf[1])):
@@ -59,6 +66,9 @@ class uswipha(dbData):
                             self.data["det"].append(int(k[5]))
                             self.data["rng"].append(int(k[6]))
                             self.data["brw"].append(float(k[7]))
+                            if self.path == "/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/":
+                                self.data["Bphi"].append(float(k[8]))
+                                self.data["Btheta"].append(float(k[9]))
                     except:
                         print "Problems reading DoY ",doy
         self.data["year"]=array(self.data["year"])
@@ -71,6 +81,9 @@ class uswipha(dbData):
         self.data["rng"]=array(self.data["rng"])
         self.data["brw"]=array(self.data["brw"])
         self.data["vHe+"] = getvelocity(4.,1.,self.data["epq"])
+        if self.path == "/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/":
+            self.data["Bphi"] = array(self.data["Bphi"])
+            self.data["Btheta"] = array(self.data["Btheta"])
 
     def calc_d90(self):
         offy = self.data["year"] - 1990
@@ -207,7 +220,7 @@ class uswipha(dbData):
         Bt = self.data['Bt']
         Bn = self.data['Bn']
         self.add_data('Bphi', (arctan(Bt / Br) + (((sign(Br) - 1) / -2.) * (sign(Bt) * pi))))
-        self.add_data('Btheta', arctan(Bn / abs(Br)))
+        self.add_data('Btheta',  (arcsin(Bn / sqrt(Br**2 + Bt**2 + Bn**2))))
 
         # add magnetic field angles in degree:
         self.add_data('Bphi_deg', (self.data['Bphi'] * 180. / pi))

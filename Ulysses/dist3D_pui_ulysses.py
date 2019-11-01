@@ -25,8 +25,8 @@ matplotlib.rcParams.update({'font.size': 18,
 
 
 class Dist3D(object):
-    def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=1, nrs_para=4,
-                 nrs_sec=9, nrs_epq=3, ion="He1+", offset_sp=180., sc_vel=True):
+    def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=3, nrs_para=9,
+                 nrs_sec=9, nrs_epq=3, vswstep = 5, ion="He1+", offset_sp=180., sc_vel=False):
         """
         d : dbData instance with species predifined by Master mask
         m : Ion mass in amu
@@ -39,6 +39,7 @@ class Dist3D(object):
         self.nrs_perp = nrs_perp
         self.nrs_sec = nrs_sec
         self.nrs_epq = nrs_epq
+        self.vswstep = vswstep
         self.mass = mass
         self.charge = charge
         self.ion = ion
@@ -52,7 +53,7 @@ class Dist3D(object):
                                around(max(self.d.data["asptheta"])) + aspthetastep + 0.0001, aspthetastep)
 
         self.vswbins = arange(around(min(self.d.data["vsw"]), decimals=-1),
-                              around(max(self.d.data["vsw"]), decimals=-1) + 10. + 0.0001, 10)
+                              around(max(self.d.data["vsw"]), decimals=-1) + vswstep + 0.0001, vswstep)
 
         self.vr = arange(around(min(self.d.data["vr_sc"])),
                          around(max(self.d.data["vr_sc"])) + v_sc_step + 0.0001, v_sc_step)
@@ -332,9 +333,9 @@ class Dist3D(object):
         else:
             self.d.data["wphi"] = arctan(wT / wR) + (((sign(wR) - 1) / -2.) * (sign(wT) * pi))
         if not "wtheta" in self.d.data.keys():
-            self.d.add_data("wtheta", arctan(wN / abs(wR)))
+            self.d.add_data("wtheta", arcsin(wN / sqrt(wR**2 + wT**2 + wN**2) ))
         else:
-            self.d.data["wtheta"] = arctan(wN / abs(wR))
+            self.d.data["wtheta"] = arcsin(wN / sqrt(wR**2 + wT**2 + wN**2))
 
         # degree values:
         if not "wphi_deg" in self.d.data.keys():
@@ -342,9 +343,9 @@ class Dist3D(object):
         else:
             self.d.data["wphi_deg"] = (arctan(wT / wR) + (((sign(wR) - 1) / -2.) * (sign(wT) * pi)) *180. / pi)
         if not "wtheta_deg" in self.d.data.keys():
-            self.d.add_data("wtheta_deg", (arctan(wN / abs(wR)) * 180. / pi))
+            self.d.add_data("wtheta_deg", arcsin(wN / sqrt(wR**2 + wT**2 + wN**2) ) * 180. / pi)
         else:
-            self.d.data["wtheta_deg"] = (arctan(wN / abs(wR)) * 180. / pi)
+            self.d.data["wtheta_deg"] = arcsin(wN / sqrt(wR**2 + wT**2 + wN**2) ) *  (180. / pi)
 
     def _add_phspeff_wgt(self):
         """
@@ -417,7 +418,7 @@ class Dist3D(object):
         phibins = arange(self.aspphi[0] - self.aspphistep / 2., self.aspphi[-1] + self.aspthetastep, self.aspphistep)
         thetabins = arange(self.asptheta[0] - self.aspthetastep / 2., self.asptheta[-1] + self.aspthetastep,
                            self.aspthetastep)
-        vswbins = arange(self.vswbins[0] - 10 / 2., self.vswbins[-1] + 10, 10)
+        vswbins = arange(self.vswbins[0] - self.vswstep / 2., self.vswbins[-1] + self.vswstep, self.vswstep)
 
         H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, phibins, thetabins))
         self.H = H
@@ -434,26 +435,26 @@ class Dist3D(object):
                 if (p >= aspphi[0]) * (p <= aspphi[1]):
                     for it, t in enumerate(self.asptheta):
                         if H[iv, ip, it] > 0:
-                            whe = self.vels / (v)
-                            epqs = arange(0, 64, 1)[whe > min_whe]
-                            if dim == 3:
-                                tmpwx = self.vspace[ip, it, epqs, ..., 0, :] - v
-                                wx = tmpwx / v
-                                wy = self.vspace[ip, it, epqs, ..., 1, :] / v
-                                wz = self.vspace[ip, it, epqs, ..., 2, :] / v
+                                whe = self.vels / (v)
+                                epqs = arange(0, 64, 1)[whe > min_whe]
+                                if dim == 3:
+                                    tmpwx = self.vspace[ip, it, epqs, ..., 0, :] - v
+                                    wx = tmpwx / v
+                                    wy = self.vspace[ip, it, epqs, ..., 1, :] / v
+                                    wz = self.vspace[ip, it, epqs, ..., 2, :] / v
 
-                                H2, bs = histogramdd((wx.flatten(), wy.flatten(), wz.flatten()),
-                                                     bins=(wbins, wbins, wbins))
-                                norm_arr += H2 * H[iv, ip, it]
+                                    H2, bs = histogramdd((wx.flatten(), wy.flatten(), wz.flatten()),
+                                                         bins=(wbins, wbins, wbins))
+                                    norm_arr += H2 * H[iv, ip, it]
 
-                            if dim == 1:
-                                tmpwx = self.vspace[ip, it, epqs, ..., 0, :] - v
-                                wx = tmpwx / v
-                                wy = self.vspace[ip, it, epqs, ..., 1, :] / v
-                                wz = self.vspace[ip, it, epqs, ..., 2, :] / v
-                                w = sqrt(wx**2 + wy**2 + wz**2)
-                                H2, bs = histogram(w.flatten(), bins = wbins)
-                                norm_arr += H2 * H[iv, ip, it]
+                                if dim == 1:
+                                    tmpwx = self.vspace[ip, it, epqs, ..., 0, :] - v
+                                    wx = tmpwx / v
+                                    wy = self.vspace[ip, it, epqs, ..., 1, :] / v
+                                    wz = self.vspace[ip, it, epqs, ..., 2, :] / v
+                                    w = sqrt(wx**2 + wy**2 + wz**2)
+                                    H2, bs = histogram(w.flatten(), bins = wbins)
+                                    norm_arr += H2 * H[iv, ip, it]
         return norm_arr
 
     def calc_w3dspecs(self, vswbins=arange(0., 1800.1, 10.), wbins=arange(-2., 2.01, 0.2), min_whe=1,
@@ -497,7 +498,7 @@ class Dist3D(object):
         self.d.remove_submask("Master", "asptheta")
         return norm_arr_sw, H2_sw
 
-    def plot_wspec(self, dim='R', slice=10, ax=None, min_wHe=1.0, mode='ps'):
+    def plot_wslice(self, dim='R', slice=10, ax=None, min_wHe=1.0, mode='ps'):
         '''
         :param dim:
         :param slice:
@@ -641,11 +642,11 @@ class Dist3D(object):
                              self.aspphistep)
         asp_thetabins = arange(self.asptheta[0] - self.aspthetastep / 2., self.asptheta[-1] + self.aspthetastep,
                                self.aspthetastep)
-        vswbins = arange(self.vswbins[0] - 10 / 2., self.vswbins[-1] + 10, 10)
+        vswbins = arange(self.vswbins[0] - self.vswstep / 2., self.vswbins[-1] + self.vswstep, self.vswstep)
 
         H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, asp_phibins, asp_thetabins))
 
-        self.H = H
+
 
         # norm_arr indicates how often a wR-wT-wN combination "is hit" with the given AA-vsw combinations and their
         # resp. occurrences
@@ -656,12 +657,23 @@ class Dist3D(object):
         self.phibins = phibins
         self.thetabins = thetabins
 
+        self.w = array([])
+        self.wR = array([])
+        self.wT = array([])
+        self.wN = array([])
+        self.phi = array([])
+        self.theta = array([])
+
+        self.H = H
+
         norm_arr = zeros((phibins.shape[0] - 1, thetabins.shape[0] - 1, wshellbins.shape[0] - 1))
         for iv, v in enumerate(self.vswbins):
             for ip, p in enumerate(self.aspphi):
                 if (p >= aspphi[0]) * (p <= aspphi[1]):
                     for it, t in enumerate(self.asptheta):
+
                         if H[iv, ip, it] > 0:
+                            print(iv, ip, it)
                             whe = self.vels / (v)
                             epqs = arange(0, 64, 1)[whe > min_whe]
                             tmpwR = self.vspace[ip, it, epqs, ..., 0, :] - v
@@ -675,9 +687,23 @@ class Dist3D(object):
                             w = sqrt(wR ** 2 + wT ** 2 + wN ** 2)
 
 
+                            self.w = w
+                            self.wR = wR
+                            self.wT = wT
+                            self.wN = wN
+
+                            # self.w = append(self.w, w)
+                            # self.wR = append(self.wR, wR)
+                            # self.wT = append(self.wT, wT )
+                            # self.wN = append(self.wN, wN)
 
                             wphi = arctan(wT / wR) + (((sign(wR) - 1) / -2.) * (sign(wT) * pi))
-                            wtheta = arctan(wN / abs(wR))
+                            wtheta = arcsin(wN / sqrt(wR**2 + wT**2 + wN**2))
+
+                            # self.phi = append(self.phi, wphi)
+                            # self.theta = append(self.theta, wtheta)
+                            self.phi = wphi
+                            self.theta = wtheta
 
                             H2, bs = histogramdd((wphi.flatten(), wtheta.flatten(), w.flatten()),
                                                  bins=(phibins, thetabins, wshellbins))
@@ -737,7 +763,7 @@ class Dist3D(object):
         self.d.remove_submask("Master", "asptheta")
         return norm_arr, H
 
-    def plot_shellspec(self, shell = 5, ax = None, min_wHe = 0.9, phirange=[-pi, pi + 0.001],
+    def plot_shell(self, shell = 5, ax = None, min_wHe = 0.9, phirange=[-pi, pi + 0.001],
                                             thetarange=[-pi / 2., pi / 2. + 0.001], angstep= 10 * pi / 180.,
                                             wshellbins=arange(0, 2.01, 0.2), mode='ps', vol = True):
 
@@ -782,7 +808,7 @@ class Dist3D(object):
 
 
 
-    def plot_skyspec(self, shell = 5, ax = None, min_wHe = 0.9, phirange=[-pi, pi + 0.001],
+    def plot_sky(self, shell = 5, ax = None, min_wHe = 0.9, phirange=[-pi, pi + 0.001],
                                             thetarange=[-pi / 2., pi / 2. + 0.001], angstep= 30 * pi / 180.,
                                             wshellbins=arange(0, 2.01, 0.2), mode='ps', vol = True):
 
@@ -1088,7 +1114,7 @@ class Dist3D(object):
 
     def draw_sphere(self, ax = None, r = 1.):
         u, v = mgrid[0:2 * pi:20j, 0:pi:10j]
-        x = r *cos(u) * sin(v) + r
+        x = r *cos(u) * sin(v)
         y = r* sin(u) * sin(v)
         z = r * cos(v)
         ax.plot_wireframe(x, y, z, color="r")

@@ -64,6 +64,13 @@
 	node [midway, fill=white] {\textbf{#2 -- #3. Oktober}};
 }
 
+\newcommand{\DayInNov}[3][]{\vspace{2cm}%
+	\noindent \tikz \draw [draw=black, ultra thick, #1]
+	($(current page.center)-(0.5\linewidth,0)$) -- 
+	($(current page.center)+(0.5\linewidth,0)$)
+	node [midway, fill=white] {\textbf{#2 -- #3. November}};
+}
+
 
 %opening
 \title{Master Journal}
@@ -808,6 +815,9 @@ Trajektorie: Nochmal nachgeguckt: Der Orbit ist oben \textit{nach vorne} gekippt
 \\ \\
 Magnetfeld: Während des Minumums um 1996 (Ende Schwabezyklus 22, Anfang Zyklus 23): Unterhalb der Ekliptik negative Br-Werte, oberhalb positive -> passt zu dem Butterfly-Diagramm mit Polung (Wiki, NASA)
 
+\DayInNov{Fr}{1}
+Magnetfeld: Ich schreibe gerade neue PHA-Dateien für He+ weg, in denen die Magnetfelddaten mit dirn sind, damit das alles schneller geht. Man kann dann entweder den \verb|PHA_mag|-Pfad angeben, dann wird das automatisch mit eingeladen (aber nur für He+). Oder man lädt über einen anderen Pfad ein und wählt \verb|sync_mag()|, dann werden die Mag-Daten nachträglich eingeladen. Das geht für alle Daten, dauert aber länger.\\ \\
+Sphärische Koordinaten: Ich habe gestern komische Entfüllungen bei Phi 90 und -90 gesehen über alle Thetas außer Theta 90 und -90 gesehen (da, \textit{oben und unten} war dafür besonders befüllt)).\\ 1. Fehler gefunden: Ich habe die Theta-Komponente verkackt! die ist natürlich nicht nur von N und R abhängig sondern auch von T. Formel wird jetzt angepasst.
 %
 %
 %
