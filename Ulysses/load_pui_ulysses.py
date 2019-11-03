@@ -29,7 +29,7 @@ He2 = False #True #
 
 
 # load Ulysses data:
-years = [1993, 1994, 1995]
+years = [1993]
 
 if He1:
     d1 = uswipha(year=years, tf=[[1,366]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
@@ -37,7 +37,7 @@ if He1:
     d1.sync_traj()
     #d1.sync_mag()
 
-    d1.set_mask('Master','vsw',400,1500,reset = True)
+    d1.set_mask('Master','vsw',600,700,reset = True)
     d1.set_mask('Master','rng',0,0,reset=True)
     d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
@@ -45,9 +45,9 @@ if He1:
 
     #d1.set_mask('Master', 'epq', 10, np.inf, reset=True)
 
-    d1.set_mask('Master','Btheta',-15./180.*np.pi,15./180.*np.pi,reset=True)
-    d1.set_mask('Master','Bphi',125./180.*np.pi,135./180.*np.pi,reset=True)
-    d1.set_mask('Master', 'Bphi', -55. / 180. * np.pi, -45. / 180. * np.pi)
+    # d1.set_mask('Master','Btheta',-15./180.*np.pi,15./180.*np.pi,reset=True)
+    # d1.set_mask('Master','Bphi',125./180.*np.pi,135./180.*np.pi,reset=True)
+    # d1.set_mask('Master', 'Bphi', -55. / 180. * np.pi, -45. / 180. * np.pi)
 
     d1.set_mask('Master','aa_tot', 0, 10)
     d1.set_mask('Master','aspphi', -5,5)
@@ -59,11 +59,11 @@ if He1:
     print('*** Load Subset ***')
     d1.load_subset(filename = 'd1.tmp', force = True)
 
-    D4 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
+    D3 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
 
 
 # load Ulysses data:
-years = [1993]
+years = [1994]
 if not He1:
     d1 = uswipha(year=years, tf=[[1,366]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
     d1.sync_swoops()
@@ -87,7 +87,7 @@ if not He1:
     print('*** Load Subset ***')
     d1.load_subset(filename = 'd1.tmp', force = True)
 
-    D6 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
+    D4 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
 
 
 

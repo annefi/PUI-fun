@@ -102,12 +102,14 @@ The measured energy $E_{SSD}$ is often referred to as \textit{residual energy} i
 \\ \\ \\
 One of SWICS' main objectives is the measurement of the composition of incident particles. An ion and its charge state can be fully identified with the knowledge of its mass $m$ and its mass-per-charge $mpq$. 
 With the measurement of the ToF, the energy $E_{SSD}$ and the knowledge of the EpQ-step we can calculate the mass, mpq and velocity of an ion $i$ with the following set of equations:
-\begin{align*}
-m_i &= 2\,E_{SSD} \left( \frac{Tof}{d}\right)^2 \\
-\frac{m_i}{q_i} &= 2 \left(EpQ + V_{PAC}\right) * \left(\frac{Tof}{d}\right)^2 \\
+\begin{align}
+m_i &= 2\,E_{SSD} \left( \frac{Tof}{d}\right)^2 \label{eq:swics_set1}\\
+\frac{m_i}{q_i} &= 2 \left(EpQ + V_{PAC}\right) * \left(\frac{Tof}{d}\right)^2 \label{eq:swics_set2} \\
 v_i &= \sqrt{2\,EpQ\,\frac{q_i}{m_i}},
-\end{align*}
+\label{eq:swics_set3}
+\end{align}
 where $d$ is the length of the time-of-flight section and $V_{PAC}$ is the post-acceleration voltage. $v$ denotes the ion's initial velocity when entering the instrument and is not to be confused with its velocity during the time-of-flight measurement, that is altered particularly by the post-acceleration.
+\clearpage
 \subsection{Velocity Space Coverage}
 \subsection{The Section}
 von den Rohdaten zur 3D VDF: 
@@ -118,7 +120,7 @@ andere Daten: B, vsw (Swoops)
 Kollimatormodell -- warum eigentlich -- wie umgesetzt?
 \\
 Das Ziel ist, einem gemessenen Teilchen einen v-Vektor zuzuordnen. Eine Sek-Det-Kombi ist aber nicht eindeutig. Ihre Bedeutung hängt davon ab, wohin das Instrument guckt (FoV), von der Eigengeschwindigkeit des SC und davon, wie das SC gerade gedreht ist. Zusätzlich hat der Kollimator eine komplizierte Geometrie, sodass eine analytische Lösung schwierig ist: Also numerische Lösung.\\
-Was macht das Modell? -- Ich will das FoV zu jeden Zeitpunkt bestimmen. Ich nehme dafür einzelne Messpunkte auf der originalen Geometrie. Dann gebe ich noch ins Modell, wie das gerade ausgerichtet ist.
+Was macht das Modell? -- Ich will das FoV zu jedem Zeitpunkt bestimmen. Ich nehme dafür einzelne Messpunkte auf der originalen Geometrie. Dann gebe ich noch ins Modell, wie das gerade ausgerichtet ist.
 Übergang vspace: Dann weiß ich, welche v-Vektoren möglich gewesen sein können, damit dieses PHA-Wort entstanden ist.
 \\
 Kalibrierung: He2+, Det-Sec-Histogramme -- Suche nach Sek 0

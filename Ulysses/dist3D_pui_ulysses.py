@@ -26,7 +26,7 @@ matplotlib.rcParams.update({'font.size': 18,
 
 class Dist3D(object):
     def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=3, nrs_para=9,
-                 nrs_sec=9, nrs_epq=3, vswstep = 5, ion="He1+", offset_sp=180., sc_vel=False):
+                 nrs_sec=9, nrs_epq=3, vswstep = 10, ion="He1+", offset_sp=180., sc_vel=False):
         """
         d : dbData instance with species predifined by Master mask
         m : Ion mass in amu

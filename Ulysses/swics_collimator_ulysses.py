@@ -342,7 +342,7 @@ class collimator(object):
                 cc = zeros((nrs, 3))
                 for j in range(nrs):
                     cc[j] = lighten_color(rgb, factor=shade_arr[j]) / 255.
-                ax.scatter(f[..., s, 0, :], f[..., s, 1, :], f[..., s, 2, :], c=cc, alpha = 0.5)
+                ax.scatter(f[..., s, 0, :], f[..., s, 1, :], f[..., s, 2, :], c=cc, alpha = 0.2)
                 # draw grid:
                 for det in range(3):
                     # ___draw edges parallel (borders between sectors)
@@ -363,7 +363,7 @@ class collimator(object):
                                     sec * self.nrs_perp * self.nrs_para)
                         step = self.nrs_perp * self.nrs_para
                         ax.plot([f[det, s, 0, p], f[det, s, 0, p + step]], [f[det, s, 1, p], f[det, s, 1, p + step]],
-                                [f[det, s, 2, p], f[det, s, 2, p + step]], c='k', lw = 2., alpha=1)
+                                [f[det, s, 2, p], f[det, s, 2, p + step]], c='k', lw = 2.5, alpha=1)
 
                 # # viewing direction sunpulser when triggered (=sec0)
                 # ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow",
