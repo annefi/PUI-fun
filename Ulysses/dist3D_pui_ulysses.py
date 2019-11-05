@@ -27,6 +27,8 @@ matplotlib.rcParams.update({'font.size': 18,
 class Dist3D(object):
     def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=3, nrs_para=9,
                  nrs_sec=9, nrs_epq=3, vswstep = 10, ion="He1+", offset_sp=180., sc_vel=False):
+
+        # nrs_perp: 3, nrs_para: 9, nrs_sec: 6, nrs_epq: 3
         """
         d : dbData instance with species predifined by Master mask
         m : Ion mass in amu
@@ -368,23 +370,57 @@ class Dist3D(object):
 
         #### space volume in km**3 (12s for whole spin, but each sec is only scanned for 1.5s)*solid angle coverage(
         # 4*69 whole)*dv from deltaE/Q*efficiencies
-        wgts_all = 1. / (vs * 1.5 * self.geomfac) * 1. / (vs ** 2 * (pi ** 2 / 180 ** 2. * 4. * 69)) * 1. / (
-                0.03 * vs) * 1. / self.d.data["eff"]
+        wgts_all =  (vs * 1.5 * self.geomfac) *  (vs ** 2 * (pi ** 2 / 180 ** 2. * 4. * 69)) * (0.03 * vs) * self.d.data["eff"]
         #### space volume in km**3 (1.5s for sec)*solid angle coverage(4*33 for sec)*dv from deltaE/Q*efficiencies
-        wgts_sec = 1. / (vs * 1.5 * self.geomfac) * 1. / (vs ** 2 * (pi ** 2 / 180 ** 2. * 4. * 23)) * 1. / (
-                0.03 * vs) * 1. / self.d.data["eff"]
+        wgts_sec = (vs * 1.5 * self.geomfac) *  (vs ** 2 * (pi ** 2 / 180 ** 2. * 4. * 23)) *  (0.03 * vs)
+        #*self.d.data["eff"]
 
-        if not "wgts_all" in self.d.data.keys():
-            self.d.add_data("wgts_all", wgts_all)
+        # # save all single volumes for reference:
+        self.psv = zeros([64, 8, 3])
+        for epq in arange(0,64):
+            vs = self.vels[epq]
+            self.psv[epq,:,:] = (vs * 1.5 * self.geomfac) *  (vs ** 2 * (pi ** 2 / 180 ** 2. * 4. * 23)) *  (0.03 *
+                                                                                                             vs)
+                                #* \
+                                #eff[epq]
+
+        if not "psv_all" in self.d.data.keys():
+            self.d.add_data("psv_all", wgts_all)
         else:
-            self.d.data["wgts_all"] = wgts_all
-        if not "wgts_sec" in self.d.data.keys():
-            self.d.add_data("wgts_sec", wgts_sec)
+            self.d.data["psv_all"] = wgts_all
+        if not "psv_sec" in self.d.data.keys():
+            self.d.add_data("psv_sec", wgts_sec)
         else:
-            self.d.data["wgts_sec"] = wgts_sec
+            self.d.data["psv_sec"] = wgts_sec
+
+    def add_total_hits(self):
+        '''
+        :return:
+        '''
+        epq = self.d.data["epq"]
+        sec = self.d.data["sec"]
+        det = self.d.data["det"]
+
+        bins_epq = arange(0,64+1,1)
+        bins_sec = arange(0,8+1,1)
+        bins_det = arange(0,3+1,1)
+
+        H_hits, b = histogramdd((epq,sec,det), bins = (bins_epq, bins_sec, bins_det))
+        # count hits in every epq-det-sec combination:
+        hits = H_hits[epq,sec,det]
+        self.hits = H_hits
+        # total number has to be multiplied with number of detector points -> yes but ...no
+        #total_hits = hits * self.sec_det_dim
+        total_hits = hits
+
+        if not "hits" in self.d.data.keys():
+            self.d.add_data("hits", total_hits)
+        else:
+            self.d.data["hits"] = total_hits
+
 
     def get_norm(self, vswbins=arange(0., 1000.1, 10.), aspphi=(-30., 45.), min_whe=0.0,
-                 wbins=arange(-2., 2.01, 0.2), dim=3, frame='sw'):
+                 wbins=arange(-2., 2.01, 0.2), dim=3):
         '''
         Calculates norm_array for weighting the histogram bins relative to how often a bins has been seen:
         For each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
@@ -406,12 +442,15 @@ class Dist3D(object):
         self.d.set_mask("Master", "aspphi", aspphi[0], aspphi[1], reset=True)
 
         # find unique time stamps and the resp. AAs and vsw:
-        uTall, Tallind = unique(self.d.get_data("Master", "d00"), return_index=True)
+        uTall, Tallind = unique(self.d.get_data("Master", "d00"), return_index = True)
         uasphi = self.d.get_data("Master", "aspphi")[Tallind]
         uasptheta = self.d.get_data("Master", "asptheta")[Tallind]
         uvsw = self.d.get_data("Master", "vsw")[Tallind]
         # H indicates how often a particular aspphi-asptheta-vsw combination occurs (= how often did ULYSSES see this
         # angle with this vsw?)
+
+        self.uasphi = uasphi
+        self.usvsw = uvsw
 
         # new bins: take the edges again from inbetween the aspphisteps and insert outer borders to not
         # exclude counts
@@ -419,6 +458,10 @@ class Dist3D(object):
         thetabins = arange(self.asptheta[0] - self.aspthetastep / 2., self.asptheta[-1] + self.aspthetastep,
                            self.aspthetastep)
         vswbins = arange(self.vswbins[0] - self.vswstep / 2., self.vswbins[-1] + self.vswstep, self.vswstep)
+
+        self.phbins = phibins
+        self.vb = vswbins
+
 
         H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, phibins, thetabins))
         self.H = H
@@ -442,7 +485,6 @@ class Dist3D(object):
                                     wx = tmpwx / v
                                     wy = self.vspace[ip, it, epqs, ..., 1, :] / v
                                     wz = self.vspace[ip, it, epqs, ..., 2, :] / v
-
                                     H2, bs = histogramdd((wx.flatten(), wy.flatten(), wz.flatten()),
                                                          bins=(wbins, wbins, wbins))
                                     norm_arr += H2 * H[iv, ip, it]
@@ -457,7 +499,7 @@ class Dist3D(object):
                                     norm_arr += H2 * H[iv, ip, it]
         return norm_arr
 
-    def calc_w3dspecs(self, vswbins=arange(0., 1800.1, 10.), wbins=arange(-2., 2.01, 0.2), min_whe=1,
+    def calc_w3dspecs(self, vswbins=arange(0., 1800.1, 10.), wbins=arange(-2., 2.01, 0.2), min_whe=0,
                       aspphi=(-30., 45.), weights = None):
         """
         Calculates w spectra in slices
@@ -472,33 +514,53 @@ class Dist3D(object):
 
         # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
         # to calculate the weights for normalising the final histograms:
-        norm_arr_sw = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe=min_whe, wbins=wbins, dim=3,
-                                    frame='sw')
+        norm_arr = self.get_norm(vswbins=vswbins, aspphi=aspphi, min_whe=min_whe, wbins=wbins, dim=3)
+
+        self.add_total_hits()
 
         # consider the PHA words *only now*:
-        wgts = self.d.get_data("He1+", "wgts_sec")  # 1 / (phase space volume * eff)
+        psv = self.d.get_data("He1+", "psv_sec")  # phase space volume
         swgt = self.d.get_data("He1+", "brw")  ### real sector weight not available for Ulysses
+        eff = self.d.get_data("He1+", "eff")  #efficiency
+        hits = self.d.get_data("He1+", "hits")  ### number of total hits per sec-set-epq combination
 
         wR_sw2 = self.d.get_data("He1+", "wRsw2")
         wT_sw2 = self.d.get_data("He1+", "wTsw2")
         wN_sw2 = self.d.get_data("He1+", "wNsw2")
 
+        # consider normalised phase space volume:
         twts = zeros(wR_sw2.shape)
+        th = zeros(wR_sw2.shape)
+        twts2 = zeros(wR_sw2.shape)
         for i in range(wR_sw2.shape[1]):
-            twts[:, i] = swgt * wgts
+            twts[:, i] = (eff * psv) * 1 / (hits *  swgt)
+            #twts[:, i] = 1/(eff * psv * 1 / (hits * swgt))
+            #twts[:, i] = psv
+            th[:,i] = 1/(hits*self.sec_det_dim)
 
-        self.t = twts
 
-        H2_sw, bs = histogramdd((wR_sw2.flatten(), wT_sw2.flatten(), wN_sw2.flatten()), bins=(wbins, wbins, wbins),
-                                weights=twts.flatten())
+        H_psv, b_psv = histogramdd((wR_sw2.flatten(), wT_sw2.flatten(), wN_sw2.flatten()), bins=(wbins, wbins, wbins),
+                               weights=twts.flatten())
+
+        H2, bs = histogramdd((wR_sw2.flatten(), wT_sw2.flatten(), wN_sw2.flatten()), bins=(wbins, wbins, wbins))
+
+
+        H2[H_psv == 0] = 0
+        H_psv[H_psv == 0] = 1
+        H3 = H2 / H_psv
+
+
+        # #old version:
+        # H2, bs = histogramdd((wR_sw2.flatten(), wT_sw2.flatten(), wN_sw2.flatten()), bins=(wbins, wbins, wbins),
+        #                     weights = twts.flatten())
 
         self.d.remove_submask("He1+", "wHe1+2")
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
-        return norm_arr_sw, H2_sw
+        return norm_arr, H3
 
-    def plot_wslice(self, dim='R', slice=10, ax=None, min_wHe=1.0, mode='ps'):
+    def plot_wslice(self, dim='R', slice=10, ax=None, min_wHe=0, mode='ps'):
         '''
         :param dim:
         :param slice:
@@ -507,7 +569,7 @@ class Dist3D(object):
         :param mode: Decides whether counts, phase space or norm array are plotted
         :return:
         '''
-        wbins = arange(-2, 2.01, 0.2)
+        wbins = arange(-4, 4.01, 0.4)
         norm_arr, H_0 = self.calc_w3dspecs(min_whe=min_wHe)
         if mode == 'norm':
             H = norm_arr
@@ -549,7 +611,6 @@ class Dist3D(object):
 
 
 
-
     def wspec_1d(self, vswbins = arange(0,1000,10), wbins = arange(-2., 5.01, 0.1), min_whe = 0.0,
                  aspphi = (-30.,45.), mode = 'ps', year = '1993', ax = None):
 
@@ -575,8 +636,7 @@ class Dist3D(object):
         twts = zeros(wsw.shape)
         for i in range(wsw.shape[1]):
             twts[:, i] = wgts * swgt
-
-        H0, bs = histogram(wsw.flatten(), bins=wbins, weights=twts.flatten())
+        H0, bs = histogram(wsw.flatten(), bins = wbins, weights = twts.flatten())
 
         self.d.remove_submask("He1+", "wHe1+2")
         self.d.remove_submask("Master", "vsw")
@@ -607,7 +667,7 @@ class Dist3D(object):
     def get_norm_shells(self, vswbins=arange(500., 800.1, 10.), aspphi=(-30., 45.), min_whe=0.0,
                         phirange=[-pi, pi + 0.001], thetarange=[-pi / 2., pi / 2. + 0.001], angstep=10 * pi / 180,
                         wshellbins=
-                        arange(0, 2.01, 0.2), vol = True):
+                        arange(0, 2.01, 0.2)):
         '''
         Calculates norm_array for weighting the histogram bins relative to how often a bins has been seen:
         For each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
@@ -646,25 +706,11 @@ class Dist3D(object):
 
         H, bs = histogramdd((uvsw, uasphi, uasptheta), bins=(vswbins, asp_phibins, asp_thetabins))
 
-
-
         # norm_arr indicates how often a wR-wT-wN combination "is hit" with the given AA-vsw combinations and their
         # resp. occurrences
 
         phibins = arange(phirange[0], phirange[1], angstep)
         thetabins = arange(thetarange[0], thetarange[1], angstep)
-
-        self.phibins = phibins
-        self.thetabins = thetabins
-
-        self.w = array([])
-        self.wR = array([])
-        self.wT = array([])
-        self.wN = array([])
-        self.phi = array([])
-        self.theta = array([])
-
-        self.H = H
 
         norm_arr = zeros((phibins.shape[0] - 1, thetabins.shape[0] - 1, wshellbins.shape[0] - 1))
         for iv, v in enumerate(self.vswbins):
@@ -673,7 +719,7 @@ class Dist3D(object):
                     for it, t in enumerate(self.asptheta):
 
                         if H[iv, ip, it] > 0:
-                            print(iv, ip, it)
+                            #print(iv, ip, it)
                             whe = self.vels / (v)
                             epqs = arange(0, 64, 1)[whe > min_whe]
                             tmpwR = self.vspace[ip, it, epqs, ..., 0, :] - v
@@ -687,45 +733,30 @@ class Dist3D(object):
                             w = sqrt(wR ** 2 + wT ** 2 + wN ** 2)
 
 
-                            self.w = w
-                            self.wR = wR
-                            self.wT = wT
-                            self.wN = wN
-
-                            # self.w = append(self.w, w)
-                            # self.wR = append(self.wR, wR)
-                            # self.wT = append(self.wT, wT )
-                            # self.wN = append(self.wN, wN)
-
                             wphi = arctan(wT / wR) + (((sign(wR) - 1) / -2.) * (sign(wT) * pi))
                             wtheta = arcsin(wN / sqrt(wR**2 + wT**2 + wN**2))
-
-                            # self.phi = append(self.phi, wphi)
-                            # self.theta = append(self.theta, wtheta)
-                            self.phi = wphi
-                            self.theta = wtheta
 
                             H2, bs = histogramdd((wphi.flatten(), wtheta.flatten(), w.flatten()),
                                                  bins=(phibins, thetabins, wshellbins))
 
                             norm_arr += H2 * H[iv, ip, it]
 
-        # consider the different volumes of the bins:
-        # 'real' theta in spherical coordinate system goes from 0 to 180 degree:
-        thetabins = arange(0., pi + 0.0001, angstep)
-        vol_arr = zeros((phibins.shape[0] - 1, thetabins.shape[0] - 1, wshellbins.shape[0] - 1))
-        for ip, p in enumerate(phibins[:-1]):
-            for it, t in enumerate(thetabins[:-1]):
-                for iw, w in enumerate(wshellbins[:-1]):
-                    vol_arr[ip, it, iw] = 1 / 3. * (wshellbins[iw + 1] ** 3 - wshellbins[iw] ** 3) * (cos(t) - cos(
-                        t + angstep)) * (angstep)
-        if vol:
-            norm_arr *= vol_arr
+        # # consider the different volumes of the bins:
+        # # 'real' theta in spherical coordinate system goes from 0 to 180 degree:
+        # thetabins = arange(0., pi + 0.0001, angstep)
+        # vol_arr = zeros((phibins.shape[0] - 1, thetabins.shape[0] - 1, wshellbins.shape[0] - 1))
+        # for ip, p in enumerate(phibins[:-1]):
+        #     for it, t in enumerate(thetabins[:-1]):
+        #         for iw, w in enumerate(wshellbins[:-1]):
+        #             vol_arr[ip, it, iw] = 1 / 3. * (wshellbins[iw + 1] ** 3 - wshellbins[iw] ** 3) * (cos(t) - cos(
+        #                 t + angstep)) * (angstep)
+        # if vol:
+        #     norm_arr *= vol_arr
         return norm_arr
 
     def calc_skymapspec(self, vswbins=arange(500., 800.1, 10.), min_whe=1.0, aspphi=(-30., 45.),
                         phirange=[-pi, pi + 0.001], thetarange=[-pi / 2., pi / 2. + 0.001], angstep=10 * pi / 180,
-                        wshellbins=arange(0, 2.01, 0.2), vol = True):
+                        wshellbins=arange(0, 2.01, 0.2)):
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
@@ -733,35 +764,72 @@ class Dist3D(object):
         self.d.set_mask("Master", "vsw", vswbins[0], vswbins[-1], reset=True)
         self.d.set_mask("Master", "aspphi", aspphi[0], aspphi[1], reset=True)
 
-        # DOESNT WORK YET
-        # norm_arr = ones([len(phibins)-1, len(thetabins)-1, len(wshellbins)-1])
+
         norm_arr = self.get_norm_shells(vswbins=vswbins, min_whe=min_whe, phirange=phirange, thetarange=
-        thetarange, angstep=angstep, wshellbins=wshellbins, vol = vol)
+        thetarange, angstep=angstep, wshellbins=wshellbins)
 
-        # consider the PHA words *only now*:
-        wgts = self.d.get_data("He1+", "wgts_sec")  # 1 / (phase space volume * eff)
-        swgt = self.d.get_data("He1+", "brw")  ### real sector weight not available for Ulysses
+        self.add_total_hits()
 
-        wphi = self.d.get_data("He1+", "wphi")
-        wtheta = self.d.get_data("He1+", "wtheta")
-        w = self.d.get_data("He1+", "wsw2")
+        if True:
+            # consider the PHA words *only now*:
+            psv = self.d.get_data("He1+", "psv_sec")  # phase space volume
+            swgt = self.d.get_data("He1+", "brw")  ### real sector weight not available for Ulysses
+            eff = self.d.get_data("He1+", "eff")  # efficiency
+            hits = self.d.get_data("He1+", "hits")  ### number of total hits per sec-set-epq combination
 
-        phibins = arange(phirange[0], phirange[1], angstep)
-        thetabins = arange(thetarange[0], thetarange[1], angstep)
+            wphi = self.d.get_data("He1+", "wphi")
+            wtheta = self.d.get_data("He1+", "wtheta")
+            w = self.d.get_data("He1+", "wsw2")
 
-        self.wphi = wphi
-        self.phibins = phibins
+            phibins = arange(phirange[0], phirange[1], angstep)
+            thetabins = arange(thetarange[0], thetarange[1], angstep)
 
-        twts = zeros(wphi.shape)
-        for i in range(wphi.shape[1]):
-            twts[:, i] = wgts * swgt
-        H, bs = histogramdd((wphi.flatten(), wtheta.flatten(), w.flatten()), bins=(phibins, thetabins, wshellbins),
-                            weights=twts.flatten())
+            # consider normalised phase space volume:
+            twts = zeros(wphi.shape)
+            for i in range(wphi.shape[1]):
+                twts[:, i] = (eff * psv) * 1 / (hits * swgt)
+
+            H_psv, bs = histogramdd((wphi.flatten(), wtheta.flatten(), w.flatten()), bins=(phibins, thetabins, wshellbins),
+                                weights=twts.flatten())
+
+            H2, bs = histogramdd((wphi.flatten(), wtheta.flatten(), w.flatten()), bins=(phibins, thetabins, wshellbins))
+
+            H2[H_psv == 0] = 0
+            H_psv[H_psv == 0] = 1
+            H = H2 / H_psv
+
+
+        if not True:
+            ### old version
+            # consider the PHA words *only now*:
+            wgts = self.d.get_data("He1+", "psv_sec")  # 1 / (phase space volume * eff)
+            swgt = self.d.get_data("He1+", "brw")  ### real sector weight not available for Ulysses
+            eff = self.d.get_data("He1+", "eff")  # efficiency
+
+            wphi = self.d.get_data("He1+", "wphi")
+            wtheta = self.d.get_data("He1+", "wtheta")
+            w = self.d.get_data("He1+", "wsw2")
+
+            phibins = arange(phirange[0], phirange[1], angstep)
+            thetabins = arange(thetarange[0], thetarange[1], angstep)
+
+            self.wphi = wphi
+            self.phibins = phibins
+
+            twts = zeros(wphi.shape)
+            for i in range(wphi.shape[1]):
+                twts[:, i] = swgt / (eff*wgts)
+            H, bs = histogramdd((wphi.flatten(), wtheta.flatten(), w.flatten()), bins=(phibins, thetabins, wshellbins),
+                                weights=twts.flatten())
+
+
         self.d.remove_submask("He1+", "wHe1+2")
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
         return norm_arr, H
+
+
 
     def plot_shell(self, shell = 5, ax = None, min_wHe = 0.9, phirange=[-pi, pi + 0.001],
                                             thetarange=[-pi / 2., pi / 2. + 0.001], angstep= 10 * pi / 180.,

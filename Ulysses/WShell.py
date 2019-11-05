@@ -5,7 +5,7 @@ from numpy import arange, min, max, amin, amax, unique, around
 
 class WShell():
     def __init__(self, D, min_wHe=0.9, shell=5, color_norm='sg', mode='ps', phirange = [-pi, pi + 0.001], thetarange
-    = [-pi / 2., pi / 2. + 0.001], angstep = 10 * pi / 180., wshellbins = arange(0, 2.01, 0.2), vol = True):
+    = [-pi / 2., pi / 2. + 0.001], angstep = 10 * pi / 180., wshellbins = arange(0, 2.01, 0.2), vol = False):
         self.D = D
         self.shell = shell
         self.color_norm = color_norm
@@ -67,7 +67,7 @@ class WShell():
 
         if self.color_norm == 'sg':
             vmin = amin(self.H[self.H > 0])
-            vmax = amax(self.H[:, :, shell])
+            vmax = min([1000, amax(self.H[:, :, shell])])
             if vmax < 1:
                 vmax = 10.
             self.Quadmesh = self.ax.pcolormesh(phibins, thetabins, self.H[:, :, shell].T, cmap=colormap, vmin=vmin,

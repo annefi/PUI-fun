@@ -5,7 +5,7 @@ from numpy import arange, min, max, amin, amax, unique, around
 
 
 class WSlice():
-    def __init__(self, D, min_wHe = 1.0, slice = 5, dim = 'R', color_norm = 'sg', mode = 'ps',
+    def __init__(self, D, min_wHe = 0.0, slice = 5, dim = 'R', color_norm = 'sg', mode = 'ps',
                  wbins = arange(-2,2.01, 0.2)):
         self.D = D
         self.slice = slice
@@ -21,7 +21,7 @@ class WSlice():
         elif mode == 'ps':
             H0[norm_arr == 0] = 0.
             norm_arr[norm_arr == 0] = 1
-            self.H = H0 / norm_arr
+            self.H = H0 / norm_arr * 1000.
 
     def init_plot(self):
         def keypress(event):
@@ -83,8 +83,8 @@ class WSlice():
             vmin = amin(self.H[self.H > 0])
             if dim == 'R':
                 vmax = amax(self.H[slice, :, :])
-                if vmax < 1.:
-                    vmax = 10.
+                # if vmax < 1.:
+                #     vmax = 10.
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[slice, :, :].T, cmap=colormap, vmin = vmin,
                                                    vmax = vmax)
                 colormap.set_under('white')

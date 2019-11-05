@@ -100,6 +100,22 @@ außerdem: Eigengeschwindigkeit Ulysses
 Dann nehmen wir PHA-Worte und können jedem ein gemessenes Volumen im Phasenraum zuordnen (?).
 
 
+\section{Phasenraumbla}
+Mittlere Phasenraumdichte in einem Bin, in den zwei Instrumentenbins A und B reingehen:
 
+\begin{align}
+\bar{\rho} = \frac{N_A + N_B}{\frac{N_A}{N_{A,ges}} V_A + \frac{N_B}{N_{B,ges}} V_B }
+\end{align}
+
+Dabei ist $N_i$ die Anzahl der Hits, die im Messbin gelandet sind und $N_{i,ges}$ die gesamte Anzahl an Bins. Hits heißt GEsamtcounts durch Detektoranzahl. Eigentlich gebe ich statt $N_i$ $N_i \cdot Detektoranzahl$ rein, aber das kürzt sich ja raus.\\ \\
+Effizienz und Sektorgewichte dazu:\\
+Allg.:
+\begin{align*}
+\rho = \frac{N \cdot brw}{V \cdot Eff}
+\end{align*}
+Und dann
+\begin{align}
+\bar{\rho} = \frac{N_A + N_B}{\frac{N_A}{N_{A,ges}} \frac{V_A \cdot eff_A}{brw_A} + \frac{N_B}{N_{B,ges}} \frac{V_B \cdot eff_B}{brw_B} }
+\end{align}
 
 
