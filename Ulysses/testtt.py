@@ -21,9 +21,9 @@ import numpy as np
 # show()
 
 def fast(D):
-    phi = D.phi[D.w > 1.8]
-    theta = D.theta[D.w > 1.8]
-    wR = D.wR[D.w > 1.8]
-    wT = D.wT[D.w > 1.8]
-    wN = D.wN[D.w > 1.8]
+    phi = D.wphi[(D.w > 1.9) & (D.w < 2.0)]
+    theta = D.wtheta[(D.w > 1.9) & (D.w < 2.0)]
+    wR = D.wr[(D.w > 1.9) & (D.w < 2.0)]
+    wT = D.wt[(D.w > 1.9) & (D.w < 2.0)]
+    wN = D.wn[(D.w > 1.9) & (D.w < 2.0)]
     return phi, theta, wR, wT, wN
