@@ -1,30 +1,45 @@
 import matplotlib.pyplot as plt
 from numpy import *
 from numpy import arange, min, max, amin, amax, unique, around
+from matplotlib import colors
 
 
 class WSky():
-    def __init__(self, D, min_wHe=0.9, shell=5, color_norm='sg', mode='ps', phirange = [-pi, pi + 0.001], thetarange
-    = [-pi / 2., pi / 2. + 0.001], angstep = 10 * pi / 180., wshellbins = arange(0, 2.01, 0.2), var = 'new'):
+    def __init__(self, D, color_norm='sg', mode='ps', phirange = [-pi, pi + 0.001],
+                 thetarange = [-pi / 2., pi / 2. + 0.001], angstep = 10 * pi / 180., shellstep = 0.1):
+
+        # shift wshellmax to SW frame:
+        self.wshellbins = arange(shellstep, (D.wshellmax -1) + 0.0001, shellstep)
         self.D = D
-        self.shell = shell
+        self.shell = len(self.wshellbins) / 2
         self.color_norm = color_norm
-
-
+        self.mode = mode
         self.angstep = angstep
-        self.wshellbins = wshellbins
 
-        norm_arr, H0 = self.D.calc_skymapspec(min_whe = min_wHe, phirange = phirange, thetarange = thetarange,
-                                              angstep = angstep, wshellbins = wshellbins, var = var)
+        norm_arr, H0 = self.D.calc_skymapspec(phirange = phirange, thetarange = thetarange, angstep = angstep, wshellbins = self.wshellbins)
+
+        self.n = norm_arr
 
         if mode == 'norm':
+            norm_arr[norm_arr == 0] = -5.
             self.H = norm_arr
         elif mode == 'counts':
+            H0[norm_arr == 0] = -5
             self.H = H0
         elif mode == 'ps':
-            H0[norm_arr == 0] = 0
+            H0[norm_arr == 0] = -5
             norm_arr[norm_arr == 0] = 1
             self.H = H0 / norm_arr
+        #
+        # # cut out extra high values (at the edges: only few counts) that destroy the colormap:
+        # for shell in range(len(self.wshellbins)-1):
+        #     for i in range(4):
+        #             print(self.H[:, :, shell].max())
+        #             self.H[:, :, shell][self.H[:, :, shell] > (mean(self.H[:, :, shell]) + 3 * std(self.H[:, :,
+        #                                                                                            shell]))] = 0
+        #             print(self.H[:, :, shell].max())
+        #             print(shell)
+
 
     def init_plot(self):
         def keypress(event):
@@ -36,7 +51,7 @@ class WSky():
             print(self.shell)
             print 'click'
 
-        fig = plt.figure()
+        fig = plt.figure('%s' % self.mode)
         self.ax = plt.subplot(111, projection="mollweide")
         fig.canvas.mpl_connect('key_press_event', keypress)
         self.ax.set_xlabel(r'$\varphi \, / \, \degree$')
@@ -66,19 +81,22 @@ class WSky():
                 vmax = 10.
             self.Quadmesh = self.ax.pcolormesh(phibins, thetabins, self.H[:, :, shell].T, cmap=colormap, vmin=vmin,
                                                vmax=vmax)
-            colormap.set_under('white')
+            colormap.set_under('gray')
             self.txt_shell.set_text('Shell: %s' % self.shell)
             self.txt_w.set_text(r'$w = [%2.1f, %2.1f]$' % (self.wshellbins[self.shell], self.wshellbins[
                 self.shell + 1]))
 
         if self.color_norm == 'sg':
-            vmin = amin(self.H[self.H > 0])
+
+            # set limits for colormap:
+            vmin = 0
+            #vmin = amin(self.H[self.H > 0])
             vmax = amax(self.H[:, :, shell])
             # if vmax < 1:
             #     vmax = 10.
-            self.Quadmesh = self.ax.pcolormesh(phibins, thetabins, self.H[:, :, shell].T, cmap=colormap, vmin=vmin,
-                                               vmax=vmax)
-            colormap.set_under('white')
+
+            self.Quadmesh = self.ax.pcolormesh(phibins, thetabins, self.H[:, :, shell].T, cmap=colormap, vmin = vmin, vmax=vmax)
+            colormap.set_under('gray')
             self.txt_shell.set_text('Shell: %s' % self.shell)
             self.txt_w.set_text(r'$w = [%2.1f, %2.1f]$' % (self.wshellbins[self.shell], self.wshellbins[
                 self.shell + 1]))

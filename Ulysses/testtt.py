@@ -20,10 +20,25 @@ import numpy as np
 #
 # show()
 
-def fast(D):
-    phi = D.wphi[(D.w > 1.9) & (D.w < 2.0)]
-    theta = D.wtheta[(D.w > 1.9) & (D.w < 2.0)]
+def fast_norm(D):
+    # phi = D.wphi[(D.w > 1.9) & (D.w < 2.0)]
+    # theta = D.wtheta[(D.w > 1.9) & (D.w < 2.0)]
     wR = D.wr[(D.w > 1.9) & (D.w < 2.0)]
     wT = D.wt[(D.w > 1.9) & (D.w < 2.0)]
     wN = D.wn[(D.w > 1.9) & (D.w < 2.0)]
-    return phi, theta, wR, wT, wN
+    return wR, wT, wN
+
+
+
+def fast_data(D):
+    # phi = D.wphi[(D.w > 1.9) & (D.w < 2.0)]
+    # theta = D.wtheta[(D.w > 1.9) & (D.w < 2.0)]
+    w = D.d.data['wsw'].flatten()
+    wR = D.d.data['wRsw2'].flatten()
+    wT = D.d.data['wTsw2'].flatten()
+    wN = D.d.data['wNsw2'].flatten()
+
+    wT1 = wR[(w>1.4) & (w<2.)]
+    wT2 = wT[(w > 1.4) & (w < 2.)]
+    wN2 = wN[(w > 1.4) & (w < 2.)]
+    return wR, wT, wN

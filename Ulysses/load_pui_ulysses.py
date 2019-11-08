@@ -28,29 +28,29 @@ He2 = False #True
 
 
 # load Ulysses data:
-years = [1993]
+years = [1994]
 
 if He1:
-    d1 = uswipha(year=years, tf=[[100,180]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
+    d1 = uswipha(year=years, tf=[[1,150]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
     d1.sync_swoops()
     d1.sync_traj()
     #d1.sync_mag()
 
-    d1.set_mask('Master','vsw',630,1035,reset = True)
+    d1.set_mask('Master','vsw',700,1800,reset = True)
     d1.set_mask('Master','rng',0,0,reset=True)
     d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
-    d1.set_mask('Master','brw',1,np.inf,reset=True)
+    d1.set_mask('Master','brw',1,1,reset=True)
 
-    #d1.set_mask('Master', 'epq', 10, np.inf, reset=True)
-
-    # d1.set_mask('Master','Btheta',-20./180.*np.pi,20./180.*np.pi,reset=True)
-    # d1.set_mask('Master','Bphi',-55./180.*np.pi,-35./180.*np.pi,reset=True)
-    # d1.set_mask('Master', 'Bphi', 35. / 180. * np.pi, 55. / 180. * np.pi)
+    #d1.set_mask('Master', 'epq', 15, 20, reset=True)
+    #
+    d1.set_mask('Master','Btheta',-5./180.*np.pi,5./180.*np.pi,reset=True)
+    d1.set_mask('Master', 'Bphi', 30. / 180. * np.pi, 50. / 180. * np.pi, reset=True)
+    #d1.set_mask('Master', 'Bphi', 85. / 180. * np.pi, 95. / 180. * np.pi)
     #
     # d1.set_mask('Master','aa_tot', 0, 10)
     # d1.set_mask('Master','aspphi', -5,5)
-    # d1.set_mask('Master','asptheta',-5,7)
+    # d1.set_mask('Master','asptheta',-20,-7)
 
     # get a real subset with masks applied:
     print('*** Save Subset ***')

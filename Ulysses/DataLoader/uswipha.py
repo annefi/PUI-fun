@@ -219,7 +219,7 @@ class uswipha(dbData):
         Br = self.data['Br']
         Bt = self.data['Bt']
         Bn = self.data['Bn']
-        self.add_data('Bphi', (arctan(Bt / Br) + (((sign(Br) - 1) / -2.) * (sign(Bt) * pi))))
+        self.add_data('Bphi', (arctan2(Bt , Br)))
         self.add_data('Btheta',  (arcsin(Bn / sqrt(Br**2 + Bt**2 + Bn**2))))
 
         # add magnetic field angles in degree:

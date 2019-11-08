@@ -10,7 +10,7 @@ header = 'doy\t\tepqst\ttch\tech\tsect\tdet\trange\tbrw      Bphi       Btheta  
 
 fail = []
 
-for y in [1993,1994, 1995, 1996, 1997, 1998, 1999, 2000]:
+for y in [1994, 1995, 1996]:
     if os.path.exists('%s%s/' % (path, str(y))) == False:
         os.mkdir('%s%s/' % (path, str(y)))
     for doy in arange(1,366):
@@ -34,15 +34,16 @@ for y in [1993,1994, 1995, 1996, 1997, 1998, 1999, 2000]:
                 det = str(d.data['det'][i])
                 range = str(d.data['rng'][i])
                 brw = str(d.data['brw'][i])
-                bp = d.data['Bphi'][i]
-                bt = d.data['Btheta'][i]
+                bphi = d.data['Bphi'][i]
+                btheta = d.data['Btheta'][i]
 
                 br = d.data['Br'][i]
                 bt = d.data['Bt'][i]
                 bn = d.data['Bn'][i]
 
                 line = "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%8.5f   %8.5f  %8.5f  %8.5f  %8.5f\n" %(do,epq,tch,ech,sec,
-                                                                                               det,range,brw,bp,bt,
+                                                                                               det,range,brw,bphi,
+                                                                                                btheta,
                                                                                                br,bt,bn)
                 out.write(line)
             out.close()
