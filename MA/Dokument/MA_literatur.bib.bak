@@ -40,7 +40,6 @@
   issue    = {6045},
   pages    = {426–429},
   doi      = {10.1038/318426A0},
-  url      = {https://www.nature.com/articles/318426a0},
   abstract = {Singly-ionized helium with a velocity distribution extending up to double the solar wind velocity has been detected in interplanetary space. This distribution unambiguously determines the source: interstellar neutrals, ionized and accelerated in the solar wind. The observed significant flux increase in early December is due to the gravitational focusing of the interstellar neutral wind on the downwind side of the Sun.},
   keywords = {history PUI},
 }
@@ -103,7 +102,6 @@
   subtitle  = {Eine Einführung},
   publisher = {Springer Berlin Heidelberg},
   doi       = {10.1007/978-3-642-18807-7},
-  url       = {https://doi.org/10.1007/978-3-642-18807-7},
 }
 Query Results from the ADS Database
 
@@ -394,9 +392,38 @@ nucl$^{-1}$.
 
 @Online{esa_orbit,
   author  = {{European Space Agency}},
-  title   = {ESA Website},
+  title   = {ESA Website -- Ulysses Orbit},
+  year    = {2019},
   url     = {https://www.cosmos.esa.int/web/ulysses/the-ulysses-orbit},
   urldate = {2019-10-27},
+}
+
+@Online{ulysses-data-archive,
+  author  = {European Space Agency},
+  title   = {Ulysses Final Archive - Data},
+  url     = {http://ufa.esac.esa.int/ufa/#data},
+  urldate = {2019-08-01},
+}
+
+@Online{nasa-earth-coord,
+  author  = {{NASA HelioWeb}},
+  title   = {Heliocentric Trajectories for Selected Spacecraft, Planets, and Comets},
+  url     = {https://omniweb.gsfc.nasa.gov/coho/helios/heli.html},
+  urldate = {2019-06-01},
+}
+
+@Article{fraenz_harper,
+  author  = {{Fränz}, M. and {Harper}, D.},
+  title   = {{Heliospheric coordinate systems}},
+  journal = {Planetary \& Space Science},
+  year    = {2002},
+  volume  = {50},
+  number  = {2},
+  month   = {Feb},
+  pages   = {217-233},
+  doi     = {10.1016/S0032-0633(01)00119-2},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl  = {https://ui.adsabs.harvard.edu/abs/2002P&SS...50..217F},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}

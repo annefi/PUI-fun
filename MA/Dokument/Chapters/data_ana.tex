@@ -7,11 +7,15 @@
 %----------------------------------------------------------------------------------------
 
 %----------------------------------------------------------------------------------------
+
+
+von den Rohdaten zur 3D VDF
+\\ \\
 wohin damit? \\ \\
 PHA pro Spin...
 Ideal / mit Fehlern alpha, beta
-
-
+\\ , Pile-up, random coincidences/ Schmutztail durch hohe Flüsse
+\\
 SWICS provides two types of data products from the analogue signals Tof, ESSD and the EPQ-Step.
 24-bit
 
@@ -46,7 +50,7 @@ Threshold, Doubles...
 %
 
 \section{ET matrices, identification}
-Fig. \ref{fig:et_matrix} shows longterm PHA data collected with Ulysses SWICS over two years for EPQ Step 25 (= Energy per charge TODO). For every particle with valid measurements the $\mathrm{E_{SSD}}$ channel is plotted over the ToF channel. As a particle's mass and mass-per-charge is connected to the measured values $EpQ$, $\tau$ and $E_{SSD}$ by equations \ref{eq:swics_set1} --  \ref{eq:swics_set3}, every ion species occupies a distinct position in the so-called \textit{ET-Matrix}.
+Fig. \ref{fig:et_matrix} shows longterm PHA data collected with Ulysses SWICS over two years for EPQ Step 25 (= Energy per charge TODO). For every particle with valid measurements the $\mathrm{E_{SSD}}$ channel is plotted over the ToF channel. As a particle's mass and mass-per-charge is connected to the measured values $EpQ$, $\tau$ and $E_{SSD}$ by equations \ref{eq:swics_set1} --  \ref{eq:swics_set3}, every ion species occupies a distinct position in the so-called \textit{ET-Matrix}. (Counts of different ion species sum up at distinct places in ... space.)
 
 
 \begin{figure}[h]
@@ -58,7 +62,7 @@ Fig. \ref{fig:et_matrix} shows longterm PHA data collected with Ulysses SWICS ov
 
 
 \section{Filter He+}
-
+nominal w based on vsw -> solar wind ions rausfiltern
 \begin{figure}[h]
 	\includegraphics[width=0.9\textwidth]{Figures/epq_all.pdf}
 	\centering
@@ -67,7 +71,7 @@ Fig. \ref{fig:et_matrix} shows longterm PHA data collected with Ulysses SWICS ov
 \end{figure}
 
 
-For extracting only the $\mathrm{He^+}$ events from the PHA data we plot the events' energy-per-charge over their measured ToF.
+For extracting only the $\mathrm{He^+}$ events from the PHA data we plot the events' energy-per-charge over their measured ToF. 
 Teilchen derselben mpq werden auf Kurven $todo$ geortet. Spezies höherer Mpq finden sich auf Kurven mit größeren ToF-Werten. Man kann so z.B. todo, todo und todo identifizieren. Unten ist He gut zu erkennen weil suprathermal. An die suprathermalen $He$-Teilchen schließen sich zu höheren ToF andere Teilchen mit derselben mpq auf der gleichen Kurve an. Weil die Kurven dort enger liegen, kann man He in dem Bereich auch nicht von anderen mit ähnlicher mpq unterscheiden.
 We can take advantage of SWICS' on-board priority weighting. We only plot the Range0-events. This roughly cuts out events with $m>8.7$. Nur H, He2+, He+ bleiben übrig als prominente Ionen. Man sieht, dass auch einige schwerere in die Box reinlecken, aber das betrifft nicht die ESA-Steps, in denen Helium auftritt.\\
 Man kann jetzt prima per Auge eine Maske legen. Zusätzlich w filtern um eventullen Hintergrund zu unterdrücken...?
@@ -76,18 +80,28 @@ Man sieht, dass wir nur Helium-PHAs bis EpQ-Step todo auswerten. Der Grund ist, 
 Für alle Jahre. Anzahl: todo
 
 
-\section{Filter He2+}
+\subsection{Filter He2+}
 für die spätere Kalibrierung (todo: Verweis) brauchen wir eine Spezies, bei der wir davon ausgehen, dass sie sich mit dem SW-Bulk bewegt und die als Triple Coinzidences vorliegt (für die Richtungsinformation). We choose He2+ wegen guter Statistik und auch in Range0. Im Gegensatz zu He1+ auch bei höheren ESA-Steps anzutreffen, weil mehr Nachbeschleunigung durch die höhere Ladung. Dadurch nicht so schnell unter SSD-Threshold. Gleiches Verfahren, einfach ausschneiden. Hier ist es nicht so wichtig, alles mitzubekommen, weil wir anhand von He2+ keine Analyse der VDF durchführen wollen. 
 \\
 Für alle Jahre. Anzahl: todo
 \\ \\
 Weitere Daten: vsw von SWOOPS, B-Feld
+\\ \\
+wie viele Daten bleiben über, wie viele PHA-Worte ca. pro Spin?
 
 
-
-
-\section{Collimator}
-
+%
+%
+%
+\section{Collimator/Detector model}
+Kollimatormodell -- warum eigentlich -- wie umgesetzt?
+\\
+Das Ziel ist, einem gemessenen Teilchen einen v-Vektor zuzuordnen. Eine Sek-Det-Kombi ist aber nicht eindeutig. Ihre Bedeutung hängt davon ab, wohin das Instrument guckt (FoV), von der Eigengeschwindigkeit des SC und davon, wie das SC gerade gedreht ist. Zusätzlich hat der Kollimator eine komplizierte Geometrie, sodass eine analytische Lösung schwierig ist: Also numerische Lösung.\\
+Was macht das Modell? -- Ich will das FoV zu jedem Zeitpunkt bestimmen. Ich nehme dafür einzelne Messpunkte auf der originalen Geometrie. Dann gebe ich noch ins Modell, wie das gerade ausgerichtet ist.\\
+Berechnet anhand des AA, wohin Sun trigger schaut, wenn getriggert wird und rotiert coll. an entsprechende Position für Sek 0. Ordnet entsorechend andere Sektoren an.
+Simuliert FoV durch Punkteraster \\
+wählbare Anzahlen nrs\_sec usw. Später schreiben, was verwendet wurde (?) ; Steps vsw, asp Winkel
+\\ \\
 Geometrie, Aspect Angle: Ausrichtung zu jedem Zeitpunkt bekannt
 (FoV) (hierher die Kalibration! Nur damit funktioniert die Ausrichtung)
 Wir füllen die einzelnen Bereiche mit verschiedenen möglichen Messpunkten
@@ -98,15 +112,56 @@ Betrag aus EpQ-Steps
 außerdem: Eigengeschwindigkeit Ulysses
 
 Dann nehmen wir PHA-Worte und können jedem ein gemessenes Volumen im Phasenraum zuordnen (?).
+\\
+Übergang vspace: Dann weiß ich, welche v-Vektoren möglich gewesen sein können, damit dieses PHA-Wort entstanden ist.
+%
+\subsection{Coordinates}
+heliographic, heliocentric? 180 Grad Versatz beschreiben? Drehung mit Eulermatrix\\
+cartesian RTN-System erklären (spherical für AA)
+\\ \\
+trajectory. \\Orbitdaten gegeben in B.1950... Umrechnung?
+\\ \\
+verschiedene Koordinatensysteme
+\\ \\
+Aspect Angle: Komponenten; Verlauf zeigen; Berechnung?; Daten Erde genutzt (die waren aber in B-2000); zeigen, dass mit größeren AA vermehrt äußerer Detektor angesprochen wird; durch versch. AA wird unterschiedlicher Teil des v-Raums ausgeleuchtet; Datenprodukt SPE-Winkel gegeben, wir brauchen aber zwei Komponenten; 
+\\ \\
+Eigengeschwindigkeit Berechnung (s. Kladde S. 84, 85)
 
 
-\section{Phasenraumbla}
+
+
+
+%
+\subsection{Calibration}
+Problem: sectors are not triggered uniformly (?). Every spin sector 0 is triggered newly. koplanare Lage der drei Vektoren: Spinachse, Sensor, SC-Sun, \textit{when sun crosses the ...plane of the SC}\\
+Allover Blick: Sector, der gegnüber liegt, sollte besonders prominent sein
+\\
+Kalibrierung: He2+, Det-Sec-Histogramme -- Suche nach Sek 0
+\\ Hiscale Paper: Sensoren sind umgebaute Albedo-Sensoren
+\\ \\
+(...) For verifying this angle we use a species for which we know the direction of velocity. That is He2+ that we assume to be flowing radially with the solar wind
+\\
+Kalibration Detektoren: Für große AA zeigen, dass äußerer Det angesprochen wird
+\\
+Kalibration Sektoren: Nur bei sehr großen AA möglich (äußerer od. mittlerer Detektor), weil beim inneren der Bulk auf allen landet.
+
+
+%
+%
+%
+\section{VDF}
+Zweifache Beschränkung im w-Space: Bei kleinem w: keine hohen Steps (kleine Geschwindigkeiten) durch das unter-den-Threshold-Rutschen (deshalb können wir auch keinen langsamen SW untersuchen). Bei hohem w: Ende der Schalen (Step 0: 1708.5 km/s)
+%
+\subsection{Velocity Space Coverage}
+vom FoV zum Vspace: Invertieren $\Rightarrow$ Akzeptanz im V-Raum
+
+%
+\subsection{Phasenraumbla}
 Mittlere Phasenraumdichte in einem Bin, in den zwei Instrumentenbins A und B reingehen:
 (differential PSD)
 \begin{align}
 \bar{\rho} = \frac{N_A + N_B}{\frac{N_A}{N_{A,ges}} V_A + \frac{N_B}{N_{B,ges}} V_B }
 \end{align}
-
 Dabei ist $N_i$ die Anzahl der Hits, die im Messbin gelandet sind und $N_{i,ges}$ die gesamte Anzahl an Bins. Hits heißt GEsamtcounts durch Detektoranzahl. Eigentlich gebe ich statt $N_i$ $N_i \cdot Detektoranzahl$ rein, aber das kürzt sich ja raus.\\ \\
 Effizienz und Sektorgewichte dazu:\\
 Allg.:
@@ -117,10 +172,43 @@ Und dann
 \begin{align}
 \bar{\rho} = \frac{N_A + N_B}{\frac{N_A}{N_{A,ges}} \frac{V_A \cdot eff_A}{brw_A} + \frac{N_B}{N_{B,ges}} \frac{V_B \cdot eff_B}{brw_B} }
 \end{align}
+Unsicherheit EpQ: Delta v. Rechnung fehlerfortpflanzung Kladde S. 84
 
+
+%
+%
+%
+\section{Und dann so}
+Ich hab jetzt ein Set von v-Komponenten pro PHA-Event. Daraus kann ich berechnen:
+(mit: In Komponenten aufgeteilt kann man jetzt Geschwindigkeit im SW-frame berechnen, indem man vsw in R-Richtugn abzieht)
+\begin{itemize}
+	\item Betrag im SW frame
+	\item Winkel im w-space (SW frame)
+\end{itemize}
+B-Feld. Von welchem Instrument? auch RTN-System. Genauso Winkel berechnet.\\
+1-min-Mittel (Gyroradius Zeit zeigen) und entsprechend EpQ-Steps den PHAs zugeordnet.
+
+
+%
+%
+%
+\section{Results}
+
+
+
+%
+%
+%
 \section{Outlook}
 \begin{itemize}
 	\item Efficiency müsste genau bestimmt werden: Dabei berücksichtigen, welcher Anteil unter den Threshold wandert. Evtl. überschätzen wir die Eff., wenn wir die interpolierten Werte von ACE/SWICS nehmen.
 \end{itemize}
 
 
+
+
+
+
+
+\subsection{Loose Ends}
+andere Daten: B, vsw (Swoops: als vsw wird Protonengeschw. genommen. Ist das überhaupt richtig, ist das der Referenzframe? Und Annahme, dass vsw rein radial ist)

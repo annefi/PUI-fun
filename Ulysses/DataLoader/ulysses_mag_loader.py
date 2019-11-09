@@ -39,6 +39,7 @@ class mag_loader(dbData):
                         fname = "%s%.4i/%.3i.dat"%(self.path,year,doy)
                         print fname
                         fin = open(fname,"r")
+                        #fin.readline()  #read first line (that is empty in doy 1-149 in 2005)
                         for s in fin:
                             k = s.split()
                             for i,key in enumerate(self.keys):

@@ -10,7 +10,7 @@ header = 'doy\t\tepqst\ttch\tech\tsect\tdet\trange\tbrw      Bphi       Btheta  
 
 fail = []
 
-for y in [1994, 1995, 1996]:
+for y in [2008, 2009, 2010]:
     if os.path.exists('%s%s/' % (path, str(y))) == False:
         os.mkdir('%s%s/' % (path, str(y)))
     for doy in arange(1,366):

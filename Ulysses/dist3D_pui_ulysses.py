@@ -1063,8 +1063,6 @@ class Dist3D(object):
 
 
 
-
-
     def hist_sec_det(self, polar=True, binx=arange(0, 4, 1), biny=arange(0, 9, 1)):
         colormap = plt.cm.get_cmap("viridis")
         valsec = self.d.data['sec']

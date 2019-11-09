@@ -28,10 +28,10 @@ He2 = False #True
 
 
 # load Ulysses data:
-years = [1994]
+years = [1993]
 
 if He1:
-    d1 = uswipha(year=years, tf=[[1,150]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
+    d1 = uswipha(year=years, tf=[[1,250]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
     d1.sync_swoops()
     d1.sync_traj()
     #d1.sync_mag()
@@ -44,9 +44,9 @@ if He1:
 
     #d1.set_mask('Master', 'epq', 15, 20, reset=True)
     #
-    d1.set_mask('Master','Btheta',-5./180.*np.pi,5./180.*np.pi,reset=True)
-    d1.set_mask('Master', 'Bphi', 30. / 180. * np.pi, 50. / 180. * np.pi, reset=True)
-    #d1.set_mask('Master', 'Bphi', 85. / 180. * np.pi, 95. / 180. * np.pi)
+    # d1.set_mask('Master','Btheta',-5./180.*np.pi,5./180.*np.pi,reset=True)
+    # d1.set_mask('Master', 'Bphi', 30. / 180. * np.pi, 50. / 180. * np.pi, reset=True)
+    # #d1.set_mask('Master', 'Bphi', 85. / 180. * np.pi, 95. / 180. * np.pi)
     #
     # d1.set_mask('Master','aa_tot', 0, 10)
     # d1.set_mask('Master','aspphi', -5,5)
