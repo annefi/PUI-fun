@@ -261,7 +261,12 @@ class Plot_wspace(object):
 
     def draw_sphere(self, ax = None, r = 1.):
         u, v = mgrid[0:2 * pi:20j, 0:pi:10j]
-        x = r *cos(u) * sin(v)
+        x = r *cos(u) * sin(v) +1
         y = r* sin(u) * sin(v)
         z = r * cos(v)
         ax.plot_wireframe(x, y, z, color="r")
+
+    def plot_pt(self, ax = None):
+        x,y,z = self.vspace[0,6,0,0,0,:,-1]
+        print(x,y,z)
+        ax.scatter(x,y,z, s = 20, c = 'red')
