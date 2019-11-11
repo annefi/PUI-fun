@@ -410,7 +410,7 @@ class Dist3D(object):
 
     def get_norm_shells(self, vswbins=arange(10., 1800.1, 10.), aspphi=(-30., 45.),
                         phirange=[-pi, pi + 0.001], thetarange=[-pi / 2., pi / 2. + 0.001], angstep=10 * pi / 180,
-                        shellstep = 0.1, dim = '3'):
+                        shellstep = 0.1, dim = '3', wbins = None):
         '''
         Norm for SHELLS, SKYMAP and 1D
         Calculates norm_array for weighting the histogram bins relative to how often a bins has been seen:
@@ -452,7 +452,10 @@ class Dist3D(object):
         # norm_arr indicates how often a wR-wT-wN combination "is hit" with the given AA-vsw combinations and their
         # resp. occurrences
         # attention: these bins are different from the asp angle bins, s.a. (that are called phi and theta as well...)
-        wshellbins = arange(shellstep * 0.5, (self.wshellmax - 1) + 0.0001, shellstep)
+        if wbins is None:
+            wshellbins = arange(shellstep * 0.5, (self.wshellmax - 1) + 0.0001, shellstep)
+        else:
+            wshellbins = wbins
         phibins = arange(phirange[0], phirange[1], angstep)
         thetabins = arange(thetarange[0], thetarange[1], angstep)
 
@@ -564,7 +567,7 @@ class Dist3D(object):
         return norm_arr, H
 
     def wspec_1d(self, vswbins = arange(0,1800,10), aspphi = (-30.,45.), shellstep = 0.1, mode = 'ps', name = '1993',
-                 ax = None):
+                 ax = None, wbins = None):
 
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
@@ -576,9 +579,9 @@ class Dist3D(object):
         # to calculate the weights for normalising the final histograms:
 
         norm_arr = self.get_norm_shells(vswbins = vswbins, aspphi = aspphi, shellstep = shellstep,
-                                        dim = '1')
-
-        wbins = arange(shellstep * 0.5, (self.wshellmax - 1) + 0.0001, shellstep)
+                                        dim = '1', wbins = wbins)
+        if wbins is None:
+            wbins = arange(shellstep * 0.5, (self.wshellmax - 1) + 0.0001, shellstep)
 
         swgt = self.d.get_data("Master", "brw")  ### real sector weight not available for Ulysses
         wsw = self.d.get_data('Master', 'wsw2')  # 1D data in solar wind frame
@@ -595,38 +598,39 @@ class Dist3D(object):
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
 
-        if ax == None:
-            fig, ax = plt.subplots(figsize=(8,7))
-            ax.set_xlim(-1.05,4)
-            ax.xaxis.set_minor_locator(MultipleLocator(.5))
-            ax.set_xlabel(r'$\mathrm{w_{sw}}$')
-            ax.set_ylabel('phase space density')
-
-        if mode == 'norm':
-            H = norm_arr
-            ax.set_ylabel('norm')
-            ax.plot(wbins[:-1], H, ls='steps-post', label='%s' % name)
-        elif mode == 'counts':
-            H = H0
-            ax.set_ylabel('counts')
-            ax.plot(wbins[:-1], H, ls='steps-post', label='%s' %name)
-        elif mode == 'ps':
-            H0[norm_arr == 0] = 0
-            norm_arr[norm_arr == 0] = 1
-            H = H0 / norm_arr
-            ax.plot(wbins[:-1], H, ls='steps-post', label='%s' % name)
-        if mode == 'all':
-            H_cts = H0[:]
-            H0[norm_arr == 0] = 0
-            norm_arr[norm_arr == 0] = 1
-            H = H0 / norm_arr
-            ax.plot(wbins[:-1], H_cts, ls='steps-post', label='counts')
-            ax.plot(wbins[:-1], H, ls='steps-post', label='PSD')
-            ax.plot(wbins[:-1], norm_arr, ls='steps-post', label='norm')
-
-        ax.legend()
-        self.Hw = H
-        return ax
+        # if ax == None:
+        #     fig, ax = plt.subplots(figsize=(8,7))
+        #     ax.set_xlim(-1.05,4)
+        #     ax.xaxis.set_minor_locator(MultipleLocator(.5))
+        #     ax.set_xlabel(r'$\mathrm{w_{sw}}$')
+        #     ax.set_ylabel('phase space density')
+        #
+        # if mode == 'norm':
+        #     H = norm_arr
+        #     ax.set_ylabel('norm')
+        #     ax.plot(wbins[:-1], H, ls='steps-post', label='%s' % name)
+        # elif mode == 'counts':
+        #     H = H0
+        #     ax.set_ylabel('counts')
+        #     ax.plot(wbins[:-1], H, ls='steps-post', label='%s' %name)
+        # elif mode == 'ps':
+        #     H0[norm_arr == 0] = 0
+        #     norm_arr[norm_arr == 0] = 1
+        #     H = H0 / norm_arr
+        #     ax.plot(wbins[:-1], H, ls='steps-post', label='%s' % name)
+        # if mode == 'all':
+        #     H_cts = H0[:]
+        #     H0[norm_arr == 0] = 0
+        #     norm_arr[norm_arr == 0] = 1
+        #     H = H0 / norm_arr
+        #     ax.plot(wbins[:-1], H_cts, ls='steps-post', label='counts')
+        #     ax.plot(wbins[:-1], H, ls='steps-post', label='PSD')
+        #     ax.plot(wbins[:-1], norm_arr, ls='steps-post', label='norm')
+        #
+        # ax.legend()
+        # self.Hw = H
+        # #return ax
+        return H0, norm_arr
 
     def calc_skymapspec(self, vswbins=arange(10., 1800.1, 10.), aspphi=(-30., 45.),
                         phirange=[-pi, pi + 0.001], thetarange=[-pi / 2., pi / 2. + 0.001], angstep=10 * pi / 180,

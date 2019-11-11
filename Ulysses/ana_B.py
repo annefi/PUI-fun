@@ -79,7 +79,6 @@ H90, wshellmax90 = load_B(B=90)
 
 wsmax= min([wshellmax0, wshellmax45, wshellmax90])
 
-
 for H in [H0,H45,H90]:
     # cut out extra high values (at the edges: only few counts) that destroy the colormap:
     wshellbins = arange(shellstep, (wsmax - 1) + 0.0001, shellstep)
