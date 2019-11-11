@@ -25,6 +25,10 @@ matplotlib.rcParams.update({'font.size': 18,
 
 
 class Plot_wspace(object):
+    '''
+    Class for plotting FoV, vspace or wspace with a reduced number of dtector points. Works on an uswipha instance
+    and used the resp. bins for vsw, aspphi, asptheta
+    '''
     def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=2, nrs_para=3,
                  nrs_sec=3, nrs_epq=1, vswstep = 10, ion="He1+", offset_sp=180., sc_vel=True):
 
@@ -179,7 +183,7 @@ class Plot_wspace(object):
             print("no valid sector given")
         return ax
 
-    def plot_vspace(self, ax=None, aspphi=-1, asptheta=-1, epq=50, sec='all'):
+    def plot_vspace(self, ax=None, aspphi=-1, asptheta=-1, epq=10, sec='all'):
         if ax == None:
             fig = plt.figure(figsize=(6, 6))
             ax = fig.add_subplot(111, projection='3d')
@@ -261,7 +265,7 @@ class Plot_wspace(object):
 
     def draw_sphere(self, ax = None, r = 1.):
         u, v = mgrid[0:2 * pi:20j, 0:pi:10j]
-        x = r *cos(u) * sin(v) +1
+        x = r *cos(u) * sin(v)
         y = r* sin(u) * sin(v)
         z = r * cos(v)
         ax.plot_wireframe(x, y, z, color="r")

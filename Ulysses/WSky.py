@@ -5,9 +5,20 @@ from matplotlib import colors
 
 
 class WSky():
+    '''
+    Class for plotting clickable skymap of dist3D instance.
+    Mode can be "ps", "norm" or "counts"
+
+    Example of use:
+
+    ***
+    wsky = WSky(D, mode = 'norm') (for plotting the norm matrice)
+    wsky.init_plot()
+    ***
+
+    '''
     def __init__(self, D, color_norm='sg', mode='ps', phirange = [-pi, pi + 0.001],
                  thetarange = [-pi / 2., pi / 2. + 0.001], angstep = 10 * pi / 180., shellstep = 0.1):
-
         # shift wshellmax to SW frame:
         self.wshellbins = arange(shellstep, (D.wshellmax -1) + 0.0001, shellstep)
         self.D = D
@@ -16,7 +27,8 @@ class WSky():
         self.mode = mode
         self.angstep = angstep
 
-        norm_arr, H0 = self.D.calc_skymapspec(phirange = phirange, thetarange = thetarange, angstep = angstep, wshellbins = self.wshellbins)
+        norm_arr, H0 = self.D.calc_skymapspec(phirange = phirange, thetarange = thetarange, angstep = angstep,
+                                              shellstep = shellstep)
 
         self.n = norm_arr
 
@@ -87,7 +99,6 @@ class WSky():
                 self.shell + 1]))
 
         if self.color_norm == 'sg':
-
             # set limits for colormap:
             vmin = 0
             #vmin = amin(self.H[self.H > 0])

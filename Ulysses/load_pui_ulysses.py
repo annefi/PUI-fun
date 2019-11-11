@@ -22,6 +22,7 @@ from WSky import WSky
 # He1+
 He1 = True #False #
 He2 = False #True
+
 # # He2+
 # He1 = False #
 # He2 = True #
@@ -31,24 +32,24 @@ He2 = False #True
 years = [1993]
 
 if He1:
-    d1 = uswipha(year=years, tf=[[1,350]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
+    d1 = uswipha(year=years, tf=[[1,35]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
     d1.sync_swoops()
     d1.sync_traj()
-    #d1.sync_mag()
+    #d1.sync_mag() # not needed anymore: new PHAs including mag data
 
-    d1.set_mask('Master','vsw',670,680,reset = True)
+    d1.set_mask('Master','vsw',700, 800, reset = True)
     d1.set_mask('Master','rng',0,0,reset=True)
     d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
     d1.set_mask('Master','brw',1,1,reset=True)
 
-    #d1.set_mask('Master', 'epq', 0, 17, reset=True)
     d1.set_mask('Master', 'epq', 0, 17, reset=True)
-    #
+
     # d1.set_mask('Master','Btheta',-5./180.*np.pi,5./180.*np.pi,reset=True)
     # d1.set_mask('Master', 'Bphi', 30. / 180. * np.pi, 50. / 180. * np.pi, reset=True)
     # #d1.set_mask('Master', 'Bphi', 85. / 180. * np.pi, 95. / 180. * np.pi)
-    #
+
+
     # d1.set_mask('Master','aa_tot', 0, 10)
     # d1.set_mask('Master','aspphi', 0,5)
     # d1.set_mask('Master','asptheta',4,4.5)
@@ -60,40 +61,6 @@ if He1:
     d1.load_subset(filename = 'd1.tmp', force = True)
 
     D3 = Dist3D(d1, mass = 4, charge = 1, sc_vel = False)
-
-
-# load Ulysses data:
-years = [1994]
-if not He1:
-    d1 = uswipha(year=years, tf=[[1,366]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
-    d1.sync_swoops()
-    d1.sync_traj()
-    #d1.sync_mag()
-    d1.set_mask('Master','vsw',400,1500,reset = True)
-    d1.set_mask('Master','rng',0,0,reset=True)
-    d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
-    d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
-    d1.set_mask('Master','brw',1,np.inf,reset=True)
-
-
-
-    #d1.set_mask('Master','aa_tot', 0, 10)
-    # d1.set_mask('Master','aspphi', -5,5)
-    # d1.set_mask('Master','asptheta',-5,5)
-
-    # get a real subset with masks applied:
-    print('*** Save Subset ***')
-    d1.save_subset('Master', filename = 'd1.tmp')
-    print('*** Load Subset ***')
-    d1.load_subset(filename = 'd1.tmp', force = True)
-
-    D4 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
-
-
-
-
-
-
 
 
 

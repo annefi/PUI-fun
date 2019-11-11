@@ -6,14 +6,14 @@ from numpy import arange, min, max, amin, amax, unique, around
 
 class WSlice():
     def __init__(self, D, min_wHe = 0.0, slice = 5, dim = 'R', color_norm = 'sg', mode = 'ps',
-                 wbins = arange(-2,2.01, 0.2), var ='new'):
+                 wbins = arange(-2,2.01, 0.2)):
         self.D = D
         self.slice = slice
         self.dim = dim
         self.color_norm = color_norm
         self.wbins = around(wbins,decimals=1)
 
-        norm_arr, H0 = self.D.calc_w3dspecs(min_whe = min_wHe, wbins = wbins, var = var)
+        norm_arr, H0 = self.D.calc_w3dspecs(wbins = wbins)
         if mode == 'norm':
             self.H = norm_arr
         elif mode == 'counts':

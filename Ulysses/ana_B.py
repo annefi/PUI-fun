@@ -62,9 +62,9 @@ def load_B(B = 90):
 
     D = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
 
-    wshellbins = arange(shellstep, (D.wshellmax - 1) + 0.0001, shellstep)
-    norm_arr, H0 = D.calc_skymapspec(phirange = phirange, thetarange = thetarange, angstep = angstep, wshellbins =
-        wshellbins)
+
+    norm_arr, H0 = D.calc_skymapspec(phirange = phirange, thetarange = thetarange, angstep = angstep, shellstep =
+    shellstep)
 
     H0[norm_arr == 0] = -5
     norm_arr[norm_arr == 0] = 1
@@ -92,21 +92,21 @@ wsky0 = Wsky_rel(H = H0, wshellmax = wsmax, name = '0')
 wsky45 = Wsky_rel(H = H45, wshellmax = wsmax, name = '45')
 wsky90 = Wsky_rel(H = H90, wshellmax = wsmax, name = '90')
 
-# H_0 = H0 + H45 + H90
-# H_0[(H0==-5) | (H45 == -5) | (H90 == -5)] = NaN
-#
-# H00 = H0/H_0
-# H045 = H45/H_0
-# H090 = H90/H_0
-#
-# H00[isnan(H00)] = -5
-# H045[isnan(H045)] = -5
-# H090[isnan(H090)] = -5
-#
-#
-#
-# wskyrel0 = Wsky_rel(H = H00, wshellmax = wsmax, name = '0 rel')
-# wskyrel45 = Wsky_rel(H = H045, wshellmax = wsmax, name = '45 rel')
-# wskyrel90 = Wsky_rel(H = H090, wshellmax = wsmax, name = '90 rel')
+H_0 = H0 + H45 + H90
+H_0[(H0==-5) | (H45 == -5) | (H90 == -5)] = NaN
+
+H00 = H0/H_0
+H045 = H45/H_0
+H090 = H90/H_0
+
+H00[isnan(H00)] = -5
+H045[isnan(H045)] = -5
+H090[isnan(H090)] = -5
+
+
+
+wskyrel0 = Wsky_rel(H = H00, wshellmax = wsmax, name = '0 rel')
+wskyrel45 = Wsky_rel(H = H045, wshellmax = wsmax, name = '45 rel')
+wskyrel90 = Wsky_rel(H = H090, wshellmax = wsmax, name = '90 rel')
 
 
