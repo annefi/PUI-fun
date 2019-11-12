@@ -5,8 +5,11 @@ from matplotlib import colors
 
 
 class Wsky_rel():
+    '''
+    class for plotting the skymap specs but takes external histogram (= no calculation, only plotting)
+    '''
     def __init__(self, H, wshellmax, name = 'no name'):
-        self.wshellbins = arange(0.1, (wshellmax - 1) + 0.0001, 0.1)
+        self.wshellbins = arange(0.3, (wshellmax - 1) + 0.0001, 0.1)
         self.H = H
         self.color_norm = 'sg'
         self.mode = 'ps'

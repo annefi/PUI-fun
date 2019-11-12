@@ -1,7 +1,7 @@
 from pylib import dbData
 from numpy import *
 from uswo import uswo
-from Trajectory.ulysses_traj import ulysses_traj
+from DataLoader.ulysses_traj import ulysses_traj
 from ulysses_mag_loader import mag_loader
 from uswiutils import getvelocity
 
@@ -45,6 +45,9 @@ class uswipha(dbData):
         if self.path =="/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/":
             self.data["Bphi"] = []
             self.data["Btheta"] = []
+            self.data["BR"] = []
+            self.data["BT"] = []
+            self.data["BN"] = []
 
 
         for year in self.year:
@@ -69,6 +72,11 @@ class uswipha(dbData):
                             if self.path == "/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/":
                                 self.data["Bphi"].append(float(k[8]))
                                 self.data["Btheta"].append(float(k[9]))
+
+                                self.data["BR"].append(float(k[10]))
+                                self.data["BT"].append(float(k[11]))
+                                self.data["BN"].append(float(k[12]))
+
                     except:
                         print "Problems reading DoY ",doy
         self.data["year"]=array(self.data["year"])
@@ -84,6 +92,11 @@ class uswipha(dbData):
         if self.path == "/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/":
             self.data["Bphi"] = array(self.data["Bphi"])
             self.data["Btheta"] = array(self.data["Btheta"])
+
+            self.data["BR"] = array(self.data["BR"])
+            self.data["BT"] = array(self.data["BT"])
+            self.data["BN"] = array(self.data["BN"])
+
 
     def calc_d90(self):
         offy = self.data["year"] - 1990
@@ -193,7 +206,9 @@ class uswipha(dbData):
         if not 'd90_epq' in self.data.keys():
             self.calc_d90_epq()
 
-        bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1./24./60.)
+        bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1.)
+
+        #bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1./24./60.)
         N, bins = histogram(mag.data['d90'], bins = bins1min)
         N[N==0] = 1.
 

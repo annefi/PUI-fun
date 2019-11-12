@@ -634,7 +634,7 @@ class Dist3D(object):
 
     def calc_skymapspec(self, vswbins=arange(10., 1800.1, 10.), aspphi=(-30., 45.),
                         phirange=[-pi, pi + 0.001], thetarange=[-pi / 2., pi / 2. + 0.001], angstep=10 * pi / 180,
-                        shellstep = 0.1):
+                        shellstep = 0.1, wshellbins = None):
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
@@ -642,14 +642,16 @@ class Dist3D(object):
         self.d.set_mask("Master", "aspphi", aspphi[0], aspphi[1], reset=True)
 
         norm_arr = self.get_norm_shells(vswbins=vswbins, phirange=phirange, thetarange=
-            thetarange, angstep=angstep, shellstep = shellstep , dim = '3')
+            thetarange, angstep=angstep, shellstep = shellstep , dim = '3', wbins = wshellbins)
 
         swgt = self.d.get_data("Master", "brw")  ### real sector weight not available for Ulysses
         wphi = self.d.get_data("Master", "wphi")
         wtheta = self.d.get_data("Master", "wtheta")
         w = self.d.get_data("Master", "wsw2")
 
-        wshellbins = arange(shellstep * 0.5, (self.wshellmax - 1) + 0.0001, shellstep)
+        if wshellbins is None:
+            wshellbins = arange(shellstep * 0.5, (self.wshellmax - 1) + 0.0001, shellstep)
+
         phibins = arange(phirange[0], phirange[1], angstep)
         thetabins = arange(thetarange[0], thetarange[1], angstep)
 

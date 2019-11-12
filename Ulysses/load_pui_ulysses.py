@@ -45,7 +45,6 @@ if He1:
 
     d1.set_mask('Master', 'epq', 0, 17, reset=True)
 
-
     # d1.set_mask('Master','Btheta',-5./180.*np.pi,5./180.*np.pi,reset=True)
     # d1.set_mask('Master', 'Bphi', 30. / 180. * np.pi, 50. / 180. * np.pi, reset=True)
     # #d1.set_mask('Master', 'Bphi', 85. / 180. * np.pi, 95. / 180. * np.pi)

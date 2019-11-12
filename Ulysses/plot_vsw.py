@@ -27,9 +27,9 @@ matplotlib.rcParams.update({'font.size': 12,
 
 
 def load_year(y):
-    d1 = uswipha(year=y, tf='all', path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
+    d1 = uswipha(year=y, tf=[[1,366]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
     d1.sync_swoops()
-    d1.sync_traj()
+    #d1.sync_traj()
     d1.set_mask('Master', 'rng', 0, 0, reset=True)
     d1.set_mask('Master', 'det', 0, 2, reset=True)  # cut out det = 3 (=rubbish?)
     d1.set_mask('Master', 'ech', 12, 250, reset=True)  # exclude doubles
@@ -45,7 +45,7 @@ def load_year(y):
     vsw = d1.data['vsw']
     return vsw
 
-vswbins = arange(0,1000,10)
+vswbins = arange(200,1001,10)
 years = range(1993,2007)
 H_col = zeros([vswbins.shape[0]-1, len(years)])
 sum_col = []
@@ -53,19 +53,34 @@ sum_col = []
 
 def loop():
     for iy, year in enumerate(years):
-        vsw = load_year(y = year)
-        sum = vsw.sum()
-        sum_col.append(sum)
-        H, b = histogram(vsw, vswbins)
-        H_col[:,iy] = H
+        try:
+            vsw = load_year(y = year)
+            sum = vsw.sum()
+            sum_col.append(sum)
+            H, b = histogram(vsw, vswbins)
+            H_col[:,iy] = H
+        except:
+            print('no matching data in %s' % year)
 
 yearbins = years + [years[-1]+1]
 
-def plot_v():
+def plot_v(norm = 'max'):
     fig, ax = plt.subplots(figsize=(8, 7))
-    ax.text(1.5,1994,'test')
-    ax.pcolormesh(vswbins, yearbins, H_col.T)
+    colormap = plt.cm.get_cmap("viridis")
+    colormap.set_under('white')
+    if norm == 'max':
+        for i in range(H_col.shape[1]):
+            if amax(H_col[:, i]) > 0:
+                H_col[:, i] /= float(max(H_col[:, i]))
+    ax.text(vswbins[-1]+5, yearbins[-1]+0.2, r'$\sum$ PHA')
+    ax.set_xlabel(r'$vsw \, / \, km/s$')
+    ax.set_xlabel(r'vsw / $km/s$')
 
+    for i, s in enumerate(sum_col):
+        ax.text(vswbins[-1] +10, yearbins[i] + 0.5, '%i'%s, fontsize = 10)
+
+
+    ax.pcolormesh(vswbins, yearbins, H_col.T, cmap = colormap, vmin = 0.0000001, vmax = H_col.max())
 
 
 

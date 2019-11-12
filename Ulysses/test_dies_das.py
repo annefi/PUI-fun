@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt
+from matplotlib import pylab
 from numpy import arange, array
 from Trajectory.ulysses_traj import ulysses_traj
+from DataLoader.ulysses_mag_loader import mag_loader
+from DataLoader.uswipha import uswipha
 from Trajectory.ul_calc_traj import hg_to_hc, hc_to_hg, calc_v
 
 fig, ax = plt.subplots(figsize=(6, 5))
@@ -115,16 +118,58 @@ def evolution_RTN():
 
 
 
+def evolution_B_data():
+    '''
+    plot B data from original data file
+    '''
+    fig, ax = plt.subplots(figsize=(8, 7))
+    ax.set_xlim(1994,1999)
+    ax.set_ylim(-4, 4)
+
+    fig2, ax2 = plt.subplots(figsize=(8, 7))
+
+
+    d = uswipha(year = range(1997, 1999), tf = [[1, 366]], path =
+    '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/')
+    d.sync_mag()
+
+
+    mag_data = d.data['Br']
+    doy =d.data['doy']
+    year = d.data['year']
+    time = year + doy/365.
+
+    ax.plot(time, d.data['Br'], marker = 'o', label = 'BR', ms = .1)
+    ax.plot(time, d.data['Bt'], marker='o', label='BT', ms = 1)
+    ax.plot(time, d.data['Bn'], marker='o', label='BN', ms = 1)
+
+    ax2.plot(time, d.data['Bphi'], marker = 'o', label = 'Bphi', ms = 1)
+    ax2.plot(time, d.data['Btheta'], marker='o', label='Btheta', ms=1)
+
+    ax.legend()
+    ax2.legend()
+    #pylab.show()
 
 
 
-
-
-
-
-
-
-
-
-
+def evolution_B_PHA():
+    '''
+    plot B data from reduced PHA file
+    '''
+    fig1, ax1 = plt.subplots(figsize=(8, 7))
+    fig2, ax2 = plt.subplots(figsize=(8, 7))
+    fig3, ax3 = plt.subplots(figsize=(8, 7))
+    d = uswipha(year = range(1993,2001), tf = [[1,366]], path ='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
+    doy = d.data['doy'][::10]
+    year = d.data['year'][::10]
+    time = year + doy / 365.
+    ax1.plot(time, d.data['Bphi'][::10], marker='o', label='Bphi', ms=1)
+    ax2.plot(time, d.data['Btheta'][::10], marker='o', label='Btheta', ms=1)
+    # ax1.plot(time, d.data['BR'][::100], marker='o', label='BR', ms=1)
+    # ax2.plot(time, d.data['BT'][::100], marker='o', label='BT', ms=1)
+    # ax3.plot(time, d.data['BN'][::100], marker='o', label='BN', ms=1)
+    ax1.legend()
+    ax2.legend()
+    ax3.legend()
+    plt.show()
 
