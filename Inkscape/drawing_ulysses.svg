@@ -39,16 +39,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.49497475"
-     inkscape:cx="132.36137"
-     inkscape:cy="591.74321"
+     inkscape:cx="-76.371238"
+     inkscape:cy="577.60107"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      showborder="false"
-     inkscape:window-width="1680"
-     inkscape:window-height="990"
-     inkscape:window-x="1280"
-     inkscape:window-y="31"
+     inkscape:window-width="1280"
+     inkscape:window-height="946"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata16196">
@@ -66,7 +66,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline;opacity:0.73706641">
+     style="display:inline;opacity:1">
     <image
        y="-0.92083234"
        x="-104.24583"
@@ -78,7 +78,8 @@
        clip-path="url(#clipPath16823)"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       style="fill:#ffffff;stroke:none;stroke-opacity:1" />
+       style="fill:#ffffff;stroke:none;stroke-opacity:1"
+       inkscape:export-filename="/home/asterix/fischer/PUI/Inkscape/Images/ulysses_cut2.png" />
     <path
        style="fill:#ffffff;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 147.50521,152.5186 -4.34673,14.07961 18.33184,5.66964 2.74033,-4.6302 c 0.77571,-0.53334 1.79854,-0.44884 2.92932,-0.0945 l -1.79539,-1.6064 z"

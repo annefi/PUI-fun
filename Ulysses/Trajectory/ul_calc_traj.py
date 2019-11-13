@@ -68,7 +68,7 @@ def hg_to_rtn(r_vec,sc_vec,spherical = True, degr = True, long_shift = 180.,long
     return array([R,T,N])
 
 
-def calc_v(vec1, vec2, dt, R = "AU"):
+def calc_v(vec1, vec2, dt, R = "km"):
     '''
     Calculates Ulysses' velocity components R,T and N as the "derivation" of position vectors with respect to the time.
     v1 = (pos2 - pos1) / dt
@@ -94,16 +94,16 @@ def calc_v(vec1, vec2, dt, R = "AU"):
         #print(delta_RTN)
     elif R == "km":
         vx, vy, vz = (delta_RTN / dt)
-        # print('HG:')
-        # vec1[0] /= 1.496*10**8
-        # vec2[0] /= 1.496 * 10 ** 8
-        # print(vec1)
-        # print(vec2)
-        # print('RTN:')
-        # print(vec1_RTN / (1.496 * 10 ** 8))
-        # print(vec2_RTN / (1.496 * 10 ** 8))
-        # d = delta_RTN / (1.496 * 10 ** 8)
-        # print(d)
+        print('HG:')
+        vec1[0] /= 1.496*10**8
+        vec2[0] /= 1.496 * 10 ** 8
+        print(vec1)
+        print(vec2)
+        print('RTN:')
+        print(vec1_RTN / (1.496 * 10 ** 8))
+        print(vec2_RTN / (1.496 * 10 ** 8))
+        d = delta_RTN / (1.496 * 10 ** 8)
+        print(d)
     #print(vx,vy,vz)
     return vx,vy,vz
 

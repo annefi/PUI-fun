@@ -122,7 +122,8 @@ class ulysses_traj(dbData):
 
             for day in range(len(self.data['DOY'])):
                 sc_vec_hg = array([self.data['R'][day],self.data['HG_Long'][day],self.data['HG_Lat'][day]])
-                earth_vec_hg = array([self.data['AU_E'][day], self.data['HGI_LON_E'][day], self.data['HG_LAT_E'][day]])
+                earth_vec_hg = array([self.data['R_AU'][day], self.data['HGI_LON'][day], self.data['HGI_LAT'][
+                    day]])
                 asp_phi, asp_theta = calc_asp_angles(sc_vec_hg,earth_vec_hg)
                 self.data['asp_phi'].append(asp_phi)
                 self.data['asp_theta'].append(asp_theta)

@@ -38,6 +38,22 @@ for line in fin_h:
 
 fin_h.close()
 
+# extend for calculation from beginning of 2007 (s.b.):
+for i in range(6266,6814):
+    year_h.append(0.)
+    doy_h.append(0.)
+    esp_h.append(0.)
+    spe_h.append(0.)
+    sep_h.append(0.)
+    r_h.append(0.)
+    hg_lat_h.append(0.)
+    hg_long_h.append(0.)
+    hc_lat_h.append(0.)
+    hg_long_wrt_earth_h.append(0.)
+
+
+
+
 # Read in ulysses_daily_heliocentric_data_1990-2009.txt
 year_u = []
 month_u = []
@@ -96,38 +112,81 @@ hg_lat_h = array(hg_lat_h)
 hg_long_h = array(hg_long_h)
 hc_lat_h = array(hc_lat_h)
 hg_long_wrt_earth_h = array(hg_long_wrt_earth_h)
-year_u = array(year_u[:-548])
-month_u = array(month_u[:-548])
-day_u = array(day_u[:-548])
-doy_u = array(doy_u[:-548])
-jd_u = array(jd_u[:-548])
-hour_u = array(hour_u[:-548])
-min_u = array(min_u[:-548])
-sec_u = array(sec_u[:-548])
-esp_u = array(esp_u[:-548])
-spe_u = array(spe_u[:-548])
-sep_u = array(sep_u[:-548])
-r_u = array(r_u[:-548])
-r_km_u = array(r_km_u[:-548])
-v_u = array(v_u[:-548])
-hg_lat_u = array(hg_lat_u[:-548])
-hc_long_u = array(hc_long_u[:-548])
-hc_lat_u = array(hc_lat_u[:-548])
-hg_long_wrt_earth_u = array(hg_long_wrt_earth_u[:-548])
+year_u = array(year_u)
+month_u = array(month_u)
+day_u = array(day_u)
+doy_u = array(doy_u)
+jd_u = array(jd_u)
+hour_u = array(hour_u)
+min_u = array(min_u)
+sec_u = array(sec_u)
+esp_u = array(esp_u)
+spe_u = array(spe_u)
+sep_u = array(sep_u)
+r_u = array(r_u)
+r_km_u = array(r_km_u)
+v_u = array(v_u)
+hg_lat_u = array(hg_lat_u)
+hc_long_u = array(hc_long_u)
+hc_lat_u = array(hc_lat_u)
+hg_long_wrt_earth_u = array(hg_long_wrt_earth_u)
+
+
+# year_h = array(year_h)
+# doy_h = array(doy_h)
+# esp_h = array(esp_h)
+# spe_h = array(spe_h)
+# sep_h = array(sep_h)
+# r_h = array(r_h)
+# hg_lat_h = array(hg_lat_h)
+# hg_long_h = array(hg_long_h)
+# hc_lat_h = array(hc_lat_h)
+# hg_long_wrt_earth_h = array(hg_long_wrt_earth_h)
+# year_u = array(year_u[:-548])
+# month_u = array(month_u[:-548])
+# day_u = array(day_u[:-548])
+# doy_u = array(doy_u[:-548])
+# jd_u = array(jd_u[:-548])
+# hour_u = array(hour_u[:-548])
+# min_u = array(min_u[:-548])
+# sec_u = array(sec_u[:-548])
+# esp_u = array(esp_u[:-548])
+# spe_u = array(spe_u[:-548])
+# sep_u = array(sep_u[:-548])
+# r_u = array(r_u[:-548])
+# r_km_u = array(r_km_u[:-548])
+# v_u = array(v_u[:-548])
+# hg_lat_u = array(hg_lat_u[:-548])
+# hc_long_u = array(hc_long_u[:-548])
+# hc_lat_u = array(hc_lat_u[:-548])
+# hg_long_wrt_earth_u = array(hg_long_wrt_earth_u[:-548])
 
 
 
 # __________ fill up data gap ______________
 def fill_up_gap():
     '''
-    No data in helio.dat for 20 year at the end of 2001, so HG long is missing there. Is getting calculated by
+    No data in helio.dat for 20 days at the end of 2001, so HG long is missing there. Is getting calculated by
     hc_to_hg-function. Plot shows that the transition is smooth.
     '''
     for i in range(4057,4076):
         hc_arr = array([r_u[i],hc_long_u[i],hc_lat_u[i]])
         hg_arr = hc_to_hg(hc_arr, degree = True, long_shift = 180.)
         hg_long_h[i] = hg_arr[1]
-fill_up_gap()
+#fill_up_gap()
+
+
+# __________ fill up data end______________
+def fill_up_end():
+    '''
+    No data in helio.dat for from end of 2007, so HG long is missing there. Is getting calculated by
+    hc_to_hg-function.
+    '''
+    for i in range(6266,6814):
+        hc_arr = array([r_u[i],hc_long_u[i],hc_lat_u[i]])
+        hg_arr = hc_to_hg(hc_arr, degree = True, long_shift = 180.)
+        hg_long_h[i] = hg_arr[1]
+#fill_up_end()
 
 
 # __________ calc velocities _______________
@@ -154,14 +213,14 @@ def calc_velocities():
         vt_list.append(vy)
         vn_list.append(vz)
         v_abs.append(sqrt(vx ** 2 + vy ** 2 + vz ** 2))
-calc_velocities()
+#calc_velocities()
 
 
 
 # _________ MAIN: writing the file ______________
 
 def write_new_file():
-    fid_out = open('trajectory_data/traj_data_ulysses_pool.dat','w')
+    fid_out = open('trajectory_data/traj_data_ulysses_pool2.dat','w')
     headline1 = 'Year   DOY MM DD     ESP   SPE    SEP       R       R_km       HC_Lat  HC_Long    HG_Lat HG_Long  ' \
                 'HG_Long_wrtE  v     v_R    v_T    v_N\n'
     headline2 = '\t\t    [deg] [deg]  [deg]     [AU]     [km]       [deg]    [deg]      [deg]  [deg]      [deg]   ' \

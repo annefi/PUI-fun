@@ -10,12 +10,25 @@ import numpy as np
 from matplotlib import pylab
 from matplotlib.animation import FuncAnimation
 from matplotlib import colors
+import matplotlib
 
 
-font = {'family' : 'normal',
-        'weight' : 'bold',
-        'size'   : 12}
-pylab.rc('font', **font)
+matplotlib.rcParams.update({'font.size': 14,
+                            'xtick.major.size': 8,
+                            'xtick.major.width': 1.5,
+                            'xtick.minor.size': 5,
+                            'xtick.minor.width': 1,
+                            'ytick.major.size': 8,
+                            'ytick.major.width': 1.5,
+                            'ytick.minor.size': 5,
+                            'ytick.minor.width': 1,
+                            'xtick.direction': 'inout',
+                            'ytick.direction': 'inout',
+                            'figure.subplot.left':0.12,
+                            'figure.subplot.bottom': 0.15,
+                            'figure.subplot.right': 0.9,
+                            'figure.subplot.top': 0.94,
+                            'figure.figsize': (7,4.5)})
 
 
 
@@ -357,7 +370,7 @@ def plot_eigen_velocities():
     data)
     :return:
     '''
-    from Trajectory.ulysses_traj import ulysses_traj
+    from DataLoader.ulysses_traj import ulysses_traj
     years = range(1991,2007)
     traj = ulysses_traj(year = years, tf = 'all')
     traj.calc_d90()
@@ -386,10 +399,11 @@ def collect_AA():
     '''
     creates a file with the two aspect angles in RTN-coordinates for all years
     '''
-    from Trajectory.ulysses_traj import ulysses_traj
-    out = open('/home/asterix/fischer/PUI/Ulysses/Trajectory/trajectory_data/aa_data.dat', 'w')
+    from DataLoader.ulysses_traj import ulysses_traj
+    out = open('/home/asterix/fischer/PUI/Ulysses/Trajectory/trajectory_data/aa_data2.dat', 'w')
     out.write('YEAR      DOY     D90    ASP_PHI     ASP_THETA    ASP_total\n')
-    for y in range(1991, 2007):
+    for y in range(1991, 2010):
+        print('%s'%y)
         t = ulysses_traj(year= y, tf = 'all')
         t.calc_d90()
         doy = t.data['DOY']
@@ -418,15 +432,79 @@ def plot_AA():
             asp_tot.append(float(l[5]))
         fig = pylab.figure(figsize=(12,8))
         ax = pylab.subplot(111)
-        ax.set_xlim(0,18*365 +1)
-        ax.set_xticks(np.arange(365, 18 * 365 + 1, 365))
-        ax.set_xticklabels(np.arange(1991, 2008, 1))
-        ax.plot(d90, asp_phi, linestyle='-', linewidth = 2.0, label = 'phi')
-        ax.plot(d90, asp_theta, linestyle='-', linewidth = 2.0, label='theta')
-        ax.plot(d90, asp_tot, linestyle='-', linewidth=1.0, label='total')
-        ax.legend()
+        ax.set_xlim(50,20*365 +1)
+        ax.set_xticks(np.arange(365, 20 * 365, 365))
+        ax.set_xticklabels(np.arange(1991, 2010, 1))
+        ax.plot(d90, asp_tot, linestyle='-', linewidth= 3.5, color='lavender', label='Total')
+
+        ax.plot(d90, asp_phi, linestyle='-', linewidth = 2.0, color = 'royalblue', label = 'Phi')
+        ax.plot(d90, asp_theta, linestyle='-', linewidth = 2.0, color = 'crimson', label= 'Theta')
+
+        ax.legend(loc='upper center', bbox_to_anchor=(0.2, 0.97), shadow=True, ncol=3)
         ax.grid()
+        ax.set_ylim(-35, 47)
         ax.set_ylabel('Aspect Angle / deg')
+
+def calc_d90(year, doy):
+    offy = year - 1990
+    offd = offy*365 + (offy.astype(int)+2)/4
+    d90 = offd + doy
+    return d90
+
+
+def plot_HG_coords(orbit = 'all'):
+    year = []
+    doy = []
+    R = []
+    hg_lat = []
+    hg_long = []
+    fid = open('/home/asterix/fischer/PUI/Ulysses/Trajectory/trajectory_data/traj_data_ulysses_pool.dat', 'r')
+    for headerline in range(4):
+        fid.readline()
+    for line in fid:
+        l = line.split()
+        year.append(float(l[0]))
+        doy.append(float(l[1]))
+        R.append(float(l[7]))
+        hg_lat.append(float(l[9]))
+        hg_long.append(float(l[10]))
+    d90 = calc_d90(np.array(year), np.array(doy))
+    # plot
+    fig, (ax1, ax2) = pylab.subplots(2, 1, sharex=True)
+    matplotlib.pyplot.subplots_adjust(hspace=0.05)
+    if orbit == 'all':
+        ax1.plot(d90, R, color = 'firebrick', linewidth = 2.0)
+        ax1.set_ylim(-0.5,6.5)
+        ax1.set_yticks([1,3,5])
+        ax1.grid()
+        ax1.set_ylabel('R / AU', labelpad=15)
+        ax1.set_yticks([0., 2., 4., 6.], minor=True)
+
+        ax1.axvspan(775, 3030, facecolor='papayawhip', alpha=0.5)
+        ax1.axvspan(5296, 7121, facecolor='papayawhip', alpha=0.5)
+
+        ax2.set_xlim(50, 20 * 365 + 1)
+        ax2.set_xticks(np.arange(365, 20 * 365, 2*365))
+        ax2.set_xticklabels(np.arange(1991, 2010, 2))
+
+        ax2.set_ylim(-180,550)
+        ax2.set_yticks([0.,180.,360.])
+        ax2.set_ylabel('Angle / deg')
+
+        ax2.plot(d90, hg_long, label='HG Long', color='rebeccapurple', linewidth = 2.0)
+        ax2.plot(d90, hg_lat, label='HG Lat', color = 'orangered', linewidth = 2.0)
+        ax2.grid()
+
+        ax2.set_yticks([-90.,90.,270.,450.], minor=True)
+
+        ax2.axvspan(775, 3030, facecolor='papayawhip', alpha=0.5)
+        ax2.axvspan(5296, 7121, facecolor='papayawhip', alpha=0.5)
+    if orbit == 'first':
+        pass
+
+    ax2.legend(loc='upper center', bbox_to_anchor=(0.15, 0.97), shadow=True, ncol=2)
+
+
 
 
 

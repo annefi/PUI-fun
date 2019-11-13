@@ -2,15 +2,90 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c58623c-1821-4880-9e22-06c9e1193331" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../Inkscape/drawing_RTN.svg" beforeDir="false" afterPath="$PROJECT_DIR$/../Inkscape/drawing_RTN.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Inkscape/ulysses_cut2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Inkscape/ulysses_trajectory.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Inkscape/ulysses_trajectory_old.pdf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataLoader/pui_ulysses.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataLoader/pui_ulysses.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataLoader/ulysses_traj.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataLoader/ulysses_traj.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataLoader/uswipha.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataLoader/uswipha.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Wsky_rel.py" beforeDir="false" afterPath="$PROJECT_DIR$/Wsky_rel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ana_1d.py" beforeDir="false" afterPath="$PROJECT_DIR$/ana_1d.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ana_B.py" beforeDir="false" afterPath="$PROJECT_DIR$/ana_B.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist3D_pui_ulysses.py" beforeDir="false" afterPath="$PROJECT_DIR$/dist3D_pui_ulysses.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/load_pui_ulysses.py" beforeDir="false" afterPath="$PROJECT_DIR$/load_pui_ulysses.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plot_vsw.py" beforeDir="false" afterPath="$PROJECT_DIR$/plot_vsw.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1992_aa_tot_4_9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1993_aa_tot_10_12.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1993_phi_-5_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-30_-20/1994_157deg_-30_-20.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-30_-20/1994_157deg_-30_-20_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-30_-20/1994_157deg_-30_-20_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-30_-20/1994_157deg_-30_-20_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-30_-20/1994_180deg_-30_-20.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-30_-20/1994_180deg_-30_-20_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-30_-20/1994_180deg_-30_-20_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-30_-20/1994_180deg_-30_-20_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-30_-20/1994_202deg_-30_-20_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-30_-20/1994_202deg_-30_-20_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-30_-20/1994_202deg_-30_-20_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-5_5/1994_157deg_-5_5_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-5_5/1994_157deg_-5_5_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-5_5/1994_157deg_-5_5_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-5_5/1994_180deg_-5_5_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-5_5/1994_180deg_-5_5_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-5_5/1994_180deg_-5_5_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-5_5/1994_202deg_-5_5_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-5_5/1994_202deg_-5_5_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_-5_5/1994_202deg_-5_5_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_10_15/1994_157deg_theta_10_15_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_10_15/1994_157deg_theta_10_15_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_10_15/1994_157deg_theta_10_15_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_10_15/1994_180deg_theta_10_15_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_10_15/1994_180deg_theta_10_15_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_10_15/1994_180deg_theta_10_15_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_10_15/1994_202deg_theta_10_15_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_10_15/1994_202deg_theta_10_15_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_10_15/1994_202deg_theta_10_15_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_180deg_-30_-20.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_180deg_-5_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_180deg_theta_10_15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_aa_tot_14.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1994_aa_tot_25_26.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1995_aa_tot_20_20.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1995_phi_-5_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1997_aatot_4_9.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1997_aatot_8_10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1997_phi_-5_5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/1998_aatot_0_10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_-35_-15/2001_02_157_theta_-35_-15_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_-35_-15/2001_02_157_theta_-35_-15_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_-35_-15/2001_02_157_theta_-35_-15_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_-35_-15/2001_02_180_theta_-35_-15_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_-35_-15/2001_02_180_theta_-35_-15_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_-35_-15/2001_02_180_theta_-35_-15_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_-35_-15/2001_02_202_theta_-35_-15_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_-35_-15/2001_02_202_theta_-35_-15_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_-35_-15/2001_02_202_theta_-35_-15_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_-35_-15/2001_02_theta_-35_-15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_02_theta_-35_-15.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_180deg_35_45.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_35_45/2001_157deg_35_45_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_35_45/2001_157deg_35_45_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_35_45/2001_157deg_35_45_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_35_45/2001_180deg_35_45.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_35_45/2001_180deg_35_45_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_35_45/2001_180deg_35_45_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_35_45/2001_180deg_35_45_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_35_45/2001_202deg_35_45_vx.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_35_45/2001_202deg_35_45_vy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_35_45/2001_202deg_35_45_vz.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plots_SunPulse_Angle/2001_aatot_32_43.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trajectory/plots_trajectory/coordinates_hc_hg.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trajectory/traj_pooled.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/traj_pooled.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trajectory/trajectory_data/aa_data.dat" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/trajectory_data/aa_data.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trajectory/trajectory_data/earth_coordinates.dat" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/trajectory_data/earth_coordinates.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trajectory/trajectory_data/traj_data_ulysses_pool.dat" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/trajectory_data/traj_data_ulysses_pool.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trajectory/ul_calc_traj.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/ul_calc_traj.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old_functions/dist3D_ulysses_old.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old_functions/swics_collimator_old.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old_functions/ulysses_traj_old.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.pdf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/test_dies_das.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_dies_das.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -60,7 +135,7 @@
     <session id="2091974253">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="83" />
+          <entry key="project.closed" value="84" />
           <entry key="project.open.time.10" value="7" />
           <entry key="project.open.time.11" value="2" />
           <entry key="project.open.time.12" value="1" />
@@ -72,115 +147,56 @@
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="4" />
           <entry key="project.open.time.7" value="12" />
-          <entry key="project.open.time.8" value="35" />
+          <entry key="project.open.time.8" value="37" />
           <entry key="project.open.time.9" value="18" />
-          <entry key="project.opened" value="90" />
+          <entry key="project.opened" value="92" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="dat" value="1" />
-          <entry key="py" value="392" />
+          <entry key="py" value="405" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="391" />
+          <entry key="Python" value="404" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="18" />
-          <entry key="py" value="83226" />
+          <entry key="py" value="86109" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="18" />
-          <entry key="Python" value="83226" />
+          <entry key="Python" value="86109" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5425982">
+    <splitter split-orientation="horizontal" split-proportion="0.42555755">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="580">
-                  <caret line="45" column="51" selection-start-line="45" selection-start-column="51" selection-end-line="45" selection-end-column="51" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/swics_collimator_ulysses.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="5400">
-                  <caret line="364" column="90" selection-start-line="364" selection-start-column="90" selection-end-line="364" selection-end-column="90" />
-                  <folding>
-                    <element signature="e#0#19#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/dist3D_pui_ulysses.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="203">
-                  <caret line="458" column="8" lean-forward="true" selection-start-line="458" selection-start-column="8" selection-end-line="459" selection-end-column="65" />
-                  <folding>
-                    <element signature="e#0#47#0" expanded="true" />
-                    <element signature="e#12523#15180#0" />
-                  </folding>
+                <state relative-caret-position="220">
+                  <caret line="63" selection-start-line="63" selection-end-line="63" />
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/Wsky_rel.py">
+            <entry file="file://$PROJECT_DIR$/Plots/plots_et.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="120">
-                  <caret line="8" column="102" selection-start-line="8" selection-start-column="102" selection-end-line="8" selection-end-column="102" />
-                  <folding>
-                    <element signature="e#0#31#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/plot_wspace.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="3855">
-                  <caret line="270" column="45" selection-start-line="270" selection-start-column="45" selection-end-line="270" selection-end-column="45" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/DataLoader/uswiutils.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="120">
-                  <caret line="8" column="4" selection-start-line="8" selection-start-column="4" selection-end-line="8" selection-end-column="4" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/test_dies_das.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="790">
-                  <caret line="146" column="69" selection-start-line="146" selection-start-column="69" selection-end-line="146" selection-end-column="69" />
-                  <folding>
-                    <element signature="e#0#31#0" expanded="true" />
-                    <marker date="1573568861904" expanded="true" signature="4317:5694" ph="..." />
-                  </folding>
+                <state relative-caret-position="-1862">
+                  <caret line="33" column="21" lean-forward="true" selection-start-line="33" selection-start-column="21" selection-end-line="33" selection-end-column="21" />
                 </state>
               </provider>
             </entry>
@@ -190,57 +206,44 @@
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/ana_B.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-450">
-                  <caret line="27" column="30" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/ana_1d.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="360">
-                  <caret line="93" column="12" lean-forward="true" selection-start-line="93" selection-start-column="12" selection-end-line="93" selection-end-column="49" />
-                  <folding>
-                    <marker date="1573582645881" expanded="true" signature="6499:7601" ph="..." />
-                    <marker date="1573582645881" expanded="true" signature="7598:7601" ph="..." />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/DataLoader/uswipha.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="280">
-                  <caret line="208" column="88" selection-start-line="208" selection-start-column="88" selection-end-line="208" selection-end-column="88" />
+                <state relative-caret-position="85">
+                  <caret line="149" column="22" selection-start-line="149" selection-start-column="22" selection-end-line="149" selection-end-column="22" />
                   <folding>
                     <element signature="e#0#24#0" expanded="true" />
-                    <marker date="1573568121825" expanded="true" signature="10703:10712" ph="..." />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/DataLoader/ulysses_traj.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="90">
-                  <caret line="6" selection-start-line="6" selection-end-line="6" />
-                  <folding>
-                    <element signature="e#276#300#0" expanded="true" />
+                    <marker date="1573641340480" expanded="true" signature="10703:10712" ph="..." />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
           <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/DataLoader/pui_ulysses.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="195">
+                  <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+                  <folding>
+                    <marker date="1573677602260" expanded="true" signature="17511:19289" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Trajectory/ul_calc_traj.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-605">
+                  <caret line="126" column="12" selection-start-line="126" selection-start-column="12" selection-end-line="126" selection-end-column="12" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/WSky.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="405">
-                  <caret line="42" column="39" lean-forward="true" selection-start-line="42" selection-start-column="39" selection-end-line="42" selection-end-column="39" />
+                <state relative-caret-position="345">
+                  <caret line="26" column="24" selection-start-line="26" selection-start-column="24" selection-end-line="26" selection-end-column="24" />
                 </state>
               </provider>
             </entry>
@@ -248,7 +251,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$USER_HOME$/Python/pylib/dbData/_plotdbData.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="298">
+                <state relative-caret-position="1050">
                   <caret line="78" column="20" selection-start-line="78" selection-start-column="20" selection-end-line="78" selection-end-column="44" />
                 </state>
               </provider>
@@ -259,6 +262,18 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="90">
                   <caret line="8" selection-start-line="8" selection-end-line="9" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/DataLoader/ulysses_traj.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="513">
+                  <caret line="134" lean-forward="true" selection-start-line="134" selection-end-line="138" selection-end-column="53" />
+                  <folding>
+                    <element signature="e#276#300#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -341,11 +356,8 @@
         <option value="$PROJECT_DIR$/Trajectory/__init__.py" />
         <option value="$PROJECT_DIR$/Trajectory/calc_delta_v.py" />
         <option value="$PROJECT_DIR$/uswipha.py" />
-        <option value="$PROJECT_DIR$/Trajectory/traj_pooled.py" />
         <option value="$PROJECT_DIR$/filter_He+.py" />
-        <option value="$PROJECT_DIR$/Trajectory/ul_calc_traj.py" />
         <option value="$PROJECT_DIR$/Trajectory/ulysses_traj.py" />
-        <option value="$PROJECT_DIR$/DataLoader/pui_ulysses.py" />
         <option value="$PROJECT_DIR$/filter_He.py" />
         <option value="$PROJECT_DIR$/Durchlauf.py" />
         <option value="$PROJECT_DIR$/WSpec.py" />
@@ -364,23 +376,26 @@
         <option value="$PROJECT_DIR$/plot_wspace.py" />
         <option value="$PROJECT_DIR$/WSky.py" />
         <option value="$PROJECT_DIR$/WSlice.py" />
-        <option value="$PROJECT_DIR$/DataLoader/ulysses_traj.py" />
         <option value="$PROJECT_DIR$/plot_vsw.py" />
         <option value="$PROJECT_DIR$/load_pui_ulysses.py" />
-        <option value="$PROJECT_DIR$/DataLoader/uswipha.py" />
-        <option value="$PROJECT_DIR$/test_dies_das.py" />
         <option value="$PROJECT_DIR$/ana_1d.py" />
         <option value="$PROJECT_DIR$/dist3D_pui_ulysses.py" />
         <option value="$PROJECT_DIR$/ana_B.py" />
         <option value="$PROJECT_DIR$/Wsky_rel.py" />
+        <option value="$PROJECT_DIR$/DataLoader/uswipha.py" />
+        <option value="$PROJECT_DIR$/test_dies_das.py" />
+        <option value="$PROJECT_DIR$/Trajectory/traj_pooled.py" />
+        <option value="$PROJECT_DIR$/Trajectory/ul_calc_traj.py" />
+        <option value="$PROJECT_DIR$/DataLoader/ulysses_traj.py" />
+        <option value="$PROJECT_DIR$/DataLoader/pui_ulysses.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1277" />
     <option name="y" value="31" />
-    <option name="width" value="1682" />
-    <option name="height" value="1024" />
+    <option name="width" value="1686" />
+    <option name="height" value="1022" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -474,7 +489,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1277" y="31" width="1682" height="1024" extended-state="0" />
+    <frame x="1277" y="31" width="1686" height="1022" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49382716" weight="0.0036166366" />
@@ -519,26 +534,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/Python/pylib/dbData/_plotmod.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="804">
-          <caret line="82" column="37" selection-start-line="82" selection-start-column="37" selection-end-line="82" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../ACE/LOADER/ace_ancil.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../ACE/LOADER/ace_swics_pha.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="58">
-          <caret line="33" column="44" selection-start-line="33" selection-start-column="44" selection-end-line="33" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../ACE/LOADER/ace_swics_hk.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/../ACE/LOADER/ace_swics_pha_puis.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -649,13 +644,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Plots/plots_et.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2310">
-          <caret line="163" selection-start-line="163" selection-end-line="163" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../ACE/PUIs/ace_swics_3d/test_col.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -695,20 +683,38 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Durchlauf.py" />
-    <entry file="file://$PROJECT_DIR$/swics_collimator_ulysses.py">
+    <entry file="file://$PROJECT_DIR$/testtt.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5400">
-          <caret line="364" column="90" selection-start-line="364" selection-start-column="90" selection-end-line="364" selection-end-column="90" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="600">
+          <caret line="42" column="21" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plot_wspace.py">
+    <entry file="file://$PROJECT_DIR$/DataLoader/create_pha_mag.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3855">
-          <caret line="270" column="45" selection-start-line="270" selection-start-column="45" selection-end-line="270" selection-end-column="45" />
+        <state relative-caret-position="480">
+          <caret line="32" column="43" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plot_vsw.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="65" selection-start-line="65" selection-end-line="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/WSky.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="26" column="24" selection-start-line="26" selection-start-column="24" selection-end-line="26" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Python/pylib/dbData/_plotdbData.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1050">
+          <caret line="78" column="20" selection-start-line="78" selection-start-column="20" selection-end-line="78" selection-end-column="44" />
         </state>
       </provider>
     </entry>
@@ -719,34 +725,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/ul_calc_traj.py">
+    <entry file="file://$PROJECT_DIR$/plot_wspace.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-765">
-          <caret line="156" column="47" selection-start-line="156" selection-start-column="47" selection-end-line="156" selection-end-column="47" />
+        <state relative-caret-position="804">
+          <caret line="270" column="45" selection-start-line="270" selection-start-column="45" selection-end-line="270" selection-end-column="45" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DataLoader/ulysses_traj.py">
+    <entry file="file://$PROJECT_DIR$/Wsky_rel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        <state relative-caret-position="120">
+          <caret line="8" column="102" selection-start-line="8" selection-start-column="102" selection-end-line="8" selection-end-column="102" />
           <folding>
-            <element signature="e#276#300#0" expanded="true" />
+            <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Python/pylib/dbData/_plotdbData.py">
+    <entry file="file://$PROJECT_DIR$/swics_collimator_ulysses.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="78" column="20" selection-start-line="78" selection-start-column="20" selection-end-line="78" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testtt.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="42" column="21" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
+        <state relative-caret-position="804">
+          <caret line="364" column="90" selection-start-line="364" selection-start-column="90" selection-end-line="364" selection-end-column="90" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -757,78 +759,55 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
+    <entry file="file://$PROJECT_DIR$/Trajectory/traj_pooled.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="580">
-          <caret line="45" column="51" selection-start-line="45" selection-start-column="51" selection-end-line="45" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataLoader/uswipha.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="208" column="88" selection-start-line="208" selection-start-column="88" selection-end-line="208" selection-end-column="88" />
+        <state relative-caret-position="1710">
+          <caret line="114" selection-start-line="114" selection-end-line="114" />
           <folding>
-            <element signature="e#0#24#0" expanded="true" />
-            <marker date="1573568121825" expanded="true" signature="10703:10712" ph="..." />
+            <element signature="e#0#29#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test_dies_das.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="790">
-          <caret line="146" column="69" selection-start-line="146" selection-start-column="69" selection-end-line="146" selection-end-column="69" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-            <marker date="1573568861904" expanded="true" signature="4317:5694" ph="..." />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/old_functions/ulysses_traj_old.py">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/DataLoader/ulysses_mag_loader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="384">
+        <state relative-caret-position="525">
           <caret line="36" column="56" selection-start-line="36" selection-start-column="56" selection-end-line="36" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataLoader/create_pha_mag.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" column="43" selection-start-line="32" selection-start-column="43" selection-end-line="32" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plot_vsw.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="65" selection-start-line="65" selection-end-line="65" />
-          <folding>
-            <marker date="1573555893725" expanded="true" signature="1108:1109" ph="..." />
-            <marker date="1573555893725" expanded="true" signature="1939:1944" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ana_1d.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="93" column="12" lean-forward="true" selection-start-line="93" selection-start-column="12" selection-end-line="93" selection-end-column="49" />
+        <state relative-caret-position="804">
+          <caret line="93" column="12" selection-start-line="93" selection-start-column="12" selection-end-line="93" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ana_B.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-585">
+          <caret line="27" column="30" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataLoader/uswipha.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="149" column="22" selection-start-line="149" selection-start-column="22" selection-end-line="149" selection-end-column="22" />
           <folding>
-            <marker date="1573582645881" expanded="true" signature="6499:7601" ph="..." />
-            <marker date="1573582645881" expanded="true" signature="7598:7601" ph="..." />
+            <element signature="e#0#24#0" expanded="true" />
+            <marker date="1573641340480" expanded="true" signature="10703:10712" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dist3D_pui_ulysses.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="458" column="8" lean-forward="true" selection-start-line="458" selection-start-column="8" selection-end-line="459" selection-end-column="65" />
+        <state relative-caret-position="6150">
+          <caret line="458" column="8" selection-start-line="458" selection-start-column="8" selection-end-line="459" selection-end-column="65" />
           <folding>
             <element signature="e#0#47#0" expanded="true" />
             <element signature="e#12523#15180#0" />
@@ -836,26 +815,65 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ana_B.py">
+    <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-450">
-          <caret line="27" column="30" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
+        <state relative-caret-position="220">
+          <caret line="63" selection-start-line="63" selection-end-line="63" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/WSky.py">
+    <entry file="file://$PROJECT_DIR$/test_dies_das.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="42" column="39" lean-forward="true" selection-start-line="42" selection-start-column="39" selection-end-line="42" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Wsky_rel.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="102" selection-start-line="8" selection-start-column="102" selection-end-line="8" selection-end-column="102" />
+        <state relative-caret-position="325">
+          <caret line="164" column="5" selection-start-line="164" selection-start-column="5" selection-end-line="164" selection-end-column="5" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
+            <marker date="1573653381236" expanded="true" signature="4125:4204" ph="..." />
+            <marker date="1573653381236" expanded="true" signature="4252:4257" ph="..." />
+            <marker date="1573653381236" expanded="true" signature="5481:6059" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trajectory/ul_calc_traj.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-605">
+          <caret line="126" column="12" selection-start-line="126" selection-start-column="12" selection-end-line="126" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Plots/test_epq_steps.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Plots/plots_et.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1862">
+          <caret line="33" column="21" lean-forward="true" selection-start-line="33" selection-start-column="21" selection-end-line="33" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataLoader/ulysses_traj.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="134" lean-forward="true" selection-start-line="134" selection-end-line="138" selection-end-column="53" />
+          <folding>
+            <element signature="e#276#300#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataLoader/pui_ulysses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+          <folding>
+            <marker date="1573677602260" expanded="true" signature="17511:19289" ph="..." />
           </folding>
         </state>
       </provider>

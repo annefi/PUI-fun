@@ -206,9 +206,9 @@ class uswipha(dbData):
         if not 'd90_epq' in self.data.keys():
             self.calc_d90_epq()
 
-        bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1.)
+        #bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1.)
 
-        #bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1./24./60.)
+        bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1./24./60.)
         N, bins = histogram(mag.data['d90'], bins = bins1min)
         N[N==0] = 1.
 

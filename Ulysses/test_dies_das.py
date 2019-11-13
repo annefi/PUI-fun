@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib import pylab
+import numpy as np
 from numpy import arange, array
 from Trajectory.ulysses_traj import ulysses_traj
 from DataLoader.ulysses_mag_loader import mag_loader
@@ -117,38 +118,80 @@ def evolution_RTN():
 
 
 
+def running_mean(x, N):
+    cumsum = np.cumsum(np.insert(x, 0, 0))
+    return (cumsum[N:] - cumsum[:-N]) / float(N)
 
-def evolution_B_data():
+def average(x, N):
+    xr = x[:N*(len(x)/N)].reshape(-1,N)
+    return np.average(xr, axis = 1)
+
+
+def evolution_B_data(y, ax1 = None, ax2 = None):
     '''
     plot B data from original data file
     '''
-    fig, ax = plt.subplots(figsize=(8, 7))
-    ax.set_xlim(1994,1999)
-    ax.set_ylim(-4, 4)
+    # if ax1 is None:
+    #     fig, ax1 = plt.subplots(figsize=(8, 7))
+    # if ax2 is None:
+    #     fig2, ax2 = plt.subplots(figsize=(8, 7))
 
-    fig2, ax2 = plt.subplots(figsize=(8, 7))
+    m = mag_loader(year = y, tf = [[1, 366]])
 
-
-    d = uswipha(year = range(1997, 1999), tf = [[1, 366]], path =
-    '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/')
-    d.sync_mag()
-
-
-    mag_data = d.data['Br']
-    doy =d.data['doy']
-    year = d.data['year']
+    doy = m.data['doy']
+    year = m.data['year']
     time = year + doy/365.
 
-    ax.plot(time, d.data['Br'], marker = 'o', label = 'BR', ms = .1)
-    ax.plot(time, d.data['Bt'], marker='o', label='BT', ms = 1)
-    ax.plot(time, d.data['Bn'], marker='o', label='BN', ms = 1)
+    Babs = m.data['Babs']
+    Br = m.data['Br']/Babs
+    Bt = m.data['Bt']/Babs
+    Bn = m.data['Bn']/Babs
 
-    ax2.plot(time, d.data['Bphi'], marker = 'o', label = 'Bphi', ms = 1)
-    ax2.plot(time, d.data['Btheta'], marker='o', label='Btheta', ms=1)
 
-    ax.legend()
-    ax2.legend()
+
+    N = 1000000
+    tt = average(time, N)
+    Br = average(Br, N)
+    Bt = average(Bt, N)
+    Bn = average(Bn, N)
+
+
+    #ax1.plot(t2[::50], Br[::50], marker = 'o', label = 'BR', ms = 1, linestyle = None)
+    # ax1.plot(time, Bt, marker='o', label='BT', ms = 1, linestyle = None)
+    # ax1.plot(time, Bn, marker='o', label='BN', ms = 1, linestyle = None)
+
+    # ax2.plot(time, d.data['Bphi'], marker = 'o', label = 'Bphi', ms = 1, linestyle = None)
+    # ax2.plot(time, d.data['Btheta'], marker='o', label='Btheta', ms=1, linestyle = None)
+    #
+    # ax1.legend()
+    # ax2.legend()
     #pylab.show()
+    return tt[:], Br[:], Bt[:], Bn[:]
+
+
+def loop_years_B():
+    Br_sum = np.array([])
+    Bt_sum = np.array([])
+    Bn_sum = np.array([])
+    t_sum = np.array([])
+    Bt_a_sum = np.array([])
+    for y in [1994, 1995,1996,1997,1998]:
+        t, Br, Bt, Bn = evolution_B_data(y = y)
+        Br_sum = np.append(Br_sum, Br)
+        Bt_sum = np.append(Bt_sum, Bt)
+        Bn_sum = np.append(Bn_sum, Bn)
+        t_sum = np.append(t_sum, t)
+    fig, ax1 = plt.subplots(figsize=(8, 7))
+    ax1.plot(t_sum, Br_sum, label = 'BR')
+    ax1.legend()
+
+    fig2, ax2 = plt.subplots(figsize=(8, 7))
+    ax2.plot(t_sum, Bt_sum, label = 'BT')
+    ax2.legend()
+
+    fig3, ax3 = plt.subplots(figsize=(8, 7))
+    ax3.plot(t_sum, Bn_sum, label = 'BN', linestyle = None)
+    ax3.legend()
 
 
 
