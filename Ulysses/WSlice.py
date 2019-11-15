@@ -19,9 +19,9 @@ class WSlice():
         elif mode == 'counts':
             self.H = H0
         elif mode == 'ps':
-            H0[norm_arr == 0] = 0.
+            H0[norm_arr == 0] = -5.
             norm_arr[norm_arr == 0] = 1
-            self.H = H0 / norm_arr * 1000.
+            self.H = H0 / norm_arr
 
     def init_plot(self):
         def keypress(event):
@@ -96,9 +96,11 @@ class WSlice():
                 vmax = amax(self.H[:, slice, :])
                 if vmax < 1.:
                     vmax = 10.
+                vmin = 0.
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, slice, :].T, cmap=colormap, vmin = vmin,
                                                    vmax = vmax)
-                colormap.set_under('white')
+                colormap.set_under('gray')
+                #colormap.set_under('white')
                 self.txt_plane.set_text('%s-plane' % 'R-N')
                 self.txt_slice.set_text(r'$\mathrm{w_{sw,T} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
                 self.ax.set_xlabel(r'$\mathrm{w_{sw,R}}$')

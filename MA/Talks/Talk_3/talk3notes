@@ -1,0 +1,82 @@
+(...)
+
+[PHA Datenmatrix]
+
+Wir können also He+ identifizieren und bekommen auch den Geschwindigkeitsbetrag. 
+Eigentlich suchen wir aber die drei einzelnen Geschwindigkeitskomponenten!
+
+[FoV -- VSpace Übergang]
+Dazu muss man verstehen, wie SWICS' EpQ-Filter funktioniert. 
+Messsystem als Schnitt, das vorne ist das Eingangssystem. Im Prinzip zwei gebogene Kondensatorplatten, zwischen denen eine Spannugn U anliegt. [Formel]  Bei bekannter Spanung/'EpQ-Step', kennt man bei bekannter mpq also den Geschwindigkeitsbetrag eines einfallenden Teilchens. (Und mpq kennen wir ja, weil wir nur He+ angucken)
+
+- Jetzt können Teilchen einer festen Geschwindigkeit von hier einfallen oder von hier. Wenn man in den Geschwindigkeitsraum übergeht, übersetzt sich das in Punkte auf einem Kreisausschnitt, also mit konstanter Geschwindigkeit im SC-Frame. (Kurze Erklärung, wie der Übergang geht.) 
+
+Herkömmliches Auswertungsprinzip arbeitet so, dass über die Bögen integriert wird
+TODO: Informationsverlust, Übergang vsw-Frame nicht möglich -- dafür brauchen wir die 3D Geschwindigkeitskomponenten, im vsw-Frame nicht dieselbe Geschwindigkeit
+
+[Bild Detektor Detail]
+Einen Schritt in diese Richtung kann man gehen, wenn man SWICS Detektor genauer betrachtet: Eigentlich drei Einzeldetektoren mit unterschiedlichen Winkeln, ein Teil der Daten hat auch diese Angabe. Damit kann man die Projektion des V-Raums dreiteilen, denn man kann zuordnen, ob ein Teilchen von hier, hier oder hier gekommen ist. 
+
+TODO:
+Spin sorgt für die dritte Dimension (Instrument dreht auf SC mit) [Plot der Sektoren oder Modell zeigen]. In 8 Sektoren unterteilt.
+
+Das wird dann ganz schön kompliziert, zu kompliziert um das analytisch zu lösen [Modell zeigen]
+
+
+Deshalb haben wir ein Modell des Detektors gebaut. Der Übergang vom FoV zum V-Space funktioniert genauso, nur dass man sich jetzt in 3 Dimensionen bewegt. Kuppel entspricht dem einmal gedrehten Detektor mit Akzeptanzgschwindigkeit malgenommen (also für einen EpQ-Step und für eine Spezies). 
+
+
+
+
+
+
+- Funktion: PHA-Wort mit einer Det-Sek-EpQ-Kombi (vsw, Aspphi, theta) gemessen, wir geben jedem Detektorpunkt einen Count
+- Annahme: Phasenraumdichte über einen einzelnen Detektor ist konstant
+- Der gesamt gemessene V-Raum setzt sich zusammen aus den einzelnen Schalen
+- wir verwenden eine variable Anzahl an Detektorpunkten
+
+
+[Plot Orbit mit AA]
+[Plot Verlauf AA]
+- Verkompliziert wird das zusätzlich, wenn man sich nochmal den Ulysses Orbit anschaut. Denn die Antenne muss dauerhaft zur Erde zeigen und damit ergibt sich ein sich ständig variierender Winkel zwischen SC-Sun-Linie und Richtung der Antenne, die gleichzeitig (etwa) Spinachse des Insturments ist. Dadurch deckt das Instrument immer einen leicht anderen Teil des V-Raums ab und eine SEk-Det-Kombi hat immer eine unterschiedliche Bedeutung.
+Das heißt, dass wir die Daten zusätzlich mit den Orbitdaten synchronisiseren mussten und unser Detektor kann auch entsprechende AA berücksichtigen.
+[Bild Detektor großer AA]
+
+Plausibilät geprüft: Sonnenwindion (He2+) mit guter Statsitik genommen. Wahrscheinlich Bewegung mit dem SW-Bulk. Nur große AA gefiltert. Man erwartet, dass tendenziell der äußere Detektor getroffen wird und das sieht man auch
+[Plot Hist-Det-Sek]
+
+Wir haben also ein funktionierendes Detektormodell. Damit können wir nun 3D VDFs erstellen. 
+
+- Dafür legen wir ein Grid in die Messungen.
+Counts zählen. Nur die Counts anzugucken ist irreführend, die müssen noch normiert werden. a) Von Counts auf Phasenraumvolumen; b) Dahingehend, wie oft wir einen Detektorpunkt hätten messen können.
+Zusammenfassend: Auf das aufintegrierte Phasenraumvolumen. [Formel?]
+[Normierung zeigen]
+
+
+Weil wir 3D nur schwierig darstellen können, gibt es verschiedene Projektionen.
+Die eine Projektion 
+
+*SLICES:
+[Schema zeigen]
+[Plot zeigen], Ring zeigen, verschiedene Richtungen
+
+*MAPS:
+Um so etwas wie Ringstrukturen oder andere Anisotropien zu erkennen, ist man interessiert an den Verteilungen auf Schalen mit konstanter Geschwindigkeit im SW-Frame. Dafür wurden jetzt Schalen mit kostantem w genommen und projiziert auf so eine Kartendarstellung. Da muss man sich kurz hineindenken: Wir schauen von vorne drauf, phi, theta, warum sieht man hinten nichts...
+
+*1D:
+Besser zu analysieren und zu vergleichen: Wieder runterbrechen auf 1D, d.h. entlang der Schalen integriert
+Verschiedene Jahre zeigen -- 'Kühlen' zu verschiedenen Radien? TODO
+
+
+
+
+xxx xxx xxx Very loose ends: xxx xxx xxx
+
+x vRaum-Abdeckung zeigen inklusive Grenzen nach oben und unten. Beispiel, welche Geschwindigkeit man dann überhaupt sehen kann 
+x vsw Plot?
+x Magnetfeld überhaupt mit rein?
+x wo w einführen
+
+
+---------------------------------
+Backup
