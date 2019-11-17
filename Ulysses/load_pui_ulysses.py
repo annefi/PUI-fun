@@ -18,32 +18,33 @@ from WSky import WSky
 # # both:
 # He1 = True
 # He2 = True
-#
-# # He1+
-# He1 = True #False #
-# He2 = False #True
 
-# He2+
-He1 = False #
-He2 = True #
+# He1+
+He1 = True #False #
+He2 = False #True
+
+# # He2+
+# He1 = False #
+# He2 = True #
 
 
 # load Ulysses data:
-years = [2001]
+years = [1993]
 
 if He1:
-    d1 = uswipha(year=years, tf=[[1,366]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
+    d1 = uswipha(year=years, tf=[[1,3]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
     d1.sync_swoops()
     d1.sync_traj()
     #d1.sync_mag() # not needed anymore: new PHAs including mag data
 
-    #d1.set_mask('Master','vsw',770,800, reset = True)
+    #d1.set_mask('Master','vsw',750,800, reset = True)
     d1.set_mask('Master','rng',0,0,reset=True)
     d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
     d1.set_mask('Master','brw',1,1,reset=True)
 
     d1.set_mask('Master', 'epq', 0, 17, reset=True)
+
 
     # d1.set_mask('Master','Btheta',-20./180.*np.pi,20./180.*np.pi,reset=True)
     # d1.set_mask('Master', 'Bphi', -20. / 180. * np.pi, 20. / 180. * np.pi, reset=True)
@@ -77,7 +78,7 @@ if He1:
 
 if He2:
 
-    d2 = uswipha(year=years,tf=[[1,36]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/')
+    d2 = uswipha(year=years,tf=[[1,290]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/')
     d2.sync_swoops()
     d2.sync_traj()
 
@@ -86,7 +87,7 @@ if He2:
     d2.set_mask('Master','ech',12,250,reset=True) # exclude doubles
     d2.set_mask('Master','brw',1,np.inf,reset=True)
 
-    #d2.set_mask('Master','aa_tot', 0 , 10)
+    d2.set_mask('Master','aa_tot', 0,7)
     # d2.set_mask('Master','aspphi', 1,5)
     # d2.set_mask('Master','asptheta',5,7)
 

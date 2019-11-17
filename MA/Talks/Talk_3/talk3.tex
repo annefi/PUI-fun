@@ -5,6 +5,8 @@
 \usepackage[makeroom]{cancel}
 \usepackage{tikz}
 
+\setbeamercolor{background canvas}{bg=white}
+
 \tikzstyle{every picture}+=[remember picture]
 \usetikzlibrary{arrows,positioning}
 \tikzset{
@@ -326,6 +328,16 @@
 \end{frame}
 
 
+\begin{frame}{}
+\begin{figure}
+	\includegraphics[scale=0.28]{Pics/HG_coord.pdf}
+	
+\end{figure}
+\end{frame}
+
+
+
+
 
 
 %%%
@@ -439,168 +451,64 @@
 %%%
 
 %%%
-% TEST:
-
-\begin{frame}{Conclusion of the Measurement}
-	\begin{minipage}{.2\textwidth}
-		\begin{tikzpicture}
-		\node [inner sep=0pt,above right] 
-		{\includegraphics[scale=.09]{Pics/SWICS_measurement_gerade.pdf}};
-		% show origin
-		%\fill (4,1) circle (2pt);
-		% define destination coordinates
-		\path (4.2,1) coordinate (a);
-		\end{tikzpicture}
-		
-		
-		\begin{tikzpicture}
-		\node [inner sep=0pt,above right] 
-		{\includegraphics[scale=.08]{Pics/first_orbit.pdf}};
-		% show origin
-		%\fill (4,1) circle (2pt);
-		% define destination coordinates
-		\path (4,1.2) coordinate (b);
-		\end{tikzpicture}
-		\vspace{-0.8cm}
-		
-		\begin{tikzpicture}
-		\node [inner sep=0pt,above right] 
-		{\includegraphics[scale=.25]{Pics/figure_1-1_swics.pdf}};
-		% show origin
-		%\fill (4,1) circle (2pt);
-		% define destination coordinates
-		\path (4,2) coordinate (c);
-		\end{tikzpicture}
-	\end{minipage}
-\hspace{3.5cm}
-	\begin{minipage}{.15\textwidth}
-		\begin{tikzpicture}[node distance=2cm, auto,]
-		\node[punkt] (21) {$\frac{E}{q}, ToF, E_{res}$};
-		\end{tikzpicture}
-		
-			\begin{tikzpicture}[node distance=1cm, auto,]
-		\node[punkt] (22) {$x, y, z$};
-		\end{tikzpicture}
-		
-			\begin{tikzpicture}[node distance=1cm, auto,]
-		\node[punkt] (23) {sector \& \\ detector};
-		\end{tikzpicture}
-	\end{minipage}
-\hspace{0.7cm}
-	\begin{minipage}{.2\textwidth}
-			\begin{mdframed}[roundcorner=4pt,userdefinedwidth=2.5cm,
-			align
-			=center,
-			linecolor
-			=black,backgroundcolor=green!8,
-			linewidth
-			=1pt]
-			 {\large $m, q$\\ $x, y, z$ \\ $\vec{v}_x, \vec{v}_y, \vec{v}_z$}
-		\end{mdframed}
-	\end{minipage}
 
 
-\begin{tikzpicture}[overlay]
-\draw[->,very thick] (a) to (21.west);
-\draw[->, very thick] (b) to (22.west);
-\draw[->,very thick] (c) to (23.west);
-\end{tikzpicture}
+\begin{frame}{}
+\includegraphics[scale=0.35]{Pics/coll_3shells.pdf}
 \end{frame}
+
 %%%
-\subsection{Trajectory}
-\begin{frame}{Ulysses Trajectory}
-	\vspace{.1cm}
-\begin{figure}									
-	\includegraphics[scale=0.25]{Pics/first_orbit.pdf}
-	\caption{\tiny{\begin{center}
-				\textit{www.cosmos.esa.int, 2019}\end{center}}}
+
+
+\begin{frame}{}
+\begin{figure}
+	\includegraphics[scale=0.3]{Pics/RTN_AA.pdf}
 \end{figure}
 \end{frame}
+
 %%%
-\begin{frame}{Ulysses Trajectory -- Coordinate System}
-	%\vspace{-3cm}
-	\begin{center}
-		\includegraphics[scale=.75]{Pics/aa0.pdf} \\
-		\vspace{0.8cm}
-			Spacecraft orientated coordinate system:\\
-		\textbf{R}adial \textbf{T}angential \textbf{N}ormal
-		\end{center}
+
+\begin{frame}{}
+\begin{figure}
+	\includegraphics[scale=0.3]{Pics/aa_new.pdf}
+\end{figure}
 \end{frame}
+
 %%%
-\begin{frame}{Ulysses Trajectory -- Aspect Angle}
-	\begin{center}
-	\includegraphics[scale=.5]{Pics/aa1.pdf}
-	%\only<2>{\includegraphics[scale=.5]{Pics/aa1.pdf}}\\
-	\vspace{0.3cm}
-	\textbf{Aspect Angle}: Angle between Ulysses' antenna ($\rightarrow$ earth) and  viewing line Ulysses $\leftrightarrow$ sun
-\end{center}
-\end{frame}
-%%%
-\begin{frame}{VDF -- Aspect Angle}
-	\vspace{1.cm}
-	\includegraphics[scale=0.4]{Pics/V-Spacetest.pdf}
-	\includegraphics[scale=0.35]{Pics/figure_2-1_swics.pdf}
-	\begin{columns}
-		\vspace{1.5cm}
-		\column[]{5cm}
-		\begin{center}
-			Aspect Angle $= 0 ^{\circ}$
-		\end{center}
-		\column[]{5cm}
-		\begin{center}
-			Aspect Angle $> 0 ^{\circ}$
-		\end{center}
-	\end{columns}
-\end{frame}
-%%%
-\begin{frame}{Outlook: ACE SWICS -- 3D measurement}
-	\begin{columns}
-		\hspace{-1cm}
-		\column{5cm}
+
+\begin{frame}{}
+\begin{columns}
+	\column[]{6.cm}
 		\begin{figure}
-			\includegraphics[scale=0.18]{Pics/lars_result_yz.pdf}
-				\caption{\tiny{\begin{center}
-						\textit{Berger, AGU Fall Meeting 2018}\end{center}}}
+			\includegraphics[scale=0.4]{Pics/coll_aa.pdf}
 		\end{figure}
-		
-		\column{5cm}
+	\column[]{7.5cm}
 		\begin{figure}
-			\includegraphics[scale=0.2]{Pics/sw_pui_gloeckler.png}
-				\caption{\tiny{\begin{center}
-						\textit{Gloeckler et al., 1999}\end{center}}}
+			\includegraphics[scale=0.4]{Pics/hist_det_sec_aa_90days2001.pdf}
 		\end{figure}
-		
-		
-	\end{columns}
+\end{columns}
 \end{frame}
+
+%%%
+
+\begin{frame}{}
+
+\end{frame}
+
+%%%
+
+\begin{frame}{}
+
+\end{frame}
+
+
 \section{Outlook \& Conclusion}
 %%%
+
 \begin{frame}[plain]{Conclusion}
-	\begin{columns}
-		\column{5cm}
-		\begin{itemize}
-			\item Pickup Ions basic concepts
-			\item Ulysses SWICS
-			\begin{itemize}
-				\item Principle of measurement
-				\item Data \& Software
-				\item Coordinate Systems
-			\end{itemize}
-		\end{itemize}
 
-
-		\column{4cm}
-
-		\includegraphics[scale=0.06]{Pics/ULYSSES-SWICS.jpg}
-
-	\end{columns}
-	\vspace{1cm}
-		\hrulefill
-	\vspace{0.5cm}
-
-Next: \\
-Creating and analysing 3D VDFs based on Ulysses SWICS data
 \end{frame}
+
 %
 %
 %

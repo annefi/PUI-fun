@@ -34,7 +34,7 @@ matplotlib.rcParams.update({'font.size': 12,
 
 class Dist3D(object):
     def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., v_sc_step=1., nrs_perp=3, nrs_para=9,
-                 nrs_sec=12, nrs_epq=3, vswstep = 1, ion="He1+", offset_sp=180., sc_vel=False):
+                 nrs_sec=6, nrs_epq=3, vswstep = 1, ion="He1+", offset_sp=180., sc_vel=False):
 
         # nrs_perp: 3, nrs_para: 9, nrs_sec: 6, nrs_epq: 3
         """
@@ -585,7 +585,7 @@ class Dist3D(object):
 
         return norm_arr
 
-    def calc_w3dspecs(self, vsw = [0,1000], doys = [0,365], wbins=arange(-2., 2.01, 0.2),aspphi=(-30., 45.)):
+    def calc_w3dspecs(self, vsw = [0,1000], doys = [0,365], wbins=arange(-2., 2.01, 0.2)):
         """
         Calculates w spectra in slices
         vswbins: for masking vsw
@@ -756,16 +756,19 @@ class Dist3D(object):
         self.bins_det = bins_det
         self.bins_sec = bins_sec
         if polar == True:
-            fig = plt.figure(figsize=(3, 3))
+            fig = plt.figure()
             ax = plt.subplot(111, projection='polar')
             ax.set_ylim(0, 2.8)
             ax.set_yticks([])
             ax.set_theta_zero_location('N')
             ax.set_xticks([x + (2 * pi / 16.) for x in linspace(0, 2 * pi, 8, endpoint=False)])
-            ax.set_xticklabels([str(i) for i in arange(0, 8, 1)])
+            ax.set_xticklabels([str(i) for i in arange(0, 8, 1)], fontweight = 'bold')
             radbins_sec = linspace(0, 2 * pi, 9)
             fullbins_det = array([3.2, 2, 1, 0])
-            Mesh = ax.pcolormesh(radbins_sec, fullbins_det, C, cmap=colormap, norm=colors.LogNorm())
+            vmin = amin(C[C>0])
+            vmax = max(10.2**3,C.max())
+            Mesh = ax.pcolormesh(radbins_sec, fullbins_det, C, cmap=colormap, vmin = vmin, vmax = vmax, norm=colors.LogNorm())
+
         else:
             fig, ax = plt.subplots()
             ax.set_xlabel('Detector')
@@ -787,8 +790,9 @@ class Dist3D(object):
                 tick.tick1line.set_markersize(0)
                 # tick.label1.set_horizontalalignment('center')
             Mesh = ax.pcolormesh(bins_det, bins_sec, C.T, cmap=colormap, norm=colors.LogNorm())
-        colormap.set_under('white')
-        cb = plt.colorbar(Mesh, ax=ax, extend='max')
+        colormap.set_under('gray')
+        cb = plt.colorbar(Mesh, ax=ax, ticks=[10**0, 10**1, 10**2, 10**3, 10**4, 10**5], pad = .1)
+        cb.set_label('# PHA', fontsize = 14, labelpad= 14)
 
 
  ####################################################################################

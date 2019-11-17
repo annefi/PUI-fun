@@ -26,7 +26,7 @@ matplotlib.rcParams.update({'font.size': 12,
 
 
 class collimator(object):
-    def __init__(self, nrs_para=4, nrs_perp=2, nrs_sec=1, edges=True, aspphi=0.00001, asptheta=0.00001, vel=600.,
+    def __init__(self, nrs_para=4, nrs_perp=2, nrs_sec=1, edges=False, aspphi=0.00001, asptheta=0.00001, vel=600.,
                  vsw=700, offset_sp = 180.):
         """
         Class to calculate the field of view of SWICS (Ulysses) nrs_para,nrs_perp -> number of angle steps for
@@ -462,16 +462,21 @@ class collimator(object):
             ax.set_xlim(-vel/3., vel*5/3.)
             ax.set_ylim(-vel, vel)
             ax.set_zlim(-vel, vel)
-            ax.set_xlabel(r'$v_R$ / $km\,s^{-1}$', labelpad = 19, va = 'baseline')
-            ax.set_ylabel(r'$v_T$ / $km\,s^{-1}$', labelpad = 39, va = 'baseline', ha = 'left')
-            ax.set_zlabel(r'$v_N$ / $km\,s^{-1}$', labelpad = 39, va = 'baseline', ha = 'right')
+            # ax.set_xlabel(r'$v_R$ / $km\,s^{-1}$', labelpad = 19, va = 'baseline')
+            # ax.set_ylabel(r'$v_T$ / $km\,s^{-1}$', labelpad = 39, va = 'baseline', ha = 'right')
+            # ax.set_zlabel(r'$v_N$ / $km\,s^{-1}$', labelpad = 39, va = 'baseline', ha = 'right')
+
+            ax.set_xlabel(r'$v_R$ / $km\,s^{-1}$', labelpad = 19)
+            ax.set_ylabel(r'$v_T$ / $km\,s^{-1}$', labelpad = 19)
+            ax.set_zlabel(r'$v_N$ / $km\,s^{-1}$', labelpad = 19)
 
 
-            ax.set_yticklabels(ax.get_yticks(), rotation=-15, va='center', ha='right')
-            ax.set_zticklabels(ax.get_yticks(), va='center', ha='right')
+            # ax.set_yticklabels(ax.get_yticks(), rotation=-15, va='center', ha='right')
+            # ax.set_zticklabels(ax.get_yticks(), va='center', ha='right')
 
             # SC spin axis:
-            #ax.plot([0, self.rax[0]*2*vel], [0, self.rax[1]*2*vel], [0, -self.rax[2]*2*vel], "-", color="orange")
+            ax.plot([0, self.rax[0]*2*vel], [0, self.rax[1]*2*vel], [0, -self.rax[2]*2*vel], "-", color="crimson",
+                    zorder = 10., lw=1.8)
         colors = array([[77, 77, 0], [77, 57, 0], [77, 0, 0], [77, 0, 57], [38, 0, 77], [0, 38, 77], [0, 77, 77],
                         [0, 77, 19]])
         if isinstance(sec, int):
@@ -505,19 +510,17 @@ class collimator(object):
                 for j in range(nrs_det):
                     cc[j*nrs_pts : (j+1)*nrs_pts] = lighten_color(rgb, factor=shade_arr[j]) / 255.
 
-                # ax.scatter(v[..., s, 0, :], v[..., s, 1, :], v[..., s, 2, :], c=cc, s = 12, alpha = 0.6)
-                # ax.scatter(0, 0, 0, c='k', s=25)  # origin dot
-                # ax.plot([0, 3 * vel], [0, 0], [0, 0], c='k', lw=1.8, zorder = 10.)
-                # ax.view_init(elev=16., azim=-14)
-
-
-                # for many shells:
-                ax.scatter(v[..., s, 0, :], v[..., s, 1, :], v[..., s, 2, :], c=cc, s=18, alpha=0.3)
+                ax.scatter(v[..., s, 0, :], v[..., s, 1, :], v[..., s, 2, :], c=cc, s = 12, alpha = 0.6)
                 ax.scatter(0, 0, 0, c='k', s=25)  # origin dot
-                ax.plot([0, 3 * vel], [0, 0], [0, 0], c='k', lw=1.8)
-                ax.view_init(elev=18., azim=-137)
+                ax.plot([0, 3 * vel], [0, 0], [0, 0], c='k', lw=1.8, zorder = 10.)
+                ax.view_init(elev=16., azim=-14)
 
-
+                #
+                # # for many shells:
+                # ax.scatter(v[..., s, 0, :], v[..., s, 1, :], v[..., s, 2, :], c=cc, s=18, alpha=0.5)
+                # ax.scatter(0, 0, 0, c='k', s=25)  # origin dot
+                # ax.plot([0, 3 * vel], [0, 0], [0, 0], c='k', lw=1.8)
+                # ax.view_init(elev=18., azim=-137)
 
         else:
             print("no valid sector given")
