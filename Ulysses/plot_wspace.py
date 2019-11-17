@@ -29,8 +29,8 @@ class Plot_wspace(object):
     Class for plotting FoV, vspace or wspace with a reduced number of dtector points. Works on an uswipha instance
     and used the resp. bins for vsw, aspphi, asptheta
     '''
-    def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=2, nrs_para=3,
-                 nrs_sec=3, nrs_epq=1, vswstep = 10, ion="He1+", offset_sp=180., sc_vel=True):
+    def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=4, nrs_para=12,
+                 nrs_sec=1, nrs_epq=1, vswstep = 10, ion="He1+", offset_sp=180., sc_vel=True):
 
         # nrs_perp: 3, nrs_para: 9, nrs_sec: 6, nrs_epq: 3
         """
@@ -192,9 +192,9 @@ class Plot_wspace(object):
             ax.set_xlim(-600, 600)
             ax.set_ylim(-600, 600)
             ax.set_zlim(-600, 600)
-            ax.set_xlabel('x')
-            ax.set_ylabel('y')
-            ax.set_zlabel('z')
+            ax.set_xlabel(r'R / $kms^{-1}$', labelpad = 20)
+            ax.set_ylabel(r'T / $kms^{-1}$', labelpad = 20)
+            ax.set_zlabel(r'N / $kms^{-1}$', labelpad = 20)
         colors = array([[77, 77, 0], [77, 57, 0], [77, 0, 0], [77, 0, 57], [38, 0, 77], [0, 38, 77], [0, 77, 77],
                         [0, 77, 19]])
         if isinstance(sec, int):
@@ -274,3 +274,7 @@ class Plot_wspace(object):
         x,y,z = self.vspace[0,6,0,0,0,:,-1]
         print(x,y,z)
         ax.scatter(x,y,z, s = 20, c = 'red')
+
+
+
+

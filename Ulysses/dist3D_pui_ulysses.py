@@ -14,15 +14,22 @@ import time
 from matplotlib.ticker import (MultipleLocator, FormatStrFormatter,
                                AutoMinorLocator)
 
-matplotlib.rcParams.update({'font.size': 14,
-                            'xtick.major.size': 13,
-                            'xtick.major.width': 2,
-                            'xtick.minor.size': 8,
+matplotlib.rcParams.update({'font.size': 12,
+                            'xtick.major.size': 8,
+                            'xtick.major.width': 1.5,
+                            'xtick.minor.size': 5,
                             'xtick.minor.width': 1,
-                            'ytick.major.size': 13,
-                            'ytick.major.width': 2,
-                            'ytick.minor.size': 8,
-                            'ytick.minor.width': 1})
+                            'ytick.major.size': 8,
+                            'ytick.major.width': 1.5,
+                            'ytick.minor.size': 5,
+                            'ytick.minor.width': 1,
+                            'xtick.direction': 'inout',
+                            'ytick.direction': 'inout',
+                            'figure.subplot.left':0.12,
+                            'figure.subplot.bottom': 0.15,
+                            'figure.subplot.right': 0.9,
+                            'figure.subplot.top': 0.94,
+                            'figure.figsize': (7,4.5)})
 
 
 class Dist3D(object):

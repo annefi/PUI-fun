@@ -22,23 +22,26 @@ Spin sorgt für die dritte Dimension (Instrument dreht auf SC mit) [Plot der Sek
 
 Das wird dann ganz schön kompliziert, zu kompliziert um das analytisch zu lösen [Modell zeigen]
 
-
-Deshalb haben wir ein Modell des Detektors gebaut. Der Übergang vom FoV zum V-Space funktioniert genauso, nur dass man sich jetzt in 3 Dimensionen bewegt. Kuppel entspricht dem einmal gedrehten Detektor mit Akzeptanzgschwindigkeit malgenommen (also für einen EpQ-Step und für eine Spezies). 
-
+Deshalb haben wir ein Modell des Detektors gebaut.
 
 
 
+Der Übergang vom FoV zum V-Space funktioniert genauso, nur dass man sich jetzt in 3 Dimensionen bewegt.
+[FoV einen Sec zeigen (mit Pfeilen)] Originalgeometrie genommen mit einer variablen Anzahl an sensitiven Detektorpunkten. 
+[denselben Sektor im v-Space] V-Space erhält man durch Invertierung und Malnehmen mit zu Epq-Step gehörendem Geschwindigkeitsbetrag (Akzeptanzgeschw)
+[gedreht im v-Space] Hier haben wir Schale mit EpQ = ...
+
+Der gesamte messbare V-Raum ergibt sich, wenn wir alle EpQ-Schalen berücksichtigen [Plot mehrere Schalen]
+ 
 
 
 - Funktion: PHA-Wort mit einer Det-Sek-EpQ-Kombi (vsw, Aspphi, theta) gemessen, wir geben jedem Detektorpunkt einen Count
 - Annahme: Phasenraumdichte über einen einzelnen Detektor ist konstant
-- Der gesamt gemessene V-Raum setzt sich zusammen aus den einzelnen Schalen
-- wir verwenden eine variable Anzahl an Detektorpunkten
 
 
 [Plot Orbit mit AA]
 [Plot Verlauf AA]
-- Verkompliziert wird das zusätzlich, wenn man sich nochmal den Ulysses Orbit anschaut. Denn die Antenne muss dauerhaft zur Erde zeigen und damit ergibt sich ein sich ständig variierender Winkel zwischen SC-Sun-Linie und Richtung der Antenne, die gleichzeitig (etwa) Spinachse des Insturments ist. Dadurch deckt das Instrument immer einen leicht anderen Teil des V-Raums ab und eine SEk-Det-Kombi hat immer eine unterschiedliche Bedeutung.
+- Verkompliziert wird das zusätzlich, wenn man sich nochmal den Ulysses Orbit anschaut. Denn die Antenne muss dauerhaft zur Erde zeigen und damit ergibt sich ein sich ständig variierender Winkel zwischen SC-Sun-Linie und Richtung der Antenne, die gleichzeitig (etwa) Spinachse des Instruments ist. Dadurch deckt das Instrument immer einen leicht anderen Teil des V-Raums ab und eine SEk-Det-Kombi hat immer eine unterschiedliche Bedeutung.
 Das heißt, dass wir die Daten zusätzlich mit den Orbitdaten synchronisiseren mussten und unser Detektor kann auch entsprechende AA berücksichtigen.
 [Bild Detektor großer AA]
 
@@ -47,6 +50,20 @@ Plausibilät geprüft: Sonnenwindion (He2+) mit guter Statsitik genommen. Wahrsc
 
 Wir haben also ein funktionierendes Detektormodell. Damit können wir nun 3D VDFs erstellen. 
 
+
+Unübersichtlich, deshalb zurück zu 2D: Schnitt durch *diese* Ebene.
+
+
+- Übergang von v zu w
+
+- Übergang SC-frame -- SW-frame
+
+- w- bzw. v-Kugel reinlegen
+- Abdeckung? (wie verändert sich das bei unterschiedlicher vsw?)
+
+
+
+
 - Dafür legen wir ein Grid in die Messungen.
 Counts zählen. Nur die Counts anzugucken ist irreführend, die müssen noch normiert werden. a) Von Counts auf Phasenraumvolumen; b) Dahingehend, wie oft wir einen Detektorpunkt hätten messen können.
 Zusammenfassend: Auf das aufintegrierte Phasenraumvolumen. [Formel?]
@@ -54,7 +71,7 @@ Zusammenfassend: Auf das aufintegrierte Phasenraumvolumen. [Formel?]
 
 
 Weil wir 3D nur schwierig darstellen können, gibt es verschiedene Projektionen.
-Die eine Projektion 
+
 
 *SLICES:
 [Schema zeigen]
@@ -76,6 +93,7 @@ x vRaum-Abdeckung zeigen inklusive Grenzen nach oben und unten. Beispiel, welche
 x vsw Plot?
 x Magnetfeld überhaupt mit rein?
 x wo w einführen
+x wo/überhaupt Koordinatensystem einführen
 
 
 ---------------------------------
