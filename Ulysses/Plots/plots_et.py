@@ -1,6 +1,5 @@
 import matplotlib
 import matplotlib.pyplot as plt
-from custom_colours import lighten_color
 import matplotlib.colors as colors
 import matplotlib.ticker as ticker
 from numpy import *
@@ -12,11 +11,11 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 matplotlib.rcParams.update({'font.size': 12,
                             'xtick.major.size': 8,
-                            'xtick.major.width': 1.5,
+                            'xtick.major.width': 1.0,
                             'xtick.minor.size': 5,
                             'xtick.minor.width': 1,
                             'ytick.major.size': 8,
-                            'ytick.major.width': 1.5,
+                            'ytick.major.width': 1.0,
                             'ytick.minor.size': 5,
                             'ytick.minor.width': 1,
                             'xtick.direction': 'inout',
@@ -49,6 +48,7 @@ def plot_epq_all():
 
 
 def plot_et_matrix_m():
+    # manually without dbData
     d = uswipha(year = [1993,1994], tf = [[1,366]])
     d.set_mask('Master','epq',24,24)
     d.set_mask('Master','ech',10,2400)
@@ -78,7 +78,11 @@ def plot_et_matrix_m():
 
 
 
-def plot_epq_all_m(d):
+def plot_epq_all_m():
+    # manually without dbData
+    d = uswipha(year=[1993, 1994], tf=[[1, 366]])
+    d.set_mask('Master', 'ech', 10, 2400)
+
     fig, ax = plt.subplots()
     valx = d.get_data('Master','tch')
     valy = d.get_data('Master','epq')

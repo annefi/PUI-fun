@@ -29,15 +29,15 @@ He2 = False #True
 
 
 # load Ulysses data:
-years = [1993]
+years = [1994]
 
 if He1:
-    d1 = uswipha(year=years, tf=[[1,3]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
+    d1 = uswipha(year=years, tf=[[1,136]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
     d1.sync_swoops()
     d1.sync_traj()
     #d1.sync_mag() # not needed anymore: new PHAs including mag data
 
-    #d1.set_mask('Master','vsw',750,800, reset = True)
+    d1.set_mask('Master','vsw',750,760, reset = True)
     d1.set_mask('Master','rng',0,0,reset=True)
     d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles

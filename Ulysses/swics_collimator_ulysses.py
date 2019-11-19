@@ -5,23 +5,23 @@ import matplotlib.pyplot as plt
 from custom_colours import lighten_color
 import matplotlib
 from DataLoader.uswiutils import getvelocity
-
-matplotlib.rcParams.update({'font.size': 12,
-                            'xtick.major.size': 8,
-                            'xtick.major.width': 1.5,
-                            'xtick.minor.size': 5,
-                            'xtick.minor.width': 1,
-                            'ytick.major.size': 8,
-                            'ytick.major.width': 1.5,
-                            'ytick.minor.size': 5,
-                            'ytick.minor.width': 1,
-                            'xtick.direction': 'inout',
-                            'ytick.direction': 'inout',
-                            'figure.subplot.left':0.00,
-                            'figure.subplot.bottom': 0.04,
-                            'figure.subplot.right': 0.98,
-                            'figure.subplot.top': 0.99,
-                            'figure.figsize': (7,4.5)})
+#
+# matplotlib.rcParams.update({'font.size': 12,
+#                             'xtick.major.size': 8,
+#                             'xtick.major.width': 1.5,
+#                             'xtick.minor.size': 5,
+#                             'xtick.minor.width': 1,
+#                             'ytick.major.size': 8,
+#                             'ytick.major.width': 1.5,
+#                             'ytick.minor.size': 5,
+#                             'ytick.minor.width': 1,
+#                             'xtick.direction': 'inout',
+#                             'ytick.direction': 'inout',
+#                             'figure.subplot.left':0.00,
+#                             'figure.subplot.bottom': 0.04,
+#                             'figure.subplot.right': 0.98,
+#                             'figure.subplot.top': 0.99,
+#                             'figure.figsize': (7,4.5)})
 
 
 
@@ -80,7 +80,7 @@ class collimator(object):
         self._rot_aspang()
         self._rot_seczero()
         self._calc_FoV()
-        # # self._calc_vspace()
+        # self._calc_vspace()
 
     def ana_plot(self, ax = None):
         # simple plot for checking directions
@@ -107,21 +107,21 @@ class collimator(object):
         ax.plot(self.det2[0, :], self.det2[1, :], self.det2[2, :], "o", color="forestgreen", ms=4.)
         ax.plot(self.det3[0, :], self.det3[1, :], self.det3[2, :], "o", color="lawngreen", ms=4.)
         # # # axes for AA-rotation:
-        ax.plot([0, self.rphiax[0] * 2.5], [0, self.rphiax[1] * 2.5], [0, self.rphiax[2] * 2.5], "-", color="peru",
-                ls=":", label = 'asp_phi rotation axis')
-        ax.plot([0, self.rthetaax[0] * 2.5], [0, self.rthetaax[1] * 2.5], [0, self.rthetaax[2] * 2.5], "-",
-                color="burlywood",
-                ls=":", label = 'asp_phi rotation axis')
-        # Spacecraft Z-Axis (Spacecraft rotation axis, direction mostly Sunward):
-        ax.plot([0, self.rax[0]], [0, self.rax[1]], [0, self.rax[2]], "-", color="orange", label = 'SC rotation axis')
-        # Swics Z-Axis relative to rotation axis:
-        ax.plot([0, self.rzax[0]], [0, self.rzax[1]], [0, self.rzax[2]], "-", color="lime", label = 'SWICS z-axis initial')
-        # # viewing direction sunpulser when triggered (=sec0)
-        ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow",
-               lw=3., label = 'sunpulser viewing when triggered')
-        # #rotated rzax
-        ax.plot([0, self.rzaxrot[0]], [0, self.rzaxrot[1]], [0, self.rzaxrot[2]], "-", color="limegreen",
-                label = 'SWICS z-axis rotated')
+        # ax.plot([0, self.rphiax[0] * 2.5], [0, self.rphiax[1] * 2.5], [0, self.rphiax[2] * 2.5], "-", color="peru",
+        #         ls=":", label = 'asp_phi rotation axis')
+        # ax.plot([0, self.rthetaax[0] * 2.5], [0, self.rthetaax[1] * 2.5], [0, self.rthetaax[2] * 2.5], "-",
+        #         color="burlywood",
+        #         ls=":", label = 'asp_phi rotation axis')
+        # # Spacecraft Z-Axis (Spacecraft rotation axis, direction mostly Sunward):
+        # ax.plot([0, self.rax[0]], [0, self.rax[1]], [0, self.rax[2]], "-", color="orange", label = 'SC rotation axis')
+        # # Swics Z-Axis relative to rotation axis:
+        # ax.plot([0, self.rzax[0]], [0, self.rzax[1]], [0, self.rzax[2]], "-", color="lime", label = 'SWICS z-axis initial')
+        # # # viewing direction sunpulser when triggered (=sec0)
+        # ax.plot([0, self.spax[0] * 0.5], [0, self.spax[1] * 0.5], [0, self.spax[2] * 0.5], "-", color="yellow",
+        #        lw=3., label = 'sunpulser viewing when triggered')
+        # # #rotated rzax
+        # ax.plot([0, self.rzaxrot[0]], [0, self.rzaxrot[1]], [0, self.rzaxrot[2]], "-", color="limegreen",
+        #         label = 'SWICS z-axis rotated')
         ax.legend(loc=4)
         return ax
 

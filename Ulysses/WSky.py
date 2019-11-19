@@ -71,15 +71,15 @@ class WSky():
             H0[norm_arr == 0] = -5
             norm_arr[norm_arr == 0] = 1
             self.H = H0 / norm_arr
-        #
-        # # cut out extra high values (at the edges: only few counts) that destroy the colormap:
-        # for shell in range(len(self.wshellbins)-1):
-        #     for i in range(4):
-        #             print(self.H[:, :, shell].max())
-        #             self.H[:, :, shell][self.H[:, :, shell] > (mean(self.H[:, :, shell]) + 3 * std(self.H[:, :,
-        #                                                                                            shell]))] = 0
-        #             print(self.H[:, :, shell].max())
-        #             print(shell)
+
+        # cut out extra high values (at the edges: only few counts) that destroy the colormap:
+        for shell in range(len(self.wshellbins)-1):
+            for i in range(4):
+                    print(self.H[:, :, shell].max())
+                    self.H[:, :, shell][self.H[:, :, shell] > (mean(self.H[:, :, shell]) + 3 * std(self.H[:, :,
+                                                                                                   shell]))] = 0
+                    print(self.H[:, :, shell].max())
+                    print(shell)
 
 
     def init_plot(self):
