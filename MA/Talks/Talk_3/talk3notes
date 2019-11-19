@@ -2,23 +2,41 @@ Einleitung/Motivation:
 
 PUIs mit Ulysses, 3D VDF Verteilungen
 
-1. Ionisationsprozesse: Photoionisation, Charge Exchange, Electron Impact. Ionisiertes Teilchen ist dann den elektromagnetischen Kräften in der Heliosphäre ausgesetzt.
+1) Ionisationsprozesse: Photoionisation, Charge Exchange, Electron Impact. Ionisiertes Teilchen ist dann den elektromagnetischen Kräften in der Heliosphäre ausgesetzt.
+
+2) Messung, typisches Spektrum, im SC frame und auf 1D reduziert, Achsen erklären
+PUIs: konstant hohe Diche mit CutOff, dort ein relativ rascher Abfall
+1D reduzier, dabei eigentlih ein mehrdiemnsionales Problem (s.Achsenbeschriftung), eigentlicher Bezugsframe: SW
+
+Wie kommt es zu diesem Spektrum?
+3) PU Prozess: Relative Motion -> Gyro Motion
 
 
 
-
-3. PU Prozess: Relative Motion -> Gyro Motion
-
-
-
-
-
+7) Erwartung: Isotropie. Aber wenn man bei verschiedenen B-Konfigurationen guckt, sieht man gewaltige Unterschiede. Spricht nicht für Isotropie und für eine Unabhängigkeit vom B-Feld
+PLASTIC: Bei w = 1, in dem gezeichneten Kreis sieht man bei zum SW senkrechten MF ein FEature erhöhter PRD, das sich mitzubewegen scheint, bei radialem MF nicht
 
 Ulysses: Orbit > unique data
 
-EpQ measurement, angular resolution: 1: ... 2.: insbesondere schwer, in den sw-frame überzugehen, s. Beispiel. 3. Bei den Treble Coincidences zusätzliche Information...
+EpQ measurement, angular resolution: 1: ... 2.: insbesondere schwer, in den sw-frame überzugehen, s. Beispiel. Man mischt da ganz viel. 3. Bei den Treble Coincidences zusätzliche Information...
+(Spin)
+Kollimator ist aber nicht gerade! (Modell zeigen)
+
+14) Grobes Raster, wir können 24 Richtungen unterscheiden. Schwarz zeigt immer radial, also Bewegung von der Sonne zum SC
 
 
+PHA-Wort:Count -> auf das gesamte Pixel verteilt, weil ein Teilchen von hier oder hier hätte kommen können.
+
+
+20) Wir haben durch die verteilung ein kartesisches w-Raster gelegt
+Counts, die zu verschiedenen Bedingungen aufsummiert wurden. Und zu verschiedenen AAs, immer unterschiedlich geguckt
+
+21) Wie groß ist das abgescannte Phasenraumvolumen, aus dem die Messungen stammen?
+
+Man sieht z.B: hier hat das Instrument viel hingeguckt, hier hat er dadurch hohe Counts
+
+23) Was kann man mit diesem Werkzeug nun machen? Z.B. Torusfeature bfeldabhängig untersuchen, kürzere Zeiträume angucken
+Man sieht: Es funkioniert
 
 
 
@@ -26,6 +44,7 @@ EpQ measurement, angular resolution: 1: ... 2.: insbesondere schwer, in den sw-f
 (...)
 
 [PHA Datenmatrix]
+Nur Tripelkoinzidenzen, für die haben wir die Richtungsauflösung
 
 Wir können also He+ identifizieren und bekommen auch den Geschwindigkeitsbetrag. 
 Eigentlich suchen wir aber die drei einzelnen Geschwindigkeitskomponenten!
@@ -110,7 +129,8 @@ Besser zu analysieren und zu vergleichen: Wieder runterbrechen auf 1D, d.h. entl
 Verschiedene Jahre zeigen -- 'Kühlen' zu verschiedenen Radien? TODO
 
 
-
+Conclusion: Maps, Glöckler, 1D(?)
+Outlook: Kühlen prüfen, Magnetfeld prüfen, habe Werkzeug gebaut 
 
 xxx xxx xxx Very loose ends: xxx xxx xxx
 
