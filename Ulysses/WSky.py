@@ -8,23 +8,23 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 
-# matplotlib.rcParams.update({'font.size': 12,
-#                             'axes.labelsize': 14,
-#                             'xtick.major.size': 8,
-#                             'xtick.major.width': 1.5,
-#                             'xtick.minor.size': 5,
-#                             'xtick.minor.width': 1,
-#                             'ytick.major.size': 8,
-#                             'ytick.major.width': 1.5,
-#                             'ytick.minor.size': 5,
-#                             'ytick.minor.width': 1,
-#                             'xtick.direction': 'out',
-#                             'ytick.direction': 'out',
-#                             'figure.subplot.left':0.12,
-#                             'figure.subplot.bottom': 0.1,
-#                             'figure.subplot.right': 0.84,
-#                             'figure.subplot.top': 0.88,
-#                             'figure.figsize': (8,4.5)}) # Achtung anders
+matplotlib.rcParams.update({'font.size': 12,
+                            'axes.labelsize': 14,
+                            'xtick.major.size': 8,
+                            'xtick.major.width': 1.5,
+                            'xtick.minor.size': 5,
+                            'xtick.minor.width': 1,
+                            'ytick.major.size': 5,
+                            'ytick.major.width': 1.5,
+                            'ytick.minor.size': 5,
+                            'ytick.minor.width': 1,
+                            'xtick.direction': 'out',
+                            'ytick.direction': 'out',
+                            'figure.subplot.left':0.09,
+                            'figure.subplot.bottom': 0.1,
+                            'figure.subplot.right': 0.84,
+                            'figure.subplot.top': 0.82,
+                            'figure.figsize': (8,4.5)}) # Achtung anders
 
 # define style of textboxes
 props = dict(boxstyle='round', facecolor='#D3D3D3', edgecolor = 'k', alpha=0.8, pad = 0.8)
@@ -46,7 +46,8 @@ class WSky():
     def __init__(self, D, color_norm='sg', mode='ps', phirange = [-pi, pi + 0.001],
                  thetarange = [-pi / 2., pi / 2. + 0.001], angstep = 10 * pi / 180., shellstep = 0.1):
         # shift wshellmax to SW frame:
-        self.wshellbins = arange(shellstep, (D.wshellmax -1) + 0.0001, shellstep)
+        #self.wshellbins = arange(shellstep, (self.D.wshellmax -1) + 0.0001, shellstep)
+        self.wshellbins = arange(shellstep * 0.5, (D.wshellmax - 1) + 0.0001, shellstep)
         self.D = D
         self.shell = len(self.wshellbins) / 2
         self.color_norm = color_norm
@@ -59,13 +60,15 @@ class WSky():
         self.n = norm_arr
 
         if mode == 'norm':
-            self.unit = 'PSV / ?TODO'
+            self.unit = 'PSV / $km^{6} \, s^{-3}$'
             norm_arr[norm_arr == 0] = -5.
             self.H = norm_arr
         elif mode == 'counts':
+            print(H0[18,9,:])
             self.unit = 'Counts'
             H0[norm_arr == 0] = -5
             self.H = H0
+            print(self.H[18, 9, :])
         elif mode == 'ps':
             self.unit = r'Phase Space Density / $s^3 \, km^{-6}$'
             H0[norm_arr == 0] = -5
@@ -76,7 +79,7 @@ class WSky():
         for shell in range(len(self.wshellbins)-1):
             for i in range(4):
                     print(self.H[:, :, shell].max())
-                    self.H[:, :, shell][self.H[:, :, shell] > (mean(self.H[:, :, shell]) + 3 * std(self.H[:, :,
+                    self.H[:, :, shell][self.H[:, :, shell] > (mean(self.H[:, :, shell]) + 5 * std(self.H[:, :,
                                                                                                    shell]))] = 0
                     print(self.H[:, :, shell].max())
                     print(shell)
@@ -120,7 +123,7 @@ class WSky():
 
 
         self.cb = plt.colorbar(self.Quadmesh, cax = axins)
-        self.cb.set_label("%s" % (self.unit), labelpad=10)
+        self.cb.set_label("%s" % (self.unit), labelpad=8)
         self.cb.formatter.set_powerlimits((0, 0))  # limits for changing to scientific number notation -> (0,0): always
         self.cb.update_bruteforce(self.Quadmesh)  # force updating the colorbar
 
@@ -143,7 +146,7 @@ class WSky():
                                                vmax=vmax)
             colormap.set_under(color='#D3D3D3')
             #self.txt_shell.set_text('Shell: %s' % self.shell)
-            self.txt_w.set_text(r'$w = [%2.1f, %2.1f]$' % (self.wshellbins[self.shell], self.wshellbins[
+            self.txt_w.set_text(r'$w = [%2.2f, %2.2f]$' % (self.wshellbins[self.shell], self.wshellbins[
                 self.shell + 1]))
 
         if self.color_norm == 'sg':
@@ -155,7 +158,7 @@ class WSky():
             self.Quadmesh = self.ax.pcolormesh(phibins, thetabins, self.H[:, :, shell].T, cmap=colormap, vmin = vmin, vmax=vmax)
             colormap.set_under(color='#D3D3D3')
             #self.txt_shell.set_text('Shell: %s' % self.shell)
-            self.txt_w.set_text(r'$w = [%2.1f, %2.1f]$' % (self.wshellbins[self.shell], self.wshellbins[
+            self.txt_w.set_text(r'$w = [%2.2f, %2.2f]$' % (self.wshellbins[self.shell], self.wshellbins[
                 self.shell + 1]))
             self.ax.grid()
 

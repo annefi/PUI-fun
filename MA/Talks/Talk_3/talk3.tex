@@ -74,6 +74,7 @@
 
 
 %%%
+\section{Pickup Ions}
 \begin{frame}{The Pickup Process}
 \begin{block}{ }
 	\textbf{Pickup Ions: \\
@@ -211,6 +212,7 @@
 
 
 
+\section{Motivation}
 \begin{frame}{Motivation}
 \begin{columns}
 	\column[]{5cm}
@@ -229,13 +231,39 @@
 	\includegraphics[scale=0.18]{Pics/qm.pdf}
 \end{columns}
 
-\section{Ulysses SWICS}
 \end{frame}
+%%%
+
+%%%
+
+\begin{frame}{Frame of Reference}
+\begin{columns}
+	\column[]{5cm}
+	\vspace{-1cm}
+	\begin{figure}
+		\includegraphics[scale=2.0]{Pics/vspace_sc_trans.pdf}
+	\end{figure}
+	\vspace{-1cm}
+	\begin{figure}
+		\includegraphics[scale=2]{Pics/vspace_sw_trans.pdf}
+	\end{figure}
+	
+	
+	\column[]{6.2cm}
+	\vspace{3.5cm}
+	\begin{figure}
+		\includegraphics[scale=2]{Pics/wspace_sw_trans.pdf}
+	\end{figure}
+\end{columns}
+\end{frame}
+
 %%%
 
 %
 %
 %
+
+\section{Ulysses SWICS}
 \begin{frame}{Ulysses Spacecraft (1990 -- 2009)}
 
 \begin{figure}
@@ -374,13 +402,23 @@
 
 
 %%%
-\begin{frame}{Virtual Collimator}
+\begin{frame}{The Virtual Detector}
 	\begin{columns}
-		\column[]{7cm}
+		\column[]{6.5cm}
+		\begin{figure}
+					\includegraphics[scale=0.35]{Pics/col_single_new.pdf}
+			\end{figure}
+	{\scriptsize \begin{center}
+				Unrotated collimator acceptance \\ for one EpQ step
+	\end{center}}
 
-		\includegraphics[scale=0.35]{Pics/col_single.pdf}
-		\column[]{7cm}
-		\includegraphics[scale=0.35]{Pics/col_vspace_normal.pdf}
+		\column[]{6.5cm}
+				\begin{figure}
+			\includegraphics[scale=0.38]{Pics/col_vspace_normal.pdf}
+		\end{figure}
+		\begin{center}
+			{\scriptsize Collimator Acceptance for \\one spacecraft spin and one EpQ step}
+		\end{center}
 	\end{columns}
 	
 \end{frame}
@@ -388,10 +426,23 @@
 
 %%%
 
+\begin{frame}{The Virtual Detector}
+\begin{columns}
+	\column[]{6.5cm}
+	\begin{figure}
+	\includegraphics[scale=0.35]{Pics/col_shells.pdf}
+\end{figure}
+	
+	
+	\column[]{6.5cm}
+	\begin{figure}
+		\includegraphics[scale=0.38]{Pics/col_vspace_normal.pdf}
+	\end{figure}
 
-\begin{frame}{}
-\includegraphics[scale=0.35]{Pics/col_shells.pdf}
+\end{columns}
+
 \end{frame}
+
 
 %%%
 
@@ -401,7 +452,7 @@
 
 \begin{frame}{Aspect Angle}
 \begin{figure}
-	\includegraphics[scale=0.4]{Pics/RTN_AA_flat_angle.pdf}
+	\includegraphics[scale=0.45]{Pics/RTN_AA_flat_angle.pdf}
 \end{figure}
 \end{frame}
 
@@ -409,7 +460,7 @@
 
 \begin{frame}{Aspect Angle}
 \begin{figure}
-	\includegraphics[scale=0.34]{Pics/aa_new.pdf}
+	\includegraphics[scale=0.37]{Pics/aa_new.pdf}
 \end{figure}
 \end{frame}
 
@@ -418,37 +469,49 @@
 \begin{frame}{Aspect Angle}
 \begin{columns}
 	\column[]{6.cm}
+	\vspace{-0.8cm}
 		\begin{figure}
 			\includegraphics[scale=0.4]{Pics/col_aa_marker.png}
 		\end{figure}
-	\column[]{7.5cm}
+\begin{center}
+	{\small 	Aspect angle:\\
+	$\varphi = 25 ^\circ, \vartheta = -10 ^\circ $}
+\end{center}
+	
+	\column[]{6cm}
+	
 		\begin{figure}
 			\includegraphics[scale=0.4]{Pics/hist_det_sec_aa_90days2001.pdf}
 		\end{figure}
+\begin{center}
+		
+{\small 	$\Rightarrow$ Plausibility check with \\solar wind $\mathrm{He^{2+}}$ PHA data}\\{\scriptsize  ( 120 days in 2001)}
+\end{center}
+	\column[]{1cm}
 \end{columns}
-Aspphi: 25, Asptheta = -10; 120 Tage in 2001
-$\Rightarrow$ Plausibility check with solar wind $\mathrm{He^{2+}}$
+
+
 \end{frame}
 
 %%%
 
-\begin{frame}{Transition}
+\begin{frame}{Frame of Reference}
 \begin{columns}
 \column[]{5cm}
 \vspace{-1cm}
 	\begin{figure}
-		\includegraphics[scale=2.0]{Pics/vspace_sc_trans.pdf}
+		\includegraphics[scale=2.2]{Pics/vspace_sc_trans.pdf}
 	\end{figure}
-	\vspace{-1cm}
+	\vspace{-1.2cm}
 	\begin{figure}
-	\includegraphics[scale=2]{Pics/vspace_sw_trans.pdf}
+	\includegraphics[scale=2.2]{Pics/vspace_sw_trans.pdf}
 \end{figure}
 
 
 \column[]{6.2cm}
-	\vspace{3.5cm}
+	\vspace{.5cm}
 	\begin{figure}
-		\includegraphics[scale=2]{Pics/wspace_sw_trans.pdf}
+		\includegraphics[scale=2.2]{Pics/wspace_sw_trans.pdf}
 	\end{figure}
 \end{columns}
 \end{frame}
@@ -457,15 +520,18 @@ $\Rightarrow$ Plausibility check with solar wind $\mathrm{He^{2+}}$
 
 %%%
 
-\begin{frame}{Slice Counts}
+\begin{frame}{Spherical Cut through VDF}
 \begin{columns}
 	\column{2.5cm}
 \begin{figure}
 	\includegraphics[scale=.7]{Pics/slice_R2.pdf}
 \end{figure}
+{\scriptsize 50 days in 1994 \\
+ $\mathrm{vsw} : 760 - 780 \, \mathrm{km\,s^{-1}}$
+}
 \column{7.5cm}
 \begin{figure}
-	\includegraphics[scale=.5]{Pics/counts.pdf}
+	\includegraphics[scale=.5]{Pics/cart_50_counts_R.pdf}
 \end{figure}
 \end{columns}
 \end{frame}
@@ -475,38 +541,53 @@ $\Rightarrow$ Plausibility check with solar wind $\mathrm{He^{2+}}$
 
 %%%
 
-\begin{frame}{Einschub: Counts zu PSD}
-	\begin{figure}
+\begin{frame}{From Counts to Phase Space Density}
+\begin{columns}
+	\column[]{2cm}
+	\begin{mdframed}[roundcorner=4pt,userdefinedwidth=3.cm,
+		align
+		=center,
+		linecolor
+		=black,backgroundcolor=blue!8,
+		linewidth
+		=1.pt]
+		$PSD = \frac{N}{PSV}$
+	\end{mdframed}
+
+	\column[]{5cm}
+	
 	\includegraphics[scale=.4]{Pics/norm_time.pdf}
-\end{figure}
-Formel PSD...
+\end{columns}
+
+
 \begin{columns}
 	\column[]{5cm}
 	\begin{figure}
-		\includegraphics[scale=.3]{Pics/counts.pdf}
+		\includegraphics[scale=.35]{Pics/cart_50_counts_R.pdf}
 	\end{figure}
 	\column[]{5cm}
 	\begin{figure}
-		\includegraphics[scale=.3]{Pics/psv.pdf}
+		\includegraphics[scale=.35]{Pics/cart_50_norm_R.pdf}
 	\end{figure}
+\column[]{1cm}
 	\end{columns}
 
 \end{frame}
 
 %%%
 
-\begin{frame}{Slice PSD}
+\begin{frame}{Spherical Cut through VDF}
 \begin{columns}
 	\column{3cm}
 	\begin{figure}
 		
-		\includegraphics[scale=.2]{Pics/counts.pdf}
-		\includegraphics[scale=.2]{Pics/psv.pdf}
+		\includegraphics[scale=.2]{Pics/cart_50_counts_R.pdf}
+		\includegraphics[scale=.2]{Pics/cart_50_norm_R.pdf}
 		
 	\end{figure}
 	\column{6.5cm}
 	\begin{figure}
-	\includegraphics[scale=.45]{Pics/slice_psd.pdf}
+	\includegraphics[scale=.45]{Pics/cart_50_ps_R.pdf}
 	\end{figure}
 \column{.5cm}
 \end{columns}
@@ -515,17 +596,32 @@ Formel PSD...
 
 
 %%%
+\begin{frame}{Spherical Surface}
+\begin{figure}
+	\includegraphics[scale=.65]{Pics/cov.pdf}
+\end{figure}
+\end{frame}
 
-\begin{frame}{Skymap}
+%%%
+\begin{frame}{Spherical Surface}
 \begin{columns}
-\column{3cm}
-\vspace{3.5cm}
-\includegraphics[scale=.45]{Pics/cov.pdf}
-\column{13cm}
-\vspace{-2.5cm}
+\column{1.8cm}
+\vspace{-4.5cm}
+\includegraphics[scale=.3]{Pics/cov.pdf}
 
-	\includegraphics[scale=.48]{Pics/ps_sky.pdf}
-\column{3.5cm}
+			
+\column{16cm}
+\vspace{2.2cm}
+
+	
+	\includegraphics[scale=.51]{Pics/sky_ps.pdf}
+
+\vspace{-0.9cm}
+\begin{center}
+	 {\tiny $\mathrm{vsw}:760 - 780 \, \mathrm{km\,s^{-1}}$ --
+		50 days in 1993}
+\end{center}
+\column{4cm}
 \end{columns}
 \end{frame}
 
@@ -535,11 +631,30 @@ Formel PSD...
 %%%
 
 \begin{frame}{1D}
-
+TODO
 \end{frame}
 
 
+\begin{frame}{Outlook}
 
+\begin{columns}
+	\column{5.8cm}
+\begin{itemize}
+	\item 1D radiale Abhängigkeit untersuchen
+	\item B-Feld abhängige Torusverteilung
+\end{itemize}
+	\column{10cm}
+	
+	\includegraphics[scale=.21]{Pics/sky_ps.pdf}
+	%\column{4cm}
+\end{columns}
+
+
+
+
+
+
+\end{frame}
 
 
 
@@ -547,7 +662,11 @@ Formel PSD...
 %%%
 
 \begin{frame}[plain]{Conclusion}
-
+\begin{itemize}
+	\item 
+\end{itemize}
+	\includegraphics[scale=.21]{Pics/sky_ps.pdf}
+	\includegraphics[scale=.25]{Pics/cart_50_ps_R.pdf}
 \end{frame}
 
 
@@ -597,7 +716,7 @@ Formel PSD...
 %
 %
 %
-\begin{frame}{Cartesian Cut: T}
+\begin{frame}[plain]{Cartesian Cut: T}
 \begin{columns}
 	\column{3cm}
 	\begin{figure}
@@ -612,7 +731,7 @@ Formel PSD...
 \end{frame}
 
 
-\begin{frame}{Cartesian Cut: N}
+\begin{frame}[plain]{Cartesian Cut: N}
 \begin{columns}
 \column{3cm}
 \begin{figure}
@@ -628,7 +747,7 @@ Formel PSD...
 
 
 
-\begin{frame}{He$^+$ Data: vsw}
+\begin{frame}[plain]{He$^+$ Data: vsw}
 	%\vspace{-1cm}
 	\begin{figure}
 		\includegraphics[scale=.45]{Pics/vsw_all_years_brw.pdf}
@@ -639,15 +758,49 @@ Formel PSD...
 %
 %
 %
-\begin{frame}[plain]{}
 
+\begin{frame}[plain]
+\begin{columns}
+	
+	\column{4cm}
+	\vspace{-0.5cm}
+	\begin{figure}
+		
+		\includegraphics[scale=.28]{Pics/cart_lang_R_counts.pdf}
+		\includegraphics[scale=.28]{Pics/cart_lang_R_norm.pdf}
+		
+	\end{figure}
+	\column{6.5cm}
+	\begin{figure}
+		\includegraphics[scale=.4]{Pics/cart_lang_R_psd.pdf}
+
+
+ {\scriptsize 		 $\mathrm{vsw} : 740 - 780 \, \mathrm{km\,s^{-1}}$ \\
+		 250 days in 1994}
+
+	\end{figure}
+	%\column{.5cm}
+\end{columns}
 \end{frame}
 
-
 %
 %
 %
 \begin{frame}[plain]{}
+\begin{columns}
+	\column{7.5cm}
+	\begin{figure}
+			\includegraphics[scale=.4]{Pics/sky_counts.pdf}
+		\includegraphics[scale=.4]{Pics/sky_norm.pdf}
+		\end{figure}
+
+	\column{2.5cm}
+	\vspace{8cm}
+	 {\tiny $\mathrm{vsw}:760 - 780 \, \mathrm{km\,s^{-1}}$ \\
+		50 days in 1993}
+	
+	\end{columns}
+
 
 \end{frame}
 

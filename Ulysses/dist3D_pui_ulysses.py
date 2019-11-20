@@ -33,8 +33,8 @@ from matplotlib.ticker import (MultipleLocator, FormatStrFormatter,
 
 
 class Dist3D(object):
-    def __init__(self, d, mass=4., charge=1., aspphistep=1., aspthetastep=1., v_sc_step=1., nrs_perp=3, nrs_para=9,
-                 nrs_sec=6, nrs_epq=3, vswstep = 1, ion="He1+", offset_sp=180., sc_vel=False):
+    def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=3, nrs_para=9,
+                 nrs_sec=9, nrs_epq=3, vswstep = 10, ion="He1+", offset_sp=180., sc_vel=False):
 
         # nrs_perp: 3, nrs_para: 9, nrs_sec: 6, nrs_epq: 3
         """
@@ -437,7 +437,8 @@ class Dist3D(object):
                                     self.wz = wz
 
                                     # add phase space volume per detector point for weighting
-                                    psv = zeros(shape(wz))
+                                    #psv = zeros(shape(wz))
+                                    psv = ones(shape(wz))
                                     psv[:] = tile((self.eff[0:18] * self.psv[0:18] / self.sec_det_dim), [wz.shape[3],
                                                                     wz.shape[2],wz.shape[1],1]).T
                                     self.pp = psv

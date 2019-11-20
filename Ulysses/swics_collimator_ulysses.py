@@ -478,8 +478,8 @@ class collimator(object):
             # ax.set_zticklabels(ax.get_yticks(), va='center', ha='right')
 
             # SC spin axis:
-            ax.plot([0, self.rax[0]*2*vel], [0, self.rax[1]*2*vel], [0, -self.rax[2]*2*vel], "-", color="crimson",
-                   zorder = 10., lw=1.8)
+            # ax.plot([0, self.rax[0]*2*vel], [0, self.rax[1]*2*vel], [0, -self.rax[2]*2*vel], "-", color="crimson",
+            #        zorder = 10., lw=1.8)
         colors = array([[77, 77, 0], [77, 57, 0], [77, 0, 0], [77, 0, 57], [38, 0, 77], [0, 38, 77], [0, 77, 77],
                         [0, 77, 19]])
         if isinstance(sec, int):
@@ -493,6 +493,7 @@ class collimator(object):
             nrs = nrs_det * nrs_pts
             shade_arr = [0.2, 1.4, 3.]
             rgb = colors[sec]
+            rgb = [0, 77, 77]
             cc = zeros((nrs, 3))
             for j in range(nrs_det):
                 cc[j * nrs_pts: (j + 1) * nrs_pts] = lighten_color(rgb, factor=shade_arr[j]) / 255.
@@ -510,6 +511,7 @@ class collimator(object):
 
                 shade_arr = [0.2, 1.4, 3.]
                 rgb = colors[i]
+
 
                 cc = zeros((nrs, 3))
                 for j in range(nrs_det):

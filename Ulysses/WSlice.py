@@ -16,7 +16,7 @@ matplotlib.rcParams.update({'font.size': 12,
                             'ytick.minor.width': 1,
                             'xtick.direction': 'out',
                             'ytick.direction': 'out',
-                            'figure.subplot.left':0.12,
+                            'figure.subplot.left':0.0,
                             'figure.subplot.bottom': 0.1,
                             'figure.subplot.right': 0.97,
                             'figure.subplot.top': 0.88,
@@ -38,7 +38,7 @@ class WSlice():
 
         norm_arr, H0 = self.D.calc_w3dspecs(wbins = wbins)
         if mode == 'norm':
-            self.unit = 'PSV / ?TODO'
+            self.unit = 'PSV / $km^{6} \, s^{-3}$'
             norm_arr[norm_arr == 0] = -5.
             self.H = norm_arr
         elif mode == 'counts':
@@ -115,7 +115,7 @@ class WSlice():
         if self.color_norm == 'sg':
             if dim == 'R':
                 vmax = amax(self.H[slice, :, :])
-                vmax = mean(self.H[slice, :, :]) + 3*std(self.H[slice, :, :])
+                #vmax = mean(self.H[slice, :, :]) + 3.5*std(self.H[slice, :, :])
                 if vmax <= 0:
                     vmax = 0.0001
 
@@ -135,6 +135,7 @@ class WSlice():
                 self.ax.set_ylabel(r'$\mathrm{w_{sw,N}}$')
             elif dim == 'T':
                 vmax = amax(self.H[:, slice, :])
+                #vmax = mean(self.H[slice, :, :]) + 1 * std(self.H[slice, :, :])
                 if vmax <= 0:
                     vmax = 0.0001
                 try:
@@ -150,6 +151,7 @@ class WSlice():
                 self.ax.set_ylabel(r'$\mathrm{w_{sw,N}}$')
             elif dim == 'N':
                 vmax = amax(self.H[:, :, slice])
+                #vmax = mean(self.H[slice, :, :]) + 1.5 * std(self.H[slice, :, :])
                 if vmax <= 0:
                     vmax = 0.0001
                 try:

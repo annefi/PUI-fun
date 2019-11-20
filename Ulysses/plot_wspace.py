@@ -29,8 +29,8 @@ class Plot_wspace(object):
     Class for plotting FoV, vspace or wspace with a reduced number of dtector points. Works on an uswipha instance
     and used the resp. bins for vsw, aspphi, asptheta
     '''
-    def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=4, nrs_para=12,
-                 nrs_sec=1, nrs_epq=1, vswstep = 10, ion="He1+", offset_sp=180., sc_vel=True):
+    def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=2, nrs_para=6,
+                 nrs_sec=4, nrs_epq=3, vswstep = 10, ion="He1+", offset_sp=180., sc_vel=True):
 
         # nrs_perp: 3, nrs_para: 9, nrs_sec: 6, nrs_epq: 3
         """
