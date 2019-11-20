@@ -2,40 +2,214 @@ Einleitung/Motivation:
 
 PUIs mit Ulysses, 3D VDF Verteilungen
 
+
+***
 1) Ionisationsprozesse: Photoionisation, Charge Exchange, Electron Impact. Ionisiertes Teilchen ist dann den elektromagnetischen Kräften in der Heliosphäre ausgesetzt.
 
-2) Messung, typisches Spektrum, im SC frame und auf 1D reduziert, Achsen erklären
-PUIs: konstant hohe Diche mit CutOff, dort ein relativ rascher Abfall
+
+***
+4)  Diese Arten von PUI wurden bisher gemessen. Man kann sich fragen, wie man unterscheidet, ob etwas PUI oder SW ist und dazu gibt es zwei Kriterien: Zum einen ist das der Ladungszustand - wie man sieht, sind PUI in fast allen Fällen nur einfach ionisiert und SW-Ionen sind wegen Durchgang durch heiße Korona vollständig ionisiert. Zum andere zeichnen sich PUI durch eine sehr charakteristische VDF aus, die sich deutlich von der des SW unterscheidet.
+
+Messung, typisches Spektrum, im SC frame und auf 1D reduziert, Achsen erklären
+Aufgetragen ist die Phasenraumdichte gegen w (w ist eine gebräuchliche Größe bei der Behandlung von PUIs: Geschw Ion / Geschw SW.) - d.h. wir haben sowas wie eine Geschwindigkeitsverteilung (Zusatzinfos: über 100 Tage gemittelt, langsamer SW). Und das Ganze ist aufgetragen für einfach und zweifach ionisiertes Helium sowie für ionisierten Wasserstoff, “PUI-Protonen”
+- Für vollständig ionisierte (kommen im SW vor) sieht man die Geschwindigkeitsverteilung der SW-Ionen ganz deutlich (Kappa-Funktion) und rechts davon bei höheren Geschwindigkeit das Plateau, das zu den PUI gehört. 
+Problem: Man muss SW-Verteilung sehr gut kennen, um beides voneinander trennen zu können.
+- Einfach ionisiertes Helium erwarten wir nicht als SW-Ion. Deshalb sieht man hier die reine PUI-Verteilung -> gut zu messen.
+
+
+PUIs: konstant hohe Dichte mit CutOff, dort ein relativ rascher Abfall
 1D reduzier, dabei eigentlih ein mehrdiemnsionales Problem (s.Achsenbeschriftung), eigentlicher Bezugsframe: SW
 
+***
 Wie kommt es zu diesem Spektrum?
-3) PU Prozess: Relative Motion -> Gyro Motion
+5) PU Prozess: Ionisiertes Teilchen spürt die elektromagnetischen Kräfte in der Heeliosühäre, insbesondere B-Feld. Wenn wir teilchen als ruhend betrachten und B-Feld als radial und in den SW eingefroren
+Relative Motion -> Gyro Motion
+
+Ganzes System betrachten: Ausgezeichnete Punkte auf dem orbit um das Magnetfeld
+Im Geschwindigkeitsraum übersetzt sich diese Bewegung in einer Kreisbhan senkrecht zum B-Feld. Maximal doppelte Geschwindigkeit, minimal ruhend, im SW-Frame immer mit der Geschwindigkeit vsw.
+
+Mehrere Teilchen: Torus: anisotrop, Injizierung bei w=1 im SW-Frame
+Und dabei kommt es grundsätzlich zu zwei Prozessen, nämlich zum einen zum PAS und zu Energieaustauschprozessen.
 
 
+***
+6) Evolution
+Was pasiert nach der Injizierung? Seit den 1970ern gibt es dazu zahlreiche Modelle.
+Teilchen bewegen sich mit dem Sonnenwind nach außen
 
-7) Erwartung: Isotropie. Aber wenn man bei verschiedenen B-Konfigurationen guckt, sieht man gewaltige Unterschiede. Spricht nicht für Isotropie und für eine Unabhängigkeit vom B-Feld
+PAS: Da ist die Vorstellung, dass die Teilchen aufgund von z.B. Bfeldinhomogenitäten gestreut werden und dadurch ihren Pitchangle ändern. Dadurch werden nach und nach andere Teile der Kugelschale bevölkert und man ging lange davon aus, dass es sehr schnell zu einer Isotropisierung der Verteilung kommt, d.h., dass sich die Teilchen auf weiten Teilen der Kugelschale bewegen und nicht nur auf dem Torus.
+
+Energieaustausch:
+Energie verlieren/gewinnen (Kugelschale kleiner, größer), dass sie also irgendwie mit ihrer Umgebung Energie austauschen. Oft ist dabei vom adiabatischen Kühlen die Rede (Teilchen werden nach außen getragen, expandiert und wird gekühlt. D.h., mit wachsendem Abstand zieht sich die Kugel immer mehr zusammen)
+
+Beschleunigung: Schockfronten, kIRs
+
+Damit können wir Glöckler erklären
+
+
+7) Anisotropic Features: Erwartung: Isotropie. Jetzt gab es schon früh Messungen, die vermuten lassen, dass es durchaus auch anisotrope Eigenschaften gibt.
+
+Aber wenn man bei verschiedenen B-Konfigurationen guckt, sieht man gewaltige Unterschiede. Spricht nicht für Isotropie und für eine Unabhängigkeit vom B-Feld
 PLASTIC: Bei w = 1, in dem gezeichneten Kreis sieht man bei zum SW senkrechten MF ein FEature erhöhter PRD, das sich mitzubewegen scheint, bei radialem MF nicht
+(Grund für Anisotropie: Unter Pitchwinkel 90 Grad sind viele Teilchen zu sehen -> das ist genau der Ort, an dem sie gepickupt wurden. Man weiß allerdings nicht, ob die wirklich hier gepickuot wurden oder nur dorthin gestreut)
 
-Ulysses: Orbit > unique data
 
-EpQ measurement, angular resolution: 1: ... 2.: insbesondere schwer, in den sw-frame überzugehen, s. Beispiel. Man mischt da ganz viel. 3. Bei den Treble Coincidences zusätzliche Information...
+***
+8) Motivation
+Grundsätzliche Fragestellung / Problem:
+
+Es gibt unendlich viele 3D-Modellfunktionen, die auf 1D reduziert so eine Kurve darstellen (Uneindeutigkeit der reduzierten Daten). Man verliert Informationen. Darum macht es keinen Sinn, 1D zu betrachten, wenn man die Möglichkeit hat, sich 3D anzuschauen. 
+
+***
+Zentrale Frage: Phasenraumtransport verstehen
+Und die gemachten Modelle, z:B auch Kühlen, verstehen.
+9) Trafo
+Logisch: Bezugsframe ist der Sonnenwind und kein künstlicher SC-Frame, d.h. wir müssen übergehen. Dafür brauchen wir aber die 3D Informationen
+
+***
+10) Ulysses: Orbit > unique data, daher ist auch der eben gezeigte Plot
+
+
+***
+11) SWICS
+Wissenschaftliche Ziele: Komposition des SW, Geschwindigkeit von allen SW-Ionen 
+
+Spare Model auf ACE!
+Kann Ionenspezies auflösen
+Das Messprinzip möchte ich an dieser Skizze erklären. Und zwar fällt ein Ion mit einer bestimmten Energie, Masse und Ladung hier am Kollimator ein. (Auf dem Bild hier oben ist der Bereich hier zu sehen, d.h. hier unten haben wir einen Schnitt durch diesen Bereich). Hinter dem Collimator befindet sich der Electrostatic Analyser. Das sind quasi zwei gebogene Kondensatorplatten, zwischen denen eine diskrete Spannung anliegt. Das Ion kann jetzt nur passieren, wenn es eine entsprechende EpQ hat. Die Spannung wird laufend in 64 loagrithmisch verteilten Schritten durchgesteppt, sodass man Teilchen von einer Energie pro Ladung von 0.16keV/e bis 59.6keV/e messen kann (ca. 13 min)
+
+Das Ion wird dann nachbeschleunigt (30 kV Drop)
+
+Und tritt in den ToF-Messbereich ein: Hier wird, wie der Name schon sagt, die Flugzeit gemessen, die das Teilchen für die Strecke von 10 cm benötigt. Dafür werden Start- und Stopsignale gemessen, wobei das Startsignal dadurch zusatnde kommt, dass das Ion durch eine dünne Folie (Kohlenstoff, Nickelbeschichtung, 3mug/cm^2) trifft und aus der Folie Sekundärelektronen löst, die wiederum ein Signal auf einer MicroChannelPlate geben. Das Stopsignal wird ausgelöst, wenn das Ion auf den Halbleiterdetektor trifft und dort wiederum Sekundärelektronen auslöst.
+
+An diesem Halbleiterdetektor wird dann auch die Restenergie gemessen, die das Teilchen nach Zurücklegen der Strecke noch hat. 
+
+Wir haben also 3 unabhängige Größen des Teilchen gemessen und können daraus diese drei Größen berechnen. MpQ und M dienen dazu, das Teilchen zu identifizieren und v gibt Aufschluss über die Energie, die das Teilchen bei Eintritt in den Kollimator hatte, also hilft, eine Geschwindigkeitsverteilung abzuleiten.
+
+
+
+***
+
+12) PHA data
+Nur Tripelkoinzidenzen, für die haben wir die Richtungsauflösung
+
+Hier habe ich die “Rohdaten”, sog. PHA-Daten aus dem Zeitraum x aufgetragen. Und zwar hab ich hier auf der x-Achse das Datenprodukt Tch und auf der y-Achse ESA, Achtung das ist antiproportional zur EpQ. 
+Und normiert
+
+Die Bögen lassen sich als einzelne Ionensorten identifizieren. denn wenn ich ein festes mpq habe, dann ist die EpQ eine Funktion von der Geschwindigkeit, also von der inversen Tof. 
+
+He+ hat eine m/q von 4. Bei konstanter EpQ ist tof einfach eine Funktion von der Masse pro Ladung. D.h. rechts finde ich hohe mpq und links niederige, hier ist He+. 
+
+Helium1+ kann man gut sehen und filtern und ist ein häufiges PUI -> super
+
+***
+Wir können also He+ identifizieren und bekommen auch den Geschwindigkeitsbetrag. 
+Eigentlich suchen wir aber die drei einzelnen Geschwindigkeitskomponenten!
+13) EpQ measurement, angular resolution: 1: ...Übergang VSpace, Integration Schalen EpQ insbesondere schwer, in den sw-frame überzugehen,
+s. Beispiel. Man mischt da ganz viel.
+
+Es können nur Teilchen rein, die einen Geschwindigkeitsvektor haben, der senkrecht zur Öffnung steht. Diese Teilchen werden dann nach ihrer EpQ gefiltert - und zwar durch Variation der Gleichspannung zwischen diesen Platten. 
+Für ein konstantes mpq-Verhältnis gelangen also mit unterschiedlichen EpQ-Steps unterschiedlich schnelle He+-Teilchen in das Instrument.
+
+Wie kann man den Detektor / allgemein eine Detektorakzeptanz jetzt im V-Raum darstellen?
+D.h., wie überträgt man so eine Detektoröffnung als Akzeptanz in den v-Raum?
+
+
+Wir haben hier unseren Detektor fest im Ortsraum, der soll Teilchen von hier detektieren und hier auf der Seite den v-Raum, in dem der Detektor ruhen soll, also hier im Ursprung ist.
+Dafür betrachten wir erstmal einen festen EpQ-Step für He+. 
+Es gibt jetzt eine gewisse Bandbreite an Winkeln in der xy-Ebene, die akzeptiert werden. Als Grenzfälle ist das ein Teilchen, das nur eine v_x-Komponente hat. Das findet sich dann im v-Raum hier. Jetzt hat der Detektor ja aber eine gewisse Akzeptanz in dieser Richtung, nämlich 70 Grad. D.h., auch Teilchen, die so einfallen, können gemessen werden. Das sind TEilchen, die eine geringe negative y-Komponente haben. D.h. im v-Raum tragen wir die obere detektierbare Grenze hier auf. Alle Winkel dazwischen können natürlich auch detektiert werden, wobei der Betrag immer noch derselbe ist  - wir sind ja noch bei einem EpQ-Step. 
+Was macht das Instrument jetzt aus dieser Information?
+Wir legen uns jetzt mal einen Kreis mit dem Radius v_sw hier rein und nehmen an, dass wir drei Teilchen haben, die alle auf dieser Schale sitzen. Im SW-frame haben sie also alle die Geschwindigkeit v_sw.
+
+Im Normalfall kann das Instrument nicht unterscheiden, ob ein Teilchen hier oder hier gemessen wurde, deshalb werden allen auf einer Schale gemessenen Teilchen dieser Geschwindigkeit zugeordnet. 
+Teilchen A wird dann dieser Schale zugeordnet, B dieser usw und offensichtlich entspricht das nicht dem Betrag der Geschwindigkeit im SW-frame und man könnte auch nicht rekonstruieren wie das aussah.
+An dieser Stelle verlieren wir Informationen (Integration über die Shells)!
+
+Wenn wir also solch eine 1D-Verteilung messen, ist gar nicht genau klar, wie die zusatnde kommt. Wir bräuchten mehr Informationen darüber, wo genau auf der Schale ein Teilchen gemssen wurde. 
+
+
+
+14) Richtungsauflösung: Bei den Treble Coincidences zusätzliche Information...
+Eigentlich kann SWICS aber noch mehr!
+
+Und genau das liefert und SWICS.
+-> Lösung: 3 Detektoren von SWICS!
+Wenn man genau auf diese Skizze schaut, sieht man nämlich, dass es nicht einen flachen SSD-Detektor gibt, sondern drei verschiedene, mithilfe deren man grob unterscheiden kann, unter welchem Winkel ein Teilchen eingefallen ist. D.h. im V-Raum, dass man diese Unterscheidung machen kann. 
+
 (Spin)
 Kollimator ist aber nicht gerade! (Modell zeigen)
 
-14) Grobes Raster, wir können 24 Richtungen unterscheiden. Schwarz zeigt immer radial, also Bewegung von der Sonne zum SC
 
 
-PHA-Wort:Count -> auf das gesamte Pixel verteilt, weil ein Teilchen von hier oder hier hätte kommen können.
 
-An einzelnem Koll zeigen, wo die Detektoren sind
-20) Wir haben durch die verteilung ein kartesisches w-Raster gelegt
+15) Virtueller Detektor. An einzelnem Koll zeigen, wo die Detektoren sind 
+Grobes Raster, wir können 24 Richtungen unterscheiden. Schwarz zeigt immer radial, also Bewegung von der Sonne zum SC. PHA-Wort:Count -> auf das gesamte Pixel verteilt, weil ein Teilchen von hier oder hier hätte kommen können.
+
+16) Virtueller Detektor: EpQ und Messprinzip
+Der gesamte messbare V-Raum ergibt sich, wenn wir alle EpQ-Schalen berücksichtigen [Plot mehrere Schalen]
+
+
+
+
+17) Aspect Angle
+tatsächlich stimmt die Linie Sonne SC nicht mit der Antenne, Rotationsachse überein, denn Antenne muss dauernd zur Erde zeigen. Dadurhc ergibt sich ein variabler Winkel: AA, der abhängt von Position SC und von Position der Erde
+
+
+18) Aspect Angle
+und der ist auch nicht klein!
+
+
+19) Aspect Angle
+Hier ist der Kollimator mit einem AA.
+
+Zu unterschiedlichen AA ganz unterschiedliche Bedeutungen! Das macht es so kompliziert...
+Daten eingebaut, synchronisert, Kollimator richtet sich immer aus.
+Plausibilät geprüft: Sonnenwindion (He2+) mit guter Statsitik genommen. Wahrscheinlich Bewegung mit dem SW-Bulk. Nur große AA gefiltert. Man erwartet, dass tendenziell der äußere Detektor getroffen wird und das sieht man auch
+[Plot Hist-Det-Sek]
+
+Wir haben also ein funktionierendes Detektormodell. Damit können wir nun 3D VDFs erstellen.
+
+
+
+20) Jetzt können wir den Übergang machen!
+
+..wenn ich das tue, kommt das raus:
+
+
+21) Unübersichtlich, deshalb zurück zu 2D: Schnitt durch *diese* Ebene.
+Wir haben durch die verteilung ein kartesisches w-Raster gelegt
 Counts, die zu verschiedenen Bedingungen aufsummiert wurden. Und zu verschiedenen AAs, immer unterschiedlich geguckt
 
-21) Wie groß ist das abgescannte Phasenraumvolumen, aus dem die Messungen stammen?
 
+
+22) Wie groß ist das abgescannte Phasenraumvolumen, aus dem die Messungen stammen?
 Man sieht z.B: hier hat das Instrument viel hingeguckt, hier hat er dadurch hohe Counts
 
-23) Was kann man mit diesem Werkzeug nun machen? Z.B. Torusfeature bfeldabhängig untersuchen, kürzere Zeiträume angucken
+
+
+23) Skymap Vorbereitung
+
+
+
+24) Skymap
+Um so etwas wie Ringstrukturen oder andere Anisotropien zu erkennen, ist man interessiert an den Verteilungen auf Schalen mit konstanter Geschwindigkeit im SW-Frame. Dafür wurden jetzt Schalen mit kostantem w genommen und projiziert auf so eine Kartendarstellung. Da muss man sich kurz hineindenken: Wir schauen von vorne drauf, phi, theta, warum sieht man hinten nichts...
+
+
+25) 1D: Besser zu analysieren und zu vergleichen: Wieder runterbrechen auf 1D, d.h. entlang der Schalen integriert
+
+
+
+Outlook)
+
+
+
+Conclusion)
+
+
+
+
+
+ Was kann man mit diesem Werkzeug nun machen? Z.B. Torusfeature bfeldabhängig untersuchen, kürzere Zeiträume angucken
 Man sieht: Es funkioniert
 
 
@@ -43,11 +217,9 @@ Man sieht: Es funkioniert
 
 (...)
 
-[PHA Datenmatrix]
-Nur Tripelkoinzidenzen, für die haben wir die Richtungsauflösung
 
-Wir können also He+ identifizieren und bekommen auch den Geschwindigkeitsbetrag. 
-Eigentlich suchen wir aber die drei einzelnen Geschwindigkeitskomponenten!
+
+
 
 [FoV -- VSpace Übergang]
 Dazu muss man verstehen, wie SWICS' EpQ-Filter funktioniert. 
@@ -75,7 +247,7 @@ Der Übergang vom FoV zum V-Space funktioniert genauso, nur dass man sich jetzt 
 [denselben Sektor im v-Space] V-Space erhält man durch Invertierung und Malnehmen mit zu Epq-Step gehörendem Geschwindigkeitsbetrag (Akzeptanzgeschw)
 [gedreht im v-Space] Hier haben wir Schale mit EpQ = ...
 
-Der gesamte messbare V-Raum ergibt sich, wenn wir alle EpQ-Schalen berücksichtigen [Plot mehrere Schalen]
+
  
 
 
@@ -89,18 +261,13 @@ Der gesamte messbare V-Raum ergibt sich, wenn wir alle EpQ-Schalen berücksichti
 Das heißt, dass wir die Daten zusätzlich mit den Orbitdaten synchronisiseren mussten und unser Detektor kann auch entsprechende AA berücksichtigen.
 [Bild Detektor großer AA]
 
-Plausibilät geprüft: Sonnenwindion (He2+) mit guter Statsitik genommen. Wahrscheinlich Bewegung mit dem SW-Bulk. Nur große AA gefiltert. Man erwartet, dass tendenziell der äußere Detektor getroffen wird und das sieht man auch
-[Plot Hist-Det-Sek]
-
-Wir haben also ein funktionierendes Detektormodell. Damit können wir nun 3D VDFs erstellen. 
+ 
 
 
-Unübersichtlich, deshalb zurück zu 2D: Schnitt durch *diese* Ebene.
 
 
-- Übergang von v zu w
 
-- Übergang SC-frame -- SW-frame
+
 
 - w- bzw. v-Kugel reinlegen
 - Abdeckung? (wie verändert sich das bei unterschiedlicher vsw?)
@@ -122,10 +289,10 @@ Weil wir 3D nur schwierig darstellen können, gibt es verschiedene Projektionen.
 [Plot zeigen], Ring zeigen, verschiedene Richtungen
 
 *MAPS:
-Um so etwas wie Ringstrukturen oder andere Anisotropien zu erkennen, ist man interessiert an den Verteilungen auf Schalen mit konstanter Geschwindigkeit im SW-Frame. Dafür wurden jetzt Schalen mit kostantem w genommen und projiziert auf so eine Kartendarstellung. Da muss man sich kurz hineindenken: Wir schauen von vorne drauf, phi, theta, warum sieht man hinten nichts...
+
 
 *1D:
-Besser zu analysieren und zu vergleichen: Wieder runterbrechen auf 1D, d.h. entlang der Schalen integriert
+
 Verschiedene Jahre zeigen -- 'Kühlen' zu verschiedenen Radien? TODO
 
 
@@ -141,8 +308,4 @@ x wo w einführen
 x wo/überhaupt Koordinatensystem einführen
 
 
----------------------------------
-Backup
 
-- vsw Übersicht Jahre
-- He2+ Filterung
