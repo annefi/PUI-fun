@@ -6,22 +6,24 @@ from custom_colours import lighten_color
 import matplotlib
 from DataLoader.uswiutils import getvelocity
 #
-# matplotlib.rcParams.update({'font.size': 12,
-#                             'xtick.major.size': 8,
-#                             'xtick.major.width': 1.5,
-#                             'xtick.minor.size': 5,
-#                             'xtick.minor.width': 1,
-#                             'ytick.major.size': 8,
-#                             'ytick.major.width': 1.5,
-#                             'ytick.minor.size': 5,
-#                             'ytick.minor.width': 1,
-#                             'xtick.direction': 'inout',
-#                             'ytick.direction': 'inout',
-#                             'figure.subplot.left':0.00,
-#                             'figure.subplot.bottom': 0.04,
-#                             'figure.subplot.right': 0.98,
-#                             'figure.subplot.top': 0.99,
-#                             'figure.figsize': (7,4.5)})
+matplotlib.rcParams.update({'font.size': 12,
+                            'xtick.major.size': 8,
+                            'xtick.major.width': 1.5,
+                            'xtick.minor.size': 5,
+                            'xtick.minor.width': 1,
+                            'axes.labelsize': 16,
+                            'ytick.major.size': 8,
+                            'ytick.major.width': 1.5,
+                            'ytick.minor.size': 5,
+                            'ytick.minor.width': 1,
+                            'xtick.direction': 'inout',
+                            'ytick.direction': 'inout',
+                            'figure.subplot.left':0.00,
+                            'figure.subplot.bottom': 0.04,
+                            'figure.subplot.right': 0.9,
+                            'figure.subplot.top': 0.99,
+                            'figure.figsize': (7,4.5)})
+
 
 
 
@@ -452,6 +454,7 @@ class collimator(object):
     def plot_vspace(self, ax=None, epq = 10, sec='all', zorder = None):
         # for He1+
         vel = getvelocity(mass = 4, charge = 1, step = epq ,frac = 1.)
+        self.vel = vel
         self._calc_vspace(vel = vel)
 
         if ax == None:
@@ -466,9 +469,9 @@ class collimator(object):
             # ax.set_ylabel(r'$v_T$ / $km\,s^{-1}$', labelpad = 39, va = 'baseline', ha = 'right')
             # ax.set_zlabel(r'$v_N$ / $km\,s^{-1}$', labelpad = 39, va = 'baseline', ha = 'right')
 
-            ax.set_xlabel(r'$v_R$ / $km\,s^{-1}$', labelpad = 19)
-            ax.set_ylabel(r'$v_T$ / $km\,s^{-1}$', labelpad = 19)
-            ax.set_zlabel(r'$v_N$ / $km\,s^{-1}$', labelpad = 19)
+            ax.set_xlabel(r'$v_R$ / $km\,s^{-1}$', labelpad = 15)
+            ax.set_ylabel(r'$v_T$ / $km\,s^{-1}$', labelpad = 15)
+            ax.set_zlabel(r'$v_N$ / $km\,s^{-1}$', labelpad = 15)
 
 
             # ax.set_yticklabels(ax.get_yticks(), rotation=-15, va='center', ha='right')
@@ -476,7 +479,7 @@ class collimator(object):
 
             # SC spin axis:
             ax.plot([0, self.rax[0]*2*vel], [0, self.rax[1]*2*vel], [0, -self.rax[2]*2*vel], "-", color="crimson",
-                    zorder = 10., lw=1.8)
+                   zorder = 10., lw=1.8)
         colors = array([[77, 77, 0], [77, 57, 0], [77, 0, 0], [77, 0, 57], [38, 0, 77], [0, 38, 77], [0, 77, 77],
                         [0, 77, 19]])
         if isinstance(sec, int):
@@ -488,15 +491,15 @@ class collimator(object):
             nrs_det = v.shape[-3]
             nrs_pts = v.shape[-1]
             nrs = nrs_det * nrs_pts
-            shade_arr = [0.4, 1.6, 2.8]
+            shade_arr = [0.2, 1.4, 3.]
             rgb = colors[sec]
             cc = zeros((nrs, 3))
             for j in range(nrs_det):
                 cc[j * nrs_pts: (j + 1) * nrs_pts] = lighten_color(rgb, factor=shade_arr[j]) / 255.
-            ax.scatter(v[..., 0, :], v[..., 1, :], v[..., 2, :], c=cc, s = 10)
+            ax.scatter(v[..., 0, :], v[..., 1, :], v[..., 2, :], c=cc, s=10)
             ax.scatter(0, 0, 0, c='k', s=25) # origin dot
             ax.plot([0, 2* vel], [0, 0], [0, 0], c='k', lw=1.8)
-            ax.view_init(elev=26., azim=-37)
+            ax.view_init(elev=16., azim=-14)
 
         elif sec == 'all':
             v = self.vspace[:, :, :, :]
@@ -504,13 +507,15 @@ class collimator(object):
                 nrs_det = v.shape[-4]
                 nrs_pts = v.shape[-1]
                 nrs = nrs_det * nrs_pts
-                shade_arr = [0.4, 1.6, 2.8]
+
+                shade_arr = [0.2, 1.4, 3.]
                 rgb = colors[i]
+
                 cc = zeros((nrs, 3))
                 for j in range(nrs_det):
                     cc[j*nrs_pts : (j+1)*nrs_pts] = lighten_color(rgb, factor=shade_arr[j]) / 255.
 
-                ax.scatter(v[..., s, 0, :], v[..., s, 1, :], v[..., s, 2, :], c=cc, s = 12, alpha = 0.6)
+                ax.scatter(v[..., s, 0, :], v[..., s, 1, :], v[..., s, 2, :], c=cc, s=12, alpha=0.6)
                 ax.scatter(0, 0, 0, c='k', s=25)  # origin dot
                 ax.plot([0, 3 * vel], [0, 0], [0, 0], c='k', lw=1.8, zorder = 10.)
                 ax.view_init(elev=16., azim=-14)
@@ -524,12 +529,12 @@ class collimator(object):
 
         else:
             print("no valid sector given")
-        # update axes:
+        #update axes:
         # ax.set_xlim(-vel / 3., vel * 5 / 3.)
         # ax.set_ylim(-vel, vel)
         # ax.set_zlim(-vel, vel)
-        # ax.plot([0, 2 * vel], [0, 0], [0, 0], c='k', lw=0.8)
-        # set view:
+        #ax.plot([0, vel], [0, 0], [0, 0], c='k', lw=0.8, zorder = 50)
+
 
         return ax
 

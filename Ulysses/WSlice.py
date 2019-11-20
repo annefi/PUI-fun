@@ -1,6 +1,7 @@
 import sys
 import matplotlib.pyplot as plt
 from numpy import arange, min, max, amin, amax, unique, around
+from numpy import *
 import matplotlib
 
 matplotlib.rcParams.update({'font.size': 12,
@@ -50,6 +51,9 @@ class WSlice():
             norm_arr[norm_arr == 0] = 1
             self.H = H0 / norm_arr
 
+
+
+
     def init_plot(self):
         def keypress(event):
             if event.key == 'right':
@@ -84,7 +88,7 @@ class WSlice():
             vmax = amax(self.H)
             if dim == 'R':
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[slice, :, :].T, cmap=colormap, vmin = vmin,
-                                                   vmax = vmax)
+                                                   vmax = vmax, rasterized=True)
                 colormap.set_under(color='#D3D3D3')
                 self.txt_plane.set_text('%s plane' % r'$\rm{w_T-w_N}$')
                 self.txt_slice.set_text(r'$\mathrm{w_{sw,R} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
@@ -92,7 +96,7 @@ class WSlice():
                 self.ax.set_ylabel(r'$\mathrm{w_{sw,N}}$')
             elif dim == 'T':
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, slice, :].T, cmap=colormap, vmin = vmin,
-                                                   vmax = vmax)
+                                                   vmax = vmax, rasterized=True)
                 colormap.set_under(color='#D3D3D3')
                 self.txt_plane.set_text('%s plane' % r'$\rm{w_R-w_N}$')
                 self.txt_slice.set_text(r'$\mathrm{w_{sw,T} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
@@ -100,7 +104,7 @@ class WSlice():
                 self.ax.set_ylabel(r'$\mathrm{w_{sw,N}}$')
             elif dim == 'N':
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, :, slice].T, cmap=colormap, vmin = vmin,
-                                                   vmax = vmax)
+                                                   vmax = vmax, rasterized=True)
                 colormap.set_under(color='#D3D3D3')
                 self.txt_plane.set_text('%s plane' % r'$\rm{w_R-w_T}$')
                 self.txt_slice.set_text(r'$\mathrm{w_{sw,N} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
@@ -111,9 +115,10 @@ class WSlice():
         if self.color_norm == 'sg':
             if dim == 'R':
                 vmax = amax(self.H[slice, :, :])
+                vmax = mean(self.H[slice, :, :]) + 3*std(self.H[slice, :, :])
                 if vmax <= 0:
                     vmax = 0.0001
-                vmin = 0.
+
                 try:
                     vmin = min(self.H[slice,:,:][self.H[slice,:,:] > 0.])
                 except:
@@ -122,7 +127,7 @@ class WSlice():
                 # if vmin == 0.:
                 #     vmin = 10
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[slice, :, :].T, cmap=colormap, vmin = vmin,
-                                                   vmax = vmax)
+                                                   vmax = vmax, rasterized=True)
                 colormap.set_under(color = '#D3D3D3')
                 self.txt_plane.set_text('%s plane'%r'$\rm{w_T-w_N}$')
                 self.txt_slice.set_text(r'$\mathrm{w_{sw,R} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
@@ -137,7 +142,7 @@ class WSlice():
                 except:
                     vmin = 0.00001
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, slice, :].T, cmap=colormap, vmin = vmin,
-                                                   vmax = vmax)
+                                                   vmax = vmax, rasterized=True)
                 colormap.set_under(color = '#D3D3D3')
                 self.txt_plane.set_text('%s plane' % r'$\rm{w_R-w_N}$')
                 self.txt_slice.set_text(r'$\mathrm{w_{sw,T} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
@@ -152,7 +157,7 @@ class WSlice():
                 except:
                     vmin = 0.00001
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[:, :, slice].T, cmap=colormap, vmin=vmin,
-                                                   vmax=vmax)
+                                                   vmax=vmax, rasterized=True)
                 colormap.set_under(color = '#D3D3D3')
                 self.txt_plane.set_text('%s plane' % r'$\rm{w_R-w_T}$')
                 self.txt_slice.set_text(r'$\mathrm{w_{sw,N} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice + 1]))

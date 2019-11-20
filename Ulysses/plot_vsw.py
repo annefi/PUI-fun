@@ -1,4 +1,5 @@
 import sys
+import matplotlib.ticker as ticker
 sys.path.append('/home/asterix/fischer/PUI/old_stuff/Ulysses/swics/software/libulpy')
 sys.path.append('/home/asterix/fischer/PUI')
 from DataLoader.uswipha import uswipha
@@ -33,7 +34,7 @@ def load_year(y):
     d1.set_mask('Master', 'rng', 0, 0, reset=True)
     d1.set_mask('Master', 'det', 0, 2, reset=True)  # cut out det = 3 (=rubbish?)
     d1.set_mask('Master', 'ech', 12, 250, reset=True)  # exclude doubles
-    d1.set_mask('Master', 'brw', 1, 1, reset=True)
+    #d1.set_mask('Master', 'brw', 1, 1, reset=True)
     d1.set_mask('Master', 'epq', 0, 17, reset=True)
 
     # get a real subset with masks applied:
@@ -46,7 +47,10 @@ def load_year(y):
     return vsw
 
 vswbins = arange(200,1001,10)
-years = range(1993,2007)
+
+
+years = range(1993,2010)
+#years = range(1993,2007)
 H_col = zeros([vswbins.shape[0]-1, len(years)])
 sum_col = []
 
@@ -63,6 +67,8 @@ def loop():
             print('no matching data in %s' % year)
 
 yearbins = years + [years[-1]+1]
+halfs = arange(yearbins[0] + 0.5, yearbins[-1], 1)
+
 
 def plot_v(norm = 'max'):
     fig, ax = plt.subplots(figsize=(8, 7))
@@ -76,9 +82,19 @@ def plot_v(norm = 'max'):
     ax.set_xlabel(r'$vsw \, / \, km/s$')
     ax.set_xlabel(r'vsw / $km/s$')
 
+    ax.yaxis.set_major_formatter(ticker.NullFormatter())
+    ax.set_yticks(halfs, minor=True)
+    ax.set_yticklabels(years, minor=True)
+    for tick in ax.yaxis.get_minor_ticks():
+        tick.set_pad(8.)
+        tick.tick1line.set_markersize(0)
+        tick.tick2line.set_markersize(0)
+        tick.label1.set_horizontalalignment('center')
+
+
+    ax.set_yticks(yearbins)
     for i, s in enumerate(sum_col):
         ax.text(vswbins[-1] +10, yearbins[i] + 0.5, '%i'%s, fontsize = 10)
-
 
     ax.pcolormesh(vswbins, yearbins, H_col.T, cmap = colormap, vmin = 0.0000001, vmax = H_col.max())
 

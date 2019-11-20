@@ -8,23 +8,23 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 
-matplotlib.rcParams.update({'font.size': 12,
-                            'axes.labelsize': 14,
-                            'xtick.major.size': 8,
-                            'xtick.major.width': 1.5,
-                            'xtick.minor.size': 5,
-                            'xtick.minor.width': 1,
-                            'ytick.major.size': 8,
-                            'ytick.major.width': 1.5,
-                            'ytick.minor.size': 5,
-                            'ytick.minor.width': 1,
-                            'xtick.direction': 'out',
-                            'ytick.direction': 'out',
-                            'figure.subplot.left':0.12,
-                            'figure.subplot.bottom': 0.1,
-                            'figure.subplot.right': 0.84,
-                            'figure.subplot.top': 0.88,
-                            'figure.figsize': (8,4.5)}) # Achtung anders
+# matplotlib.rcParams.update({'font.size': 12,
+#                             'axes.labelsize': 14,
+#                             'xtick.major.size': 8,
+#                             'xtick.major.width': 1.5,
+#                             'xtick.minor.size': 5,
+#                             'xtick.minor.width': 1,
+#                             'ytick.major.size': 8,
+#                             'ytick.major.width': 1.5,
+#                             'ytick.minor.size': 5,
+#                             'ytick.minor.width': 1,
+#                             'xtick.direction': 'out',
+#                             'ytick.direction': 'out',
+#                             'figure.subplot.left':0.12,
+#                             'figure.subplot.bottom': 0.1,
+#                             'figure.subplot.right': 0.84,
+#                             'figure.subplot.top': 0.88,
+#                             'figure.figsize': (8,4.5)}) # Achtung anders
 
 # define style of textboxes
 props = dict(boxstyle='round', facecolor='#D3D3D3', edgecolor = 'k', alpha=0.8, pad = 0.8)
