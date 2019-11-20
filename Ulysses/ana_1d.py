@@ -42,7 +42,7 @@ wbins = arange(0.3, (wshellmax - 1) + 0.0001, shellstep)
 
 
 
-if False:
+if True:
     def load_data_year(y, start = 1, stop = 166, vel2 = max_vel, r_au = None, ax = None):
         d1 = uswipha(year=y, tf=[[start,stop]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
         d1.sync_swoops()
@@ -115,7 +115,8 @@ if False:
             ybins_labels(yearbins)
         #ax.pcolormesh(wbins, yearbins, H_mat.T)
 
-if True:
+if False:
+
     def load_data_r(r_au, start=1, stop=366, vel2=max_vel, ax=None):
         d1 = uswipha(year=range(1994,1995), tf=[[start, stop]],
                      path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
