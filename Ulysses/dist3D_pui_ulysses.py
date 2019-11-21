@@ -14,7 +14,7 @@ import time
 from matplotlib.ticker import (MultipleLocator, FormatStrFormatter,
                                AutoMinorLocator)
 
-matplotlib.rcParams.update({'font.size': 12,
+matplotlib.rcParams.update({'font.size': 24,
                             'xtick.major.size': 8,
                             'xtick.major.width': 1.5,
                             'xtick.minor.size': 5,
