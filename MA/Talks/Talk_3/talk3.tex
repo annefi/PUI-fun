@@ -74,7 +74,7 @@
 
 %%%
 \section{Pickup Ions}
-\begin{frame}{The Pickup Process}
+\begin{frame}{Pickup Ions}
 \begin{block}{ }
 	\textbf{Pickup Ions: \\
 		Former neutrals that get ionised within the heliosphere}
@@ -372,10 +372,10 @@
 		\only<1>{\includegraphics[scale=0.22]{Pics/swics_collimator111.pdf}}
 		\only<2>{\includegraphics[scale=0.22]{Pics/swics_collimator22.pdf}}
 	\end{columns}
-\vspace{-0.5cm}
+\vspace{-0.1cm}
 	\begin{itemize}
 		\item For constant $\frac{m}{q}:$ $\frac{E}{q}$-step $\widehat{=}$ absolute value of velocity
-		\item Integration over EpQ shells $\rightarrow$ loss of information!
+		\only<2>{\item Integration over EpQ shells $\rightarrow$ loss of information!}
 	\end{itemize}
 \end{frame}
 %%%
@@ -517,14 +517,14 @@
 %%%
 
 %%%
-\section{Results}
+\section{Results -- 3D VDF}
 \begin{frame}{Spherical Cut through VDF}
 \begin{columns}
 	\column{2.5cm}
 \begin{figure}
 	\includegraphics[scale=.7]{Pics/slice_R2.pdf}
 \end{figure}
-{\scriptsize 50 days in 1994 \\
+{\scriptsize 50 days in 1993 \\
  $\mathrm{vsw} : 760 - 780 \, \mathrm{km\,s^{-1}}$
 }
 \column{7.5cm}
@@ -552,14 +552,14 @@
 		$PSD = \frac{N}{PSV}$
 	\end{mdframed}
 
-	\column[]{5cm}
+	\column[]{6cm}
 	
 	\includegraphics[scale=.4]{Pics/norm_time.pdf}
 \end{columns}
 
 
 \begin{columns}
-	\column[]{5cm}
+	\column[]{5.5cm}
 	\begin{figure}
 		\includegraphics[scale=.35]{Pics/cart_50_counts_R.pdf}
 	\end{figure}
@@ -595,9 +595,17 @@
 
 %%%
 \begin{frame}{Spherical Surface}
+\begin{columns}
+	\column{5.5cm}
+	\begin{figure}
+		\includegraphics[scale=.8]{Pics/slice_R2.pdf}
+	\end{figure}
+
+	\column{7.5cm}
 \begin{figure}
 	\includegraphics[scale=.65]{Pics/cov.pdf}
 \end{figure}
+\end{columns}
 \end{frame}
 
 %%%
@@ -628,28 +636,27 @@
 
 %%%
 
-\begin{frame}{1D}
-TODO
-\end{frame}
-
-
-\begin{frame}{Outlook}
-
+\begin{frame}{1D Spectrum}
 \begin{columns}
-	\column{5.8cm}
-\begin{itemize}
-	\item 1D radiale Abhängigkeit untersuchen
-	\item B-Feld abhängige Torusverteilung
-\end{itemize}
-	\column{10cm}
+		\column{.1cm}
+	\column{4.8cm}
+
+	\includegraphics[scale=.3]{Pics/cov.pdf}
+	\hspace{1cm}\includegraphics[scale=0.15]{Pics/sw_pui_gloeckler.png}
 	
-	\includegraphics[scale=.21]{Pics/sky_ps.pdf}
-	%\column{4cm}
+	\column{6cm}
+	\vspace{.5cm}
+	
+	
+	\includegraphics[scale=.38]{Pics/1D.pdf}
+	
+	\vspace{-0.1cm}
+	\begin{center}
+		{\tiny $\mathrm{vsw}:760 - 770 \, \mathrm{km\,s^{-1}}$ --
+			100 days each in 1994, 1996}
+	\end{center}
+	\column{4cm}
 \end{columns}
-
-
-
-
 
 
 \end{frame}
@@ -659,12 +666,32 @@ TODO
 \section{Outlook \& Summary}
 %%%
 
-\begin{frame}[plain]{Summary}
-\begin{itemize}
-	\item 
-\end{itemize}
-	\includegraphics[scale=.21]{Pics/sky_ps.pdf}
-	\includegraphics[scale=.25]{Pics/cart_50_ps_R.pdf}
+\begin{frame}[plain]{Summary \& Outlook}
+\begin{columns}
+	\column{8cm}
+	\begin{itemize}
+		\item $\mathrm{He^+}$ data from Ulysses SWICS
+		\item Virtual Detector
+		\item Geometrical Effects
+		\item Phase Space Normalisation
+	\end{itemize}
+		\hspace{0.1cm}$\Rightarrow$ 3D measurement of PUI VDF
+		\vspace{1cm}
+		\hrule
+		\vspace{1cm}
+{\footnotesize	\begin{itemize}
+		\item PUI torus distribution with the IMF
+		\item PUI energy diffusion processes
+
+	\end{itemize}}
+	\column{5cm}
+		\includegraphics[scale=.2]{Pics/sky_ps.pdf}
+		\includegraphics[scale=.21]{Pics/cart_50_ps_R.pdf}
+		\includegraphics[scale=.16]{Pics/1D.pdf}
+		
+\end{columns}
+
+
 \end{frame}
 
 
@@ -801,6 +828,54 @@ TODO
 
 
 \end{frame}
+
+
+\begin{frame}[plain]{}
+
+	\begin{figure}
+		\includegraphics[scale=.6]{Pics/epq_all.pdf}
+
+	\end{figure}
+	
+\end{frame}
+
+\begin{frame}[plain]{}
+\begin{figure}
+	\includegraphics[scale=.6]{Pics/cart_50_step-1.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}[plain]{}
+\begin{figure}
+	\includegraphics[scale=.6]{Pics/cart_50_ps_R.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}[plain]{}
+\begin{figure}
+	\includegraphics[scale=.6]{Pics/cart_50_R_step1.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}[plain]{}
+\begin{figure}
+	\includegraphics[scale=.6]{Pics/cart_50_step2.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}[plain]{}
+\begin{figure}
+	\includegraphics[scale=.6]{Pics/cart_50_step3.pdf}
+\end{figure}
+\end{frame}
+
+\begin{frame}[plain]{}
+\begin{figure}
+	\includegraphics[scale=.6]{Pics/cart_50_step4.pdf}
+\end{figure}
+\end{frame}
+
+
 
 
 

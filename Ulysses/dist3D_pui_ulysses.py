@@ -14,22 +14,22 @@ import time
 from matplotlib.ticker import (MultipleLocator, FormatStrFormatter,
                                AutoMinorLocator)
 
-# matplotlib.rcParams.update({'font.size': 12,
-#                             'xtick.major.size': 8,
-#                             'xtick.major.width': 1.5,
-#                             'xtick.minor.size': 5,
-#                             'xtick.minor.width': 1,
-#                             'ytick.major.size': 8,
-#                             'ytick.major.width': 1.5,
-#                             'ytick.minor.size': 5,
-#                             'ytick.minor.width': 1,
-#                             'xtick.direction': 'inout',
-#                             'ytick.direction': 'inout',
-#                             'figure.subplot.left':0.12,
-#                             'figure.subplot.bottom': 0.15,
-#                             'figure.subplot.right': 0.9,
-#                             'figure.subplot.top': 0.94,
-#                             'figure.figsize': (7,4.5)})
+matplotlib.rcParams.update({'font.size': 24,
+                            'xtick.major.size': 8,
+                            'xtick.major.width': 1.5,
+                            'xtick.minor.size': 5,
+                            'xtick.minor.width': 1,
+                            'ytick.major.size': 8,
+                            'ytick.major.width': 1.5,
+                            'ytick.minor.size': 5,
+                            'ytick.minor.width': 1,
+                            'xtick.direction': 'inout',
+                            'ytick.direction': 'inout',
+                            'figure.subplot.left':0.12,
+                            'figure.subplot.bottom': 0.15,
+                            'figure.subplot.right': 0.9,
+                            'figure.subplot.top': 0.94,
+                            'figure.figsize': (7,4.5)})
 
 
 class Dist3D(object):
@@ -625,7 +625,7 @@ class Dist3D(object):
         return norm_arr, H
 
     def wspec_1d(self, vsw = [0,1000], doys = [0,365], shellstep = 0.1, mode = 'ps', name = '1993',
-                 ax = None, wbins = None):
+                 ax = None, wbins = None, col = "blue"):
         '''
 
         :param vsw: vsw range to be analysed
@@ -669,24 +669,25 @@ class Dist3D(object):
 
         if ax == None:
             fig, ax = plt.subplots(figsize=(8,7))
-            ax.set_xlim(-1.05,2)
-            ax.xaxis.set_minor_locator(MultipleLocator(.5))
+            ax.set_yscale('log')
+            ax.set_xlim(-1.05, 2)
+            #ax.xaxis.set_minor_locator(MultipleLocator(.5))
             ax.set_xlabel(r'$\mathrm{w_{sw}}$')
-            ax.set_ylabel('phase space density')
+            ax.set_ylabel(r'Phase Space Density / $s^3 \, km^{-6}$')
 
         if mode == 'norm':
             H = norm_arr
             ax.set_ylabel('norm')
-            ax.plot(wbins[:-1], H, ls='steps-post', label='%s' % name)
+            ax.plot(wbins[:-1], H, ls='steps-post')
         elif mode == 'counts':
             H = H0
             ax.set_ylabel('counts')
-            ax.plot(wbins[:-1], H, ls='steps-post', label='%s' %name)
+            ax.plot(wbins[:-1], H, ls='steps-post')
         elif mode == 'ps':
             #H0[norm_arr == 0] = 0
             norm_arr[norm_arr == 0] = 1
             H = H0 / norm_arr
-            ax.plot(wbins[:-1], H, ls='steps-post', label='%s' % name)
+            ax.plot(wbins[:-1], H, ls='steps-post', c = '%s'%col, label= '%s'%name, lw = 2.)
         if mode == 'all':
             print('sum counts: ', H0.sum())
             H_cts = H0[:]
