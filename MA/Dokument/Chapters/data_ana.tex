@@ -98,6 +98,7 @@ wie viele Daten bleiben über, wie viele PHA-Worte ca. pro Spin?
 %
 %
 \section{Collimator/Detector model}
+Schreiben, dass das eigentlich von ACE/Lars kommt
 
 \subsubsection{Motivation}
 Kollimatormodell -- warum eigentlich -- wie umgesetzt?\\ \\
@@ -106,7 +107,16 @@ Was macht das Modell? -- Ich will das FoV zu jedem Zeitpunkt bestimmen. Ich nehm
 Berechnet anhand des AA, wohin Sun trigger schaut, wenn getriggert wird und rotiert coll. an entsprechende Position für Sek 0. Ordnet entsorechend andere Sektoren an.
 Simuliert FoV durch Punkteraster \\
 \subsubsection{Construction}
-Originalgeometrie beschreiben\\
+The original geometry of the SWICS entrance system, in particular the collimator, was read out from a technical drawing \textbf{\textbf{(TODO: Quelle?!})}
+Can be described as:
+Width: Cutting out a hollow piece of 90 deg longitude (\textbf{todo: latitude? 4 grad?}) from a sphere (\textbf{of r ca. 26 cm ??}) at .. deg polar latitude. The piece is not flat but curved and has a height of ca. 5 cm. This geometry leads to two deflection plates that are curved but have a constant distance of ca. 3.7 cm over a relatively large area which is necessary to provide a constant voltage for the EpQ filtering. Resulting opening angles of the collimator are $69^\circ$ in width and $4^\circ$ in height. \textbf{Todo: Zeichnung/Abbildung?}\\
+The instrument is mounted with one of the narrow side edges parallel to Ulysses' spin axis. When we define this edge to lie within the xy-plane of a three dimensional Cartesian coordinate system, the collimator geometry can be reconstructed by revolving this edge for $90^\circ$ around a straight line that lies in the xy-plane with an angle of $56^\circ$ relative to the x-axis. \textbf{Todo: Zeichnung/Abbildung!} \\
+
+FoV: unendlich lange Vektoren in Richtung der Normalen auf der Detektoröffnung. Da gibt es eine gewisse Range, die wir durch äquidistante Detektorpunkte wählen ( Anzahl/ Dichte: variabel). Repräsentiert durch Einheitsvektoren bzw. Punkte am Ende dieser, weil wir nur an der Richtung interessiert sind. 
+\\ \\
+Unterteilung in drei Detektoren!
+
+.\\ \\
 Konstruktion durch Detektorpunkte
 \subsubsection{From FoV to Vspace}
 Übergang FoV -> vSpace:
@@ -159,24 +169,38 @@ Plots: einzelner Sektor -- einmal alles ohne AA -- einmal alles mit AA
 %%%
 %%%
 \subsubsection{Ulysses trajectory, HG system}
+\textbf{Todo: Hinweis auf Zeichnung und Kapitel vorne}\\
+Trajectory data is used from \citet{ulysses-data-archive} where Ulysses position data on a daily basis is available. The trajectory data is given based on different coordinates, including the heliographic coordinate system in the B1950.0 epoch.
+\\ \\
+Heliographic Coordinate System:\\
+The heliographic (HG) coordinate system is a Cartesian Sun-centered system with the Sun's equatorial plane as a reference plane. Its X-axis is directed along the line of ascending node, which is the intersection line of the ecliptic and the solar equatorial plane. While the solar equatorial plane has an inclination of $i_\odot 7.25 ^\circ$ against the ecliptic \citep{fraenz_harper} the line of ascending node is at a longitude of $\Omega_\odot \approx 75^\circ$ relative to the First Point of Aries in 1950 \citep{nasa-earth-coord}. The Z-axis of the HG coordinate system is directed along the Sun's spin axis (northward) and the Y-axis completes the right-handed system. \\
+In HG spherical coordinates the longitude $\varphi_{HG}$ is defined to be $0^\circ$ for directions along the X-axis and increases towards the Y-axis. The latitude $\vartheta_{HG}$ is $0^\circ$ for direction within the solar equatorial plane and $+90^\circ$ for northward directions.\\ \\
+%
+%
+When working with the Ulysses trajectory data it was found that these data were given in spherical coordinates for which the $\varphi_{HG} = 0^\circ$ direction was towards $\sim -105 ^\circ$ longitude relative to the First Point of Aries. This means that the Ulysses trajectory coordinate system is shifted $180^\circ$ around the solar spin axis against the classical definition (s.a.).\\
+In fig. \ref{fig:traj} Ulysses' spherical HG coordinates as well its distance from the Sun are given over the time of nearly the complete mission.
+
+
 \begin{figure}[h]
 	\includegraphics[width=1\textwidth]{Figures/HG_coord.pdf}
 	\centering
-	\caption{TODO}
-	\label{TODO}
+	\caption{Ulysses trajectory data from November 1990 to June 2009 based on the data from the \citet{ulysses-data-archive}. Color shaded are the three orbits of the mission. \textbf{Above:} Shown is Ulysses' radial distance R from the Sun. Perihelion and aphelion of Ulysses' elliptical orbit can clearly be seen as the nearest/farthest distance of $1.3\,\mathrm{AU}$ and $5.4\,\mathrm{AU}$. Ulysses passes each of these points every 6.2 years and three times in total over the duration of the mission. \textbf{Below:} Shown are Ulysses' heliographic (HG) longitude and latitude. Note, that the longitude is shifted around $180^\circ$ with respect to the classical definition (s. text for details). A clear periodicity over Ulysses' three orbits can be seen. Maximum and minimum latitude are $\sim \pm 80^\circ$. These points are highest above the poles of the sun and are reached a few weeks before and after Ulysses' pass through the perihelion.}
+	\label{fig:traj}
 \end{figure}
 
 
 \subsubsection{AA motivation}
+durch versch. AA wird unterschiedlicher Teil des v-Raums ausgeleuchtet;
 \begin{figure}[h]
 	\includegraphics[width=0.5\textwidth]{Figures/col_aa_marker.png}
 	\centering
-	\caption{TODO}
-	\label{TODO}
+	\caption{todo}
+	\label{todo}
 \end{figure}
 	
 
 \subsubsection{Eigengeschwindigkeit}
+Eigengeschwindigkeit Berechnung (s. Kladde S. 84, 85
 
 \subsubsection{Sunpulse Trigger -- Rotation}
 
@@ -184,20 +208,10 @@ Plots: einzelner Sektor -- einmal alles ohne AA -- einmal alles mit AA
 \subsubsection{Calibration Sector}
 
 \subsection{Coordinates}
-heliographic, heliocentric? 180 Grad Versatz beschreiben? Drehung mit Eulermatrix
+Umrechnung von HG in RTN?
 \\ \\
-trajectory. \\Orbitdaten gegeben in B.1950... Umrechnung?
-\\ \\
-verschiedene Koordinatensysteme
-\\ \\
-durch versch. AA wird unterschiedlicher Teil des v-Raums ausgeleuchtet;
-\\ \\
-Eigengeschwindigkeit Berechnung (s. Kladde S. 84, 85)
-\\ \\ 
 TODO:
 The orbit itself is described in heliographic coordinates, so a cs that is constant (stable?) with respect to the sun. For describing positions and velocities in the frame of the spacecraft (e.g. AA) we need another cs...
-\\ \\
-Woher HG Daten und Umrechnung in RTN
 
 \begin{figure}[h]
 	\includegraphics[width=1\textwidth]{Figures/RTN_AA_angles.pdf}
