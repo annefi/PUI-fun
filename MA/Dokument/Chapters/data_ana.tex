@@ -107,35 +107,65 @@ Was macht das Modell? -- Ich will das FoV zu jedem Zeitpunkt bestimmen. Ich nehm
 Berechnet anhand des AA, wohin Sun trigger schaut, wenn getriggert wird und rotiert coll. an entsprechende Position für Sek 0. Ordnet entsorechend andere Sektoren an.
 Simuliert FoV durch Punkteraster \\
 \subsubsection{Construction}
+For reconstructing the velocity space that SWICS measures we need to know about the directions of incident particles that can enter the instrument.
+\\ \\
 The original geometry of the SWICS entrance system, in particular the collimator, was read out from a technical drawing \textbf{\textbf{(TODO: Quelle?!})}
 Can be described as:
 Width: Cutting out a hollow piece of 90 deg longitude (\textbf{todo: latitude? 4 grad?}) from a sphere (\textbf{of r ca. 26 cm ??}) at .. deg polar latitude. The piece is not flat but curved and has a height of ca. 5 cm. This geometry leads to two deflection plates that are curved but have a constant distance of ca. 3.7 cm over a relatively large area which is necessary to provide a constant voltage for the EpQ filtering. Resulting opening angles of the collimator are $69^\circ$ in width and $4^\circ$ in height. \textbf{Todo: Zeichnung/Abbildung?}\\
-The instrument is mounted with one of the narrow side edges parallel to Ulysses' spin axis. When we define this edge to lie within the xy-plane of a three dimensional Cartesian coordinate system, the collimator geometry can be reconstructed by revolving this edge for $90^\circ$ around a straight line that lies in the xy-plane with an angle of $56^\circ$ relative to the x-axis. \textbf{Todo: Zeichnung/Abbildung!} \\
-
-FoV: unendlich lange Vektoren in Richtung der Normalen auf der Detektoröffnung. Da gibt es eine gewisse Range, die wir durch äquidistante Detektorpunkte wählen ( Anzahl/ Dichte: variabel). Repräsentiert durch Einheitsvektoren bzw. Punkte am Ende dieser, weil wir nur an der Richtung interessiert sind. 
+The instrument is mounted with one of the narrow side edges parallel to Ulysses' spin axis. When we define this edge to lie on the x-axis of a three dimensional Cartesian coordinate system, the collimator geometry can be reconstructed by revolving this edge for $90^\circ$ around a straight line that lies in the xy-plane with an angle of $56^\circ$ relative to the x-axis. \textbf{Todo: Zeichnung/Abbildung!} \\
+The detector's field of view can be represented by a set of normal vectors on the opening plane of the detector. In our model, we have a variable number of those equidistant vectors both along the width and the height of the detector opening. The real continuous field of view is modelled better with an increasing number of normal vectors that cover the opening. Each of these normalized vectors $\mathrm{\mathbf{f_i}}$ has a unique direction $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ in position space. An example... \textbf{(TODO: Plot)}
 \\ \\
-Unterteilung in drei Detektoren!
+Unterteilung in drei Detektoren!\\
+Ein Spin des SC wird begleitet von einer Rotation des FoV um die x-Achse. Diese Rotation wird eingeteilt in 8 Sektoren a 45 Grad. Da das SC kontinuierlich dreht, verändert auch das reale FOV kontinuierlich seinen Drehwinkel. Wir modellieren das dadurch, dass wir das einzelne FOV schrittweise in n Steps durch jeden Sektor steppen lassen.
+Das integrierte FoV über einen Spin ergibt sich dann aus ... einzelnen Einheitsvektoren, deren Richtungen symmetrisch um die Spinachse ausgerichtet sind.
 
-.\\ \\
-Konstruktion durch Detektorpunkte
 \subsubsection{From FoV to Vspace}
-Übergang FoV -> vSpace:
-Richtungsinfo aus FoV
-Betrag aus EpQ-Steps
+The detector's velocity acceptance can be calculated by combining the directional information from the field of view and the value of absolute velocity from the current EpQ step. 
+\\
+A particle can only enter the detector when its absolute velocity is within the acceptance of the current EpQ step and when its direction is antiparallel to one of the vectors of the field of view. For a given acceptance velocity $v_i$ and a single field of view vector $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ the accepted velocity is
+\begin{align*}
+\mathbf{v_i} = \begin{bmatrix}v_{R,i}\\v_{T,i}\\v_{N,i}\end{bmatrix} = - \begin{bmatrix}f_{x,i}\\f_{y,i}\\f_{z,i}\end{bmatrix} \cdot v_i.
+\end{align*}
+Indem man alle FoV Vektoren einer Rotation während eines v-Steps berücksichtigt, bilden alle v-Akzeptanzen zusammen eine Shell mit Radius v im v-Space.
+
+
+The accepted velocity space over a complete spacecraft rotation for a acceptance velocity $v_i = todo$ consists of the combination of TODO accepted velocities and is shown in fig. todo. 
+
+
+For a spacecraft rotation that is distributed into eight sectors ... the accepted velocities 
+
+
+
+
+
+.
+\\ \\
+The central velocity for an ion of charge $q$ and mass $m$ for an energy-per-charge step $EpQ$ (in $keV/e$) is
+\begin{align*}
+\frac{v_c}{km \, s^{-1}} = \sqrt{\frac{2 \cdot EpQ \cdot 1.60217646\cdot10^{-19}\cdot |q|}{m \cdot 1.66053886 \cdot 10^{-27}} }
+\end{align*}
+with $m = 4 u$ and $|q| = 1$ for $He^{+}$.\\
+To represent the uncertainty in EpQ measurement, we take into account the relative uncertainty $\Delta \frac{E}{q}/\frac{E}{q} = \pm 5\%$ and translate it into an uncertainty $\Delta v / v = \frac{1}{2} \left( \Delta \frac{E}{q}/\frac{E}{q}\right) = \pm 2.5\%$ in accepted velocity. For every EpQ step we can now choose a number of $i_{epq}$ single velocities that are distributed evenly in the interval $\left[ v_c - \Delta v / v, v_c + \Delta v / v \right]$. The total number of accepted velocities $v$ is then $64 \cdot i_{epq}$.
+\\
+Im v-Space stellen sich die einzelnen v-Schritte als ineinander liegende Schalen mit gerade dem Radius ihrer Geschwindigkeit dar. Ein Beispiel, der Übersichtlichkeit halber nur 3 Schalen, ist in bla gezeigt.
+\\
+Durch die Kombination aus vielen Schalen ergibt sich im v-Space ein 3D Pattern aus eng beieinander liegenden v-Akzeptanzpunkten, die das reale kontinuierliche v-Volumen nachahmen.
+
+\subsubsection{Loose ends}
+Rotation
+\\ 
+Ausrichtung
+\\ \\
 außerdem: Eigengeschwindigkeit Ulysses
-\subsubsection{EpQ Schalen}
-
-
-
-
+\\ \\
+Übergang vspace: Dann weiß ich, welche v-Vektoren möglich gewesen sein können, damit dieses PHA-Wort entstanden ist.
+\\ \\
 wählbare Anzahlen nrs\_sec usw. Später schreiben, was verwendet wurde (?) ; Steps vsw, asp Winkel
 \\ \\
 Geometrie, Aspect Angle: Ausrichtung zu jedem Zeitpunkt bekannt
 (FoV) (hierher die Kalibration! Nur damit funktioniert die Ausrichtung)
 Wir füllen die einzelnen Bereiche mit verschiedenen möglichen Messpunkten\\ \\
 Dann nehmen wir PHA-Worte und können jedem ein gemessenes Volumen im Phasenraum zuordnen (?).
-\\
-Übergang vspace: Dann weiß ich, welche v-Vektoren möglich gewesen sein können, damit dieses PHA-Wort entstanden ist.
 \\ \\
 Plots: einzelner Sektor -- einmal alles ohne AA -- einmal alles mit AA
 
@@ -199,11 +229,31 @@ durch versch. AA wird unterschiedlicher Teil des v-Raums ausgeleuchtet;
 \end{figure}
 	
 
-\subsubsection{Eigengeschwindigkeit}
-Eigengeschwindigkeit Berechnung (s. Kladde S. 84, 85
-
 \subsubsection{Sunpulse Trigger -- Rotation}
-
+\begin{figure}[h]
+	\includegraphics[width=0.5\textwidth]{Figures/hist_det_sec_aa_90days2001}
+	\centering
+	\caption{TODO}
+	\label{TODO}
+\end{figure}
+Plots: \\ 
+Verweis auf AA-Plot oben: Dazu Hist-Det -- dann Schemazeichnung SunPulser, dazu Problem irgendwie zeigen
+\\ \\
+zeigen, dass mit größeren AA vermehrt äußerer Detektor angesprochen wird; 
+\\ \\
+Problem: sectors are not triggered uniformly (?). Every spin sector 0 is triggered newly. koplanare Lage der drei Vektoren: Spinachse, Sensor, SC-Sun, \textit{when sun crosses the ...plane of the SC}\\
+Allover Blick: Sector, der gegnüber liegt, sollte besonders prominent sein
+\\ \\
+Kalibrierung: He2+, Det-Sec-Histogramme -- Suche nach Sek 0
+\\ Hiscale Paper: Sensoren sind umgebaute Albedo-Sensoren
+\\ \\
+(...) For verifying this angle we use a species for which we know the direction of velocity. That is He2+ that we assume to be flowing radially with the solar wind
+\\ \\
+Kalibration Detektoren: Für große AA zeigen, dass äußerer Det angesprochen wird
+\\ \\
+Kalibration Sektoren: Nur bei sehr großen AA möglich (äußerer od. mittlerer Detektor), weil beim inneren der Bulk auf allen landet.
+\\ \\
+Sektorgeschichte, Sunpulser...
 
 \subsubsection{Calibration Sector}
 
@@ -235,48 +285,6 @@ The aspect angle is measured from the line-of-sight Ulysses--Sun (that is $\vec{
 (Todo: Lars fragen, ob die genaue Rechnung hier rein muss, Kladde S. 79)
 For the calculation of the aspect angle we used the Ulysses trajectory data (Verweis ... TODO) and Earth trajectory data in heliographic coordinates on a daily basis from \citet{nasa-earth-coord} and converted both to RTN coordinates. In fig. \ref{fig:aa} both components $\varphi_{asp}$ and $\vartheta_{asp}$ as well as the \textit{flat} aspect angle $\alpha$ with  $\alpha = \arccos(\cos{\varphi_{asp}}) + \arccos(\cos{\vartheta_{asp}}) -1$ are shown over the time of the mission. $\varphi_{asp}$ varies in the range from $\sim - 25^\circ$ to $\sim 42^\circ$ and $\vartheta_{asp}$ in a range from $\sim - 30^\circ$ to $\sim 17^\circ$. Large angles occur especially around the three fast latitude scans, i.e. when Ulysses is at its perihelion and has the smallest distance to Sun and Earth.\\
 (Todo? Beschreiben, dass ich $\alpha$ mit dem Datenprodukt SPE verglichen habe?)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-%
-\subsection{Calibration}
-\subsubsection{Calibration AA}
-\begin{figure}[h]
-	\includegraphics[width=0.5\textwidth]{Figures/hist_det_sec_aa_90days2001}
-	\centering
-	\caption{TODO}
-	\label{TODO}
-\end{figure}
-Plots: \\ 
-Verweis auf AA-Plot oben: Dazu Hist-Det -- dann Schemazeichnung SunPulser, dazu Problem irgendwie zeigen
-\\ \\
-zeigen, dass mit größeren AA vermehrt äußerer Detektor angesprochen wird; 
-\\ \\
-Problem: sectors are not triggered uniformly (?). Every spin sector 0 is triggered newly. koplanare Lage der drei Vektoren: Spinachse, Sensor, SC-Sun, \textit{when sun crosses the ...plane of the SC}\\
-Allover Blick: Sector, der gegnüber liegt, sollte besonders prominent sein
-\\ \\
-Kalibrierung: He2+, Det-Sec-Histogramme -- Suche nach Sek 0
-\\ Hiscale Paper: Sensoren sind umgebaute Albedo-Sensoren
-\\ \\
-(...) For verifying this angle we use a species for which we know the direction of velocity. That is He2+ that we assume to be flowing radially with the solar wind
-\\ \\
-Kalibration Detektoren: Für große AA zeigen, dass äußerer Det angesprochen wird
-\\ \\
-Kalibration Sektoren: Nur bei sehr großen AA möglich (äußerer od. mittlerer Detektor), weil beim inneren der Bulk auf allen landet.
-\\ \\
-Sektorgeschichte, Sunpulser...
-
 
 %
 %

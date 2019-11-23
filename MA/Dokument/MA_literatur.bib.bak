@@ -428,4 +428,12 @@ nucl$^{-1}$.
   adsurl   = {https://ui.adsabs.harvard.edu/abs/2002P&SS...50..217F},
 }
 
+@Online{nasa_coord,
+  author  = {COHOWeb},
+  editor  = {NASA Goddard Space Flight Center},
+  title   = {COHOWeb Service and Data Documentation},
+  url     = {https://cohoweb.gsfc.nasa.gov/coho/html/cw_data.html#general},
+  urldate = {2019-01-13},
+}
+
 @Comment{jabref-meta: databaseType:biblatex;}
