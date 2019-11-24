@@ -92,113 +92,18 @@ Für alle Jahre. Anzahl: todo
 Weitere Daten: vsw von SWOOPS, B-Feld
 \\ \\
 wie viele Daten bleiben über, wie viele PHA-Worte ca. pro Spin?
-
-
 %
 %
 %
-\section{Collimator/Detector model}
-Schreiben, dass das eigentlich von ACE/Lars kommt
-
-\subsubsection{Motivation}
-Kollimatormodell -- warum eigentlich -- wie umgesetzt?\\ \\
-Das Ziel ist, einem gemessenen Teilchen einen v-Vektor zuzuordnen. Eine Sek-Det-Kombi ist aber nicht eindeutig. Ihre Bedeutung hängt davon ab, wohin das Instrument guckt (FoV), von der Eigengeschwindigkeit des SC und davon, wie das SC gerade gedreht ist. Zusätzlich hat der Kollimator eine komplizierte Geometrie, sodass eine analytische Lösung schwierig ist: Also numerische Lösung. \\
-Was macht das Modell? -- Ich will das FoV zu jedem Zeitpunkt bestimmen. Ich nehme dafür einzelne Messpunkte auf der originalen Geometrie. Dann gebe ich noch ins Modell, wie das gerade ausgerichtet ist.\\
-Berechnet anhand des AA, wohin Sun trigger schaut, wenn getriggert wird und rotiert coll. an entsprechende Position für Sek 0. Ordnet entsorechend andere Sektoren an.
-Simuliert FoV durch Punkteraster \\
-\subsubsection{Construction}
-For reconstructing the velocity space that SWICS measures we need to know about the directions of incident particles that can enter the instrument.
-\\ \\
-The original geometry of the SWICS entrance system, in particular the collimator, was read out from a technical drawing \textbf{\textbf{(TODO: Quelle?!})}
-Can be described as:
-Width: Cutting out a hollow piece of 90 deg longitude (\textbf{todo: latitude? 4 grad?}) from a sphere (\textbf{of r ca. 26 cm ??}) at .. deg polar latitude. The piece is not flat but curved and has a height of ca. 5 cm. This geometry leads to two deflection plates that are curved but have a constant distance of ca. 3.7 cm over a relatively large area which is necessary to provide a constant voltage for the EpQ filtering. Resulting opening angles of the collimator are $69^\circ$ in width and $4^\circ$ in height. \textbf{Todo: Zeichnung/Abbildung?}\\
-The instrument is mounted with one of the narrow side edges parallel to Ulysses' spin axis. When we define this edge to lie on the x-axis of a three dimensional Cartesian coordinate system, the collimator geometry can be reconstructed by revolving this edge for $90^\circ$ around a straight line that lies in the xy-plane with an angle of $56^\circ$ relative to the x-axis. \textbf{Todo: Zeichnung/Abbildung!} \\
-The detector's field of view can be represented by a set of normal vectors on the opening plane of the detector. In our model, we have a variable number of those equidistant vectors both along the width and the height of the detector opening. The real continuous field of view is modelled better with an increasing number of normal vectors that cover the opening. Each of these normalized vectors $\mathrm{\mathbf{f_i}}$ has a unique direction $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ in position space. An example... \textbf{(TODO: Plot)}
-\\ \\
-Unterteilung in drei Detektoren!\\
-Ein Spin des SC wird begleitet von einer Rotation des FoV um die x-Achse. Diese Rotation wird eingeteilt in 8 Sektoren a 45 Grad. Da das SC kontinuierlich dreht, verändert auch das reale FOV kontinuierlich seinen Drehwinkel. Wir modellieren das dadurch, dass wir das einzelne FOV schrittweise in n Steps durch jeden Sektor steppen lassen.
-Das integrierte FoV über einen Spin ergibt sich dann aus ... einzelnen Einheitsvektoren, deren Richtungen symmetrisch um die Spinachse ausgerichtet sind.
-
-\subsubsection{From FoV to Vspace}
-The detector's velocity acceptance can be calculated by combining the directional information from the field of view and the value of absolute velocity from the current EpQ step. 
-\\
-A particle can only enter the detector when its absolute velocity is within the acceptance of the current EpQ step and when its direction is antiparallel to one of the vectors of the field of view. For a given acceptance velocity $v_i$ and a single field of view vector $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ the accepted velocity is
-\begin{align*}
-\mathbf{v_i} = \begin{bmatrix}v_{R,i}\\v_{T,i}\\v_{N,i}\end{bmatrix} = - \begin{bmatrix}f_{x,i}\\f_{y,i}\\f_{z,i}\end{bmatrix} \cdot v_i.
-\end{align*}
-Indem man alle FoV Vektoren einer Rotation während eines v-Steps berücksichtigt, bilden alle v-Akzeptanzen zusammen eine Shell mit Radius v im v-Space.
-
-
-The accepted velocity space over a complete spacecraft rotation for a acceptance velocity $v_i = todo$ consists of the combination of TODO accepted velocities and is shown in fig. todo. 
-
-
-For a spacecraft rotation that is distributed into eight sectors ... the accepted velocities 
 
 
 
 
 
-.
-\\ \\
-The central velocity for an ion of charge $q$ and mass $m$ for an energy-per-charge step $EpQ$ (in $keV/e$) is
-\begin{align*}
-\frac{v_c}{km \, s^{-1}} = \sqrt{\frac{2 \cdot EpQ \cdot 1.60217646\cdot10^{-19}\cdot |q|}{m \cdot 1.66053886 \cdot 10^{-27}} }
-\end{align*}
-with $m = 4 u$ and $|q| = 1$ for $He^{+}$.\\
-To represent the uncertainty in EpQ measurement, we take into account the relative uncertainty $\Delta \frac{E}{q}/\frac{E}{q} = \pm 5\%$ and translate it into an uncertainty $\Delta v / v = \frac{1}{2} \left( \Delta \frac{E}{q}/\frac{E}{q}\right) = \pm 2.5\%$ in accepted velocity. For every EpQ step we can now choose a number of $i_{epq}$ single velocities that are distributed evenly in the interval $\left[ v_c - \Delta v / v, v_c + \Delta v / v \right]$. The total number of accepted velocities $v$ is then $64 \cdot i_{epq}$.
-\\
-Im v-Space stellen sich die einzelnen v-Schritte als ineinander liegende Schalen mit gerade dem Radius ihrer Geschwindigkeit dar. Ein Beispiel, der Übersichtlichkeit halber nur 3 Schalen, ist in bla gezeigt.
-\\
-Durch die Kombination aus vielen Schalen ergibt sich im v-Space ein 3D Pattern aus eng beieinander liegenden v-Akzeptanzpunkten, die das reale kontinuierliche v-Volumen nachahmen.
 
-\subsubsection{Loose ends}
-Rotation
-\\ 
-Ausrichtung
-\\ \\
-außerdem: Eigengeschwindigkeit Ulysses
-\\ \\
-Übergang vspace: Dann weiß ich, welche v-Vektoren möglich gewesen sein können, damit dieses PHA-Wort entstanden ist.
-\\ \\
-wählbare Anzahlen nrs\_sec usw. Später schreiben, was verwendet wurde (?) ; Steps vsw, asp Winkel
-\\ \\
-Geometrie, Aspect Angle: Ausrichtung zu jedem Zeitpunkt bekannt
-(FoV) (hierher die Kalibration! Nur damit funktioniert die Ausrichtung)
-Wir füllen die einzelnen Bereiche mit verschiedenen möglichen Messpunkten\\ \\
-Dann nehmen wir PHA-Worte und können jedem ein gemessenes Volumen im Phasenraum zuordnen (?).
-\\ \\
-Plots: einzelner Sektor -- einmal alles ohne AA -- einmal alles mit AA
-
+\section{Coordinate Systems}
 %
-\begin{figure}
-	\centering
-	\begin{subfigure}{.5\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{Figures/col_single_new.pdf}
-		\caption{A subfigure}
-		\label{fig:sub1}
-	\end{subfigure}%
-	\begin{subfigure}{.5\textwidth}
-		\centering
-		\includegraphics[width=1\linewidth]{Figures/col_vspace_normal.pdf}
-		\caption{A subfigure}
-		\label{fig:sub2}
-	\end{subfigure}
-	\caption{A figure with two subfigures}
-	\label{fig:test}
-\end{figure}
-%
-%
-\begin{figure}[h]
-	\includegraphics[width=0.5\textwidth]{Figures/col_shells.pdf}
-	\centering
-	\caption{TODO}
-	\label{TODO}
-\end{figure}
-%%%
-%%%
-%%%
-\subsubsection{Ulysses trajectory, HG system}
+\subsection{Ulysses trajectory, HG system}
 \textbf{Todo: Hinweis auf Zeichnung und Kapitel vorne}\\
 Trajectory data is used from \citet{ulysses-data-archive} where Ulysses position data on a daily basis is available. The trajectory data is given based on different coordinates, including the heliographic coordinate system in the B1950.0 epoch.
 \\ \\
@@ -218,15 +123,169 @@ In fig. \ref{fig:traj} Ulysses' spherical HG coordinates as well its distance fr
 	\label{fig:traj}
 \end{figure}
 
+\subsection{RTN Coordinate System}
+Umrechnung von HG in RTN?
+\\ \\
+TODO:
+The orbit itself is described in heliographic coordinates, so a cs that is constant (stable?) with respect to the sun. For describing positions and velocities in the frame of the spacecraft (e.g. AA) we need another cs...
 
-\subsubsection{AA motivation}
-durch versch. AA wird unterschiedlicher Teil des v-Raums ausgeleuchtet;
+\begin{figure}[h]
+	\includegraphics[width=1\textwidth]{Figures/RTN_AA_angles.pdf}
+	\centering
+	\caption{Graphical representation of the RTN coordinate system (not to scale). Shown are the Sun (yellow), the Earth (blue) and the Ulysses spacecraft at a non-specific position on its orbit. $\vec{R}$ is defined as the unit vector along the line-of-sight Sun--Earth, $\vec{T}$ as the normalized cross product $\vec{\omega} x \vec{R}$ with $\vec{\omega}$ the angular velocity of the Sun (yellow vector). $\vec{N}$ completes the right-handed Cartesian system. Also shown is the definition of the aspect angle components $\varphi_{asp}$ and $\vartheta_{asp}$ as they are used in this work. The grey plane depicts the $\vec{R}$--$\vec{T}$ plane. $0 ^\circ < \varphi_{asp} < 90^\circ$ and $-90 ^\circ < \vartheta_{asp} < 0^\circ$ in the shown situation. \textbf{TODO: Zeichnung anpassen: Vektorpfeile, Indizes Winkel; Quelle Ulysses Dingsi}}
+	\label{fig:rtn}
+\end{figure}
+
+
+For dealing with Ulysses' trajectory data it is useful to work with \textit{radial-tangential-normal} coordinates. The RTN coordinate system is defined relative to a moving object in the heliosphere -- in this case the spacecraft, Ulysses, and is centered at the sun. A graphical representation on the system can be found in fig. \ref{fig:rtn}. The unit vectors are $\vec{R}$, $\vec{T}$ and $\vec{N}$, where $\vec{R}$ points radially outward from the sun to the current position of the spacecraft. $\vec{T}$ is defined as the normalized cross product of the Sun's angular velocity $\vec{\omega}$ and $\vec{R}$. $\vec{N}$ completes the right-handed Cartesian coordinate system. Consequently, the RTN system is not defined for a spacecraft's position right above one of the Sun's poles as the cross product $\vec{\omega} x \vec{R}$ is zero here. Nevertheless we do not have to worry about this fact as not even Ulysses crosses the poles directly (todo: Verweis?).
+
+
+
+
+%
+%
+%
+\section{Collimator/Detector model}
+\begin{figure}
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{Figures/col_single_new.pdf}
+		\caption{A subfigure}
+		\label{fig:sub1}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=1\linewidth]{Figures/col_vspace_normal.pdf}
+		\caption{A subfigure}
+		\label{fig:sub2}
+	\end{subfigure}
+	\caption{A figure with two subfigures}
+	\label{fig:test}
+\end{figure}
+\begin{figure}[h]
+	\includegraphics[width=0.5\textwidth]{Figures/col_shells.pdf}
+	\centering
+	\caption{TODO}
+	\label{TODO}
+\end{figure}
+Schreiben, dass das eigentlich von ACE/Lars kommt
+
+\subsubsection{Motivation}
+Kollimatormodell -- warum eigentlich -- wie umgesetzt?\\ \\
+Das Ziel ist, einem gemessenen Teilchen einen v-Vektor zuzuordnen. Eine Sek-Det-Kombi ist aber nicht eindeutig. Ihre Bedeutung hängt davon ab, wohin das Instrument guckt (FoV), von der Eigengeschwindigkeit des SC und davon, wie das SC gerade gedreht ist. Zusätzlich hat der Kollimator eine komplizierte Geometrie, sodass eine analytische Lösung schwierig ist: Also numerische Lösung. \\
+Was macht das Modell? -- Ich will das FoV zu jedem Zeitpunkt bestimmen. Ich nehme dafür einzelne Messpunkte auf der originalen Geometrie. Dann gebe ich noch ins Modell, wie das gerade ausgerichtet ist.\\
+Berechnet anhand des AA, wohin Sun trigger schaut, wenn getriggert wird und rotiert coll. an entsprechende Position für Sek 0. Ordnet entsorechend andere Sektoren an.
+Simuliert FoV durch Punkteraster \\
+\subsection{Construction}
+For reconstructing the velocity space that SWICS measures we need to know about the directions of incident particles that can enter the instrument.
+\\ \\
+The original geometry of the SWICS entrance system, in particular the collimator, was read out from a technical drawing \textbf{\textbf{(TODO: Quelle?!})}
+Can be described as:
+Width: Cutting out a hollow piece of 90 deg longitude (\textbf{todo: latitude? 4 grad?}) from a sphere (\textbf{of r ca. 26 cm ??}) at .. deg polar latitude. The piece is not flat but curved and has a height of ca. 5 cm. This geometry leads to two deflection plates that are curved but have a constant distance of ca. 3.7 cm over a relatively large area which is necessary to provide a constant voltage for the EpQ filtering (s. \ref{sec:EpQ}). Resulting opening angles of the collimator are $69^\circ$ in width and $4^\circ$ in height. \textbf{Todo: Zeichnung/Abbildung?}\\
+The instrument is mounted with one of the narrow side edges parallel to Ulysses' spin axis. When we define this edge to lie on the x-axis of a three dimensional Cartesian coordinate system, the collimator geometry can be reconstructed by revolving this edge for $90^\circ$ around a straight line that lies in the xy-plane with an angle of $56^\circ$ relative to the x-axis. \textbf{Todo: Zeichnung/Abbildung!} Every third of these $90^\circ$ is reserved as the opening angle for each of the three detector elements, that are described in \textbf{Todo}.  \\
+The detector's field of view is the solid angle over which the detector is sensitive to incoming particles.
+It can be represented by a set of outward directed normal vectors on the opening plane of the detector. In our model, we have a variable number of those equidistant vectors both along the width and the height of the detector opening. The real continuous field of view is modelled better with an increasing number of normal vectors that cover the opening. Each of these normalized vectors $\mathrm{\mathbf{f_i}}$ has a unique direction $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ in position space. An example... \textbf{(TODO: Plot)}
+\\
+With a spin of the Ulysses spacecraft the fixedly mounted SWICS instrument is revolves as well around the spacecraft spin axis. Consequently, the field of view is revolved around the x-axis in fig todo. One revolution of SWICS is divided up into eight sectors per $45^\circ$ each (todo: Verweis auf Instrumentenkapitel oder Erklärung). As the spacecraft is spinning continuously, also the real field of view changes its rotation angle continuously.
+For our virtual detector we model this by rotating the field of view gradually over n steps through every sector.\\
+The integrated field of view over one spin then comprises TODO single vectors $\mathrm{\mathbf{f_i}}$ which are directed symmetrically around the spin axis (s. Abbildung TODO)). In fig. Todo is shown the FoV of todo , you can see a shell with radius 1 bla...
+\subsubsection{From FoV to Vspace}
+The detector's velocity acceptance can be calculated by combining the directional information from the field of view and the value of absolute velocity from the current EpQ step. 
+\\
+A particle can only enter the detector when its absolute velocity is within the acceptance of the current EpQ step and when its inverted direction is within the detectors field of view. For a given acceptance velocity $v_i$ and a single field of view vector $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ the accepted velocity is
+\begin{align*}
+\mathbf{v_i} = \begin{bmatrix}v_{R,i}\\v_{T,i}\\v_{N,i}\end{bmatrix} = - \begin{bmatrix}f_{x,i}\\f_{y,i}\\f_{z,i}\end{bmatrix} \cdot v_i.
+\end{align*}
+With consideration of the integrated field of view over one spacecraft spin (s. ), the acceptance velocity consists of the combination n\_todo discrete velocities which form a shell with radius $v_i$ in velocity space. (s. fig. TODO for v\_todo)
+
+
+
+
+.
+\\ \\
+The central velocity for an ion of charge $q$ and mass $m$ for an energy-per-charge step $EpQ$ (in $keV/e$) is
+\begin{align*}
+\frac{v_c}{km \, s^{-1}} = \sqrt{\frac{2 \cdot EpQ \cdot 1.60217646\cdot10^{-19}\cdot |q|}{m \cdot 1.66053886 \cdot 10^{-27}} }
+\end{align*}
+with $m = 4 u$ and $|q| = 1$ for $He^{+}$.\\
+To represent the uncertainty in EpQ measurement, we take into account the relative uncertainty $\Delta \frac{E}{q}/\frac{E}{q} = \pm 5\%$ and translate it into an uncertainty $\Delta v / v = \frac{1}{2} \left( \Delta \frac{E}{q}/\frac{E}{q}\right) = \pm 2.5\%$ in accepted velocity. For every EpQ step we can now choose a number of $i_{epq}$ single velocities that are distributed evenly in the interval $\left[ v_c - \Delta v / v, v_c + \Delta v / v \right]$. The total number of accepted velocities $v$ is then $64 \cdot i_{epq}$.
+\\
+Different absolute velocities $v$ appear as distinct shells of radius $v$ in velocity space.
+Ein Beispiel, der Übersichtlichkeit halber nur 3 Schalen, ist in bla gezeigt.
+\\
+With combining all $64 \cdot i_{epq}$ shells we obtain a dense three dimensional pattern of accepted velocities that simulate the real continuous velocity acceptance volume of the spinning detector.
+\\ \\
+When we measure a PHA word with a distinct SEC, DET and EPQ information, we can now determine its three dimensional velocity with our virtual detector. Of course, the resolution is limited as sector and detector areas are finite as well as the uncertainty $\Delta \frac{E}{q}/\frac{E}{q}$. By spreading the count over the entirety of velocity acceptances in the volume of the SEC DET EPQ combination, we take into account every velocity that could have led to this distinct PHA word.
+\\ \\
+
+
+.\\ \\ \\
+Später schreiben, was für n verwendet wurden
+\subsection{Eigen-velocity}
+For the considerations in the previous section we assumed a detector on a spacecraft that is fixed in space. Obviously this is not the case for the Ulysses spacecraft (s. sec. TODO) which moves on its elliptical orbit around the Sun. \\
+For determining the spacecraft's velocity we make use of the daily given trajectory data from sec. TODO. For every time stamp $t_i$ we calculate the spacecraft's instantaneous velocity by forming the differential quotient 
+\begin{align*}
+v_i = \frac{ \begin{bmatrix}v_{R,i+1}\\v_{T,i+1}\\v_{N,i+1}\end{bmatrix}_i  - \begin{bmatrix}v_{R,i}\\v_{T,i}\\v_{N,i}\end{bmatrix}_i} {t_{i+1} - t_i}
+\end{align*}
+with $t_{i+1}$ being the next time stamp, which is normally $t_i + 1\,\mathrm{d}$. Note, that the spacecrafts position at $t_{i+1}$ has to be considered in the RTN coordinate system that relates to the spacecraft's position at $t_i$. The resulting velocities in RTN coordinates are shown in fig. todo.
+\\
+--Bewertung Größenordnung--
+\\
+To correct the measured velocities for the spacecraft's eigen-velocity, we simply add the resulting velocity components to the velocity acceptance. Thus, for every time stamp the shells (s. fig todo) are shifted a bit in velocity space based on the respective eigen-velocity.
+
+
+\subsection{Orientation of the Detector}
+Until now we have assumed that Ulysses' spin axis is aligned with the R-axis of the coordinate system, i.e. that the spin axis points directly to the Sun. In fact, this is not the case in general. Due to telemetry reasons, Ulysses' high gain antenna has to be oriented directly towards Earth (todo: Vergleich mit ACE, warum?). As Ulysses' spin axis is aligned with the electrical axis of the antenna \citep{wenzel_ulysses}, has an offset towards the line of sight spacecraft-Sun. This offset is called \textit{aspect angle} and is a permanently changing quantity as a function of Ulysses' position and the position of the Earth. As a varying aspect angle results in SWICS covering different parts of velocity space it is essential to consider this quantity in detail.
+%
+%
+\subsubsection{Calculation of the Aspect Angle}
+\begin{figure}[h]
+	\includegraphics[width=1\textwidth]{Figures/aa_new.pdf}
+	\centering
+	\caption{The evolution of Ulysses' aspect angle components $\varphi_{asp}$ and $\vartheta_{asp}$ from 1991 to the end of the mission are shown. The aspect angle is the angle between the line-of-sight Ulysses--Sun and the orientation of Ulysses' spin axis. A constantly changing aspect angle results from the fact that the spacecraft's antenna, that is nearly parallel with the spin-axis, has to point towards Earth all the time. Particularly large aspect angles occur during the three fast latitude scans around 1995, 2001 and 2007. Here, Ulysses' distance to Sun and Earth is at a minimum. \textbf{Also shown is the... (todo: raus aus der Zeichnung?)} }
+	\label{fig:aa}
+\end{figure}
+The aspect angle is measured from the line-of-sight Ulysses--Sun (that is $\vec{R}$) to the line-of-sight Ulysses--Earth. To describe this angle uniquely for any moment, we need two spherical coordinates $\varphi_{asp}$ and $\vartheta_{asp}$ based on the RTN system. As shown in fig. \ref{fig:aa}, $\varphi_{asp}$ is measured in the $\vec{R}$--$\vec{T}$ plane between $-\vec{R}$ and the projection of the line-of-sight from Ulysses to the Earth into this plane. $\varphi_{asp}$  is $0^\circ$ for directions along $-\vec{R}$, that is the line-of-sight from Ulysses to the Sun and increases to positive values towards $-\vec{T}$. $\vartheta_{asp}$ is the angle between the projection of the line-of-sight from Ulysses to the Earth into the $\vec{R}$--$\vec{T}$ plane and the line-of-sight itself. It is defined as $0^\circ$ for directions that lie within the $\vec{R}$--$\vec{T}$ plane and $+90^\circ$ for directions along $\vec{N}$.\\
+(Todo: Lars fragen, ob die genaue Rechnung hier rein muss, Kladde S. 79)
+For the calculation of the aspect angle we used the Ulysses trajectory data (Verweis ... TODO) and Earth trajectory data in heliographic coordinates on a daily basis from \citet{nasa-earth-coord} and converted both to RTN coordinates. In fig. \ref{fig:aa} both components $\varphi_{asp}$ and $\vartheta_{asp}$ as well as the \textit{flat} aspect angle $\alpha$ with  $\alpha = \arccos(\cos{\varphi_{asp}}) + \arccos(\cos{\vartheta_{asp}}) -1$ are shown over the time of the mission. $\varphi_{asp}$ varies in the range from $\sim - 25^\circ$ to $\sim 42^\circ$ and $\vartheta_{asp}$ in a range from $\sim - 30^\circ$ to $\sim 17^\circ$. Large angles occur especially around the three fast latitude scans, i.e. when Ulysses is at its perihelion and has the smallest distance to Sun and Earth.\\
+(Todo? Beschreiben, dass ich $\alpha$ mit dem Datenprodukt SPE verglichen habe?)
+\\ \\
+
 \begin{figure}[h]
 	\includegraphics[width=0.5\textwidth]{Figures/col_aa_marker.png}
 	\centering
 	\caption{todo}
 	\label{todo}
 \end{figure}
+steps asp Winkel
+
+The variable aspect angle is incorporated into the analysis by rotating the field of view corresponding to $\varphi_{asp}$ and $\vartheta_{asp}$. This results in a likewise rotation of the velocity acceptance space. 
+\subsubsection{Übergang w}
+Steps vsw
+
+
+\subsubsection{Loose ends}
+Ausrichtung
+\\ \\
+Geometrie, Aspect Angle: Ausrichtung zu jedem Zeitpunkt bekannt
+(FoV) (hierher die Kalibration! Nur damit funktioniert die Ausrichtung)
+Wir füllen die einzelnen Bereiche mit verschiedenen möglichen Messpunkten\\ \\
+Dann nehmen wir PHA-Worte und können jedem ein gemessenes Volumen im Phasenraum zuordnen (?).
+\\ \\
+Plots: einzelner Sektor -- einmal alles ohne AA -- einmal alles mit AA
+%
+
+%
+%
+
+%%%
+%%%
+%%%
+
+
+
+
 	
 
 \subsubsection{Sunpulse Trigger -- Rotation}
@@ -257,34 +316,8 @@ Sektorgeschichte, Sunpulser...
 
 \subsubsection{Calibration Sector}
 
-\subsection{Coordinates}
-Umrechnung von HG in RTN?
-\\ \\
-TODO:
-The orbit itself is described in heliographic coordinates, so a cs that is constant (stable?) with respect to the sun. For describing positions and velocities in the frame of the spacecraft (e.g. AA) we need another cs...
 
-\begin{figure}[h]
-	\includegraphics[width=1\textwidth]{Figures/RTN_AA_angles.pdf}
-	\centering
-	\caption{Graphical representation of the RTN coordinate system (not to scale). Shown are the Sun (yellow), the Earth (blue) and the Ulysses spacecraft at a non-specific position on its orbit. $\vec{R}$ is defined as the unit vector along the line-of-sight Sun--Earth, $\vec{T}$ as the normalized cross product $\vec{\omega} x \vec{R}$ with $\vec{\omega}$ the angular velocity of the Sun (yellow vector). $\vec{N}$ completes the right-handed Cartesian system. Also shown is the definition of the aspect angle components $\varphi_{asp}$ and $\vartheta_{asp}$ as they are used in this work. The grey plane depicts the $\vec{R}$--$\vec{T}$ plane. $0 ^\circ < \varphi_{asp} < 90^\circ$ and $-90 ^\circ < \vartheta_{asp} < 0^\circ$ in the shown situation. \textbf{TODO: Zeichnung anpassen: Vektorpfeile, Indizes Winkel; Quelle Ulysses Dingsi}}
-	\label{fig:rtn}
-\end{figure}
-\begin{figure}[h]
-	\includegraphics[width=1\textwidth]{Figures/aa_new.pdf}
-	\centering
-	\caption{The evolution of Ulysses' aspect angle components $\varphi_{asp}$ and $\vartheta_{asp}$ from 1991 to the end of the mission are shown. The aspect angle is the angle between the line-of-sight Ulysses--Sun and the orientation of Ulysses' spin axis. A constantly changing aspect angle results from the fact that the spacecraft's antenna, that is nearly parallel with the spin-axis, has to point towards Earth all the time. Particularly large aspect angles occur during the three fast latitude scans around 1995, 2001 and 2007. Here, Ulysses' distance to Sun and Earth is at a minimum. \textbf{Also shown is the... (todo: raus aus der Zeichnung?)} }
-	\label{fig:aa}
-\end{figure}
-%
 
-%
-\subsubsection{RTN Coordinate System}
-For dealing with Ulysses' trajectory data it is useful to work with \textit{radial-tangential-normal} coordinates. The RTN coordinate system is defined relative to a moving object in the heliosphere -- in this case the spacecraft, Ulysses, and is centered at the sun. A graphical representation on the system can be found in fig. \ref{fig:rtn}. The unit vectors are $\vec{R}$, $\vec{T}$ and $\vec{N}$, where $\vec{R}$ points radially outward from the sun to the current position of the spacecraft. $\vec{T}$ is defined as the normalized cross product of the Sun's angular velocity $\vec{\omega}$ and $\vec{R}$. $\vec{N}$ completes the right-handed Cartesian coordinate system. Consequently, the RTN system is not defined for a spacecraft's position right above one of the Sun's poles as the cross product $\vec{\omega} x \vec{R}$ is zero here. Nevertheless we do not have to worry about this fact as not even Ulysses crosses the poles directly (todo: Verweis?).
-\subsubsection{Calculation of the Aspect Angle}
-The aspect angle is measured from the line-of-sight Ulysses--Sun (that is $\vec{R}$) to the line-of-sight Ulysses--Earth. To describe this angle uniquely for any moment, we need two spherical coordinates $\varphi_{asp}$ and $\vartheta_{asp}$ based on the RTN system. As shown in fig. \ref{fig:aa}, $\varphi_{asp}$ is measured in the $\vec{R}$--$\vec{T}$ plane between $-\vec{R}$ and the projection of the line-of-sight from Ulysses to the Earth into this plane. $\varphi_{asp}$  is $0^\circ$ for directions along $-\vec{R}$, that is the line-of-sight from Ulysses to the Sun and increases to positive values towards $-\vec{T}$. $\vartheta_{asp}$ is the angle between the projection of the line-of-sight from Ulysses to the Earth into the $\vec{R}$--$\vec{T}$ plane and the line-of-sight itself. It is defined as $0^\circ$ for directions that lie within the $\vec{R}$--$\vec{T}$ plane and $+90^\circ$ for directions along $\vec{N}$.\\
-(Todo: Lars fragen, ob die genaue Rechnung hier rein muss, Kladde S. 79)
-For the calculation of the aspect angle we used the Ulysses trajectory data (Verweis ... TODO) and Earth trajectory data in heliographic coordinates on a daily basis from \citet{nasa-earth-coord} and converted both to RTN coordinates. In fig. \ref{fig:aa} both components $\varphi_{asp}$ and $\vartheta_{asp}$ as well as the \textit{flat} aspect angle $\alpha$ with  $\alpha = \arccos(\cos{\varphi_{asp}}) + \arccos(\cos{\vartheta_{asp}}) -1$ are shown over the time of the mission. $\varphi_{asp}$ varies in the range from $\sim - 25^\circ$ to $\sim 42^\circ$ and $\vartheta_{asp}$ in a range from $\sim - 30^\circ$ to $\sim 17^\circ$. Large angles occur especially around the three fast latitude scans, i.e. when Ulysses is at its perihelion and has the smallest distance to Sun and Earth.\\
-(Todo? Beschreiben, dass ich $\alpha$ mit dem Datenprodukt SPE verglichen habe?)
 
 %
 %
