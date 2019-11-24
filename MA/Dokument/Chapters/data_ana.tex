@@ -194,9 +194,10 @@ The integrated field of view over one spin then comprises TODO single vectors $\
 The detector's velocity acceptance can be calculated by combining the directional information from the field of view and the value of absolute velocity from the current EpQ step. 
 \\
 A particle can only enter the detector when its absolute velocity is within the acceptance of the current EpQ step and when its inverted direction is within the detectors field of view. For a given acceptance velocity $v_i$ and a single field of view vector $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ the accepted velocity is
-\begin{align*}
+\begin{align}
 \mathbf{v_i} = \begin{bmatrix}v_{R,i}\\v_{T,i}\\v_{N,i}\end{bmatrix} = - \begin{bmatrix}f_{x,i}\\f_{y,i}\\f_{z,i}\end{bmatrix} \cdot v_i.
-\end{align*}
+\label{eq:fov}
+\end{align}
 With consideration of the integrated field of view over one spacecraft spin (s. ), the acceptance velocity consists of the combination n\_todo discrete velocities which form a shell with radius $v_i$ in velocity space. (s. fig. TODO for v\_todo)
 
 
@@ -251,7 +252,6 @@ The aspect angle is measured from the line-of-sight Ulysses--Sun (that is $\vec{
 For the calculation of the aspect angle we used the Ulysses trajectory data (Verweis ... TODO) and Earth trajectory data in heliographic coordinates on a daily basis from \citet{nasa-earth-coord} and converted both to RTN coordinates. In fig. \ref{fig:aa} both components $\varphi_{asp}$ and $\vartheta_{asp}$ as well as the \textit{flat} aspect angle $\alpha$ with  $\alpha = \arccos(\cos{\varphi_{asp}}) + \arccos(\cos{\vartheta_{asp}}) -1$ are shown over the time of the mission. $\varphi_{asp}$ varies in the range from $\sim - 25^\circ$ to $\sim 42^\circ$ and $\vartheta_{asp}$ in a range from $\sim - 30^\circ$ to $\sim 17^\circ$. Large angles occur especially around the three fast latitude scans, i.e. when Ulysses is at its perihelion and has the smallest distance to Sun and Earth.\\
 (Todo? Beschreiben, dass ich $\alpha$ mit dem Datenprodukt SPE verglichen habe?)
 \\ \\
-
 \begin{figure}[h]
 	\includegraphics[width=0.5\textwidth]{Figures/col_aa_marker.png}
 	\centering
@@ -260,34 +260,24 @@ For the calculation of the aspect angle we used the Ulysses trajectory data (Ver
 \end{figure}
 steps asp Winkel
 
-The variable aspect angle is incorporated into the analysis by rotating the field of view corresponding to $\varphi_{asp}$ and $\vartheta_{asp}$. This results in a likewise rotation of the velocity acceptance space. 
+The variable aspect angle is incorporated into the analysis by rotating the field of view corresponding to $\varphi_{asp}$ and $\vartheta_{asp}$. This results in a likewise rotation of the velocity acceptance space. In fig. todo the acceptance velocity for a single absolute velocity todo is shown for $\varphi_{asp} = todo $ and $\vartheta_{asp} = todo $. Note, that the orientation here seems to be mirrored against the convention that has been described before. This is due to the inversion when transitioning from the field of view to velocity acceptance, s. eq. \ref{eq:fov}.\\
+When comparing fig todo with fig todo, where a situation with $\vartheta_{asp} = \varphi_{asp} = 0$ is shown, it becomes clear that especially larger aspect angles change the link between a distinct sector-detector element and a volume in velocity space. While with a zero aspect angle a radial velocity (along $\vec{R}$) would be detected right in the middle of the velocity shell and definitely in the innermost detector, this is not the case for the aspect angle in fig. todo. Here, a exclusively radial oriented velocity would be detected in a distinct sector in the central detector. (Andersrum bedeutet das, dass eine Sec-Det-Info nur zugeordnet werden kann, wenn die Ausrichtung des Detektors bekannt ist!)
 \subsubsection{Übergang w}
 Steps vsw
-
-
-\subsubsection{Loose ends}
-Ausrichtung
-\\ \\
-Geometrie, Aspect Angle: Ausrichtung zu jedem Zeitpunkt bekannt
-(FoV) (hierher die Kalibration! Nur damit funktioniert die Ausrichtung)
-Wir füllen die einzelnen Bereiche mit verschiedenen möglichen Messpunkten\\ \\
-Dann nehmen wir PHA-Worte und können jedem ein gemessenes Volumen im Phasenraum zuordnen (?).
-\\ \\
-Plots: einzelner Sektor -- einmal alles ohne AA -- einmal alles mit AA
-%
+\\
+With the knowledge of orientation and eigen-velocity we can now use the virtual detector for analysing bla. In a last step make a transition to solar wind frame and from velocity space to w space.\\
+Subtracting solar wind velocity in R-component from velocity in SC frame: 
+\begin{align*}
+\mathbf{v_{i,sw}} = \begin{bmatrix}v_{R,i,sc}\\v_{T,i,sc}\\v_{N,i,sc}\end{bmatrix} - \begin{bmatrix}v_{sw}\\0\\0\end{bmatrix}
+\end{align*}
+Dividing every component by solar wind velocity:
+\begin{align*}
+\mathbf{w_{i,sw}} = \begin{bmatrix}v_{R,i,sc}\\v_{T,i,sc}\\v_{N,i,sc}\end{bmatrix} / \begin{bmatrix}v_{sw}\\v_{sw}\\v_{sw}\end{bmatrix}
+\end{align*}
 
 %
 %
-
-%%%
-%%%
-%%%
-
-
-
-
-	
-
+%
 \subsubsection{Sunpulse Trigger -- Rotation}
 \begin{figure}[h]
 	\includegraphics[width=0.5\textwidth]{Figures/hist_det_sec_aa_90days2001}
@@ -313,8 +303,11 @@ Kalibration Detektoren: Für große AA zeigen, dass äußerer Det angesprochen w
 Kalibration Sektoren: Nur bei sehr großen AA möglich (äußerer od. mittlerer Detektor), weil beim inneren der Bulk auf allen landet.
 \\ \\
 Sektorgeschichte, Sunpulser...
+\\
+Zeigen: Für lange Zeiträume: He2+ kommt zentral. Für einzelne kurze: unterschiedlich.
+Deshalb: grober Check von wegen Detektor geht gut. Für das Feintuning (180 Grad oder doch was anderes?) reichts aber nicht...
 
-\subsubsection{Calibration Sector}
+
 
 
 
