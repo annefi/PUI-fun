@@ -261,7 +261,56 @@ For the calculation of the aspect angle we used the Ulysses trajectory data (Ver
 steps asp Winkel
 
 The variable aspect angle is incorporated into the analysis by rotating the field of view corresponding to $\varphi_{asp}$ and $\vartheta_{asp}$. This results in a likewise rotation of the velocity acceptance space. In fig. todo the acceptance velocity for a single absolute velocity todo is shown for $\varphi_{asp} = todo $ and $\vartheta_{asp} = todo $. Note, that the orientation here seems to be mirrored against the convention that has been described before. This is due to the inversion when transitioning from the field of view to velocity acceptance, s. eq. \ref{eq:fov}.\\
-When comparing fig todo with fig todo, where a situation with $\vartheta_{asp} = \varphi_{asp} = 0$ is shown, it becomes clear that especially larger aspect angles change the link between a distinct sector-detector element and a volume in velocity space. While with a zero aspect angle a radial velocity (along $\vec{R}$) would be detected right in the middle of the velocity shell and definitely in the innermost detector, this is not the case for the aspect angle in fig. todo. Here, a exclusively radial oriented velocity would be detected in a distinct sector in the central detector. (Andersrum bedeutet das, dass eine Sec-Det-Info nur zugeordnet werden kann, wenn die Ausrichtung des Detektors bekannt ist!)
+When comparing fig todo with fig todo, where a situation with $\vartheta_{asp} = \varphi_{asp} = 0$ is shown, it becomes clear that especially larger aspect angles change the link between a distinct sector-detector element and a volume in velocity space. While with a zero aspect angle a radial velocity (along $\vec{R}$) would be detected right in the middle of the velocity shell and definitely in the innermost detector, this is not the case for the aspect angle in fig. todo. Here, an exclusively radial oriented velocity would be detected in a distinct sector in the central detector. (Andersrum bedeutet das, dass eine Sec-Det-Info nur zugeordnet werden kann, wenn die Ausrichtung des Detektors bekannt ist!)
+
+\subsubsection{Probe}
+For checking if the considerations made before are reasonable and if the virtual detector works in the right way, we want to have a look at data of which we believe to know the VDF. Appropriate test data is the solar wind itself as it is believed to flow radially outwards from the sun (Todo:Quelle). An ideal candidate within the solar wind is $He^{2+}$ as the most abundant species (todo: Quelle). Thus, we can identify $He^{2+}$ easily in fig Todo and are provided with good statistics. Unlike protons, which are even more abundant in the solar wind, $He^{2+}$ most likely deposits energy above the detector's threshold in the SSD detector (s. chap Todo). This is because of its higher mass and the twice as high charge, which leads to a higher gain in energy by the post acceleration (todo:nochmal Verweis?). Only when a particle triggers an ESSD measurement (Triple Coincidence) we get a directional information about its velocity (Verweis todo). Protons are most often measured as Double Coincidences except for suprathermal protons, for which the assumption of radial stream must not hold true (Todo:Quelle). For selecting $He^{2+}$ we proceed like described in chap. todo.
+Wie viele PHAs sind das dann insgesamt und pro Jahr? Schreiben, dass das nicht so genau gemacht werden musste, weil keine VDF Analyse...
+\\ \\
+In a first step we look at periods of time in which both aspect angle components $\varphi_{asp}$ and $\vartheta_{asp}$ were small (Todo: genau?). For these nr\_todo PHA words we draw a histogram (??) of their sektor and detector information. The result can be seen in fig. todo. The histogram shows that mainly the innermost detector has counts. This is the expected behavior when we imagine the instrument on a spacecraft that points directly to the Sun. A radially streaming flow then hits the instrument's detector that is oriented sunwards. This does not change with the spin of the spacecraft. This result is also consistent with the detector model for $\varphi_{asp} = \vartheta_{asp} = 0$ which is shown in fig. todo. A radial stream can be represented here by the black line which cuts through the velocity shell in its center, the region of the innermost detector, bla. Irgendwie schöner schreiben...
+(Due to the width... auf allen Sektoren?)
+\\ \\
+In a second step we take a look at a time period in which Ulysses had a substantial aspect angle. This is particularly the case for when Ulysses is near its perihelion, s. fig todo. We choose for the second orbit, i.e. days 1-90 (?) in 2001. For all $He^{2+}$ PHA data from this time we again histogram sector and detector information, which is shown in fig. todo. Compared to fig. todo the maximum of counts is now shifted clearly towards a single sector (Nr.?) and the central detector. This is consistent with the virtual detector in fig. todo, where the aspect angle's quantity matches the one in the selected time period. With this orientation a radial stream from the Sun hits the instrument on its center detector and only while a particular moment (?!) of the spin/rotation (?!). Counts do not show up exclusively with this single sector-detector combination but slightly spread out over adjacent sector-detector elements. This is due to the fact that solar wind $He^{2+}$ does not stream as an ideal beam but has a certain width (todo: Referenz).
+\\ Verweis: Sektordetails im nächsten Kapitelchen
+
+\begin{figure}[h]
+	\includegraphics[width=0.5\textwidth]{Figures/hist_det_sec_aa_90days2001}
+	\centering
+	\caption{TODO}
+	\label{TODO}
+\end{figure}
+
+
+\subsubsection{Sunpulse Trigger -- Rotation}
+In the previous section hat man gesehen, dass sich die PHA Counts für einen großen AA auf den mittleren Detektor konzentrieren. In diesem Abschnitt soll geklärt werden, wovon es abhängt, in welchem Sektor der Schwerpunkt der Counts landet. 
+
+As mentioned before (todo: ist es?), one SC spin is divided into 8 sectors, starting with sector 0 and ending with sector 7.
+Every spin's start is defined newly by the \textit{spin reference pulse} of Ulysses \citep{hiscale}. 
+This pulse is triggered when the Sun crosses the spacecraft's positive xy-plane, which is spanned by the spin axis (z) and a particular axis defined by Ulysses' sun sensors which detect the crossing of the Sun.
+The spin reference pulse is not uniform over time as the position of the Sun relative to the spacecraft changes with varying aspect angle.\\
+
+[We have implemented this angle in our model so that the link is made right. If it was not right, a single count would be linked to a different direction. This shift between true and andere direction is not constant over aspect angles and would lead to a complete verschmierung der direction]
+
+
+To extract correct directional information from a sector data product of an ion that has been detected by SWICS it is essential to know the relative orientation between SWICS' main axis and the x-axis on the spacecraft.\\
+From the \citet[][S.20-22]{swics_dpu} we know that \textit{normal orientation} means that the sun pulse occurs in the center of SWICS sector 4, which implies a $180^\circ$ shift between the x-axis and SWICS' mean axis (s. fig TODO). However, it is also said that it was possible to do a fine adjustment which would lead to an offset of the sun pulse from this center line up to $22.5^\circ$ \citet[][S.48]{swics_dpu}. Unfortunately, we do not know about the value that has been chosen.
+\\
+Again, we choose to use $He^{2+}$ to analyze this (in a backwards way?). From fig Todo we find that the overall idea of a sun pulse in sector 4 should be right when we believe the assumption that $He^{2+}$ streams radially from the Sun. To check for a potential fine adjustment we search for tendencies of the maximum of counts sweeping to an adjacent sector.
+
+
+
+
+Allover Blick: Sector, der gegnüber liegt, sollte besonders prominent sein
+\\ \\
+Was würde passieren, wenns falsch wäre?
+\\ \\
+Kalibration Sektoren: Nur bei sehr großen AA möglich (äußerer od. mittlerer Detektor), weil beim inneren der Bulk auf allen landet.
+\\
+Zeigen: Für lange Zeiträume: He2+ kommt zentral. Für einzelne kurze: unterschiedlich.
+Deshalb: grober Check von wegen Detektor geht gut. Für das Feintuning (180 Grad oder doch was anderes?) reichts aber nicht...
+\\
+Schemazeichnung SunPulser, dazu Problem irgendwie zeigen
+
 \subsubsection{Übergang w}
 Steps vsw
 \\
@@ -278,34 +327,7 @@ Dividing every component by solar wind velocity:
 %
 %
 %
-\subsubsection{Sunpulse Trigger -- Rotation}
-\begin{figure}[h]
-	\includegraphics[width=0.5\textwidth]{Figures/hist_det_sec_aa_90days2001}
-	\centering
-	\caption{TODO}
-	\label{TODO}
-\end{figure}
-Plots: \\ 
-Verweis auf AA-Plot oben: Dazu Hist-Det -- dann Schemazeichnung SunPulser, dazu Problem irgendwie zeigen
-\\ \\
-zeigen, dass mit größeren AA vermehrt äußerer Detektor angesprochen wird; 
-\\ \\
-Problem: sectors are not triggered uniformly (?). Every spin sector 0 is triggered newly. koplanare Lage der drei Vektoren: Spinachse, Sensor, SC-Sun, \textit{when sun crosses the ...plane of the SC}\\
-Allover Blick: Sector, der gegnüber liegt, sollte besonders prominent sein
-\\ \\
-Kalibrierung: He2+, Det-Sec-Histogramme -- Suche nach Sek 0
-\\ Hiscale Paper: Sensoren sind umgebaute Albedo-Sensoren
-\\ \\
-(...) For verifying this angle we use a species for which we know the direction of velocity. That is He2+ that we assume to be flowing radially with the solar wind
-\\ \\
-Kalibration Detektoren: Für große AA zeigen, dass äußerer Det angesprochen wird
-\\ \\
-Kalibration Sektoren: Nur bei sehr großen AA möglich (äußerer od. mittlerer Detektor), weil beim inneren der Bulk auf allen landet.
-\\ \\
-Sektorgeschichte, Sunpulser...
-\\
-Zeigen: Für lange Zeiträume: He2+ kommt zentral. Für einzelne kurze: unterschiedlich.
-Deshalb: grober Check von wegen Detektor geht gut. Für das Feintuning (180 Grad oder doch was anderes?) reichts aber nicht...
+
 
 
 
@@ -386,4 +408,5 @@ B-Feld. Von welchem Instrument? auch RTN-System. Genauso Winkel berechnet.\\
 \begin{itemize}
 	\item andere Daten: B, vsw (Swoops: als vsw wird Protonengeschw. genommen. Ist das überhaupt richtig, ist das der Referenzframe? Und Annahme, dass vsw rein radial ist)
 	\item Die Sache mit dem BRW ab 2003
+	\item Englisch: Relativpronomen, Kommasetzung, British/American
 \end{itemize}

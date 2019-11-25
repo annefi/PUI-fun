@@ -192,8 +192,8 @@ nucl$^{-1}$.
 }
 
 @Booklet{swics_dpu,
-  author = {F. Gliem and W. Rieck and H. Dinse},
-  title  = {SWICS DPU},
+  author = {"SWICS DPU"},
+  editor = {F. Gliem and W. Rieck and H. Dinse},
   year   = {1988},
 }
 
@@ -428,12 +428,11 @@ nucl$^{-1}$.
   adsurl   = {https://ui.adsabs.harvard.edu/abs/2002P&SS...50..217F},
 }
 
-@Online{nasa_coord,
-  author  = {COHOWeb},
-  editor  = {NASA Goddard Space Flight Center},
-  title   = {COHOWeb Service and Data Documentation},
-  url     = {https://cohoweb.gsfc.nasa.gov/coho/html/cw_data.html#general},
-  urldate = {2019-01-13},
+@Manual{hiscale,
+  editor    = {T. Hunt-Ward and T.P. Armstrong},
+  title     = {Ulysses HISCALE Data Analysis Handbook},
+  year      = {1999},
+  publisher = {Fundamental Technologies, LLC},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}
