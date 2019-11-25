@@ -20,12 +20,12 @@ from WSky import WSky
 # He2 = True
 #
 # He1+
-He1 = True #False #
-He2 = False #True
+# He1 = True #False #
+# He2 = False #True
 
-# # He2+
-# He1 = False #
-# He2 = True #
+# He2+
+He1 = False #
+He2 = True #
 
 
 # load Ulysses data:
@@ -106,7 +106,7 @@ if He1:
 
 
 
-
+years = [1991,1992,1997,1998,1999,2004]
 
 ###########
 ### He2
@@ -114,7 +114,7 @@ if He1:
 
 if He2:
 
-    d2 = uswipha(year=years,tf=[[1,120]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/')
+    d2 = uswipha(year=years,tf=[[1,366]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/')
     d2.sync_swoops()
     d2.sync_traj()
 
@@ -123,9 +123,9 @@ if He2:
     d2.set_mask('Master','ech',12,250,reset=True) # exclude doubles
     d2.set_mask('Master','brw',1,np.inf,reset=True)
 
-    #d2.set_mask('Master','aa_tot', 0,7)
-    # d2.set_mask('Master','aspphi', 1,5)
-    # d2.set_mask('Master','asptheta',5,7)
+    d2.set_mask('Master','aa_tot', 0,2)
+    d2.set_mask('Master','aspphi', -5,5)
+    d2.set_mask('Master','asptheta',-.2,.2)
 
 
     # get a real subset with masks applied:
