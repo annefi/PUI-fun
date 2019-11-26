@@ -102,6 +102,8 @@ wie viele Daten bleiben über, wie viele PHA-Worte ca. pro Spin?
 
 
 \section{Coordinate Systems}
+For orientation bla we need coordinate system bla...
+
 %
 \subsection{Ulysses trajectory, HG system}
 \textbf{Todo: Hinweis auf Zeichnung und Kapitel vorne}\\
@@ -286,25 +288,16 @@ In the previous section hat man gesehen, dass sich die PHA Counts für einen gro
 
 As mentioned before (todo: ist es?), one SC spin is divided into 8 sectors, starting with sector 0 and ending with sector 7.
 Every spin's start is defined newly by the \textit{spin reference pulse} of Ulysses \citep{hiscale}. 
-This pulse is triggered when the Sun crosses the spacecraft's positive xy-plane, which is spanned by the spin axis (z) and a particular axis defined by Ulysses' sun sensors which detect the crossing of the Sun.
+
+This pulse is triggered by a combination of four sun sensors which detect when the Sun crosses a plane that is spanned by the spacecraft's spin axis and the spacecraft's x-axis, which is a particular axis perpendicular to the spin axis.
 The spin reference pulse is not uniform over time as the position of the Sun relative to the spacecraft changes with varying aspect angle.\\
-
-[We have implemented this angle in our model so that the link is made right. If it was not right, a single count would be linked to a different direction. This shift between true and andere direction is not constant over aspect angles and would lead to a complete verschmierung der direction]
-
-
-To extract correct directional information from a sector data product of an ion that has been detected by SWICS it is essential to know the relative orientation between SWICS' main axis and the x-axis on the spacecraft.\\
-From the \citet[][S.20-22]{swics_dpu} we know that \textit{normal orientation} means that the sun pulse occurs in the center of SWICS sector 4, which implies a $180^\circ$ shift between the x-axis and SWICS' mean axis (s. fig TODO). However, it is also said that it was possible to do a fine adjustment which would lead to an offset of the sun pulse from this center line up to $22.5^\circ$ \citet[][S.48]{swics_dpu}. Unfortunately, we do not know about the value that has been chosen.
+To extract correct directional information from a sector data product of an ion that has been detected by SWICS it is essential to know the relative orientation between SWICS' main axis and the x-axis on the spacecraft. In the virtual detector this is implemented as an angle against the line-of-sight spacecraft-sun by which the field of view is rotated around the spin axis.\\
+From the \citet[][S.20-22]{swics_dpu} we know with \textit{normal orientation} the sun pulse occurs in the center of SWICS sector 4, which implies a $180^\circ$ offset between the line-of-sight spacecraft-sun and SWICS sector 0 (s. fig TODO). However, one can also read that it was possible to set a fine adjustment which would lead to an offset of the sun pulse from this center line up to $22.5^\circ$ \citet[][S.48]{swics_dpu}. Unfortunately, we do not know about the value that has been chosen.
 \\
-Again, we choose to use $He^{2+}$ to analyze this (in a backwards way?). From fig Todo we find that the overall idea of a sun pulse in sector 4 should be right when we believe the assumption that $He^{2+}$ streams radially from the Sun. To check for a potential fine adjustment we search for tendencies of the maximum of counts sweeping to an adjacent sector.
-
-
-
-
-Allover Blick: Sector, der gegnüber liegt, sollte besonders prominent sein
-\\ \\
-Was würde passieren, wenns falsch wäre?
-\\ \\
-Kalibration Sektoren: Nur bei sehr großen AA möglich (äußerer od. mittlerer Detektor), weil beim inneren der Bulk auf allen landet.
+If we assumed a wrong angle, a particle beam coming from a fixed direction in a sun-fixed frame would be linked to a different direction. But this shift between true and supposedly measured direction is not constant over aspect angles. If we then measured over a longer time period with various aspect angles, we would measure the beam as blurred in velocity space.
+\\
+To make sure our model uses the right angle, we again choose $He^{2+}$ as a test population of which we assume a beam-like behaviour streaming radially from the Sun. Also, we can only look at time periods when the aspect angles were large and the maximum of $He^{2+}$ counts occurs in the central or outermost detector. Only here we can clearly discriminate between single sectors. When measured in the innermost detector the slightly widened distribution of $He^{2+}$ would spread across all sectors as they are close together here (s. fig todo).
+From fig Todo, where we histogrammed bla, we find that the overall idea of a sun pulse in sector 4 should be right when we believe the assumption that $He^{2+}$ streams radially from the Sun. To check for a potential fine adjustment we search for tendencies of the maximum of counts sweeping to an adjacent sector.
 \\
 Zeigen: Für lange Zeiträume: He2+ kommt zentral. Für einzelne kurze: unterschiedlich.
 Deshalb: grober Check von wegen Detektor geht gut. Für das Feintuning (180 Grad oder doch was anderes?) reichts aber nicht...
@@ -314,37 +307,51 @@ Schemazeichnung SunPulser, dazu Problem irgendwie zeigen
 \subsubsection{Übergang w}
 Steps vsw
 \\
-With the knowledge of orientation and eigen-velocity we can now use the virtual detector for analysing bla. In a last step make a transition to solar wind frame and from velocity space to w space.\\
-Subtracting solar wind velocity in R-component from velocity in SC frame: 
+With the considerations of eigen-velocity and orientation we can now use the virtual detector for displaying velocity distributions of $He^{+}$ pickup ions. 
+
+Mithilfe des virtuellen Detektors können jetzt geeignete (Triples) PHA Worte in dreidimensionale Geschwindigkeitskomponenten übersetzt werden (vorher: nur Betrag. Jetzt: Komponenten).
+Erst mit diesen entfalteten Einzelkomponenten kann man den wichtigen Schritt gehen und in den Sonnenwindframe übergehen.
+This is done for every PHA word (nein. jeder v-Akzeptanzpunkt in jeden getroffenen Sek-Det-Kombidings...) by subtracting the instantaneous solar wind speed in R-component from the ion's velocity in spacecraft frame: 
 \begin{align*}
 \mathbf{v_{i,sw}} = \begin{bmatrix}v_{R,i,sc}\\v_{T,i,sc}\\v_{N,i,sc}\end{bmatrix} - \begin{bmatrix}v_{sw}\\0\\0\end{bmatrix}
 \end{align*}
-Dividing every component by solar wind velocity:
+In a last step every component of the resulting vector is divided the by solar wind speed:
 \begin{align*}
-\mathbf{w_{i,sw}} = \begin{bmatrix}v_{R,i,sc}\\v_{T,i,sc}\\v_{N,i,sc}\end{bmatrix} / \begin{bmatrix}v_{sw}\\v_{sw}\\v_{sw}\end{bmatrix}
+\mathbf{w_{i,sw}} = \begin{bmatrix}v_{R,i,sw}\\v_{T,i,sw}\\v_{N,i,sw}\end{bmatrix} / \begin{bmatrix}v_{sw}\\v_{sw}\\v_{sw}\end{bmatrix}
 \end{align*}
-
-%
-%
-%
-
-
-
-
-
-
-
+By this, the transition from velocity space in the spacecraft frame to solar wind independent w space in solar wind frame of reference is made.
 %
 %
 %
 \section{VDF}
-Zweifache Beschränkung im w-Space: Bei kleinem w: keine hohen Steps (kleine Geschwindigkeiten) durch das unter-den-Threshold-Rutschen (deshalb können wir auch keinen langsamen SW untersuchen). Bei hohem w: Ende der Schalen (Step 0: 1708.5 km/s)
+
 %
 \subsection{Velocity Space Coverage}
-vom FoV zum Vspace: Invertieren $\Rightarrow$ Akzeptanz im V-Raum
+Constraints of w space:\\ \\
+geometry collimator (slightly widened by varying aspect angle) \\
+high w: lowest EpQ step: 1708.5 km/s for He, außerdem ist der Step auch mit Vorsicht zu genießen. \\
+small w: He rutscht schnell unter den Threshold bei kleinen Energien. Deshalb: keinen langsamen SW
+\\ \\
+Plot Coverage (inkl. Geometrie Kollimator!)
+Plot vsw: wenig Counts am Aphel, Zeiträume mit langs. SW sind auch raus
+
 
 %
 \subsection{Phasenraumnormierung}
+Von Counts zur PSD:
+Aus den PHA words, die uns Sec, Det und EpQ Info geben (He wissen wir auch) und zusammen mit der Info darüber wie sich das SC gerade bewegt hat und wohin es geguckt hat können wir Counts im 3D w-Raum bestimmen innerhalb der Zeit, die wir gemessen haben.
+
+Die physikalische Größe die wir daraus ableiten wollen ist die PSD.\\
+
+Phasenraumdichte in einzelnem Det-Sec-Epq-Element (Annahme: übers ganze Element konstant. Oder ich nehm die mittlere Dichte):\\
+V: spatial volume of the measurement (G: geometry factor)
+\begin{align}
+N_{ijk} &= \iiint\displaylimits_{v_{\varphi i}v_{\vartheta j}v_{R k}} \rho_{ijk}	V_k	\,\,	d^3v \\
+&= \iiint\displaylimits_{v_{\varphi i}v_{\vartheta j}v_{R k}} \rho_{ijk} \,	G \, v_k \, \tau	\,\,	d^3v \\
+&= v^2_k \left(\frac{\pi^2}{180^2}\cdot4 \cdot 69\right) \, \Delta v_k \, \rho_{ijk} \,	G \, v_k \, \tau \\
+&= v^4_k \left(\frac{\pi^2}{180^2}\cdot4 \cdot 69\right) \, 0.025\, \rho_{ijk} \, G  \, \tau
+\end{align}
+Effizienz; Aufteilen auf die großen w-Bins...\\
 Mittlere Phasenraumdichte in einem Bin, in den zwei Instrumentenbins A und B reingehen:
 (differential PSD)
 \begin{align}
@@ -395,6 +402,7 @@ B-Feld. Von welchem Instrument? auch RTN-System. Genauso Winkel berechnet.\\
 	\item Efficiency müsste genau bestimmt werden: Dabei berücksichtigen, welcher Anteil unter den Threshold wandert. Evtl. überschätzen wir die Eff., wenn wir die interpolierten Werte von ACE/SWICS nehmen.
 	\item B-Feld-spezifische Untersuchung: Torus
 	\item Radialabhängigkeit: adiabatic Cooling, PA-Scattering
+	\item Sonnenwindanalyse: Ist zu breit. In Richtung Spin-Achse könnte man aber über die Schalen analysieren (Lars fragen: radial?)
 
 \end{itemize}
 
