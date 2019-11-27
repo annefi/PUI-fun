@@ -327,14 +327,14 @@ By this, the transition from velocity space in the spacecraft frame to solar win
 
 %
 \subsection{Velocity Space Coverage}
-Constraints of w space:\\ \\
-geometry collimator (slightly widened by varying aspect angle) \\
-high w: lowest EpQ step: 1708.5 km/s for He, außerdem ist der Step auch mit Vorsicht zu genießen. \\
-small w: He rutscht schnell unter den Threshold bei kleinen Energien. Deshalb: keinen langsamen SW
+When analyzing $He^{+}$ PUI w-spectra with Ulysses SWICS, several effects have to be considered that limit the observable part of w-space. The most obvious restriction results from the fixed geometry of the collimator (s. sec todo) which allows to observe only a dome-shaped part of the w-space when considering the spin of the spacecraft and varying EpQ steps. (However, this dome is not fixed in w-space for different orientations of the spacecraft.
+While the ever changing aspect angle of Ulysses introduces a complex subject to directional data analysis it also enlarges the integrated coverage of velocity space over time.)\\
+Furthermore, we have to deal with a limitation of the coverage in $w_R$-direction particularly for $He^{+}$ triple coincidences. The observable EpQ range for $He^{+}$ is limited to TODO to TODO, which corresponds to steps todo to todo. While A is the instrument's highest possible EpQ value, B is the lowest value for which $He^{+}$ still has enough energy to overcome the energy threshold of the SSD and thus can trigger a valid energy measurement. 
+The w-range that is consequently covered is highly dependent on the prevalent solar wind speed. For $v_{sw} = 700 \,\mathrm{km/s}$ the absolute w in a spacecraft frame is limited to TODO. For slow solar wind at $v_{sw} = 300 \,\mathrm{km/s}$ todo... . 
+That means that we are limited to time periods with fast solar wind as we do not expect to measure the bulk of $He^{+}$ PUI at w größer als... TODO. In fig. TODO an exemplary w-space coverage for vsw = Todo and no aspect angle is sketched.
 \\ \\
-Plot Coverage (inkl. Geometrie Kollimator!)
-Plot vsw: wenig Counts am Aphel, Zeiträume mit langs. SW sind auch raus
-
+Evtl. woanders hin und irgendwie besser schreiben: \\
+In fig. TODO a histogram for occuring solar wind speeds is shown -- limited to times in which $He^{+}$ triple coincidences were measured. Measured with SWOOPS. The number on the right indicates the total number of $He^{+}$ PHA triple coincidence data that was received for that year. One can see the overall variation of the solar wind speed (due to different latitude: slow/fast sw) and that the total number of received data decreases heavily towards years in which Ulysses approaches the orbit's aphelion. This is mainly an effect of pickup ion flux reduction that scales with $r^{-2}$ due to the expansion of the solar wind (Todo:Quelle?).
 
 %
 \subsection{Phasenraumnormierung}
@@ -345,13 +345,25 @@ Die physikalische Größe die wir daraus ableiten wollen ist die PSD.\\
 
 Phasenraumdichte in einzelnem Det-Sec-Epq-Element (Annahme: übers ganze Element konstant. Oder ich nehm die mittlere Dichte):\\
 V: spatial volume of the measurement (G: geometry factor)
-\begin{align}
+\begin{align*}
 N_{ijk} &= \iiint\displaylimits_{v_{\varphi i}v_{\vartheta j}v_{R k}} \rho_{ijk}	V_k	\,\,	d^3v \\
 &= \iiint\displaylimits_{v_{\varphi i}v_{\vartheta j}v_{R k}} \rho_{ijk} \,	G \, v_k \, \tau	\,\,	d^3v \\
 &= v^2_k \left(\frac{\pi^2}{180^2}\cdot4 \cdot 69\right) \, \Delta v_k \, \rho_{ijk} \,	G \, v_k \, \tau \\
 &= v^4_k \left(\frac{\pi^2}{180^2}\cdot4 \cdot 69\right) \, 0.025\, \rho_{ijk} \, G  \, \tau
-\end{align}
+\end{align*}
 Effizienz; Aufteilen auf die großen w-Bins...\\
+\subsubsection{Detection Efficiency}
+(Frage Lars: Welche Wahrscheinlichkeit genau gibt die E. an? Ausgehend von einem Teilchen vor dem Instrument mit der richtigen Epq? Von einem Teilchen, das den EpQ Filter durchlaufen hat?)\\ \\
+The detector efficiency is the probability to measure a particle that has entered the instrument(?). 
+When working with SWICS, like for any physical measurement, one has to consider several effects that impede the ideal measurement as it is described in sec. todo. 
+These effects are highly dependent from the ion species and deflection step and include for example that secondary electrons for the time of flight measurement (in carbon foil and SSD) may not be emitted properly. Also, ions could pass through the time of flight section on divergent trajectories due to scattering processes (in the carbon foil??). Possibly, the ion then does not hit the sensitive area of the SSD and does neither trigger a stop signal for the time of flight measurement nor a valid energy measurement in the SSD. Even for an ion that hits the SSD centrally
+
+Another reason for a missing energy deposit in the SSD is that the ion's energy is smaller than the threshold of the SSD. The reason for choosing a nonzero threshold is to limit the influence of the SSDs natural noise. For SWICS this noise level is quite high (todo: Quelle!! Goldfolie?) so that the threshold is chosen to be TODO. Ions with a small mass and charge are most likely to not overcome the threshold. For $He^{+}$ this is already the case for deflection step TODO that corresponds to a $He^{+}$ velocity of TODO (s. sec TODO).
+Unfortunately, $He^{+}$ detection efficiencies are not known to us for Ulysses SWICS. Instead, we make use of the efficiencies from ACE SWICS (todo: woher?). As ACE SWICS uses different EpQ deflection steps and seems to have a different SSD threshold we extrapolated the values for Ulysses SWICS.
+For the highest EpQ value TODO we interpolated the efficiency from the ACE triple efficiencies and then extrapolated linearly to an efficiency of 0 at EpQ step 17. By this, we accommodate for the fact that $He^{+}$ does not have enough energy to deposit energy above the SSD threshold at step TODO and thus, the probability for a triple coincidence is zero (Todo: Verweis auf anderes Kapitel: Coverage). $He^{+}$ efficiencies from ACE SWICS and the resulting efficiencies used for Ulysses SWICS are shown in fig. TODO. For sure, these values are not realistic but represent the overall trend of a decreasing efficiency for higher EpQ steps at least.
+
+.
+\\ \\ \\
 Mittlere Phasenraumdichte in einem Bin, in den zwei Instrumentenbins A und B reingehen:
 (differential PSD)
 \begin{align}
@@ -417,4 +429,7 @@ B-Feld. Von welchem Instrument? auch RTN-System. Genauso Winkel berechnet.\\
 	\item andere Daten: B, vsw (Swoops: als vsw wird Protonengeschw. genommen. Ist das überhaupt richtig, ist das der Referenzframe? Und Annahme, dass vsw rein radial ist)
 	\item Die Sache mit dem BRW ab 2003
 	\item Englisch: Relativpronomen, Kommasetzung, British/American
+	\item $He^{1+}$ einheitlich, mathrm
+	\item Tempus?
+	\item kursiv / nicht kursiv wie war das nochmal
 \end{itemize}
