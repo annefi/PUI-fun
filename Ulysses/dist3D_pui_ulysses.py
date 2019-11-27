@@ -363,7 +363,7 @@ class Dist3D(object):
     def calc_psv(self):
         '''
         Calc PSV and load efficiencies
-        phase space volume is only dependent epq step (vel) for a single det/sec combination
+        phase space volume is only dependent on the epq step (vel) for a single det/sec combination
         '''
         # psd per sec/det:
         self.psv = (self.vels * 1.5 * self.geomfac) * (self.vels ** 2 * (pi ** 2 / 180 ** 2. * 4. * 23)) * (0.03*self.vels)

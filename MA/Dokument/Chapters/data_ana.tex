@@ -345,13 +345,29 @@ Die physikalische Größe die wir daraus ableiten wollen ist die PSD.\\
 
 Phasenraumdichte in einzelnem Det-Sec-Epq-Element (Annahme: übers ganze Element konstant. Oder ich nehm die mittlere Dichte):\\
 V: spatial volume of the measurement (G: geometry factor)
+Übrlegung über einen Spin: \\
+Counts $N_{jk}$ that have been measured in a sector-detector element $j$ during the EpQ deflection step $k$ can be connected to the phase space density $\delta_{jk}$ by an integration over the three dimensional velocity space:
 \begin{align*}
-N_{ijk} &= \iiint\displaylimits_{v_{\varphi i}v_{\vartheta j}v_{R k}} \rho_{ijk}	V_k	\,\,	d^3v \\
-&= \iiint\displaylimits_{v_{\varphi i}v_{\vartheta j}v_{R k}} \rho_{ijk} \,	G \, v_k \, \tau	\,\,	d^3v \\
-&= v^2_k \left(\frac{\pi^2}{180^2}\cdot4 \cdot 69\right) \, \Delta v_k \, \rho_{ijk} \,	G \, v_k \, \tau \\
-&= v^4_k \left(\frac{\pi^2}{180^2}\cdot4 \cdot 69\right) \, 0.025\, \rho_{ijk} \, G  \, \tau
+N_{jk} &= \iiint\displaylimits_{v_{\varphi j}v_{\vartheta j}v_{R k}} \rho_{jk}	V_k	\,\,	d^3v
 \end{align*}
-Effizienz; Aufteilen auf die großen w-Bins...\\
+where $V_k = G \, \tau \, v_k$ is the spatial volume of the measurement with the geometrical factor $G = 0.0225 \,\mathrm{cm^2}$ (TODO: Quelle. Bei gloeckler steht das nicht?), $\tau = 12/8\,\mathrm{s} = 1.5\,\mathrm{s}$ the time of the measurement in a single sector and $v_k$ the central velocity for $He^{+}$ in the EpQ step $k$ (Todo: Plot, Formel? Und dann Verweis nach vorne).
+With the opening angles of a single sector-detector element of $4^\circ$ in width and $69/3^\circ = 23^\circ$ in length and the height of this element $\Delta v_k$ we can write
+\begin{align*}
+%&= \iiint\displaylimits_{v_{\varphi i}v_{\vartheta j}v_{R k}} \rho_{ijk} \,	G \, v_k \, \tau	\,\,	d^3v \\
+N_{jk} &= v^2_k \left(\frac{\pi^2}{180^2}\cdot4 \cdot 23\right) \, \Delta v_k \, \rho_{jk} \,	G \, v_k \, \tau.
+\end{align*}
+$\Delta v_k$ is determined by the uncertainty in EpQ measurement. It has been found to be $\Delta v_k = 0.025 \, v_k$ in sec. todo:chaptr FoV to vspace, which gives us
+\begin{align*}
+N_{jk} &= v^4_k \left(\frac{\pi^2}{180^2}\cdot4 \cdot 23\right) \, 0.025\, \rho_{jk} \, G  \, \tau.
+\end{align*}
+Das kann man schreiben als 
+\begin{align*}
+\rho_{jk} &= \frac{N_{jk}}{V_{k}},
+\end{align*}
+weil das PRV nur von dem EpQ Schritt abhängig ist.\\
+Nun kommt noch hinzu, dass Ionen abhängig vom EpQ Step unterschiedlich wahrscheinlich detektiert werden.
+Das kann durch die Detection Efficiency beschrieben werden:
+
 \subsubsection{Detection Efficiency}
 (Frage Lars: Welche Wahrscheinlichkeit genau gibt die E. an? Ausgehend von einem Teilchen vor dem Instrument mit der richtigen Epq? Von einem Teilchen, das den EpQ Filter durchlaufen hat?)\\ \\
 The detector efficiency is the probability to measure a particle that has entered the instrument(?). 
@@ -361,25 +377,35 @@ These effects are highly dependent from the ion species and deflection step and 
 Another reason for a missing energy deposit in the SSD is that the ion's energy is smaller than the threshold of the SSD. The reason for choosing a nonzero threshold is to limit the influence of the SSDs natural noise. For SWICS this noise level is quite high (todo: Quelle!! Goldfolie?) so that the threshold is chosen to be TODO. Ions with a small mass and charge are most likely to not overcome the threshold. For $He^{+}$ this is already the case for deflection step TODO that corresponds to a $He^{+}$ velocity of TODO (s. sec TODO).
 Unfortunately, $He^{+}$ detection efficiencies are not known to us for Ulysses SWICS. Instead, we make use of the efficiencies from ACE SWICS (todo: woher?). As ACE SWICS uses different EpQ deflection steps and seems to have a different SSD threshold we extrapolated the values for Ulysses SWICS.
 For the highest EpQ value TODO we interpolated the efficiency from the ACE triple efficiencies and then extrapolated linearly to an efficiency of 0 at EpQ step 17. By this, we accommodate for the fact that $He^{+}$ does not have enough energy to deposit energy above the SSD threshold at step TODO and thus, the probability for a triple coincidence is zero (Todo: Verweis auf anderes Kapitel: Coverage). $He^{+}$ efficiencies from ACE SWICS and the resulting efficiencies used for Ulysses SWICS are shown in fig. TODO. For sure, these values are not realistic but represent the overall trend of a decreasing efficiency for higher EpQ steps at least.
-
-.
-\\ \\ \\
-Mittlere Phasenraumdichte in einem Bin, in den zwei Instrumentenbins A und B reingehen:
-(differential PSD)
-\begin{align}
-\bar{\rho} = \frac{N_A + N_B}{\frac{N_A}{N_{A,ges}} V_A + \frac{N_B}{N_{B,ges}} V_B }
-\end{align}
-Dabei ist $N_i$ die Anzahl der Hits, die im Messbin gelandet sind und $N_{i,ges}$ die gesamte Anzahl an Bins. Hits heißt GEsamtcounts durch Detektoranzahl. Eigentlich gebe ich statt $N_i$ $N_i \cdot Detektoranzahl$ rein, aber das kürzt sich ja raus.\\ \\
-Effizienz und Sektorgewichte dazu:\\
-Allg.:
+\\ \\
+Das können wir berücksichtigeen, indem wir die PRD für jedes Segment mit der inversen Effizienz gewichten:
 \begin{align*}
-\rho = \frac{N \cdot brw}{V \cdot Eff}
+\rho_{jk} &= \frac{N_{jk}}{V_{k}\cdot eff_k}.
 \end{align*}
-Und dann
-\begin{align}
-\bar{\rho} = \frac{N_A + N_B}{\frac{N_A}{N_{A,ges}} \frac{V_A \cdot eff_A}{brw_A} + \frac{N_B}{N_{B,ges}} \frac{V_B \cdot eff_B}{brw_B} }
-\end{align}
-Unsicherheit EpQ: Delta v. Rechnung fehlerfortpflanzung Kladde S. 84
+Wenn wir nicht nur einen Spin betrachten sondern einen längeren Messzeitraum, müssen wir nicht nur die Counts aufsummieren, sondern auch das über die Zeit gemessene intgrierte Phasenraumvolumen betrachten. Diese Zeit $t_{jk}$ ist nicht gleich für alle Segmente wegen Aspect Winkel (nur das?). Mit $t_{jk} = n_{jk} \cdot \tau$ (anders benennen, vielleicht irgendwas quer als Mittelung):
+\begin{align*}
+\rho_{jk} &= \frac{N_{jk}}{n_{jk} \cdot V_{k}\cdot eff_k}.
+\end{align*}
+
+
+%.
+%\\ \\ \\
+%Mittlere Phasenraumdichte in einem Bin, in den zwei Instrumentenbins A und B reingehen:
+%(differential PSD)
+%\begin{align}
+%\bar{\rho} = \frac{N_A + N_B}{\frac{N_A}{N_{A,ges}} V_A + \frac{N_B}{N_{B,ges}} V_B }
+%\end{align}
+%Dabei ist $N_i$ die Anzahl der Hits, die im Messbin gelandet sind und $N_{i,ges}$ die gesamte Anzahl an Bins. Hits heißt GEsamtcounts durch Detektoranzahl. Eigentlich gebe ich statt $N_i$ $N_i \cdot Detektoranzahl$ rein, aber das kürzt sich ja raus.\\ \\
+%Effizienz und Sektorgewichte dazu:\\
+%Allg.:
+%\begin{align*}
+%\rho = \frac{N \cdot brw}{V \cdot Eff}
+%\end{align*}
+%Und dann
+%\begin{align}
+%\bar{\rho} = \frac{N_A + N_B}{\frac{N_A}{N_{A,ges}} \frac{V_A \cdot eff_A}{brw_A} + \frac{N_B}{N_{B,ges}} \frac{V_B \cdot eff_B}{brw_B} }
+%\end{align}
+
 
 
 %
@@ -432,4 +458,5 @@ B-Feld. Von welchem Instrument? auch RTN-System. Genauso Winkel berechnet.\\
 	\item $He^{1+}$ einheitlich, mathrm
 	\item Tempus?
 	\item kursiv / nicht kursiv wie war das nochmal
+	\item spinrate drin?
 \end{itemize}
