@@ -8,16 +8,9 @@
 
 %----------------------------------------------------------------------------------------
 
-
+Intro:\\
 von den Rohdaten zur 3D VDF
-\\ \\
-wohin damit? \\ \\
-PHA pro Spin...
-Ideal / mit Fehlern alpha, beta
-\\ , Pile-up, random coincidences/ Schmutztail durch hohe Flüsse
-\\
-SWICS provides two types of data products from the analogue signals Tof, ESSD and the EPQ-Step.
-24-bit
+
 
 
 
@@ -50,7 +43,7 @@ Threshold, Doubles...
 %
 
 \section{ET matrices, identification}
-Fig. \ref{fig:et_matrix} shows longterm PHA data collected with Ulysses SWICS over two years for EPQ Step 25 (= Energy per charge TODO). For every particle with valid measurements the $\mathrm{E_{SSD}}$ channel is plotted over the ToF channel. As a particle's mass and mass-per-charge is connected to the measured values $EpQ$, $\tau$ and $E_{SSD}$ by equations \ref{eq:swics_set1} --  \ref{eq:swics_set3}, every ion species occupies a distinct position in the so-called \textit{ET-Matrix}. (Counts of different ion species sum up at distinct places in ... space.)
+Fig. \ref{fig:et_matrix} shows longterm PHA data collected with Ulysses SWICS over two years for energy-per-charge step 25 (which is $10.05\,\mathrm{kV}$). For every particle with valid measurements the $\mathrm{E_{SSD}}$ channel is plotted over the ToF channel. As a particle's mass and mass-per-charge is connected to the measured values $EpQ$, $\tau$ and $E_{SSD}$ by equations \ref{eq:swics_set1} --  \ref{eq:swics_set3}, every ion species occupies a distinct position in the so-called \textit{ET-Matrix}. (Counts of different ion species sum up at distinct places in ... space.)
 
 
 \begin{figure}[h]
@@ -71,8 +64,8 @@ nominal w based on vsw -> solar wind ions rausfiltern
 \end{figure}
 
 
-For extracting only the $\mathrm{He^+}$ events from the PHA data we plot the events' energy-per-charge over their measured ToF. 
-Teilchen derselben mpq werden auf Kurven $todo$ geortet. Spezies höherer Mpq finden sich auf Kurven mit größeren ToF-Werten. Man kann so z.B. todo, todo und todo identifizieren. Unten ist He gut zu erkennen weil suprathermal. An die suprathermalen $He$-Teilchen schließen sich zu höheren ToF andere Teilchen mit derselben mpq auf der gleichen Kurve an. Weil die Kurven dort enger liegen, kann man He in dem Bereich auch nicht von anderen mit ähnlicher mpq unterscheiden.
+For extracting only the $\mathrm{He^{+}}$ events from the PHA data we plot the events' energy-per-charge over their measured ToF. 
+Teilchen derselben mpq werden auf Kurven $todo$ geortet. Spezies höherer Mpq finden sich auf Kurven mit größeren ToF-Werten. Man kann so z.B. todo, todo und todo identifizieren. Unten ist He gut zu erkennen weil suprathermal. An die suprathermalen $\mathrm{He^{+}}$-Teilchen schließen sich zu höheren ToF andere Teilchen mit derselben mpq auf der gleichen Kurve an. Weil die Kurven dort enger liegen, kann man He in dem Bereich auch nicht von anderen mit ähnlicher mpq unterscheiden.
 We can take advantage of SWICS' on-board priority weighting. We only plot the Range0-events. This roughly cuts out events with $m>8.7$. Nur H, He2+, He+ bleiben übrig als prominente Ionen. Man sieht, dass auch einige schwerere in die Box reinlecken, aber das betrifft nicht die ESA-Steps, in denen Helium auftritt.\\
 Man kann jetzt prima per Auge eine Maske legen. Zusätzlich w filtern um eventullen Hintergrund zu unterdrücken...?
 Man sieht, dass wir nur Helium-PHAs bis EpQ-Step todo auswerten. Der Grund ist, dass He1+ aufgrund der geringen Masse nicht genug Energie hat, die Triggerschwelle des SSDs zu überschreiten. Somit liegen He1+-Ionen bei höheren ESA-Steps (kleineren Energien pro Ladung) als Double Coincidences vor und taugen nicht für unsere Analyse.
@@ -92,6 +85,14 @@ Für alle Jahre. Anzahl: todo
 Weitere Daten: vsw von SWOOPS, B-Feld
 \\ \\
 wie viele Daten bleiben über, wie viele PHA-Worte ca. pro Spin?
+\\ \\
+wohin damit? \\ \\
+PHA pro Spin...
+Ideal / mit Fehlern alpha, beta
+\\ , Pile-up, random coincidences/ Schmutztail durch hohe Flüsse
+\\
+SWICS provides two types of data products from the analogue signals Tof, ESSD and the EPQ-Step.
+24-bit
 %
 %
 %
@@ -134,7 +135,7 @@ The orbit itself is described in heliographic coordinates, so a cs that is const
 \begin{figure}[h]
 	\includegraphics[width=1\textwidth]{Figures/RTN_AA_angles.pdf}
 	\centering
-	\caption{Graphical representation of the RTN coordinate system (not to scale). Shown are the Sun (yellow), the Earth (blue) and the Ulysses spacecraft at a non-specific position on its orbit. $\vec{R}$ is defined as the unit vector along the line-of-sight Sun--Earth, $\vec{T}$ as the normalized cross product $\vec{\omega} x \vec{R}$ with $\vec{\omega}$ the angular velocity of the Sun (yellow vector). $\vec{N}$ completes the right-handed Cartesian system. Also shown is the definition of the aspect angle components $\varphi_{asp}$ and $\vartheta_{asp}$ as they are used in this work. The grey plane depicts the $\vec{R}$--$\vec{T}$ plane. $0 ^\circ < \varphi_{asp} < 90^\circ$ and $-90 ^\circ < \vartheta_{asp} < 0^\circ$ in the shown situation. \textbf{TODO: Zeichnung anpassen: Vektorpfeile, Indizes Winkel; Quelle Ulysses Dingsi}}
+	\caption{Graphical representation of the RTN coordinate system (not to scale). Shown are the Sun (yellow), the Earth (blue) and the Ulysses spacecraft at a non-specific position on its orbit. $\vec{R}$ is defined as the unit vector along the line-of-sight Sun--Earth, $\vec{T}$ as the normalized cross product $\vec{\omega} x \vec{R}$ with $\vec{\omega}$ the angular velocity of the Sun (yellow vector). $\vec{N}$ completes the right-handed Cartesian system. Also shown is the definition of the aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ as they are used in this work. The grey plane depicts the $\vec{R}$--$\vec{T}$ plane. $0 ^\circ < \varphi_{\mathrm{asp}} < 90^\circ$ and $-90 ^\circ < \vartheta_{\mathrm{asp}} < 0^\circ$ in the shown situation. \textbf{TODO: Zeichnung anpassen: Vektorpfeile, Indizes Winkel; Quelle Ulysses Dingsi}}
 	\label{fig:rtn}
 \end{figure}
 
@@ -179,7 +180,7 @@ Das Ziel ist, einem gemessenen Teilchen einen v-Vektor zuzuordnen. Eine Sek-Det-
 Was macht das Modell? -- Ich will das FoV zu jedem Zeitpunkt bestimmen. Ich nehme dafür einzelne Messpunkte auf der originalen Geometrie. Dann gebe ich noch ins Modell, wie das gerade ausgerichtet ist.\\
 Berechnet anhand des AA, wohin Sun trigger schaut, wenn getriggert wird und rotiert coll. an entsprechende Position für Sek 0. Ordnet entsorechend andere Sektoren an.
 Simuliert FoV durch Punkteraster \\
-\subsection{Construction}
+\subsection{Construction} \label{subsec:construction}
 For reconstructing the velocity space that SWICS measures we need to know about the directions of incident particles that can enter the instrument.
 \\ \\
 The original geometry of the SWICS entrance system, in particular the collimator, was read out from a technical drawing \textbf{\textbf{(TODO: Quelle?!})}
@@ -211,7 +212,7 @@ The central velocity for an ion of charge $q$ and mass $m$ for an energy-per-cha
 \begin{align*}
 \frac{v_c}{km \, s^{-1}} = \sqrt{\frac{2 \cdot EpQ \cdot 1.60217646\cdot10^{-19}\cdot |q|}{m \cdot 1.66053886 \cdot 10^{-27}} }
 \end{align*}
-with $m = 4 u$ and $|q| = 1$ for $He^{+}$.\\
+with $m = 4 u$ and $|q| = 1$ for $\mathrm{He^{+}}$.\\
 To represent the uncertainty in EpQ measurement, we take into account the relative uncertainty $\Delta \frac{E}{q}/\frac{E}{q} = \pm 5\%$ and translate it into an uncertainty $\Delta v / v = \frac{1}{2} \left( \Delta \frac{E}{q}/\frac{E}{q}\right) = \pm 2.5\%$ in accepted velocity. For every EpQ step we can now choose a number of $i_{epq}$ single velocities that are distributed evenly in the interval $\left[ v_c - \Delta v / v, v_c + \Delta v / v \right]$. The total number of accepted velocities $v$ is then $64 \cdot i_{epq}$.
 \\
 Different absolute velocities $v$ appear as distinct shells of radius $v$ in velocity space.
@@ -246,33 +247,33 @@ Until now we have assumed that Ulysses' spin axis is aligned with the R-axis of 
 \begin{figure}[h]
 	\includegraphics[width=1\textwidth]{Figures/aa_new.pdf}
 	\centering
-	\caption{The evolution of Ulysses' aspect angle components $\varphi_{asp}$ and $\vartheta_{asp}$ from 1991 to the end of the mission are shown. The aspect angle is the angle between the line-of-sight Ulysses--Sun and the orientation of Ulysses' spin axis. A constantly changing aspect angle results from the fact that the spacecraft's antenna, that is nearly parallel with the spin-axis, has to point towards Earth all the time. Particularly large aspect angles occur during the three fast latitude scans around 1995, 2001 and 2007. Here, Ulysses' distance to Sun and Earth is at a minimum. \textbf{Also shown is the... (todo: raus aus der Zeichnung?)} }
+	\caption{The evolution of Ulysses' aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ from 1991 to the end of the mission are shown. The aspect angle is the angle between the line-of-sight Ulysses--Sun and the orientation of Ulysses' spin axis. A constantly changing aspect angle results from the fact that the spacecraft's antenna, that is nearly parallel with the spin-axis, has to point towards Earth all the time. Particularly large aspect angles occur during the three fast latitude scans around 1995, 2001 and 2007. Here, Ulysses' distance to Sun and Earth is at a minimum. \textbf{Also shown is the... (todo: raus aus der Zeichnung?)} }
 	\label{fig:aa}
 \end{figure}
-The aspect angle is measured from the line-of-sight Ulysses--Sun (that is $\vec{R}$) to the line-of-sight Ulysses--Earth. To describe this angle uniquely for any moment, we need two spherical coordinates $\varphi_{asp}$ and $\vartheta_{asp}$ based on the RTN system. As shown in fig. \ref{fig:aa}, $\varphi_{asp}$ is measured in the $\vec{R}$--$\vec{T}$ plane between $-\vec{R}$ and the projection of the line-of-sight from Ulysses to the Earth into this plane. $\varphi_{asp}$  is $0^\circ$ for directions along $-\vec{R}$, that is the line-of-sight from Ulysses to the Sun and increases to positive values towards $-\vec{T}$. $\vartheta_{asp}$ is the angle between the projection of the line-of-sight from Ulysses to the Earth into the $\vec{R}$--$\vec{T}$ plane and the line-of-sight itself. It is defined as $0^\circ$ for directions that lie within the $\vec{R}$--$\vec{T}$ plane and $+90^\circ$ for directions along $\vec{N}$.\\
+The aspect angle is measured from the line-of-sight Ulysses--Sun (that is $\vec{R}$) to the line-of-sight Ulysses--Earth. To describe this angle uniquely for any moment, we need two spherical coordinates $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ based on the RTN system. As shown in fig. \ref{fig:aa}, $\varphi_{\mathrm{asp}}$ is measured in the $\vec{R}$--$\vec{T}$ plane between $-\vec{R}$ and the projection of the line-of-sight from Ulysses to the Earth into this plane. $\varphi_{\mathrm{asp}}$  is $0^\circ$ for directions along $-\vec{R}$, that is the line-of-sight from Ulysses to the Sun and increases to positive values towards $-\vec{T}$. $\vartheta_{\mathrm{asp}}$ is the angle between the projection of the line-of-sight from Ulysses to the Earth into the $\vec{R}$--$\vec{T}$ plane and the line-of-sight itself. It is defined as $0^\circ$ for directions that lie within the $\vec{R}$--$\vec{T}$ plane and $+90^\circ$ for directions along $\vec{N}$.\\
 (Todo: Lars fragen, ob die genaue Rechnung hier rein muss, Kladde S. 79)
-For the calculation of the aspect angle we used the Ulysses trajectory data (Verweis ... TODO) and Earth trajectory data in heliographic coordinates on a daily basis from \citet{nasa-earth-coord} and converted both to RTN coordinates. In fig. \ref{fig:aa} both components $\varphi_{asp}$ and $\vartheta_{asp}$ as well as the \textit{flat} aspect angle $\alpha$ with  $\alpha = \arccos(\cos{\varphi_{asp}}) + \arccos(\cos{\vartheta_{asp}}) -1$ are shown over the time of the mission. $\varphi_{asp}$ varies in the range from $\sim - 25^\circ$ to $\sim 42^\circ$ and $\vartheta_{asp}$ in a range from $\sim - 30^\circ$ to $\sim 17^\circ$. Large angles occur especially around the three fast latitude scans, i.e. when Ulysses is at its perihelion and has the smallest distance to Sun and Earth.\\
+For the calculation of the aspect angle we used the Ulysses trajectory data (Verweis ... TODO) and Earth trajectory data in heliographic coordinates on a daily basis from \citet{nasa-earth-coord} and converted both to RTN coordinates. In fig. \ref{fig:aa} both components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ as well as the \textit{flat} aspect angle $\alpha$ with  $\alpha = \arccos(\cos{\varphi_{\mathrm{asp}}}) + \arccos(\cos{\vartheta_{\mathrm{asp}}}) -1$ are shown over the time of the mission. $\varphi_{\mathrm{asp}}$ varies in the range from $\sim - 25^\circ$ to $\sim 42^\circ$ and $\vartheta_{\mathrm{asp}}$ in a range from $\sim - 30^\circ$ to $\sim 17^\circ$. Large angles occur especially around the three fast latitude scans, i.e. when Ulysses is at its perihelion and has the smallest distance to Sun and Earth.\\
 (Todo? Beschreiben, dass ich $\alpha$ mit dem Datenprodukt SPE verglichen habe?)
 \\ \\
 \begin{figure}[h]
 	\includegraphics[width=0.5\textwidth]{Figures/col_aa_marker.png}
 	\centering
 	\caption{todo}
-	\label{todo}
+	\label{fig:col_aa}
 \end{figure}
 steps asp Winkel
 
-The variable aspect angle is incorporated into the analysis by rotating the field of view corresponding to $\varphi_{asp}$ and $\vartheta_{asp}$. This results in a likewise rotation of the velocity acceptance space. In fig. todo the acceptance velocity for a single absolute velocity todo is shown for $\varphi_{asp} = todo $ and $\vartheta_{asp} = todo $. Note, that the orientation here seems to be mirrored against the convention that has been described before. This is due to the inversion when transitioning from the field of view to velocity acceptance, s. eq. \ref{eq:fov}.\\
-When comparing fig todo with fig todo, where a situation with $\vartheta_{asp} = \varphi_{asp} = 0$ is shown, it becomes clear that especially larger aspect angles change the link between a distinct sector-detector element and a volume in velocity space. While with a zero aspect angle a radial velocity (along $\vec{R}$) would be detected right in the middle of the velocity shell and definitely in the innermost detector, this is not the case for the aspect angle in fig. todo. Here, an exclusively radial oriented velocity would be detected in a distinct sector in the central detector. (Andersrum bedeutet das, dass eine Sec-Det-Info nur zugeordnet werden kann, wenn die Ausrichtung des Detektors bekannt ist!)
+The variable aspect angle is incorporated into the analysis by rotating the field of view corresponding to $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$. This results in a likewise rotation of the velocity acceptance space. In fig. \ref{fig:col_aa} the acceptance velocity for a single absolute velocity $v = 600\,\mathrm{km\,s^{-1}}$ is shown for $\varphi_\mathrm{asp} = 25^\circ$ and $\vartheta_{\mathrm{asp}} = -10^\circ $. Note, that the orientation here seems to be mirrored against the convention that has been described before. This is due to the inversion when transitioning from the field of view to velocity acceptance, s. eq. \ref{eq:fov}.\\
+When comparing fig todo with fig todo, where a situation with $\vartheta_{\mathrm{asp}} = \varphi_{\mathrm{asp}} = 0$ is shown, it becomes clear that especially larger aspect angles change the link between a distinct sector-detector element and a volume in velocity space. While with a zero aspect angle a radial velocity (along $\vec{R}$) would be detected right in the middle of the velocity shell and definitely in the innermost detector, this is not the case for the aspect angle in fig. todo. Here, an exclusively radial oriented velocity would be detected in a distinct sector in the central detector. (Andersrum bedeutet das, dass eine Sec-Det-Info nur zugeordnet werden kann, wenn die Ausrichtung des Detektors bekannt ist!)
 
 \subsubsection{Probe}
-For checking if the considerations made before are reasonable and if the virtual detector works in the right way, we want to have a look at data of which we believe to know the VDF. Appropriate test data is the solar wind itself as it is believed to flow radially outwards from the sun (Todo:Quelle). An ideal candidate within the solar wind is $He^{2+}$ as the most abundant species (todo: Quelle). Thus, we can identify $He^{2+}$ easily in fig Todo and are provided with good statistics. Unlike protons, which are even more abundant in the solar wind, $He^{2+}$ most likely deposits energy above the detector's threshold in the SSD detector (s. chap Todo). This is because of its higher mass and the twice as high charge, which leads to a higher gain in energy by the post acceleration (todo:nochmal Verweis?). Only when a particle triggers an ESSD measurement (Triple Coincidence) we get a directional information about its velocity (Verweis todo). Protons are most often measured as Double Coincidences except for suprathermal protons, for which the assumption of radial stream must not hold true (Todo:Quelle). For selecting $He^{2+}$ we proceed like described in chap. todo.
+For checking if the considerations made before are reasonable and if the virtual detector works in the right way, we want to have a look at data of which we believe to know the VDF. Appropriate test data is the solar wind itself as it is believed to flow radially outwards from the sun (Todo:Quelle). An ideal candidate within the solar wind is $\mathrm{He^{2+}}$ as the most abundant species (todo: Quelle). Thus, we can identify $\mathrm{He^{2+}}$ easily in fig Todo and are provided with good statistics. Unlike protons, which are even more abundant in the solar wind, $\mathrm{He^{2+}}$ most likely deposits energy above the detector's threshold in the SSD detector (s. chap Todo). This is because of its higher mass and the twice as high charge, which leads to a higher gain in energy by the post acceleration (todo:nochmal Verweis?). Only when a particle triggers an ESSD measurement (Triple Coincidence) we get a directional information about its velocity (Verweis todo). Protons are most often measured as Double Coincidences except for suprathermal protons, for which the assumption of radial stream must not hold true (Todo:Quelle). For selecting $\mathrm{He^{2+}}$ we proceed like described in chap. todo.
 Wie viele PHAs sind das dann insgesamt und pro Jahr? Schreiben, dass das nicht so genau gemacht werden musste, weil keine VDF Analyse...
 \\ \\
-In a first step we look at periods of time in which both aspect angle components $\varphi_{asp}$ and $\vartheta_{asp}$ were small (Todo: genau?). For these nr\_todo PHA words we draw a histogram (??) of their sektor and detector information. The result can be seen in fig. todo. The histogram shows that mainly the innermost detector has counts. This is the expected behavior when we imagine the instrument on a spacecraft that points directly to the Sun. A radially streaming flow then hits the instrument's detector that is oriented sunwards. This does not change with the spin of the spacecraft. This result is also consistent with the detector model for $\varphi_{asp} = \vartheta_{asp} = 0$ which is shown in fig. todo. A radial stream can be represented here by the black line which cuts through the velocity shell in its center, the region of the innermost detector, bla. Irgendwie schöner schreiben...
+In a first step we look at periods of time in which both aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ were small (Todo: genau?). For these nr\_todo PHA words we draw a histogram (??) of their sektor and detector information. The result can be seen in fig. todo. The histogram shows that mainly the innermost detector has counts. This is the expected behavior when we imagine the instrument on a spacecraft that points directly to the Sun. A radially streaming flow then hits the instrument's detector that is oriented sunwards. This does not change with the spin of the spacecraft. This result is also consistent with the detector model for $\varphi_{\mathrm{asp}} = \vartheta_{\mathrm{asp}} = 0$ which is shown in fig. todo. A radial stream can be represented here by the black line which cuts through the velocity shell in its center, the region of the innermost detector, bla. Irgendwie schöner schreiben...
 (Due to the width... auf allen Sektoren?)
 \\ \\
-In a second step we take a look at a time period in which Ulysses had a substantial aspect angle. This is particularly the case for when Ulysses is near its perihelion, s. fig todo. We choose for the second orbit, i.e. days 1-90 (?) in 2001. For all $He^{2+}$ PHA data from this time we again histogram sector and detector information, which is shown in fig. todo. Compared to fig. todo the maximum of counts is now shifted clearly towards a single sector (Nr.?) and the central detector. This is consistent with the virtual detector in fig. todo, where the aspect angle's quantity matches the one in the selected time period. With this orientation a radial stream from the Sun hits the instrument on its center detector and only while a particular moment (?!) of the spin/rotation (?!). Counts do not show up exclusively with this single sector-detector combination but slightly spread out over adjacent sector-detector elements. This is due to the fact that solar wind $He^{2+}$ does not stream as an ideal beam but has a certain width (todo: Referenz).
+In a second step we take a look at a time period in which Ulysses had a substantial aspect angle. This is particularly the case for when Ulysses is near its perihelion, s. fig todo. We choose for the second orbit, i.e. days 1-90 (?) in 2001. For all $\mathrm{He^{2+}}$ PHA data from this time we again histogram sector and detector information, which is shown in fig. todo. Compared to fig. todo the maximum of counts is now shifted clearly towards a single sector (Nr.?) and the central detector. This is consistent with the virtual detector in fig. todo, where the aspect angle's quantity matches the one in the selected time period. With this orientation a radial stream from the Sun hits the instrument on its center detector and only while a particular moment (?!) of the spin/rotation (?!). Counts do not show up exclusively with this single sector-detector combination but slightly spread out over adjacent sector-detector elements. This is due to the fact that solar wind $\mathrm{He^{2+}}$ does not stream as an ideal beam but has a certain width (todo: Referenz).
 \\ Verweis: Sektordetails im nächsten Kapitelchen
 
 \begin{figure}[h]
@@ -296,10 +297,10 @@ From the \citet[][S.20-22]{swics_dpu} we know with \textit{normal orientation} t
 \\
 If we assumed a wrong angle, a particle beam coming from a fixed direction in a sun-fixed frame would be linked to a different direction. But this shift between true and supposedly measured direction is not constant over aspect angles. If we then measured over a longer time period with various aspect angles, we would measure the beam as blurred in velocity space.
 \\
-To make sure our model uses the right angle, we again choose $He^{2+}$ as a test population of which we assume a beam-like behaviour streaming radially from the Sun. Also, we can only look at time periods when the aspect angles were large and the maximum of $He^{2+}$ counts occurs in the central or outermost detector. Only here we can clearly discriminate between single sectors. When measured in the innermost detector the slightly widened distribution of $He^{2+}$ would spread across all sectors as they are close together here (s. fig todo).
-From fig Todo, where we histogrammed bla, we find that the overall idea of a sun pulse in sector 4 should be right when we believe the assumption that $He^{2+}$ streams radially from the Sun. To check for a potential fine adjustment we search for tendencies of the maximum of counts sweeping to an adjacent sector.
+To make sure our model uses the right angle, we again choose $\mathrm{He^{2+}}$ as a test population of which we assume a beam-like behaviour streaming radially from the Sun. Also, we can only look at time periods when the aspect angles were large and the maximum of $\mathrm{He^{2+}}$ counts occurs in the central or outermost detector. Only here we can clearly discriminate between single sectors. When measured in the innermost detector the slightly widened distribution of $\mathrm{He^{2+}}$ would spread across all sectors as they are close together here (s. fig todo).
+From fig Todo, where we histogrammed bla, we find that the overall idea of a sun pulse in sector 4 should be right when we believe the assumption that $\mathrm{He^{2+}}$ streams radially from the Sun. To check for a potential fine adjustment we search for tendencies of the maximum of counts sweeping to an adjacent sector.
 \\
-Zeigen: Für lange Zeiträume: He2+ kommt zentral. Für einzelne kurze: unterschiedlich.
+Zeigen: Für lange Zeiträume: $\mathrm{He^{2+}}$ kommt zentral. Für einzelne kurze: unterschiedlich.
 Deshalb: grober Check von wegen Detektor geht gut. Für das Feintuning (180 Grad oder doch was anderes?) reichts aber nicht...
 \\
 Schemazeichnung SunPulser, dazu Problem irgendwie zeigen
@@ -307,7 +308,7 @@ Schemazeichnung SunPulser, dazu Problem irgendwie zeigen
 \subsubsection{Übergang w}
 Steps vsw
 \\
-With the considerations of eigen-velocity and orientation we can now use the virtual detector for displaying velocity distributions of $He^{+}$ pickup ions. 
+With the considerations of eigen-velocity and orientation we can now use the virtual detector for displaying velocity distributions of $\mathrm{He^{+}}$ pickup ions. 
 
 Mithilfe des virtuellen Detektors können jetzt geeignete (Triples) PHA Worte in dreidimensionale Geschwindigkeitskomponenten übersetzt werden (vorher: nur Betrag. Jetzt: Komponenten).
 Erst mit diesen entfalteten Einzelkomponenten kann man den wichtigen Schritt gehen und in den Sonnenwindframe übergehen.
@@ -327,31 +328,35 @@ By this, the transition from velocity space in the spacecraft frame to solar win
 
 %
 \subsection{Velocity Space Coverage}
-When analyzing $He^{+}$ PUI w-spectra with Ulysses SWICS, several effects have to be considered that limit the observable part of w-space. The most obvious restriction results from the fixed geometry of the collimator (s. sec todo) which allows to observe only a dome-shaped part of the w-space when considering the spin of the spacecraft and varying EpQ steps. (However, this dome is not fixed in w-space for different orientations of the spacecraft.
+When analyzing $\mathrm{He^{+}}$ PUI w-spectra with Ulysses SWICS, several effects have to be considered that limit the observable part of w-space. The most obvious restriction results from the fixed geometry of the collimator (s. sec. \ref{subsec:construction})) which allows to observe only a dome-shaped part of the w-space when considering the spin of the spacecraft and varying EpQ steps. (However, this dome is not fixed in w-space for different orientations of the spacecraft.
 While the ever changing aspect angle of Ulysses introduces a complex subject to directional data analysis it also enlarges the integrated coverage of velocity space over time.)\\
-Furthermore, we have to deal with a limitation of the coverage in $w_R$-direction particularly for $He^{+}$ triple coincidences. The observable EpQ range for $He^{+}$ is limited to TODO to TODO, which corresponds to steps todo to todo. While A is the instrument's highest possible EpQ value, B is the lowest value for which $He^{+}$ still has enough energy to overcome the energy threshold of the SSD and thus can trigger a valid energy measurement. 
+Furthermore, we have to deal with a limitation of the coverage in $w_R$-direction particularly for $\mathrm{He^{+}}$ triple coincidences. The observable EpQ range for $\mathrm{He^{+}}$ is limited to TODO to TODO, which corresponds to steps todo to todo. While A is the instrument's highest possible EpQ value, B is the lowest value for which $\mathrm{He^{+}}$ still has enough energy to overcome the energy threshold of the SSD and thus can trigger a valid energy measurement. 
 The w-range that is consequently covered is highly dependent on the prevalent solar wind speed. For $v_{sw} = 700 \,\mathrm{km/s}$ the absolute w in a spacecraft frame is limited to TODO. For slow solar wind at $v_{sw} = 300 \,\mathrm{km/s}$ todo... . 
-That means that we are limited to time periods with fast solar wind as we do not expect to measure the bulk of $He^{+}$ PUI at w größer als... TODO. In fig. TODO an exemplary w-space coverage for vsw = Todo and no aspect angle is sketched.
+That means that we are limited to time periods with fast solar wind as we do not expect to measure the bulk of $\mathrm{He^{+}}$ PUI at w größer als... TODO. In fig. TODO an exemplary w-space coverage for vsw = Todo and no aspect angle is sketched.
 \\ \\
 Evtl. woanders hin und irgendwie besser schreiben: \\
-In fig. TODO a histogram for occuring solar wind speeds is shown -- limited to times in which $He^{+}$ triple coincidences were measured. Measured with SWOOPS. The number on the right indicates the total number of $He^{+}$ PHA triple coincidence data that was received for that year. One can see the overall variation of the solar wind speed (due to different latitude: slow/fast sw) and that the total number of received data decreases heavily towards years in which Ulysses approaches the orbit's aphelion. This is mainly an effect of pickup ion flux reduction that scales with $r^{-2}$ due to the expansion of the solar wind (Todo:Quelle?).
+In fig. \ref{fig:vsw_years} a histogram for occurring solar wind speeds is shown -- limited to times in which $\mathrm{He^{+}}$ triple coincidences were measured. Measured with SWOOPS. The number on the right indicates the total number of $\mathrm{He^{+}}$ PHA triple coincidence data that was received for that year. One can see the overall variation of the solar wind speed (due to different latitude: slow/fast sw) and that the total number of received data decreases heavily towards years in which Ulysses approaches the orbit's aphelion. This is mainly an effect of pickup ion flux reduction that scales with $r^{-2}$ due to the expansion of the solar wind (Todo:Quelle?).
+\begin{figure}[h]
+	\includegraphics[width=0.9\textwidth]{Figures/vsw_all_years_brw.pdf}
+	\centering
+	\caption{TODO... u.a.: norm; pad links neu}
+	\label{fig:vsw_years}
+\end{figure}
+
 
 %
-\subsection{Phasenraumnormierung}
-Von Counts zur PSD:
-Aus den PHA words, die uns Sec, Det und EpQ Info geben (He wissen wir auch) und zusammen mit der Info darüber wie sich das SC gerade bewegt hat und wohin es geguckt hat können wir Counts im 3D w-Raum bestimmen innerhalb der Zeit, die wir gemessen haben.
+\subsection{Phase Space Normalisation}
+We are now able to combine the information about sector, detector and EpQ step from the selected $\mathrm{He^{+}}$ PHA triple coincidences with the information about how the spacecraft was moving and which direction it was facing at the time of the measurement.
+Counts that we have collected over a certain time period can be mapped into three dimensional w-space by this. However, for deriving physical quantities from these, a transition from counts to phase space density has to be made.\\
+Firstly, we consider a single spin of the spacecraft, which normally corresponds to one EpQ step of SWICS.
+Counts $N_{jk}$ that have been measured in a phase space volume that has been covered by a sector-detector element $j$ during the EpQ deflection step $k$ can be connected to the average phase space density $\delta_{jk}$ in this volume by an integration over the three dimensional velocity space:
 
-Die physikalische Größe die wir daraus ableiten wollen ist die PSD.\\
 
-Phasenraumdichte in einzelnem Det-Sec-Epq-Element (Annahme: übers ganze Element konstant. Oder ich nehm die mittlere Dichte):\\
-V: spatial volume of the measurement (G: geometry factor)
-Übrlegung über einen Spin: \\
-Counts $N_{jk}$ that have been measured in a sector-detector element $j$ during the EpQ deflection step $k$ can be connected to the phase space density $\delta_{jk}$ by an integration over the three dimensional velocity space:
 \begin{align*}
-N_{jk} &= \iiint\displaylimits_{v_{\varphi j}v_{\vartheta j}v_{R k}} \rho_{jk}	V_k	\,\,	d^3v
+N_{jk} &= \iiint\displaylimits_{v_{\varphi j}v_{\vartheta j}v_{R k}} \rho_{jk}	V_k	\,\,	d^3v,
 \end{align*}
-where $V_k = G \, \tau \, v_k$ is the spatial volume of the measurement with the geometrical factor $G = 0.0225 \,\mathrm{cm^2}$ (TODO: Quelle. Bei gloeckler steht das nicht?), $\tau = 12/8\,\mathrm{s} = 1.5\,\mathrm{s}$ the time of the measurement in a single sector and $v_k$ the central velocity for $He^{+}$ in the EpQ step $k$ (Todo: Plot, Formel? Und dann Verweis nach vorne).
-With the opening angles of a single sector-detector element of $4^\circ$ in width and $69/3^\circ = 23^\circ$ in length and the height of this element $\Delta v_k$ we can write
+where $V_k = G \, \tau \, v_k$ is the spatial volume of the measurement with the geometrical factor $G = 0.0225 \,\mathrm{cm^2}$ (TODO: Quelle. Bei gloeckler steht das nicht?), $\tau = 12/8\,\mathrm{s} = 1.5\,\mathrm{s}$, the time of the measurement in a single sector and $v_k$ the central velocity for $\mathrm{He^{+}}$ in the EpQ step $k$ (Todo: Plot, Formel? Und dann Verweis nach vorne).
+With the opening angles of a single sector-detector element of $4^\circ$ in width and $69^\circ /3 = 23^\circ$ in length and the height of this element $\Delta v_k$ we can write
 \begin{align*}
 %&= \iiint\displaylimits_{v_{\varphi i}v_{\vartheta j}v_{R k}} \rho_{ijk} \,	G \, v_k \, \tau	\,\,	d^3v \\
 N_{jk} &= v^2_k \left(\frac{\pi^2}{180^2}\cdot4 \cdot 23\right) \, \Delta v_k \, \rho_{jk} \,	G \, v_k \, \tau.
@@ -360,32 +365,33 @@ $\Delta v_k$ is determined by the uncertainty in EpQ measurement. It has been fo
 \begin{align*}
 N_{jk} &= v^4_k \left(\frac{\pi^2}{180^2}\cdot4 \cdot 23\right) \, 0.025\, \rho_{jk} \, G  \, \tau.
 \end{align*}
-Das kann man schreiben als 
+This we can rewrite with the phase space volume $V_{k}$ as 
 \begin{align*}
-\rho_{jk} &= \frac{N_{jk}}{V_{k}},
+\rho_{jk} &= \frac{N_{jk}}{V_{k}}.
 \end{align*}
-weil das PRV nur von dem EpQ Schritt abhängig ist.\\
-Nun kommt noch hinzu, dass Ionen abhängig vom EpQ Step unterschiedlich wahrscheinlich detektiert werden.
-Das kann durch die Detection Efficiency beschrieben werden:
-
+Notice, that $V_{k}$ is only dependent on the EpQ step $k$, as the sector-detector elements span the same (absolute) phase space volume for one EpQ step.\\
+When we want to measure more than one spin, it has to be considered, that the probability to detect an ion is dependent on the EpQ step. This behaviour can be described by the detection efficiency.
 \subsubsection{Detection Efficiency}
 (Frage Lars: Welche Wahrscheinlichkeit genau gibt die E. an? Ausgehend von einem Teilchen vor dem Instrument mit der richtigen Epq? Von einem Teilchen, das den EpQ Filter durchlaufen hat?)\\ \\
 The detector efficiency is the probability to measure a particle that has entered the instrument(?). 
 When working with SWICS, like for any physical measurement, one has to consider several effects that impede the ideal measurement as it is described in sec. todo. 
-These effects are highly dependent from the ion species and deflection step and include for example that secondary electrons for the time of flight measurement (in carbon foil and SSD) may not be emitted properly. Also, ions could pass through the time of flight section on divergent trajectories due to scattering processes (in the carbon foil??). Possibly, the ion then does not hit the sensitive area of the SSD and does neither trigger a stop signal for the time of flight measurement nor a valid energy measurement in the SSD. Even for an ion that hits the SSD centrally
+These effects are highly dependent on the ion species and deflection step and include for example that secondary electrons for the time of flight measurement (in carbon foil and SSD) may not be emitted properly. Also, ions could pass through the time of flight section on divergent trajectories due to scattering processes (in the carbon foil??). Possibly, the ion then does not hit the sensitive area of the SSD and does neither trigger a stop signal for the time of flight measurement nor a valid energy measurement in the SSD. Even for an ion that hits the SSD centrally
 
-Another reason for a missing energy deposit in the SSD is that the ion's energy is smaller than the threshold of the SSD. The reason for choosing a nonzero threshold is to limit the influence of the SSDs natural noise. For SWICS this noise level is quite high (todo: Quelle!! Goldfolie?) so that the threshold is chosen to be TODO. Ions with a small mass and charge are most likely to not overcome the threshold. For $He^{+}$ this is already the case for deflection step TODO that corresponds to a $He^{+}$ velocity of TODO (s. sec TODO).
-Unfortunately, $He^{+}$ detection efficiencies are not known to us for Ulysses SWICS. Instead, we make use of the efficiencies from ACE SWICS (todo: woher?). As ACE SWICS uses different EpQ deflection steps and seems to have a different SSD threshold we extrapolated the values for Ulysses SWICS.
-For the highest EpQ value TODO we interpolated the efficiency from the ACE triple efficiencies and then extrapolated linearly to an efficiency of 0 at EpQ step 17. By this, we accommodate for the fact that $He^{+}$ does not have enough energy to deposit energy above the SSD threshold at step TODO and thus, the probability for a triple coincidence is zero (Todo: Verweis auf anderes Kapitel: Coverage). $He^{+}$ efficiencies from ACE SWICS and the resulting efficiencies used for Ulysses SWICS are shown in fig. TODO. For sure, these values are not realistic but represent the overall trend of a decreasing efficiency for higher EpQ steps at least.
+Another reason for a missing energy deposit in the SSD is that the ion's energy is smaller than the threshold of the SSD. The reason for choosing a nonzero threshold is to limit the influence of the SSDs natural noise. For SWICS this noise level is quite high (todo: Quelle!! Goldfolie?) so that the threshold is chosen to be TODO. Ions with a small mass and charge are most likely to not overcome the threshold. For $\mathrm{He^{+}}$ this is already the case for deflection step TODO that corresponds to a $\mathrm{He^{+}}$ velocity of TODO (s. sec TODO).
+Unfortunately, $\mathrm{He^{+}}$ detection efficiencies are not known to us for Ulysses SWICS. Instead, we make use of the efficiencies from ACE SWICS (todo: woher?). As ACE SWICS uses different EpQ deflection steps and seems to have a different SSD threshold we extrapolated the values for Ulysses SWICS.
+For the highest EpQ value TODO we interpolated the efficiency from the ACE triple efficiencies and then extrapolated linearly to an efficiency of 0 at EpQ step 17. By this, we accommodate for the fact that $\mathrm{He^{+}}$ does not have enough energy to deposit energy above the SSD threshold at step TODO and thus, the probability for a triple coincidence is zero (Todo: Verweis auf anderes Kapitel: Coverage). $\mathrm{He^{+}}$ efficiencies from ACE SWICS and the resulting efficiencies used for Ulysses SWICS are shown in fig. TODO. For sure, these values are not realistic but represent the overall trend of a decreasing efficiency for higher EpQ steps at least.
 \\ \\
-Das können wir berücksichtigeen, indem wir die PRD für jedes Segment mit der inversen Effizienz gewichten:
+The detection efficiency can be considered in phase space normalisation by weighting the spanned phase space volume for every sector detector element with the efficiency of the respective EpQ step: 
 \begin{align*}
 \rho_{jk} &= \frac{N_{jk}}{V_{k}\cdot eff_k}.
 \end{align*}
-Wenn wir nicht nur einen Spin betrachten sondern einen längeren Messzeitraum, müssen wir nicht nur die Counts aufsummieren, sondern auch das über die Zeit gemessene intgrierte Phasenraumvolumen betrachten. Diese Zeit $t_{jk}$ ist nicht gleich für alle Segmente wegen Aspect Winkel (nur das?). Mit $t_{jk} = n_{jk} \cdot \tau$ (anders benennen, vielleicht irgendwas quer als Mittelung):
+As the instrument covers different phase space volumes with varying aspect angle, changing parts of phase space volume are covered.
+However, we are actually interested in the average phase space density at a distinct volume element in phase space. This we get by dividing the counts in the volume element $v_i$ by the measured volume, both integrated over time and this volume. This means that we consider the time in which we we could have measured blaaaa.
 \begin{align*}
-\rho_{jk} &= \frac{N_{jk}}{n_{jk} \cdot V_{k}\cdot eff_k}.
+\rho_{v_a} = \frac{\iint\displaylimits_{t\,v_a} N \, dv dt}{\iint\displaylimits_{t\,v_a} V\,eff\,dv dt}
 \end{align*}
+
+
 
 
 %.
@@ -408,55 +414,8 @@ Wenn wir nicht nur einen Spin betrachten sondern einen längeren Messzeitraum, m
 
 
 
-%
-%
-%
-\section{Und dann so}
-Ich hab jetzt ein Set von v-Komponenten pro PHA-Event. Daraus kann ich berechnen:
-(mit: In Komponenten aufgeteilt kann man jetzt Geschwindigkeit im SW-frame berechnen, indem man vsw in R-Richtugn abzieht)
-\begin{itemize}
-	\item Betrag im SW frame
-	\item Winkel im w-space (SW frame)
-\end{itemize}
-B-Feld. Von welchem Instrument? auch RTN-System. Genauso Winkel berechnet.\\
-1-min-Mittel (Gyroradius Zeit zeigen) und entsprechend EpQ-Steps den PHAs zugeordnet.
-
-
-%
-%
-%
-\section{Results}
-\subsection{Slices}
-\subsection{Skymaps}
-\subsection{1D}
-
-
-
-%
-%
-%
-\section{Outlook}
-\begin{itemize}
-	\item Efficiency müsste genau bestimmt werden: Dabei berücksichtigen, welcher Anteil unter den Threshold wandert. Evtl. überschätzen wir die Eff., wenn wir die interpolierten Werte von ACE/SWICS nehmen.
-	\item B-Feld-spezifische Untersuchung: Torus
-	\item Radialabhängigkeit: adiabatic Cooling, PA-Scattering
-	\item Sonnenwindanalyse: Ist zu breit. In Richtung Spin-Achse könnte man aber über die Schalen analysieren (Lars fragen: radial?)
-
-\end{itemize}
 
 
 
 
 
-
-
-\subsection{Loose Ends}
-\begin{itemize}
-	\item andere Daten: B, vsw (Swoops: als vsw wird Protonengeschw. genommen. Ist das überhaupt richtig, ist das der Referenzframe? Und Annahme, dass vsw rein radial ist)
-	\item Die Sache mit dem BRW ab 2003
-	\item Englisch: Relativpronomen, Kommasetzung, British/American
-	\item $He^{1+}$ einheitlich, mathrm
-	\item Tempus?
-	\item kursiv / nicht kursiv wie war das nochmal
-	\item spinrate drin?
-\end{itemize}

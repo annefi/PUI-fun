@@ -249,6 +249,7 @@
 \colorlet{mdtRed}{red!50!black}
 \definecolor{myOrange}{rgb}{1,0.5,0}
 \colorlet{myPurple}{blue!40!red}
+\definecolor{lila}{HTML}{431d8b}
 \definecolor{chartreuse}{rgb}{0.0, 0.5, 0.0}
 
 %----------------------------------------------------------------------------------------
@@ -526,7 +527,7 @@ bookmarksopenlevel=0,
 hypertexnames=false,
 colorlinks=true,% Set to false to disable coloring links
 citecolor=chartreuse,% The color of citations
-linkcolor=myPurple,% The color of references to document elements (sections, figures, etc)
+linkcolor=lila,% The color of references to document elements (sections, figures, etc)
 urlcolor=mdtRed,% The color of hyperlinks (URLs)
 pdfstartview={FitV},
 unicode,
