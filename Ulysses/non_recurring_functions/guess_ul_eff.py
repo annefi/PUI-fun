@@ -3,11 +3,28 @@ Script determines matching measuring efficiencies per epq-step for Ulysses SWICS
 SWICS efficiencies
 '''
 
-from numpy import array, loadtxt
+from numpy import array, loadtxt, arange
 from matplotlib import pylab as plt
 from scipy.optimize import curve_fit
+import matplotlib
 
 
+matplotlib.rcParams.update({'font.size': 12,
+                            'xtick.major.size': 8,
+                            'xtick.major.width': 1.0,
+                            'xtick.minor.size': 5,
+                            'xtick.minor.width': 1,
+                            'ytick.major.size': 8,
+                            'ytick.major.width': 1.0,
+                            'ytick.minor.size': 5,
+                            'ytick.minor.width': 1,
+                            'xtick.direction': 'inout',
+                            'ytick.direction': 'inout',
+                            'figure.subplot.left':0.12,
+                            'figure.subplot.bottom': 0.15,
+                            'figure.subplot.right': 0.9,
+                            'figure.subplot.top': 0.94,
+                            'figure.figsize': (9,4.5)})
 
 def guess_from_ace():
     fin = open("/data/projects/ace/efficencies/He1+.eff", "r")
@@ -41,13 +58,13 @@ def guess_from_ace():
     ax.plot(epq_ace, poly(epq_ace, best_vals[0], best_vals[1], best_vals[2], best_vals[3], best_vals[4], best_vals[5]))
 
     # operate Ulysses epq-steps in fitted function and write into file
-    out = open('He1+.eff', 'w')
-
-    for i in epq_ul:
-        eff_ul = poly(i, best_vals[0], best_vals[1], best_vals[2], best_vals[3], best_vals[4], best_vals[5])
-        out.write('%s' % i + '   ' + '%s\n' % eff_ul)
-
-    out.close()
+    # out = open('He1+.eff', 'w')
+    #
+    # for i in epq_ul:
+    #     eff_ul = poly(i, best_vals[0], best_vals[1], best_vals[2], best_vals[3], best_vals[4], best_vals[5])
+    #     out.write('%s' % i + '   ' + '%s\n' % eff_ul)
+    #
+    # out.close()
 
 
 def linear_guess():
@@ -68,24 +85,36 @@ def linear_guess():
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    ax.plot([60.50781039,17.85605316], [val0, val17], marker='o')
+    #ax.plot([60.50781039,17.85605316], [val0, val17], marker='o')
 
     def lin(x,m,b):
         return (m*x + b)
 
     best_vals, covar = curve_fit(lin, [60.50781039,17.85605316], [val0, val17])
 
-    ax.plot(epq_ul, lin(epq_ul, best_vals[0], best_vals[1]), marker = 'o')
-    ax.plot(epq_ace, eff_ace, marker = 'o', c= 'green')
+    ax.plot(epq_ace, eff_ace, marker='.', ms=10, c='lightsteelblue', label="ACE SWICS", linestyle="None")
 
+    ax.plot(epq_ul, lin(epq_ul, best_vals[0], best_vals[1]), marker = '.', ms = 10, c = 'darkblue',
+            label = "Ulysses SWICS", linestyle = "None")
 
-    out = open('He1+_new.eff', 'w')
+    # step_name = arange(0,18)
+    # for i,x in enumerate(epq_ul):
+    #     ax.text(x+3, lin(epq_ul, best_vals[0], best_vals[1])[i] -0.005 ,str(step_name[i]), fontsize = 8)
 
-    for i in epq_ul:
-        eff_ul = lin(i, best_vals[0], best_vals[1])
-        out.write('%s' % i + '   ' + '%s\n' % eff_ul)
+    ax.set_xlabel('Energy-per-Charge / keV')
+    ax.set_ylabel('Efficiency')
+    ax.legend(bbox_to_anchor=(0.35, 0.75), loc="lower right", bbox_transform=fig.transFigure)
+    ax.grid()
+    ax.set_xlim(-3, 91)
+    ax.set_ylim(-0.015, 0.359)
 
-    out.close()
+    # out = open('He1+_new.eff', 'w')
+    #
+    # for i in epq_ul:
+    #     eff_ul = lin(i, best_vals[0], best_vals[1])
+    #     out.write('%s' % i + '   ' + '%s\n' % eff_ul)
+    #
+    # out.close()
 
 
 

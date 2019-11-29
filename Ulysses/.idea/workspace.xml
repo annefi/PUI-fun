@@ -3,9 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="0c58623c-1821-4880-9e22-06c9e1193331" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../MA/Dokument/Chapters/data_ana.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/Dokument/Chapters/data_ana.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MA/Dokument/Chapters/instrumentation.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/Dokument/Chapters/instrumentation.tex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MA/Dokument/main.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/Dokument/main.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MA/Talks/Talk_3/.~lock.Talk2.odt#" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/load_pui_ulysses.py" beforeDir="false" afterPath="$PROJECT_DIR$/load_pui_ulysses.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/non_recurring_functions/guess_ul_eff.py" beforeDir="false" afterPath="$PROJECT_DIR$/non_recurring_functions/guess_ul_eff.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,7 +55,7 @@
     <session id="2091974253">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="99" />
+          <entry key="project.closed" value="100" />
           <entry key="project.open.time.10" value="7" />
           <entry key="project.open.time.11" value="2" />
           <entry key="project.open.time.12" value="2" />
@@ -67,39 +68,39 @@
           <entry key="project.open.time.6" value="4" />
           <entry key="project.open.time.7" value="14" />
           <entry key="project.open.time.8" value="47" />
-          <entry key="project.open.time.9" value="19" />
-          <entry key="project.opened" value="107" />
+          <entry key="project.open.time.9" value="20" />
+          <entry key="project.opened" value="108" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="dat" value="1" />
-          <entry key="py" value="436" />
+          <entry key="py" value="437" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="435" />
+          <entry key="Python" value="436" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="18" />
-          <entry key="py" value="93954" />
+          <entry key="py" value="94538" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="18" />
-          <entry key="Python" value="93954" />
+          <entry key="Python" value="94538" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.67654175">
+    <splitter split-orientation="horizontal" split-proportion="0.5525998">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
@@ -123,8 +124,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/plot_wspace.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="405">
-                  <caret line="40" column="18" selection-start-line="40" selection-start-column="18" selection-end-line="40" selection-end-column="18" />
+                <state relative-caret-position="30">
+                  <caret line="15" selection-start-line="15" selection-end-line="23" selection-end-column="52" />
                 </state>
               </provider>
             </entry>
@@ -132,8 +133,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state>
-                  <caret line="27" column="14" lean-forward="true" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
+                <state relative-caret-position="-285">
+                  <caret line="25" selection-start-line="25" selection-end-line="28" />
                 </state>
               </provider>
             </entry>
@@ -147,7 +148,7 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/swics_collimator_ulysses.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="360">
@@ -159,7 +160,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/dist3D_pui_ulysses.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="270">
+                <state relative-caret-position="1080">
                   <caret line="86" selection-start-line="86" selection-end-line="97" selection-end-column="28" />
                 </state>
               </provider>
@@ -170,6 +171,18 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="150">
                   <caret line="10" selection-start-line="9" selection-start-column="4" selection-end-line="10" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/non_recurring_functions/guess_ul_eff.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="180">
+                  <caret line="84" lean-forward="true" selection-start-line="84" selection-end-line="84" />
+                  <folding>
+                    <element signature="e#143#183#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -200,7 +213,7 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Trajectory/ul_calc_traj.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="129">
@@ -233,11 +246,11 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Plots/plots_et.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="840">
-                  <caret line="64" column="51" selection-start-line="64" selection-start-column="51" selection-end-line="64" selection-end-column="66" />
+                <state relative-caret-position="510">
+                  <caret line="34" column="36" lean-forward="true" selection-start-line="34" selection-start-column="36" selection-end-line="34" selection-end-column="36" />
                   <folding>
                     <element signature="e#0#17#0" expanded="true" />
                   </folding>
@@ -345,7 +358,6 @@
         <option value="$USER_HOME$/Python/pylib/dbData/_plotdbData.py" />
         <option value="$PROJECT_DIR$/WShell.py" />
         <option value="$PROJECT_DIR$/dist3D_pui_ulysses_bu.py" />
-        <option value="$PROJECT_DIR$/non_recurring_functions/guess_ul_eff.py" />
         <option value="$PROJECT_DIR$/testtt.py" />
         <option value="$PROJECT_DIR$/DataLoader/ulysses_mag_loader.py" />
         <option value="$PROJECT_DIR$/DataLoader/create_pha_mag.py" />
@@ -367,6 +379,7 @@
         <option value="$PROJECT_DIR$/swics_collimator_ulysses.py" />
         <option value="$PROJECT_DIR$/dist3D_pui_ulysses.py" />
         <option value="$PROJECT_DIR$/load_pui_ulysses.py" />
+        <option value="$PROJECT_DIR$/non_recurring_functions/guess_ul_eff.py" />
       </list>
     </option>
   </component>
@@ -614,13 +627,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/non_recurring_functions/guess_ul_eff.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="72" column="19" selection-start-line="72" selection-start-column="19" selection-end-line="72" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/WShell.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="99">
@@ -717,17 +723,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plot_wspace.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="40" column="18" selection-start-line="40" selection-start-column="18" selection-end-line="40" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ana_1d.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1770">
           <caret line="118" selection-start-line="118" selection-end-line="118" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist3D_pui_ulysses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="86" selection-start-line="86" selection-end-line="97" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -769,16 +775,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Plots/plots_et.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="840">
-          <caret line="64" column="51" selection-start-line="64" selection-start-column="51" selection-end-line="64" selection-end-column="66" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/WSlice.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="660">
@@ -789,17 +785,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/ul_calc_traj.py">
+    <entry file="file://$PROJECT_DIR$/swics_collimator_ulysses.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="69" selection-start-line="69" selection-end-line="69" />
+        <state relative-caret-position="360">
+          <caret line="30" column="110" selection-start-line="30" selection-start-column="110" selection-end-line="30" selection-end-column="110" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="27" column="14" lean-forward="true" selection-start-line="27" selection-start-column="14" selection-end-line="27" selection-end-column="14" />
+        <state relative-caret-position="-285">
+          <caret line="25" selection-start-line="25" selection-end-line="28" />
         </state>
       </provider>
     </entry>
@@ -810,17 +806,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dist3D_pui_ulysses.py">
+    <entry file="file://$PROJECT_DIR$/plot_wspace.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="86" selection-start-line="86" selection-end-line="97" selection-end-column="28" />
+        <state relative-caret-position="30">
+          <caret line="15" selection-start-line="15" selection-end-line="23" selection-end-column="52" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/swics_collimator_ulysses.py">
+    <entry file="file://$PROJECT_DIR$/Trajectory/ul_calc_traj.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="30" column="110" selection-start-line="30" selection-start-column="110" selection-end-line="30" selection-end-column="110" />
+        <state relative-caret-position="129">
+          <caret line="69" selection-start-line="69" selection-end-line="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Plots/plots_et.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="34" column="36" lean-forward="true" selection-start-line="34" selection-start-column="36" selection-end-line="34" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#17#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/non_recurring_functions/guess_ul_eff.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="84" lean-forward="true" selection-start-line="84" selection-end-line="84" />
+          <folding>
+            <element signature="e#143#183#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

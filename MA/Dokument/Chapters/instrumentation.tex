@@ -72,6 +72,7 @@ Richtungsauflösung Detektoren
 \\ \\ 
 In the following section the measurement is described in more detail.
 \subsection{Principle of Measurement / Identification of Particles}
+\label{subsec:measurement}
 \begin{figure}[h]
 	\includegraphics[width=0.8\textwidth]{Figures/Lars_Swics.png}
 	\centering
@@ -115,3 +116,123 @@ v_i &= \sqrt{2\,EpQ\,\frac{q_i}{m_i}},
 \end{align}
 where $d$ is the length of the time-of-flight section and $V_{PAC}$ is the post-acceleration voltage. $v$ denotes the ion's initial velocity when entering the instrument and is not to be confused with its velocity during the time-of-flight measurement, that is altered particularly by the post-acceleration.
 \\ \\ \\HISCALE: "The experiment provides information about the spatial origin of events by treating each spin as eight sectors of approximately equal duration."
+
+
+
+
+
+\section{Data products}
+Data in Form von 24-bit PHA words: Übertragungsrate Normal: 30 x 24 bit pro Spin\\
+
+DPU selects a balanced ratio of high and low priority PHA: Details s. SWICS Paper Ende 3.2.2 (one-to-one basis?) \\
+
+Voltage cycle: 64 steps, je ein Step pro spin, 1 Spin: 12 sec -> Duty Cycle 12.8 min
+\\ \\
+Tof: Range 10 -- 200 ns \\
+1024 channels
+resolution:
+\\ \\
+Ech: Range 40 - 600 keV \\
+256 channels
+resolution:
+\\ \\
+PHA words,\\
+Channel numbers, EpQ mit Unsicherheit auftragen, EpQ \\ 
+data transmission \\
+SC bit rate? 1024 o. 512 bit/s
+\\ \\
+EpQ umrechnen in Geschwindigkeiten für He. Formel aus uswiutils. Woher kommen diese Werte? Gibts da eine richtige Formel für?
+
+
+\subsection{Detection Efficiency, Doubles, Triples}
+(Frage Lars: Welche Wahrscheinlichkeit genau gibt die E. an? Ausgehend von einem Teilchen vor dem Instrument mit der richtigen Epq? Von einem Teilchen, das den EpQ Filter durchlaufen hat?)\\ \\
+The detector efficiency is the probability to measure a particle that has entered the instrument(?). 
+When working with SWICS -- like for any physical measurement -- one has to consider several effects that impede the ideal measurement as it is described in sec. \ref{subsec:measurement}. 
+These effects are highly dependent on the ion species and deflection step and include for example that secondary electrons for the time of flight measurement may not be emitted properly from carbon foil and SSD. Also, ions could pass through the time of flight section on divergent trajectories due to scattering processes (in the carbon foil??). Possibly, the ion then does not hit the sensitive area of the solid state detector and does neither trigger a stop signal for the time of flight measurement nor a valid energy measurement in the solid state detector.\\
+Another reason for a missing valid energy measurement in the solid state detector can be that the ion's energy is smaller than the threshold of the solid state detector. In this case, only energy-per-charge and time-of-flight information for the ion are available. Such events without a corresponding energy measurement are called double coincidences, while events with triggered start and stop signal and a energy measurement are called triple coincidences.\\
+The reason for choosing a non-zero threshold is to limit the influence of the solid state detector's natural noise. For SWICS this noise level is quite high, at around $12\,\mathrm{keV}$ \citep{gloeckler_1992} (todo: ?), so that the threshold is chosen to be $\sim 30 \, \mathrm{keV}$. Ions with a small mass and charge are most likely to not overcome this threshold at low energy-per-charge values. For the bulk of $\mathrm{He^{+}}$ this is already the case for deflection step number 17 ($EpQ = 17.86\,\mathrm{kV}$), which corresponds to a $\mathrm{He^{+}}$ velocity of $v = 900\,\mathrm{km\,s^{-1}}$ (s. eq. TODO).\\
+Unfortunately, $\mathrm{He^{+}}$ detection efficiencies are not known to us for Ulysses SWICS. Instead, we make use of the efficiencies from ACE SWICS, that have been calculated by \citet{koeten}. As ACE SWICS uses different energy-per-charge ranges we had to extrapolate the values for Ulysses SWICS.
+For the highest energy-per-charge value $EpQ = 60.51\,\mathrm{keV}$ we interpolated the efficiency from the ACE $\mathrm{He^{+}}$ triple efficiencies and then extrapolated linearly to an efficiency of 0 at energy-per-charge step 17. By this, we accommodate for the above mentioned fact that $\mathrm{He^{+}}$ does not have enough energy to deposit energy above the solid state detector's threshold at deflection step 17 and thus, the probability for a triple coincidence is zero (Todo: Verweis auf anderes Kapitel: Coverage). $\mathrm{He^{+}}$ efficiencies from ACE SWICS and the resulting efficiencies used for Ulysses SWICS are shown in fig. \ref{fig:guess_eff}. For sure, these values are not realistic but represent the overall trend of a decreasing efficiency for higher energy-per-charge steps.
+\begin{figure}[h]
+	\includegraphics[width=1.\textwidth]{Figures/guess_eff.pdf}
+	\centering
+	\caption{todo}
+	\label{fig:guess_eff}
+\end{figure}
+
+
+\subsection{Priority weighting}
+SWICS performs an on-board mass and mass-per-charge-classification. For every ion with valid measurements the $m$ and $mpq$ are calculated based on the measurements of ESSD, Tof and the particle's EPQ-step using a look-up-table technique.\\
+On the one hand these values are used for sorting the ions into predefined boxes in the m-mpq-space which yield in the so-called matrix rate, a second data product that is provided by SWICS.\\
+Secondly, and more important for our analysis, the m and mpq information is used to sort every measured ion into one of three priority ranges.
+
+Range, BRW\\ \\
+\begin{tabular}{c|c|c}
+	%\hline
+	Range 0 & $m < 8.7$;  $m_0 : mpq < 3.3$ & $\mathrm{H}$, $\mathrm{He^+}$, $\mathrm{He^{2+}}$; Doubles\\ 
+	\hline 
+	Range 1 & $m > 8.7$ & Heavier ions \\ 
+	\hline 
+	Range 2 & $m_0 : mpq > 3.3$ & Doubles \\ 
+	%\hline 
+\end{tabular} 
+
+%
+%
+%
+
+\section{ET matrices, identification}
+Fig. \ref{fig:et_matrix} shows longterm PHA data collected with Ulysses SWICS over two years for energy-per-charge step 25 (which is $10.05\,\mathrm{kV}$). For every particle with valid measurements the $\mathrm{E_{SSD}}$ channel is plotted over the ToF channel. As a particle's mass and mass-per-charge is connected to the measured values $EpQ$, $\tau$ and $E_{SSD}$ by equations \ref{eq:swics_set1} --  \ref{eq:swics_set3}, every ion species occupies a distinct position in the so-called \textit{ET-Matrix}. (Counts of different ion species sum up at distinct places in ... space.)
+
+
+\begin{figure}[h]
+	\includegraphics[width=0.9\textwidth]{Figures/et_matrix.pdf}
+	\centering
+	\caption{test}
+	\label{fig:et_matrix}
+\end{figure}
+
+
+\subsection{Filter He+}
+nominal w based on vsw -> solar wind ions rausfiltern
+\begin{figure}[h]
+	\includegraphics[width=0.9\textwidth]{Figures/epq_all.pdf}
+	\centering
+	\caption{test}
+	\label{fig:epq_all}
+\end{figure}
+
+
+For extracting only the $\mathrm{He^{+}}$ events from the PHA data we plot the events' energy-per-charge over their measured ToF. 
+Teilchen derselben mpq werden auf Kurven $todo$ geortet. Spezies höherer Mpq finden sich auf Kurven mit größeren ToF-Werten. Man kann so z.B. todo, todo und todo identifizieren. Unten ist He gut zu erkennen weil suprathermal. An die suprathermalen $\mathrm{He^{+}}$-Teilchen schließen sich zu höheren ToF andere Teilchen mit derselben mpq auf der gleichen Kurve an. Weil die Kurven dort enger liegen, kann man He in dem Bereich auch nicht von anderen mit ähnlicher mpq unterscheiden.
+We can take advantage of SWICS' on-board priority weighting. We only plot the Range0-events. This roughly cuts out events with $m>8.7$. Nur H, He2+, He+ bleiben übrig als prominente Ionen. Man sieht, dass auch einige schwerere in die Box reinlecken, aber das betrifft nicht die ESA-Steps, in denen Helium auftritt.\\
+Man kann jetzt prima per Auge eine Maske legen. Zusätzlich w filtern um eventullen Hintergrund zu unterdrücken...?
+Man sieht, dass wir nur Helium-PHAs bis EpQ-Step todo auswerten. Der Grund ist, dass He1+ aufgrund der geringen Masse nicht genug Energie hat, die Triggerschwelle des SSDs zu überschreiten. Somit liegen He1+-Ionen bei höheren ESA-Steps (kleineren Energien pro Ladung) als Double Coincidences vor und taugen nicht für unsere Analyse.
+\\
+Für alle Jahre. Anzahl: todo
+\\ \\
+Plots: Nur RNG0, He und He2 gefiltert. In einem (dann nochmal und Fabrsala synchron) oder einzeln?
+\\
+Irgendwo He+, He++ und Protonen markieren
+
+
+\subsection{Filter He2+}
+für die spätere Kalibrierung (todo: Verweis) brauchen wir eine Spezies, bei der wir davon ausgehen, dass sie sich mit dem SW-Bulk bewegt und die als Triple Coinzidences vorliegt (für die Richtungsinformation). We choose He2+ wegen guter Statistik und auch in Range0. Im Gegensatz zu He1+ auch bei höheren ESA-Steps anzutreffen, weil mehr Nachbeschleunigung durch die höhere Ladung. Dadurch nicht so schnell unter SSD-Threshold. Gleiches Verfahren, einfach ausschneiden. Hier ist es nicht so wichtig, alles mitzubekommen, weil wir anhand von He2+ keine Analyse der VDF durchführen wollen. 
+\\
+Für alle Jahre. Anzahl: todo
+\\ \\
+Weitere Daten: vsw von SWOOPS, B-Feld
+\\ \\
+wie viele Daten bleiben über, wie viele PHA-Worte ca. pro Spin?
+\\ \\
+wohin damit? \\ \\
+PHA pro Spin...
+Ideal / mit Fehlern alpha, beta
+\\ , Pile-up, random coincidences/ Schmutztail durch hohe Flüsse
+\\
+SWICS provides two types of data products from the analogue signals Tof, ESSD and the EPQ-Step.
+24-bit
+%
+%
+%
+
