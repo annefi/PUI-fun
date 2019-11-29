@@ -15,7 +15,36 @@ von den Rohdaten zur 3D VDF
 
 
 \section{Data products}
-PHA words, data transmission
+Data in Form von 24-bit PHA words: Übertragungsrate Normal: 30 x 24 bit pro Spin\\
+
+DPU selects a balanced ratio of high and low priority PHA: Details s. SWICS Paper Ende 3.2.2 (one-to-one basis?) \\
+
+Voltage cycle: 64 steps, je ein Step pro spin, 1 Spin: 12 sec -> Duty Cycle 12.8 min
+\\ \\
+Tof: Range 10 -- 200 ns \\
+1024 channels
+resolution:
+\\ \\
+Ech: Range 40 - 600 keV \\
+256 channels
+resolution:
+\\ \\
+PHA words,\\
+Channel numbers, EpQ mit Unsicherheit auftragen, EpQ \\ 
+data transmission \\
+SC bit rate? 1024 o. 512 bit/s
+
+
+\subsection{Detection Efficiency, Doubles, Trebles}
+(Frage Lars: Welche Wahrscheinlichkeit genau gibt die E. an? Ausgehend von einem Teilchen vor dem Instrument mit der richtigen Epq? Von einem Teilchen, das den EpQ Filter durchlaufen hat?)\\ \\
+The detector efficiency is the probability to measure a particle that has entered the instrument(?). 
+When working with SWICS, like for any physical measurement, one has to consider several effects that impede the ideal measurement as it is described in sec. todo. 
+These effects are highly dependent on the ion species and deflection step and include for example that secondary electrons for the time of flight measurement (in carbon foil and SSD) may not be emitted properly. Also, ions could pass through the time of flight section on divergent trajectories due to scattering processes (in the carbon foil??). Possibly, the ion then does not hit the sensitive area of the SSD and does neither trigger a stop signal for the time of flight measurement nor a valid energy measurement in the SSD. Even for an ion that hits the SSD centrally
+
+Another reason for a missing energy deposit in the SSD is that the ion's energy is smaller than the threshold of the SSD. The reason for choosing a nonzero threshold is to limit the influence of the SSDs natural noise. For SWICS this noise level is quite high (todo: Quelle!! Goldfolie?) so that the threshold is chosen to be TODO. Ions with a small mass and charge are most likely to not overcome the threshold. For $\mathrm{He^{+}}$ this is already the case for deflection step TODO that corresponds to a $\mathrm{He^{+}}$ velocity of TODO (s. sec TODO).
+Unfortunately, $\mathrm{He^{+}}$ detection efficiencies are not known to us for Ulysses SWICS. Instead, we make use of the efficiencies from ACE SWICS (todo: woher?). As ACE SWICS uses different EpQ deflection steps and seems to have a different SSD threshold we extrapolated the values for Ulysses SWICS.
+For the highest EpQ value TODO we interpolated the efficiency from the ACE triple efficiencies and then extrapolated linearly to an efficiency of 0 at EpQ step 17. By this, we accommodate for the fact that $\mathrm{He^{+}}$ does not have enough energy to deposit energy above the SSD threshold at step TODO and thus, the probability for a triple coincidence is zero (Todo: Verweis auf anderes Kapitel: Coverage). $\mathrm{He^{+}}$ efficiencies from ACE SWICS and the resulting efficiencies used for Ulysses SWICS are shown in fig. TODO. For sure, these values are not realistic but represent the overall trend of a decreasing efficiency for higher EpQ steps at least.
+
 
 \subsection{Priority weighting}
 SWICS performs an on-board mass and mass-per-charge-classification. For every ion with valid measurements the $m$ and $mpq$ are calculated based on the measurements of ESSD, Tof and the particle's EPQ-step using a look-up-table technique.\\
@@ -33,11 +62,6 @@ Range, BRW\\ \\
 	%\hline 
 \end{tabular} 
 
-\subsection{Detection efficiencies}
-Threshold, Doubles...
-
-
-
 %
 %
 %
@@ -54,7 +78,7 @@ Fig. \ref{fig:et_matrix} shows longterm PHA data collected with Ulysses SWICS ov
 \end{figure}
 
 
-\section{Filter He+}
+\subsection{Filter He+}
 nominal w based on vsw -> solar wind ions rausfiltern
 \begin{figure}[h]
 	\includegraphics[width=0.9\textwidth]{Figures/epq_all.pdf}
@@ -371,15 +395,6 @@ This we can rewrite with the phase space volume $V_{k}$ as
 \end{align*}
 Notice, that $V_{k}$ is only dependent on the EpQ step $k$, as the sector-detector elements span the same (absolute) phase space volume for one EpQ step.\\
 When we want to measure more than one spin, it has to be considered, that the probability to detect an ion is dependent on the EpQ step. This behaviour can be described by the detection efficiency.
-\subsubsection{Detection Efficiency}
-(Frage Lars: Welche Wahrscheinlichkeit genau gibt die E. an? Ausgehend von einem Teilchen vor dem Instrument mit der richtigen Epq? Von einem Teilchen, das den EpQ Filter durchlaufen hat?)\\ \\
-The detector efficiency is the probability to measure a particle that has entered the instrument(?). 
-When working with SWICS, like for any physical measurement, one has to consider several effects that impede the ideal measurement as it is described in sec. todo. 
-These effects are highly dependent on the ion species and deflection step and include for example that secondary electrons for the time of flight measurement (in carbon foil and SSD) may not be emitted properly. Also, ions could pass through the time of flight section on divergent trajectories due to scattering processes (in the carbon foil??). Possibly, the ion then does not hit the sensitive area of the SSD and does neither trigger a stop signal for the time of flight measurement nor a valid energy measurement in the SSD. Even for an ion that hits the SSD centrally
-
-Another reason for a missing energy deposit in the SSD is that the ion's energy is smaller than the threshold of the SSD. The reason for choosing a nonzero threshold is to limit the influence of the SSDs natural noise. For SWICS this noise level is quite high (todo: Quelle!! Goldfolie?) so that the threshold is chosen to be TODO. Ions with a small mass and charge are most likely to not overcome the threshold. For $\mathrm{He^{+}}$ this is already the case for deflection step TODO that corresponds to a $\mathrm{He^{+}}$ velocity of TODO (s. sec TODO).
-Unfortunately, $\mathrm{He^{+}}$ detection efficiencies are not known to us for Ulysses SWICS. Instead, we make use of the efficiencies from ACE SWICS (todo: woher?). As ACE SWICS uses different EpQ deflection steps and seems to have a different SSD threshold we extrapolated the values for Ulysses SWICS.
-For the highest EpQ value TODO we interpolated the efficiency from the ACE triple efficiencies and then extrapolated linearly to an efficiency of 0 at EpQ step 17. By this, we accommodate for the fact that $\mathrm{He^{+}}$ does not have enough energy to deposit energy above the SSD threshold at step TODO and thus, the probability for a triple coincidence is zero (Todo: Verweis auf anderes Kapitel: Coverage). $\mathrm{He^{+}}$ efficiencies from ACE SWICS and the resulting efficiencies used for Ulysses SWICS are shown in fig. TODO. For sure, these values are not realistic but represent the overall trend of a decreasing efficiency for higher EpQ steps at least.
 \\ \\
 The detection efficiency can be considered in phase space normalisation by weighting the spanned phase space volume for every sector detector element with the efficiency of the respective EpQ step: 
 \begin{align*}
