@@ -12,9 +12,8 @@
 \label{sec:ulysses}
 The Ulysses spacecraft \citep{wenzel_ulysses} was launched in 1990 and orbited the sun for nearly 20 years as a joint ESA/NASA project.
 Ulysses' most remarkable feature is its out-of-ecliptic orbit with an maximum heliographic latitude of $80.1\,^\circ$.
-As the first spacecraft it was hence capable of taking in situ measurements from above the poles of the sun.
-\\ \\
-Thus, the primary goal of the mission was to study the heliosphere in three dimensions. In detail some of the original main objectives were:
+As the first spacecraft it was hence capable of taking in situ measurements from above the poles of the sun.\\
+The primary goal of the mission was to study the heliosphere in three dimensions. Some of the original main objectives were:
 \begin{itemize}
 	\item to study the interplanetary magnetic field and the solar wind, especially its composition, the origin and waves and shocks within the solar wind plasma
 	\item to investigate galactic cosmic rays and energetic particles
@@ -23,30 +22,21 @@ Thus, the primary goal of the mission was to study the heliosphere in three dime
 \end{itemize}
 Some secondary objectives included e.g. the investigation of Jupiter's magnetosphere during the Jupiter flyby and the search for gravitational waves and for gamma-ray burst sources \citep{wenzel_ulysses}.
 \\
-For these aims Ulysses was equipped with a wide range of different instruments and antennas. One of the in situ instruments is the Solar Wind Ion Composition Spectrometer, that will be described in the next chapter.
+For these aims Ulysses was equipped with a wide range of different instruments and antennas. One of the in situ instruments is the Solar Wind Ion Composition Spectrometer (SWICS), that will be described in the next section.\\
+A sketch of Ulysses' unique orbit is shown in figure \ref{fig:trajectory}.
+Ulysses was launched in October 1990 and left earth's gravitational field with $15.4\,\mathrm{km/s}$. Starting with a flyby manoeuvrer around Jupiter Ulysses was sent onto its highly elliptical orbit.
+With an orbital period of 6.2 years Ulysses completed nearly three orbits around the sun until communication was shut down in June 2009 due to the expiring of the radioisotope thermal generators.
+Within the mission's long lifetime the Sun's behaviour over its activity cycle of 22 years could be studied.\\
+Ulysses is a spin-stabilized spacecraft that spins at $5\,\mathrm{rpm}$. The spin axis is aligned with the high-gain antenna's electrical axis, that provides a communication link from the spacecraft to Earth. The downlink bitrate was variable with up to $1024\,\mathrm{bit/s}$ during real-time connection.
 \begin{figure}[h]
 	\includegraphics[width=0.8\textwidth]{Figures/ulysses_trajectory.pdf}
 	\centering
 	\caption{A sketch of Ulysses' first orbit. After the launch from earth in 1990 the spacecraft was sent to Jupiter from where it left the ecliptic on an elliptical orbit around the sun with perihelion at $1.3\,\mathrm{AU}$ and aphelion at $5.4\,\mathrm{AU}$. Due to the orbit's high latitude of $\sim 80 \, ^\circ$ Ulysses crosses the Sun's pole regions two times between 1994 and 1996. Figure after \citet{esa_orbit}.}
 	\label{fig:trajectory}
 \end{figure}
-\\ \\
-A sketch of Ulysses unique orbit is shown in figure \ref{fig:trajectory}.
-Ulysses was launched in October 1990 and left earth's gravitational field with $15.4\,\mathrm{km/s}$. Starting with a flyby maneuver around Jupiter Ulysses was sent onto its highly elliptical orbit.
-With an orbital period of 6.2 years Ulysses completed nearly three orbits around the sun until communication was shut down in June 2009 due to the expiring of the radioisotope thermal generators.
-Within the mission's long lifetime the Sun's behaviour over its activity cycle of 22 years could be studied. 
-\\ \\
-eccentricity, elliptical orbit...
-\\ \\
-aspect angle (antenna)-- Power: RHU because too far away for solar panels (and radiation belt of Jupiter) -- rotation stabilization --  mission was extended multiple times
-\\ \\
-Abbildung Sun Cycles?
+.
 \\ \\ 
-spinstabilisiert, Antenna fast Rotationsachse, Antenne zeigt zur Erde, woher Daten (Ulysses, SWICS, Erde)
-\\ \\
-Rotation: Spi und 1 EpQ pro Spin
-\\ \\ 
-Importance PUIs: ref to PUI-Kapitel und zu objectives
+TODO: Importance PUIs: ref to PUI-Kapitel und zu objectives; Tempus
 %
 %
 %
@@ -55,7 +45,7 @@ Importance PUIs: ref to PUI-Kapitel und zu objectives
 \section{SWICS}
 
 \subsection{Introduction and Objectives}
-The Solar Wind Ion Composition Spectrometer (SWICS, \citet{gloeckler_1992}) is a time-of-flight mass spectrometer mounted on the spacecraft Ulysses (s. section \ref{sec:ulysses}). The instrument is designed to determine the elemental and charge-state composition and the velocity distribution of solar wind ions. With an energy-per-charge range from $0.16 \, \mathrm{keV/e}$ to $59.6 \, \mathrm{keV / e}$ SWICS is in principle able to measure every solar wind ion species from protons to iron with any typical charge state. Depending on the individual ion, energies from $E < 1 \,\mathrm{keV}$ up to $E > 1 \, \mathrm{MeV}$ are covered.
+The Solar Wind Ion Composition Spectrometer (SWICS, \citet{gloeckler_1992}) is a time-of-flight mass spectrometer mounted on the spacecraft Ulysses (s. sec. \ref{sec:ulysses}). The instrument is designed to determine the elemental and charge-state composition and the velocity distribution of solar wind ions. With an energy-per-charge range from $0.16 \, \mathrm{kV}$ to $59.6 \, \mathrm{kV}$ SWICS is in principle able to measure every solar wind ion species from protons to iron with any typical charge state. Depending on the individual ion, particle energies from $1 \,\mathrm{keV}$ up to $1 \, \mathrm{MeV}$ are covered.
 \\ \\
 Additionally, the flight spare of SWICS has been mounted on the spacecraft ACE (TODO: ref Stone 1998)
 \\ \\ 
@@ -95,6 +85,12 @@ After the collimator particles have to pass the electrostatic analyzer. It is sp
 As this simple measurement principle is very limiting for our analysis we will focus on the main channel that is suitable for a full $m$-vs.-$mpq$ analysis.
 The main channel covers an EpQ range of $0.65$ to $60\,\mathrm{keV/e}$. A particle can only pass through the pair of curved deflection plates if its kinetic energy per charge equals a certain ratio that is given by the voltage between the two plates. To measure particles of different EpQ the deflection voltage is stepped through 64 logarithmically spaced values from TODO to TODO. As the voltage steps once per spin of Ulysses (every 12 seconds), a complete voltage cycle lasts $\sim$ 12.8 minutes. 
 Every step has a relative uncertainty of $\Delta E/q \approx 5\%$ that is due to the finite space between the plates. TODO: Plot
+\begin{figure}[h]
+		\centering
+		\includegraphics[scale = 0.7]{Figures/epq_err.pdf}
+		\caption{Energy-per-Charge steps of Ulysses SWICS. A voltage cycle starts with step 0 that is the highest voltage $EpQ = 60.51\, \mathrm{kV}$. Voltage is then swept down 64 logarithmically spaced steps up to $EpQ = 0.66\, \mathrm{kV}$. The uncertainty of the single steps is $\frac{\Delta EpQ}{EpQ} = 5\%$ and drawn in lighter color.
+		} \label{fig:epq}
+\end{figure}
   
 \subsubsection{Time-of-flight measurement}
 After passing the electrostatic analyzer ions are post-accelerated by an constant potential drop of ~$30\,\mathrm{kV}$. They enter the ToF chamber with penetrating through a thin ($\sim 3\,\mu \mathrm{g / cm^2}$) carbon foil where secondary electrons are emitted. These electrons are guided to a microchannel plate detector where a start signal is triggered. The stop signal is triggered after the particles have traversed a distance of $10\,\mathrm{cm}$ and hit one of the solid state detectors, where secondary electrons are emitted again. By combining the time stamps of the start and the stop signal the particle's ToF has been measured.
@@ -122,29 +118,24 @@ where $d$ is the length of the time-of-flight section and $V_{PAC}$ is the post-
 
 
 \section{Data products}
-Data in Form von 24-bit PHA words: Übertragungsrate Normal: 30 x 24 bit pro Spin\\
-
-DPU selects a balanced ratio of high and low priority PHA: Details s. SWICS Paper Ende 3.2.2 (one-to-one basis?) \\
-
-Voltage cycle: 64 steps, je ein Step pro spin, 1 Spin: 12 sec -> Duty Cycle 12.8 min
-\\ \\
-Tof: Range 10 -- 200 ns \\
-1024 channels
-resolution:
-\\ \\
-Ech: Range 40 - 600 keV \\
-256 channels
-resolution:
-\\ \\
-PHA words,\\
-Channel numbers, EpQ mit Unsicherheit auftragen, EpQ \\ 
-data transmission \\
-SC bit rate? 1024 o. 512 bit/s
-\\ \\
-EpQ umrechnen in Geschwindigkeiten für He. Formel aus uswiutils. Woher kommen diese Werte? Gibts da eine richtige Formel für?
-
-
-\subsection{Detection Efficiency, Doubles, Triples}
+Direct Pulse-Height Analysis data (PHA data) is one of SWICS' data products and the one that is most relevant for the analysis in this work.\\
+SWICS steps through the 64 energy-per-charge steps of the electrostatic analyzer (s. sec \ref{sec:EpQ}) over one so-called voltage cycle. At normal spacecraft telemetry rates SWICS steps once per spin, which is once every $12\,\mathrm{s}$. During these times 30 PHA words per spin are selected based on a priority scheme (s.b.) and transmitted.\\
+Every 24-bit PHA word contains following information on an incident particle that triggered a valid measurement:
+\begin{itemize}
+	\item $E_{SSD}$: Energy deposition in the solid state detector \\
+	measured through 256 channels in a range $40 - 600\,\mathrm{keV}$
+	\item $ToF$: Time-of-Flight\\
+	measured through 1024 channels in a range $10 - 200\,\mathrm{ns}$
+	\item Sector information:\\
+	SWICS divides up one spin of Ulysses into 8 sectors of $45^\circ$.
+	\item Detector information: \\
+	Which of the three solid state detector elements has been triggered?
+	\item Priority category: \\
+	Due to limited telemetry an assorted sample of all measured particles can be transmitted. This selection is based on different priorities. For details s. sec \ref{subsec:prio}.
+\end{itemize}
+The interpretation of a set of PHA words that have been collected over time is discussed in sec. \ref{sec:etmatrices}. 
+%
+\subsection{Detection Efficiency}
 (Frage Lars: Welche Wahrscheinlichkeit genau gibt die E. an? Ausgehend von einem Teilchen vor dem Instrument mit der richtigen Epq? Von einem Teilchen, das den EpQ Filter durchlaufen hat?)\\ \\
 The detector efficiency is the probability to measure a particle that has entered the instrument(?). 
 When working with SWICS -- like for any physical measurement -- one has to consider several effects that impede the ideal measurement as it is described in sec. \ref{subsec:measurement}. 
@@ -156,32 +147,37 @@ For the highest energy-per-charge value $EpQ = 60.51\,\mathrm{keV}$ we interpola
 \begin{figure}[h]
 	\includegraphics[width=1.\textwidth]{Figures/guess_eff.pdf}
 	\centering
-	\caption{todo}
+	\caption{$\mathrm{He^{+}}$ detection efficiencies for ACE SWICS over all energy-per-charge steps from $0.66\,\mathrm{kV}$ to $86.64\,\mathrm{kV}$. For Ulysses SWICS the efficiencies have been extrapolated between 0 for $EpQ$ step 17 ($17.86\,\mathrm{kV}$) and the highest efficiency for $EpQ$ step 0 ($60.51\,\mathrm{kV}$). The latter value has been interpolated from the ACE efficiencies.}
 	\label{fig:guess_eff}
 \end{figure}
 
 
-\subsection{Priority weighting}
-SWICS performs an on-board mass and mass-per-charge-classification. For every ion with valid measurements the $m$ and $mpq$ are calculated based on the measurements of ESSD, Tof and the particle's EPQ-step using a look-up-table technique.\\
-On the one hand these values are used for sorting the ions into predefined boxes in the m-mpq-space which yield in the so-called matrix rate, a second data product that is provided by SWICS.\\
-Secondly, and more important for our analysis, the m and mpq information is used to sort every measured ion into one of three priority ranges.
-
-Range, BRW\\ \\
-\begin{tabular}{c|c|c}
-	%\hline
-	Range 0 & $m < 8.7$;  $m_0 : mpq < 3.3$ & $\mathrm{H}$, $\mathrm{He^+}$, $\mathrm{He^{2+}}$; Doubles\\ 
-	\hline 
-	Range 1 & $m > 8.7$ & Heavier ions \\ 
-	\hline 
-	Range 2 & $m_0 : mpq > 3.3$ & Doubles \\ 
-	%\hline 
-\end{tabular} 
-
+\subsection{Priority Weighting}
+\label{subsec:prio}
+SWICS' data processing unit performs an on-board mass and mass-per-charge-classification. For every ion with valid measurements the $m$ and $mpq$ are calculated based on the measurements of ESSD, Tof and the particle's EPQ-step using a look-up-table technique.\\
+On the one hand these values are used for sorting the ions into predefined boxes in the m-mpq-space which yield in the so-called matrix rate, a second data product that is provided benath the PHA words.\\
+Secondly, and more important for our analysis, the m and mpq information is used to sort every measured ion into one of three priority ranges. Due to a limited telemetry possibly not every measured particle can be transmitted as a PHA word. 
+30 PHA words per spin are chosen from these ranges in way that the ratio of low and high priority PHA words is balanced. By this selection less abundant heavier ions are artificially enhanced which is necessary to recreate the measured composition from the transmitted PHA words. Table \ref{tab} shows summarized the priority scheme. Details about this can be found in \citet{gloeckler_1992}.\\
+To account for the priority biased selection of PHA words it is necessary to weight the transmitted data with the so-called base-rate weight $brw = \frac{D_{\mathrm{PHA}}}{T_{\mathrm{PHA}}}$, where $T_{\mathrm{PHA}}$ is the number transmitted PHA words and $D_{\mathrm{PHA}}$ the number of detected particles on which this PHA word is based. The measured composition can be restored in this way.
+\begin{table}[h]
+	\caption{SWICS' priority categorization scheme} 
+	\centering
+	\begin{tabular}{c|c|c}
+		%\hline
+		Range 0 & $m < 8.7$;  $m_0 : mpq < 3.3$ & $\mathrm{H}$, $\mathrm{He^+}$, $\mathrm{He^{2+}}$; Doubles\\ 
+		\hline 
+		Range 1 & $m > 8.7$ & Heavier ions \\ 
+		\hline 
+		Range 2 & $m_0 : mpq > 3.3$ & Doubles \\ 
+		%\hline 
+	\end{tabular} 
+	\label{tab}
+\end{table}
 %
 %
 %
-
 \section{ET matrices, identification}
+\label{sec:etmatrices}
 Fig. \ref{fig:et_matrix} shows longterm PHA data collected with Ulysses SWICS over two years for energy-per-charge step 25 (which is $10.05\,\mathrm{kV}$). For every particle with valid measurements the $\mathrm{E_{SSD}}$ channel is plotted over the ToF channel. As a particle's mass and mass-per-charge is connected to the measured values $EpQ$, $\tau$ and $E_{SSD}$ by equations \ref{eq:swics_set1} --  \ref{eq:swics_set3}, every ion species occupies a distinct position in the so-called \textit{ET-Matrix}. (Counts of different ion species sum up at distinct places in ... space.)
 
 
@@ -224,6 +220,8 @@ Für alle Jahre. Anzahl: todo
 Weitere Daten: vsw von SWOOPS, B-Feld
 \\ \\
 wie viele Daten bleiben über, wie viele PHA-Worte ca. pro Spin?
+\\ \\
+woher sind die Daten?
 \\ \\
 wohin damit? \\ \\
 PHA pro Spin...

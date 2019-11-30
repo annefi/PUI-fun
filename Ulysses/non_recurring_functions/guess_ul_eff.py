@@ -9,6 +9,8 @@ from scipy.optimize import curve_fit
 import matplotlib
 
 
+
+
 matplotlib.rcParams.update({'font.size': 12,
                             'xtick.major.size': 8,
                             'xtick.major.width': 1.0,
