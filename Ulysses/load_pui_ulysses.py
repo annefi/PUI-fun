@@ -23,9 +23,9 @@ from WSky import WSky
 He1 = True #False #
 He2 = False #True
 #
-# He2+
-He1 = False #
-He2 = True #
+# # He2+
+# He1 = False #
+# He2 = True #
 
 
 # load Ulysses data:

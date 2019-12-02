@@ -2,12 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c58623c-1821-4880-9e22-06c9e1193331" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../MA/Dokument/Chapters/data_ana.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/Dokument/Chapters/data_ana.tex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MA/Dokument/Chapters/instrumentation.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/Dokument/Chapters/instrumentation.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MA/Dokument/MA_literatur.bib" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/Dokument/MA_literatur.bib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MA/Dokument/MA_literatur.bib.bak" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/Dokument/MA_literatur.bib.bak" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../MA/Dokument/main.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/Dokument/main.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MA/Talks/Talk_Methodenkenntnisse/talk_1321.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/Talks/Talk_Methodenkenntnisse/talk_1321.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/load_pui_ulysses.py" beforeDir="false" afterPath="$PROJECT_DIR$/load_pui_ulysses.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -69,20 +66,20 @@
           <entry key="project.open.time.6" value="4" />
           <entry key="project.open.time.7" value="14" />
           <entry key="project.open.time.8" value="47" />
-          <entry key="project.open.time.9" value="22" />
-          <entry key="project.opened" value="110" />
+          <entry key="project.open.time.9" value="23" />
+          <entry key="project.opened" value="111" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="dat" value="1" />
-          <entry key="py" value="438" />
+          <entry key="py" value="439" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="437" />
+          <entry key="Python" value="438" />
           <entry key="Scratch" value="1" />
         </counts>
       </usages-collector>
@@ -105,15 +102,6 @@
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/DataLoader/uswipha.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2160">
-                  <caret line="149" column="22" selection-start-line="149" selection-start-column="22" selection-end-line="149" selection-end-column="22" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/DataLoader/ulysses_traj.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="165">
@@ -131,11 +119,20 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="375">
                   <caret line="25" selection-start-line="25" selection-end-line="28" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/filter_He.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="324">
+                  <caret line="35" column="57" selection-start-line="35" selection-start-column="57" selection-end-line="35" selection-end-column="57" />
                 </state>
               </provider>
             </entry>
@@ -149,7 +146,7 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Plots/plots_et.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="325">
@@ -378,9 +375,9 @@
         <option value="$PROJECT_DIR$/ana_1d.py" />
         <option value="$PROJECT_DIR$/swics_collimator_ulysses.py" />
         <option value="$PROJECT_DIR$/dist3D_pui_ulysses.py" />
-        <option value="$PROJECT_DIR$/load_pui_ulysses.py" />
         <option value="$PROJECT_DIR$/non_recurring_functions/guess_ul_eff.py" />
         <option value="$PROJECT_DIR$/Plots/plots_et.py" />
+        <option value="$PROJECT_DIR$/load_pui_ulysses.py" />
       </list>
     </option>
   </component>
@@ -413,8 +410,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
       <pane id="Scope" />
+      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -611,13 +608,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/filter_He.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="35" column="57" selection-start-line="35" selection-start-column="57" selection-end-line="35" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../ACE/PUIs/ace_swics_3d/test_col.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -731,13 +721,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" selection-start-line="25" selection-end-line="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ana_1d.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1770">
@@ -756,6 +739,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1080">
           <caret line="86" selection-start-line="86" selection-end-line="97" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataLoader/uswiutils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" selection-start-line="9" selection-start-column="4" selection-end-line="10" />
         </state>
       </provider>
     </entry>
@@ -824,13 +814,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DataLoader/uswiutils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" selection-start-line="9" selection-start-column="4" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Plots/plots_et.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="325">
@@ -838,6 +821,20 @@
           <folding>
             <element signature="e#0#17#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/filter_He.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="35" column="57" selection-start-line="35" selection-start-column="57" selection-end-line="35" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" selection-start-line="25" selection-end-line="28" />
         </state>
       </provider>
     </entry>
