@@ -216,3 +216,25 @@ def evolution_B_PHA():
     ax3.legend()
     plt.show()
 
+
+def count_he2():
+    ### result: 1099970.9444444445 p.a.
+    path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/'
+    sum = []
+    years = range(1990,2010)
+    for y in years:
+        print(y)
+        nr = 0
+        for doy in range(1, 366):
+            try:
+                fname = "%s%.4i/%.3i.pha" % (path, y, doy)
+                fin = open(fname, 'r')
+                for line in fin:
+                    nr+=1
+            except:
+                print('didnt work: year %s, doy %s' %(y,doy))
+        sum.append(nr)
+    return sum
+
+
+

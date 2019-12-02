@@ -2,7 +2,7 @@
 
 \chapter{Instrumentation} % Main chapter title
 
-\label{ChapterInstrumentation} 
+\label{chapter:instrumentation} 
 
 %----------------------------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ After having passed the electrostatic analyzer the ion is post-accelerated by an
 \subsection{Energy measurement}
 Additionally, the ion's energy is measured when they hit one of the three solid state detectors. \\
 A solid-state detector is realized by applying an inverse bias voltage to a semiconductor material. When ionized particles hit the material, they set free charge carriers from the resulting depletion zone. These charge carriers can be measured as a pulse of current which is proportional to the deposited energy of the ion. \\
-Each of the three detectors has an active area of $1.5 x 1.3 \,\mathrm{cm^2}$. Their alignment with each other can be seen in fig \ref{fig:swics}, right: While the central detector is oriented perpendicular to the symmetry axis of SWICS, the other two detectors are slightly tilted with respect to this axis. This way particles with different angles of incidence along the width of the collimator can be detected. The information on which of the three detectors has been hit will be utilized in chapter \ref{Chapter:Data} for a coarse directional resolution of incident particles.
+Each of the three detectors has an active area of $1.5 x 1.3 \,\mathrm{cm^2}$. Their alignment with each other can be seen in fig \ref{fig:swics}, right: While the central detector is oriented perpendicular to the symmetry axis of SWICS, the other two detectors are slightly tilted with respect to this axis. This way particles with different angles of incidence along the width of the collimator can be detected. The information on which of the three detectors has been hit will be utilized in chapter \ref{chapter:data} for a coarse directional resolution of incident particles.
 \\ \\
 One of SWICS' main objectives is the measurement of the composition of incident particles. An ion and its charge state can be fully identified with the knowledge of its mass $m$ and its mass-per-charge $mpq$. 
 With the measurement of the time-of-flight $ToF$, the energy $E_{SSD}$ and the knowledge of the energy-per-charge $EpQ$ we can calculate the mass $m$, the mass-per-charge $mpq$ and velocity $v$ of an ion $i$ with the following set of equations:
@@ -223,22 +223,14 @@ The presented selection procedure has been performed on the complete data set fr
 %
 %
 \subsection{Selection of $\mathrm{He^{2+}}$}
-For testing the virtual detector in chapter \ref{Chapter:Data} we need a species of which we know that it mainly moves with the solar wind bulk and that occurs within the Triple Coincidences, so that we have directional information. We choose for $\mathrm{He^{2+}}$ as it also occurs in Range 0 and is easily recognizable in fig. \ref{fig:epq_rng0}.
+For testing the virtual detector in chapter \ref{chapter:data} we need a species of which we know that it mainly moves with the solar wind bulk and that occurs within the Triple Coincidences, so that we have directional information. We choose for $\mathrm{He^{2+}}$ as it also occurs in Range 0 and is easily recognizable in fig. \ref{fig:epq_rng0}.
 Unlike $\mathrm{He^{+}}$, $\mathrm{He^{2+}}$ can also be found at ESA steps higher than step 17, as it gains more energy when being post-accelerated due to the twice as high charge. Thus, $\mathrm{He^{2+}}$ deposits more likely energies above the threshold of the solid-state detector. 
 We selected $\mathrm{He^{2+}}$ with the same procedure as for $\mathrm{He^{+}}$. However, in this case it is not so crucial to include exactly every $\mathrm{He^{2+}}$ event, as we do not want to perform a full analysis with $\mathrm{He^{2+}}$.
-\\
-Für alle Jahre. Anzahl: todo
-\\ \\
-wie viele Daten bleiben über, wie viele PHA-Worte ca. pro Spin?
 \\ \\
 TODO: woher sind überhaupt die PHA Daten?\\
-vsw-Daten von SWOOPS...
-\\ \\
 %
 %
 %
-
-
 \begin{figure}
 	\centering
 \begin{subfigure}{.9\linewidth}
@@ -251,6 +243,6 @@ vsw-Daten von SWOOPS...
 	\includegraphics[width=1\linewidth]{Figures/epq_He2.pdf}
 	\centering
 \end{subfigure}
-	\caption{Todo: Color range anpassen. $\mathrm{He^{+}}$ (above) and $\mathrm{He^{2+}}$ (below) selections that have been cut out from fig. \ref{fig:epq_rng0}.}
+	\caption{$\mathrm{He^{+}}$ (above) and $\mathrm{He^{2+}}$ (below) selections that have been cut out from fig. \ref{fig:epq_rng0}.}
 \label{fig:cutouts}
 \end{figure}

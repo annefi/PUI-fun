@@ -2,7 +2,7 @@
 
 \chapter{Data Analysis and Methods} % Main chapter title
 
-\label{Chapter:Data} 
+\label{chapter:data} 
 
 %----------------------------------------------------------------------------------------
 
@@ -11,58 +11,67 @@
 Intro:\\
 von den Rohdaten zur 3D VDF
 
+In chapter \ref{chapter:instrumentation} 
 
+Im vorherigen Kapitel haben wir die Ulysses Swics Rohdaten kennen gelernt und insowfern aufbereitet, dass wir nun mit der Analyse beginnen können. 
+und He und He2+ freigestellt. Damit können wir jetzt weiter machen: Virtuellen Detektor bauen, testen mit He2+, 
 
+aim: directional resolution of velocity of incident He ions
+SWICS data in its entirety
+together with
+Ulysses position and orientation 
 
 
 
 \section{Coordinate Systems}
-For orientation bla we need coordinate system bla...
+In the following analysis the SWICS PHA data will be connected to the position and orientation of the Ulysses spacecraft. For this two different coordinate systems are utilized.
 
 %
-\subsection{Ulysses trajectory, HG system}
-\textbf{Todo: Hinweis auf Zeichnung und Kapitel vorne}\\
-Trajectory data is used from \citet{ulysses-data-archive} where Ulysses position data on a daily basis is available. The trajectory data is given based on different coordinates, including the heliographic coordinate system in the B1950.0 epoch.
-\\ \\
-Heliographic Coordinate System:\\
-The heliographic (HG) coordinate system is a Cartesian Sun-centered system with the Sun's equatorial plane as a reference plane. Its X-axis is directed along the line of ascending node, which is the intersection line of the ecliptic and the solar equatorial plane. While the solar equatorial plane has an inclination of $i_\odot 7.25 ^\circ$ against the ecliptic \citep{fraenz_harper} the line of ascending node is at a longitude of $\Omega_\odot \approx 75^\circ$ relative to the First Point of Aries in 1950 \citep{nasa-earth-coord}. The Z-axis of the HG coordinate system is directed along the Sun's spin axis (northward) and the Y-axis completes the right-handed system. \\
-In HG spherical coordinates the longitude $\varphi_{HG}$ is defined to be $0^\circ$ for directions along the X-axis and increases towards the Y-axis. The latitude $\vartheta_{HG}$ is $0^\circ$ for direction within the solar equatorial plane and $+90^\circ$ for northward directions.\\ \\
+\subsection{Heliographic Coordinate System}
+Trajectory data from \citet{ulysses-data-archive} is used in this work to describe Ulysses' orbit. In this data, Ulysses' position is given in daily intervals and based on different coordinate systems, including the heliographic coordinate system in the B1950.0 epoch.\\
+The heliographic (HG) coordinate system is a Cartesian Sun-centered system with the Sun's equatorial plane as a reference plane. Its X-axis is directed along the line of ascending node, which is the intersection line of the ecliptic and the solar equatorial plane. While the latter has an inclination of $i_\odot = 7.25 ^\circ$ against the ecliptic \citep{fraenz_harper} the line of ascending node is at an ecliptic longitude of $\Omega_\odot \approx 75^\circ$ relative to the First Point of Aries in 1950 \citep{nasa-earth-coord}. The Z-axis of the HG coordinate system is directed along the Sun's spin axis (northward) and the Y-axis completes the right-handed system. \\
+In HG spherical coordinates the longitude $\varphi_{\mathrm{HG}}$ is defined to be $0^\circ$ for directions along the X-axis and increases towards the Y-axis. The latitude $\vartheta_{\mathrm{HG}}$ is $0^\circ$ for directions within the solar equatorial plane and $+90^\circ$ for northward directions.\\ 
+However, when working with the Ulysses trajectory data it was found that these data were given in spherical coordinates for which $\varphi_{HG} = 0^\circ$ was towards $-105 ^\circ$ ecliptic longitude relative to the First Point of Aries. This means that the Ulysses trajectory coordinate system is shifted $180^\circ$ around the solar spin axis against the classical definition (s.a.).\\
+In fig. \ref{fig:traj} Ulysses' spherical HG coordinates as well its distance from the Sun are given over time of the mission.
 %
-%
-When working with the Ulysses trajectory data it was found that these data were given in spherical coordinates for which the $\varphi_{HG} = 0^\circ$ direction was towards $\sim -105 ^\circ$ longitude relative to the First Point of Aries. This means that the Ulysses trajectory coordinate system is shifted $180^\circ$ around the solar spin axis against the classical definition (s.a.).\\
-In fig. \ref{fig:traj} Ulysses' spherical HG coordinates as well its distance from the Sun are given over the time of nearly the complete mission.
-
-
 \begin{figure}[h]
 	\includegraphics[width=1\textwidth]{Figures/HG_coord.pdf}
 	\centering
-	\caption{Ulysses trajectory data from November 1990 to June 2009 based on the data from the \citet{ulysses-data-archive}. Color shaded are the three orbits of the mission. \textbf{Above:} Shown is Ulysses' radial distance R from the Sun. Perihelion and aphelion of Ulysses' elliptical orbit can clearly be seen as the nearest/farthest distance of $1.3\,\mathrm{AU}$ and $5.4\,\mathrm{AU}$. Ulysses passes each of these points every 6.2 years and three times in total over the duration of the mission. \textbf{Below:} Shown are Ulysses' heliographic (HG) longitude and latitude. Note, that the longitude is shifted around $180^\circ$ with respect to the classical definition (s. text for details). A clear periodicity over Ulysses' three orbits can be seen. Maximum and minimum latitude are $\sim \pm 80^\circ$. These points are highest above the poles of the sun and are reached a few weeks before and after Ulysses' pass through the perihelion.}
+	\caption{Ulysses trajectory data from November 1990 to June 2009 based on the data from the \citet{ulysses-data-archive}. Color shaded are the three orbits of the mission. \textbf{Above:} Shown is Ulysses' radial distance R from the Sun. Perihelion and aphelion of the spacecrafts' elliptical orbit can clearly be seen as the nearest/farthest distance that is $1.3\,\mathrm{AU}$ and $5.4\,\mathrm{AU}$. Over the duration of the mission Ulysses passes each of these points every 6.2 years and three times in total. \textbf{Below:} Shown are Ulysses' HG longitude and latitude. Note, that the longitude is shifted around $180^\circ$ with respect to the classical definition (s. text for details). A clear periodicity over Ulysses' three orbits can be seen. Maximum and minimum latitude are $\sim \pm 80^\circ$. These points are highest above the poles of the Sun and are reached a few weeks before and after Ulysses' pass through the perihelion. \textbf{TODO: Fontsize größer}}
 	\label{fig:traj}
 \end{figure}
 
-\subsection{RTN Coordinate System}
-Umrechnung von HG in RTN?
+\subsection{Radial Tangential Normal Coordinate System}
+Ulysses' orbit has been described in the HG coordinate system, which is a coordinate system that is fixed with respect to the Sun. For describing positions and velocities in the frame of the spacecraft (e.g. the Aspect Angle) we need a coordinate system that moves with the spacecraft.
+\\
+When dealing with Ulysses' trajectory data it is useful to work with Radial Tangential Normal (RTN) coordinates. The RTN coordinate system is defined relative to a moving object in the heliosphere, in this case Ulysses, and is centered at the Sun. A graphical representation of the system is given in fig. \ref{fig:rtn}. The unit vectors are $\vec{R}$, $\vec{T}$ and $\vec{N}$, where $\vec{R}$ points radially outward from the Sun to the current position of the spacecraft. $\vec{T}$ is defined as the normalized cross product of the Sun's angular velocity, $\vec{\omega}$, and $\vec{R}$. $\vec{N}$ completes the right-handed Cartesian coordinate system. Consequently, the RTN system is not defined for a spacecraft's position right above one of the Sun's poles as the cross product $\vec{\omega} x \vec{R}$ is zero here. Nevertheless we do not have to worry about this fact as not even Ulysses crosses the poles directly.
 \\ \\
-TODO:
-The orbit itself is described in heliographic coordinates, so a cs that is constant (stable?) with respect to the sun. For describing positions and velocities in the frame of the spacecraft (e.g. AA) we need another cs...
-
+OPT: Umrechnung von HG in RTN?
+%
+%
 \begin{figure}[h]
 	\includegraphics[width=1\textwidth]{Figures/RTN_AA_angles.pdf}
 	\centering
 	\caption{Graphical representation of the RTN coordinate system (not to scale). Shown are the Sun (yellow), the Earth (blue) and the Ulysses spacecraft at a non-specific position on its orbit. $\vec{R}$ is defined as the unit vector along the line-of-sight Sun--Earth, $\vec{T}$ as the normalized cross product $\vec{\omega} x \vec{R}$ with $\vec{\omega}$ the angular velocity of the Sun (yellow vector). $\vec{N}$ completes the right-handed Cartesian system. Also shown is the definition of the aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ as they are used in this work. The grey plane depicts the $\vec{R}$--$\vec{T}$ plane. $0 ^\circ < \varphi_{\mathrm{asp}} < 90^\circ$ and $-90 ^\circ < \vartheta_{\mathrm{asp}} < 0^\circ$ in the shown situation. \textbf{TODO: Zeichnung anpassen: Vektorpfeile, Indizes Winkel; Quelle Ulysses Dingsi}}
 	\label{fig:rtn}
 \end{figure}
+%
+%
+%
+\section{The Detector Model}
+With SWICS' measurement of detector and sensor (todo: Verweis Kapitel, vielleicht explizit schreiben...?) we can obtain directional information about the velocity of incident ions. However, a sec-det information alone is not sufficient to determine the ion's three dimensional velocity. Its meaning is highly dependent on SWICS' orientation and the eigen-velocity of the spacecraft. Additionally, SWICS' collimator is characterized by an intricate geometry, making an analytical solution of the problem difficult. \\
+Instead, we choose to use a virtual detector as a numerical approach. The initial idea of modelling the SWICS detector comes from Dr. Lars Berger who constructed a similar model for ACE SWICS. This work focusses on establishing the model for Ulysses SWICS.\\
 
 
-For dealing with Ulysses' trajectory data it is useful to work with \textit{radial-tangential-normal} coordinates. The RTN coordinate system is defined relative to a moving object in the heliosphere -- in this case the spacecraft, Ulysses, and is centered at the sun. A graphical representation on the system can be found in fig. \ref{fig:rtn}. The unit vectors are $\vec{R}$, $\vec{T}$ and $\vec{N}$, where $\vec{R}$ points radially outward from the sun to the current position of the spacecraft. $\vec{T}$ is defined as the normalized cross product of the Sun's angular velocity $\vec{\omega}$ and $\vec{R}$. $\vec{N}$ completes the right-handed Cartesian coordinate system. Consequently, the RTN system is not defined for a spacecraft's position right above one of the Sun's poles as the cross product $\vec{\omega} x \vec{R}$ is zero here. Nevertheless we do not have to worry about this fact as not even Ulysses crosses the poles directly (todo: Verweis?).
 
-
+Was macht das Modell? -- Ich will das FoV zu jedem Zeitpunkt bestimmen. Ich nehme dafür einzelne Messpunkte auf der originalen Geometrie. Dann gebe ich noch ins Modell, wie das gerade ausgerichtet ist.\\
+Berechnet anhand des AA, wohin Sun trigger schaut, wenn getriggert wird und rotiert coll. an entsprechende Position für Sek 0. Ordnet entsorechend andere Sektoren an.
+Simuliert FoV durch Punkteraster \\
 
 
 %
 %
 %
-\section{Collimator/Detector model}
 \begin{figure}
 	\centering
 	\begin{subfigure}{.5\textwidth}
@@ -86,14 +95,9 @@ For dealing with Ulysses' trajectory data it is useful to work with \textit{radi
 	\caption{TODO}
 	\label{TODO}
 \end{figure}
-Schreiben, dass das eigentlich von ACE/Lars kommt
-
-\subsubsection{Motivation}
-Kollimatormodell -- warum eigentlich -- wie umgesetzt?\\ \\
-Das Ziel ist, einem gemessenen Teilchen einen v-Vektor zuzuordnen. Eine Sek-Det-Kombi ist aber nicht eindeutig. Ihre Bedeutung hängt davon ab, wohin das Instrument guckt (FoV), von der Eigengeschwindigkeit des SC und davon, wie das SC gerade gedreht ist. Zusätzlich hat der Kollimator eine komplizierte Geometrie, sodass eine analytische Lösung schwierig ist: Also numerische Lösung. \\
-Was macht das Modell? -- Ich will das FoV zu jedem Zeitpunkt bestimmen. Ich nehme dafür einzelne Messpunkte auf der originalen Geometrie. Dann gebe ich noch ins Modell, wie das gerade ausgerichtet ist.\\
-Berechnet anhand des AA, wohin Sun trigger schaut, wenn getriggert wird und rotiert coll. an entsprechende Position für Sek 0. Ordnet entsorechend andere Sektoren an.
-Simuliert FoV durch Punkteraster \\
+%
+%
+%
 \subsection{Construction} \label{subsec:construction}
 For reconstructing the velocity space that SWICS measures we need to know about the directions of incident particles that can enter the instrument.
 \\ \\

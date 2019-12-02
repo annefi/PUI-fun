@@ -119,8 +119,8 @@ def plot_epq_rng0_m():
     binx = arange(180, 480)
     biny = arange(0, 66)
     C, X, Y = histogram2d(valx, valy, bins=[binx, biny])
-    vmin = amin(C[C > 0])
-    vmax = amax(C)
+    vmin = amin(C[C > 0]) # 1
+    vmax = amax(C) # 63504
     colormap = plt.cm.get_cmap("viridis")
     colormap.set_under('white')
     Mesh = ax.pcolormesh(X, Y, C.T, cmap=colormap, vmin=vmin, vmax=vmax, rasterized=True, norm = colors.LogNorm(vmin =vmin,vmax = vmax))
@@ -135,6 +135,7 @@ def plot_epq_rng0_m():
     ax.set_xlabel('ToF Channel')
     ax.set_ylabel('ESA')
     plt.savefig('Plots/epq_rng0.pdf')
+    return vmin, vmax
 
 
 def plot_epq_He1_m():
@@ -145,8 +146,10 @@ def plot_epq_He1_m():
     binx = arange(180, 480)
     biny = arange(0, 66)
     C, X, Y = histogram2d(valx, valy, bins=[binx, biny])
-    vmin = amin(C[C > 0])
-    vmax = amax(C)
+    # vmin = amin(C[C > 0])
+    # vmax = amax(C)
+    vmin = 1.
+    vmax = 63504.
     colormap = plt.cm.get_cmap("viridis")
     colormap.set_under('white')
     Mesh = ax.pcolormesh(X, Y, C.T, cmap=colormap, vmin=vmin, vmax=vmax, rasterized=True, norm = colors.LogNorm(vmin =vmin,vmax = vmax))
@@ -172,8 +175,10 @@ def plot_epq_He2_m():
     binx = arange(180, 480)
     biny = arange(0, 66)
     C, X, Y = histogram2d(valx, valy, bins=[binx, biny])
-    vmin = amin(C[C > 0])
-    vmax = amax(C)
+    # vmin = amin(C[C > 0])
+    # vmax = amax(C)
+    vmin = 1.
+    vmax = 63504.
     colormap = plt.cm.get_cmap("viridis")
     colormap.set_under('white')
     Mesh = ax.pcolormesh(X, Y, C.T, cmap=colormap, vmin=vmin, vmax=vmax, rasterized=True, norm = colors.LogNorm(vmin =vmin,vmax = vmax))
