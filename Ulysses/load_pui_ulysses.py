@@ -23,9 +23,9 @@ from WSky import WSky
 He1 = True #False #
 He2 = False #True
 #
-# # He2+
-# He1 = False #
-# He2 = True #
+# He2+
+He1 = False #
+He2 = True #
 
 
 # load Ulysses data:
@@ -106,7 +106,7 @@ if He1:
 
 
 
-years = [1991,1992,1997,1998,1999,2004]
+years = [1992]
 
 ###########
 ### He2
@@ -123,9 +123,9 @@ if He2:
     d2.set_mask('Master','ech',12,250,reset=True) # exclude doubles
     d2.set_mask('Master','brw',1,np.inf,reset=True)
 
-    d2.set_mask('Master','aa_tot', 0,2)
+    #d2.set_mask('Master','aa_tot', 0,2)
     d2.set_mask('Master','aspphi', -5,5)
-    d2.set_mask('Master','asptheta',-.2,.2)
+    d2.set_mask('Master','asptheta',-5,5)
 
 
     # get a real subset with masks applied:

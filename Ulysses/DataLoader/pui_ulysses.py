@@ -13,7 +13,7 @@ from matplotlib import colors
 import matplotlib
 
 
-matplotlib.rcParams.update({'font.size': 14,
+matplotlib.rcParams.update({'font.size': 16,
                             'xtick.major.size': 8,
                             'xtick.major.width': 1.5,
                             'xtick.minor.size': 5,
@@ -362,6 +362,9 @@ def plot_deviation_coord(data):
     ax.plot(d90, diff_long, marker='D', ms = '1', linestyle='none', label='Diff Long (HC-HG)',c='red')
     ax.legend()
 
+def average(x, N):
+    xr = x[:N*(len(x)/N)].reshape(-1,N)
+    return np.average(xr, axis = 1)
 
 def plot_eigen_velocities():
     '''
@@ -371,7 +374,7 @@ def plot_eigen_velocities():
     :return:
     '''
     from DataLoader.ulysses_traj import ulysses_traj
-    years = range(1991,2007)
+    years = range(1991,2011)
     traj = ulysses_traj(year = years, tf = 'all')
     traj.calc_d90()
     d90 = traj.data['d90']
@@ -380,19 +383,31 @@ def plot_eigen_velocities():
     vN = traj.data['v_N']
     vabs = traj.data['v']
 
+    # averaging:
+    N = 20
+    vR = average(vR, N=N)
+    vT = average(vT, N=N)
+    vN = average(vN, N=N)
+    vabs = average(vabs, N = N)
+    d902 = average(d90, N=N)
+
     fig = pylab.figure(figsize=(12,8))
     ax = pylab.subplot(111)
-    ax.set_xlim(0, 18 * 365 + 1)
-    ax.set_xticks(np.arange(0, 18 * 365 + 1, 365))
-    ax.set_xticklabels(np.arange(1990, 2009, 1))
+    ax.set_xlim(20, 20 * 365 + 1)
+    ax.set_xticks(np.arange(1*365, 19 * 365 + 1, 365))
+    ax.set_xticklabels(np.arange(1991, 2010, 1), fontsize = 14)
+    ax.set_ylim(-20, 45)
+    ax.set_ylabel(r"Ulysses' Velocity / $km\,s^{-1}$")
+    ax.grid()
 
-    ax.set_title('Ulysses\' velocity in RTN')
 
-    ax.plot(d90, vR, marker = 'o', markersize = '0.5', linestyle='-', linewidth = 0.5, label = 'v_R')
-    ax.plot(d90, vT, marker='o', markersize='0.5', linestyle='-', linewidth = 0.5, label='v_T')
-    ax.plot(d90, vN, marker='o', markersize='0.5', linestyle='-', linewidth = 0.5, label='v_N')
-    ax.plot(d90, vabs, marker='o', markersize='0.5', linestyle='-', linewidth = 0.5, label='|v|')
-    ax.legend()
+    #ax.set_title('Ulysses\' velocity in RTN')
+    ax.plot(d902, vR, marker = 'o', markersize = '1.', linestyle='-', linewidth = 2, label = r'$v_R$', c = 'midnightblue')
+    ax.plot(d902, vT, marker='o', markersize='1.', linestyle='-', linewidth = 2, label=r'$v_T$', c = 'lightsteelblue')
+    ax.plot(d902, vN, marker='o', markersize='1.', linestyle='-', linewidth = 2, label=r'$v_N$', c = 'salmon')
+    ax.plot(d902, vabs, marker='o', markersize='1.', linestyle='-', linewidth = 2, label=r'$|v|$', c = 'firebrick')
+
+    ax.legend(loc='upper center', bbox_to_anchor=(0.45, 0.97), shadow=True, ncol=4)
 
 
 def collect_AA():
@@ -434,13 +449,13 @@ def plot_AA():
         ax = pylab.subplot(111)
         ax.set_xlim(50,20*365 +1)
         ax.set_xticks(np.arange(365, 20 * 365, 365))
-        ax.set_xticklabels(np.arange(1991, 2010, 1))
-        ax.plot(d90, asp_tot, linestyle='-', linewidth= 3.5, color='lavender', label='Total')
+        ax.set_xticklabels(np.arange(1991, 2010, 1), fontsize = 14)
+        ax.plot(d90, asp_tot, linestyle='-', linewidth= 3.5, color='lavender', label='Flat')
 
         ax.plot(d90, asp_phi, linestyle='-', linewidth = 2.0, color = 'royalblue', label = 'Phi')
         ax.plot(d90, asp_theta, linestyle='-', linewidth = 2.0, color = 'crimson', label= 'Theta')
 
-        ax.legend(loc='upper center', bbox_to_anchor=(0.2, 0.97), shadow=True, ncol=3)
+        ax.legend(loc='upper center', bbox_to_anchor=(0.25, 0.97), shadow=True, ncol=3)
         ax.grid()
         ax.set_ylim(-35, 47)
         ax.set_ylabel('Aspect Angle / deg')

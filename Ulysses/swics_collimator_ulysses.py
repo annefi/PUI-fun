@@ -6,23 +6,23 @@ from custom_colours import lighten_color
 import matplotlib
 from DataLoader.uswiutils import getvelocity
 #
-matplotlib.rcParams.update({'font.size': 12,
-                            'xtick.major.size': 8,
-                            'xtick.major.width': 1.5,
-                            'xtick.minor.size': 5,
-                            'xtick.minor.width': 1,
-                            'axes.labelsize': 16,
-                            'ytick.major.size': 8,
-                            'ytick.major.width': 1.5,
-                            'ytick.minor.size': 5,
-                            'ytick.minor.width': 1,
-                            'xtick.direction': 'inout',
-                            'ytick.direction': 'inout',
-                            'figure.subplot.left':0.00,
-                            'figure.subplot.bottom': 0.04,
-                            'figure.subplot.right': 0.9,
-                            'figure.subplot.top': 0.99,
-                            'figure.figsize': (7,4.5)})
+# matplotlib.rcParams.update({'font.size': 12,
+#                             'xtick.major.size': 8,
+#                             'xtick.major.width': 1.5,
+#                             'xtick.minor.size': 5,2
+#                             'xtick.minor.width': 1,
+#                             'axes.labelsize': 16,
+#                             'ytick.major.size': 8,
+#                             'ytick.major.width': 1.5,
+#                             'ytick.minor.size': 5,
+#                             'ytick.minor.width': 1,
+#                             'xtick.direction': 'inout',
+#                             'ytick.direction': 'inout',
+#                             'figure.subplot.left':0.00,
+#                             'figure.subplot.bottom': 0.04,
+#                             'figure.subplot.right': 0.9,
+#                             'figure.subplot.top': 0.99,
+#                             'figure.figsize': (7,4.5)})
 
 
 

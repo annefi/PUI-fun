@@ -9,22 +9,22 @@ from DataLoader.uswipha import uswipha
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
-matplotlib.rcParams.update({'font.size': 12,
-                            'xtick.major.size': 8,
-                            'xtick.major.width': 1.0,
-                            'xtick.minor.size': 5,
-                            'xtick.minor.width': 1,
-                            'ytick.major.size': 8,
-                            'ytick.major.width': 1.0,
-                            'ytick.minor.size': 5,
-                            'ytick.minor.width': 1,
-                            'xtick.direction': 'inout',
-                            'ytick.direction': 'inout',
-                            'figure.subplot.left':0.12,
-                            'figure.subplot.bottom': 0.15,
-                            'figure.subplot.right': 0.9,
-                            'figure.subplot.top': 0.94,
-                            'figure.figsize': (7,4.5)})
+# matplotlib.rcParams.update({'font.size': 12,
+#                             'xtick.major.size': 8,
+#                             'xtick.major.width': 1.0,
+#                             'xtick.minor.size': 5,
+#                             'xtick.minor.width': 1,
+#                             'ytick.major.size': 8,
+#                             'ytick.major.width': 1.0,
+#                             'ytick.minor.size': 5,
+#                             'ytick.minor.width': 1,
+#                             'xtick.direction': 'inout',
+#                             'ytick.direction': 'inout',
+#                             'figure.subplot.left':0.12,
+#                             'figure.subplot.bottom': 0.15,
+#                             'figure.subplot.right': 0.9,
+#                             'figure.subplot.top': 0.94,
+#                             'figure.figsize': (7,4.5)})
 
 #matplotlib.rcParams['figure.figsize'] = 5, 10
 

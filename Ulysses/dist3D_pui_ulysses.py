@@ -760,7 +760,7 @@ class Dist3D(object):
         self.bins_det = bins_det
         self.bins_sec = bins_sec
         if polar == True:
-            fig = plt.figure()
+            fig = plt.figure(figsize=(5,4.5))
             ax = plt.subplot(111, projection='polar')
             ax.set_ylim(0, 2.8)
             ax.set_yticks([])
@@ -796,7 +796,7 @@ class Dist3D(object):
             Mesh = ax.pcolormesh(bins_det, bins_sec, C.T, cmap=colormap, norm=colors.LogNorm())
         colormap.set_under('gray')
         cb = plt.colorbar(Mesh, ax=ax, ticks=[10**0, 10**1, 10**2, 10**3, 10**4, 10**5], pad = .1)
-        cb.set_label('# PHA', fontsize = 14, labelpad= 14)
+        cb.set_label('PHA Counts', fontsize = 14, labelpad= 14)
 
 
  ####################################################################################

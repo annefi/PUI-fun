@@ -98,9 +98,9 @@ Simuliert FoV durch Punkteraster \\
 	\caption{FOTO SWICS 3D \\ 3D printed model of SWICS' entrance system, that was made from original CAD files. Its geometry can be described by a cut of 90 deg longitude (\textbf{todo: latitude? 4 grad?}) from a sphere (\textbf{of r ca. 26 cm ?}) at $todo ^\circ$ polar latitude. The resulting piece is not flat but curved and has a height of $\sim 5\,\mathrm{cm}$. This geometry leads to two deflection plates that are curved but have a constant distance of $\sim 3.7\,\mathrm{cm}$ over a relatively large area which is necessary to provide a constant voltage for the energy-per-charge filtering action (s. \ref{sec:EpQ}). The resulting opening angles of the collimator are $69^\circ$ in width and $4^\circ$ in height.}
 	\label{fig:3dcol}
 \end{figure}
-For reconstructing the velocity space that is measured by SWICS we need to know about the directions of incident particles that can enter the instrument. These directions are limited by the instrument's field of view.
+For reconstructing the velocity space that is observed by SWICS we need to know about the directions of incident particles that can enter the instrument. These directions are limited by the instrument's entrance system.
 \\
-The original geometry of the SWICS entrance system, in particular the collimator, was read out from a technical drawing. To illustrate the intricate geometry, a 3D printed model of the entrance system is shown in fig. \ref{fig:3dcol}.\\
+The original geometry of the SWICS entrance system, in particular the collimator, was read out from a technical drawing. To illustrate the intricate geometry, a photo of a 3D printed model of the entrance system is shown in fig. \ref{fig:3dcol}.\\
 The instrument is mounted with one of the collimator's narrow side edges parallel to Ulysses' spin axis. When we define this edge to be lying on the x-axis of a three dimensional Cartesian coordinate system, the collimator geometry can be reconstructed by revolving this edge for $90^\circ$ around a straight line that lies in the xy-plane with an angle of $56^\circ$ relative to the x-axis. \textbf{Todo: Zeichnung/Abbildung!} Every third of these $90^\circ$ is reserved as the opening angle for each of the three detector elements that are described in sec. \ref{sec:swics}. \\ \\
 The detector's field of view is the solid angle over which the detector is sensitive to incoming particles.
 It can be represented by a set of outward directed normal vectors on the opening plane of the detector. In our model, we have a variable number $n_\mathrm{d}$ of these equidistant vectors which we can divide along the width and the height of the detector opening. The real continuous field of view is modelled better with an increasing number of normal vectors that cover the opening. \\
@@ -153,11 +153,13 @@ To correct the measured velocities for the spacecraft's eigen-velocity, we add t
 
 \begin{figure}[h]
 	%\includegraphics[width=0.5\textwidth]{Figures/PLOT_EIGEN_VELOCITY.pdf}
-	\includegraphics[width=0.5\textwidth]{Figures/dummy.jpg}
+	\includegraphics[width=1.\textwidth]{Figures/eigenv.pdf}
 	\centering
 	\caption{Plot Eigengeschwindigkeit}
 	\label{fig:eigenv}
 \end{figure}
+
+
 
 
 \subsection{Orientation of the Detector}
@@ -170,14 +172,17 @@ For the calculation of the aspect angle we use the Ulysses trajectory data (s. s
 (Todo: Lars fragen, ob die genaue Rechnung hier rein soll, Kladde S. 79)
 %%
 %%
+
 \begin{figure}[h]
-	\includegraphics[width=1\textwidth]{Figures/aa_new.pdf}
+	\includegraphics[width=1\textwidth]{Figures/aaa.pdf}
 	\centering
-	\caption{The evolution of Ulysses' aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ and the ``flat'' aspect angle $\alpha$ with  $\alpha = \arccos(\cos{\varphi_{\mathrm{asp}}}) + \arccos(\cos{\vartheta_{\mathrm{asp}}}) -1$ from 1991 to the end of the mission. The aspect angle is the angle between the line-of-sight Ulysses--Sun and the orientation of Ulysses' spin axis. A constantly changing aspect angle results from the fact that the spacecraft's antenna, that is nearly parallel with the spin-axis, has to point towards Earth all the time. Particularly large aspect angles occur during the three fast latitude scans around 1995, 2001 and 2007. Here, Ulysses' distance to Sun and Earth is at a minimum. \textbf{Todo: Total in Flat umschreiben}}
+	\caption{The evolution of Ulysses' aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ and the ``flat'' aspect angle $\alpha$ with  $\alpha = \arccos(\cos{\varphi_{\mathrm{asp}}}) + \arccos(\cos{\vartheta_{\mathrm{asp}}}) -1$ from 1991 to the end of the mission. The aspect angle is the angle between the line-of-sight Ulysses--Sun and the orientation of Ulysses' spin axis. A constantly changing aspect angle results from the fact that the spacecraft's antenna, that is nearly parallel with the spin-axis, has to point towards Earth all the time. Particularly large aspect angles occur during the three fast latitude scans around 1995, 2001 and 2007. Here, Ulysses' distance to Sun and Earth is at a minimum.}
 	\label{fig:aa}
 \end{figure}
+
+
 \begin{figure}[h]
-	\includegraphics[width=0.5\textwidth]{Figures/col_aa_marker.png}
+	\includegraphics[width=0.7\textwidth]{Figures/col_aa_marker.png}
 	\centering
 	\caption{todo}
 	\label{fig:col_aa}
@@ -203,13 +208,13 @@ In a second step we examine a time period in which Ulysses had a substantial asp
 	\centering
 	\begin{subfigure}{.5\textwidth}
 		\centering
-		\includegraphics[width=1\textwidth]{Figures/dummy.jpg}
+		\includegraphics[width=1\textwidth]{Figures/hist_sec_det_noaa.pdf}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 		\centering
-		\includegraphics[width=1\textwidth]{Figures/hist_det_sec_aa_90days2001.pdf}
+		\includegraphics[width=1\textwidth]{Figures/hist_sec_det_aa.pdf}
 	\end{subfigure}
-	\caption{TODO}
+	\caption{links: 1992, alle Tage aber AA eingeschrönkt auf jeweils -5 bis 5 Grad; rechts: doy 1-90 aus 2001, AA nicht eingeschrönkt}
 \label{fig:histdetsecaa}
 \end{figure}
 
@@ -233,17 +238,14 @@ Deshalb: grober Check von wegen Detektor geht gut. Für das Feintuning (180 Grad
 \\
 \textbf{Todo: Schemazeichnung SunPulser, dazu Problem irgendwie zeigen}
 \begin{figure}[h]
-	\includegraphics[width=0.5\textwidth]{Figures/dummy.jpg}
+	\includegraphics[width=0.5\textwidth]{Figures/dummy_sunpulse.jpg}
 	\centering
 	\caption{todo. Schemazeichnung Sunpulser-Problem}
 	\label{fig:sp}
 \end{figure}
-\subsubsection{Übergang w}
-With the considerations of eigen-velocity and orientation we can now use the virtual detector for displaying velocity distributions of $\mathrm{He^{+}}$ pickup ions. 
-
-Mithilfe des virtuellen Detektors können jetzt geeignete (Triples) PHA Worte in dreidimensionale Geschwindigkeitskomponenten übersetzt werden (vorher: nur Betrag. Jetzt: Komponenten).
-Erst mit diesen entfalteten Einzelkomponenten kann man den wichtigen Schritt gehen und in den Sonnenwindframe übergehen.
-This is done for every PHA word (nein. jeder v-Akzeptanzpunkt in jeden getroffenen Sek-Det-Kombidings...) by subtracting the instantaneous solar wind speed in R-component from the ion's velocity in spacecraft frame: 
+\subsubsection{Transformation into $w$-space}
+With the considerations of eigen-velocity and orientation of Ulysses we can use the virtual detector for translating $\mathrm{He^{+}}$ PHA words into the three dimensional velocity space. Only when we have unfolded absolute velocities into its three components we can take the important step of transforming from a spacecraft frame of reference to a solar wind frame of reference. \\
+This can be done by subtracting the instantaneous solar wind speed in R-component from a velocity in the spacecraft frame: 
 \begin{align*}
 \mathbf{v_{i,sw}} = \begin{bmatrix}v_{R,i,sc}\\v_{T,i,sc}\\v_{N,i,sc}\end{bmatrix} - \begin{bmatrix}v_{sw}\\0\\0\end{bmatrix}
 \end{align*}
@@ -252,17 +254,14 @@ In a last step every component of the resulting vector is divided the by solar w
 \mathbf{w_{i,sw}} = \begin{bmatrix}v_{R,i,sw}\\v_{T,i,sw}\\v_{N,i,sw}\end{bmatrix} / \begin{bmatrix}v_{sw}\\v_{sw}\\v_{sw}\end{bmatrix}
 \end{align*}
 By this, the transition from velocity space in the spacecraft frame to solar wind independent w space in solar wind frame of reference is made.
-\\ \\
-\textbf{vsw Daten von SWOOPS synchronisiert} \\ \\
-\textbf{Steps vsw}
 %
 %
 %
-\section{VDF}
+\section{Velocity Distribution Function ........?}
 
 %
 \subsection{Velocity Space Coverage}
-When analyzing $\mathrm{He^{+}}$ PUI w-spectra with Ulysses SWICS, several effects have to be considered that limit the observable part of w-space. The most obvious restriction results from the fixed geometry of the collimator (s. sec. \ref{subsec:construction})) which allows to observe only a dome-shaped part of the w-space when considering the spin of the spacecraft and varying ESA steps. (However, this dome is not fixed in w-space for different orientations of the spacecraft.
+When analyzing $\mathrm{He^{+}}$ PUI w-spectra with Ulysses SWICS, several effects have to be considered that limit the observable part of the w-space. The most obvious restriction results from the fixed geometry of the collimator (s. sec. \ref{subsec:construction})) which allows to observe only a dome-shaped part of the w-space when considering the spin of the spacecraft and varying ESA steps. (However, this dome is not fixed in w-space for different orientations of the spacecraft.
 While the ever changing aspect angle of Ulysses introduces a complex subject to directional data analysis it also enlarges the integrated coverage of velocity space over time.)\\
 Furthermore, we have to deal with a limitation of the coverage in $w_R$-direction particularly for $\mathrm{He^{+}}$ triple coincidences. The observable EpQ range for $\mathrm{He^{+}}$ is limited to TODO to TODO, which corresponds to steps todo to todo. While A is the instrument's highest possible EpQ value, B is the lowest value for which $\mathrm{He^{+}}$ still has enough energy to overcome the energy threshold of the SSD and thus can trigger a valid energy measurement. 
 The w-range that is consequently covered is highly dependent on the prevalent solar wind speed. For $v_{sw} = 700 \,\mathrm{km/s}$ the absolute w in a spacecraft frame is limited to TODO. For slow solar wind at $v_{sw} = 300 \,\mathrm{km/s}$ todo... . 
