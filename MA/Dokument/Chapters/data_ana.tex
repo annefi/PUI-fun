@@ -8,22 +8,17 @@
 
 %----------------------------------------------------------------------------------------
 
-Intro:\\
-von den Rohdaten zur 3D VDF
-
-In chapter \ref{chapter:instrumentation} 
-
-Im vorherigen Kapitel haben wir die Ulysses Swics Rohdaten kennen gelernt und insowfern aufbereitet, dass wir nun mit der Analyse beginnen können. 
-und He und He2+ freigestellt. Damit können wir jetzt weiter machen: Virtuellen Detektor bauen, testen mit He2+, 
-
-aim: directional resolution of velocity of incident He ions
-SWICS data in its entirety
-together with
-Ulysses position and orientation 
 
 
+In this chapter we combine the prepared SWICS data from chapter \ref{chapter:instrumentation} with position and orientation information of the Ulysses spacecraft with help of a model of the SWICS detector. \\
+Todo: (This way we can take the step from the directional incident information of a measured ion to its position in velocity space.) \\
+
+The virtual detector is modeled after the true geometry of the SWICS instrument. By taking into account 
+
+In a first step the two main coordinate systems of this work are introduced.
 
 \section{Coordinate Systems}
+\label{sec:cs}
 In the following analysis the SWICS PHA data will be connected to the position and orientation of the Ulysses spacecraft. For this two different coordinate systems are utilized.
 
 %
@@ -77,155 +72,173 @@ Simuliert FoV durch Punkteraster \\
 	\begin{subfigure}{.5\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{Figures/col_single_new.pdf}
-		\caption{A subfigure}
-		\label{fig:sub1}
 	\end{subfigure}%
 	\begin{subfigure}{.5\textwidth}
 		\centering
 		\includegraphics[width=1\linewidth]{Figures/col_vspace_normal.pdf}
-		\caption{A subfigure}
-		\label{fig:sub2}
 	\end{subfigure}
-	\caption{A figure with two subfigures}
-	\label{fig:test}
+	\caption{Todo: beides in FoV umwandeln und Vektorpfeile dran...?}
+	\label{fig:coll_FoV}
 \end{figure}
 \begin{figure}[h]
 	\includegraphics[width=0.5\textwidth]{Figures/col_shells.pdf}
 	\centering
 	\caption{TODO}
-	\label{TODO}
+	\label{fig:coll_shells}
 \end{figure}
 %
 %
 %
-\subsection{Construction} \label{subsec:construction}
-For reconstructing the velocity space that SWICS measures we need to know about the directions of incident particles that can enter the instrument.
-\\ \\
-The original geometry of the SWICS entrance system, in particular the collimator, was read out from a technical drawing \textbf{\textbf{(TODO: Quelle?!})}
-Can be described as:
-Width: Cutting out a hollow piece of 90 deg longitude (\textbf{todo: latitude? 4 grad?}) from a sphere (\textbf{of r ca. 26 cm ??}) at .. deg polar latitude. The piece is not flat but curved and has a height of ca. 5 cm. This geometry leads to two deflection plates that are curved but have a constant distance of ca. 3.7 cm over a relatively large area which is necessary to provide a constant voltage for the EpQ filtering (s. \ref{sec:EpQ}). Resulting opening angles of the collimator are $69^\circ$ in width and $4^\circ$ in height. \textbf{Todo: Zeichnung/Abbildung?}\\
-The instrument is mounted with one of the narrow side edges parallel to Ulysses' spin axis. When we define this edge to lie on the x-axis of a three dimensional Cartesian coordinate system, the collimator geometry can be reconstructed by revolving this edge for $90^\circ$ around a straight line that lies in the xy-plane with an angle of $56^\circ$ relative to the x-axis. \textbf{Todo: Zeichnung/Abbildung!} Every third of these $90^\circ$ is reserved as the opening angle for each of the three detector elements, that are described in \textbf{Todo}.  \\
-The detector's field of view is the solid angle over which the detector is sensitive to incoming particles.
-It can be represented by a set of outward directed normal vectors on the opening plane of the detector. In our model, we have a variable number of those equidistant vectors both along the width and the height of the detector opening. The real continuous field of view is modelled better with an increasing number of normal vectors that cover the opening. Each of these normalized vectors $\mathrm{\mathbf{f_i}}$ has a unique direction $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ in position space. An example... \textbf{(TODO: Plot)}
+\subsection{Construction} 
+\label{subsec:construction}
+\begin{figure}[h]
+	%\includegraphics[width=0.5\textwidth]{Figures/FOTO_VOM_3D_PRINT.pdf}
+	\includegraphics[width=0.5\textwidth]{Figures/dummy.jpg}
+	\centering
+	\caption{FOTO SWICS 3D \\ 3D printed model of SWICS' entrance system, that was made from original CAD files. Its geometry can be described by a cut of 90 deg longitude (\textbf{todo: latitude? 4 grad?}) from a sphere (\textbf{of r ca. 26 cm ?}) at $todo ^\circ$ polar latitude. The resulting piece is not flat but curved and has a height of $\sim 5\,\mathrm{cm}$. This geometry leads to two deflection plates that are curved but have a constant distance of $\sim 3.7\,\mathrm{cm}$ over a relatively large area which is necessary to provide a constant voltage for the energy-per-charge filtering action (s. \ref{sec:EpQ}). The resulting opening angles of the collimator are $69^\circ$ in width and $4^\circ$ in height.}
+	\label{fig:3dcol}
+\end{figure}
+For reconstructing the velocity space that is measured by SWICS we need to know about the directions of incident particles that can enter the instrument. These directions are limited by the instrument's field of view.
 \\
-With a spin of the Ulysses spacecraft the fixedly mounted SWICS instrument is revolves as well around the spacecraft spin axis. Consequently, the field of view is revolved around the x-axis in fig todo. One revolution of SWICS is divided up into eight sectors per $45^\circ$ each (todo: Verweis auf Instrumentenkapitel oder Erklärung). As the spacecraft is spinning continuously, also the real field of view changes its rotation angle continuously.
-For our virtual detector we model this by rotating the field of view gradually over n steps through every sector.\\
-The integrated field of view over one spin then comprises TODO single vectors $\mathrm{\mathbf{f_i}}$ which are directed symmetrically around the spin axis (s. Abbildung TODO)). In fig. Todo is shown the FoV of todo , you can see a shell with radius 1 bla...
-\subsubsection{From FoV to Vspace}
-The detector's velocity acceptance can be calculated by combining the directional information from the field of view and the value of absolute velocity from the current EpQ step. 
+The original geometry of the SWICS entrance system, in particular the collimator, was read out from a technical drawing. To illustrate the intricate geometry, a 3D printed model of the entrance system is shown in fig. \ref{fig:3dcol}.\\
+The instrument is mounted with one of the collimator's narrow side edges parallel to Ulysses' spin axis. When we define this edge to be lying on the x-axis of a three dimensional Cartesian coordinate system, the collimator geometry can be reconstructed by revolving this edge for $90^\circ$ around a straight line that lies in the xy-plane with an angle of $56^\circ$ relative to the x-axis. \textbf{Todo: Zeichnung/Abbildung!} Every third of these $90^\circ$ is reserved as the opening angle for each of the three detector elements that are described in sec. \ref{sec:swics}. \\ \\
+The detector's field of view is the solid angle over which the detector is sensitive to incoming particles.
+It can be represented by a set of outward directed normal vectors on the opening plane of the detector. In our model, we have a variable number $n_\mathrm{d}$ of these equidistant vectors which we can divide along the width and the height of the detector opening. The real continuous field of view is modelled better with an increasing number of normal vectors that cover the opening. \\
+Each of these normalized vectors $\mathrm{\mathbf{f_i}}$ has a unique direction $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ in position space. \textbf{(OPT: Plot, An example...)}
+\\
+With a spin of the Ulysses spacecraft the fixedly mounted SWICS instrument is revolved around the spacecraft spin axis. One revolution of SWICS is divided up into eight sectors of approximately equal duration respectively of $45^\circ$ each (s. sec. \ref{sec_dataprod}). As the spacecraft is spinning continuously, also the field of view changes its rotation angle continuously. For our virtual detector we model this by rotating the field of view gradually over $n_\mathrm{sec}$ steps through every sector.\\
+The integrated field of view over one spin then comprises $n_\mathrm{FoV} = n_\mathrm{d} \cdot n_\mathrm{sec} \cdot 8$ single vectors $\mathrm{\mathbf{f_i}}$ which are directed symmetrically around the spin axis. An example is shown in fig. \ref{fig:coll_FoV}, right, for n = bla... .
+%
+%
+%
+\subsubsection{From Field of View to Velocity Space}
+The detector's velocity acceptance can be calculated by combining the directional information from the field of view with the value of absolute velocity from the current ESA step. 
 \\
 A particle can only enter the detector when its absolute velocity is within the acceptance of the current EpQ step and when its inverted direction is within the detectors field of view. For a given acceptance velocity $v_i$ and a single field of view vector $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ the accepted velocity is
 \begin{align}
 \mathbf{v_i} = \begin{bmatrix}v_{R,i}\\v_{T,i}\\v_{N,i}\end{bmatrix} = - \begin{bmatrix}f_{x,i}\\f_{y,i}\\f_{z,i}\end{bmatrix} \cdot v_i.
 \label{eq:fov}
 \end{align}
-With consideration of the integrated field of view over one spacecraft spin (s. ), the acceptance velocity consists of the combination n\_todo discrete velocities which form a shell with radius $v_i$ in velocity space. (s. fig. TODO for v\_todo)
+With consideration of the integrated field of view over one spacecraft spin the acceptance velocity for a distinct velocity $v_i$ consists of the combination of $n_\mathrm{FoV}$ discrete velocities (TODO: Schmissigeres Wort suchen. Velocity-Akzeptanzpunkte...?) which form a shell with radius $v_i$ in velocity space. (s. fig. TODO for v\_todo)
 \\ \\
-HISCALE: "The experiment provides information about the spatial origin of events by treating each spin as eight sectors of approximately equal duration." \\ \\ \\
-
-
-.
-\\ \\
-The central velocity for an ion of charge $q$ and mass $m$ for an energy-per-charge step $EpQ$ (in $keV/e$) is
+The central velocity for an ion of charge $q$ and mass $m$ at an ESA step with energy-per-charge $EpQ$ (in $keV/e$) is
 \begin{align*}
-\frac{v_c}{km \, s^{-1}} = \sqrt{\frac{2 \cdot EpQ \cdot 1.60217646\cdot10^{-19}\cdot |q|}{m \cdot 1.66053886 \cdot 10^{-27}} }
+\frac{v_c}{km \, s^{-1}} = \sqrt{\frac{2 \cdot EpQ \cdot 1.602\cdot10^{-19}\cdot |q|}{m \cdot 1.661 \cdot 10^{-27}} }
 \end{align*}
-with $m = 4 u$ and $|q| = 1$ for $\mathrm{He^{+}}$.\\
-To represent the uncertainty in EpQ measurement, we take into account the relative uncertainty $\Delta \frac{E}{q}/\frac{E}{q} = \pm 5\%$ and translate it into an uncertainty $\Delta v / v = \frac{1}{2} \left( \Delta \frac{E}{q}/\frac{E}{q}\right) = \pm 2.5\%$ in accepted velocity. For every EpQ step we can now choose a number of $i_{epq}$ single velocities that are distributed evenly in the interval $\left[ v_c - \Delta v / v, v_c + \Delta v / v \right]$. The total number of accepted velocities $v$ is then $64 \cdot i_{epq}$.
+with $m = 4\,\mathrm{u}$ and $|q| = 1\,\mathrm{e}$ for $\mathrm{He^{+}}$.
 \\
 Different absolute velocities $v$ appear as distinct shells of radius $v$ in velocity space.
-Ein Beispiel, der Übersichtlichkeit halber nur 3 Schalen, ist in bla gezeigt.
+To get an idea of this, an example with three of those (todo: v bzw ESA angeben) shells is shown in fig. \ref{fig:coll_shells}. (TODO: Ich brauche auch noch ein Bild mit einzelner Schale ohne AA-Auslenkung, so wie das FoV-Bild (s.u., Vergleich im AA Kapitel))\\
+To represent the uncertainty in the energy-per-charge measurement, we take into account the relative uncertainty $\Delta \frac{E}{q}/\frac{E}{q} = \pm 5\%$ (Todo: Rücksprache Lars!) and translate it into an uncertainty $\Delta v / v = \frac{1}{2} \left( \Delta \frac{E}{q}/\frac{E}{q}\right) = \pm 2.5\%$ in accepted velocity. For every ESA step we can now choose a number of $n_{epq}$ single velocities that are distributed evenly in the interval $\left[ v_c - \Delta v / v, v_c + \Delta v / v \right]$. %The total number of accepted absolute velocities $v$ is then $64 \cdot n_{epq}$.
 \\
-With combining all $64 \cdot i_{epq}$ shells we obtain a dense three dimensional pattern of accepted velocities that simulate the real continuous velocity acceptance volume of the spinning detector.
+With combining all $64 \cdot n_{epq}$ shells we obtain a dense three dimensional pattern of accepted velocities that simulate the real continuous velocity acceptance volume of the spinning detector.
 \\ \\
-When we measure a PHA word with a distinct SEC, DET and EPQ information, we can now determine its three dimensional velocity with our virtual detector. Of course, the resolution is limited as sector and detector areas are finite as well as the uncertainty $\Delta \frac{E}{q}/\frac{E}{q}$. By spreading the count over the entirety of velocity acceptances in the volume of the SEC DET EPQ combination, we take into account every velocity that could have led to this distinct PHA word.
+When we measure a PHA word with a distinct sector, detector and ESA information, we can now determine its three dimensional velocity with our virtual detector. Of course, the resolution is limited as sector and detector areas are finite as well as the uncertainty $\Delta \frac{E}{q}/\frac{E}{q}$. By spreading the count over the entirety of $n_{epq}$ velocity acceptances (Todo: besseres Wort, s.o.) in the volume of the sector- detector-ESA combination, we take into account every velocity that could have led to this distinct PHA word.
 \\ \\
-
-
-.\\ \\ \\
-Später schreiben, was für n verwendet wurden
-\subsection{Eigen-velocity}
-For the considerations in the previous section we assumed a detector on a spacecraft that is fixed in space. Obviously this is not the case for the Ulysses spacecraft (s. sec. TODO) which moves on its elliptical orbit around the Sun. \\
-For determining the spacecraft's velocity we make use of the daily given trajectory data from sec. TODO. For every time stamp $t_i$ we calculate the spacecraft's instantaneous velocity by forming the differential quotient 
+Todo: Später schreiben, was für n verwendet wurden
+%
+%
+%
+\subsection{Eigen-velocity (oder Spacecraft Velocity?)}
+For the considerations in the previous section we assumed a detector on a spacecraft that is fixed in space. Obviously this is not the case for the Ulysses spacecraft,  which moves on its elliptical orbit around the Sun. \\
+For determining the spacecraft's velocity we make use of the daily trajectory data from sec. \ref{sec:cs}. For every point in time $t_i$ we calculate the spacecraft's instantaneous velocity $v_{SC,i}$ by forming the differential quotient 
 \begin{align*}
-v_i = \frac{ \begin{bmatrix}v_{R,i+1}\\v_{T,i+1}\\v_{N,i+1}\end{bmatrix}_i  - \begin{bmatrix}v_{R,i}\\v_{T,i}\\v_{N,i}\end{bmatrix}_i} {t_{i+1} - t_i}
+v_{SC,i} = \frac{ \begin{bmatrix}R_{i+1}\\T_{i+1}\\N_{i+1}\end{bmatrix}_i  - \begin{bmatrix}R_{i}\\T_{i}\\N_{i}\end{bmatrix}_i} {t_{i+1} - t_i}
 \end{align*}
-with $t_{i+1}$ being the next time stamp, which is normally $t_i + 1\,\mathrm{d}$. Note, that the spacecrafts position at $t_{i+1}$ has to be considered in the RTN coordinate system that relates to the spacecraft's position at $t_i$. The resulting velocities in RTN coordinates are shown in fig. todo.
+with $t_{i+1}$ being the time of the next trajectory data given, which is normally $t_i + 1\,\mathrm{d}$. Note, that the spacecrafts position at $t_{i+1}$ has to be considered in the RTN coordinate system that relates to the spacecraft's position at $t_i$. The resulting velocities in RTN coordinates are shown in fig. todo.
 \\
 --Bewertung Größenordnung--
 \\
-To correct the measured velocities for the spacecraft's eigen-velocity, we simply add the resulting velocity components to the velocity acceptance. Thus, for every time stamp the shells (s. fig todo) are shifted a bit in velocity space based on the respective eigen-velocity.
+To correct the measured velocities for the spacecraft's eigen-velocity, we add the resulting velocity components to the velocity acceptance. Thus, for every instant in time the shells in fig. \ref{fig:coll_shells} are shifted a bit in velocity space based on the respective eigen-velocity.
+
+\begin{figure}[h]
+	%\includegraphics[width=0.5\textwidth]{Figures/PLOT_EIGEN_VELOCITY.pdf}
+	\includegraphics[width=0.5\textwidth]{Figures/dummy.jpg}
+	\centering
+	\caption{Plot Eigengeschwindigkeit}
+	\label{fig:eigenv}
+\end{figure}
 
 
 \subsection{Orientation of the Detector}
-Until now we have assumed that Ulysses' spin axis is aligned with the R-axis of the coordinate system, i.e. that the spin axis points directly to the Sun. In fact, this is not the case in general. Due to telemetry reasons, Ulysses' high gain antenna has to be oriented directly towards Earth (todo: Vergleich mit ACE, warum?). As Ulysses' spin axis is aligned with the electrical axis of the antenna \citep{wenzel_ulysses}, has an offset towards the line of sight spacecraft-Sun. This offset is called \textit{aspect angle} and is a permanently changing quantity as a function of Ulysses' position and the position of the Earth. As a varying aspect angle results in SWICS covering different parts of velocity space it is essential to consider this quantity in detail.
+Until now we have assumed that Ulysses' spin axis is aligned with the R-axis of the coordinate system, i.e. that the spin axis points directly to the Sun. In fact, this is not the case in general. Due to telemetry reasons, Ulysses' high gain antenna has to be oriented directly towards Earth. As Ulysses' spin axis is aligned with the electrical axis of the antenna \citep{wenzel_ulysses}, it has an offset towards the line of sight spacecraft-Sun. This offset is called aspect angle and is a permanently changing quantity as a function of Ulysses' position and the position of the Earth. Because a varying aspect angle results in SWICS covering different parts of velocity space it is essential to consider this quantity in detail.
 %
 %
 \subsubsection{Calculation of the Aspect Angle}
+The aspect angle is measured from the line-of-sight Ulysses--Sun to the line-of-sight Ulysses--Earth. To describe this angle uniquely for any moment, we need two spherical coordinates $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ based on the RTN system. As shown in fig. \ref{fig:rtn}, $\varphi_{\mathrm{asp}}$ is measured in the $\vec{R}$--$\vec{T}$ plane between $-\vec{R}$ and the projection of the line-of-sight from Ulysses to the Earth into this plane. $\varphi_{\mathrm{asp}}$  is $0^\circ$ for directions along $-\vec{R}$, that is the line-of-sight from Ulysses to the Sun, and increases to positive values towards $-\vec{T}$. $\vartheta_{\mathrm{asp}}$ is the angle between the projection of the line-of-sight from Ulysses to the Earth into the $\vec{R}$--$\vec{T}$ plane and the line-of-sight itself. It is defined as $0^\circ$ for directions that lie within the $\vec{R}$--$\vec{T}$ plane and $+90^\circ$ for directions along $\vec{N}$.\\
+For the calculation of the aspect angle we use the Ulysses trajectory data (s. sec. \ref{sec:cs}) and Earth trajectory data in heliographic coordinates on a daily basis from \citet{nasa-earth-coord} and converted both to RTN coordinates. In fig. \ref{fig:aa} both components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ as well as the ``flat'' aspect angle $\alpha$ with  $\alpha = \arccos(\cos{\varphi_{\mathrm{asp}}}) + \arccos(\cos{\vartheta_{\mathrm{asp}}}) -1$ are shown over the time of the mission. $\varphi_{\mathrm{asp}}$ varies in the range from $\sim - 25^\circ$ to $\sim 42^\circ$ and $\vartheta_{\mathrm{asp}}$ in a range from $\sim - 30^\circ$ to $\sim 17^\circ$. Large angles occur especially around the three fast latitude scans, i.e. when Ulysses is at its perihelion and has the smallest distance to Sun and Earth.\\
+(Todo: Lars fragen, ob die genaue Rechnung hier rein soll, Kladde S. 79)
+%%
+%%
 \begin{figure}[h]
 	\includegraphics[width=1\textwidth]{Figures/aa_new.pdf}
 	\centering
-	\caption{The evolution of Ulysses' aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ from 1991 to the end of the mission are shown. The aspect angle is the angle between the line-of-sight Ulysses--Sun and the orientation of Ulysses' spin axis. A constantly changing aspect angle results from the fact that the spacecraft's antenna, that is nearly parallel with the spin-axis, has to point towards Earth all the time. Particularly large aspect angles occur during the three fast latitude scans around 1995, 2001 and 2007. Here, Ulysses' distance to Sun and Earth is at a minimum. \textbf{Also shown is the... (todo: raus aus der Zeichnung?)} }
+	\caption{The evolution of Ulysses' aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ and the ``flat'' aspect angle $\alpha$ with  $\alpha = \arccos(\cos{\varphi_{\mathrm{asp}}}) + \arccos(\cos{\vartheta_{\mathrm{asp}}}) -1$ from 1991 to the end of the mission. The aspect angle is the angle between the line-of-sight Ulysses--Sun and the orientation of Ulysses' spin axis. A constantly changing aspect angle results from the fact that the spacecraft's antenna, that is nearly parallel with the spin-axis, has to point towards Earth all the time. Particularly large aspect angles occur during the three fast latitude scans around 1995, 2001 and 2007. Here, Ulysses' distance to Sun and Earth is at a minimum. \textbf{Todo: Total in Flat umschreiben}}
 	\label{fig:aa}
 \end{figure}
-The aspect angle is measured from the line-of-sight Ulysses--Sun (that is $\vec{R}$) to the line-of-sight Ulysses--Earth. To describe this angle uniquely for any moment, we need two spherical coordinates $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ based on the RTN system. As shown in fig. \ref{fig:aa}, $\varphi_{\mathrm{asp}}$ is measured in the $\vec{R}$--$\vec{T}$ plane between $-\vec{R}$ and the projection of the line-of-sight from Ulysses to the Earth into this plane. $\varphi_{\mathrm{asp}}$  is $0^\circ$ for directions along $-\vec{R}$, that is the line-of-sight from Ulysses to the Sun and increases to positive values towards $-\vec{T}$. $\vartheta_{\mathrm{asp}}$ is the angle between the projection of the line-of-sight from Ulysses to the Earth into the $\vec{R}$--$\vec{T}$ plane and the line-of-sight itself. It is defined as $0^\circ$ for directions that lie within the $\vec{R}$--$\vec{T}$ plane and $+90^\circ$ for directions along $\vec{N}$.\\
-(Todo: Lars fragen, ob die genaue Rechnung hier rein muss, Kladde S. 79)
-For the calculation of the aspect angle we used the Ulysses trajectory data (Verweis ... TODO) and Earth trajectory data in heliographic coordinates on a daily basis from \citet{nasa-earth-coord} and converted both to RTN coordinates. In fig. \ref{fig:aa} both components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ as well as the \textit{flat} aspect angle $\alpha$ with  $\alpha = \arccos(\cos{\varphi_{\mathrm{asp}}}) + \arccos(\cos{\vartheta_{\mathrm{asp}}}) -1$ are shown over the time of the mission. $\varphi_{\mathrm{asp}}$ varies in the range from $\sim - 25^\circ$ to $\sim 42^\circ$ and $\vartheta_{\mathrm{asp}}$ in a range from $\sim - 30^\circ$ to $\sim 17^\circ$. Large angles occur especially around the three fast latitude scans, i.e. when Ulysses is at its perihelion and has the smallest distance to Sun and Earth.\\
-(Todo? Beschreiben, dass ich $\alpha$ mit dem Datenprodukt SPE verglichen habe?)
-\\ \\
 \begin{figure}[h]
 	\includegraphics[width=0.5\textwidth]{Figures/col_aa_marker.png}
 	\centering
 	\caption{todo}
 	\label{fig:col_aa}
 \end{figure}
-steps asp Winkel
-
+%
+%
+%
 The variable aspect angle is incorporated into the analysis by rotating the field of view corresponding to $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$. This results in a likewise rotation of the velocity acceptance space. In fig. \ref{fig:col_aa} the acceptance velocity for a single absolute velocity $v = 600\,\mathrm{km\,s^{-1}}$ is shown for $\varphi_\mathrm{asp} = 25^\circ$ and $\vartheta_{\mathrm{asp}} = -10^\circ $. Note, that the orientation here seems to be mirrored against the convention that has been described before. This is due to the inversion when transitioning from the field of view to velocity acceptance, s. eq. \ref{eq:fov}.\\
-When comparing fig todo with fig todo, where a situation with $\vartheta_{\mathrm{asp}} = \varphi_{\mathrm{asp}} = 0$ is shown, it becomes clear that especially larger aspect angles change the link between a distinct sector-detector element and a volume in velocity space. While with a zero aspect angle a radial velocity (along $\vec{R}$) would be detected right in the middle of the velocity shell and definitely in the innermost detector, this is not the case for the aspect angle in fig. todo. Here, an exclusively radial oriented velocity would be detected in a distinct sector in the central detector. (Andersrum bedeutet das, dass eine Sec-Det-Info nur zugeordnet werden kann, wenn die Ausrichtung des Detektors bekannt ist!)
-
-\subsubsection{Probe}
-For checking if the considerations made before are reasonable and if the virtual detector works in the right way, we want to have a look at data of which we believe to know the VDF. Appropriate test data is the solar wind itself as it is believed to flow radially outwards from the sun (Todo:Quelle). An ideal candidate within the solar wind is $\mathrm{He^{2+}}$ as the most abundant species (todo: Quelle). Thus, we can identify $\mathrm{He^{2+}}$ easily in fig Todo and are provided with good statistics. Unlike protons, which are even more abundant in the solar wind, $\mathrm{He^{2+}}$ most likely deposits energy above the detector's threshold in the SSD detector (s. chap Todo). This is because of its higher mass and the twice as high charge, which leads to a higher gain in energy by the post acceleration (todo:nochmal Verweis?). Only when a particle triggers an ESSD measurement (Triple Coincidence) we get a directional information about its velocity (Verweis todo). Protons are most often measured as Double Coincidences except for suprathermal protons, for which the assumption of radial stream must not hold true (Todo:Quelle). For selecting $\mathrm{He^{2+}}$ we proceed like described in chap. todo.
-Wie viele PHAs sind das dann insgesamt und pro Jahr? Schreiben, dass das nicht so genau gemacht werden musste, weil keine VDF Analyse...
+When comparing fig. \ref{fig:col_aa} with fig. todo(v acceptance ohne AA!), where a situation with $\vartheta_{\mathrm{asp}} = \varphi_{\mathrm{asp}} = 0$ is shown, it becomes clear that especially larger aspect angles change the link between a distinct sector-detector element and a volume in velocity space. While with a zero aspect angle a radial velocity (along $\vec{R}$) would be detected right in the middle of the velocity shell and definitely in the innermost detector, this is not the case for the aspect angle in fig. fig. \ref{fig:col_aa}. Here, an exclusively radial oriented velocity would be detected in a distinct sector in the central detector.\\
+This also means that we can only transform a sector-detector measurement into a position in velocity space when we know about Ulysses' orientation!
 \\ \\
-In a first step we look at periods of time in which both aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ were small (Todo: genau?). For these nr\_todo PHA words we draw a histogram (??) of their sektor and detector information. The result can be seen in fig. todo. The histogram shows that mainly the innermost detector has counts. This is the expected behavior when we imagine the instrument on a spacecraft that points directly to the Sun. A radially streaming flow then hits the instrument's detector that is oriented sunwards. This does not change with the spin of the spacecraft. This result is also consistent with the detector model for $\varphi_{\mathrm{asp}} = \vartheta_{\mathrm{asp}} = 0$ which is shown in fig. todo. A radial stream can be represented here by the black line which cuts through the velocity shell in its center, the region of the innermost detector, bla. Irgendwie schöner schreiben...
+\textbf{Todo: steps asp Winkel}
+\subsubsection{Probe, Todo: gute Überschrift...}
+For checking if the considerations made before are reasonable and if the virtual detector works in the right way, we want to take a look at data of which we believe to know the velocity distribution function. Appropriate test data is the solar wind itself as it is believed to flow radially outwards from the Sun \citep[][,ch. 6.1]{prlss_2004}. An ideal candidate within the solar wind is $\mathrm{He^{2+}}$ as the most abundant species. We can identify $\mathrm{He^{2+}}$ easily in fig. \ref{fig:epq_rng0} and are provided with good statistics. Unlike protons, which are even more abundant in the solar wind, $\mathrm{He^{2+}}$ most likely deposits energy above the detector's threshold in the solid-state detector (s. sec. \ref{subsec:det_eff}). This is because of its higher mass and the twice as high charge, which leads to a higher gain in energy by the post acceleration. Only when a particle triggers an $E_{\mathrm{SSD}}$ measurement (Triple Coincidence) we get a directional information about its velocity. Protons are most often measured as Double Coincidences except for suprathermal protons, for which the assumption of radial stream must not hold true (Todo:Quelle. Lars?). For selecting $\mathrm{He^{2+}}$ we proceed like described in sec. \ref{sec:etmatrices}.
+\\ \\
+In a first step we look at periods of time in which both aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ are small (Todo: genau?). For these nr\_todo PHA words we draw a histogram of their sector and detector information. The result can be seen in fig. todo. The histogram shows that mainly the innermost detector has counts. This is the expected behavior when we imagine the instrument on a spacecraft that points directly to the Sun. A radially streaming flow then hits the instrument's detector that is oriented sunwards, which does not change with the spin of the spacecraft. This result is also consistent with the detector model for $\varphi_{\mathrm{asp}} = \vartheta_{\mathrm{asp}} = 0$ which is shown in fig. todo. A radial stream can be represented here by the black line which cuts through the velocity shell in its center, the region of the innermost detector, bla. Irgendwie schöner schreiben...
 (Due to the width... auf allen Sektoren?)
 \\ \\
-In a second step we take a look at a time period in which Ulysses had a substantial aspect angle. This is particularly the case for when Ulysses is near its perihelion, s. fig todo. We choose for the second orbit, i.e. days 1-90 (?) in 2001. For all $\mathrm{He^{2+}}$ PHA data from this time we again histogram sector and detector information, which is shown in fig. todo. Compared to fig. todo the maximum of counts is now shifted clearly towards a single sector (Nr.?) and the central detector. This is consistent with the virtual detector in fig. todo, where the aspect angle's quantity matches the one in the selected time period. With this orientation a radial stream from the Sun hits the instrument on its center detector and only while a particular moment (?!) of the spin/rotation (?!). Counts do not show up exclusively with this single sector-detector combination but slightly spread out over adjacent sector-detector elements. This is due to the fact that solar wind $\mathrm{He^{2+}}$ does not stream as an ideal beam but has a certain width (todo: Referenz).
-\\ Verweis: Sektordetails im nächsten Kapitelchen
+In a second step we examine a time period in which Ulysses had a substantial aspect angle. This is particularly the case for when Ulysses is near its perihelion, s. fig \ref{fig:aa}. We choose for the second orbit, i.e. days 1-90 in 2001. For all $\mathrm{He^{2+}}$ PHA data from this time we again histogram sector and detector information, which is shown in fig. \ref{fig:histdetsecaa}. Compared to fig. todo the maximum of counts is now shifted clearly towards a single sector, that is sector No. 4, and the central detector. This is consistent with the virtual detector in fig. \ref{fig:col_aa}, where the aspect angle's quantity matches the one in the selected time period. Counts do not show up exclusively with this single sector-detector combination but slightly spread out over adjacent sector-detector elements. This is due to the fact that solar wind $\mathrm{He^{2+}}$ does not stream as an ideal beam but has a certain width \citep[][,ch. 6.1]{prlss_2004}.
 
-\begin{figure}[h]
-	\includegraphics[width=0.5\textwidth]{Figures/hist_det_sec_aa_90days2001}
+
+\begin{figure}
 	\centering
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=1\textwidth]{Figures/dummy.jpg}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\centering
+		\includegraphics[width=1\textwidth]{Figures/hist_det_sec_aa_90days2001.pdf}
+	\end{subfigure}
 	\caption{TODO}
-	\label{TODO}
+\label{fig:histdetsecaa}
 \end{figure}
 
 
+
+
 \subsubsection{Sunpulse Trigger -- Rotation}
-In the previous section hat man gesehen, dass sich die PHA Counts für einen großen AA auf den mittleren Detektor konzentrieren. In diesem Abschnitt soll geklärt werden, wovon es abhängt, in welchem Sektor der Schwerpunkt der Counts landet. 
-
-As mentioned before (todo: ist es?), one SC spin is divided into 8 sectors, starting with sector 0 and ending with sector 7.
-Every spin's start is defined newly by the \textit{spin reference pulse} of Ulysses \citep{hiscale}. 
-
-This pulse is triggered by a combination of four sun sensors which detect when the Sun crosses a plane that is spanned by the spacecraft's spin axis and the spacecraft's x-axis, which is a particular axis perpendicular to the spin axis.
-The spin reference pulse is not uniform over time as the position of the Sun relative to the spacecraft changes with varying aspect angle.\\
-To extract correct directional information from a sector data product of an ion that has been detected by SWICS it is essential to know the relative orientation between SWICS' main axis and the x-axis on the spacecraft. In the virtual detector this is implemented as an angle against the line-of-sight spacecraft-sun by which the field of view is rotated around the spin axis.\\
-From the \citet[][S.20-22]{swics_dpu} we know with \textit{normal orientation} the sun pulse occurs in the center of SWICS sector 4, which implies a $180^\circ$ offset between the line-of-sight spacecraft-sun and SWICS sector 0 (s. fig TODO). However, one can also read that it was possible to set a fine adjustment which would lead to an offset of the sun pulse from this center line up to $22.5^\circ$ \citet[][S.48]{swics_dpu}. Unfortunately, we do not know about the value that has been chosen.
+In the previous section it was observed that $\mathrm{He^{2+}}$ PHA counts accumulate around the central detector for large aspect angles. Still it needs to be examined, in which sector counts are concentrated.\\
+As mentioned before, one spacecraft spin is divided into 8 sectors, starting with sector 0 and ending with sector 7. Every spin's start is defined newly by the \textit{spin reference pulse} of Ulysses \citep{hiscale}. This pulse is triggered by a combination of four sun sensors which detect when the Sun crosses a plane that is spanned by the spacecraft's spin axis and the spacecraft's X-axis, which is a particular axis perpendicular to the spin axis. The spin reference pulse is not uniform over time as the position of the Sun relative to the spacecraft changes with varying aspect angle.\\
+To extract correct directional information from a sector data product of an ion that has been detected by SWICS it is essential to know the relative orientation between SWICS' main axis and the X-axis on the spacecraft. In the virtual detector this is implemented as an angle against the line-of-sight spacecraft-Sun by which the field of view is rotated around the spin axis.\\
+From the \citet[][S.20-22]{swics_dpu} we know that with ``normal orientation'' the sun pulse occurs in the center of SWICS sector 4, which implies a $180^\circ$ offset between the line-of-sight spacecraft-sun and SWICS sector 0 (s. fig TODO). However, it was possible to set a fine adjustment which would lead to an offset of the sun pulse from this center line up to $22.5^\circ$ \citet[][S.48]{swics_dpu}. Unfortunately, we do not know about the value that has been chosen.
 \\
-If we assumed a wrong angle, a particle beam coming from a fixed direction in a sun-fixed frame would be linked to a different direction. But this shift between true and supposedly measured direction is not constant over aspect angles. If we then measured over a longer time period with various aspect angles, we would measure the beam as blurred in velocity space.
+If we assumed a wrong angle, a particle beam coming from a fixed direction in a Sun-fixed frame would be linked to a different direction. But this shift between true and supposedly measured direction is not constant over aspect angles. If we then measured over a longer time period with various aspect angles, we would measure the beam as blurred in velocity space.
 \\
-To make sure our model uses the right angle, we again choose $\mathrm{He^{2+}}$ as a test population of which we assume a beam-like behaviour streaming radially from the Sun. Also, we can only look at time periods when the aspect angles were large and the maximum of $\mathrm{He^{2+}}$ counts occurs in the central or outermost detector. Only here we can clearly discriminate between single sectors. When measured in the innermost detector the slightly widened distribution of $\mathrm{He^{2+}}$ would spread across all sectors as they are close together here (s. fig todo).
-From fig Todo, where we histogrammed bla, we find that the overall idea of a sun pulse in sector 4 should be right when we believe the assumption that $\mathrm{He^{2+}}$ streams radially from the Sun. To check for a potential fine adjustment we search for tendencies of the maximum of counts sweeping to an adjacent sector.
+To make sure our model uses the right angle, we again choose $\mathrm{He^{2+}}$ as a test population of which we assume a beam-like behaviour streaming radially from the Sun. Also, we can only look at time periods when the aspect angles were large and the maximum of $\mathrm{He^{2+}}$ counts occurs in the central or outermost detector. Only here we can clearly discriminate between single sectors. When measured in the innermost detector the slightly widened distribution of $\mathrm{He^{2+}}$ would spread across all sectors as they are close together here.
+From fig. \ref{fig:histdetsecaa}, right, where we histogrammed $\mathrm{He^{2+}}$ PHA words at a sizeably aspect angle, we find that the data is in agreement with the overall idea of a sun pulse in sector 4 (when we believe the assumption that $\mathrm{He^{2+}}$ streams radially from the Sun). 
+To check for a potential fine adjustment we search for tendencies of the maximum of counts sweeping to an adjacent sector.
 \\
 Zeigen: Für lange Zeiträume: $\mathrm{He^{2+}}$ kommt zentral. Für einzelne kurze: unterschiedlich.
 Deshalb: grober Check von wegen Detektor geht gut. Für das Feintuning (180 Grad oder doch was anderes?) reichts aber nicht...
 \\
-Schemazeichnung SunPulser, dazu Problem irgendwie zeigen
-
+\textbf{Todo: Schemazeichnung SunPulser, dazu Problem irgendwie zeigen}
+\begin{figure}[h]
+	\includegraphics[width=0.5\textwidth]{Figures/dummy.jpg}
+	\centering
+	\caption{todo. Schemazeichnung Sunpulser-Problem}
+	\label{fig:sp}
+\end{figure}
 \subsubsection{Übergang w}
-Steps vsw
-\\
 With the considerations of eigen-velocity and orientation we can now use the virtual detector for displaying velocity distributions of $\mathrm{He^{+}}$ pickup ions. 
 
 Mithilfe des virtuellen Detektors können jetzt geeignete (Triples) PHA Worte in dreidimensionale Geschwindigkeitskomponenten übersetzt werden (vorher: nur Betrag. Jetzt: Komponenten).
@@ -239,6 +252,9 @@ In a last step every component of the resulting vector is divided the by solar w
 \mathbf{w_{i,sw}} = \begin{bmatrix}v_{R,i,sw}\\v_{T,i,sw}\\v_{N,i,sw}\end{bmatrix} / \begin{bmatrix}v_{sw}\\v_{sw}\\v_{sw}\end{bmatrix}
 \end{align*}
 By this, the transition from velocity space in the spacecraft frame to solar wind independent w space in solar wind frame of reference is made.
+\\ \\
+\textbf{vsw Daten von SWOOPS synchronisiert} \\ \\
+\textbf{Steps vsw}
 %
 %
 %
@@ -246,7 +262,7 @@ By this, the transition from velocity space in the spacecraft frame to solar win
 
 %
 \subsection{Velocity Space Coverage}
-When analyzing $\mathrm{He^{+}}$ PUI w-spectra with Ulysses SWICS, several effects have to be considered that limit the observable part of w-space. The most obvious restriction results from the fixed geometry of the collimator (s. sec. \ref{subsec:construction})) which allows to observe only a dome-shaped part of the w-space when considering the spin of the spacecraft and varying EpQ steps. (However, this dome is not fixed in w-space for different orientations of the spacecraft.
+When analyzing $\mathrm{He^{+}}$ PUI w-spectra with Ulysses SWICS, several effects have to be considered that limit the observable part of w-space. The most obvious restriction results from the fixed geometry of the collimator (s. sec. \ref{subsec:construction})) which allows to observe only a dome-shaped part of the w-space when considering the spin of the spacecraft and varying ESA steps. (However, this dome is not fixed in w-space for different orientations of the spacecraft.
 While the ever changing aspect angle of Ulysses introduces a complex subject to directional data analysis it also enlarges the integrated coverage of velocity space over time.)\\
 Furthermore, we have to deal with a limitation of the coverage in $w_R$-direction particularly for $\mathrm{He^{+}}$ triple coincidences. The observable EpQ range for $\mathrm{He^{+}}$ is limited to TODO to TODO, which corresponds to steps todo to todo. While A is the instrument's highest possible EpQ value, B is the lowest value for which $\mathrm{He^{+}}$ still has enough energy to overcome the energy threshold of the SSD and thus can trigger a valid energy measurement. 
 The w-range that is consequently covered is highly dependent on the prevalent solar wind speed. For $v_{sw} = 700 \,\mathrm{km/s}$ the absolute w in a spacecraft frame is limited to TODO. For slow solar wind at $v_{sw} = 300 \,\mathrm{km/s}$ todo... . 
@@ -264,7 +280,7 @@ In fig. \ref{fig:vsw_years} a histogram for occurring solar wind speeds is shown
 
 %
 \subsection{Phase Space Normalisation}
-We are now able to combine the information about sector, detector and EpQ step from the selected $\mathrm{He^{+}}$ PHA triple coincidences with the information about how the spacecraft was moving and which direction it was facing at the time of the measurement.
+We are now able to combine the information about sector, detector and ESA step from the selected $\mathrm{He^{+}}$ PHA triple coincidences with the information about how the spacecraft was moving and which direction it was facing at the time of the measurement.
 Counts that we have collected over a certain time period can be mapped into three dimensional w-space by this. However, for deriving physical quantities from these, a transition from counts to phase space density has to be made.\\
 Firstly, we consider a single spin of the spacecraft, which normally corresponds to one EpQ step of SWICS.
 Counts $N_{jk}$ that have been measured in a phase space volume that has been covered by a sector-detector element $j$ during the EpQ deflection step $k$ can be connected to the average phase space density $\delta_{jk}$ in this volume by an integration over the three dimensional velocity space:

@@ -115,6 +115,7 @@ where $d$ is the length of the time-of-flight section and $V_{\mathrm{PAC}}$ is 
 %
 %
 \section{Data products}
+\label{sec_dataprod}
 Direct Pulse-Height Analysis data (PHA data) are one of SWICS' data products and the ones that are most relevant for the analysis in this work.\\
 Over one voltage cycle SWICS steps through the 64 energy-per-charge steps of the electrostatic analyzer (s. sec \ref{sec:EpQ}), which we call ESA steps. At normal spacecraft telemetry rates SWICS steps once per spin, which is once every $12\,\mathrm{s}$. During these times 30 PHA words per spin are selected and transmitted. The selection is based on a priority scheme that is described below in sec. \ref{subsec:prio}.\\
 Every 24-bit PHA word contains following information on an incident particle that triggered a valid measurement:
@@ -124,7 +125,7 @@ Every 24-bit PHA word contains following information on an incident particle tha
 	\item $ToF$: Time-of-Flight\\
 	measured through 1024 channels in a range $10 - 200\,\mathrm{ns}$
 	\item Sector information:\\
-	SWICS divides one spin of Ulysses up into 8 sectors of $45^\circ$.
+	SWICS divides one spin of Ulysses up into 8 sectors of approximately equal duration. This yields in information on the spatial origin of particles.
 	\item Detector information: \\
 	Which of the three solid state detector elements has been triggered?
 	\item Priority category: \\
@@ -177,7 +178,7 @@ To account for the priority biased selection of PHA words it is necessary to wei
 %
 \section{ET matrices, identification}
 \label{sec:etmatrices}
-Fig. \ref{fig:et_matrix} shows longterm PHA data collected with Ulysses SWICS over two years for ESA step 24 ($EpQ = 10.8\,\mathrm{kV}$). For every particle with valid time-of-flight and energy measurements the $E_{\mathrm{SSD}}$ channel is plotted over the time-of-flight channel. As a particle's mass and mass-per-charge are connected to the measured values $EpQ$, $ToF$ and $E_{\mathrm{SSD}}$ by equations \ref{eq:swics_set1} --  \ref{eq:swics_set3}, every ion species occupies a distinct position in this histogram, which we call ET-matrix. 
+Fig. \ref{fig:et_matrix} shows longterm PHA data collected over two years with Ulysses SWICS for ESA step 24 ($EpQ = 10.8\,\mathrm{kV}$). For every particle with valid time-of-flight and energy measurements the $E_{\mathrm{SSD}}$ channel is plotted over the time-of-flight channel. As a particle's mass and mass-per-charge are connected to the measured values $EpQ$, $ToF$ and $E_{\mathrm{SSD}}$ by equations \ref{eq:swics_set1} --  \ref{eq:swics_set3}, every ion species occupies a distinct position in this histogram, which we call ET-matrix. 
 However, due to uncertainties in the measurements of $EpQ$, $ToF$ and $E_{\mathrm{SSD}}$ an event may be displaced around its ideal position. 
 For multiple events of the same species this results in broadened distributions. A detailed discussion on these uncertainties can be found for example in \citet{lars-phd}.
 We can identify several ion species in the shown ET-matrix: A selection of those is labelled in \ref{fig:et_matrix}.
@@ -187,7 +188,7 @@ We can identify several ion species in the shown ET-matrix: A selection of those
 \begin{figure}[h]
 	\includegraphics[width=0.9\textwidth]{Figures/et_matrix_labels.png}
 	\centering
-	\caption{ET-matrix from Ulysses SWICS PHA data from of years (1993-1994). All plotted events were measured during ESA step 24 ($EpQ = 10.8\,\mathrm{kV}$). Only triple coincidences are shown. Besides accumulated counts in ion-specific positions, there are a few horizontal and vertical stripes apparent in the shown ET-matrix -- for example in $E_{SSD}$ channel 65 and time-of-flight channel 409, 377 or 505. These are imprints of irregularities within SWICS' Analog-Digital-Converters which can be noticed as a saturation of one bin while the adjacent bin is depleted. However, these signatures are not expected to have a significant effect on the following analysis.}
+	\caption{ET-matrix from Ulysses SWICS PHA data of years 1993-1994. All plotted events were measured during ESA step 24 ($EpQ = 10.8\,\mathrm{kV}$). Only triple coincidences are shown. Besides accumulated counts in ion-specific positions, there are a few horizontal and vertical stripes apparent in the shown ET-matrix -- for example in $E_{SSD}$ channel 65 and time-of-flight channel 409, 377 or 505. These are imprints of irregularities within SWICS' Analog-Digital-Converters which can be noticed as a saturation of one bin while the adjacent bin is depleted. However, these signatures are not expected to have a significant effect on the following analysis.}
 	\label{fig:et_matrix}
 \end{figure}
 
@@ -204,28 +205,28 @@ We can identify several ion species in the shown ET-matrix: A selection of those
 \begin{figure}[h]
 	\includegraphics[width=0.9\textwidth]{Figures/epq_rng0.png}
 	\centering
-	\caption{The same histogram as in fig. \ref{fig:epq_all}, but this time only events with Range-0-priority are plotted. This basically removes ions with $m>8.7\,\mathrm{u}$.}
+	\caption{The same histogram as in fig. \ref{fig:epq_all}, but this time only events with Range-0 priority are plotted. This basically removes ions with $m>8.7\,\mathrm{u}$.}
 	\label{fig:epq_rng0}
 \end{figure}
 
 
 For extracting only the $\mathrm{He^{+}}$ events from the PHA data we histogram the events' energy-per-charge against their measured time-of-flight in fig. \ref{fig:epq_all}. 
-Ions with the same mass-per-charge can be tracked on curves with $\mathrm{ESA} \sim ToF^2$, while species with higher masses-per-charge can be found on curves at higher $ToF$ channels. This way one can identify for example $\mathrm{H^{+}}$ and $\mathrm{He^{2+}}$. At the bottom of fig. \ref{fig:epq_all} suprathermal $\mathrm{He^{+}}$ clearly stands out.\\
-For time-of-flight channels above $\sim 375$ heavier solar wind ions with a same mass-per-charge mix into the $\mathrm{He^{+}}$ population.
-We can take advantage of SWICS' on-board priority weighting, that has been described in sec. \ref{subsec:prio}. By selecting Triple Coincidences with Range-0-priority only we separate out events with $m>8.7\,\mathrm{u}$. This leaves us mainly with $\mathrm{H+}$, $\mathrm{He^{2+}}$ and $\mathrm{He^{+}}$ as the prominent ions in the Range-0 mass range. The result is shown in fig. \ref{fig:epq_rng0}. One can also see traces of heavier ions seeping into the Range0-box but this does not affect those ESA steps in which $\mathrm{He^{+}}$ is present.
+Ions with the same mass-per-charge can be tracked on curves with $\mathrm{ESA} \sim ToF^2$, while species with higher masses-per-charge can be found on curves at higher $ToF$ channels. This way one can identify for example $\mathrm{H^{+}}$ and $\mathrm{He^{2+}}$. \\
+At the bottom of fig. \ref{fig:epq_all} suprathermal $\mathrm{He^{+}}$ clearly stands out. For time-of-flight channels above $\sim 375$ heavier solar wind ions with similar mass-per-charge ratios (e.g. $\mathrm{Si^{7+}}$) mix into the $\mathrm{He^{+}}$ population.
+We can take advantage of SWICS' on-board priority weighting, that has been described in sec. \ref{subsec:prio}. By selecting Triple Coincidences with Range-0 priority only we separate out events with $m>8.7\,\mathrm{u}$. This leaves us mainly with $\mathrm{H^+}$, $\mathrm{He^{2+}}$ and $\mathrm{He^{+}}$ as the prominent ions in the Range-0 mass range. The result is shown in fig. \ref{fig:epq_rng0}. One can also see traces of heavier ions seeping into the Range-0 regime but this does not affect those ESA steps in which $\mathrm{He^{+}}$ is present.
 For a final selection we define a box around the $\mathrm{He^{+}}$ population and extract all events within this box. The result is shown in fig. \ref{fig:cutouts}, above.
 %Additionally, we check for that the particle's nominal $w$ for $\mathrm{He^{+}}$, based on the current solar wind speed, is clearly above $ w = 1$. By that, we assure to have excluded heavier ions, todo...
 \\
-As explained in sec. \ref{subsec:det_eff}, with $\mathrm{He^{+}}$ we are limited to ESA steps 0 to 17 when only considering Triple Coincidences. For higher ESA steps $\mathrm{He^{+}}$ only occurs as a double coincidence. Double coincidences are not sufficient for us, as we need the information about which solid-state detector has been triggered for a directional analysis.
+As explained in sec. \ref{subsec:det_eff}, with $\mathrm{He^{+}}$ we are limited to ESA steps 0 to 19 when only considering Triple Coincidences. For higher ESA steps $\mathrm{He^{+}}$ only occurs as a double coincidence. Double coincidences are not sufficient for us, as we need the information about which solid-state detector has been triggered for a directional analysis.
 \\
 The presented selection procedure has been performed on the complete data set from 1991 to 2009 resulting in an average of $\sim 6.8\cdot10^{6}$ $\mathrm{He^{+}}$ PHA events per year. This is $\sim 165$ $\mathrm{He^{+}}$ events per voltage cycle. Note, that there is a wide variation between different periods of time. PHA numbers per year are listed in fig. \ref{fig:vsw_years}.
 %
 %
 %
 \subsection{Selection of $\mathrm{He^{2+}}$}
-For testing the virtual detector in chapter \ref{chapter:data} we need a species of which we know that it mainly moves with the solar wind bulk and that occurs within the Triple Coincidences, so that we have directional information. We choose for $\mathrm{He^{2+}}$ as it also occurs in Range 0 and is easily recognizable in fig. \ref{fig:epq_rng0}.
-Unlike $\mathrm{He^{+}}$, $\mathrm{He^{2+}}$ can also be found at ESA steps higher than step 17, as it gains more energy when being post-accelerated due to the twice as high charge. Thus, $\mathrm{He^{2+}}$ deposits more likely energies above the threshold of the solid-state detector. 
-We selected $\mathrm{He^{2+}}$ with the same procedure as for $\mathrm{He^{+}}$. However, in this case it is not so crucial to include exactly every $\mathrm{He^{2+}}$ event, as we do not want to perform a full analysis with $\mathrm{He^{2+}}$.
+For testing the virtual detector in chapter \ref{chapter:data} we need a species of which we know that it mainly moves with the solar wind bulk and that occurs within the Triple Coincidences, so that we have directional information. We choose for $\mathrm{He^{2+}}$, the most abundant ion in the solar wind \citep[][,ch. 6.1]{prlss_2004} as it also occurs in Range 0 and is easily recognizable in fig. \ref{fig:epq_rng0}.
+Unlike $\mathrm{He^{+}}$, $\mathrm{He^{2+}}$ can also be found at ESA steps higher than step 19, as it gains more energy when being post-accelerated due to the twice as high charge. Thus, $\mathrm{He^{2+}}$ deposits more likely energies above the threshold of the solid-state detector. 
+We selected $\mathrm{He^{2+}}$ with the same procedure as for $\mathrm{He^{+}}$. However, in this case it is not so crucial to include exactly every $\mathrm{He^{2+}}$ event, as we do not want to perform a full analysis with $\mathrm{He^{2+}}$. The resulting selection is shown in \ref{fig:cutouts}, below.
 \\ \\
 TODO: woher sind überhaupt die PHA Daten?\\
 %
