@@ -459,8 +459,22 @@ nucl$^{-1}$.
 @PhdThesis{lars-phd,
   author      = {Lars Berger},
   title       = {{Velocity Distribution Functions of Heavy Ions in the Solar Wind at 1 AU}},
-  institution = {Christian-Albrechts-Universität zu Kiel},
+  institution = {Christian-Albrechts-Universität zu Kiel, IEAP},
   year        = {2008},
+}
+
+@Article{1992A&AS...92..237B,
+  author   = {{Bame}, S.~J. and {McComas}, D.~J. and {Barraclough}, B.~L. and {Phillips}, J.~L. and {Sofaly}, K.~J. and {Chavez}, J.~C. and {Goldstein}, B.~E. and {Sakurai}, R.~K.},
+  title    = {{The ULYSSES solar wind plasma experiment}},
+  journal  = {Astronomy and Astrophysics Supplement Series},
+  year     = {1992},
+  volume   = {92},
+  number   = {2},
+  month    = {Jan},
+  pages    = {237-265},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/1992A&AS...92..237B},
+  keywords = {Interplanetary Medium, Solar Wind, Spaceborne Experiments, Ulysses Mission, Heliosphere, Radiation Counters, Solar Electrons, Solar Physics},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}
