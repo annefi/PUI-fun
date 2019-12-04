@@ -10,11 +10,9 @@
 
 
 
-In this chapter we combine the prepared SWICS data from chapter \ref{chapter:instrumentation} with position and orientation information of the Ulysses spacecraft with help of a model of the SWICS detector. \\
-Todo: (This way we can take the step from the directional incident information of a measured ion to its position in velocity space.) \\
-
-The virtual detector is modeled after the true geometry of the SWICS instrument. By taking into account 
-
+In this chapter we combine the prepared SWICS data from chapter \ref{chapter:instrumentation} with position and orientation information of the Ulysses spacecraft with help of a model of the SWICS detector. \\ \\
+\textbf{Todo}: \\(This way we can take the step from the directional incident information of a measured ion to its position in velocity space.) \\
+(...)\\
 In a first step the two main coordinate systems of this work are introduced.
 
 \section{Coordinate Systems}
@@ -54,14 +52,15 @@ OPT: Umrechnung von HG in RTN?
 %
 %
 \section{The Detector Model}
+
+\textbf{Intro TODO:} \\ \\
 With SWICS' measurement of detector and sensor (todo: Verweis Kapitel, vielleicht explizit schreiben...?) we can obtain directional information about the velocity of incident ions. However, a sec-det information alone is not sufficient to determine the ion's three dimensional velocity. Its meaning is highly dependent on SWICS' orientation and the eigen-velocity of the spacecraft. Additionally, SWICS' collimator is characterized by an intricate geometry, making an analytical solution of the problem difficult. \\
-Instead, we choose to use a virtual detector as a numerical approach. The initial idea of modelling the SWICS detector comes from Dr. Lars Berger who constructed a similar model for ACE SWICS. This work focusses on establishing the model for Ulysses SWICS.\\
+Instead, we choose to use a virtual detector as a numerical approach. The initial idea of modelling the SWICS detector comes from Dr. Lars Berger who constructed a similar model for ACE SWICS. This work focusses on establishing the model for Ulysses SWICS.\\ \\
+Kurze Zusammenfassung, was der virt. D. macht?
 
-
-
-Was macht das Modell? -- Ich will das FoV zu jedem Zeitpunkt bestimmen. Ich nehme dafür einzelne Messpunkte auf der originalen Geometrie. Dann gebe ich noch ins Modell, wie das gerade ausgerichtet ist.\\
-Berechnet anhand des AA, wohin Sun trigger schaut, wenn getriggert wird und rotiert coll. an entsprechende Position für Sek 0. Ordnet entsorechend andere Sektoren an.
-Simuliert FoV durch Punkteraster \\
+%Was macht das Modell? -- Ich will das FoV zu jedem Zeitpunkt bestimmen. Ich nehme dafür einzelne Messpunkte auf der originalen Geometrie. Dann gebe ich noch ins Modell, wie das gerade ausgerichtet ist.\\
+%Berechnet anhand des AA, wohin Sun trigger schaut, wenn getriggert wird und rotiert coll. an entsprechende Position für Sek 0. Ordnet entsorechend andere Sektoren an.
+%Simuliert FoV durch Punkteraster \\
 
 
 %
@@ -77,7 +76,7 @@ Simuliert FoV durch Punkteraster \\
 		\centering
 		\includegraphics[width=1\linewidth]{Figures/col_vspace_normal.pdf}
 	\end{subfigure}
-	\caption{Todo: beides in FoV umwandeln und Vektorpfeile dran...?}
+	\caption{Todo: }
 	\label{fig:coll_FoV}
 \end{figure}
 \begin{figure}[h]
@@ -101,10 +100,10 @@ Simuliert FoV durch Punkteraster \\
 For reconstructing the velocity space that is observed by SWICS we need to know about the directions of incident particles that can enter the instrument. These directions are limited by the instrument's entrance system.
 \\
 The original geometry of the SWICS entrance system, in particular the collimator, was read out from a technical drawing. To illustrate the intricate geometry, a photo of a 3D printed model of the entrance system is shown in fig. \ref{fig:3dcol}.\\
-The instrument is mounted with one of the collimator's narrow side edges parallel to Ulysses' spin axis. When we define this edge to be lying on the x-axis of a three dimensional Cartesian coordinate system, the collimator geometry can be reconstructed by revolving this edge for $90^\circ$ around a straight line that lies in the xy-plane with an angle of $56^\circ$ relative to the x-axis. \textbf{Todo: Zeichnung/Abbildung!} Every third of these $90^\circ$ is reserved as the opening angle for each of the three detector elements that are described in sec. \ref{sec:swics}. \\ \\
+The instrument is mounted with one of the collimator's narrow side edges parallel to Ulysses' spin axis. When we define this edge to be lying on the x-axis of a three dimensional Cartesian coordinate system, the collimator geometry can be reconstructed by revolving this edge for $90^\circ$ around a straight line that lies in the xy-plane with an angle of $56^\circ$ relative to the x-axis.  Every third of these $90^\circ$ is reserved as the opening angle for each of the three detector elements that are described in sec. \ref{sec:swics}. \\ \\
 The detector's field of view is the solid angle over which the detector is sensitive to incoming particles.
 It can be represented by a set of outward directed normal vectors on the opening plane of the detector. In our model, we have a variable number $n_\mathrm{d}$ of these equidistant vectors which we can divide along the width and the height of the detector opening. The real continuous field of view is modelled better with an increasing number of normal vectors that cover the opening. \\
-Each of these normalized vectors $\mathrm{\mathbf{f_i}}$ has a unique direction $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ in position space. \textbf{(OPT: Plot, An example...)}
+Each of these normalized vectors $\mathrm{\mathbf{f_i}}$ has a unique direction $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ in position space.
 \\
 With a spin of the Ulysses spacecraft the fixedly mounted SWICS instrument is revolved around the spacecraft spin axis. One revolution of SWICS is divided up into eight sectors of approximately equal duration respectively of $45^\circ$ each (s. sec. \ref{sec_dataprod}). As the spacecraft is spinning continuously, also the field of view changes its rotation angle continuously. For our virtual detector we model this by rotating the field of view gradually over $n_\mathrm{sec}$ steps through every sector.\\
 The integrated field of view over one spin then comprises $n_\mathrm{FoV} = n_\mathrm{d} \cdot n_\mathrm{sec} \cdot 8$ single vectors $\mathrm{\mathbf{f_i}}$ which are directed symmetrically around the spin axis. An example is shown in fig. \ref{fig:coll_FoV}, right, for n = bla... .
@@ -114,12 +113,13 @@ The integrated field of view over one spin then comprises $n_\mathrm{FoV} = n_\m
 \subsubsection{From Field of View to Velocity Space}
 The detector's velocity acceptance can be calculated by combining the directional information from the field of view with the value of absolute velocity from the current ESA step. 
 \\
-A particle can only enter the detector when its absolute velocity is within the acceptance of the current EpQ step and when its inverted direction is within the detectors field of view. For a given acceptance velocity $v_i$ and a single field of view vector $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ the accepted velocity is
+A particle can only enter the detector when its absolute velocity is within the acceptance of the current EpQ step and when its inverted direction is within the detectors field of view. For a given acceptance velocity $v_i$, each field of view vector $\mathrm{\mathbf{f_i} = \begin{bmatrix}f_{x,i}\,f_{y,i}\,f_{z,i}\end{bmatrix}}'$ can be associated with an acceptance velocity vector
 \begin{align}
 \mathbf{v_i} = \begin{bmatrix}v_{R,i}\\v_{T,i}\\v_{N,i}\end{bmatrix} = - \begin{bmatrix}f_{x,i}\\f_{y,i}\\f_{z,i}\end{bmatrix} \cdot v_i.
 \label{eq:fov}
 \end{align}
-With consideration of the integrated field of view over one spacecraft spin the acceptance velocity for a distinct velocity $v_i$ consists of the combination of $n_\mathrm{FoV}$ discrete velocities (TODO: Schmissigeres Wort suchen. Velocity-Akzeptanzpunkte...?) which form a shell with radius $v_i$ in velocity space. (s. fig. TODO for v\_todo)
+The resulting acceptance of the fixed instrument for n = todo and v = todo is shown in fig. \ref{fig:coll_FoV}, left. \\
+With consideration of the integrated field of view over one spacecraft spin the acceptance velocity for a distinct velocity $v_i$ consists of the combination of $n_\mathrm{FoV}$ discrete velocities (TODO: Schmissigeres Wort suchen. Velocity-Akzeptanzpunkte...?) which form a shell with radius $v_i$ in velocity space, s. fig. \ref{fig:coll_FoV}, right, for v\_todo)
 \\ \\
 The central velocity for an ion of charge $q$ and mass $m$ at an ESA step with energy-per-charge $EpQ$ (in $keV/e$) is
 \begin{align*}
@@ -145,9 +145,7 @@ For determining the spacecraft's velocity we make use of the daily trajectory da
 \begin{align*}
 v_{SC,i} = \frac{ \begin{bmatrix}R_{i+1}\\T_{i+1}\\N_{i+1}\end{bmatrix}_i  - \begin{bmatrix}R_{i}\\T_{i}\\N_{i}\end{bmatrix}_i} {t_{i+1} - t_i}
 \end{align*}
-with $t_{i+1}$ being the time of the next trajectory data given, which is normally $t_i + 1\,\mathrm{d}$. Note, that the spacecrafts position at $t_{i+1}$ has to be considered in the RTN coordinate system that relates to the spacecraft's position at $t_i$. The resulting velocities in RTN coordinates are shown in fig. todo.
-\\
---Bewertung Größenordnung--
+with $t_{i+1}$ being the time of the next trajectory data given, which is normally $t_i + 1\,\mathrm{d}$. Note, that the spacecrafts position at $t_{i+1}$ has to be considered in the RTN coordinate system that relates to the spacecraft's position at $t_i$. The resulting velocities in RTN coordinates are shown in fig. \ref{fig:eigenv} and range between $-20\,\mathrm{km\,s^{-1}}$ and $35\,\mathrm{km\,s^{-1}}$.
 \\
 To correct the measured velocities for the spacecraft's eigen-velocity, we add the resulting velocity components to the velocity acceptance. Thus, for every instant in time the shells in fig. \ref{fig:coll_shells} are shifted a bit in velocity space based on the respective eigen-velocity.
 
@@ -245,7 +243,7 @@ To check for a potential fine adjustment we search for tendencies of the maximum
 \end{figure}
 \subsubsection{Transformation into $w$-space}
 With the considerations of eigen-velocity and orientation of Ulysses we can use the virtual detector for translating $\mathrm{He^{+}}$ PHA words into the three dimensional velocity space. Only when we have unfolded absolute velocities into its three components we can take the important step of transforming from a spacecraft frame of reference to a solar wind frame of reference. \\
-This can be done by subtracting the instantaneous solar wind speed in R-component from a velocity in the spacecraft frame: 
+This can be done by subtracting the instantaneous solar wind speed in R-component from a velocity in the spacecraft frame (TODO: Annahme radiale Abströmung): 
 \begin{align*}
 \mathbf{v_{i,sw}} = \begin{bmatrix}v_{R,i,sc}\\v_{T,i,sc}\\v_{N,i,sc}\end{bmatrix} - \begin{bmatrix}v_{sw}\\0\\0\end{bmatrix}
 \end{align*}
@@ -270,7 +268,7 @@ As we do not expect to measure the bulk of $\mathrm{He^{+}}$ at velocities $w_{S
 \begin{figure}[h]
 	\includegraphics[width=0.8\textwidth]{Figures/cov.pdf}
 	\centering
-	\caption{todo: Kollimatorbegrenzung einzeichnen. \\
+	\caption{todo: Kollimatorbegrenzung einzeichnen. Nur ein Ring?\\
 	w im sw-frame!}
 	\label{fig:cov}
 \end{figure}
@@ -308,19 +306,21 @@ This we can be rewritten as an expression for the average phase space density $\
 \begin{align*}
 \rho_{jk} &= \frac{N_{jk}}{V_{k}}.
 \end{align*}
-Notice, that $V_{k}$ is only dependent on the ESA step $k$, as the sector-detector elements span the same (absolute) phase space volume for one step.\\
-
-
-.
-When we want to measure more than one spin, it has to be considered, that the probability to detect an ion is dependent on the EpQ step. This behaviour can be described by the detection efficiency.\\ \\
-The detection efficiency can be considered in phase space normalisation by weighting the spanned phase space volume for every sector detector element with the efficiency of the respective EpQ step: 
+Notice, that $V_{k}$ is only dependent on the ESA step $k$, as the sector-detector elements span the same (absolute) phase space volume for one step.\\\\
+When we want to measure more than one spin, we need to consider, that the probability to detect an ion is dependent on the ESA step. This behaviour is described in sec. \ref{subsec:det_eff} as the detection efficiency.\\
+For phase space normalisation this is considered by weighting the spanned phase space volume for every sector detector element with the efficiency of the respective ESA step $\mathrm{eff}_k$: 
 \begin{align*}
-\rho_{jk} &= \frac{N_{jk}}{V_{k}\cdot eff_k}.
+\rho_{jk} &= \frac{N_{jk}}{V_{k}\cdot \mathrm{eff}_k}
 \end{align*}
+\\ \\
+\textbf{T O D O:}
+\\ \\
+Schreiben, dass das nur für kleine vsw-Fenster sinnvoll ist!
+\\ \\
 As the instrument covers different phase space volumes with varying aspect angle, changing parts of phase space volume are covered.
-However, we are actually interested in the average phase space density at a distinct volume element in phase space. This we get by dividing the counts in the volume element $v_i$ by the measured volume, both integrated over time and this volume. This means that we consider the time in which we we could have measured blaaaa.
+However, we are actually interested in the average phase space density at a distinct volume element $v_a$ in phase space. This we get by dividing the counts in the volume element $v_i$ by the measured volume, both integrated over time and this volume. This means that we consider the time in which we we could have measured blaa...
 \begin{align*}
-\rho_{v_a} = \frac{\iint\displaylimits_{t\,v_a} N \, dv dt}{\iint\displaylimits_{t\,v_a} V\,eff\,dv dt}
+\rho_{v_a} = \frac{\iint\displaylimits_{t\,v_a} N \, dv dt}{\iint\displaylimits_{t\,v_a} V\,\mathrm{eff}_k\,dv dt}
 \end{align*}
 
 

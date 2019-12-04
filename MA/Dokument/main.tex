@@ -38,6 +38,7 @@ headsepline, % Uncomment to get a line under the header
 consistentlayout, % Uncomment to change the layout of the declaration, abstract and acknowledgements pages to match the default layout
 ]{MastersDoctoralThesis} % The class file specifying the document structure
 
+
 \usepackage[utf8]{inputenc} % Required for inputting international characters
 \usepackage[T1]{fontenc} % Output font encoding for international characters
 
@@ -96,7 +97,11 @@ consistentlayout, % Uncomment to change the layout of the declaration, abstract 
 \group{{Research Group Name}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
 \faculty{{Faculty Name}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
 
+
+
+
 \AtBeginDocument{
+% \hypersetup{hidelinks} % uncomment for printing: unolors links and references
 \hypersetup{pdftitle=\ttitle} % Set the PDF's title to your title
 \hypersetup{pdfauthor=\authorname} % Set the PDF's author to your name
 \hypersetup{pdfkeywords=\keywordnames} % Set the PDF's keywords to your keywords
@@ -209,11 +214,8 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 
 % Include the appendices of the thesis as separate files from the Appendices folder
 % Uncomment the lines as you write the Appendices
-
+\include{Appendices/Appendix}
 %\include{Appendices/AppendixA}
-%\include{Appendices/AppendixB}
-%\include{Appendices/AppendixC}
-
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
