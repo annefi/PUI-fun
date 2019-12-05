@@ -83,7 +83,7 @@ consistentlayout, % Uncomment to change the layout of the declaration, abstract 
 %	THESIS INFORMATION
 %----------------------------------------------------------------------------------------
 
-\thesistitle{Thesis Title} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
+\thesistitle{Velocity Distribution Functions of Pickup Ions with Ulysses/SWICS} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
 \supervisor{Prof. Dr. Wimmer-Schweingruber} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
 \examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
 \degree{} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
@@ -162,7 +162,71 @@ consistentlayout, % Uncomment to change the layout of the declaration, abstract 
 
 \begin{abstract}
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
-The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too\ldots
+
+\textbf{Context:}
+\\
+Pickup ions (PUI) are former neutral atoms that are ionized (by a b or c) in the heliosphere. The neutral atom's origin is either the interstellar medium (interstellar PUI) or a source within the heliosphere (inner-source PUI).\\
+After ionization, the PUI's velocity distribution function (VDF) is shaped by interaction with the magnetized solar wind plasma. The general idea is that PUI are swept outwards with the solar wind and that their initially anisotropic VDF is rapidly deformed by different processes and conditions within the heliosphere. 
+The details of involved processes like PAS and C. are not completely understood to this day.
+A study of the evolution of the VDF helps us to understand the origin of PUI and interplanetary transport effects.\\
+
+
+While most observation of PUI are limited to 1D reduced velocity measurement in the spacecraft frame, crucial informations about the three-dimensional VDA are lost.  
+
+
+Most observations of PUI are limited to 1D reduced velocity measurements in the spacecraft frame, which are not sufficient to represent the three dimensional evolution of the PUIs VDF.
+
+
+
+-- The aim is to resolve the VDF in three dimensions and to transform it into the SW frame. 
+which then allows to \\ 
+.
+\\ \\
+\textbf{Methods:}\\
+In this Master thesis we analyze He+ PUI measured with the Solar Wind Ion Composition Spectrometer (SWICS) onboard the spacecraft Ulysses. SWICS is a time-of-flight mass spectrometer, that is able to determine the mass, mass-per-charge and energy of ions by independent measurements of the ion's energy-per-charge, time-of-flight and residual energy. Additionally, SWICS provides directional resolution of incident ions by a three-part division of the sensor and a sectorization of Ulysses' spin. 
+With this directional information a transformation from the measured absolute velocity into three dimensional velocity components can be performed.
+\\
+The thesis starts with an introduction into PUI, before the Ulysses mission and the instrument SWICS with its measurement principle are described.
+In the third chapter a virtual detector is introduced and utilized to translate the He+ Pulse Height Analysis data into three dimensional velocity components.
+To achieve this translation Ulysses' orientation in space and its eigen-velocity have been considered.
+In the final section the obtained three dimensional spectra are presented in different projections.
+
+
+
+.
+\\ \\
+-- Two prominent processes that influence the initial VDF are pitch angle scattering and energy exchange.   \\
+
+-- For understanding a) (transport) processes in the heliosphere and b) origin of the PUI it is necessary to Understand the details of how the VDF evolves\\
+Two prominent processes that may have a significant impact on the VDF are PAS and C., which are not completely understood to this day.
+
+These processes include e.g. pitch-angle scattering and ``cooling'' , which are not completely understood to this day \\
+%We utilize this directional information to analyse the Ulysses SWICS PUI data in three dimensions for the first time.
+%
+%Coordinate Systems are described
+%Virtual detector is constructed after the original geometry
+%Consider orientation and eigen-velocity of the spacecraft (crazy orbit)
+%normalization: phase space density
+%
+%---------
+%Using a virtual detector under consideration of Ulysses' orientation in space we 
+%
+%we combine this directional information with the orientation of Ulysses
+%to obtain 
+%
+%A virtual detector is utilized to combine absolute velocity measurements with the orientation of the instrument. 
+%Kombinieren diese Infos mit der Ausrichtung des SC
+
+
+
+
+
+
+
+
+
+
+
 \end{abstract}
 
 
@@ -199,7 +263,7 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 % Include the chapters of the thesis as separate files from the Chapters folder
 % Uncomment the lines as you write the chapters
 
-\include{Chapters/motivation}
+%\include{Chapters/motivation}
 \include{Chapters/theory}
 \include{Chapters/instrumentation} 
 \include{Chapters/data_ana}

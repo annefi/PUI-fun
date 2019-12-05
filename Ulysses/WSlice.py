@@ -70,6 +70,9 @@ class WSlice():
         self.txt_plane = self.ax.text(0.05, 1.05, '%s-plane'%r'$\rm{w_T-w_N}$', bbox = props, transform =
         self.ax.transAxes, ha = 'left', va = 'bottom')
         self.ax.set_aspect('equal')
+        self.ax.set_xticks(arange(-2,2.01,1))
+        self.ax.set_yticks(arange(-2, 2.01, 1))
+
         #self.txt_slice = self.ax.text(0.61, 1.05, 'Slice: %s' % '10', bbox = props, transform = self.ax.transAxes)
         self.txt_slice = self.ax.text(0.95,1.05, 'Slice: %s' % '10', bbox=props, transform=self.ax.transAxes,
                                       ha = 'right', va = 'bottom')
