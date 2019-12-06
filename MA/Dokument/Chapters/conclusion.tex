@@ -6,50 +6,100 @@
 
 
 
-The aim of this work was to resolve the VDF of He+ PUI in three dimensions.
-In a first step He+ data was selected from the raw Ulysses SWICS PHA data. He+ events were identified by analyzing SWICS' combined measurement of energy-per-charge, time-of-flight and residual energy.
-
-
-For resolving a three dimensional velocity bla SWICS' detector and sector informations were considered together with the orientation and eigen-velocity of Ulysses. In particular, 
-
-
-
-We utilized a virtual detector to combine the da
-
-\\
-Mithilfe des virtuellen Detektors können jetzt geeignete (Triples) PHA Worte in dreidimensionale Geschwindigkeitskomponenten übersetzt werden (vorher: nur Betrag. Jetzt: Komponenten).
-\\
-Versucht den Kollimator für Ulysses SWICS nachzubauen mit all seinen Feinheiten (Aspect Winkel, Sunpulser, Trajektorie, Geometrie, Eigengeschwindigkeit...)
+The aim of this work was to resolve the VDF of He+ PUI, measured by Ulysses/SWICS, in three dimensions.\\
+In a first step He+ data was selected from the raw Ulysses SWICS PHA data. He+ events were identified by analyzing SWICS' combined measurements of energy-per-charge, time-of-flight and residual energy.\\
+The key point was to combine these data with the complex geometry of SWICS' entrance system and the trajectory data of Ulysses. For realizing this, a virtual detector, following the original geometry of SWICS, was built in Python. The detector's velocity acceptance was reconstructed in multiple steps. While the absolute velocity of He+ ions followed from the energy-per-charge information, three dimensional components were obtained by SWICS' sector- and detector resolution. For the correct interpretation of these it was significant to consider the instrument's orientation. After having calculated this from data of Ulysses' and the Earth's orbit we were able to incorporate the spacecraft's aspect angle, SWICS' Orientation within the spacecraft's spin and Ulysses' eigen-velocity for every point in time.\\
+After a consistency check with solar wind He2+ we were able to translate He+ Triple Coincidences into three dimensional velocity components.
+A phase space normalization was necessary for translating counts into the physically relevant dimension (?) phase space density.
+Finally, we presented three dimensional velocity distributions using different projections. 
+\\ \\
+These newly created three dimensional data products can significantly contribute to a better understanding of PUI phase space transport. By the deconvolution of former 1D velocity spectra into directionally resolved spectra processes like wave-particle interactions can be understood in detail. An interesting finding is the in e.g. (ref drews) observed anisotropy in He+ PUI VDF that could be expanded with the help of the wide aperture of SWICS. 
+Ulysses' outstanding orbit that spans a wide range of solar radii suggests a study of modifications of the PUI VDF that are affected by transport processes in the heliosphere.
+In future, the presented method could also be adapted to other PUI than He+, e.g. 06+ or He2+ -- or even to solar wind ions. \\
 
 
 
-The thesis starts with an introduction into PUI, before the Ulysses mission and the instrument SWICS with its measurement principle are described. 
-Coordinate Systems are described
-Virtual detector is constructed 
-Consider orientation and eigen-velocity of the instrument
-Tested Virtual Detector
 
 
-Auflösung eingeschränkt
-Wir sind eingeschränkt auf schnellen SW
+%Oder Effekte zu analysieren, die evtl. eine radiale (Weg-) abhängigkeit haben. Dafür bietet sich Ulysses SWICS an wegen der Trajektorie, die eine weite Range überspannt. 
 
 
-aim: directional resolution of velocity of incident He ions
-SWICS data in its entirety
-together with
-Ulysses position and orientation 
 
-\\
-Für He+ durchgeführt weil PUIs dankbar mit breiter Verteilung für diese grobe Richtungsauflösung und He das häufigste PUI. Könnte man aber auch für andere PUIs machen! (he2+, O6+,...)
+%Diese Methodik (oder neu erzeugte 3D Datenprodukte) kann ganz entscheidend dazu beitragen, den Phasenraumtransport von PUI besser zu verstehen. 
+%Bisherige 1D Mesungen entfalten. Nur so kann man Prozesse wir Adiabatic Cooling, PAS im Detail zu verstehen.
+%Es bietet sich z.B. an, die vermutete weiter bestehende Torusverteilung (ref Drews) in Abhängigkeit des B-Feldes zu prüfen (weite Apertur von SWICS). 
+%In Zukunft könnte man diese Methode natürlich auch auf andere PUI anwenden oder sogar auf Sonnenwindionen (radiale Auflösung?).
+
+
+
+Die hier vorgestellte Analyse wurde exemplarisch an He+ PUI durchgeführt und es konnten erstmalig von SWICS gemessene 3d VDF verteilungen präsentiert werden. 
+
+ damit konnte zum ersten mal gezeigt werden, dass 
+Zum ersten Mal wurde die volle Information aus den SWICS he+ PUI Daten geholt und eine dreidimensionale Richtungsauflösung 
+
+.
+\\ \\
+(vorher: nur Betrag. Jetzt: Komponenten).
 
 
 
 \section{Outlook}
 \begin{itemize}
-	\item Efficiency müsste genau bestimmt werden: Dabei berücksichtigen, welcher Anteil unter den Threshold wandert. Evtl. überschätzen wir die Eff., wenn wir die interpolierten Werte von ACE/SWICS nehmen.
-	\item B-Feld-spezifische Untersuchung: Torus
-	\item Radialabhängigkeit: adiabatic Cooling, PA-Scattering
+	\item Für He+ durchgeführt weil PUIs dankbar mit breiter Verteilung für diese grobe Richtungsauflösung und He das häufigste PUI. Könnte man aber auch für andere PUIs machen! (he2+, O6+,...)
 	\item Sonnenwindanalyse: Ist zu breit. In Richtung Spin-Achse könnte man aber über die Schalen analysieren (Lars fragen: radial?)
+	
+	
 	
 \end{itemize}
 
+
+
+
+
+
+
+
+
+\textbf{Restriktions:}\\
+
+Auflösung eingeschränkt\\
+Wir sind eingeschränkt auf schnellen SW\\
+different assumptions: vsw nur radial\\
+Efficiency müsste genau bestimmt werden: Dabei berücksichtigen, welcher Anteil unter den Threshold wandert. Evtl. überschätzen wir die Eff., wenn wir die interpolierten Werte von ACE/SWICS nehmen.
+
+
+
+
+
+
+
+
+
+
+%Ein zentraler Punkt war es, diese Daten mit der komplexen Geometrie von SWICS Eingangssystem und den Trajektoriendaten von Ulysses zu verknüpfen.
+%Um diese Aufgabe zu lösen wurde ein virtueller Detektor in Python gebaut. 
+%Die Konstruktion der Geschwindigkeitsakzeptanz verlief in mehreren Schritten. 
+%Während der Geschwindigkeitsbetrag gemessener Teilchen aus der energy-per-charge Information folgt, konnte eine Richtungsauflösung aus der ebensfalls von SWICS bereit gestellten Sektor- und Detektorinformation rekonstruiert werden. 
+%Um die Sektor und Detektor Informationen richtig zu interpretieren, war es von großer Bedeutung, die Ausrichtung des Instruments mitzuberücksichtigen. 
+%Diese Information wurde gewonnen aus den Ulysses und Erd-Trajektoriendaten. 
+%Damit konnten der Aspekt Winkel, SWICS' Ausrichtung innerhalb des SC Spins und die Eigengeschwindigkeit für jeden Zeitpunkt berücksichtigt werden.
+%Mithilfe des virtuellen Detektors können jetzt geeignete (Triples) PHA Worte in dreidimensionale Geschwindigkeitskomponenten übersetzt werden, wobei die Funktionalität an dem Sonnenwindion He2+ getestet wurde.
+%Eine abschließende Phasenraumnormierung war/ist notwendig, um die Counts in die physikalisch relevante Größe Phasenraumdichte zu übersetzen. -- 
+%Anhand von verschiedenen Projektionen konnte schließlich gezeigt werden, dass wir damit in der Lage sind, dreidimensional aufgelöste VDFs zu erstellen.
+
+
+
+
+Versucht den Kollimator für Ulysses SWICS nachzubauen mit all seinen Feinheiten (Aspect Winkel, Sunpulser, Trajektorie, Geometrie, Eigengeschwindigkeit...)
+\\
+For resolving a three dimensional velocity bla SWICS' detector and sector informations were considered together with the orientation and eigen-velocity of Ulysses. In particular, \\
+
+The thesis starts with an introduction into PUI, before the Ulysses mission and the instrument SWICS with its measurement principle are described. 
+Coordinate Systems are described
+Virtual detector is constructed 
+Consider orientation and eigen-velocity of the instrument
+
+
+aim: directional resolution of velocity of incident He ions
+
+Dafür konnten nur Triple Coincidences genutzt werden -- Teilchen, die genug Energie hatten, um im Instrument eine Energiemessung auszulösen (nur so steht die Richtungsinformation zur Verfügung)
