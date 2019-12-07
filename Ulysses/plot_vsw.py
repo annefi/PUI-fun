@@ -50,7 +50,7 @@ vswbins = arange(200,1001,10)
 
 
 years = range(1993,2010)
-#years = range(1993,2007)
+
 H_col = zeros([vswbins.shape[0]-1, len(years)])
 sum_col = []
 
@@ -59,7 +59,7 @@ def loop():
     for iy, year in enumerate(years):
         try:
             vsw = load_year(y = year)
-            sum = vsw.sum()
+            sum = vsw.shape
             sum_col.append(sum)
             H, b = histogram(vsw, vswbins)
             H_col[:,iy] = H
@@ -86,11 +86,10 @@ def plot_v(norm = 'max'):
     ax.set_yticks(halfs, minor=True)
     ax.set_yticklabels(years, minor=True)
     for tick in ax.yaxis.get_minor_ticks():
-        tick.set_pad(8.)
+        tick.set_pad(14.)
         tick.tick1line.set_markersize(0)
         tick.tick2line.set_markersize(0)
         tick.label1.set_horizontalalignment('center')
-
 
     ax.set_yticks(yearbins)
     for i, s in enumerate(sum_col):

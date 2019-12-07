@@ -93,8 +93,8 @@ consistentlayout, % Uncomment to change the layout of the declaration, abstract 
 \subject{} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
 \keywords{} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
 \university{Christian-Albrechts-Universität zu Kiel} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
-\department{{Department or School Name}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
-\group{{Research Group Name}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
+\department{{Institut für Experimentelle und Angewandte Physik}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
+\group{{Arbeitsgruppe Extraterrestrische Physik}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
 \faculty{{Faculty Name}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
 
 
@@ -118,41 +118,70 @@ consistentlayout, % Uncomment to change the layout of the declaration, abstract 
 %----------------------------------------------------------------------------------------
 
 \begin{titlepage}
+	
 \begin{center}
+		
+	\HRule \\[0.4cm] % Horizontal line
+	{\huge \bfseries \ttitle\par}\vspace{0.4cm} % Thesis title
+	\HRule \\[1.5cm] % Horizontal line
+	
+	
+	\textsc{\LARGE Master Thesis}\\[8.9cm] % Thesis type
+	{\Large \authorname}\\[.2cm] % Author name - remove the \href bracket to remove the link
+	{\Large Dezember 2019}\\[1cm] % Date
+	
+	
 
-\vspace*{.06\textheight}
-{\scshape\LARGE \univname\par}\vspace{1.5cm} % University name
-\textsc{\Large Master Thesis}\\[0.5cm] % Thesis type
 
-\HRule \\[0.4cm] % Horizontal line
-{\huge \bfseries \ttitle\par}\vspace{0.4cm} % Thesis title
-\HRule \\[1.5cm] % Horizontal line
- 
-\begin{minipage}[t]{0.4\textwidth}
-\begin{flushleft} \large
-\emph{Author:} \\
-{\authorname} % Author name - remove the \href bracket to remove the link
-\end{flushleft}
-\end{minipage}
-\begin{minipage}[t]{0.4\textwidth}
-\begin{flushright} \large
-\emph{Supervisor:} \\
-{\supname} % Supervisor name - remove the \href bracket to remove the link  
-\end{flushright}
-\end{minipage}\\[3cm]
- 
-\vfill
+	
+	\vfill
+	
 
-\large
-\groupname\\\deptname\\[2cm] % Research group name and department name
- 
-\vfill
+	{\Large \univname\\} % University name
+	{\Large \deptname\\\groupname\\[2cm]} % Research group name and department name
+	
+	\vfill
+	
+	
 
-{\large \today}\\[4cm] % Date
-%\includegraphics{Logo} % University/department logo - uncomment to place it
- 
-\vfill
+	
+	\vfill
 \end{center}
+%\begin{center}
+%
+%\vspace*{.06\textheight}
+%{\scshape\LARGE \univname\par}\vspace{1.5cm} % University name
+%\textsc{\Large Master Thesis}\\[0.5cm] % Thesis type
+%
+%\HRule \\[0.4cm] % Horizontal line
+%{\huge \bfseries \ttitle\par}\vspace{0.4cm} % Thesis title
+%\HRule \\[1.5cm] % Horizontal line
+% 
+%\begin{minipage}[t]{0.4\textwidth}
+%\begin{flushleft} \large
+%\emph{Author:} \\
+%{\authorname} % Author name - remove the \href bracket to remove the link
+%\end{flushleft}
+%\end{minipage}
+%\begin{minipage}[t]{0.4\textwidth}
+%\begin{flushright} \large
+%\emph{Supervisor:} \\
+%{\supname} % Supervisor name - remove the \href bracket to remove the link  
+%\end{flushright}
+%\end{minipage}\\[3cm]
+% 
+%\vfill
+%
+%\large
+%\groupname\\\deptname\\[2cm] % Research group name and department name
+% 
+%\vfill
+%
+%{\large \today}\\[4cm] % Date
+%%\includegraphics{Logo} % University/department logo - uncomment to place it
+% 
+%\vfill
+%\end{center}
 \end{titlepage}
 
 
@@ -163,44 +192,43 @@ consistentlayout, % Uncomment to change the layout of the declaration, abstract 
 \begin{abstract}
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
 
-\textbf{Context:}
-\\
-Pickup ions (PUI) are former neutral atoms that are ionized (by a b or c) in the heliosphere. The neutral atom's origin is either the interstellar medium (interstellar PUI) or a source within the heliosphere (inner-source PUI).\\
+
+Pickup ions (PUI) are former neutral atoms that are ionized in the heliosphere. The neutral atom's origin is either the interstellar medium (interstellar PUI) or a source within the heliosphere (inner-source PUI).\\
 After ionization, the PUI's velocity distribution function (VDF) is shaped by interaction with the magnetized solar wind plasma. The general idea is that PUI are swept outwards with the solar wind and that their initially anisotropic VDF is rapidly deformed by different processes and conditions within the heliosphere. 
-The details of involved processes like PAS and C. are not completely understood to this day.
-A study of the evolution of the VDF helps us to understand the origin of PUI and interplanetary transport effects.\\
-
-
-While most observation of PUI are limited to 1D reduced velocity measurement in the spacecraft frame, crucial informations about the three-dimensional VDA are lost.  
-
-
-Most observations of PUI are limited to 1D reduced velocity measurements in the spacecraft frame, which are not sufficient to represent the three dimensional evolution of the PUIs VDF.
-
-
-
--- The aim is to resolve the VDF in three dimensions and to transform it into the SW frame. 
-which then allows to \\ 
-.
-\\ \\
-\textbf{Methods:}\\
-In this Master thesis we analyze He+ PUI measured with the Solar Wind Ion Composition Spectrometer (SWICS) onboard the spacecraft Ulysses. SWICS is a time-of-flight mass spectrometer, that is able to determine the mass, mass-per-charge and energy of ions by independent measurements of the ion's energy-per-charge, time-of-flight and residual energy. Additionally, SWICS provides directional resolution of incident ions by a three-part division of the sensor and a sectorization of Ulysses' spin. 
-With this directional information a transformation from the measured absolute velocity into three dimensional velocity components can be performed.
+The details of involved mechanisms like e.g. pitch-angle scattering and adiabatic cooling are not completely understood to this day.
+A study of the evolution of the VDF helps us to understand the origin of PUI and of the underlying effects that shape the VDF.
 \\
+However, most observations of PUI are limited to 1D reduced velocity measurements in the spacecraft frame. Consequently, they do not allow for interpretations without making assumptions about the underlying VDF.
+%The aim is to resolve the VDF in three dimensions and to transform it into the SW frame. 
+\\
+In this Master thesis we want to develop a method for resolving data measured by the Solar Wind Ion Composition Spectrometer (SWICS) onboard the spacecraft Ulysses in three dimensions.
+SWICS is a time-of-flight mass spectrometer, that is able to determine the mass, mass-per-charge and energy of ions by independent measurements of the ion's energy-per-charge, time-of-flight and residual energy. Additionally, SWICS provides information on the inflow direction of incident ions by a three-part division of the sensor and a sectorization of Ulysses' spin. 
+For translating this information correctly into three dimensional velocity components it is necessary to consider Ulysses' orientation in space at any time of measurement.
+\\
+In this work, we utilize a virtual detector to perform a transformation from Ulysses SWICS PHA data into three dimensional velocity components on the example of He+ PUI.
+
+.\\ \\ \\ \\
+\\
+With this directional information a transformation from the measured absolute velocity  can be performed 
+He+!
 The thesis starts with an introduction into PUI, before the Ulysses mission and the instrument SWICS with its measurement principle are described.
 In the third chapter a virtual detector is introduced and utilized to translate the He+ Pulse Height Analysis data into three dimensional velocity components.
-To achieve this translation Ulysses' orientation in space and its eigen-velocity have been considered.
+To achieve this translation, Ulysses' orientation in space and its eigen-velocity have been considered.
 In the final section the obtained three dimensional spectra are presented in different projections.
 
 
 
-.
-\\ \\
--- Two prominent processes that influence the initial VDF are pitch angle scattering and energy exchange.   \\
 
--- For understanding a) (transport) processes in the heliosphere and b) origin of the PUI it is necessary to Understand the details of how the VDF evolves\\
-Two prominent processes that may have a significant impact on the VDF are PAS and C., which are not completely understood to this day.
+A virtual detector is utilized to combine absolute velocity measurements with the orientation of the instrument. 
 
-These processes include e.g. pitch-angle scattering and ``cooling'' , which are not completely understood to this day \\
+%.
+%\\ \\
+%-- Two prominent processes that influence the initial VDF are pitch angle scattering and energy exchange.   \\
+%
+%-- For understanding a) (transport) processes in the heliosphere and b) origin of the PUI it is necessary to Understand the details of how the VDF evolves\\
+%Two prominent processes that may have a significant impact on the VDF are PAS and C., which are not completely understood to this day.
+%
+%These processes include e.g. pitch-angle scattering and ``cooling'' , which are not completely understood to this day \\
 %We utilize this directional information to analyse the Ulysses SWICS PUI data in three dimensions for the first time.
 %
 %Coordinate Systems are described
@@ -263,7 +291,7 @@ These processes include e.g. pitch-angle scattering and ``cooling'' , which are 
 % Include the chapters of the thesis as separate files from the Chapters folder
 % Uncomment the lines as you write the chapters
 
-%\include{Chapters/motivation}
+\include{Chapters/introduction}
 \include{Chapters/theory}
 \include{Chapters/instrumentation} 
 \include{Chapters/data_ana}
@@ -295,21 +323,13 @@ These processes include e.g. pitch-angle scattering and ``cooling'' , which are 
 
 \begin{declaration}
 	\addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
-	\noindent I, \authorname, declare that this thesis titled,  and the work presented in it are my own. I confirm that:
+
+Hiermit erkläre ich, dass ich die vorliegende Masterarbeit selbständig und lediglich unter Benutzung der angegebenen Quellen und Hilfsmittel verfasst habe. Ferner versichere ich, dass die vorliegende Arbeit noch nicht im Rahmen eines anderen Prüfungsverfahrens eingereicht wurde. \\[1cm]
 	
-	\begin{itemize} 
-		\item This work was done wholly or mainly while in candidature for a research degree at this University.
-		\item Where any part of this thesis has previously been submitted for a degree or any other qualification at this University or any other institution, this has been clearly stated.
-		\item Where I have consulted the published work of others, this is always clearly attributed.
-		\item Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
-		\item I have acknowledged all main sources of help.
-		\item Where the thesis is based on work done by myself jointly with others, I have made clear exactly what was done by others and what I have contributed myself.\\
-	\end{itemize}
-	
-	\noindent Signed:\\
+	\noindent Ort, Datum:\\
 	\rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
-	
-	\noindent Date:\\
+	\\[0.5cm]
+	\noindent Unterschrift:\\
 	\rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
 \end{declaration}
 
