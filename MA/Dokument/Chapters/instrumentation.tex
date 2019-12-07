@@ -25,9 +25,9 @@ Some secondary objectives included e.g. the investigation of Jupiter's magnetosp
 For these aims Ulysses was equipped with a wide range of different instruments and antennas. One of the in situ instruments is the Solar Wind Ion Composition Spectrometer (SWICS), that will be described in the next section.\\
 A sketch of Ulysses' unique orbit is shown in figure \ref{fig:trajectory}.
 Ulysses was launched in October 1990 and left earth's gravitational field with $15.4\,\mathrm{km/s}$. Starting with a flyby manoeuvrer around Jupiter Ulysses was sent onto its highly elliptical orbit.
-With an orbital period of 6.2 years Ulysses completed nearly three orbits around the sun until communication was shut down in June 2009 due to the expiring of the radioisotope thermal generators.
+With an orbital period of 6.2 years Ulysses completed nearly three orbits around the sun until terminated in June 2009 due to the expiring of the radioisotope thermal generators.
 Within the mission's long lifetime the Sun's behaviour over its activity cycle of 22 years could be studied.\\
-Ulysses is a spin-stabilized spacecraft that spun at $5\,\mathrm{rpm}$. The spin axis is aligned with the high-gain antenna's electrical axis, that provided a communication link from the spacecraft to Earth. The downlink bitrate was variable with up to $1024\,\mathrm{bit/s}$ during real-time connection.
+Ulysses is a spin-stabilized spacecraft that spins at $5\,\mathrm{rpm}$. The spin axis is aligned with the high-gain antenna's electrical axis, that provided a communication link from the spacecraft to Earth. The downlink bitrate was variable with up to $1024\,\mathrm{bit/s}$ during real-time connection.
 \\ \\ 
 TODO: Importance PUIs?
 \begin{figure}[h]
@@ -67,7 +67,7 @@ TODO: Super für measuring PUIs! viele wichtige Messungen... \\ \\
 %
 %
 %
-SWICS measures the mass $m$, the charge $q$ and the energy $E$ of entering ions by a combination of three separate measurements: The electrostatic deflection analyzer within the entrance systems is used for determining the energy-per-charge of a particle. Within the time-of-flight/energy section the particle's time-of-flight and residual energy are measured. A more detailed description of the measurement is given in the next sections. A particle's trajectory through the instrument can be tracked in the schematic in fig. \ref{fig:lars_swics}.
+SWICS measures the mass $m$, the charge $q$ and the energy $E$ of entering ions by a combination of three separate measurements: The electrostatic deflection analyzer within the entrance systems is used for determining the energy-per-charge of a particle. Within the time-of-flight/energy section the particle's time-of-flight and residual energy are measured. A more detailed description of the measurement is given in the next sections. A particle's trajectory through the instrument is sketched in the schematic in fig. \ref{fig:lars_swics}.
 %
 \subsection{Collimator and Electrostatic Analyzer}
 \label{sec:EpQ}
@@ -96,7 +96,7 @@ Every step has a relative uncertainty in energy-per-charge of $\Delta \mathrm{Ep
 %
 %
 \subsection{Time-of-flight measurement}
-After having passed the electrostatic analyzer the ion is post-accelerated by an constant potential drop of ~$30\,\mathrm{kV}$. It enters the time-of-flight chamber with penetrating through a thin ($\sim 3\,\mu \mathrm{g / cm^2}$) carbon foil from which secondary electrons are emitted. These electrons are guided to a microchannel plate detector where a start signal is triggered (s. fig \ref{fig:lars_swics}). The stop signal is triggered after the ion has traversed nearly force free a distance of $10\,\mathrm{cm}$ through the vacuumized time-of-flight section. Here it hits one of the solid-state detectors, where secondary electrons are emitted again. By combining the times of the start and the stop signal the particle's time-of-flight has been measured.
+After having passed the electrostatic analyzer the ion is post-accelerated by a constant potential drop of $\sim 23\,\mathrm{kV}$. It enters the time-of-flight chamber penetrating a thin ($\sim 3\,\mu \mathrm{g / cm^2}$) carbon foil from which secondary electrons are emitted. These electrons are guided to a microchannel plate detector where a start signal is triggered (s. fig \ref{fig:lars_swics}). The stop signal is triggered after the ion has traversed nearly force free a distance of $10\,\mathrm{cm}$ through the vacuumized time-of-flight section. Here it hits one of the solid-state detectors, where secondary electrons are emitted again. By combining the times of the start and the stop signal the particle's time-of-flight has been measured.
 \subsection{Energy measurement}
 Additionally, the ion's energy is measured when they hit one of the three solid state detectors. \\
 A solid-state detector is realized by applying an inverse bias voltage to a semiconductor material. When ionized particles hit the material, they set free charge carriers from the resulting depletion zone. These charge carriers can be measured as a pulse of current which is proportional to the deposited energy of the ion. \\
@@ -155,7 +155,7 @@ For the highest energy-per-charge value $EpQ = 60.51\,\mathrm{keV}$ we interpola
 \subsection{Priority Weighting}
 \label{subsec:prio}
 SWICS' data processing unit performs an on-board mass and mass-per\--charge-clas\-sification. For every ion with valid measurements the mass $m$ and mass-per-charge $mpq$ are calculated based on the measurements of $E_{\mathrm{SSD}}$, $ToF$ and the particle's ESA step using a look-up-table technique.\\
-On the one hand these values are used for sorting the ions into predefined boxes in the $m$-$mpq$-space which yield in the so-called matrix rate, a second data product that is provided benath the PHA words.\\
+On the one hand these values are used for sorting the ions into predefined boxes in the $m$-$mpq$-space which yield in the so-called matrix rate, a second data product that is provided beside the PHA words.\\
 Secondly, and more important for our analysis, the m and mpq information is used to sort every measured ion into one of three priority ranges. Due to a limited telemetry possibly not every measured particle can be transmitted as a PHA word. 
 30 PHA words per spin are chosen from these ranges in way that the ratio of low and high priority PHA words is balanced. By this selection less abundant heavier ions are artificially enhanced which is necessary to recreate the measured composition from the transmitted PHA words. Table \ref{tab} shows a summary of this priority scheme. Details about this can be found in \citet{gloeckler_1992}.\\
 To account for the priority biased selection of PHA words it is necessary to weight the transmitted data with the so-called base-rate weight $brw = \frac{D_{\mathrm{PHA}}}{T_{\mathrm{PHA}}}$, where $T_{\mathrm{PHA}}$ is the number transmitted PHA words and $D_{\mathrm{PHA}}$ the number of detected particles on which this PHA word is based. The measured composition can be restored in this way.
@@ -224,7 +224,7 @@ The presented selection procedure has been performed on the complete data set fr
 %
 %
 \subsection{Selection of $\mathrm{He^{2+}}$}
-For testing the virtual detector in chapter \ref{chapter:data} we need a species of which we know that it mainly moves with the solar wind bulk and that occurs within the Triple Coincidences, so that we have directional information. We choose for $\mathrm{He^{2+}}$, the most abundant ion in the solar wind \citep[][,ch. 6.1]{prlss_2004} as it also occurs in Range 0 and is easily recognizable in fig. \ref{fig:epq_rng0}.
+For testing the virtual detector in sec. \ref{sec:consis} we need a species of which we know that it mainly moves with the solar wind bulk and that occurs within the Triple Coincidences, so that we have directional information. We choose for $\mathrm{He^{2+}}$, the most abundant ion in the solar wind \citep[][,ch. 6.1]{prlss_2004} as it also occurs in Range 0 and is easily recognizable in fig. \ref{fig:epq_rng0}.
 Unlike $\mathrm{He^{+}}$, $\mathrm{He^{2+}}$ can also be found at ESA steps higher than step 19, as it gains more energy when being post-accelerated due to the twice as high charge. Thus, $\mathrm{He^{2+}}$ deposits more likely energies above the threshold of the solid-state detector. 
 We selected $\mathrm{He^{2+}}$ with the same procedure as for $\mathrm{He^{+}}$. However, in this case it is not so crucial to include exactly every $\mathrm{He^{2+}}$ event, as we do not want to perform a full analysis with $\mathrm{He^{2+}}$. The resulting selection is shown in \ref{fig:cutouts}, below.
 \\ \\
