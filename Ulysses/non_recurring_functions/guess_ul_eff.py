@@ -78,7 +78,7 @@ def linear_guess():
 
 
     val0 = 0.2501016717412423
-    val17 = 0.0
+    val19 = 0.0
 
     epq_ul = array(
         [60.50781039, 56.31621253, 52.41498202, 48.78400405, 45.40455724, 42.2592171, 39.3317662, 36.60711056,
@@ -92,7 +92,7 @@ def linear_guess():
     def lin(x,m,b):
         return (m*x + b)
 
-    best_vals, covar = curve_fit(lin, [60.50781039,17.85605316], [val0, val17])
+    best_vals, covar = curve_fit(lin, [60.50781039,17.85605316], [val0, val19])
 
     ax.plot(epq_ace, eff_ace, marker='.', ms=10, c='lightsteelblue', label="ACE SWICS", linestyle="None")
 
@@ -110,13 +110,13 @@ def linear_guess():
     ax.set_xlim(-3, 91)
     ax.set_ylim(-0.015, 0.359)
 
-    # out = open('He1+_new.eff', 'w')
-    #
-    # for i in epq_ul:
-    #     eff_ul = lin(i, best_vals[0], best_vals[1])
-    #     out.write('%s' % i + '   ' + '%s\n' % eff_ul)
-    #
-    # out.close()
+    out = open('He1+_new.eff', 'w')
+
+    for i in epq_ul:
+        eff_ul = lin(i, best_vals[0], best_vals[1])
+        out.write('%s' % i + '   ' + '%s\n' % eff_ul)
+
+    out.close()
 
 
 

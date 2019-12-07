@@ -31,20 +31,30 @@ This is a result of the measurement and not a feature in the velocity distributi
 In fig todo we show the psd for another longer time period todo for slice todo at vsw todo. Here, the counts show a ring structure which vanishes by normalization. 
 The PSD in fig todo shows a similar distribution like the psd from the other time period, concentrated and symmetrical around central direction.
 \\ \\
-We can also choose another (polar) projection. For this we consider spherical shells of constant $w$ in sw frame. Visualization: fig todo: 2d projection of such a concentric shell around w = 0 is shown. Irgendwo Winkel einzeichnen oder erklären.
-Zeige beispielhaft Counts und PSV für Zeitraum todo... Auch hier zeigt sich (noch deutlicher) ein helles Feature, was der gebiasten Guckrichtung geschuldet ist. Wenn wir das mithilfe der Normalizierung wegmachen, sehen wir eine andere Verteilung. Für ISotropie müsste alles gleich gefüllt sein, ist es aber nicht.
-This projection is capable to visualize features like an anisotropic distribution like the rings, s. theorie
-\\ \\
-In fig todo haben wir die 3d Verteilung noch mehr runter projiziert: Auf 1D-Spektren. Das entsteht durch integration over spherical shells der Breite todo (für counts und psv). The histogram shows the average psd for shells of different radii.
-Wir haben zwei Zeiträume ausgewählt: bla und bla.
-Qualitativ ähnlich: CutOff, einigermaßen konstant bis etwa 0.5. Weiter können wir nicht gucken wegen Einschränkung der Coverage (?? vsw gleich? checken...)
+Of course we are not limited to the presented Cartesian projections.
+We can also choose a shell-wise projections. For this we consider spherical shells of constant $w$ in sw frame. Visualization: fig todo: 2d projection of such a concentric shell around w = 0 is shown. Irgendwo Winkel einzeichnen oder erklären.
 \\
-Qualitativ ist das auch mit Glöckler vergleichbar, allerdings auf einem ganz anderen Weg entstanden.
+Graue Fläche kurz erklären
+\\
+In Figs. \ref{fig:sky_counts} and \ref{fig:sky_norm} we show counts and integrated phase space volume in such a projection for $\mathrm{He^{+}}$ measurements from 50 days 1993, restricted to solar wind speeds from $760 \, \mathrm{km\,s^{-1}}$ to $780 \, \mathrm{km\,s^{-1}}$. The selected spherical shell comprises absolute $w$-values $0.85 <= w < 0.95$. Even more clearly than in bla clearly peaks at bla are apparent in both figures, which is due to the variation in observation time of distinct phase space volumes. The histogram of the corresponding phase space density, that excludes this effect, is shown in figure bla.
+This projection can become particularly suitable for the examination of the level of isotropy within a $w$-shell. Shapes like a torus distribution (ref PUI Kapitel) could be observed directly. For a completely isotropized shell we would expect an evenly colored projection in Fig todo. This is obviously not the case. Here, we find a structure of increased phase space density that is around $-60\,^\circ$ longitude for $\vartheta = 0\,^\circ$ and moves towards $\varphi = 0\,^\circ$ for higher latitudes.
+\\
+Unfortunately, we could not find clear structures that were constant over different periods of measurement. A possible reason for that could be that the detection efficiency in chap todo could only have been determined very vaguely. As the shell projection comprises measurements from different ESA steps (s. Zeichnung todo), an inaccurate efficiency weighting could either lead to a disappearance of real structures or even to an emerging of artificial ones. A detailed analysis of the detection efficiencies like it is shown in \citet{koeten} for ACE/SWICS is beyond the scope of this work but would be highly beneficial for future analyses.
 
 
+.
+\\ \\
+In Fig todo we show 1D projections of 3D VDF from measurements of two different years. In each year (1994, 1996) we analyzed $\mathrm{He^{+}}$ data from 100 days at solar wind speeds from $760 \, \mathrm{km\,s^{-1}}$ to $770 \, \mathrm{km\,s^{-1}}$. 
+
+For this projection we integrate both the counts and the phase space volume over spherical shells around $w=0$. In a 2D projection this can be visualized by a integration along a blue circle in Fig. todo. We combined values within the width $\Delta w = 0.1$ at different radii from $w = 0.25$ to $w = 1.05$. In Fig todo the histogram of the resulting PSD is shown.
+The histograms look qualitatively similar for both years. 
+We see a relatively broad distribution with a clear cutoff around $w = 1$ which corresponds to $w_{SC} = 2$ (Verweis PUI Kapitel). For smaller values of $w$ the distribution does not change over many magnitudes. 
 
 
-
+The spectra in Fig. todo are also in good qualitative agreement with the one in Fig.(todo:gloeckler). It should be noted that our spectra are limited to values $w > 0.25$, while the spectrum in todo is continued down to values $w_{SC} < 1$, which corresponds to values $w < 0$ in solar wind frame. 
+In sec todo we have seen that He+ Triple Coincidences can only be measured for distinct $w$-values above a limit that is dependant on the solar wind speed but hardly smaller than $w = 1$. This shows that the spectrum in Fig.(todo:gloeckler) is not based on solely Triple Coincidences but also on He+ Double Coincidences. As Double Coincidences lack an energy measurement in the solid-state detector and thus a directional resolution, the spectrum can only result from an integration along different ESA shells that is projected onto a distinct possible value.
+\\
+Although the spectra look similar we want to emphasize that the spectrum in Fig. todo results from a very different approach as we show projected cuts through an actual three dimensional velocity distribution.
 
 \clearpage
 \subsection{Slices}
@@ -140,19 +150,19 @@ Qualitativ ist das auch mit Glöckler vergleichbar, allerdings auf einem ganz an
 	\includegraphics[width=1\textwidth]{Figures/sky_counts.pdf}
 	\centering
 	\caption{todo}
-	\label{fig:todo}
+	\label{fig:sky_counts}
 \end{figure}
 \begin{figure}[h]
 	\includegraphics[width=1\textwidth]{Figures/sky_norm.pdf}
 	\centering
 	\caption{todo}
-	\label{fig:todo}
+	\label{fig:sky_norm}
 \end{figure}
 \begin{figure}[h]
 	\includegraphics[width=1\textwidth]{Figures/sky_ps.pdf}
 	\centering
 	\caption{todo}
-	\label{fig:todo}
+	\label{fig:sky_psd}
 \end{figure}
 %
 %
@@ -167,7 +177,6 @@ Qualitativ ist das auch mit Glöckler vergleichbar, allerdings auf einem ganz an
 	\label{fig:todo}
 \end{figure}
 
-Echte Schnitte durch v-verteilung, nicht aufaddierte Projektion!
 %
 %
 %

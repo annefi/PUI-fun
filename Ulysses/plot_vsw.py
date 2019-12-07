@@ -28,7 +28,7 @@ matplotlib.rcParams.update({'font.size': 12,
 
 
 def load_year(y):
-    d1 = uswipha(year=y, tf=[[1,366]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
+    d1 = uswipha(year=y, tf=[[1,366]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he/')
     d1.sync_swoops()
     #d1.sync_traj()
     d1.set_mask('Master', 'rng', 0, 0, reset=True)
@@ -49,7 +49,7 @@ def load_year(y):
 vswbins = arange(200,1001,10)
 
 
-years = range(1993,2010)
+years = range(1991,2010)
 
 H_col = zeros([vswbins.shape[0]-1, len(years)])
 sum_col = []
