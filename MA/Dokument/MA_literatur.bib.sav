@@ -1,0 +1,553 @@
+% Encoding: UTF-8
+
+@Article{mccomas_2004,
+  author   = {McComas, D. J. and Schwadron, N. A. and Crary, F. J. and Elliott, H. A. and Young, D. T. and Gosling, J. T. and Thomsen, M. F. and Sittler, E. and Berthelier, J.-J. and Szego, K. and Coates, A. J.},
+  title    = {The interstellar hydrogen shadow: Observations of interstellar pickup ions beyond Jupiter},
+  journal  = {Journal of Geophysical Research: Space Physics},
+  year     = {2004},
+  volume   = {109},
+  number   = {A2},
+  doi      = {10.1029/2003JA010217},
+  eprint   = {https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2003JA010217},
+  url      = {https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2003JA010217},
+  abstract = {This study analyzes the first direct, mass-resolved observations of heliospheric pickup ions beyond the orbit of Jupiter. The Cassini Plasma Spectrometer observes H+, He+, He++, and O+ pickup ions of interstellar origin between 6.4 and 8.2 AU. Cassini's trajectory carries it through the downstream direction where we observe enhancements in the pickup He consistent with gravitational focusing by the Sun. We also show the first in situ observations of an “interstellar hydrogen shadow” where pickup H is depleted in the region behind the Sun relative to the local interstellar flow. Most H atoms cannot penetrate into this downstream shadow region both because the outward force due to radiation pressure exceeds gravitational attraction at this time and because H atoms trying to enter the shadow must pass close by the Sun where they have a high probability of being ionized and swept out with the solar wind.},
+  keywords = {interstellar hydrogen shadow, Jupiter, Cassini, pickup ions, heliosphere, hydrgen},
+}
+
+@Article{kallenbach_2000,
+  author   = {Kallenbach, R. and Geiss, J. and Gloeckler, G. and von Steiger, R.},
+  title    = {Pick-up Ion Measurements in the Heliosphere -- A Review},
+  journal  = {Astrophysics and Space Science},
+  year     = {2000},
+  volume   = {274},
+  number   = {1},
+  month    = {Oct},
+  pages    = {97--114},
+  issn     = {1572-946X},
+  doi      = {10.1023/A:1026587620772},
+  url      = {https://doi.org/10.1023/A:1026587620772},
+  abstract = {Measurements of the composition and spatial distribution of pick-up ions inside the heliosphere are reviewed. The first interstellar 4He+pick-up ions were detected with the SULEICA instrument on the AMPTE spacecraft near Earth's orbit. Most data on pick-up ions were taken in the solar-wind and suprathermal energy range of SWICS on Ulysses while the spacecraft cruised from 1.4 to 5.4 AU and explored the high-latitude heliosphere and solar wind from the ecliptic to {\textpm} 80{\textdegree} heliolatitude. This includes the discovery of H+, 4He++, 3He+, N+,O+, and Ne+ pick-up ions that originate from the interstellar neutralgas penetrating the heliosphere. From their fluxes properties of the interaction region between the heliosphere and the Local Interstellar Cloud such as the limits on filtration and the strength of the interstellar magnetic field have been revealed. Detailed analysis of the velocity distributions of pick-up ions led to 1) the discovery of a new distinct source, the so-called Inner Source, consisting of atoms released from interstellar and interplanetary dust inside the heliosphere, 2) the determination of pick-up ion transport parameters such as the long mean free path for pitch-angle scattering of order1 AU, and 3) detailed knowledge on the very preferential injection and acceleration of pick-up ions during interplanetary energetic particle events such as Co-rotating Interaction Regions and Coronal Mass Ejections. SWICS measurements have fully confirmed the theory of Fisk, Koslovsky, and Ramaty that pick-up ions derived from the interstellar gas are the dominant source of the Anomalous Cosmic Rays; they are pre-accelerated inside the heliosphere and re-accelerated at the solar-wind Termination Shock according to Pesses, Eichler, and Jokipii. The data indicate that the Inner Source of pick-up ionsis largely responsible for the occurence of C+ in the Anomalous Cosmic Rays. The abundances of recently discovered Inner-Source Mg+ and Si+ are solar-wind like and consistent with their abundances in the energetic particles associated with Co-rotating Interaction Regions. Knowledge on the injection and acceleration processes in Co-rotating Interaction Regions is applied to discuss the current observational evidence for the Interplanetary Focusing Cone of the interstellar neutral gas due to the Sun's gravitational force. The 25--150 keV/amu suprathermal 4He+ pick-up ion fluxes measured by CELIAS/STOF on board SOHO over 360{\textdegree} of ecliptic longitude represent a `local' ionization and acceleration of interstellar atoms at 1 AU or smaller heliocentric distances. Completing the first limited data set of SULEICA/AMPTE on 4He+ pick-up ions they indicate a density enhancement in the Interplanetary Focusing Cone which is confirmed by recent SWICS/ACE data. Clear evidence for signatures in ecliptic longitude are found in the data on energetic neutral H fluxes observed with the CELIAS/HSTOF sensor on board SOHO. These fluxes are enhanced in the upstream and downstream directions of the interstellar wind. Detection of energetic H atoms, which propagate unaffected by the Heliospheric Magnetic Field, provided for the first time a diagnostic tool for observations near Earth to analyze the structure in ecliptic longitude of the interface region between the heliosphere and the Local Interstellar Cloud.},
+  day      = {01},
+  keywords = {Review, PUI, hydrogen},
+}
+
+@Article{moebius_nature_85,
+  author   = {Möbius, E. and Hovestadt, D. and Klecker, B. and Scholer, G. and Gloeckler, G.},
+  title    = {Direct observation of He+ pick-up ions of interstellar origin in the solar wind},
+  journal  = {nature},
+  year     = {1985},
+  volume   = {318},
+  issue    = {6045},
+  pages    = {426–429},
+  doi      = {10.1038/318426A0},
+  abstract = {Singly-ionized helium with a velocity distribution extending up to double the solar wind velocity has been detected in interplanetary space. This distribution unambiguously determines the source: interstellar neutrals, ionized and accelerated in the solar wind. The observed significant flux increase in early December is due to the gravitational focusing of the interstellar neutral wind on the downwind side of the Sun.},
+  keywords = {history PUI},
+}
+
+@Article{vasyl_siscoe_1976,
+  author   = {Vasyliunas, V. M. and Siscoe, G. L.},
+  title    = {On the flux and the energy spectrum of interstellar ions in the solar system},
+  journal  = {Journal of Geophysical Research (1896-1977)},
+  year     = {1976},
+  issue    = {7},
+  abstract = {The flux density of ions created by ionization of interstellar neutral particles in the solar system and picked up by the solar wind is calculated as a function of the neutral particles. A very broad maximum occurs at an angle of 0 and a distance that depends on the density and speed of the neutral particles and on the ionization time but is typically in the general region of 10 AU. For atomic hydrogen the flux density is estimated to exceed 104 cm?2 s?1 over the distance range from a few to nearly 100 AU. The velocity space distribution of the interstellar ions is calculated under the assumption of no significant energy diffusion but with inclusion of adiabatic effects as well as a possible strong pitch angle diffusion. The energy spectrum is highly nonthermal and much broader than that of the solar wind ions; under the assumed conditions, interstellar protons are easily distinguishable from solar wind protons by their location in velocity space. If charge exchange is an important contributor to the ionization of hydrogen, the observed local intensity of interstellar protons should exhibit time variations correlated with the density changes of the solar wind stream structure.},
+  keywords = {history, hydrogen, PUI, anisotropy, solarwind},
+}
+
+@Book{aschwanden_book,
+  author   = {Markus Aschwanden},
+  title    = {Physics of the Solar Corona},
+  year     = {2005},
+  keywords = {solarwind},
+}
+
+@Article{geiss_1995b,
+  author   = {J. Geiss and G. Gloeckler and R. von Steiger},
+  title    = {Origin of the solar wind from composition data},
+  journal  = {Space Science Reviews},
+  year     = {1995},
+  volume   = {72},
+  number   = {1},
+  month    = {Apr},
+  pages    = {49--60},
+  issn     = {1572-9672},
+  doi      = {10.1007/BF00768753},
+  url      = {https://doi.org/10.1007/BF00768753},
+  abstract = {The ESA/NASA spacecraft Ulysses is making, for the first time, direct measurements in the solar wind originating from virtually all places where the corona expands. Since the initial two polar passes of Ulysses occur during relatively quiet solar conditions, we discuss here the three main regimes of quasi-stationary solar wind flow: the high speed streams (HSSTs) coming out of the polar coronal holes, the slow solar wind surrounding the HSSTs, and the streamers which occur at B-field reversals. Comparisons between H-$\alpha$ maps and data taken by Ulysses demonstrate that as a result of super-radial expansion, the HSSTs occupy a much larger solid angle than that derived from radial projections of coronal holes. Data obtained with SWICS-Ulysses confirm that the strength of the FIP effect is much reduced in the HSSTs. The systematics in the variations of elemental abundances becomes particularly clear, if these are plotted against the time of ionisation (at the solar surface) rather than against the first ionisation potential (FIP). We have used a superposed-epoch method to investigate the changes in solar wind speed and composition measured during the 9-month period in 1992/93 when Ulysses regularly passed into and out of the southern HSST. We find that the patterns in the variations of the Mg/O and O7+/O6+ ratios are virtually identical and that their transition from high to low values is very steep. Since the Mg/O ratio is controlled by the FIP effect and the O7+/O6+ ratio reflects the coronal temperature, this finding points to a connection between chromospheric and coronal conditions.},
+  day      = {01},
+  keywords = {solarwind, ulysses},
+}
+
+@Article{cranmer_2012,
+  author   = {Cranmer, Steven R.},
+  title    = {Self-Consistent Models of the Solar Wind},
+  journal  = {Space Science Reviews},
+  year     = {2012},
+  volume   = {172},
+  number   = {1},
+  month    = {Nov},
+  pages    = {145--156},
+  issn     = {1572-9672},
+  doi      = {10.1007/s11214-010-9674-7},
+  url      = {https://doi.org/10.1007/s11214-010-9674-7},
+  abstract = {The origins of the hot solar corona and the supersonically expanding solar wind are still the subject of much debate. This paper summarizes some of the essential ingredients of realistic and self-consistent models of solar wind acceleration. It also outlines the major issues in the recent debate over what physical processes dominate the mass, momentum, and energy balance in the accelerating wind. A key obstacle in the way of producing realistic simulations of the Sun-heliosphere system is the lack of a physically motivated way of specifying the coronal heating rate. Recent models that assume the energy comes from Alfv{\'e}n waves that are partially reflected, and then dissipated by magnetohydrodynamic turbulence, have been found to reproduce many of the observed features of the solar wind. This paper discusses results from these models, including detailed comparisons with measured plasma properties as a function of solar wind speed. Some suggestions are also given for future work that could answer the many remaining questions about coronal heating and solar wind acceleration.},
+  day      = {01},
+  keywords = {solarwind},
+}
+
+@Book{prlss_2004,
+  author    = {Gerd W. Prölss},
+  title     = {Physik des erdnahen Weltraums},
+  year      = {2004},
+  subtitle  = {Eine Einführung},
+  publisher = {Springer Berlin Heidelberg},
+  doi       = {10.1007/978-3-642-18807-7},
+}
+Query Results from the ADS Database
+
+
+Retrieved 1 abstracts, starting with number 1.  Total number selected: 1.
+
+@Article{chalov_1996,
+  author   = {Chalov, S. V. and Fahr, H. J.},
+  title    = {Reflection of Pre-Accelerated Pick-up Ions at the Solar Wind Termination Shock: The Seed for Anomalous Cosmic Rays},
+  journal  = {Solar Physics},
+  year     = {1996},
+  volume   = {168},
+  month    = oct,
+  pages    = {389-411},
+  doi      = {10.1007/BF00148064},
+  abstract = {It has been hypothesized for quite some time that interplanetary pick-up
+ions due to energization taking place in the region close to the solar
+wind termination shock, at some fraction and as an outcome of a
+complicated chain of processes, eventually are converted into species of
+the anomalous cosmic-ray particles. For the actual conversion efficiency
+it is of great importance to know the energy distribution of these
+pick-up ions upon their arrival at the shock. It turns out that
+pre-acceleration of these ions during their passage through the
+heliosphere shall substantially increase their chances to become
+reflected at the shock into the upstream direction which is a
+prerequisite for a further climb-up in energy by virtue of Fermi-1
+acceleration processes. In this paper we start out from stochastically
+pre-accelerated pick-up ions and investigate their behaviour at the
+shock. With the use of adiabatic approaches in the de Hoffman-Teller
+frame of the shock, we calculate the energy distribution function of the
+reflected part of pick-up ions. From the calculated distribution
+functions it turns out that the reflected ions in the average suffer an
+energy increase by about a factor of 10, still not enough to let them
+move off the shock by spatial diffusion in the upstream direction. Thus,
+since converted back into the shock, they can undergo repeated
+reflections and energy gains till the diffusion-convection limit is
+reached. As we show in addition, the reflection probability for pick-up
+ions is about a factor of 10 higher than expected from the present
+literature and strongly varies with the off-axis angle, pointing to the
+fact that the termination shock represents a surface with a
+three-dimensionally varying source strength for the production of
+anomalous cosmic rays. The ACR source pattern is also expected to vary
+during the solar cycle and the relevant injection energies are expected
+to be larger by factors of 10 to 100 than the canonically adopted 1 keV
+nucl$^{-1}$.
+},
+}
+
+@Article{chalov_1998,
+  author   = {S. V. Chalov and H. J. Fahr},
+  title    = {Phase space diffusion and anisotropic pick-up ion distributions in the solar wind: an injection study},
+  journal  = {Astronomy and Astrophysics},
+  year     = {1998},
+  volume   = {335},
+  month    = {Jul},
+  pages    = {746-756},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/1998A&A...335..746C},
+  keywords = {TURBULENCE, ACCELERATION OF PARTICLES},
+}
+
+@Article{chalov_1999,
+  author  = {S. V. Chalov and H. J. Fahr},
+  title   = {Signatures of the Interplanetary Helium Cone Reflected by Pick-up Ions},
+  journal = {Solar Physics},
+  year    = {1999},
+  volume  = {187},
+  number  = {1},
+  month   = {Jun},
+  pages   = {123-144},
+  doi     = {10.1023/A:1005176229228},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl  = {https://ui.adsabs.harvard.edu/abs/1999SoPh..187..123C},
+}
+
+@Article{gloeckler_1992,
+  author   = {{Gloeckler}, G. and {Geiss}, J. and {Balsiger}, H. and {Bedini}, P. and {Cain}, J.~C. and {Fischer}, J. and {Fisk}, L.~A. and {Galvin}, A.~B. and {Gliem}, F. and {Hamilton}, D.~C. and {Hollweg}, J.~V. and {Ipavich}, F.~M. and {Joos}, R. and {Livi}, S. and {Lundgren}, R.~A. and {Mall}, U. and {McKenzie}, J.~F. and {Ogilvie}, K.~W. and {Ottens}, F. and {Rieck}, W. and {Tums}, E.~O. and {von Steiger}, R. and {Weiss}, W. and {Wilken}, B.},
+  title    = {{The Solar Wind Ion Composition Spectrometer}},
+  journal  = {Astronomy \& Astrophysics Supplement Series},
+  year     = {1992},
+  volume   = {92},
+  number   = {2},
+  month    = {Jan},
+  pages    = {267-289},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/1992A&AS...92..267G},
+  keywords = {Interplanetary Medium, Mass Spectrometers, Plasma Composition, Satellite-Borne Instruments, Solar Wind Velocity, Ulysses Mission, Hydrogen Ions, Ion Charge, Ion Temperature, Metal Ions, Solar Protons, Spacecraft Instrumentation, SWICS},
+}
+
+@Booklet{swics_dpu,
+  author = {{SWICS DPU}},
+  editor = {F. Gliem and W. Rieck and H. Dinse},
+  year   = {1988},
+}
+
+@Article{drews_2013,
+  author   = {Christian Drews and Lars Berger and Robert F. Wimmer-Schweingruber and Antoinette B. Galvin},
+  title    = {Interstellar He$^{+}$ ring-beam distributions: Observations and implications},
+  journal  = {Geophysical Research Letters},
+  year     = {2013},
+  volume   = {40},
+  number   = {8},
+  month    = {Apr},
+  pages    = {1468-1473},
+  doi      = {10.1002/grl.50368},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/2013GeoRL..40.1468D},
+  keywords = {Pickup He$^{+}$, Interstellar Helium, Injection of Pickup Ion, He$^{+}$ Pitch Angle},
+}
+
+@Article{drews_2015,
+  author   = {Christian Drews and Lars Berger and Andreas Taut and Thies Peleikis and Robert F. Wimmer-Schweingruber},
+  title    = {2D He$^{+}$ pickup ion velocity distribution functions: STEREO PLASTIC observations},
+  journal  = {Astronomy \& Astrophysics},
+  year     = {2015},
+  volume   = {575},
+  eid      = {A97},
+  month    = {Mar},
+  pages    = {A97},
+  doi      = {10.1051/0004-6361/201425271},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/2015A&A...575A..97D},
+  keywords = {Sun: heliosphere, solar wind, plasmas, magnetic fields, scattering},
+}
+
+@Article{geiss_1995a,
+  author   = {Geiss, J. and Gloeckler, G. and Fisk, L. A. and von Steiger, R.},
+  title    = {C+ Pickup ions in the heliosphere and their origin},
+  journal  = {Journal of Geophysical Research: Space Physics},
+  year     = {1995},
+  volume   = {100},
+  number   = {A12},
+  pages    = {23373-23377},
+  doi      = {10.1029/95JA03051},
+  eprint   = {https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/95JA03051},
+  url      = {https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/95JA03051},
+  abstract = {C+ pickup ions were discovered with the solar wind ion composition spectrometer flying on Ulysses. Whereas the other nonlocally occurring pickup ions are produced from the interstellar gas penetrating deep into the heliosphere, C+ comes from an “inner source” which is located at a solar distance of a few AU and extends over all heliospheric latitudes investigated so far. The total production of C+, N+, and O+ by this inner source is of the order of 10−3 relative to the total production of O+ from the interstellar gas in the heliosphere. Thus the inner source does not significantly contribute to oxygen or nitrogen in the anomalous cosmic rays (ACR), but its contribution to ACR carbon may not be negligible. We propose that the inner source material is carbon compounds evaporating from grains. At this time, the evidence points to interstellar grains as the major source, but we do not want to exclude yet a contribution from grains of solar system origin.},
+}
+
+@Article{Frisch,
+  author  = {Frisch, Priscilla C. and Redfield, Seth and Slavin, Jonathan D.},
+  title   = {The Interstellar Medium Surrounding the Sun},
+  journal = {Annual Review of Astronomy and Astrophysics},
+  year    = {2011},
+  volume  = {49},
+  number  = {1},
+  month   = {Sep},
+  pages   = {237-279},
+  doi     = {10.1146/annurev-astro-081710-102613},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl  = {https://ui.adsabs.harvard.edu/abs/2011ARA&A..49..237F},
+}
+
+@Article{gloeckler2000_innersource,
+  author   = {Gloeckler, G. and Fisk, L. A. and Geiss, J. and Schwadron, N. A. and Zurbuchen, T. H.},
+  title    = {Elemental composition of the inner source pickup ions},
+  journal  = {Journal of Geophysical Research},
+  year     = {2000},
+  volume   = {105},
+  number   = {A4},
+  month    = {Apr},
+  pages    = {7459-7464},
+  doi      = {10.1029/1999JA000224},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/2000JGR...105.7459G},
+  keywords = {Interplanetary Physics: Pickup ions, Interplanetary Physics: Plasma waves and turbulence},
+}
+
+@Article{allegrini_2005,
+  author   = {Allegrini, F. and Schwadron, N. A. and McComas, D. J. and Gloeckler, G. and Geiss, J.},
+  title    = {Stability of the inner source pickup ions over the solar cycle},
+  journal  = {Journal of Geophysical Research},
+  year     = {2005},
+  volume   = {110},
+  number   = {A5},
+  eid      = {A05105},
+  month    = {May},
+  pages    = {A05105},
+  doi      = {10.1029/2004JA010847},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/2005JGRA..110.5105A},
+  keywords = {Interplanetary Physics: Pickup ions, Interplanetary Physics: Interplanetary dust, Planetary Sciences: Comets and Small Bodies: Dust, Planetary Sciences: Solar System Objects: Dust, pickup ions, inner source},
+}
+
+@Article{schwadron_2000,
+  author   = {Schwadron, N. A. and Geiss, J. and Fisk, L. A. and Gloeckler, G. and Zurbuchen, T. H. and von Steiger, R.},
+  title    = {Inner source distributions: Theoretical interpretation, implications, and evidence for inner source protons},
+  journal  = {Journal of Geophysical Research},
+  year     = {2000},
+  volume   = {105},
+  number   = {A4},
+  month    = {Apr},
+  pages    = {7465-7472},
+  doi      = {10.1029/1999JA000225},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/2000JGR...105.7465S},
+  keywords = {Interplanetary Physics: Interplanetary dust, Interplanetary Physics: Neutral particles, Interplanetary Physics: Pickup ions, Planetology: Comets and Small Bodies: Interactions with solar wind plasma and fields},
+}
+
+@Article{wimmer_2002,
+  author    = {Wimmer-Schweingruber, R. F. and Bochsler, P.},
+  title     = {On the Origin of Inner-Source Pickup Ions},
+  journal   = {Geophysical Research Letters},
+  year      = {2002},
+  volume    = {30},
+  number    = {2},
+  month     = {May},
+  pages     = {49-1 - 49-4},
+  adsnote   = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl    = {https://ui.adsabs.harvard.edu/abs/2002AGUSMSH22C..06W},
+  booktitle = {AGU Spring Meeting Abstracts},
+  keywords  = {2129 Interplanetary dust, 2152 Pickup ions},
+}
+
+@Article{schwadron_2015_ibex,
+  author   = {Schwadron, N. A. and Möbius, E. and Leonard, T. and Fuselier, S. A. and McComas, D. J. and Heirtzler, D. and Kucharek, H. and Rahmanifard, F. and Bzowski, M. and Kubiak, M. A. and Sokół, J. M. and Swaczyna, P. and Frisch, P.},
+  title    = {Determination of Interstellar He Parameters Using Five Years of Data from the IBEX: Beyond Closed Form Approximations},
+  journal  = {The Astrophysical Journal Supplement Series},
+  year     = {2015},
+  volume   = {220},
+  number   = {2},
+  eid      = {25},
+  month    = {Oct},
+  pages    = {25},
+  doi      = {10.1088/0067-0049/220/2/25},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/2015ApJS..220...25S},
+  keywords = {ISM: atoms, ISM: clouds, ISM: general, local interstellar matter},
+}
+
+@Article{oka_2002,
+  author   = {Oka, M. and Terasawa, T. and Noda, H. and Saito, Y. and Mukai, T.},
+  title    = {`Torus' distribution of interstellar helium pickup ions: Direct observation},
+  journal  = {Geophysical Research Letters},
+  year     = {2002},
+  volume   = {29},
+  number   = {12},
+  eid      = {1612},
+  month    = {Jun},
+  pages    = {1612},
+  doi      = {10.1029/2002GL015111},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/2002GeoRL..29.1612O},
+  keywords = {Interplanetary Physics: Pickup ions, Space Plasma Physics: Ionization processes, Space Plasma Physics: Transport processes, Interplanetary Physics: MHD waves and turbulence},
+}
+
+@Article{moebius_98,
+  author   = {Möbius, E. and Rucinski, D. and Lee, M. A. and Isenberg, P. A.},
+  title    = {Decreases in the antisunward flux of interstellar pickup He$^{+}$ associated with radial interplanetary magnetic field},
+  journal  = {Journal of Geophysical Research},
+  year     = {1998},
+  volume   = {103},
+  number   = {A1},
+  month    = {Jan},
+  pages    = {257-266},
+  doi      = {10.1029/97JA02771},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/1998JGR...103..257M},
+  keywords = {Interstellar Gas, Helium Ions, Interplanetary Magnetic Fields, Satellite Observation, Solar Wind, Ion Distribution, Magnetic Field Configurations, Ampte (Satellites), Ion Charge, Space Radiation, 2114 INTERPLANETARY PHYSICS; ENERGETIC PARTICLES, HELIOSPHERIC (7514), 2134 INTERPLANTARY MAGNETIC FIELDS, 2151 NEUTRAL PARTICLES, 2152 PICKUP IONS},
+}
+
+@Article{gloeckler_1995,
+  author   = {Gloeckler, G. and Schwadron, N. A. and Fisk, L. A. and Geiss, J.},
+  title    = {Weak pitch angle scattering of few MV rigidity ions from measurements of anisotropies in the distribution function of interstellar pickup H$^{+}$},
+  journal  = {Geophysical Research Letters},
+  year     = {1995},
+  volume   = {22},
+  number   = {19},
+  month    = {Jan},
+  pages    = {2665-2668},
+  doi      = {10.1029/95GL02480},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/1995GeoRL..22.2665G},
+  keywords = {Space Plasma Physics: Charged particle motion and acceleration, Space Plasma Physics: Transport processes, Space Plasma Physics: Wave/particle interactions, Interplanetary Physics: Interstellar gas},
+}
+
+@Article{wenzel_ulysses,
+  author  = {Wenzel, K. P. and Marsden, R. G. and Page, D. E. and Smith, E. J.},
+  title   = {The ULYSSES Mission},
+  journal = {Astronomy and Astrophysics Supplement},
+  year    = {1992},
+  volume  = {92},
+  month   = {Jan},
+  pages   = {207},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl  = {https://ui.adsabs.harvard.edu/abs/1992A&AS...92..207W},
+}
+
+@Online{esa_orbit,
+  author  = {{European Space Agency}},
+  title   = {ESA Website -- Ulysses Orbit},
+  year    = {2019},
+  url     = {https://www.cosmos.esa.int/web/ulysses/the-ulysses-orbit},
+  urldate = {2019-10-27},
+}
+
+@Online{ulysses-data-archive,
+  author  = {{Ulysses Final Archive}},
+  editor  = {{European Space Agency}},
+  year    = {2008},
+  url     = {http://ufa.esac.esa.int/ufa/#data},
+  urldate = {2019-08-01},
+}
+
+@Online{nasa-earth-coord,
+  author  = {{NASA HelioWeb}},
+  title   = {Heliocentric Trajectories for Selected Spacecraft, Planets, and Comets},
+  url     = {https://omniweb.gsfc.nasa.gov/coho/helios/heli.html},
+  urldate = {2019-06-01},
+}
+
+@Article{fraenz_harper,
+  author   = {{Fränz}, M. and {Harper}, D.},
+  title    = {{Heliospheric coordinate systems}},
+  journal  = {Planetary \& Space Science},
+  year     = {2002},
+  subtitle = {Corrected Version},
+  volume   = {50},
+  number   = {2},
+  month    = {Feb},
+  pages    = {217-233},
+  doi      = {10.1016/S0032-0633(01)00119-2},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/2002P&SS...50..217F},
+}
+
+@Manual{hiscale,
+  editor    = {T. Hunt-Ward and T.P. Armstrong},
+  title     = {Ulysses HISCALE Data Analysis Handbook},
+  year      = {1999},
+  publisher = {Fundamental Technologies, LLC},
+}
+
+@PhdThesis{koeten,
+  author      = {Muharrem Köten},
+  title       = {An improved efficiency model for ACE/SWICS - Determination of the carbon isotopic ratio 13 C/ 12 C in the solar wind from ACE/SWICS measurements},
+  institution = {Christian-Albrechts-Universität zu Kiel, IEAP},
+  year        = {2009},
+  date        = {2009-03},
+}
+
+@Article{stone_ace,
+  author  = {E. C. Stone and A. M. Frandsen and R. A. Mewaldt and E. R. Christian and D. Margolies and J. F. Ormes and F. Snow},
+  title   = {{The Advanced Composition Explorer}},
+  journal = {Space Science Reviews},
+  year    = {1998},
+  volume  = {86},
+  month   = {Jul},
+  pages   = {1-22},
+  doi     = {10.1023/A:1005082526237},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl  = {https://ui.adsabs.harvard.edu/abs/1998SSRv...86....1S},
+}
+
+@PhdThesis{lars-phd,
+  author      = {Lars Berger},
+  title       = {{Velocity Distribution Functions of Heavy Ions in the Solar Wind at 1 AU}},
+  institution = {Christian-Albrechts-Universität zu Kiel, IEAP},
+  year        = {2008},
+}
+
+@Article{bame_swoops,
+  author   = {{Bame}, S.~J. and {McComas}, D.~J. and {Barraclough}, B.~L. and {Phillips}, J.~L. and {Sofaly}, K.~J. and {Chavez}, J.~C. and {Goldstein}, B.~E. and {Sakurai}, R.~K.},
+  title    = {{The ULYSSES solar wind plasma experiment}},
+  journal  = {Astronomy and Astrophysics Supplement Series},
+  year     = {1992},
+  volume   = {92},
+  number   = {2},
+  month    = {Jan},
+  pages    = {237-265},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/1992A&AS...92..237B},
+  keywords = {Interplanetary Medium, Solar Wind, Spaceborne Experiments, Ulysses Mission, Heliosphere, Radiation Counters, Solar Electrons, Solar Physics},
+}
+
+@Misc{talk_etss,
+  author = {Andreas Taut and Lars Berger and Christian Drews and Duncan Keilbach and Eberhard Möbius and Martin A. Lee},
+  title  = {Presentation: Pickup Ion Transport Effects? Challenges in the Determination of the Interstellar Flow Longitude Using the Pickup Ion Cutoff},
+  year   = {2017},
+  date   = {30.05.2017},
+}
+
+@Article{isenberg,
+  author   = {Philip A. Isenberg},
+  title    = {{A hemispherical model of anisotropic interstellar pickup ions}},
+  journal  = {Journal of Geophysical Research},
+  year     = {1997},
+  volume   = {102},
+  number   = {A3},
+  month    = {Mar},
+  pages    = {4719-4724},
+  doi      = {10.1029/96JA03671},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/1997JGR...102.4719I},
+  keywords = {Interplanetary Physics: Pickup ions, Interplanetary Physics: Interstellar gas, Space Plasma Physics: Charged particle motion and acceleration, Space Plasma Physics: Kinetic and MHD theory},
+}
+
+@Article{fahr,
+  author  = {{Fahr}, H.~J.},
+  title   = {{Revisiting the theory of the evolution of pick-up ion distributions: magnetic or adiabatic cooling?}},
+  journal = {Annales Geophysicae},
+  year    = {2007},
+  volume  = {25},
+  number  = {12},
+  month   = {Dec},
+  pages   = {2649-2659},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl  = {https://ui.adsabs.harvard.edu/abs/2007AnGeo..25.2649F},
+}
+
+@Article{fahr_fichtner,
+  author   = {{Fahr}, H.~J. and {Fichtner}, H.},
+  title    = {{Pickup ion transport under conservation of particle invariants: how important are velocity diffusion and cooling processes?}},
+  journal  = {Astronomy \& Astrophysics},
+  year     = {2011},
+  volume   = {533},
+  eid      = {A92},
+  month    = {Sep},
+  pages    = {A92},
+  doi      = {10.1051/0004-6361/201116880},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/2011A&A...533A..92F},
+  keywords = {acceleration of particles, solar wind, scattering, diffusion},
+}
+
+@Book{kallenrode,
+  author    = {May-Britt Kallenrode},
+  title     = {Space Physics},
+  year      = {1998},
+  publisher = {Springer},
+}
+
+@Article{fisk_gloeckler2012,
+  author   = {Fisk, L. A. and Gloeckler, G.},
+  title    = {Particle Acceleration in the Heliosphere: Implications for Astrophysics},
+  journal  = {Space Science Reviews},
+  year     = {2012},
+  volume   = {173},
+  number   = {1},
+  month    = {Nov},
+  pages    = {433--458},
+  issn     = {1572-9672},
+  doi      = {10.1007/s11214-012-9899-8},
+  url      = {https://doi.org/10.1007/s11214-012-9899-8},
+  abstract = {There has been a remarkable discovery concerning particles that are accelerated in the solar wind. At low energies, in the region where the particles are being accelerated, the spectrum of the accelerated particles is always the same: when expressed as a distribution function, the spectrum is a power law in particle speed with a spectral index of −5, and a rollover at higher particle speeds that can often be described as exponential. This common spectral shape cannot be accounted for by any conventional acceleration mechanism, such as diffusive shock acceleration or traditional stochastic acceleration. It has thus been necessary to invent a new acceleration mechanism to account for these observations, a pump mechanism in which particles are pumped up in energy through a series of adiabatic compressions and expansions. The conditions under which the pump acceleration is the dominant acceleration mechanism are quite general and are likely to occur in other astrophysical plasmas. In this paper, the most compelling observations of the −5 spectra are reviewed; the governing equation of the pump acceleration mechanism is derived in detail; the pump acceleration mechanism is applied to acceleration at shocks; and, as an illustration of the potential applicability of the pump acceleration mechanism to other astrophysical plasmas, the pump mechanism is applied to the acceleration of galactic cosmic rays in the interstellar medium.},
+  day      = {01},
+}
+
+@Comment{jabref-meta: databaseType:biblatex;}

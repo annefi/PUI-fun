@@ -463,7 +463,7 @@ nucl$^{-1}$.
   year        = {2008},
 }
 
-@Article{1992A&AS...92..237B,
+@Article{bame_swoops,
   author   = {{Bame}, S.~J. and {McComas}, D.~J. and {Barraclough}, B.~L. and {Phillips}, J.~L. and {Sofaly}, K.~J. and {Chavez}, J.~C. and {Goldstein}, B.~E. and {Sakurai}, R.~K.},
   title    = {{The ULYSSES solar wind plasma experiment}},
   journal  = {Astronomy and Astrophysics Supplement Series},
@@ -475,6 +475,79 @@ nucl$^{-1}$.
   adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
   adsurl   = {https://ui.adsabs.harvard.edu/abs/1992A&AS...92..237B},
   keywords = {Interplanetary Medium, Solar Wind, Spaceborne Experiments, Ulysses Mission, Heliosphere, Radiation Counters, Solar Electrons, Solar Physics},
+}
+
+@Misc{talk_etss,
+  author = {Andreas Taut and Lars Berger and Christian Drews and Duncan Keilbach and Eberhard Möbius and Martin A. Lee},
+  title  = {Presentation: Pickup Ion Transport Effects? Challenges in the Determination of the Interstellar Flow Longitude Using the Pickup Ion Cutoff},
+  year   = {2017},
+  date   = {30.05.2017},
+}
+
+@Article{isenberg,
+  author   = {Philip A. Isenberg},
+  title    = {{A hemispherical model of anisotropic interstellar pickup ions}},
+  journal  = {Journal of Geophysical Research},
+  year     = {1997},
+  volume   = {102},
+  number   = {A3},
+  month    = {Mar},
+  pages    = {4719-4724},
+  doi      = {10.1029/96JA03671},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/1997JGR...102.4719I},
+  keywords = {Interplanetary Physics: Pickup ions, Interplanetary Physics: Interstellar gas, Space Plasma Physics: Charged particle motion and acceleration, Space Plasma Physics: Kinetic and MHD theory},
+}
+
+@Article{fahr,
+  author  = {{Fahr}, H.~J.},
+  title   = {{Revisiting the theory of the evolution of pick-up ion distributions: magnetic or adiabatic cooling?}},
+  journal = {Annales Geophysicae},
+  year    = {2007},
+  volume  = {25},
+  number  = {12},
+  month   = {Dec},
+  pages   = {2649-2659},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl  = {https://ui.adsabs.harvard.edu/abs/2007AnGeo..25.2649F},
+}
+
+@Article{fahr_fichtner,
+  author   = {{Fahr}, H.~J. and {Fichtner}, H.},
+  title    = {{Pickup ion transport under conservation of particle invariants: how important are velocity diffusion and cooling processes?}},
+  journal  = {Astronomy \& Astrophysics},
+  year     = {2011},
+  volume   = {533},
+  eid      = {A92},
+  month    = {Sep},
+  pages    = {A92},
+  doi      = {10.1051/0004-6361/201116880},
+  adsnote  = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl   = {https://ui.adsabs.harvard.edu/abs/2011A&A...533A..92F},
+  keywords = {acceleration of particles, solar wind, scattering, diffusion},
+}
+
+@Book{kallenrode,
+  author    = {May-Britt Kallenrode},
+  title     = {Space Physics},
+  year      = {1998},
+  publisher = {Springer},
+}
+
+@Article{Fisk2012,
+  author   = {Fisk, L. A. and Gloeckler, G.},
+  title    = {Particle Acceleration in the Heliosphere: Implications for Astrophysics},
+  journal  = {Space Science Reviews},
+  year     = {2012},
+  volume   = {173},
+  number   = {1},
+  month    = {Nov},
+  pages    = {433--458},
+  issn     = {1572-9672},
+  doi      = {10.1007/s11214-012-9899-8},
+  url      = {https://doi.org/10.1007/s11214-012-9899-8},
+  abstract = {There has been a remarkable discovery concerning particles that are accelerated in the solar wind. At low energies, in the region where the particles are being accelerated, the spectrum of the accelerated particles is always the same: when expressed as a distribution function, the spectrum is a power law in particle speed with a spectral index of −5, and a rollover at higher particle speeds that can often be described as exponential. This common spectral shape cannot be accounted for by any conventional acceleration mechanism, such as diffusive shock acceleration or traditional stochastic acceleration. It has thus been necessary to invent a new acceleration mechanism to account for these observations, a pump mechanism in which particles are pumped up in energy through a series of adiabatic compressions and expansions. The conditions under which the pump acceleration is the dominant acceleration mechanism are quite general and are likely to occur in other astrophysical plasmas. In this paper, the most compelling observations of the −5 spectra are reviewed; the governing equation of the pump acceleration mechanism is derived in detail; the pump acceleration mechanism is applied to acceleration at shocks; and, as an illustration of the potential applicability of the pump acceleration mechanism to other astrophysical plasmas, the pump mechanism is applied to the acceleration of galactic cosmic rays in the interstellar medium.},
+  day      = {01},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}
