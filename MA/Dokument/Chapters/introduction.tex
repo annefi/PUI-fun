@@ -5,72 +5,29 @@
 \label{chap:intro} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
 
-kurze Übersicht:
-was ist das Problem (Fragestellung), wie löse ich das, in dieser Arbeit wird das und das gemacht
-(A. etwas ausführlicher wdh.)
 
-Der Phasenraumtransport von PUI wurde bereits sehr detailliert modelliert. Bestätigung durch Messungen hängt aber zurück, da die Messungen häufig auf 1D reduziert sind.
-In dieser Arbeit soll ein Tool erstellt werden, das 3d auflösen kann auf Basis von Daten, die bisher nicht ausreichen ausgewertet wurden
-Tool bauen anhand for Ulysses/SWICS Daten. SWICS hat grobe Richtungsauflösung (Winkel angeben). 
+Understanding the physics behind interstellar PUI is of special interest as they give us a possibility to directly observe properties of the interstellar medium by in-situ measurements within the heliosphere. 
+Additionally, the observation of their VDF helps us to understand interplanetary transport as the evolution of their characteristic VDF shows signatures of the transport processes involved.
+\begin{figure}[h]
+	\includegraphics[width=0.8\textwidth]{Figures/sw_pui_gloeckler.png}
+	\centering
+	\caption{Phase space density for $\mathrm{He^{2+}}$, $\mathrm{He^{+}}$ and $\mathrm{H^{+}}$ against $w = \frac{v_\mathrm{ion}}{v_\mathrm{sw}}$ in the slow solar wind ($v_\mathrm{sw} = 375\,\mathrm{km\,s^{-1}}$). PUI distributions are clearly visible for all three species in the $w$ range between $\sim$ 1.5 and 2 followed by a cutoff at $w = 2$ and high-velocity tails. Solar wind distributions are represented by the dashed and solid curves for $\mathrm{He^{2+}}$ and $\mathrm{H^{+}}$. The figure is taken from \citet{gloeckler1999}.} 
+	\label{fig:gloeckler}
+\end{figure}
+Many studies on PUI VDF base on measurements of Ulysses/SWICS \citep[s.][]{gloeckler_geiss}.
+These studies were limited to 1D reduced observations in the spacecraft frame until today, as only the absolute values of velocities were considered.
+An example by \citet{gloeckler1999} is shown in Fig. \ref{fig:gloeckler}. Here we see the phase space density of three different pickup ion species drawn against $w$, which is the ion's velocity divided by the current solar wind speed. The pickup ions shows a non-Maxwellian distribution with a clear cutoff at w=2. While the distributions of He2+ and H+ are superimposed by the distribution of the solar wind ions around w=1, the distribution of He+ PUI is unveiled.  
+However, the actual PUI VDF is multi dimensional and cannot be reproduced from the reduced 1D measurement without making assumptions on the underlying distribution.
+Several 3D VDF may lead to the same 1D VDF when being reduced and thus every 1D measurement is ambiguous.
 
-
-
-Warum PUI?
-weil breite Verteilung. Ideale Population, um Werkzeuge zu tsten und anzuweneden
-(weil räumliche Auflösung halt doch nicht so toll ist: Winkelschritte von...)
-
-PUI differ from solar wind ions by a very non-Maxwellian Velocity Distribution Function. As this distribution is particularly broad, PUI are the perfect candidates for testing the METHOD and being studied with it.
-
-
-
-Ulysses
-weil viele PUI Studioen darauf aufgebaut haben
-kann radiale Entwicklung auflösen
-
-
-
-
-Motivation:
-Gloeckler zeigen
-Ohne Modellvorstellung kann man anhand dieses Spektrums...
-wurde nicht aus einer eindeutigen Verteilung erstellt
-
-Es gibt unendlich viele 3D-Modellfunktionen, die auf 1D reduziert so eine Kurve darstellen (Uneindeutigkeit der reduzierten Daten). Man verliert Informationen. Darum macht es keinen Sinn, 1D zu betrachten, wenn man die Möglichkeit hat, sich 3D anzuschauen. 
-
-***
-Zentrale Frage: Phasenraumtransport verstehen
-Und die gemachten Modelle, z:B auch Kühlen, verstehen.
-9) Trafo
-Logisch: Bezugsframe ist der Sonnenwind und kein künstlicher SC-Frame, d.h. wir müssen übergehen. Dafür brauchen wir aber die 3D Informationen
-
-...wie würde das in 3D aussehen?
-
-“Drews 2013: While the assumption of a fully isotropic He+ VDF would allow for the transition from the SC to a SW frame of reference even without knowing the three components of the He+ velocity vector, [...] a non isotropic He+ VDF [...] will result in a significant difference in shape and intensity of the observed spectra between the two frames of refrence,
-Man kann in 1D nicht die einzelnen Prozesse unterscheiden, die zu einer bestimmten Verteilung führen
-Warum sw frame?\\
-Warum brauchen wir 3D? Um das zu entfalten und dann den Frame wechseln zu können.
-
-
-
-
-
-Gliederung vorstellen
-
-
-\section{Loose Ends}
-Warum sw frame?\\
-Warum brauchen wir 3D? Um das zu entfalten und dann den Frame wechseln zu können.
-Oder Überkapitel Solar Physics?
-\\ \\
-Heliosphere: Grenze zu LISM
-\\ \\
-Solar Wind: Zusammensetzung, schneller und langsamer, high latitudes: less complex, constant in speed \\ \\
-B-Feldgleichung
-\\ \\
-Irgendwohin muss unbedingt Motivation, warum PUIs überhaupt interessant sind zu messen!
+As Ulysses SWICS is capable of resolving the inflow direction of incident ions, a three dimensional VDF can be obtained when taking into account all given information.
+The aim of this thesis is to make use of this information and to develop a tool to provide three-dimensional VDFs. 
+PUI differ from solar wind ions by a non-Maxwellian VDF. As this distribution is particularly broad, He+ PUI are the perfect candidates for testing the tool and for being studied with it.
 \\
-PU Process\\ \\\
-Instrument that is capable of measuring this distribution: large acceptance in absolute velocity, large variation and resolution in angles
+The thesis starts with an introduction into PUI, before the Ulysses mission and the instrument SWICS with its measurement principle are described. In the third chapter a virtual detector is developed to translate the raw He+ data into three dimensional velocity components. For this, SWICS' intrigue geometry has to be considered as well as Ulysses' orientation in space and its eigen-velocity. In the final section the obtained three dimensional spectra are presented in different projections.
+
+
+
 %%%
 %-------------------------------------------------------------
 %%%

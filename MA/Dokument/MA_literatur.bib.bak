@@ -534,7 +534,7 @@ nucl$^{-1}$.
   publisher = {Springer},
 }
 
-@Article{Fisk2012,
+@Article{fisk_gloeckler2012,
   author   = {Fisk, L. A. and Gloeckler, G.},
   title    = {Particle Acceleration in the Heliosphere: Implications for Astrophysics},
   journal  = {Space Science Reviews},
@@ -548,6 +548,32 @@ nucl$^{-1}$.
   url      = {https://doi.org/10.1007/s11214-012-9899-8},
   abstract = {There has been a remarkable discovery concerning particles that are accelerated in the solar wind. At low energies, in the region where the particles are being accelerated, the spectrum of the accelerated particles is always the same: when expressed as a distribution function, the spectrum is a power law in particle speed with a spectral index of −5, and a rollover at higher particle speeds that can often be described as exponential. This common spectral shape cannot be accounted for by any conventional acceleration mechanism, such as diffusive shock acceleration or traditional stochastic acceleration. It has thus been necessary to invent a new acceleration mechanism to account for these observations, a pump mechanism in which particles are pumped up in energy through a series of adiabatic compressions and expansions. The conditions under which the pump acceleration is the dominant acceleration mechanism are quite general and are likely to occur in other astrophysical plasmas. In this paper, the most compelling observations of the −5 spectra are reviewed; the governing equation of the pump acceleration mechanism is derived in detail; the pump acceleration mechanism is applied to acceleration at shocks; and, as an illustration of the potential applicability of the pump acceleration mechanism to other astrophysical plasmas, the pump mechanism is applied to the acceleration of galactic cosmic rays in the interstellar medium.},
   day      = {01},
+}
+
+@Article{gloeckler1999,
+  author  = {G. Gloeckler},
+  title   = {Observation of Injection and Pre-Acceleration Processes in the Slow Solar Wind},
+  journal = {Space Science Reviews},
+  year    = {1999},
+  volume  = {89},
+  month   = {Jul},
+  pages   = {91-104},
+  doi     = {10.1023/A:1005272601422},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl  = {https://ui.adsabs.harvard.edu/abs/1999SSRv...89...91G},
+}
+
+@Article{gloeckler_geiss,
+  author  = {George Gloeckler and Johannes Geiss},
+  title   = {Interstellar and Inner Source Pickup Ions Observed with SWICS on ULYSSES},
+  journal = {Space Science Reviews},
+  year    = {1998},
+  volume  = {86},
+  month   = {Jul},
+  pages   = {127-159},
+  doi     = {10.1023/A:1005019628054},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl  = {https://ui.adsabs.harvard.edu/abs/1998SSRv...86..127G},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}
