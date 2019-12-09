@@ -183,9 +183,9 @@ This also means that we can only transform a sector-detector measurement into a 
 \label{sec:consis}
 For checking if the considerations made before are reasonable and if the virtual detector works in the right way, we want to take a look at data of which we believe to know the velocity distribution function. Appropriate test data is the solar wind itself as it is believed to flow radially outwards from the Sun \citep[][,Ch. 6.1]{prlss_2004}. An ideal candidate within the solar wind is $\mathrm{He^{2+}}$ as the most abundant species. We can identify $\mathrm{He^{2+}}$ easily in Fig. \ref{fig:epq_rng0} and are provided with good statistics. Unlike protons, which are even more abundant in the solar wind, $\mathrm{He^{2+}}$ most likely deposits energy above the detector's threshold in the solid-state detector (s. Sec. \ref{subsec:det_eff}). This is because of its higher mass and the twice as high charge, which leads to a higher gain in energy by the post acceleration. Only when a particle triggers an $E_{\mathrm{SSD}}$ measurement (Triple Coincidence) we get a directional information about its velocity. Protons are most often measured as Double Coincidences except for suprathermal protons, for which the assumption of radial streaming must not hold true. For selecting $\mathrm{He^{2+}}$ we proceed like described in Sec. \ref{sec:etmatrices}.
 \\ \\
-In a first step we look at periods of time in which both aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ are small ($<\pm5^\circ$). For these PHA words we draw a histogram of their sector and detector information. The result can be seen in the left panel of Fig. \ref{fig:histdetsecaa}. The histogram shows that mainly the innermost detector is hit. This is the expected behavior when we imagine the instrument on a spacecraft that points directly to the Sun. A radially streaming flow then hits the instrument's detector that is oriented sunwards, which does not change with the spin of the spacecraft. This result is also consistent with the detector model for $\varphi_{\mathrm{asp}} = \vartheta_{\mathrm{asp}} = 0$ which is shown in fig. \ref{fig:coll_FoV}. A radial stream can be represented here by the black line which cuts through the velocity shell in its center, the region of the innermost detector.
+In a first step we look at periods of time in which both aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ are small ($<\pm5^\circ$). For these PHA words we draw a histogram of their sector and detector information. The result is shown in the left panel of Fig. \ref{fig:histdetsecaa}. The histogram shows that mainly the innermost detector is hit. This is the expected behavior when we imagine the instrument on a spacecraft that points directly to the Sun. A radially streaming flow then hits the instrument's detector that is oriented sunwards, which does not change with the spin of the spacecraft. This result is also consistent with the detector model for $\varphi_{\mathrm{asp}} = \vartheta_{\mathrm{asp}} = 0$ which is shown in fig. \ref{fig:coll_FoV}. A radial stream can be represented here by the black line which cuts through the velocity shell in its center, the region of the innermost detector.
 \\
-In a second step we examine a time period in which Ulysses had a substantial aspect angle. This is particularly the case for when Ulysses is near its perihelion, s. Fig \ref{fig:aa}. We choose for the second orbit, i.e. days 1-90 in 2001. For all $\mathrm{He^{2+}}$ PHA data from this time we again histogram sector and detector information, which is shown in the right panel of Fig. \ref{fig:histdetsecaa}. Compared to the left panel the maximum of counts is now shifted clearly towards a single sector, that is Sector No. 4, and to the central detector. This is consistent with the virtual detector in Fig. \ref{fig:col_aa}, where the aspect angle's quantity matches the one in the selected time period. Counts do not show up exclusively with this single sector-detector combination but slightly spread out over adjacent sector-detector elements. This is due to the fact that solar wind $\mathrm{He^{2+}}$ does not stream as an ideal beam but has a certain temperature, i.e. width \citep[][,ch. 6.1]{prlss_2004}.
+In a second step we examine a time period in which Ulysses has a substantial aspect angle. This is particularly the case for when Ulysses is near its perihelion, s. Fig~\ref{fig:aa}. We choose for the second orbit, i.e. days 1-90 in 2001. For all $\mathrm{He^{2+}}$ PHA data from this time we again histogram sector and detector information, which is shown in the right panel of Fig. \ref{fig:histdetsecaa}. Compared to the left panel the maximum of counts is now shifted clearly towards a single sector, that is Sector No. 4, and to the central detector. This is consistent with the virtual detector in Fig. \ref{fig:col_aa}, where the aspect angle's value matches the measured one in the selected time period. Counts do not show up exclusively with this single sector-detector combination but slightly spread out over adjacent sector-detector elements. This is due to the fact that solar wind $\mathrm{He^{2+}}$ does not stream as an ideal beam but has a certain temperature, i.e. width \citep[][,Ch. 6.1]{prlss_2004}.
 
 
 \begin{figure}
@@ -198,48 +198,45 @@ In a second step we examine a time period in which Ulysses had a substantial asp
 		\centering
 		\includegraphics[width=1\textwidth]{Figures/hist_sec_det_aa.pdf}
 	\end{subfigure}
-	\caption{Histogrammed sector and detector information of PHA counts. \textbf{Left panel:} 365 days from 1992, $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ limited to angles $<\pm5^\circ$. \textbf{Right panel:} DOY 1-90 from 2001  (large $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$).}
+	\caption{Histogrammed sector and detector information of $\mathrm{He^{2+}}$ PHA counts. \textbf{Left panel:} 365 days from 1992, $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ limited to angles $<\pm5^\circ$. \textbf{Right panel:} DOY 1-90 from 2001  (large $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$).}
 \label{fig:histdetsecaa}
 \end{figure}
-
-
-
-
+%
+%
 \subsubsection{Spin Reference Pulse}
 In the previous section it was observed that $\mathrm{He^{2+}}$ PHA counts accumulate around the central detector for large aspect angles. Still it needs to be examined how the sectors are oriented.\\
-As mentioned before, one spacecraft spin is divided into 8 sectors, starting with sector 0 and ending with sector 7. Every spin's start is defined newly by the ``spin reference pulse'' of Ulysses \citep{hiscale}. This pulse is triggered by a combination of four sun sensors which detect when the Sun crosses a plane that is spanned by the spacecraft's spin axis and the spacecraft's x-axis, which is a particular axis perpendicular to the spin axis. The spin reference pulse is not uniform over time as the position of the Sun relative to the spacecraft changes with varying aspect angle.\\
+As mentioned before, one spacecraft spin is divided into 8 sectors, starting with Sector 0 and ending with Sector 7. Every spin's start is defined newly by the ``spin reference pulse'' of Ulysses \citep{hiscale}. This pulse is triggered by a combination of four Sun sensors which detect when the Sun crosses a plane that is spanned by the spacecraft's spin axis and the spacecraft's x-axis, which is a particular axis perpendicular to the spin axis. The spin reference pulse is not uniform over time as the position of the Sun relative to the spacecraft changes with varying aspect angle.\\
 To extract correct directional information from a sector data product of an ion that has been detected by SWICS it is essential to know the relative orientation between SWICS' main axis and the x-axis on the spacecraft. In the virtual detector this is implemented as an angle against the spacecraft--Sun line by which the field of view is rotated around the spin axis.\\
-From the \citet[][p. 20-22]{swics_dpu} we know that the Sun pulse that triggers the beginning of Sector 0 is shifted by $180^\circ$ against SWICS' main axis, i.e. on the opposite side of Ulysses spin axis. This means that the spacecraft has to rotate for half a spin after the sun pulse until SWICS measures particles streaming radially from the Sun. However, it was possible to set a fine adjustment which would lead to an offset of the sun pulse from this center line up to $22.5^\circ$ \citet[][S.48]{swics_dpu}. Unfortunately, we do not know the value that has been chosen.
+From the \citet[][p. 20-22]{swics_dpu} we know that the Sun pulse that triggers the beginning of Sector 0 is shifted by $180^\circ$ against SWICS' main axis. This means that the spacecraft has to rotate for a half spin after the Sun pulse until SWICS measures particles streaming radially from the Sun. However, it was possible to set a fine adjustment which would lead to an offset of the sun pulse from this center line up to $22.5^\circ$ \citet[][p.48]{swics_dpu}. Unfortunately, we do not know the value that has been chosen.
 \\
 If we assumed a wrong angle, a particle beam coming from a fixed direction in a Sun-fixed frame would be linked to a different direction. But this shift between true and supposedly measured direction is not constant over aspect angles. If we then measured over a longer time period with various aspect angles, we would measure the beam as blurred in velocity space.
 \\
 To make sure our model uses the right angle, we again choose $\mathrm{He^{2+}}$ as a test population of which we assume a beam-like behaviour streaming radially from the Sun. Also, we can only look at time periods when the aspect angles were large and the maximum of $\mathrm{He^{2+}}$ counts occurs in the central or outermost detector. Only here we can clearly discriminate between single sectors. When measured in the innermost detector the slightly widened distribution of $\mathrm{He^{2+}}$ would spread across all sectors as they are close together here.
-From Fig. \ref{fig:histdetsecaa}, right panel, where we histogrammed $\mathrm{He^{2+}}$ PHA words at a sizeable aspect angle, we find that the data is in agreement with the overall idea of a Sun pulse that is issued a half spin before SWICS faces the Sun. If we believe the assumption that $\mathrm{He^{2+}}$ streams radially from the Sun, Sector 4, that is shifted by $180^\circ$ relative to Sector 0, contains the radial direction. 
-To check for a potential fine adjustment we search for tendencies of the maximum of counts sweeping to an adjacent sector. However, such a tendency that is consistent over time cannot be found. Thus, we proceed the analysis with the assumption that no crucial fine adjustment had been set. 
+From the right panel of Fig. \ref{fig:histdetsecaa}, where we histogrammed $\mathrm{He^{2+}}$ PHA words at a sizeable aspect angle, we find that the data is in agreement with the overall idea of a Sun pulse that is triggered a half spin before SWICS faces the Sun. If we believe the assumption that $\mathrm{He^{2+}}$ streams radially from the Sun, Sector 4, that is shifted by $180^\circ$ relative to Sector 0, contains the radial direction.\\ 
+To check for a potential fine adjustment we search for tendencies of the maximum of counts sweeping to an adjacent sector. However, such a tendency that is consistent over time cannot be found. Thus, we proceed the analysis with the assumption that no significant fine adjustment had been set. 
 %Zeigen: Für lange Zeiträume: $\mathrm{He^{2+}}$ kommt zentral. Für einzelne kurze: unterschiedlich.
 %Deshalb: grober Check von wegen Detektor geht gut. Für das Feintuning (180 Grad oder doch was anderes?) reichts aber nicht...
 \subsubsection{Transformation into $w$-space}
-With the considerations of eigen-velocity and orientation of Ulysses we can use the virtual detector for translating $\mathrm{He^{+}}$ PHA words into the three-dimensional velocity space. Only when we have unfolded absolute velocities into its three components we can take the important step of transforming from a spacecraft frame of reference to a solar wind frame of reference. \\
+With the considerations of eigen-velocity and orientation of Ulysses we can use the virtual detector for translating $\mathrm{He^{+}}$ PHA words into the three-dimensional velocity space. Only when we have unfolded absolute velocities into their three components we can take the important step of transforming from a spacecraft frame of reference to a solar wind frame of reference. \\
 Under the assumption that the solar wind streams basically radially this can be done by subtracting the instantaneous solar wind speed in R-component from a velocity in the spacecraft frame: 
 \begin{align*}
 \mathbf{v_{i,sw}} = \begin{bmatrix}v_{R,i,sc}\\v_{T,i,sc}\\v_{N,i,sc}\end{bmatrix} - \begin{bmatrix}v_{sw}\\0\\0\end{bmatrix}
 \end{align*}
-In a last step every component of the resulting vector is divided the by solar wind speed:
+In a last step every component of the resulting vector is divided by the solar wind speed:
 \begin{align*}
 \mathbf{w_{i,sw}} = \begin{bmatrix}v_{R,i,sw} / v_{sw}\\v_{T,i,sw} / v_{sw}\\v_{N,i,sw} / v_{sw}\end{bmatrix}
 \end{align*}
-By this, the transition from velocity space in the spacecraft frame to solar wind independent w space in solar wind frame of reference is made.
+By this, the transition from a velocity space in the spacecraft frame to a solar wind independent $w$-space in the solar wind frame of reference is made.
 %
 %
 %
 %
 \subsection{Velocity Space Coverage}
 \label{subsec:cov}
-When analyzing $\mathrm{He^{+}}$ PUI w-spectra with Ulysses SWICS, several effects have to be considered that limit the observable part of the w-space. The most obvious restriction results from the fixed geometry of the collimator (s. Sec. \ref{subsec:construction})) which allows to observe only a dome-shaped part of the w-space when considering the spin of the spacecraft and varying ESA steps. (However, this dome is not fixed in w-space for different orientations of the spacecraft.
-While the ever changing aspect angle of Ulysses introduces a complex subject to directional data analysis it also enlarges the integrated coverage of velocity space over time.)\\
-Furthermore, we have to deal with a limitation of the coverage in $w_R$-direction particularly for $\mathrm{He^{+}}$ triple coincidences. The observable range in ESA steps is 19 to 0, which for $\mathrm{He^{+}}$ corresponds to a limitation from $864\,\mathrm{km\,s^{-1}}$ to $1708\,\mathrm{km\,s^{-1}}$. While the upper limit is simply due to SWICS' highest possible ESA step, the lower limit is the lowest value for which $\mathrm{He^{+}}$ still has enough energy to overcome the threshold of the solid-state detector and thus can trigger a valid energy measurement (s. Sec. \ref{subsec:det_eff}).\\
-The w-range that is consequently covered is highly dependent on the prevalent solar wind speed. For $v_{sw} = 700 \,\mathrm{km/s}$ the absolute w in a spacecraft frame is limited to $1.2 < w_{SC} < 2.4$, whereas for slow solar wind at $v_{sw} = 300 \,\mathrm{km/s}$ the limitation is $2.9 < w_{SC} < 5.7$. 
-In Fig. \ref{fig:cov} an exemplary w-space coverage for $v_{sw} = 700 \,\mathrm{km/s}$ and no aspect angle is sketched.\\
+When analyzing $\mathrm{He^{+}}$ PUI w-spectra with Ulysses SWICS, several effects have to be considered that limit the observable part of the w-space. The most obvious restriction results from the fixed geometry of the collimator (s. Sec. \ref{subsec:construction}), which allows to observe only a dome-shaped part of the $w$-space when considering the spin of the spacecraft and varying ESA steps.\\ (However, this dome is not fixed in $w$-space for different orientations of the spacecraft. While the ever changing aspect angle of Ulysses introduces a complex subject to directional data analysis it also enlarges the integrated coverage of velocity space over time.)\\
+Furthermore, we have to deal with a limitation of the coverage in $w$ particularly for $\mathrm{He^{+}}$ triple coincidences. The observable range in ESA steps is 17 to 0, which for $\mathrm{He^{+}}$ corresponds to a limitation to velocities from $928\,\mathrm{km\,s^{-1}}$ to $1708\,\mathrm{km\,s^{-1}}$. While the upper limit is simply due to SWICS' highest possible ESA step, the lower limit is the lowest value for which $\mathrm{He^{+}}$ still has enough energy to overcome the threshold of the solid-state detector and thus can trigger a valid energy measurement (s. Sec.~\ref{subsec:det_eff}).\\
+The $w$-range that is consequently covered is highly dependent on the prevalent solar wind speed. For $v_{sw} = 700 \,\mathrm{km\,s^{-1}}$ the absolute w in a spacecraft frame is limited to $1.2 < w_{SC} < 2.4$, whereas for slow solar wind at $v_{sw} = 300 \,\mathrm{km\,s^{-1}}$ the limitation is $2.9 < w_{SC} < 5.7$. 
+In Fig. \ref{fig:cov} an exemplary w-space coverage for $v_{sw} = 700 \,\mathrm{km\,s^{-1}}$ and no aspect angle is sketched.\\
 As we do not expect to measure the bulk of $\mathrm{He^{+}}$ at velocities $w_{SC}>>2$, we are thus limited to time periods with fast solar wind.
 \begin{figure}[h]
 	\includegraphics[width=0.8\textwidth]{Figures/covv.pdf}
@@ -249,7 +246,7 @@ As we do not expect to measure the bulk of $\mathrm{He^{+}}$ at velocities $w_{S
 \end{figure}
 \\
 In this work solar wind speed data is used that has been measured by the instrument SWOOPS \citep[Solar Wind Observations Over the Poles of the Sun,][]{bame_swoops} on Ulysses. \\ 
-In Fig. \ref{fig:vsw_years} a histogram for occurring solar wind speeds is shown -- limited to times in which $\mathrm{He^{+}}$ triple coincidences were measured.  The number on the right indicates the total number of $\mathrm{He^{+}}$ PHA triple coincidence data that was received within the year. One can see the overall variation of the solar wind speed that is due to different latitudes of the spacecraft: When close to the poles of the Sun, Ulysses is exposed to the fast solar wind \citep{mccomas_2004}, which is the case for example in 1995. Also, the total number of received data decreases heavily towards years in which Ulysses approaches the orbit's aphelion, e.g. 1998 at the end of the first orbit. This is mainly an effect of pickup ion flux reduction that scales with $r_\odot^{-2}$ due to the expansion of the solar wind \citep[][,ch. 6.1]{prlss_2004}.
+In Fig. \ref{fig:vsw_years} a histogram for occurring solar wind speeds is shown -- limited to times in which at least one $\mathrm{He^{+}}$ Triple Coincidences PHA event has been transmitted. The number on the right indicates the total number of $\mathrm{He^{+}}$ PHA triple coincidence data that was received within the year. One can see the overall variation of the solar wind speed that is due to different latitudes of the spacecraft: When close to the poles of the Sun, Ulysses is exposed to the fast solar wind \citep{mccomas_2004}, which is the case for example in 1995. Also, the total number of received data decreases heavily towards years in which Ulysses approaches the orbit's aphelion, e.g. 1998 at the end of the first orbit. This is mainly an effect of pickup ion flux reduction that scales with $r_\odot^{-2}$ due to the expansion of the solar wind \citep[][,Ch. 6.1]{prlss_2004}.
 \begin{figure}[h]
 	\includegraphics[width=1\textwidth]{Figures/vsw_sum.pdf}
 	\centering
@@ -267,29 +264,29 @@ Counts $N_{jk}$ that have been measured in a phase space volume that has been co
 \begin{align*}
 N_{jk} &= \iiint\displaylimits_{v_{\varphi j}v_{\vartheta j}v_{R k}} \rho_{jk}	V_k	\,\,	d^3v,
 \end{align*}
-where $V_k = G \, \tau \, v_k$ is the spatial volume of the measurement with the geometrical factor $G = 0.0225 \,\mathrm{cm^2}$ (Dr. Lars Berger, personal communication), $\tau = 12/8\,\mathrm{s} = 1.5\,\mathrm{s}$, the time of the measurement in a single sector and $v_k$ the central velocity for $\mathrm{He^{+}}$ in the ESA step $k$.
+where $V_k = G \, \tau \, v_k$ is the spatial volume of the measurement with the geometrical factor $G = 0.0225 \,\mathrm{cm^2}$ (Dr. Lars Berger, personal communication), $\tau = 12/8\,\mathrm{s} = 1.5\,\mathrm{s}$ the time of the measurement in a single sector and $v_k$ the central velocity for $\mathrm{He^{+}}$ in the ESA step $k$.
 With the opening angles of a single sector-detector element of $4^\circ$ in width and $69^\circ /3 = 23^\circ$ in length and the height of this element $\Delta v_k$ we can write
 \begin{align*}
 %&= \iiint\displaylimits_{v_{\varphi i}v_{\vartheta j}v_{R k}} \rho_{ijk} \,	G \, v_k \, \tau	\,\,	d^3v \\
 N_{jk} &= v^2_k \left(\frac{\pi^2}{180^2}\cdot4 \cdot 23\right) \, \Delta v_k \, \rho_{jk} \,	G \, v_k \, \tau.
 \end{align*}
-$\Delta v_k$ is determined by the uncertainty in energy-per-charge measurement. It has been found to be $\Delta v_k = 0.0125 \, v_k$ in Sec. \ref{subsec:construction}, which gives us
+$\Delta v_k$ is determined by the uncertainty in energy-per-charge measurements. It has been found to be $\Delta v_k = 0.025 \, v_k$ in Sec. \ref{subsec:construction}, which gives us
 \begin{align*}
 N_{jk} &= v^4_k \left(\frac{\pi^2}{180^2}\cdot4 \cdot 23\right) \, 0.025\, \rho_{jk} \, G  \, \tau.
 \end{align*}
-This we can be rewritten as an expression for the average phase space density $\delta_{jk}$ with the phase space volume $V_{k}$ as 
+This can be rewritten as an expression for the average phase space density $\delta_{jk}$ with the phase space volume $V_{k}$ as 
 \begin{align*}
 \rho_{jk} &= \frac{N_{jk}}{V_{k}}.
 \end{align*}
 Note that $V_{k}$ is only dependent on the ESA step $k$, as the sector-detector elements span the same (absolute) phase space volume for one step.\\
-When we want to measure more than one spin, we need to consider that the probability to detect an ion is dependent on the ESA step. This behaviour is described in Sec. \ref{subsec:det_eff} as the detection efficiency.\\
-For phase space normalisation this is considered by weighting the spanned phase space volume for every sector detector element with the efficiency of the respective ESA step $\mathrm{eff}_k$: 
+When we want to measure more than one spin, we need to consider that the probability to detect an ion is dependent on the ESA step. This behavior is described in Sec. \ref{subsec:det_eff} as the detection efficiency.\\
+For phase space normalization this is considered by weighting the spanned phase space volume for every sector-detector element with the efficiency of the respective ESA step $\mathrm{eff}_k$: 
 \begin{align*}
 \rho_{jk} &= \frac{N_{jk}}{V_{k}\cdot \mathrm{eff}_k}
 \end{align*}
 To consider the resolution of the single sector-detector-ESA elements (s. Sec. \ref{subsec:construction}) we assign each of the velocity acceptances in an element the count rate $\frac{1}{n_i}\, N_{jk}$ and the partial phase space volume $\frac{1}{n_i} \, V_{k}$.\\
 As we will not always have counts in every scanned phase space volume, we have to integrate over longer periods of time to determine a phase space density.
-As the instrument covers different phase space volumes with varying aspect angle, changing parts of phase space volume are covered. To take this into account we have to divide the integrated count rate in a distinct volume by the integrated volume over all time in which this volume has been observed -- independent on whether a PHA word has been measured.
+As the instrument covers different phase space volumes with varying aspect angle, changing parts of phase space volume are covered. To take this into account we have to divide the integrated count rate in a distinct volume by the integrated volume over all time in which this volume has been observed -- independent on whether a PHA event has been measured.
 %.
 %\\ \\ \\
 %Mittlere Phasenraumdichte in einem Bin, in den zwei Instrumentenbins A und B reingehen:
