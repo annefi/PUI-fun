@@ -57,7 +57,7 @@ Ulysses is a spin-stabilized spacecraft that spins at $5\,\mathrm{rpm}$. The spi
 	\label{fig:swics}
 \end{figure}
 
-The Solar Wind Ion Composition Spectrometer (SWICS, \citet{gloeckler_1992}) is a time-of-flight mass spectrometer mounted on the spacecraft Ulysses (s. Sec.~\ref{sec:ulysses}). The instrument is designed to determine the elemental and charge-state composition and the velocity distribution of solar wind ions. With an energy-per-charge range from $0.16 \, \mathrm{kV}$ to $59.6 \, \mathrm{kV}$ SWICS is able to measure every solar wind ion species from protons to iron with any typical charge state. Depending on the individual ion, particle energies from $1 \,\mathrm{keV}$ up to $1 \, \mathrm{MeV}$ are covered.\\
+The Solar Wind Ion Composition Spectrometer (SWICS, \citet{gloeckler_1992}) is a time-of-flight mass spectrometer mounted on the spacecraft Ulysses (s. Sec.~\ref{sec:ulysses}). The instrument is designed to determine the elemental and charge-state composition and the velocity distribution of solar wind ions. With an energy-per-charge range from $0.16 \, \mathrm{keV/e}$ to $59.6 \, \mathrm{keV/e}$ SWICS is able to measure every solar wind ion species from protons to iron with any typical charge state. Depending on the individual ion, particle energies from $1 \,\mathrm{keV}$ up to $1 \, \mathrm{MeV}$ are covered.\\
 SWICS is mounted on the sun-facing side of Ulysses and revolves around the spacecraft's spin axis with the spacecraft spinning. A photograph of the instrument is shown in Fig.~\ref{fig:swics}, left.\\
 Ulysses SWICS also has a twin instrument that is the SWICS spare model, which has been mounted on the ACE spacecraft \citep{stone_ace}.
 %
@@ -85,7 +85,7 @@ Every step has a relative uncertainty in energy-per-charge of $\Delta \mathrm{Ep
 \begin{figure}[h]
 		\centering
 		\includegraphics[scale = 0.7]{Figures/epq_err.pdf}
-		\caption{Energy-per-Charge steps of Ulysses SWICS. A voltage cycle starts with step 0 that is the highest voltage $EpQ = 60.51\, \mathrm{kV}$. Voltage is then swept down to $EpQ = 0.66\, \mathrm{kV}$ using 64 logarithmically spaced steps. The uncertainty of the single steps is $\frac{\Delta EpQ}{EpQ} = 5\%$ and drawn in lighter color.
+		\caption{Energy-per-Charge steps of Ulysses SWICS. A voltage cycle starts with step 0 that is the highest voltage $EpQ = 60.51\, \mathrm{keV/e}$. Voltage is then swept down to $EpQ = 0.66\, \mathrm{keV/e}$ using 64 logarithmically spaced steps. The uncertainty of the single steps is $\frac{\Delta EpQ}{EpQ} = 5\%$ and drawn in lighter color.
 		} \label{fig:epq}
 \end{figure}
 %
@@ -137,12 +137,12 @@ With an ion passing through the time-of-flight section there is the likelihood t
 Another reason for an invalid energy measurement in the solid-state detector can be that the ion's energy is smaller than the threshold of the solid-state detector. In this case, only energy-per-charge and time-of-flight information for the ion are available. Such events without a corresponding energy measurement are called double coincidences, while events with triggered start and stop signal and an energy measurement are called triple coincidences.\\
 The reason for choosing a non-zero threshold is to limit the influence of the solid-state detector's natural noise. For SWICS this noise level is quite high, at around $12\,\mathrm{keV}$ \citep{gloeckler_1992}, so that the threshold is chosen to be $\sim 30 \, \mathrm{keV}$. 
 The detection efficiency is highly dependent on the ion species and the deflection step.
-Ions with a small mass and charge are most likely to not overcome the threshold at low energy-per-charge values. For the bulk of $\mathrm{He^{+}}$ this is already the case for ESA step 17 ($EpQ = 17.86\,\mathrm{kV}$), which corresponds to a $\mathrm{He^{+}}$ velocity of $v = 900\,\mathrm{km\,s^{-1}}$ (s. Eq.~\ref{eq:swics_set3}).\\
+Ions with a small mass and charge are most likely to not overcome the threshold at low energy-per-charge values. For the bulk of $\mathrm{He^{+}}$ this is already the case for ESA step 17 ($EpQ = 17.86\,\mathrm{keV/e}$), which corresponds to a $\mathrm{He^{+}}$ velocity of $v = 900\,\mathrm{km\,s^{-1}}$ (s. Eq.~\ref{eq:swics_set3}).\\
 Unfortunately, $\mathrm{He^{+}}$ detection efficiencies are not known to us for Ulysses SWICS. Instead, we make use of the efficiencies from ACE SWICS, that have been calculated by \citet{koeten}. ACE SWICS has a different type of solid-state detector with a lower threshold than Ulysses SWICS. Thus, the detection efficiencies are different as well. As ACE SWICS also features different energy-per-charge ranges the values for Ulysses SWICS had to be extrapolated. For the highest energy-per-charge value $EpQ = 60.51\,\mathrm{keV}$ I interpolated the efficiency from the ACE $\mathrm{He^{+}}$ triple efficiencies and then extrapolated linearly to an efficiency of 0 at ESA step 17. By this means, we accommodate for the above mentioned fact that $\mathrm{He^{+}}$ does not have enough energy to deposit energy above the solid state detector's threshold at ESA step 17 and thus, the probability for a triple coincidence is zero. $\mathrm{He^{+}}$ efficiencies from ACE SWICS and the resulting efficiencies used for Ulysses SWICS are shown in Fig.~\ref{fig:guess_eff}. For sure, these values are not realistic but represent the overall trend of a decreasing efficiency for higher ESA steps.
 \begin{figure}[h]
 	\includegraphics[width=1.\textwidth]{Figures/guess_eff.pdf}
 	\centering
-	\caption{$\mathrm{He^{+}}$ detection efficiencies for ACE SWICS over all ESA steps from $0.66\,\mathrm{kV}$ to $86.64\,\mathrm{kV}$. For Ulysses SWICS the efficiencies have been extrapolated between 0 for ESA step 17 ($EpQ = 17.86\,\mathrm{kV}$) and the highest efficiency for ESA step 0 ($EpQ =60.51\,\mathrm{kV}$). The latter value has been interpolated from the ACE efficiencies.}
+	\caption{$\mathrm{He^{+}}$ detection efficiencies for ACE SWICS over all ESA steps from $0.66\,\mathrm{keV/e}$ to $86.64\,\mathrm{keV/e}$. For Ulysses SWICS the efficiencies have been extrapolated between 0 for ESA step 17 ($EpQ = 17.86\,\mathrm{keV/e}$) and the highest efficiency for ESA step 0 ($EpQ =60.51\,\mathrm{keV/e}$). The latter value has been interpolated from the ACE efficiencies.}
 	\label{fig:guess_eff}
 \end{figure}
 
@@ -173,7 +173,7 @@ To account for the priority biased selection of PHA words it is necessary to wei
 %
 \section{ET-Matrices}
 \label{sec:etmatrices}
-Fig. \ref{fig:et_matrix} shows longterm PHA data collected over two years with Ulysses SWICS for ESA step 24 ($EpQ = 10.8\,\mathrm{kV}$). Histogrammed are $E_{\mathrm{SSD}}$ channels and time-of-flight channels for particles with valid time-of-flight and energy measurements. As a particle's mass and mass-per-charge are connected to the measured values $EpQ$, $ToF$ and $E_{\mathrm{SSD}}$ by Eq.~\ref{eq:swics_set1} --  \ref{eq:swics_set3}, every ion species occupies a distinct position in this histogram, which we call ET-matrix. 
+Fig. \ref{fig:et_matrix} shows longterm PHA data collected over two years with Ulysses SWICS for ESA step 24 ($EpQ = 10.8\,\mathrm{keV/e}$). Histogrammed are $E_{\mathrm{SSD}}$ channels and time-of-flight channels for particles with valid time-of-flight and energy measurements. As a particle's mass and mass-per-charge are connected to the measured values $EpQ$, $ToF$ and $E_{\mathrm{SSD}}$ by Eq.~\ref{eq:swics_set1} --  \ref{eq:swics_set3}, every ion species occupies a distinct position in this histogram, which we call ET-matrix. 
 However, due to uncertainties in the measurements of $EpQ$, $ToF$ and $E_{\mathrm{SSD}}$ an event may be displaced around its ideal position. 
 For multiple events of the same species this results in broadened distributions. A detailed discussion on these uncertainties can be found for example in \citet{lars-phd}.
 We can identify several ion species in the shown ET-matrix: A selection of those is labeled in Fig.~\ref{fig:et_matrix}.
@@ -183,7 +183,7 @@ We can identify several ion species in the shown ET-matrix: A selection of those
 \begin{figure}[h]
 	\includegraphics[width=0.9\textwidth]{Figures/et_matrix_labels.png}
 	\centering
-	\caption{ET-matrix from Ulysses SWICS PHA data of years 1993-1994. All plotted events were measured during ESA step 24 ($EpQ = 10.8\,\mathrm{kV}$). Only triple coincidences are shown. Besides accumulated counts in ion-specific positions, there are a few horizontal and vertical stripes apparent in the shown ET-matrix -- for example in $E_{SSD}$ channel 65 and time-of-flight channel 377, 409 or 505. These are imprints of irregularities within SWICS' Analog-Digital-Converters which can be noticed as a saturation of one bin while the adjacent bin is depleted. However, these signatures are not expected to have a significant effect on the following analysis.}
+	\caption{ET-matrix from Ulysses SWICS PHA data of years 1993-1994. All plotted events were measured during ESA step 24 ($EpQ = 10.8\,\mathrm{keV/e}$). Only triple coincidences are shown. Besides accumulated counts in ion-specific positions, there are a few horizontal and vertical stripes apparent in the shown ET-matrix -- for example in $E_{SSD}$ channel 65 and time-of-flight channel 377, 409 or 505. These are imprints of irregularities within SWICS' Analog-Digital-Converters which can be noticed as a saturation of one bin while the adjacent bin is depleted. However, these signatures are not expected to have a significant effect on the following analysis.}
 	\label{fig:et_matrix}
 \end{figure}
 

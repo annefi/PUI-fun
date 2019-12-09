@@ -44,7 +44,7 @@ class PlotCov():
 
         fig, self.ax = plt.subplots()
         self.ax.set_xlim([-1,2.3])
-        self.ax.set_ylim([-2.3,2.3])
+        self.ax.set_ylim([-2.5,2.5])
         self.ax.set_xticks([0,1,2])
         self.ax.set_yticks([-2,-1,0, 1, 2])
         self.ax.annotate(r'$\mathrm{w_{sw,R}}$', xy=(2.2, -0.3), ha='left', va='top', fontsize = 14)
@@ -72,6 +72,12 @@ class PlotCov():
         pac = Arc([0, 0], 2 *R, 2*R, angle=0, theta1=0, theta2=360, alpha = 0.3, color = 'blue', lw = 5)
         self.ax.add_patch(pac)
 
+    def draw_cov(self):
+        self.ax.plot([-1,1],[0,2*tan(69/180.*pi)], c = 'k')
+        self.ax.plot([-1, 1], [0, -2 * tan(69 / 180. * pi)], c='k')
+
+
+
     def get_R(self, step):
         vel = getvelocity(mass = 4, charge = 1,step = step, frac = 1.)
         w_sc = vel/self.vsw
@@ -79,9 +85,11 @@ class PlotCov():
         return w_sw
 
     def plot_epq(self):
-        for step in range(0,17):
+        for step in range(0,18):
             r = self.get_R(step)
-            self.draw_circ_arc(R=r)
+            self.draw_circ_arc(R=r+1)
+
+
 
 
     # def fill_cov(self, R = 2):
