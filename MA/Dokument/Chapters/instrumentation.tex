@@ -113,7 +113,7 @@ where $d$ is the length of the time-of-flight section and $V_{\mathrm{PAC}}$ is 
 \section{Pulse-Height Analysis Data}
 \label{sec_dataprod}
 Direct Pulse-Height Analysis data (PHA data) are one of SWICS' data products and the ones that are most relevant for the analysis in this work.\\
-Over one voltage cycle SWICS steps through the 64 energy-per-charge steps of the electrostatic analyzer (s. Sec.~\ref{sec:EpQ}), which we call ESA steps. At normal spacecraft telemetry rates SWICS steps once per spin, which is once every $12\,\mathrm{s}$. During these times 30 PHA words per spin are selected and transmitted. The selection is based on a priority scheme that is described below in Sec.~\ref{subsec:prio}.\\
+Over one voltage cycle SWICS steps through the 64 energy-per-charge steps of the electrostatic analyzer (s. Sec.~\ref{sec:EpQ}), which we call ESA steps. At normal spacecraft telemetry rates SWICS steps once per spin, which is once every $12\,\mathrm{s}$. From the total number of PHA words that is measured only 30 words can be transmitted per spin period. The selection is based on a priority scheme that is described below in Sec.~\ref{subsec:prio}.\\
 Every 24-bit PHA word contains the following information on an incident particle that triggered a valid measurement:
 \begin{itemize}
 	\item $E_{SSD}$: Energy deposition in the solid state detector \\
@@ -121,7 +121,7 @@ Every 24-bit PHA word contains the following information on an incident particle
 	\item $ToF$: Time-of-Flight\\
 	measured through 1024 channels in a range $10 - 200\,\mathrm{ns}$
 	\item Sector information:\\
-	SWICS divides one spin of Ulysses into 8 sectors of approximately equal duration. This yields in information on the spatial origin of particles.
+	SWICS divides one spin of Ulysses into 8 sectors of approximately equal duration. This results in information of the spatial origin of particles.
 	\item Detector information: \\
 	Which of the three solid state detector elements has been triggered?
 	\item Priority category: \\
@@ -138,8 +138,7 @@ Another reason for an invalid energy measurement in the solid-state detector can
 The reason for choosing a non-zero threshold is to limit the influence of the solid-state detector's natural noise. For SWICS this noise level is quite high, at around $12\,\mathrm{keV}$ \citep{gloeckler_1992}, so that the threshold is chosen to be $\sim 30 \, \mathrm{keV}$. 
 The detection efficiency is highly dependent on the ion species and the deflection step.
 Ions with a small mass and charge are most likely to not overcome the threshold at low energy-per-charge values. For the bulk of $\mathrm{He^{+}}$ this is already the case for ESA step 17 ($EpQ = 17.86\,\mathrm{kV}$), which corresponds to a $\mathrm{He^{+}}$ velocity of $v = 900\,\mathrm{km\,s^{-1}}$ (s. Eq.~\ref{eq:swics_set3}).\\
-Unfortunately, $\mathrm{He^{+}}$ detection efficiencies are not known to us for Ulysses SWICS. Instead, I make use of the efficiencies from ACE SWICS, that have been calculated by \citet{koeten}. As ACE SWICS uses different energy-per-charge ranges the values for Ulysses SWICS had to be extrapolated.
-For the highest energy-per-charge value $EpQ = 60.51\,\mathrm{keV}$ I interpolated the efficiency from the ACE $\mathrm{He^{+}}$ triple efficiencies and then extrapolated linearly to an efficiency of 0 at ESA step 17. By this means, we accommodate for the above mentioned fact that $\mathrm{He^{+}}$ does not have enough energy to deposit energy above the solid state detector's threshold at ESA step 17 and thus, the probability for a triple coincidence is zero. $\mathrm{He^{+}}$ efficiencies from ACE SWICS and the resulting efficiencies used for Ulysses SWICS are shown in Fig.~\ref{fig:guess_eff}. For sure, these values are not realistic but represent the overall trend of a decreasing efficiency for higher ESA steps.
+Unfortunately, $\mathrm{He^{+}}$ detection efficiencies are not known to us for Ulysses SWICS. Instead, we make use of the efficiencies from ACE SWICS, that have been calculated by \citet{koeten}. ACE SWICS has a different type of solid-state detector with a lower threshold than Ulysses SWICS. Thus, the detection efficiencies are different as well. As ACE SWICS also features different energy-per-charge ranges the values for Ulysses SWICS had to be extrapolated. For the highest energy-per-charge value $EpQ = 60.51\,\mathrm{keV}$ I interpolated the efficiency from the ACE $\mathrm{He^{+}}$ triple efficiencies and then extrapolated linearly to an efficiency of 0 at ESA step 17. By this means, we accommodate for the above mentioned fact that $\mathrm{He^{+}}$ does not have enough energy to deposit energy above the solid state detector's threshold at ESA step 17 and thus, the probability for a triple coincidence is zero. $\mathrm{He^{+}}$ efficiencies from ACE SWICS and the resulting efficiencies used for Ulysses SWICS are shown in Fig.~\ref{fig:guess_eff}. For sure, these values are not realistic but represent the overall trend of a decreasing efficiency for higher ESA steps.
 \begin{figure}[h]
 	\includegraphics[width=1.\textwidth]{Figures/guess_eff.pdf}
 	\centering
@@ -154,17 +153,17 @@ SWICS' data processing unit performs an on-board mass and mass-per\--charge-clas
 On the one hand these values are used for sorting the ions into predefined boxes in the $m$-$mpq$-space which yield in the so-called matrix rate, a second data product that is provided beside the PHA words.\\
 Secondly, and more important for our analysis, the $m$ and $mpq$ information is used to sort every measured ion into one of three priority ranges. Due to a limited telemetry possibly not every measured particle can be transmitted as a PHA word. 
 30 PHA words per spin are chosen from these ranges in a way that the ratio of low and high priority PHA words is balanced. By this selection less abundant heavier ions are artificially enhanced which is necessary to recreate the measured composition from the transmitted PHA words. Table \ref{tab} shows a summary of this priority scheme. Details about this can be found in \citet{gloeckler_1992}.\\
-To account for the priority biased selection of PHA words it is necessary to weight the transmitted data with the so-called base-rate weight $brw = \frac{D_{\mathrm{PHA}}}{T_{\mathrm{PHA}}}$, where $T_{\mathrm{PHA}}$ is the number of transmitted PHA words and $D_{\mathrm{PHA}}$ the number of detected particles on which this PHA word is based. The measured composition can be restored in this way.
+To account for the priority biased selection of PHA words it is necessary to weight the transmitted data with the so-called base-rate weight $brw = \frac{D_{\mathrm{PHA}}}{T_{\mathrm{PHA}}}$, where $T_{\mathrm{PHA}}$ is the number of transmitted PHA words from a $m$-$mpq$-box and $D_{\mathrm{PHA}}$ the number of detected particles which have been measured and been assigned to this $m$-$mpq$-box. The measured composition can be restored in this way.
 \begin{table}[h]
 	\caption{SWICS' priority categorization scheme} 
 	\centering
 	\begin{tabular}{c|c|c}
 		%\hline
-		Range 0 & $m < 8.7$;  $m_0 : mpq < 3.3$ & $\mathrm{H}$, $\mathrm{He^+}$, $\mathrm{He^{2+}}$; Doubles\\ 
+		Range 0 & \begin{tabular}{@{}c@{}}$m < 8.7\,\mathrm{u}$ \\ $m_0 : mpq < 3.3\,\mathrm{u}$\end{tabular}  &  \begin{tabular}{@{}c@{}}$\mathrm{H}$, $\mathrm{He^+}$, $\mathrm{He^{2+}}$ \\ Doubles\end{tabular}\\ 
 		\hline 
-		Range 1 & $m > 8.7$ & Heavier ions \\ 
+		Range 1 & $m > 8.7\,\mathrm{u}$ & Heavier ions \\ 
 		\hline 
-		Range 2 & $m_0 : mpq > 3.3$ & Doubles \\ 
+		Range 2 & $m_0 : mpq > 3.3\,\mathrm{u}$ & Doubles \\ 
 		%\hline 
 	\end{tabular} 
 	\label{tab}
@@ -174,7 +173,7 @@ To account for the priority biased selection of PHA words it is necessary to wei
 %
 \section{ET-Matrices}
 \label{sec:etmatrices}
-Fig. \ref{fig:et_matrix} shows longterm PHA data collected over two years with Ulysses SWICS for ESA step 24 ($EpQ = 10.8\,\mathrm{kV}$). For every particle with valid time-of-flight and energy measurements the $E_{\mathrm{SSD}}$ channel is plotted over the time-of-flight channel. As a particle's mass and mass-per-charge are connected to the measured values $EpQ$, $ToF$ and $E_{\mathrm{SSD}}$ by Eq.~\ref{eq:swics_set1} --  \ref{eq:swics_set3}, every ion species occupies a distinct position in this histogram, which we call ET-matrix. 
+Fig. \ref{fig:et_matrix} shows longterm PHA data collected over two years with Ulysses SWICS for ESA step 24 ($EpQ = 10.8\,\mathrm{kV}$). Histogrammed are $E_{\mathrm{SSD}}$ channels and time-of-flight channels for particles with valid time-of-flight and energy measurements. As a particle's mass and mass-per-charge are connected to the measured values $EpQ$, $ToF$ and $E_{\mathrm{SSD}}$ by Eq.~\ref{eq:swics_set1} --  \ref{eq:swics_set3}, every ion species occupies a distinct position in this histogram, which we call ET-matrix. 
 However, due to uncertainties in the measurements of $EpQ$, $ToF$ and $E_{\mathrm{SSD}}$ an event may be displaced around its ideal position. 
 For multiple events of the same species this results in broadened distributions. A detailed discussion on these uncertainties can be found for example in \citet{lars-phd}.
 We can identify several ion species in the shown ET-matrix: A selection of those is labeled in Fig.~\ref{fig:et_matrix}.
