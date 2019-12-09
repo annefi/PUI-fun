@@ -10,31 +10,31 @@ The aim of this work was to prepare a tool for resolving ion measurements by Uly
 In a first step He+ data was selected from the raw Ulysses SWICS PHA data.
 He+ events were identified by analyzing SWICS' combined measurements of energy-per-charge, time-of-flight and residual energy.\\
 In a second step a model of the SWICS detector was developed, which allows us to translate the PHA data into three-dimensional velocity components.
-Here the key point was to combine the PHA data with the complex geometry of SWICS' entrance system and the trajectory data of Ulysses. For realizing this, a virtual detector, following the original geometry of SWICS, was built in Python. 
-The detector's velocity acceptance was reconstructed in multiple steps. While the absolute velocity of He+ ions followed from the energy-per-charge information, three-dimensional components were obtained by SWICS' sector- and detector resolution. For the correct interpretation of these it was significant to consider the instrument's orientation. After having calculated this from data of Ulysses' and the Earth's orbit we were able to incorporate the spacecraft's aspect angle, SWICS' Orientation within the spacecraft's spin and Ulysses' eigen-velocity for every point in time.\\
+Here the key point was to combine the PHA data with the complex geometry of SWICS' entrance system and the trajectory data of Ulysses. For realizing this, a virtual detector, mimicking the original geometry of SWICS, was built in Python. 
+The detector's velocity acceptance was reconstructed in multiple steps. While the absolute velocity of $\mathrm{He^+}$ ions followed from the energy-per-charge information, three-dimensional components were obtained by SWICS' sector- and detector resolution. For the correct interpretation of these it was significant to consider the instrument's orientation. After having calculated this from data of Ulysses' and the Earth's orbit we were able to incorporate the spacecraft's aspect angle, SWICS' orientation within the spacecraft's spin and Ulysses' eigen-velocity for every point in time.\\
 After a consistency check with solar wind He2+ we were able to translate He+ Triple Coincidences into three-dimensional velocity components.
 A phase space normalization was necessary for translating counts into the physically relevant quantity phase space density.
 Finally, we presented three-dimensional velocity distributions using different projections. 
 \\
 These newly created three-dimensional data products can significantly contribute to a better understanding of PUI phase space transport. By the deconvolution of former 1D velocity spectra into directionally resolved spectra the evolution of the PUI VDFs can be studied in detail.
 Existing theory on processes that shape these distributions like cooling mechanisms and pitch-angle scattering can be tested directly.
-Ulysses' outstanding orbit that spans a wide range of solar radii particularly suggest exploring the radial evolution of these processes.\\
-In future, the presented method could also be adapted to other PUI than He+, e.g. 06+ or He2+ -- or even to solar wind ions. \\
-In this work we could already confirm with our super duper method that He+ PUI feature sphere-like VDF.
-
-
-
-.
-\\ \\ \\
-In this work we decided for He+ PUI as a first approach for our method. 
-Die hier vorgestellte Analyse wurde exemplarisch an He+ PUI durchgeführt und es konnten erstmalig von SWICS gemessene 3d VDF verteilungen präsentiert werden. 
-\newpage
-(vorher: nur Betrag. Jetzt: Komponenten).\\ \\
-\textbf{Restrictions:}\\
-Auflösung eingeschränkt\\
-Wir sind eingeschränkt auf schnellen SW\\
-assumption: vsw nur radial\\
-Efficiency müsste genau bestimmt werden: Dabei berücksichtigen, welcher Anteil unter den Threshold wandert. Evtl. überschätzen wir die Eff., wenn wir die interpolierten Werte von ACE/SWICS nehmen.
+Ulysses' outstanding orbit that spans a wide range of solar radii particularly suggests exploring the radial evolution of these processes.\\
+In the future, the presented method could also be adapted to other PUI than $\mathrm{He^+}$, e.g. $\mathrm{O^{6+}}$ or $\mathrm{He^{2+}}$  -- or even to solar wind ions. \\
+In this work we could already confirm with the developed method that $\mathrm{He^+}$ PUI feature sphere-like VDF.
+%
+%
+%
+%.
+%\\ \\ \\
+%In this work we decided for He+ PUI as a first approach for our method. 
+%Die hier vorgestellte Analyse wurde exemplarisch an He+ PUI durchgeführt und es konnten erstmalig von SWICS gemessene 3d VDF verteilungen präsentiert werden. 
+%\newpage
+%(vorher: nur Betrag. Jetzt: Komponenten).\\ \\
+%\textbf{Restrictions:}\\
+%Auflösung eingeschränkt\\
+%Wir sind eingeschränkt auf schnellen SW\\
+%assumption: vsw nur radial\\
+%Efficiency müsste genau bestimmt werden: Dabei berücksichtigen, welcher Anteil unter den Threshold wandert. Evtl. überschätzen wir die Eff., wenn wir die interpolierten Werte von ACE/SWICS nehmen.
 
 
 
