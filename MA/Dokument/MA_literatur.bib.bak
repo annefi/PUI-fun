@@ -564,7 +564,7 @@ nucl$^{-1}$.
 }
 
 @Article{gloeckler_geiss,
-  author  = {George Gloeckler and Johannes Geiss},
+  author  = {G. Gloeckler and Johannes Geiss},
   title   = {Interstellar and Inner Source Pickup Ions Observed with SWICS on ULYSSES},
   journal = {Space Science Reviews},
   year    = {1998},
@@ -574,6 +574,20 @@ nucl$^{-1}$.
   doi     = {10.1023/A:1005019628054},
   adsnote = {Provided by the SAO/NASA Astrophysics Data System},
   adsurl  = {https://ui.adsabs.harvard.edu/abs/1998SSRv...86..127G},
+}
+
+@Article{rucinsky,
+  author  = {D. Rucinski and A. C. Cummings and G. Gloeckler and A. J. Lazarus and E. Möbius and M. and Witte},
+  title   = {Ionization processes in the heliosphere -- Rates and methods of their determination},
+  journal = {Space Science Reviews},
+  year    = {1996},
+  volume  = {78},
+  number  = {1-2},
+  month   = {Oct},
+  pages   = {73-84},
+  doi     = {10.1007/BF00170794},
+  adsnote = {Provided by the SAO/NASA Astrophysics Data System},
+  adsurl  = {https://ui.adsabs.harvard.edu/abs/1996SSRv...78...73R},
 }
 
 @Comment{jabref-meta: databaseType:biblatex;}

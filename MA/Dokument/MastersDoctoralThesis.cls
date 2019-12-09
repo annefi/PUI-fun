@@ -382,6 +382,47 @@ KOMA-script documentation for details.}]{fancyhdr}
 	}
 }
 
+
+\newcommand{\abstractnamed}{Zusammenfassung}
+\providecaptionname{german,ngerman,austrian,naustrian}{\byname}{von}
+\providecaptionname{american,australian,british,canadian,english,newzealand,UKenglish,USenglish}{\byname}{by}
+\ifbool{consistentlayout}{
+	\DeclareDocumentEnvironment{abstractd}{ O{} }{%
+		\addchap*{\abstractnamed}%
+		%{\chapteralign\normalsize\abstractauthorfont \authorname \par}% Author name
+		%\vspace{\baselineskip}		
+		%\noindent\ignorespaces
+	}%
+	{}%end alt-abstract
+}{%
+	\DeclareDocumentEnvironment{abstractd}{ O{\null\vfill} }{
+		\checktoopen
+		\tttypeout{\abstractnamed}
+		#1%added to be able to have abstract more than one page long
+		\thispagestyle{plain}
+		\begin{center}
+			{\normalsize \MakeUppercase{\univname} \par}% University name in capitals
+			\bigskip
+			{\huge\textit{\abstractnamed} \par}
+			\bigskip
+			{\normalsize \facname \par}% Faculty name
+			{\normalsize \deptname \par}% Department name
+			\bigskip
+			{\normalsize \degreename\par}% Degree name
+			\bigskip
+			{\normalsize\bfseries \@title \par}% Thesis title
+			\medskip
+			{\normalsize \byname{} \authorname \par}% Author name
+			\bigskip
+		\end{center}
+	}
+	{
+		\vfill\null
+	}
+}
+
+
+
 \DeclareDocumentEnvironment{extraAbstract}{ O{\null\vfill} }{
 	\checktoopen
 	\tttypeout{\abstractname}
