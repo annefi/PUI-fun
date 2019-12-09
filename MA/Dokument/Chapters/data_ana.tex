@@ -39,9 +39,9 @@ When dealing with Ulysses' trajectory data it is useful to work with Radial Tang
 %
 %
 \begin{figure}[h]
-	\includegraphics[width=1\textwidth]{Figures/RTN_AA_angles.pdf}
+	\includegraphics[width=1\textwidth]{Figures/drawing_RTN.pdf}
 	\centering
-	\caption{Graphical representation of the RTN coordinate system (not to scale). Shown are the Sun (yellow), the Earth (blue) and the Ulysses spacecraft at a non-specific position on its orbit. $\vec{R}$ is defined as the unit vector along the Sun--Earth line, $\vec{T}$ as the normalized cross product $\vec{\omega} \mathrm{x} \vec{R}$ with $\vec{\omega}$ being the angular velocity of the Sun (yellow vector). $\vec{N}$ completes the right-handed Cartesian system. Also shown is the definition of the aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ as they are used in this work. The grey plane depicts the $\vec{R}$--$\vec{T}$ plane. $0 ^\circ < \varphi_{\mathrm{asp}} < 90^\circ$ and $-90 ^\circ < \vartheta_{\mathrm{asp}} < 0^\circ$ in the shown situation. \textbf{TODO: Zeichnung anpassen: Vektorpfeile, Indizes Winkel; Quelle Ulysses Dingsi}}
+	\caption{Graphical representation of the RTN coordinate system (not to scale). Shown are the Sun (yellow), the Earth (blue) and the Ulysses spacecraft at a non-specific position on its orbit. $\vec{R}$ is defined as the unit vector along the Sun--Earth line, $\vec{T}$ as the normalized cross product $\vec{\omega} \mathrm{x} \vec{R}$ with $\vec{\omega}$ being the angular velocity of the Sun (yellow vector). $\vec{N}$ completes the right-handed Cartesian system. Also shown is the definition of the aspect angle components $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$ as they are used in this work. The grey plane depicts the $\vec{R}$--$\vec{T}$ plane. $0 ^\circ < \varphi_{\mathrm{asp}} < 90^\circ$ and $-90 ^\circ < \vartheta_{\mathrm{asp}} < 0^\circ$ in the shown situation. The Ulysses Image is taken from \cite{esa_orbit} and modified.}
 	\label{fig:rtn}
 \end{figure}
 %
@@ -86,9 +86,9 @@ With each Triple Coincidence PHA word we receive information of which of the thr
 \label{subsec:construction}
 \begin{figure}[h]
 	%\includegraphics[width=0.5\textwidth]{Figures/FOTO_VOM_3D_PRINT.pdf}
-	\includegraphics[width=0.5\textwidth]{Figures/dummy.jpg}
+	\includegraphics[width=0.5\textwidth]{Figures/photo_swics2.jpg}
 	\centering
-	\caption{FOTO SWICS 3D \\ 3D printed model of SWICS' entrance system that was made from the original CAD files. Its geometry can be described by a cut of 90 deg longitude (\textbf{todo: latitude? 4 grad?}) from a sphere (\textbf{of r ca. 26 cm ?}) at $todo ^\circ$ polar latitude. The resulting piece is not flat but curved and has a height of $\sim 5\,\mathrm{cm}$. This geometry leads to two deflection plates that are curved but have a constant distance of $\sim 3.7\,\mathrm{cm}$ over a relatively large area which is necessary to provide a constant voltage for the energy-per-charge filtering action (s. Sec.~\ref{sec:EpQ}). The resulting opening angles of the collimator are $69^\circ$ in width and $4^\circ$ in height.}
+	\caption{3D printed model of SWICS' entrance system that was made from the original CAD files. Its geometry can be described by a cut of $90\,^\circ$ longitude from a sphere at $56 ^\circ$ polar latitude. The resulting piece is not flat but curved and has a height of $\sim 5\,\mathrm{cm}$. This geometry leads to two deflection plates that are curved but have a constant distance of $\sim 3.7\,\mathrm{cm}$ over a relatively large area which is necessary to provide a constant voltage for the energy-per-charge filtering action (s. Sec.~\ref{sec:EpQ}). The resulting opening angles of the collimator are $69^\circ$ in width and $4^\circ$ in height.}
 	\label{fig:3dcol}
 \end{figure}
 For reconstructing the velocity space that is observed by SWICS we need to know the possible directions of incident particles that can enter the instrument. These directions are limited by the instrument's entrance system.
@@ -170,13 +170,13 @@ For the calculation of the aspect angle we use the Ulysses trajectory data (s. S
 \begin{figure}[h]
 	\includegraphics[width=0.7\textwidth]{Figures/col_aa_marker.png}
 	\centering
-	\caption{todo}
+	\caption{Velocity acceptance for ESA step 10 ($v \sim 1200 \,\mathrm{km\,s^{-1}}$) and for aspect angles $\varphi_\mathrm{asp} = 25^\circ$ and $\vartheta_{\mathrm{asp}} = -10^\circ $. Ulysses' spin axis is drawn in red and the radial direction in black. Marked is also the sector-detector element in  which an exclusively radial stream would be measured (black circle).}
 	\label{fig:col_aa}
 \end{figure}
 %
 %
 %
-The variable aspect angle is incorporated into the analysis by rotating the field of view corresponding to $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$. This results in a likewise rotation of the velocity acceptance space. In Fig. \ref{fig:col_aa} the acceptance velocity for a single absolute velocity $v = 600\,\mathrm{km\,s^{-1}}$ is shown for $\varphi_\mathrm{asp} = 25^\circ$ and $\vartheta_{\mathrm{asp}} = -10^\circ $. Note that the orientation here seems to be mirrored with respect to the convention that has been described before. This is due to the inversion when transitioning from the field of view to velocity acceptance, s. Eq. \ref{eq:fov}.\\
+The variable aspect angle is incorporated into the analysis by rotating the field of view corresponding to $\varphi_{\mathrm{asp}}$ and $\vartheta_{\mathrm{asp}}$. This results in a likewise rotation of the velocity acceptance space. In Fig. \ref{fig:col_aa} the acceptance velocity for the ESA step 10 ($v \sim 1200 \,\mathrm{km\,s^{-1}}$) is shown for $\varphi_\mathrm{asp} = 25^\circ$ and $\vartheta_{\mathrm{asp}} = -10^\circ $. Note that the orientation here seems to be mirrored with respect to the convention that has been described before. This is due to the inversion when transitioning from the field of view to velocity acceptance, s. Eq. \ref{eq:fov}.\\
 When comparing Fig. \ref{fig:col_aa} with Fig.~\ref{fig:coll_FoV}, right panel, where a situation with $\vartheta_{\mathrm{asp}} = \varphi_{\mathrm{asp}} = 0$ is shown, it becomes clear that especially larger aspect angles change the link between a distinct sector-detector element and a volume in velocity space. While with a zero aspect angle a radial velocity (along $\vec{R}$) would be detected right in the middle of the velocity shell and definitely in the innermost detector, this is not the case for the aspect angle in Fig. \ref{fig:col_aa}. Here, an exclusively radially oriented velocity would be detected in a distinct sector in the central detector.\\
 This also means that we can only transform a sector-detector measurement into a position in velocity space when we know about Ulysses' orientation!
 \subsubsection{Consistency Check}
@@ -205,44 +205,33 @@ In a second step we examine a time period in which Ulysses had a substantial asp
 
 
 
-\subsubsection{Sunpulse Trigger -- Rotation}
-In the previous section it was observed that $\mathrm{He^{2+}}$ PHA counts accumulate around the central detector for large aspect angles. Still it needs to be examined, in which sector counts are concentrated.\\
-As mentioned before, one spacecraft spin is divided into 8 sectors, starting with sector 0 and ending with sector 7. Every spin's start is defined newly by the ``spin reference pulse'' of Ulysses \citep{hiscale}. This pulse is triggered by a combination of four sun sensors which detect when the Sun crosses a plane that is spanned by the spacecraft's spin axis and the spacecraft's X-axis, which is a particular axis perpendicular to the spin axis. The spin reference pulse is not uniform over time as the position of the Sun relative to the spacecraft changes with varying aspect angle.\\
-To extract correct directional information from a sector data product of an ion that has been detected by SWICS it is essential to know the relative orientation between SWICS' main axis and the X-axis on the spacecraft. In the virtual detector this is implemented as an angle against the spacecraft--Sun line by which the field of view is rotated around the spin axis.\\
-From the \citet[][S.20-22]{swics_dpu} we know that with ``normal orientation'' the sun pulse occurs in the center of SWICS sector 4, which implies a $180^\circ$ offset between the spacecraft--Sun line and SWICS sector 0 (s. Fig. \ref{fig:sp} for clarification). However, it was possible to set a fine adjustment which would lead to an offset of the sun pulse from this center line up to $22.5^\circ$ \citet[][S.48]{swics_dpu}. Unfortunately, we do not know about the value that has been chosen.
+\subsubsection{Spin Reference Pulse}
+In the previous section it was observed that $\mathrm{He^{2+}}$ PHA counts accumulate around the central detector for large aspect angles. Still it needs to be examined how the sectors are oriented.\\
+As mentioned before, one spacecraft spin is divided into 8 sectors, starting with sector 0 and ending with sector 7. Every spin's start is defined newly by the ``spin reference pulse'' of Ulysses \citep{hiscale}. This pulse is triggered by a combination of four sun sensors which detect when the Sun crosses a plane that is spanned by the spacecraft's spin axis and the spacecraft's x-axis, which is a particular axis perpendicular to the spin axis. The spin reference pulse is not uniform over time as the position of the Sun relative to the spacecraft changes with varying aspect angle.\\
+To extract correct directional information from a sector data product of an ion that has been detected by SWICS it is essential to know the relative orientation between SWICS' main axis and the x-axis on the spacecraft. In the virtual detector this is implemented as an angle against the spacecraft--Sun line by which the field of view is rotated around the spin axis.\\
+From the \citet[][p. 20-22]{swics_dpu} we know that the Sun pulse that triggers the beginning of Sector 0 is shifted by $180^\circ$ against SWICS' main axis, i.e. on the opposite side of Ulysses spin axis. This means that the spacecraft has to rotate for half a spin after the sun pulse until SWICS measures particles streaming radially from the Sun. However, it was possible to set a fine adjustment which would lead to an offset of the sun pulse from this center line up to $22.5^\circ$ \citet[][S.48]{swics_dpu}. Unfortunately, we do not know the value that has been chosen.
 \\
 If we assumed a wrong angle, a particle beam coming from a fixed direction in a Sun-fixed frame would be linked to a different direction. But this shift between true and supposedly measured direction is not constant over aspect angles. If we then measured over a longer time period with various aspect angles, we would measure the beam as blurred in velocity space.
 \\
 To make sure our model uses the right angle, we again choose $\mathrm{He^{2+}}$ as a test population of which we assume a beam-like behaviour streaming radially from the Sun. Also, we can only look at time periods when the aspect angles were large and the maximum of $\mathrm{He^{2+}}$ counts occurs in the central or outermost detector. Only here we can clearly discriminate between single sectors. When measured in the innermost detector the slightly widened distribution of $\mathrm{He^{2+}}$ would spread across all sectors as they are close together here.
-From Fig. \ref{fig:histdetsecaa}, right, where we histogrammed $\mathrm{He^{2+}}$ PHA words at a sizeably aspect angle, we find that the data is in agreement with the overall idea of a sun pulse in sector 4, when we believe the assumption that $\mathrm{He^{2+}}$ streams radially from the Sun. 
+From Fig. \ref{fig:histdetsecaa}, right panel, where we histogrammed $\mathrm{He^{2+}}$ PHA words at a sizeable aspect angle, we find that the data is in agreement with the overall idea of a Sun pulse that is issued a half spin before SWICS faces the Sun. If we believe the assumption that $\mathrm{He^{2+}}$ streams radially from the Sun, Sector 4, that is shifted by $180^\circ$ relative to Sector 0, contains the radial direction. 
 To check for a potential fine adjustment we search for tendencies of the maximum of counts sweeping to an adjacent sector. However, such a tendency that is consistent over time cannot be found. Thus, we proceed the analysis with the assumption that no crucial fine adjustment had been set. 
-\\ \\
-\textbf{Todo : Hier oder in den Ausblick? Sollte man nochmal in den Housekeepingdata checken und ggf. systematisch analysieren, ob das vielleicht daran liegt, dass He2 doch nicht so radial strömt.}
 %Zeigen: Für lange Zeiträume: $\mathrm{He^{2+}}$ kommt zentral. Für einzelne kurze: unterschiedlich.
 %Deshalb: grober Check von wegen Detektor geht gut. Für das Feintuning (180 Grad oder doch was anderes?) reichts aber nicht...
-\\
-\begin{figure}[h]
-	\includegraphics[width=0.5\textwidth]{Figures/dummy_sunpulse.jpg}
-	\centering
-	\caption{todo. Schemazeichnung Sunpulser-Problem}
-	\label{fig:sp}
-\end{figure}
 \subsubsection{Transformation into $w$-space}
 With the considerations of eigen-velocity and orientation of Ulysses we can use the virtual detector for translating $\mathrm{He^{+}}$ PHA words into the three-dimensional velocity space. Only when we have unfolded absolute velocities into its three components we can take the important step of transforming from a spacecraft frame of reference to a solar wind frame of reference. \\
-This can be done by subtracting the instantaneous solar wind speed in R-component from a velocity in the spacecraft frame (TODO: Annahme radiale Abströmung): 
+Under the assumption that the solar wind streams basically radially this can be done by subtracting the instantaneous solar wind speed in R-component from a velocity in the spacecraft frame: 
 \begin{align*}
 \mathbf{v_{i,sw}} = \begin{bmatrix}v_{R,i,sc}\\v_{T,i,sc}\\v_{N,i,sc}\end{bmatrix} - \begin{bmatrix}v_{sw}\\0\\0\end{bmatrix}
 \end{align*}
 In a last step every component of the resulting vector is divided the by solar wind speed:
 \begin{align*}
-\mathbf{w_{i,sw}} = \begin{bmatrix}v_{R,i,sw}\\v_{T,i,sw}\\v_{N,i,sw}\end{bmatrix} / \begin{bmatrix}v_{sw}\\v_{sw}\\v_{sw}\end{bmatrix}
+\mathbf{w_{i,sw}} = \begin{bmatrix}v_{R,i,sw} / v_{sw}\\v_{T,i,sw} / v_{sw}\\v_{N,i,sw} / v_{sw}\end{bmatrix}
 \end{align*}
 By this, the transition from velocity space in the spacecraft frame to solar wind independent w space in solar wind frame of reference is made.
 %
 %
 %
-\section{Velocity Distribution Function ........?}
-
 %
 \subsection{Velocity Space Coverage}
 \label{subsec:cov}
