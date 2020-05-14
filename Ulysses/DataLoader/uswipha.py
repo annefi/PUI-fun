@@ -1,9 +1,15 @@
-from pylib import dbData
+import sys
+#sys.path.append('/home/asterix/fischer/PUI')
+sys.path.append('/home/af/fusessh/PUI')
+from pylib import *
 from numpy import *
-from uswo import uswo
-from DataLoader.ulysses_traj import ulysses_traj
-from ulysses_mag_loader import mag_loader
-from uswiutils import getvelocity
+#from uswo import uswo
+#from Ulysses.DataLoader.ulysses_traj import ulysses_traj
+#from ulysses_mag_loader import mag_loader
+#from uswiutils import getvelocity
+
+
+
 
 class uswipha(dbData):
     def load_data(self,*args,**kwargs):
@@ -28,7 +34,8 @@ class uswipha(dbData):
         if kwargs.has_key("path"):
             self.path=kwargs["path"]
         else:
-            self.path="/data/projects/Ulysses/swics/pha/"
+            self.path = "/home/af/fusessh/dataprojects/swics/pha/"
+            #self.path="/data/projects/Ulysses/swics/pha/"
             #self.path="/data/ivar/ulysses/swics/pha/"
 
 
