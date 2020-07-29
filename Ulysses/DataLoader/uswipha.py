@@ -1,15 +1,14 @@
 import sys
 #sys.path.append('/home/asterix/fischer/PUI')
-sys.path.append('/home/af/fusessh/PUI')
+sys.path.append('/media/storage/PUI-fun')
 from pylib import *
 from numpy import *
-#from uswo import uswo
-#from Ulysses.DataLoader.ulysses_traj import ulysses_traj
-#from ulysses_mag_loader import mag_loader
-#from uswiutils import getvelocity
+from Ulysses.DataLoader.uswo import uswo
+from Ulysses.DataLoader.ulysses_traj import ulysses_traj
+from Ulysses.DataLoader.ulysses_mag_loader import mag_loader
+from Ulysses.DataLoader.uswiutils import getvelocity
 
-
-
+magpath = "/media/storage/PUI-fun/Ulysses/data_misc/PHA_mag/"
 
 class uswipha(dbData):
     def load_data(self,*args,**kwargs):
@@ -38,8 +37,6 @@ class uswipha(dbData):
             #self.path="/data/projects/Ulysses/swics/pha/"
             #self.path="/data/ivar/ulysses/swics/pha/"
 
-
-
         self.data["year"]=[]
         self.data["doy"]=[]
         self.data["epq"]=[]
@@ -49,13 +46,12 @@ class uswipha(dbData):
         self.data["det"]=[]
         self.data["rng"]=[]
         self.data["brw"]=[]
-        if self.path =="/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/":
+        if self.path == magpath:
             self.data["Bphi"] = []
             self.data["Btheta"] = []
             self.data["BR"] = []
             self.data["BT"] = []
             self.data["BN"] = []
-
 
         for year in self.year:
             for tf in self.timeframe:
@@ -76,14 +72,13 @@ class uswipha(dbData):
                             self.data["det"].append(int(k[5]))
                             self.data["rng"].append(int(k[6]))
                             self.data["brw"].append(float(k[7]))
-                            if self.path == "/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/":
+                            if self.path == magpath:
                                 self.data["Bphi"].append(float(k[8]))
                                 self.data["Btheta"].append(float(k[9]))
 
                                 self.data["BR"].append(float(k[10]))
                                 self.data["BT"].append(float(k[11]))
                                 self.data["BN"].append(float(k[12]))
-
                     except:
                         print "Problems reading DoY ",doy
         self.data["year"]=array(self.data["year"])
@@ -96,7 +91,7 @@ class uswipha(dbData):
         self.data["rng"]=array(self.data["rng"])
         self.data["brw"]=array(self.data["brw"])
         self.data["vHe+"] = getvelocity(4.,1.,self.data["epq"])
-        if self.path == "/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/":
+        if self.path == magpath:
             self.data["Bphi"] = array(self.data["Bphi"])
             self.data["Btheta"] = array(self.data["Btheta"])
 
@@ -259,4 +254,5 @@ class uswipha(dbData):
         off_epq = self.data['epq'] * 1./24./60./60. *12.
         self.add_data("d90_epq",self.data["doy"] + offd + off_epq)
 
-
+for i in [1,2,3,4]
+        print in
