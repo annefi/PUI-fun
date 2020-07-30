@@ -1,6 +1,6 @@
 import sys
-#sys.path.append('/home/asterix/fischer/PUI')
-sys.path.append('/media/storage/PUI-fun')
+sys.path.append('/home/asterix/fischer/PUI')
+#sys.path.append('/media/storage/PUI-fun')
 from pylib import *
 from numpy import *
 from Ulysses.DataLoader.uswo import uswo
