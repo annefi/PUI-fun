@@ -2,6 +2,21 @@ from pylib import dbData
 from numpy import array,ndarray
 
 class uswo(dbData):
+    """ Loader class for Ulysses SWOOPS data
+
+    Methods
+    -------
+    load_data()
+    calc_d90()
+    calc_doy()
+
+    Examples
+    -------
+    s = uswo()
+    s = uswo(year = 1991, tf = [[1,30]])
+
+    """
+
     def load_data(self,*args,**kwargs):
         if kwargs.has_key("year"):
             if isinstance(kwargs["year"],list):
