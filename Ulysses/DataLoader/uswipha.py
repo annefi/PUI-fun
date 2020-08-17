@@ -1,6 +1,10 @@
 import sys
-sys.path.append('/home/asterix/fischer/PUI')
-#sys.path.append('/media/storage/PUI-fun')
+myrootpath = '/home/asterix/fischer/PUI'
+#myrootpath = '/media/storage/PUI-fun'
+sys.path.append(myrootpath)
+
+magpath = mypath
+
 from pylib import *
 from numpy import *
 from Ulysses.DataLoader.uswo import uswo
@@ -113,14 +117,14 @@ class uswipha(dbData):
         self.data["det"]=array(self.data["det"])
         self.data["rng"]=array(self.data["rng"])
         self.data["brw"]=array(self.data["brw"])
-        self.data["vHe+"] = getvelocity(4.,1.,self.data["epq"])
-        if self.path == magpath:
-            self.data["Bphi"] = array(self.data["Bphi"])
-            self.data["Btheta"] = array(self.data["Btheta"])
-
-            self.data["BR"] = array(self.data["BR"])
-            self.data["BT"] = array(self.data["BT"])
-            self.data["BN"] = array(self.data["BN"])
+        # self.data["vHe+"] = getvelocity(4.,1.,self.data["epq"])
+        # if self.path == magpath:
+        #     self.data["Bphi"] = array(self.data["Bphi"])
+        #     self.data["Btheta"] = array(self.data["Btheta"])
+        #
+        #     self.data["BR"] = array(self.data["BR"])
+        #     self.data["BT"] = array(self.data["BT"])
+        #     self.data["BN"] = array(self.data["BN"])
 
     def calc_d90(self):
         """ Calculates days since 01.01.1990 -> self.d90
