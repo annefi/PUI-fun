@@ -1,7 +1,7 @@
-'''
-Different functions around Ulysses PUI, some of them ancient.
-'''
+""" Different functions around Ulysses PUI, some of them ancient
 
+
+"""
 
 import sys
 sys.path.append('/home/asterix/fischer/ulysses/swics/software/libulpy')
@@ -11,7 +11,6 @@ from matplotlib import pylab
 from matplotlib.animation import FuncAnimation
 from matplotlib import colors
 import matplotlib
-
 
 matplotlib.rcParams.update({'font.size': 16,
                             'xtick.major.size': 8,

@@ -11,6 +11,29 @@ from Ulysses.DataLoader.uswiutils import getvelocity
 magpath = "/media/storage/PUI-fun/Ulysses/data_misc/PHA_mag/"
 
 class uswipha(dbData):
+    """ PHA loader for Ulysses SWICS data
+    
+    Inherits loader from dbData
+
+
+    Attributes
+    ----------
+    
+
+    Methods
+    -------
+    load_data()
+        Data loader based on timeframe and masks
+    calc_d90()
+        Calculates days since 1990
+    sync_swoops()
+        Synchronises solar wind speed, density etc. (data from SWOOPS)
+    sync_traj()
+    sync_mag()
+    calc_d90_epq()
+
+    """
+
     def load_data(self,*args,**kwargs):
         if kwargs.has_key("year"):
             if isinstance(kwargs["year"],list):
@@ -99,50 +122,69 @@ class uswipha(dbData):
             self.data["BT"] = array(self.data["BT"])
             self.data["BN"] = array(self.data["BN"])
 
-
     def calc_d90(self):
+        """ Calculates days since 01.01.1990 -> self.d90
+
+        """
         offy = self.data["year"] - 1990
         offd = offy*365 + (offy.astype(int)+2)/4
         self.add_data("d90",self.data["doy"] + offd)
 
     def sync_swoops(self):
+        ''' Synchronisation with SWOOPS data
+
+        Adds data products from SWOOPS:
+            * vsw : solar wind velocity
+            * dsw : solar wind density
+            * hlat : latitude Ulysses in TODO
+            * hlong :  longitude Ulysses in TODO
+            * rau : solar radius Ulysses in AU
+            * wHe+ : vHe+ / vsw
+
+        '''
         swo = uswo(year=self.year,tf=self.timeframe)
         if not 'd90' in self.data.keys():
             self.calc_d90()
         swo.calc_d90()
         uTi,index=unique(self.data["d90"],return_inverse=True)
         uTi=append(uTi,uTi[-1]+1./24./5.) # 12 minutes
-        uTi=uTi+1./24./30. # 2 minutes?
+        uTi=uTi+1./24./30. # 2 minutes. warum? Todo
+        # **
         mask = swo.data["vges"]>0
         nrT,x = histogram(swo.data["d90"][mask],bins=uTi)
         vsw,x = histogram(swo.data["d90"][mask],bins=uTi,weights=swo.data["vges"])
         vsw = vsw/nrT # mean
         vsw[isnan(vsw)]=0.
         self.add_data("vsw",vsw[index]) #number of vsw-steps are filled into self.datas shape here
+        # **
         mask = swo.data["denp"]>0
         nrT,x = histogram(swo.data["d90"][mask],bins=uTi)
         dsw,x = histogram(swo.data["d90"][mask],bins=uTi,weights=swo.data["denp"])
         dsw = dsw/nrT # mean
         dsw[isnan(dsw)]=0.
         self.add_data("dsw",dsw[index])
+        # **
         mask = (swo.data["hlat"]>=-90.)*(swo.data["hlat"]<=90.)
         nrT,x = histogram(swo.data["d90"][mask],bins=uTi)
         hlat,x = histogram(swo.data["d90"][mask],bins=uTi,weights=swo.data["hlat"])
         hlat = hlat/nrT
         hlat[isnan(hlat)]=0.
         self.add_data("hlat",hlat[index])
+        # **
         mask = (swo.data["hlong"]>=0.)*(swo.data["hlong"]<=360.)
         nrT,x = histogram(swo.data["d90"][mask],bins=uTi)
         hlong,x = histogram(swo.data["d90"][mask],bins=uTi,weights=swo.data["hlong"])
         hlong = hlong/nrT
         hlong[isnan(hlong)]=0.
         self.add_data("hlong",hlong[index])
+        # **
         mask = (swo.data["rau"]>=0.)*(swo.data["rau"]<=6.)
         nrT,x = histogram(swo.data["d90"][mask],bins=uTi)
         rau,x = histogram(swo.data["d90"][mask],bins=uTi,weights=swo.data["rau"])
         rau = 1.*rau/nrT
         rau[isnan(rau)]=0.
         self.add_data("rau",rau[index])
+        # **
         self.add_data("wHe+",self.data["vHe+"]/self.data["vsw"])
 
     def sync_traj(self):
@@ -196,7 +238,6 @@ class uswipha(dbData):
         v_abs, x = histogram(traj.data["d90"], bins=uTi_int, weights=traj.data["v"])
         self.add_data("v_abs_sc", v_abs[index_int])
 
-
     def sync_mag(self):
         '''
         todo
@@ -243,7 +284,6 @@ class uswipha(dbData):
         self.add_data('Bphi_deg', (self.data['Bphi'] * 180. / pi))
         self.add_data('Btheta_deg', (self.data['Btheta'] * 180. / pi))
 
-
     def calc_d90_epq(self):
         '''
         calculates refined time since 1990 with epq fraction (= 12 sec)
@@ -254,5 +294,3 @@ class uswipha(dbData):
         off_epq = self.data['epq'] * 1./24./60./60. *12.
         self.add_data("d90_epq",self.data["doy"] + offd + off_epq)
 
-for i in [1,2,3,4]
-        print in
