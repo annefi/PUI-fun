@@ -1,9 +1,21 @@
 import sys
-myrootpath = '/home/asterix/fischer/PUI'
-#myrootpath = '/media/storage/PUI-fun'
-sys.path.append(myrootpath)
+import os.path
+### from Uni/skeletor: ###
+# myrootpath = "/home/asterix/fischer/PUI"
+# datarootpath = "/data/projects/Ulysses/"
+####################
 
-magpath = mypath
+### from Laptop: ###
+myrootpath = '/media/storage/PUI-fun'
+sys.path.append(myrootpath)
+if os.path.isdir("/home/af/fusessh/data/projects/Ulysses/swics/pha/") == True:
+    datarootpath = "/home/af/fusessh/data/projects/Ulysses/"
+else:
+    print("Problem finding data path. Are you connected to asterix via fusessh?\n")
+    sys.exit()
+####################
+
+magpath = myrootpath + "/Ulysses/data_misc/PHA_mag/"
 
 from pylib import *
 from numpy import *
@@ -12,17 +24,10 @@ from Ulysses.DataLoader.ulysses_traj import ulysses_traj
 from Ulysses.DataLoader.ulysses_mag_loader import mag_loader
 from Ulysses.DataLoader.uswiutils import getvelocity
 
-magpath = "/media/storage/PUI-fun/Ulysses/data_misc/PHA_mag/"
-
 class uswipha(dbData):
     """ PHA loader for Ulysses SWICS data
     
     Inherits loader from dbData
-
-
-    Attributes
-    ----------
-    
 
     Methods
     -------
@@ -35,6 +40,10 @@ class uswipha(dbData):
     sync_traj()
     sync_mag()
     calc_d90_epq()
+
+    Examples
+    --------
+    d = uswipha(year = 1991, tf = [[1,10])
 
     """
 
@@ -60,9 +69,7 @@ class uswipha(dbData):
         if kwargs.has_key("path"):
             self.path=kwargs["path"]
         else:
-            self.path = "/home/af/fusessh/dataprojects/swics/pha/"
-            #self.path="/data/projects/Ulysses/swics/pha/"
-            #self.path="/data/ivar/ulysses/swics/pha/"
+            self.path = datarootpath + "swics/pha/"
 
         self.data["year"]=[]
         self.data["doy"]=[]
@@ -117,7 +124,8 @@ class uswipha(dbData):
         self.data["det"]=array(self.data["det"])
         self.data["rng"]=array(self.data["rng"])
         self.data["brw"]=array(self.data["brw"])
-        # self.data["vHe+"] = getvelocity(4.,1.,self.data["epq"])
+        self.data["vHe+"] = getvelocity(4.,1.,self.data["epq"])
+
         # if self.path == magpath:
         #     self.data["Bphi"] = array(self.data["Bphi"])
         #     self.data["Btheta"] = array(self.data["Btheta"])
@@ -127,7 +135,7 @@ class uswipha(dbData):
         #     self.data["BN"] = array(self.data["BN"])
 
     def calc_d90(self):
-        """ Calculates days since 01.01.1990 -> self.d90
+        """ Calculates days since 01.01.1990 -> attribute self.d90
 
         """
         offy = self.data["year"] - 1990
@@ -146,7 +154,7 @@ class uswipha(dbData):
             * wHe+ : vHe+ / vsw
 
         '''
-        swo = uswo(year=self.year,tf=self.timeframe)
+        swo = uswo(year = self.year,tf = self.timeframe, path = datarootpath + "swoops/4min_data/")
         if not 'd90' in self.data.keys():
             self.calc_d90()
         swo.calc_d90()
@@ -192,10 +200,12 @@ class uswipha(dbData):
         self.add_data("wHe+",self.data["vHe+"]/self.data["vsw"])
 
     def sync_traj(self):
+        ''' Synchronisation with Ulysses trajectory data
+
+        Adds data products from 
+
         '''
-        Adds trajectory data products to uswipha instance by calling "ulysses_traj"
-        '''
-        traj = ulysses_traj(year=self.year,tf=self.timeframe)
+        traj = ulysses_traj(year = self.year,tf = self.timeframe, path = datarootpath + "trajectory/traj_data_ulysses_pool.dat")
         if not 'd90' in self.data.keys():
             self.calc_d90()
         traj.calc_d90()

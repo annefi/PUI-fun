@@ -13,6 +13,18 @@ from Ulysses.Trajectory.ul_calc_traj import calc_asp_angles, calc_SPE, hg_to_rtn
 earth = True
 
 class ulysses_traj(dbData):
+    """ Loader for Ulysses trajectory data
+
+    Inherits from dbData
+    Loads daily trajectory data from .dat-file: "/data/projects/Ulysses/trajectory/traj_data_ulysses_pool.dat"
+
+    Methods
+    -------
+    load_data()
+    calc_d90()
+    test_aspect_angle()
+
+    """
     def load_data(self,*args,**kwargs):
         if kwargs.has_key("year"):
             if isinstance(kwargs["year"],list):
@@ -36,7 +48,6 @@ class ulysses_traj(dbData):
             self.path=kwargs["path"]
         else:
             self.path="/data/projects/Ulysses/trajectory/traj_data_ulysses_pool.dat"
-
 
         if self.year[0] == 1990:
             if float(self.timeframe[0][0]) < 308.0:
@@ -130,7 +141,6 @@ class ulysses_traj(dbData):
             for key in self.data.keys():
                 self.data[key] = array(self.data[key])
             print('...almost done')
-
 
     def calc_d90(self):
         offy = self.data["Year"] - 1990

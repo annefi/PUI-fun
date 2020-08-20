@@ -1,9 +1,14 @@
-'''
-Heliocentric (HC, 'Solar ecliptic'): x-axis pointing towards vernal quinox (intersection celestial plane & ecliptic);
-z-axis normal to ecliptic
-Heliographic (HG): x-axis pointing towards intersection of solar equatorial plane & ecliptic; z-axis normal to solar
-equator
-'''
+""" Various functions for transforming between coordinte systems
+
+Heliocentric (HC, 'Solar ecliptic'):
+    x-axis pointing towards vernal quinox (intersection celestial plane & ecliptic);
+    z-axis normal to ecliptic
+
+Heliographic (HG):
+    x-axis pointing towards intersection of solar equatorial plane & ecliptic; z-axis normal to solar
+    equator
+
+"""
 
 from pylib import dbData
 from numpy import array, cos, arccos, pi, sqrt
