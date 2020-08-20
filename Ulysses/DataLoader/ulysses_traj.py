@@ -6,8 +6,8 @@ Also calculates and adds Aspect Angle data products.
 '''
 
 from pylib import dbData
-from numpy import array,ndarray,shape
-import sys, os
+from numpy import array,ndarray
+import sys
 from Ulysses.Trajectory.ul_calc_traj import calc_asp_angles, calc_SPE, hg_to_rtn
 
 earth = True

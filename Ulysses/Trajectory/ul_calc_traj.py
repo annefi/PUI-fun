@@ -1,12 +1,17 @@
-""" Various functions for transforming between coordinte systems
+""" Various functions for transforming between coordinate systems
 
 Heliocentric (HC, 'Solar ecliptic'):
-    x-axis pointing towards vernal quinox (intersection celestial plane & ecliptic);
+    x-axis pointing towards vernal equinox (intersection celestial & ecliptic plane);
     z-axis normal to ecliptic
 
 Heliographic (HG):
-    x-axis pointing towards intersection of solar equatorial plane & ecliptic; z-axis normal to solar
-    equator
+    x-axis pointing towards intersection of solar equatorial plane & ecliptic;
+    z-axis normal to solar equator
+
+Radial-Tangential-Normal (RTN):
+    R: Sun to SC unit vector
+    T: wxR with w: Sun's spin axis
+    N: completes the right-handed c.s.
 
 """
 
@@ -25,9 +30,13 @@ def hg_to_hc(hg_vec, degree=True, long_shift = 0.):
     :return: vector [R,long,lat] in heliocentric coordinates where lat increases towards +z axis
     '''
     hg_cart = sph2cart([hg_vec[0],hg_vec[1]-long_shift,90.-hg_vec[2]],deg=degree)
+    print('hg_cart:', hg_cart)
     int1 = rotate(hg_cart,'x',7.25,deg=degree)
+    print('int1', int1)
     int2 = rotate(int1,'z',75.062,deg=degree)
+    print('int2', int2)
     int3 = cart2sph(int2,deg=degree)
+    print('int3', int3)
     return array([int3[0],int3[1],90.-int3[2]])
 
 def hc_to_hg(hc_vec, degree=True, long_shift = 180.):
@@ -44,7 +53,7 @@ def hc_to_hg(hc_vec, degree=True, long_shift = 180.):
     int3 = cart2sph(int2,deg=degree)
     return array([int3[0],long_shift+int3[1],90-int3[2]])
 
-def hg_to_rtn(r_vec,sc_vec,spherical = True, degr = True, long_shift = 180.,long_shift_r = 0.):
+def hg_to_rtn(r_vec, sc_vec, long_shift = 180., long_shift_r = 0.):
     '''
     Transforms heliographic coordinates from vector r_vec to coordinates as seen from an RTN-system (centered at the Sun)s.
     ('active Rotation')
@@ -55,23 +64,16 @@ def hg_to_rtn(r_vec,sc_vec,spherical = True, degr = True, long_shift = 180.,long
     :param long_shift_r: needs to be pi as well, when r_vec is sc_vec itself & SC is Ulysses data ('Ulysses in RTN')
     :return: cartesian coordinates in RTN-system
     '''
-    if spherical:
-        r_vec_2conv = array([r_vec[0],r_vec[1]-long_shift_r,90.-r_vec[2]]) # conversion to 'classical' theta-definition
-        # print("r_vec_2conv:")
-        # print(r_vec_2conv)
-        r_vec_cart= sph2cart(r_vec_2conv,deg=degr)
-        # print("\n r_vec_cart:")
-        # print(r_vec_cart)
-    if degr:
-        interim_1 = rotate(r_vec_cart,'z',-(sc_vec[1]-90-long_shift),deg=True)
-        # print("\n interim_1:")
-        # print(interim_1)
-        interim_2 = rotate(interim_1,'x',-sc_vec[2],deg=True)
-        # print("\n interim_2:")
-        # print(interim_2)
-        R,T,N = rotate(interim_2,'z',-90.,deg=True)
-    return array([R,T,N])
-
+    r_vec_2conv = array([r_vec[0],r_vec[1]-long_shift_r,90.-r_vec[2]]) # conversion to 'classical' theta-definition
+    # print("r_vec_2conv:")
+    # print(r_vec_2conv)
+    r_vec_cart= sph2cart(r_vec_2conv, deg = True) # conversion to cartesian coordinates
+    # print("\n r_vec_cart:")
+    # print(r_vec_cart)
+    # principle: rotate r_vec like you had to rotate 'R' onto 'x'
+    interim_1 = rotate(r_vec_cart, 'z', -(sc_vec[1]-long_shift), deg = True)
+    R,T,N = rotate(interim_1, 'y', sc_vec[2], deg = True)
+    return array([R, T, N])
 
 def calc_v(vec1, vec2, dt, R = "km"):
     '''
