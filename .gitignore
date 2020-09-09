@@ -1,5 +1,7 @@
 # too large for github:
 /MA/Literatur/KoordSys/131123-explanatory-supplement-astronomical-almanac.pdf
+/Ulysses/Trajectory/Koordtrafo_Martin/spice_martin/data/*
+/Ulysses/Trajectory/SPICE/data/*
 
 # binary file written by dbData:
 tmp.dat
