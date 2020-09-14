@@ -20,9 +20,9 @@ KPL/MK
 
 
    \begindata
-   KERNELS_TO_LOAD = ('PUI/Ulysses/Trajectory/SPICE/data/latest_leapseconds.tls',
-			'PUI/Ulysses/Trajectory/SPICE/data/de438.bsp',
-			'PUI/Ulysses/Trajectory/SPICE/data/pck00010.tpc')
+   KERNELS_TO_LOAD = ('Ulysses/Trajectory/SPICE/data/latest_leapseconds.tls',
+			'Ulysses/Trajectory/SPICE/data/de438.bsp',
+			'Ulysses/Trajectory/SPICE/data/pck00010.tpc')
 
 			
    \begintext

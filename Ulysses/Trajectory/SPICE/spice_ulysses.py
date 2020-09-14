@@ -3,13 +3,14 @@ from etspice import ReferenceFrame, utils
 from etspice import kernels
 import datetime
 import spiceypy as spice
+import os
 
-my_kernel = kernels.LocalKernel('PUI/Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
-my_kernel.load()
+os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+
+#my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
+#my_kernel.load()
 
 HCI = ReferenceFrame([kernels.heliospheric_frames],'HCI')
-
-
 
 
 
@@ -57,7 +58,6 @@ def cart2sph(t, deg=False):
 
     return out
 
-
 def locateUlysses(date, RF, spher = True):
     '''
     Returns Ulysses' position after SPICE data
@@ -69,6 +69,19 @@ def locateUlysses(date, RF, spher = True):
     xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF)
     if spher == True:
         r, theta, phi = utils.cart2spherical(xyz, degrees = True)
-        r2,phi2,theta2 = cart2sph(xyz,deg = True)
-    print(r,phi,theta)
-    print(r2,phi2,theta2)
+    print(r/1.496e8,phi,theta)
+
+
+
+def read_pool():
+    path_pool = "Ulysses/Trajectory/trajectory_data/traj_data_ulysses_pool.dat"
+    fin = open(path_pool,'r')
+    paras = fin.readline().split()
+    for headerline in range(3):
+        fin.readline()
+    p_dict = {p:[] for p in paras}
+    for line in fin:
+        data = line.split()
+        for i,p in enumerate(p_dict.keys()):
+            p_dict[p].append(float(data[i]))
+    return p_dict
