@@ -10,7 +10,12 @@ os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
 #my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
 #my_kernel.load()
 
+my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/data/test_tf.tf') # load additional rf kernel
+my_kernel.load()
+
 HCI = ReferenceFrame([kernels.heliospheric_frames],'HCI')
+HCI_cp = ReferenceFrame([my_kernel],'HCI_CP')
+HCI_T1 = ReferenceFrame([my_kernel],'HCI_T1')
 
 
 
@@ -72,7 +77,6 @@ def locateUlysses(date, RF, spher = True):
     print(r/1.496e8,phi,theta)
 
 
-
 def read_pool():
     path_pool = "Ulysses/Trajectory/trajectory_data/traj_data_ulysses_pool.dat"
     fin = open(path_pool,'r')
@@ -85,3 +89,6 @@ def read_pool():
         for i,p in enumerate(p_dict.keys()):
             p_dict[p].append(float(data[i]))
     return p_dict
+
+def get_loc(date, RF = both):
+    date.year
