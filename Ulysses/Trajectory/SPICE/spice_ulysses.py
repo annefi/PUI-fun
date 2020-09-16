@@ -6,8 +6,8 @@ import spiceypy as spice
 import os
 import numpy as np
 
-# os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
+os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+#os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
 
 #my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
 #my_kernel.load()
@@ -16,8 +16,9 @@ my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/data/test_tf.tf') # lo
 my_kernel.load()
 
 HCI = ReferenceFrame([kernels.heliospheric_frames],'HCI')
-HCI_cp = ReferenceFrame([my_kernel],'HCI_CP')
+HCI_copy = ReferenceFrame([my_kernel],'HCI_COPY')
 HCI_T1 = ReferenceFrame([my_kernel],'HCI_T1')
+HCI_T2 = ReferenceFrame([my_kernel],'HCI_T2')
 
 
 def cart2sph(t, deg=False):
@@ -75,7 +76,7 @@ def locateUlysses(date, RF, spher = True):
     xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF)
     if spher == True:
         r, theta, phi = utils.cart2spherical(xyz, degrees = True)
-    print(r/1.496e8,theta,phi)
+    print(RF.name , np.array([r/1.496e8,theta,phi]))
 
 def read_pool():
     path_pool = "Ulysses/Trajectory/trajectory_data/traj_data_ulysses_pool.dat"
@@ -109,6 +110,8 @@ def get_pool_data(date):
                                                                     data['HC_Long'][index],data['R'][index],
                                                                     data['HG_Lat'][index],data['HG_Long'][index]))
 
-def comp_rf(date):
+def comp_rf(date, RF = HCI):
     get_pool_data(date)
-    locateUlysses(date, HCI)
+    locateUlysses(date, HCI_copy)
+    locateUlysses(date, HCI_T1)
+    locateUlysses(date, HCI_T2)
