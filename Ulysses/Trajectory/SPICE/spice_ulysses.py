@@ -2,12 +2,13 @@ from etspice import SUN, ULYSSES
 from etspice import ReferenceFrame, utils
 from etspice import kernels
 import datetime
-import spiceypy as spice
 import os
 import numpy as np
+import matplotlib.pyplot as plt
+from typing import List
 
-os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-#os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
+#os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
 
 #my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
 #my_kernel.load()
@@ -78,6 +79,21 @@ def locateUlysses(date, RF, spher = True):
         r, theta, phi = utils.cart2spherical(xyz, degrees = True)
     print(RF.name , np.array([r/1.496e8,theta,phi]))
 
+def locateBody(body, date, RF, spher = True):
+    '''
+    Returns a body's position after SPICE data
+
+    :param body: body object, e.g. EARTH
+    :param date: datetime object
+    :param RF: etspice.ReferenceFrame
+    :return:
+    '''
+    xyz = body.position(time = date, relative_to = SUN, reference_frame = RF)
+    if spher == True:
+        r, theta, phi = utils.cart2spherical(xyz, degrees = True)
+    print(RF.name , np.array([r/1.496e8,theta,phi]))
+
+
 def read_pool():
     path_pool = "Ulysses/Trajectory/trajectory_data/traj_data_ulysses_pool.dat"
     fin = open(path_pool,'r')
@@ -115,3 +131,37 @@ def comp_rf(date, RF = HCI):
     locateUlysses(date, HCI_copy)
     locateUlysses(date, HCI_T1)
     locateUlysses(date, HCI_T2)
+
+def plot_ts(tf, RF):
+    '''
+
+    :param tf: list of start and end date for time series
+    :param RF: list of Reference Frames that will be plotted
+    :return:
+    '''
+    for frame in RF:
+        pass
+        # check if file exists
+        # otherwise create list
+
+    # create timeseries:
+    first_day = datetime.datetime(tf[0].year,tf[0].month,tf[0].day)
+    last_day = datetime.datetime(tf[1].year, tf[1].month, tf[1].day)
+    delta = last_day - first_day
+    times = [first_day + datetime.timedelta(days = x) for x in range(delta.days + 1)]
+
+
+
+    # set up the plot
+    fig, (ax1, ax2) = plt.subplots(2)
+    ax1.set_xlim(0,len(times))
+    # find appropriate time ticks
+    if len(times) < 365:
+        tarr = np.array(times)
+        monthticks = np.where(tarr == tarr[[t.day == 1 for t in tarr]])
+
+
+
+def create_file(RF):
+    file_path = "Ulysses/Trajectory/SPICE/%s" %RF
+    fout = open(file_path, 'w')
