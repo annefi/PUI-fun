@@ -16,8 +16,15 @@ os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
 my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/data/test_tf.tf') # load additional rf kernel
 my_kernel.load()
 
+# SPICE built-in frames:
+from etspice import J2000, ECLIPJ2000
+B1950 = ReferenceFrame([kernels.planets], 'B1950')
+ECLIPB1950 = ReferenceFrame([kernels.planets], 'ECLIPB1950')
+
+# STEREO Kernel "heliospheric... .tf"
 HCI = ReferenceFrame([kernels.heliospheric_frames],'HCI')
-HCI_copy = ReferenceFrame([my_kernel],'HCI_COPY')
+
+# DIY kernel
 HCI_T1 = ReferenceFrame([my_kernel],'HCI_T1')
 HCI_T2 = ReferenceFrame([my_kernel],'HCI_T2')
 
@@ -128,7 +135,9 @@ def get_pool_data(date):
 
 def comp_rf(date, RF = HCI):
     get_pool_data(date)
-    locateUlysses(date, HCI_copy)
+    locateUlysses(date, ECLIPJ2000)
+    locateUlysses(date, ECLIPB1950)
+    locateUlysses(date, HCI)
     locateUlysses(date, HCI_T1)
     locateUlysses(date, HCI_T2)
 
@@ -161,7 +170,8 @@ def plot_ts(tf, RF):
         monthticks = np.where(tarr == tarr[[t.day == 1 for t in tarr]])
 
 
-
-def create_file(RF):
-    file_path = "Ulysses/Trajectory/SPICE/%s" %RF
-    fout = open(file_path, 'w')
+# def create_file(RF):
+#     first_day = datetime.datetime(1990,)
+#     last_day = datetime.datetime()
+#     file_path = "Ulysses/Trajectory/SPICE/%s" %RF
+#     fout = open(file_path, 'w')

@@ -78,31 +78,30 @@ Heliocentric Inertial (HCI) Frame
  
             (...)
 
-***
-changed parameter "RELATIVE" to B1950
-
 \begindata
 
-        FRAME_HCI_T1                 =  1910421
-        FRAME_1910421_NAME           = 'HCI_T1'
-        FRAME_1910421_CLASS          =  5
-        FRAME_1910421_CLASS_ID       =  1910421
-        FRAME_1910421_CENTER         =  10
-        FRAME_1910421_RELATIVE       = 'B1950'
-        FRAME_1910421_DEF_STYLE      = 'PARAMETERIZED'
-        FRAME_1910421_FAMILY         = 'TWO-VECTOR'
-        FRAME_1910421_PRI_AXIS       = 'Z'
-        FRAME_1910421_PRI_VECTOR_DEF = 'CONSTANT'
-        FRAME_1910421_PRI_FRAME      = 'IAU_SUN'
-        FRAME_1910421_PRI_SPEC       = 'RECTANGULAR'
-        FRAME_1910421_PRI_VECTOR     = ( 0, 0, 1 )
-        FRAME_1910421_SEC_AXIS       = 'Y'
-        FRAME_1910421_SEC_VECTOR_DEF = 'CONSTANT'
-        FRAME_1910421_SEC_FRAME      = 'ECLIPJ2000'
-        FRAME_1910421_SEC_SPEC       = 'RECTANGULAR'
-        FRAME_1910421_SEC_VECTOR     = ( 0, 0, 1 )
+        FRAME_HCI_T1                 =  1810420
+        FRAME_1810421_NAME           = 'HCI_T1'
+        FRAME_1810421_CLASS          =  5
+        FRAME_1810421_CLASS_ID       =  1810420
+        FRAME_1810421_CENTER         =  10
+        FRAME_1810421_RELATIVE       = 'J2000'
+        FRAME_1810421_DEF_STYLE      = 'PARAMETERIZED'
+        FRAME_1810421_FAMILY         = 'TWO-VECTOR'
+        FRAME_1810421_FREEZE_EPOCH   = @1950-JAN-01/12:00:00
+        FRAME_1810421_PRI_AXIS       = 'Z'
+        FRAME_1810421_PRI_VECTOR_DEF = 'CONSTANT'
+        FRAME_1810421_PRI_FRAME      = 'IAU_SUN'
+        FRAME_1810421_PRI_SPEC       = 'RECTANGULAR'
+        FRAME_1810421_PRI_VECTOR     = ( 0, 0, 1 )
+        FRAME_1810421_SEC_AXIS       = 'Y'
+        FRAME_1810421_SEC_VECTOR_DEF = 'CONSTANT'
+        FRAME_1810421_SEC_FRAME      = 'ECLIPJ2000'
+        FRAME_1810421_SEC_SPEC       = 'RECTANGULAR'
+        FRAME_1810421_SEC_VECTOR     = ( 0, 0, 1 )
 
 \begintext
+
 
 Heliocentric Inertial (HCI) Frame
 
