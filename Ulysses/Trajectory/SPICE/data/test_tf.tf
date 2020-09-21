@@ -80,7 +80,7 @@ Heliocentric Inertial (HCI) Frame
 
 \begindata
 
-        FRAME_HCI_T1                 =  1810420
+        FRAME_HCI_T1                 =  1810421
         FRAME_1810421_NAME           = 'HCI_T1'
         FRAME_1810421_CLASS          =  5
         FRAME_1810421_CLASS_ID       =  1810420
