@@ -7,8 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from typing import List
 
-#os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
+os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+#os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
 
 #my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
 #my_kernel.load()
@@ -117,6 +117,53 @@ def read_pool():
         p_dict['datestring'].append("%i-%i-%i" % (year,p_dict['MM'][i],p_dict['DD'][i]))
     for key in p_dict:
         p_dict[key] = np.array(p_dict[key])
+    fin.close()
+    return p_dict
+
+def read_ulysses_daily():
+    path_pool = "Ulysses/Trajectory/trajectory_data/ulysses_daily_heliocentric_data_1990-2009.txt"
+    fin = open(path_pool,'r')
+    for headerline in range(4):
+        fin.readline()
+    paras = fin.readline().split()
+    p_dict = {p:[] for p in paras}
+    for headerline in range(2):
+        fin.readline()
+    for line in fin:
+        data = line.split()
+        for i,p in enumerate(p_dict.keys()):
+            p_dict[p].append(float(data[i]))
+    p_dict["datestring"] = []
+    for i,year in enumerate(p_dict['YYYY']):
+        p_dict['datestring'].append("%i-%i-%i" % (year,p_dict['MM'][i],p_dict['DD'][i]))
+    for key in p_dict:
+        p_dict[key] = np.array(p_dict[key])
+    fin.close()
+    return p_dict
+
+def read_helio_dat():
+    path_pool = "Ulysses/Trajectory/trajectory_data/helio.dat"
+    fin = open(path_pool,'r')
+    paras_all = fin.readline().split()
+    paras = paras_all[:4] + ['R_AU', "HG_LAT", "HC_RA", "HC_ECL_LAT", "LONG_WRT_EARTH"]
+    p_dict = {p:[] for p in paras}
+    for headerline in range(5):
+        fin.readline()
+    for line in fin:
+        data_all = line.split()
+        data = data_all[:4] + data_all[-5:]
+        for i,p in enumerate(p_dict.keys()):
+            p_dict[p].append(float(data[i]))
+    p_dict["datestring"] = []
+    for i,iyear in enumerate(p_dict['Year']):
+        # small workaround as there's only DOY datagiven in helio.dat:
+        date = datetime.datetime(int(iyear),1,1) + datetime.timedelta(p_dict['DOY'][i])
+        MM = date.month
+        DD = date.day
+        p_dict['datestring'].append("%i-%i-%i" % (iyear,MM,DD))
+    for key in p_dict:
+        p_dict[key] = np.array(p_dict[key])
+    fin.close()
     return p_dict
 
 def get_pool_data(date):
@@ -135,17 +182,24 @@ def get_pool_data(date):
 
 def comp_rf(date, RF = HCI):
     get_pool_data(date)
-    locateUlysses(date, ECLIPJ2000)
+    #locateUlysses(date, ECLIPJ2000)
     locateUlysses(date, ECLIPB1950)
-    locateUlysses(date, HCI)
-    locateUlysses(date, HCI_T1)
-    locateUlysses(date, HCI_T2)
+    #locateUlysses(date, HCI)
+    #locateUlysses(date, HCI_T1)
+    #locateUlysses(date, HCI_T2)
 
 def plot_ts(tf, RF):
     '''
-
     :param tf: list of start and end date for time series
     :param RF: list of Reference Frames that will be plotted
+                    > Possible prefixes:
+                        SP --- calculated by SPICE
+                        UD --- data from "ulysses_daily... .txt"
+                        HE --- data from "helio.dat"
+                        PO --- data from the pooled file. Should be 
+                                matching with data files for the most parts.
+                    > Check resp. read-in-function (e.g. read_pool()) 
+                        for possible suffixes
     :return:
     '''
     for frame in RF:
@@ -159,15 +213,14 @@ def plot_ts(tf, RF):
     delta = last_day - first_day
     times = [first_day + datetime.timedelta(days = x) for x in range(delta.days + 1)]
 
-
+    test_data = np.random.random(len(times))
 
     # set up the plot
-    fig, (ax1, ax2) = plt.subplots(2)
-    ax1.set_xlim(0,len(times))
-    # find appropriate time ticks
-    if len(times) < 365:
-        tarr = np.array(times)
-        monthticks = np.where(tarr == tarr[[t.day == 1 for t in tarr]])
+    fig, ax = plt.subplots()
+    ax.plot(times,test_data)
+    fig.autofmt_xdate()
+    plt.show()
+    
 
 
 # def create_file(RF):

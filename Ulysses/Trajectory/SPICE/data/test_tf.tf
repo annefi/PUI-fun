@@ -69,36 +69,6 @@ Mean Ecliptic of Date (ECLIPDATE) Frame
         FRAME_1910420_SEC_SPEC       = 'RECTANGULAR'
         FRAME_1910420_SEC_VECTOR     = ( 0, 0, 1 )
 
-\begintext
-
-
-Heliocentric Inertial (HCI) Frame
-
-     Definition of the Heliocentric Inertial frame:
- 
-            (...)
-
-\begindata
-
-        FRAME_HCI_T1                 =  1810421
-        FRAME_1810421_NAME           = 'HCI_T1'
-        FRAME_1810421_CLASS          =  5
-        FRAME_1810421_CLASS_ID       =  1810420
-        FRAME_1810421_CENTER         =  10
-        FRAME_1810421_RELATIVE       = 'J2000'
-        FRAME_1810421_DEF_STYLE      = 'PARAMETERIZED'
-        FRAME_1810421_FAMILY         = 'TWO-VECTOR'
-        FRAME_1810421_FREEZE_EPOCH   = @1950-JAN-01/12:00:00
-        FRAME_1810421_PRI_AXIS       = 'Z'
-        FRAME_1810421_PRI_VECTOR_DEF = 'CONSTANT'
-        FRAME_1810421_PRI_FRAME      = 'IAU_SUN'
-        FRAME_1810421_PRI_SPEC       = 'RECTANGULAR'
-        FRAME_1810421_PRI_VECTOR     = ( 0, 0, 1 )
-        FRAME_1810421_SEC_AXIS       = 'Y'
-        FRAME_1810421_SEC_VECTOR_DEF = 'CONSTANT'
-        FRAME_1810421_SEC_FRAME      = 'ECLIPJ2000'
-        FRAME_1810421_SEC_SPEC       = 'RECTANGULAR'
-        FRAME_1810421_SEC_VECTOR     = ( 0, 0, 1 )
 
 \begintext
 
@@ -132,5 +102,38 @@ changed parameters: both "SEC_FRAME" and "RELATIVE" to B1950
         FRAME_1910422_SEC_FRAME      = 'ECLIPB1950'
         FRAME_1910422_SEC_SPEC       = 'RECTANGULAR'
         FRAME_1910422_SEC_VECTOR     = ( 0, 0, 1 )
+
+\begintext
+
+
+Heliocentric Inertial (HCI) Frame
+
+     Definition of the Heliocentric Inertial frame:
+ 
+            (...)
+
+***
+changed parameters:  "SEC_FRAME"
+
+\begindata
+
+        FRAME_HCI_NEW                =  1910423
+        FRAME_1910423_NAME           = 'HCI_NEW'
+        FRAME_1910423_CLASS          =  5
+        FRAME_1910423_CLASS_ID       =  1910423
+        FRAME_1910423_CENTER         =  10
+        FRAME_1910423_RELATIVE       = 'J2000'
+        FRAME_1910423_DEF_STYLE      = 'PARAMETERIZED'
+        FRAME_1910423_FAMILY         = 'TWO-VECTOR'
+        FRAME_1910423_PRI_AXIS       = 'Z'
+        FRAME_1910423_PRI_VECTOR_DEF = 'CONSTANT'
+        FRAME_1910423_PRI_FRAME      = 'IAU_SUN'
+        FRAME_1910423_PRI_SPEC       = 'RECTANGULAR'
+        FRAME_1910423_PRI_VECTOR     = ( 0, 0, 1 )
+        FRAME_1910423_SEC_AXIS       = 'Y'
+        FRAME_1910423_SEC_VECTOR_DEF = 'CONSTANT'
+        FRAME_1910423_SEC_FRAME      = 'ECLIPB1950'
+        FRAME_1910423_SEC_SPEC       = 'RECTANGULAR'
+        FRAME_1910423_SEC_VECTOR     = ( 0, 0, 1 )
 
 \begintext
