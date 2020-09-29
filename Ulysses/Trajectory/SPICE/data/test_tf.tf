@@ -32,45 +32,6 @@ History
     Version 4, 08-Aug-2008, WTT
 	Add GEORTN coordinate system (comment added 30-Aug-2010)
 
-Mean Ecliptic of Date (ECLIPDATE) Frame
-
-     Definition of the Mean Ecliptic of Date frame:
- 
-              All vectors are geometric: no aberration corrections are
-              used.
- 
-              The X axis is the first point in Aries for the mean ecliptic of
-	      date, and the Z axis points along the ecliptic north pole.
- 
-              The Y axis is Z cross X, completing the right-handed
-              reference frame.
-
-	      This reference frame can be used to realize the HAE coordinate
-	      system by using the sun as the observing body.
-
-\begindata
-
-        FRAME_HCI_COPY               =  1910420
-        FRAME_1910420_NAME           = 'HCI_COPY'
-        FRAME_1910420_CLASS          =  5
-        FRAME_1910420_CLASS_ID       =  1910420
-        FRAME_1910420_CENTER         =  10
-        FRAME_1910420_RELATIVE       = 'J2000'
-        FRAME_1910420_DEF_STYLE      = 'PARAMETERIZED'
-        FRAME_1910420_FAMILY         = 'TWO-VECTOR'
-        FRAME_1910420_PRI_AXIS       = 'Z'
-        FRAME_1910420_PRI_VECTOR_DEF = 'CONSTANT'
-        FRAME_1910420_PRI_FRAME      = 'IAU_SUN'
-        FRAME_1910420_PRI_SPEC       = 'RECTANGULAR'
-        FRAME_1910420_PRI_VECTOR     = ( 0, 0, 1 )
-        FRAME_1910420_SEC_AXIS       = 'Y'
-        FRAME_1910420_SEC_VECTOR_DEF = 'CONSTANT'
-        FRAME_1910420_SEC_FRAME      = 'ECLIPJ2000'
-        FRAME_1910420_SEC_SPEC       = 'RECTANGULAR'
-        FRAME_1910420_SEC_VECTOR     = ( 0, 0, 1 )
-
-
-\begintext
 
 
 Heliocentric Inertial (HCI) Frame
@@ -80,7 +41,7 @@ Heliocentric Inertial (HCI) Frame
             (...)
 
 ***
-changed parameters: both "SEC_FRAME" and "RELATIVE" to B1950
+changed parameters: both "SEC_FRAME" and freeze to B1950
 
 \begindata
 
@@ -89,9 +50,10 @@ changed parameters: both "SEC_FRAME" and "RELATIVE" to B1950
         FRAME_1910422_CLASS          =  5
         FRAME_1910422_CLASS_ID       =  1910422
         FRAME_1910422_CENTER         =  10
-        FRAME_1910422_RELATIVE       = 'B1950'
+        FRAME_1910422_RELATIVE       = 'J2000'
         FRAME_1910422_DEF_STYLE      = 'PARAMETERIZED'
         FRAME_1910422_FAMILY         = 'TWO-VECTOR'
+	FRAME_1810422_FREEZE_EPOCH   = @1949-DEC-31/22:09:47
         FRAME_1910422_PRI_AXIS       = 'Z'
         FRAME_1910422_PRI_VECTOR_DEF = 'CONSTANT'
         FRAME_1910422_PRI_FRAME      = 'IAU_SUN'

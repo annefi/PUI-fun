@@ -7,8 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from typing import List
 
-os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-#os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
+#os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
 
 #my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
 #my_kernel.load()
@@ -25,8 +25,8 @@ ECLIPB1950 = ReferenceFrame([kernels.planets], 'ECLIPB1950')
 HCI = ReferenceFrame([kernels.heliospheric_frames],'HCI')
 
 # DIY kernel
-HCI_T1 = ReferenceFrame([my_kernel],'HCI_T1')
 HCI_T2 = ReferenceFrame([my_kernel],'HCI_T2')
+HCI_N = ReferenceFrame([my_kernel],'HCI_NEW')
 
 
 def cart2sph(t, deg=False):
@@ -181,12 +181,12 @@ def get_pool_data(date):
                                                                     data['HG_Lat'][index],data['HG_Long'][index]))
 
 def comp_rf(date, RF = HCI):
-    get_pool_data(date)
-    #locateUlysses(date, ECLIPJ2000)
+    #get_pool_data(date)
+    locateUlysses(date, ECLIPJ2000)
     locateUlysses(date, ECLIPB1950)
-    #locateUlysses(date, HCI)
-    #locateUlysses(date, HCI_T1)
-    #locateUlysses(date, HCI_T2)
+    locateUlysses(date, HCI)
+    locateUlysses(date, HCI_T2)
+    locateUlysses(date, HCI_N)
 
 def plot_ts(tf, RF):
     '''
