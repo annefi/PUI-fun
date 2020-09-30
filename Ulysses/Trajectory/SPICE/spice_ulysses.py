@@ -79,12 +79,13 @@ def locateUlysses(date, RF, spher = True):
 
     :param date: datetime object
     :param RF: etspice.ReferenceFrame
-    :return:
+    :return: [heliocentric range in AU, latitude, longitude]
     '''
     xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF)
     if spher == True:
         r, theta, phi = utils.cart2spherical(xyz, degrees = True)
-    print(RF.name , np.array([r/1.496e8,theta,phi]))
+    #print(RF.name , np.array([r/1.496e8,theta,phi]))
+    return np.array([r/1.496e8,theta,phi])
 
 def locateBody(body, date, RF, spher = True):
     '''
@@ -192,33 +193,76 @@ def plot_ts(tf, RF):
     '''
     :param tf: list of start and end date for time series
     :param RF: list of Reference Frames that will be plotted
-                    > Possible prefixes:
-                        SP --- calculated by SPICE
-                        UD --- data from "ulysses_daily... .txt"
-                        HE --- data from "helio.dat"
-                        PO --- data from the pooled file. Should be 
+                    > Possible first arguments:
+                        "SP" --- calculated by SPICE
+                        "UD" --- data from "ulysses_daily... .txt"
+                        "HE" --- data from "helio.dat"
+                        "PO" --- data from the pooled file. Should be
                                 matching with data files for the most parts.
                     > Check resp. read-in-function (e.g. read_pool()) 
                         for possible suffixes
-    :return:
+    Example: plot_ts([d1,d2], [["SP",ECLIPJ200,"LAT"]])
+                with d1, d2 being datetime.datetime objects
     '''
-    for frame in RF:
-        pass
-        # check if file exists
-        # otherwise create list
-
     # create timeseries:
     first_day = datetime.datetime(tf[0].year,tf[0].month,tf[0].day)
     last_day = datetime.datetime(tf[1].year, tf[1].month, tf[1].day)
     delta = last_day - first_day
     times = [first_day + datetime.timedelta(days = x) for x in range(delta.days + 1)]
 
-    test_data = np.random.random(len(times))
-
     # set up the plot
     fig, ax = plt.subplots()
-    ax.plot(times,test_data)
+    test_data = np.random.random(len(times))
+    # real data:
+    plot_dict = {p:[] for p in ['y_dim', 'label', 'data', 'RF']}
+    for frame in RF:
+        if frame[0] == "SP":
+            data_SP = []
+            if frame[2] == "LAT":
+                for t in times:
+                    data_SP.append(locateUlysses(t,frame[1])[1])
+            elif frame[2] == "LONG":
+                for t in times:
+                    data_SP.append(locateUlysses(t,frame[1])[2])
+            else:
+                print("Third argument has not been recognised. Choose one of \"LAT\", \"LONG\".")
+            plot_dict["y_dim"].append(frame[2])
+            plot_dict["label"].append("SPICE %s" % frame[1])
+            plot_dict['data'].append([data_SP])
+            plot_dict['RF'].append(frame[0])
+            #ax.plot(times, data_SP, linestyle="None", marker="v", ms="5", label = "SPICE %s" %frame[2])
+        elif frame[0] == "UD":
+            pass
+            data_UD = []
+            ud_dict = read_ulysses_daily()
+            if frame[1] == "lat":
+                for t in times:
+                    t_ds = "%i-%i-%i" % (t.year,t.month,t.day)
+                    data_UD.append(ud_dict['lat'][ud_dict['datestring'] == t_ds])
+                plot_dict["y_dim"].append('LAT')
+            if frame[1] == "RA":
+                for t in times:
+                    t_ds = "%i-%i-%i" % (t.year,t.month,t.day)
+                    data_UD.append(ud_dict['lat'][ud_dict['datestring'] == t_ds])
+                plot_dict["y_dim"].append('LONG')
+            if frame[1] == "DEC":
+                for t in times:
+                    t_ds = "%i-%i-%i" % (t.year,t.month,t.day)
+                    data_UD.append(ud_dict['lat'][ud_dict['datestring'] == t_ds])
+            plot_dict["label"].append("ulysses_daily %s" % frame[1])
+            plot_dict['data'].append([data_UD])
+            plot_dict['RF'].append(frame[0])
+        
+        elif frame[0] == "HE":
+            pass
+        elif frame[0] == "PO":
+            pass
+        else:
+            print("First assignment has not been recognised. Choose one of \"SP\", \"UD\", \"HE\", \"PO\".")
+
+    ax.set_ylabel("Degrees")
     fig.autofmt_xdate()
+    ax.legend()
     plt.show()
     
 

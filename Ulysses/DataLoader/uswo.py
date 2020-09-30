@@ -31,10 +31,11 @@ class uswo(dbData):
             elif kwargs["tf"]=="all":
                 self.timeframe=[[1.,367]]
             else:
-                print "periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), no data loaded"
+                print("periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), "
+                      "no data loaded")
                 self.timeframe=[]
         else:
-            print "periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), no data loaded"
+            print("periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), no data loaded")
             self.timeframe=[]
         if kwargs.has_key("path"):
             self.path=kwargs["path"]
@@ -52,16 +53,16 @@ class uswo(dbData):
                 self.data[key[0]]=[]
                 self.keys.append(key[0])
         except:
-            print "Cannot get data product keys "
+            print("Cannot get data product keys ")
 
         if len(self.data.keys())>0:
             for year in self.year:
-                print year
+                print(year)
                 for tf in self.timeframe:
                     for doy in range(int(tf[0]),int(tf[1])):
                         try:
                             fname = "%s%.4i/%.3i.dat"%(self.path,year,doy)
-                            print fname
+                            print(fname)
                             fin = open(fname,"r")
                             s = fin.readline()
                             for s in fin:
@@ -72,7 +73,7 @@ class uswo(dbData):
                                     else:
                                         self.data["year"].append(year)
                         except:
-                            print "Problems reading DoY ",doy
+                            print("Problems reading DoY ",doy)
         for key in self.data.keys():
             self.data[key]=array(self.data[key])
         self.calc_doy()

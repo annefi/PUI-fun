@@ -703,6 +703,8 @@ class dbData(object):
                 if isinstance(kwargs['op'], str):
                     kwargs['op_str'] = kwargs['op']
                     kwargs['op'] = _operators.std_ops
+                    #print(args[0])
+                    #print(args)
                     self.mask[mask].add_submask(args[0], *args, **kwargs)
                 else:
                     if 'set_custom_prod' in kwargs:
