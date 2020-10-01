@@ -5,7 +5,7 @@ import datetime
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from typing import List
+from sys import exit
 
 #os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
 os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
@@ -27,7 +27,6 @@ HCI = ReferenceFrame([kernels.heliospheric_frames],'HCI')
 # DIY kernel
 HCI_T2 = ReferenceFrame([my_kernel],'HCI_T2')
 HCI_N = ReferenceFrame([my_kernel],'HCI_NEW')
-
 
 def cart2sph(t, deg=False):
     """
@@ -126,12 +125,15 @@ def read_ulysses_daily():
     fin = open(path_pool,'r')
     for headerline in range(4):
         fin.readline()
-    paras = fin.readline().split()
+
+    paras_all = fin.readline().split()
+    paras = paras_all[:3] + [paras_all[4]] + [paras_all[12]] + paras_all[-4:]
     p_dict = {p:[] for p in paras}
     for headerline in range(2):
         fin.readline()
     for line in fin:
-        data = line.split()
+        data_all = line.split()
+        data = data_all[:3] + [data_all[4]] + [data_all[12]] + data_all[-4:]
         for i,p in enumerate(p_dict.keys()):
             p_dict[p].append(float(data[i]))
     p_dict["datestring"] = []
@@ -157,8 +159,8 @@ def read_helio_dat():
             p_dict[p].append(float(data[i]))
     p_dict["datestring"] = []
     for i,iyear in enumerate(p_dict['Year']):
-        # small workaround as there's only DOY datagiven in helio.dat:
-        date = datetime.datetime(int(iyear),1,1) + datetime.timedelta(p_dict['DOY'][i])
+        # small workaround as there's only DOY data given in helio.dat:
+        date = datetime.datetime(int(iyear),1,1) + datetime.timedelta(days = p_dict['DOY'][i] - 1)
         MM = date.month
         DD = date.day
         p_dict['datestring'].append("%i-%i-%i" % (iyear,MM,DD))
@@ -189,7 +191,7 @@ def comp_rf(date, RF = HCI):
     locateUlysses(date, HCI_T2)
     locateUlysses(date, HCI_N)
 
-def plot_ts(tf, RF):
+def plot_ts(tf, RF, rou = False):
     '''
     :param tf: list of start and end date for time series
     :param RF: list of Reference Frames that will be plotted
@@ -217,53 +219,103 @@ def plot_ts(tf, RF):
     plot_dict = {p:[] for p in ['y_dim', 'label', 'data', 'RF']}
     for frame in RF:
         if frame[0] == "SP":
+            # calculate with SPICE
             data_SP = []
             if frame[2] == "LAT":
                 for t in times:
-                    data_SP.append(locateUlysses(t,frame[1])[1])
+                    if rou == True:
+                        data_SP.append(round(locateUlysses(t,frame[1])[1],2))
+                    else:
+                        data_SP.append(locateUlysses(t, frame[1])[1])
             elif frame[2] == "LONG":
                 for t in times:
-                    data_SP.append(locateUlysses(t,frame[1])[2])
+                    if rou == True:
+                        data_SP.append(round(locateUlysses(t,frame[1])[2],2))
+                    else:
+                        data_SP.append(locateUlysses(t, frame[1])[2])
             else:
                 print("Third argument has not been recognised. Choose one of \"LAT\", \"LONG\".")
             plot_dict["y_dim"].append(frame[2])
-            plot_dict["label"].append("SPICE %s" % frame[1])
-            plot_dict['data'].append([data_SP])
+            plot_dict["label"].append("SPICE %s" % frame[1].name)
+            plot_dict['data'].append(data_SP)
             plot_dict['RF'].append(frame[0])
             #ax.plot(times, data_SP, linestyle="None", marker="v", ms="5", label = "SPICE %s" %frame[2])
+
         elif frame[0] == "UD":
-            pass
+            # data from "ulysses_daily_heliocentric_data_1990-2009.txt"
             data_UD = []
             ud_dict = read_ulysses_daily()
             if frame[1] == "lat":
                 for t in times:
                     t_ds = "%i-%i-%i" % (t.year,t.month,t.day)
-                    data_UD.append(ud_dict['lat'][ud_dict['datestring'] == t_ds])
+                    data_UD.append(ud_dict['lat'][ud_dict['datestring'] == t_ds][0])
                 plot_dict["y_dim"].append('LAT')
-            if frame[1] == "RA":
+            elif frame[1] == "RA":
                 for t in times:
                     t_ds = "%i-%i-%i" % (t.year,t.month,t.day)
-                    data_UD.append(ud_dict['lat'][ud_dict['datestring'] == t_ds])
+                    data_UD.append(ud_dict['RA'][ud_dict['datestring'] == t_ds][0])
                 plot_dict["y_dim"].append('LONG')
-            if frame[1] == "DEC":
+            elif frame[1] == "DEC":
                 for t in times:
                     t_ds = "%i-%i-%i" % (t.year,t.month,t.day)
-                    data_UD.append(ud_dict['lat'][ud_dict['datestring'] == t_ds])
+                    data_UD.append(ud_dict['DEC'][ud_dict['datestring'] == t_ds][0])
+            else:
+                print("Second argument has not been recognised. Choose one of \"lat\", \"RA\", \"DEC\".")
+
             plot_dict["label"].append("ulysses_daily %s" % frame[1])
-            plot_dict['data'].append([data_UD])
+            plot_dict['data'].append(data_UD)
             plot_dict['RF'].append(frame[0])
         
         elif frame[0] == "HE":
-            pass
+            # data from "helio.txt"
+            data_HE = []
+            he_dict = read_helio_dat()
+            if frame[1] == "HG_LAT":
+                for t in times:
+                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
+                    data_HE.append(he_dict['HG_LAT'][he_dict['datestring'] == t_ds][0])
+                plot_dict["y_dim"].append('LAT')
+            elif frame[1] == "HC_RA":
+                for t in times:
+                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
+                    data_HE.append(he_dict['HC_RA'][he_dict['datestring'] == t_ds][0] - 180.)
+                plot_dict["y_dim"].append('LONG')
+            elif frame[1] == "HC_ECL_LAT":
+                for t in times:
+                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
+                    data_HE.append(he_dict['HC_ECL_LAT'][he_dict['datestring'] == t_ds][0])
+            plot_dict["label"].append("helio.dat %s" % frame[1])
+            plot_dict['data'].append(data_HE)
+            plot_dict['RF'].append(frame[0])
+
         elif frame[0] == "PO":
             pass
         else:
             print("First assignment has not been recognised. Choose one of \"SP\", \"UD\", \"HE\", \"PO\".")
 
-    ax.set_ylabel("Degrees")
+    # y axis depends on lat/long
+    if all(y_dim == "LAT" for y_dim in plot_dict['y_dim']):
+        ax.set_ylabel("Lat. in degree")
+        ax.set_ylim(-90, 90)
+    elif all(y_dim == "LONG" for y_dim in plot_dict['y_dim']):
+        ax.set_ylabel("Long. in degree")
+        ax.set_ylim(0, 360)
+    else:
+        print('y dimensions do not match')
+        exit()
+    for i, data in enumerate(plot_dict['data']):
+        # print(i, plot_dict['RF'][i], data, '\n\n')
+        if plot_dict['RF'][i] == 'SP':
+            ax.plot(times, data, linestyle='None', label=plot_dict['label'][i], marker='v', ms = "5", alpha = 0.3)
+        elif plot_dict['RF'][i] == 'UD':
+            ax.plot(times, data, linestyle = 'None', label = plot_dict['label'][i], marker = 'o', ms = "4", alpha = 0.3)
+        elif plot_dict['RF'][i] == 'HE':
+            ax.plot(times, data, linestyle = 'None', label = plot_dict['label'][i], marker = 's', ms = "4", alpha = 0.3)
+
     fig.autofmt_xdate()
     ax.legend()
     plt.show()
+    return ax, times, plot_dict['data']
     
 
 
