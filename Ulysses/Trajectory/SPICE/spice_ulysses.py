@@ -7,8 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sys import exit
 
-#os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
+os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+#os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
 
 #my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
 #my_kernel.load()
@@ -25,8 +25,8 @@ ECLIPB1950 = ReferenceFrame([kernels.planets], 'ECLIPB1950')
 HCI = ReferenceFrame([kernels.heliospheric_frames],'HCI')
 
 # DIY kernel
-HCI_T2 = ReferenceFrame([my_kernel],'HCI_T2')
-HCI_N = ReferenceFrame([my_kernel],'HCI_NEW')
+HCI_B = ReferenceFrame([my_kernel],'HCI_B1950')
+HCI_J = ReferenceFrame([my_kernel],'HCI_J2000')
 
 def cart2sph(t, deg=False):
     """

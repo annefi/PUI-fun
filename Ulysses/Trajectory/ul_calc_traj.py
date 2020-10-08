@@ -15,9 +15,9 @@ Radial-Tangential-Normal (RTN):
 
 """
 
-from pylib import dbData
+#from pylib import dbData
 from numpy import array, cos, arccos, pi, sqrt
-from pylib.etCoord import rotate, sph2cart, cart2sph
+from etCoord import rotate, sph2cart, cart2sph
 from matplotlib import pylab
 
 
