@@ -191,7 +191,7 @@ def comp_rf(date, RF = HCI):
     locateUlysses(date, HCI_T2)
     locateUlysses(date, HCI_N)
 
-def plot_ts(tf, RF, rou = False):
+def plot_ts(tf, RF, rou = False, diff = False, ax = None):
     '''
     :param tf: list of start and end date for time series
     :param RF: list of Reference Frames that will be plotted
@@ -213,7 +213,8 @@ def plot_ts(tf, RF, rou = False):
     times = [first_day + datetime.timedelta(days = x) for x in range(delta.days + 1)]
 
     # set up the plot
-    fig, ax = plt.subplots()
+    if ax == None:
+        fig, ax = plt.subplots()
     test_data = np.random.random(len(times))
     # real data:
     plot_dict = {p:[] for p in ['y_dim', 'label', 'data', 'RF']}
@@ -292,35 +293,45 @@ def plot_ts(tf, RF, rou = False):
             pass
         else:
             print("First assignment has not been recognised. Choose one of \"SP\", \"UD\", \"HE\", \"PO\".")
-
+    #return plot_dict
     # y axis depends on lat/long
     if all(y_dim == "LAT" for y_dim in plot_dict['y_dim']):
         ax.set_ylabel("Lat. in degree")
         ax.set_ylim(-90, 90)
     elif all(y_dim == "LONG" for y_dim in plot_dict['y_dim']):
         ax.set_ylabel("Long. in degree")
-        ax.set_ylim(0, 360)
+        ax.set_ylim(-180, 360)
     else:
         print('y dimensions do not match')
         exit()
-    for i, data in enumerate(plot_dict['data']):
-        # print(i, plot_dict['RF'][i], data, '\n\n')
-        if plot_dict['RF'][i] == 'SP':
-            ax.plot(times, data, linestyle='None', label=plot_dict['label'][i], marker='v', ms = "5", alpha = 0.3)
-        elif plot_dict['RF'][i] == 'UD':
-            ax.plot(times, data, linestyle = 'None', label = plot_dict['label'][i], marker = 'o', ms = "4", alpha = 0.3)
-        elif plot_dict['RF'][i] == 'HE':
-            ax.plot(times, data, linestyle = 'None', label = plot_dict['label'][i], marker = 's', ms = "4", alpha = 0.3)
+    if diff == False:
+        for i, data in enumerate(plot_dict['data']):
+            if plot_dict['RF'][i] == 'SP':
+                ax.plot(times, data, linestyle='None', label=plot_dict['label'][i], marker='v', ms = "5", alpha = 0.3)
+            elif plot_dict['RF'][i] == 'UD':
+                ax.plot(times, data, linestyle = 'None', label = plot_dict['label'][i], marker = 'o', ms = "4", alpha = 0.3)
+            elif plot_dict['RF'][i] == 'HE':
+                ax.plot(times, data, linestyle = 'None', label = plot_dict['label'][i], marker = 's', ms = "4", alpha = 0.3)
+    else:
+        ymin = 0.00001
+        ymax = 0.
+        for i, data in enumerate(plot_dict['data']):
+            print('i:', i)
+            diff_data = np.array(data) - np.array(plot_dict['data'][i+1])
+            ax.plot(times, diff_data, linestyle='None', label = "%s - %s" %(plot_dict['label'][i], plot_dict[
+                'label'][i+1]), marker='v',
+            ms="5", alpha=0.3)
+            ymin = min(list(diff_data) + [ymin])
+            ymax = max(list(diff_data) + [ymax])
+            if i == len(plot_dict['data'])-2:
+                break
+        ax.set_ylim(ymin*3.,ymax*3.)
 
-    fig.autofmt_xdate()
+
+
+
+    #fig.autofmt_xdate()
     ax.legend()
+    ax.grid()
     plt.show()
     return ax, times, plot_dict['data']
-    
-
-
-# def create_file(RF):
-#     first_day = datetime.datetime(1990,)
-#     last_day = datetime.datetime()
-#     file_path = "Ulysses/Trajectory/SPICE/%s" %RF
-#     fout = open(file_path, 'w')
