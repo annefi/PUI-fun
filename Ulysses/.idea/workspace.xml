@@ -4,6 +4,7 @@
     <list default="true" id="0c58623c-1821-4880-9e22-06c9e1193331" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trajectory/ul_calc_traj.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/ul_calc_traj.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,7 +16,7 @@
     <session id="2091974253">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="19" />
+          <entry key="project.closed" value="21" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.12" value="3" />
@@ -23,37 +24,37 @@
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.6" value="2" />
           <entry key="project.open.time.7" value="2" />
-          <entry key="project.open.time.8" value="3" />
+          <entry key="project.open.time.8" value="4" />
           <entry key="project.open.time.9" value="6" />
-          <entry key="project.opened" value="20" />
+          <entry key="project.opened" value="21" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="42" />
+          <entry key="py" value="45" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="42" />
+          <entry key="Python" value="45" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="cpp" value="2" />
-          <entry key="py" value="6254" />
+          <entry key="py" value="9089" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="C++" value="2" />
-          <entry key="Python" value="6254" />
+          <entry key="Python" value="9089" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.36889693">
+    <splitter split-orientation="horizontal" split-proportion="0.46172392">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
@@ -65,7 +66,7 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Trajectory/ulysses_coord_trans.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="805">
@@ -75,10 +76,34 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/.local/lib/python3.7/site-packages/etspice/kernels.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="671">
+                  <caret line="100" column="20" selection-start-line="100" selection-start-column="20" selection-end-line="100" selection-end-column="20" />
+                  <folding>
+                    <element signature="e#0#21#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses (copy).py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1721">
+                  <caret line="336" column="12" selection-start-line="336" selection-start-column="8" selection-end-line="336" selection-end-column="12" />
+                  <folding>
+                    <element signature="e#0#32#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Trajectory/ul_calc_traj.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="165">
-                  <caret line="11" column="20" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="20" />
+                <state relative-caret-position="105">
+                  <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
                 </state>
               </provider>
             </entry>
@@ -99,8 +124,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/DataLoader/uswo.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="495">
-                  <caret line="34" column="39" selection-start-line="34" selection-start-column="39" selection-end-line="34" selection-end-column="39" />
+                <state relative-caret-position="-5">
+                  <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
                   <folding>
                     <element signature="e#0#24#0" expanded="true" />
                   </folding>
@@ -111,10 +136,12 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="520">
-                  <caret line="239" column="64" selection-start-line="239" selection-start-column="64" selection-end-line="239" selection-end-column="64" />
+                <state relative-caret-position="461">
+                  <caret line="354" column="20" lean-forward="true" selection-start-line="354" selection-start-column="20" selection-end-line="354" selection-end-column="20" />
                   <folding>
                     <element signature="e#0#32#0" expanded="true" />
+                    <marker date="1602256313927" expanded="true" signature="9569:11417" ph="..." />
+                    <marker date="1602256313927" expanded="true" signature="11459:12859" ph="..." />
                   </folding>
                 </state>
               </provider>
@@ -125,18 +152,6 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="120">
                   <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$USER_HOME$/.local/lib/python3.7/site-packages/etspice/kernels.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="4875">
-                  <caret line="337" column="45" selection-start-line="337" selection-start-column="45" selection-end-line="337" selection-end-column="45" />
-                  <folding>
-                    <element signature="e#0#21#0" expanded="true" />
-                  </folding>
                 </state>
               </provider>
             </entry>
@@ -168,7 +183,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$USER_HOME$/.local/lib/python3.7/site-packages/etspice/frame.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="445">
+                <state relative-caret-position="435">
                   <caret line="36" column="36" selection-start-line="36" selection-start-column="36" selection-end-line="36" selection-end-column="36" />
                   <folding>
                     <element signature="e#0#21#0" expanded="true" />
@@ -241,13 +256,13 @@
         <option value="$USER_HOME$/test.py" />
         <option value="$PROJECT_DIR$/DataLoader/uswipha.py" />
         <option value="$PROJECT_DIR$/DataLoader/ulysses_traj.py" />
-        <option value="$PROJECT_DIR$/Trajectory/ul_calc_traj.py" />
         <option value="$PROJECT_DIR$/Trajectory/ulysses_coord_trans.py" />
         <option value="$PROJECT_DIR$/Trajectory/Koordtrafo_Martin/spice_martin/main.cpp" />
         <option value="$PROJECT_DIR$/DataLoader/pui_ulysses.py" />
         <option value="$USER_HOME$/.local/lib/python3.7/site-packages/etspice/__init__.py" />
         <option value="$PROJECT_DIR$/DataLoader/uswo.py" />
         <option value="$PROJECT_DIR$/../pylib/dbData/_dbData.py" />
+        <option value="$PROJECT_DIR$/Trajectory/ul_calc_traj.py" />
         <option value="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py" />
       </list>
     </option>
@@ -521,13 +536,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/ul_calc_traj.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="20" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="195">
@@ -535,37 +543,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/ulysses_coord_trans.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="805">
-          <caret line="66" column="55" selection-start-line="66" selection-start-column="55" selection-end-line="66" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataLoader/uswo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="34" column="39" selection-start-line="34" selection-start-column="39" selection-end-line="34" selection-end-column="39" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/DataLoader/ulysses_traj.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
           <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.local/lib/python3.7/site-packages/etspice/kernels.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4875">
-          <caret line="337" column="45" selection-start-line="337" selection-start-column="45" selection-end-line="337" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -591,7 +572,7 @@
     </entry>
     <entry file="file://$USER_HOME$/.local/lib/python3.7/site-packages/etspice/frame.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
+        <state relative-caret-position="435">
           <caret line="36" column="36" selection-start-line="36" selection-start-column="36" selection-end-line="36" selection-end-column="36" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
@@ -599,12 +580,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py">
+    <entry file="file://$PROJECT_DIR$/Trajectory/ulysses_coord_trans.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="520">
-          <caret line="239" column="64" selection-start-line="239" selection-start-column="64" selection-end-line="239" selection-end-column="64" />
+        <state relative-caret-position="805">
+          <caret line="66" column="55" selection-start-line="66" selection-start-column="55" selection-end-line="66" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trajectory/ul_calc_traj.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="19" column="24" selection-start-line="19" selection-start-column="24" selection-end-line="19" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataLoader/uswo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5">
+          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.local/lib/python3.7/site-packages/etspice/kernels.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="671">
+          <caret line="100" column="20" selection-start-line="100" selection-start-column="20" selection-end-line="100" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses (copy).py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1721">
+          <caret line="336" column="12" selection-start-line="336" selection-start-column="8" selection-end-line="336" selection-end-column="12" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="461">
+          <caret line="354" column="20" lean-forward="true" selection-start-line="354" selection-start-column="20" selection-end-line="354" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+            <marker date="1602256313927" expanded="true" signature="9569:11417" ph="..." />
+            <marker date="1602256313927" expanded="true" signature="11459:12859" ph="..." />
           </folding>
         </state>
       </provider>

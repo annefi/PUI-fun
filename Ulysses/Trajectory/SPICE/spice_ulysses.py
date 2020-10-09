@@ -6,9 +6,10 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from sys import exit
+from Ulysses.Trajectory.ul_calc_traj import hc_to_hg
 
-os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-#os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
+#os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
 
 #my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
 #my_kernel.load()
@@ -188,150 +189,182 @@ def comp_rf(date, RF = HCI):
     locateUlysses(date, ECLIPJ2000)
     locateUlysses(date, ECLIPB1950)
     locateUlysses(date, HCI)
-    locateUlysses(date, HCI_T2)
-    locateUlysses(date, HCI_N)
 
-def plot_ts(tf, RF, rou = False, diff = False, ax = None):
-    '''
-    :param tf: list of start and end date for time series
-    :param RF: list of Reference Frames that will be plotted
-                    > Possible first arguments:
-                        "SP" --- calculated by SPICE
-                        "UD" --- data from "ulysses_daily... .txt"
-                        "HE" --- data from "helio.dat"
-                        "PO" --- data from the pooled file. Should be
-                                matching with data files for the most parts.
-                    > Check resp. read-in-function (e.g. read_pool()) 
-                        for possible suffixes
-    Example: plot_ts([d1,d2], [["SP",ECLIPJ200,"LAT"]])
-                with d1, d2 being datetime.datetime objects
-    '''
-    # create timeseries:
-    first_day = datetime.datetime(tf[0].year,tf[0].month,tf[0].day)
-    last_day = datetime.datetime(tf[1].year, tf[1].month, tf[1].day)
-    delta = last_day - first_day
-    times = [first_day + datetime.timedelta(days = x) for x in range(delta.days + 1)]
 
-    # set up the plot
-    if ax == None:
-        fig, ax = plt.subplots()
-    test_data = np.random.random(len(times))
-    # real data:
-    plot_dict = {p:[] for p in ['y_dim', 'label', 'data', 'RF']}
-    for frame in RF:
-        if frame[0] == "SP":
-            # calculate with SPICE
-            data_SP = []
-            if frame[2] == "LAT":
-                for t in times:
-                    if rou == True:
-                        data_SP.append(round(locateUlysses(t,frame[1])[1],2))
-                    else:
-                        data_SP.append(locateUlysses(t, frame[1])[1])
-            elif frame[2] == "LONG":
-                for t in times:
-                    if rou == True:
-                        data_SP.append(round(locateUlysses(t,frame[1])[2],2))
-                    else:
-                        data_SP.append(locateUlysses(t, frame[1])[2])
+
+class CompTimeseries:
+    """
+    Todo
+    """
+
+    def __init__(self, frames, para, tf = None):
+        # create timeseries:
+        if tf == None:
+            # default time frame:
+            first_day = datetime.datetime(1990,11,6)
+            last_day = datetime.datetime(1990,12,1)
+            delta = last_day - first_day
+        elif len(tf) == 2:
+            first_day = datetime.datetime(tf[0].year, tf[0].month, tf[0].day)
+            last_day = datetime.datetime(tf[1].year, tf[1].month, tf[1].day)
+            delta = last_day - first_day
+        elif len(tf) == 1:
+            first_day = datetime.datetime(tf[0].year, tf[0].month, tf[0].day) - datetime.timedelta(days=1)
+            last_day = datetime.datetime(tf[0].year, tf[0].month, tf[0].day) - datetime.timedelta(days=1)
+            delta = last_day - first_day
+        self.times = [first_day + datetime.timedelta(days=x) for x in range(delta.days + 1)]
+        self.frames = frames
+        self.para = para
+        self.get_data()
+
+    def get_data(self):
+        self.data_dict = {p: [] for p in ['frame', 'data', 'label']}
+        for frame in self.frames:
+            if len(frame) == 2:
+                if frame[0] == 'SP':
+                    self.get_spice_data(frame[1])
+                if frame[0] == 'UD':
+                    self.get_ud_data(frame[1])
+                if frame[0] == 'HE':
+                    self.get_he_data(frame[1])
+                if frame[0] == 'CALC':
+                    pass
             else:
-                print("Third argument has not been recognised. Choose one of \"LAT\", \"LONG\".")
-            plot_dict["y_dim"].append(frame[2])
-            plot_dict["label"].append("SPICE %s" % frame[1].name)
-            plot_dict['data'].append(data_SP)
-            plot_dict['RF'].append(frame[0])
-            #ax.plot(times, data_SP, linestyle="None", marker="v", ms="5", label = "SPICE %s" %frame[2])
+                print('Every frame needs to have two elements, e.g. [\'SP\',ECLIPB1950] or [\'UD\',\'ECL\']. Please '
+                      'try again.')
+                exit()
 
-        elif frame[0] == "UD":
-            # data from "ulysses_daily_heliocentric_data_1990-2009.txt"
-            data_UD = []
-            ud_dict = read_ulysses_daily()
-            if frame[1] == "lat":
-                for t in times:
-                    t_ds = "%i-%i-%i" % (t.year,t.month,t.day)
-                    data_UD.append(ud_dict['lat'][ud_dict['datestring'] == t_ds][0])
-                plot_dict["y_dim"].append('LAT')
-            elif frame[1] == "RA":
-                for t in times:
-                    t_ds = "%i-%i-%i" % (t.year,t.month,t.day)
-                    data_UD.append(ud_dict['RA'][ud_dict['datestring'] == t_ds][0])
-                plot_dict["y_dim"].append('LONG')
-            elif frame[1] == "DEC":
-                for t in times:
-                    t_ds = "%i-%i-%i" % (t.year,t.month,t.day)
+    def get_spice_data(self, RF):
+        # calculate with SPICE
+        data_SP = []
+        if self.para == 'LAT':
+            for t in self.times:
+                data_SP.append(locateUlysses(t, RF)[1])
+        elif self.para == 'LONG':
+            for t in self.times:
+                data_SP.append(locateUlysses(t, RF)[2])
+        else:
+            print("Second argument has not been recognised. Choose one of \"LAT\", \"LONG\".")
+        self.data_dict['frame'].append('SP')
+        self.data_dict['data'].append(data_SP)
+        self.data_dict['label'].append("SPICE %s" % (RF.name))
+
+    def get_ud_data(self, RF):
+        # data from "ulysses_daily_heliocentric_data_1990-2009.txt"
+        data_UD = []
+        ud_dict = read_ulysses_daily()
+        if self.para == 'LAT':
+            if RF == 'ECL':
+                for t in self.times:
+                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
                     data_UD.append(ud_dict['DEC'][ud_dict['datestring'] == t_ds][0])
+            elif RF == 'EQ':
+                for t in self.times:
+                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
+                    data_UD.append(ud_dict['lat'][ud_dict['datestring'] == t_ds][0])
             else:
-                print("Second argument has not been recognised. Choose one of \"lat\", \"RA\", \"DEC\".")
+                print("Second argument has not been recognised. Choose one of \'ECL\' and \'EQ\'.")
+                exit()
+        if self.para == 'LONG':
+            if RF == 'ECL':
+                for t in self.times:
+                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
+                    data_UD.append(ud_dict['RA'][ud_dict['datestring'] == t_ds][0])
+            else:
+                exit("Second frame argument has not been recognised. LONG only available in ecliptical system for "
+                      "ulysses_daily.")
+        self.data_dict['frame'].append('UD')
+        self.data_dict['data'].append(data_UD)
+        self.data_dict['label'].append("ulysses_daily %s" % (RF))
 
-            plot_dict["label"].append("ulysses_daily %s" % frame[1])
-            plot_dict['data'].append(data_UD)
-            plot_dict['RF'].append(frame[0])
-        
-        elif frame[0] == "HE":
-            # data from "helio.txt"
-            data_HE = []
-            he_dict = read_helio_dat()
-            if frame[1] == "HG_LAT":
-                for t in times:
-                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
-                    data_HE.append(he_dict['HG_LAT'][he_dict['datestring'] == t_ds][0])
-                plot_dict["y_dim"].append('LAT')
-            elif frame[1] == "HC_RA":
-                for t in times:
-                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
-                    data_HE.append(he_dict['HC_RA'][he_dict['datestring'] == t_ds][0] - 180.)
-                plot_dict["y_dim"].append('LONG')
-            elif frame[1] == "HC_ECL_LAT":
-                for t in times:
+    def get_he_data(self, RF):
+        # data from "helio.txt"
+        data_HE = []
+        he_dict = read_helio_dat()
+        if self.para == 'LAT':
+            if RF == 'ECL':
+                for t in self.times:
                     t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
                     data_HE.append(he_dict['HC_ECL_LAT'][he_dict['datestring'] == t_ds][0])
-            plot_dict["label"].append("helio.dat %s" % frame[1])
-            plot_dict['data'].append(data_HE)
-            plot_dict['RF'].append(frame[0])
+            elif RF == 'EQ':
+                for t in self.times:
+                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
+                    data_HE.append(he_dict['HG_LAT'][he_dict['datestring'] == t_ds][0])
+            else:
+                exit("Second argument has not been recognised. Choose one of \'ECL\' and \'EQ\'.")
+        if self.para == 'LONG':
+            if RF == 'EQ':
+                for t in self.times:
+                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
+                    data_HE.append(he_dict['HC_RA'][he_dict['datestring'] == t_ds][0] - 180.)
+            else:
+                exit("Second argument has not been recognised. LONG only available in equatorial system for "
+                      "helio.txt")
+        self.data_dict['frame'].append('HE')
+        self.data_dict['data'].append(data_HE)
+        self.data_dict['label'].append("helio.txt %s" % (RF))
 
-        elif frame[0] == "PO":
-            pass
-        else:
-            print("First assignment has not been recognised. Choose one of \"SP\", \"UD\", \"HE\", \"PO\".")
-    #return plot_dict
-    # y axis depends on lat/long
-    if all(y_dim == "LAT" for y_dim in plot_dict['y_dim']):
-        ax.set_ylabel("Lat. in degree")
-        ax.set_ylim(-90, 90)
-    elif all(y_dim == "LONG" for y_dim in plot_dict['y_dim']):
-        ax.set_ylabel("Long. in degree")
-        ax.set_ylim(-180, 360)
-    else:
-        print('y dimensions do not match')
-        exit()
-    if diff == False:
-        for i, data in enumerate(plot_dict['data']):
-            if plot_dict['RF'][i] == 'SP':
-                ax.plot(times, data, linestyle='None', label=plot_dict['label'][i], marker='v', ms = "5", alpha = 0.3)
-            elif plot_dict['RF'][i] == 'UD':
-                ax.plot(times, data, linestyle = 'None', label = plot_dict['label'][i], marker = 'o', ms = "4", alpha = 0.3)
-            elif plot_dict['RF'][i] == 'HE':
-                ax.plot(times, data, linestyle = 'None', label = plot_dict['label'][i], marker = 's', ms = "4", alpha = 0.3)
-    else:
+    def get_calc_data(self):
+        pass
+
+    def plot_ts(self, rou = False, ax = None):
+        # set up the plot
+        fig = plt.figure()
+        if ax == None:
+            ax = fig.subplots()
+
+        if self.para == 'LAT':
+            ax.set_ylabel("Lat. in degree")
+            ax.set_ylim(-90, 90)
+        elif self.para == 'LONG':
+            ax.set_ylabel("Long. in degree")
+            ax.set_ylim(-180, 360)
+        for i, dataset in enumerate(self.data_dict['data']):
+            if self.data_dict['frame'][i] == 'SP':
+                if rou:
+                    ax.plot(self.times, np.around(np.array(dataset),2), linestyle='None', label = self.data_dict[
+                        'label'][i], marker='v', ms="5", alpha=0.3)
+                else:
+                    ax.plot(self.times, dataset, linestyle='None', label = self.data_dict['label'][i], marker='v', ms="5", alpha=0.3)
+            elif self.data_dict['frame'][i] == 'UD':
+                ax.plot(self.times, dataset, linestyle='None', label=self.data_dict['label'][i], marker='o', ms="4",
+                        alpha=0.3)
+            elif self.data_dict['frame'][i] == 'HE':
+                ax.plot(self.times, dataset, linestyle='None', label=self.data_dict['label'][i], marker='s', ms="4",
+                        alpha=0.3)
+            elif self.data_dict['frame'][i] == 'CALC':
+                pass
+        fig.autofmt_xdate()
+        ax.legend()
+        ax.grid()
+        plt.show()
+        return ax
+
+    def plot_diff(self, ax = None):
+        '''
+        plots the difference between first frame and the other frames resp.
+        :return:
+        '''
+        if len(self.frames) == 1:
+            exit('Cannot subtract frames. Only one frame loaded.')
+
+        fig = plt.figure()
+        if ax == None:
+            diff_ax = fig.subplots()
         ymin = 0.00001
-        ymax = 0.
-        for i, data in enumerate(plot_dict['data']):
-            print('i:', i)
-            diff_data = np.array(data) - np.array(plot_dict['data'][i+1])
-            ax.plot(times, diff_data, linestyle='None', label = "%s - %s" %(plot_dict['label'][i], plot_dict[
-                'label'][i+1]), marker='v',
-            ms="5", alpha=0.3)
+        ymax = 0.001
+        for i, dataset in enumerate(self.data_dict['data'][1:]):
+            #print('i: ', i)
+            #print("%s - %s" % (self.data_dict['label'][0],self.data_dict['label'][i]))
+            diff_data = np.array(self.data_dict['data'][0]) - np.array(dataset)
+            diff_ax.plot(self.times, diff_data, linestyle='None', label="%s - %s" % (self.data_dict['label'][
+                                                0], self.data_dict['label'][i]),marker='v',ms="5",alpha=0.3)
             ymin = min(list(diff_data) + [ymin])
             ymax = max(list(diff_data) + [ymax])
-            if i == len(plot_dict['data'])-2:
+            if i == len(self.data_dict['data']) - 2:
                 break
-        ax.set_ylim(ymin*3.,ymax*3.)
-
-
-
-
-    #fig.autofmt_xdate()
-    ax.legend()
-    ax.grid()
-    plt.show()
-    return ax, times, plot_dict['data']
+        diff_ax.set_ylim(ymin * 3., ymax * 3.)
+        fig.autofmt_xdate()
+        diff_ax.legend()
+        diff_ax.grid()
+        plt.show()

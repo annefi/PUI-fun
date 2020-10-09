@@ -17,7 +17,7 @@ Radial-Tangential-Normal (RTN):
 
 #from pylib import dbData
 from numpy import array, cos, arccos, pi, sqrt
-from etCoord import rotate, sph2cart, cart2sph
+from Ulysses.Trajectory.etCoord import rotate, sph2cart, cart2sph
 from matplotlib import pylab
 
 
