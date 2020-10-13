@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 from sys import exit
 from Ulysses.Trajectory.ul_calc_traj import hc_to_hg
 
-os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-#os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
+#os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
 
 #my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
 #my_kernel.load()
@@ -73,7 +73,7 @@ def cart2sph(t, deg=False):
 
     return out
 
-def locateUlysses(date, RF, spher = True):
+def locateUlysses(date, RF):
     '''
     Returns Ulysses' position after SPICE data
 
@@ -82,10 +82,17 @@ def locateUlysses(date, RF, spher = True):
     :return: [heliocentric range in AU, latitude, longitude]
     '''
     xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF)
-    if spher == True:
+    if len(xyz) == 3:
         r, theta, phi = utils.cart2spherical(xyz, degrees = True)
-    #print(RF.name , np.array([r/1.496e8,theta,phi]))
-    return np.array([r/1.496e8,theta,phi])
+        #print(RF.name , np.array([r/1.496e8,theta,phi]))
+        return np.array([r/1.496e8,theta,phi])
+    elif len(xyz) > 3:
+        positions = []
+        for t in xyz:
+            r, theta, phi = utils.cart2spherical(t, degrees=True)
+            positions.append(np.array([r/1.496e8,theta,phi]))
+        return positions
+
 
 def locateBody(body, date, RF, spher = True):
     '''
@@ -218,7 +225,7 @@ class CompTimeseries:
         self.get_data()
 
     def get_data(self):
-        self.data_dict = {p: [] for p in ['frame', 'data', 'label']}
+        self.data_dict = {p: [] for p in ['frame', 'data', 'data2', 'label']}
         for frame in self.frames:
             if len(frame) == 2:
                 if frame[0] == 'SP':
@@ -237,7 +244,9 @@ class CompTimeseries:
     def get_spice_data(self, RF):
         # calculate with SPICE
         data_SP = []
+        data_SP2 = []
         if self.para == 'LAT':
+            #data_SP2.append(locateUlysses(self.times,RF)[1])
             for t in self.times:
                 data_SP.append(locateUlysses(t, RF)[1])
         elif self.para == 'LONG':
@@ -247,6 +256,7 @@ class CompTimeseries:
             print("Second argument has not been recognised. Choose one of \"LAT\", \"LONG\".")
         self.data_dict['frame'].append('SP')
         self.data_dict['data'].append(data_SP)
+        self.data_dict['data2'].append(data_SP2)
         self.data_dict['label'].append("SPICE %s" % (RF.name))
 
     def get_ud_data(self, RF):
