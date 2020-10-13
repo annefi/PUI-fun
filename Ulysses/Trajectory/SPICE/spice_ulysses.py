@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 from sys import exit
 from Ulysses.Trajectory.ul_calc_traj import hc_to_hg
 
-#os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
+os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+#os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
 
 #my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
 #my_kernel.load()
@@ -210,7 +210,7 @@ class CompTimeseries:
             delta = last_day - first_day
         elif len(tf) == 1:
             first_day = datetime.datetime(tf[0].year, tf[0].month, tf[0].day) - datetime.timedelta(days=1)
-            last_day = datetime.datetime(tf[0].year, tf[0].month, tf[0].day) - datetime.timedelta(days=1)
+            last_day = datetime.datetime(tf[0].year, tf[0].month, tf[0].day) + datetime.timedelta(days=1)
             delta = last_day - first_day
         self.times = [first_day + datetime.timedelta(days=x) for x in range(delta.days + 1)]
         self.frames = frames
@@ -228,7 +228,7 @@ class CompTimeseries:
                 if frame[0] == 'HE':
                     self.get_he_data(frame[1])
                 if frame[0] == 'CALC':
-                    pass
+                    self.get_calc_data()
             else:
                 print('Every frame needs to have two elements, e.g. [\'SP\',ECLIPB1950] or [\'UD\',\'ECL\']. Please '
                       'try again.')
@@ -269,7 +269,10 @@ class CompTimeseries:
             if RF == 'ECL':
                 for t in self.times:
                     t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
-                    data_UD.append(ud_dict['RA'][ud_dict['datestring'] == t_ds][0])
+                    if ud_dict['RA'][ud_dict['datestring'] == t_ds][0] <= 180.:
+                        data_UD.append(ud_dict['RA'][ud_dict['datestring'] == t_ds][0])
+                    else:
+                        data_UD.append(ud_dict['RA'][ud_dict['datestring'] == t_ds][0]-360.)
             else:
                 exit("Second frame argument has not been recognised. LONG only available in ecliptical system for "
                       "ulysses_daily.")
@@ -305,12 +308,33 @@ class CompTimeseries:
         self.data_dict['label'].append("helio.txt %s" % (RF))
 
     def get_calc_data(self):
-        pass
+        data_CALC = []
+        ud_dict = read_ulysses_daily()
+        if self.para == 'LAT':
+            for t in self.times:
+                t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
+                hc_R = ud_dict['R'][ud_dict['datestring'] == t_ds][0]
+                hc_long = ud_dict['RA'][ud_dict['datestring'] == t_ds][0]
+                hc_lat = ud_dict['DEC'][ud_dict['datestring'] == t_ds][0]
+                hg_vec = hc_to_hg([hc_R,hc_long,hc_lat], long_shift = 0.)
+                data_CALC.append(hg_vec[2])
+        if self.para == 'LONG':
+            for t in self.times:
+                t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
+                hc_R = ud_dict['R'][ud_dict['datestring'] == t_ds][0]
+                hc_long = ud_dict['RA'][ud_dict['datestring'] == t_ds][0]
+                hc_lat = ud_dict['DEC'][ud_dict['datestring'] == t_ds][0]
+                hg_vec = hc_to_hg([hc_R,hc_long,hc_lat], long_shift = 0.)
+                data_CALC.append(hg_vec[1])
+        self.data_dict['frame'].append('CALC')
+        self.data_dict['data'].append(data_CALC)
+        self.data_dict['label'].append("EQ calculated")
 
     def plot_ts(self, rou = False, ax = None):
         # set up the plot
-        fig = plt.figure()
+
         if ax == None:
+            fig = plt.figure()
             ax = fig.subplots()
 
         if self.para == 'LAT':
@@ -325,46 +349,55 @@ class CompTimeseries:
                     ax.plot(self.times, np.around(np.array(dataset),2), linestyle='None', label = self.data_dict[
                         'label'][i], marker='v', ms="5", alpha=0.3)
                 else:
-                    ax.plot(self.times, dataset, linestyle='None', label = self.data_dict['label'][i], marker='v', ms="5", alpha=0.3)
+                    ax.plot(self.times, dataset, linestyle='None', label = self.data_dict['label'][i], marker='v', ms="7", alpha=0.3)
             elif self.data_dict['frame'][i] == 'UD':
-                ax.plot(self.times, dataset, linestyle='None', label=self.data_dict['label'][i], marker='o', ms="4",
+                ax.plot(self.times, dataset, linestyle='None', label=self.data_dict['label'][i], marker='o', ms="7",
                         alpha=0.3)
             elif self.data_dict['frame'][i] == 'HE':
-                ax.plot(self.times, dataset, linestyle='None', label=self.data_dict['label'][i], marker='s', ms="4",
+                ax.plot(self.times, dataset, linestyle='None', label=self.data_dict['label'][i], marker='s', ms="7",
                         alpha=0.3)
             elif self.data_dict['frame'][i] == 'CALC':
-                pass
-        fig.autofmt_xdate()
+                ax.plot(self.times, dataset, linestyle='None', label=self.data_dict['label'][i], marker='P', ms="7",
+                        alpha=0.3)
+        plt.gcf().autofmt_xdate()
         ax.legend()
-        ax.grid()
-        plt.show()
+        ax.grid(True)
         return ax
 
-    def plot_diff(self, ax = None):
+    def plot_diff(self, rou = False, ax = None):
         '''
         plots the difference between first frame and the other frames resp.
         :return:
         '''
         if len(self.frames) == 1:
-            exit('Cannot subtract frames. Only one frame loaded.')
-
-        fig = plt.figure()
+            exit('Cannot subtract frames: Only one frame loaded.')
         if ax == None:
+            fig = plt.figure()
             diff_ax = fig.subplots()
-        ymin = 0.00001
+            if self.para == 'LAT':
+                diff_ax.set_ylabel("Diff. of Lat. in degree")
+            elif self.para == 'LONG':
+                diff_ax.set_ylabel("Diff. of Long. in degree")
+        else:
+            diff_ax = ax
+        ymin = -0.001
         ymax = 0.001
         for i, dataset in enumerate(self.data_dict['data'][1:]):
             #print('i: ', i)
             #print("%s - %s" % (self.data_dict['label'][0],self.data_dict['label'][i]))
-            diff_data = np.array(self.data_dict['data'][0]) - np.array(dataset)
+            if rou:
+                diff_data = np.around(np.array(self.data_dict['data'][0]),2) - np.around(np.array(dataset),2)
+            else:
+                diff_data = np.array(self.data_dict['data'][0]) - np.array(dataset)
             diff_ax.plot(self.times, diff_data, linestyle='None', label="%s - %s" % (self.data_dict['label'][
-                                                0], self.data_dict['label'][i]),marker='v',ms="5",alpha=0.3)
-            ymin = min(list(diff_data) + [ymin])
-            ymax = max(list(diff_data) + [ymax])
+                                                0], self.data_dict['label'][i+1]),marker='v',ms="5",alpha=0.3)
+            if ax == None:
+                ymin = min(list(diff_data) + [ymin])
+                ymax = max(list(diff_data) + [ymax])
             if i == len(self.data_dict['data']) - 2:
                 break
-        diff_ax.set_ylim(ymin * 3., ymax * 3.)
-        fig.autofmt_xdate()
+        diff_ax.set_ylim(ymin * 4., ymax * 4.)
+        plt.gcf().autofmt_xdate()
         diff_ax.legend()
-        diff_ax.grid()
-        plt.show()
+        diff_ax.grid(True)
+        return diff_ax

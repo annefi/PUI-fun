@@ -27,7 +27,7 @@ def hg_to_hc(hg_vec, degree=True, long_shift = 0.):
     :param hg_vec: Heliographic vector [R,long,lat] where lat increases towards +z axis, long: s. long_shift if using Ulysses data
     :param degree: True when angles are given in degrees (False when in radians)
     :param long_shift: Ulysses HG-long-data is shifted by pi (long=0 shifted by 75+180 deg against vernal equinox)
-    :return: vector [R,long,lat] in heliocentric coordinates where lat increases towards +z axis
+    :return: vector [R,long,lat] in heliocentric coordinates where lat increases towards +z axis to +90 deg
     '''
     hg_cart = sph2cart([hg_vec[0],hg_vec[1]-long_shift,90.-hg_vec[2]],deg=degree)
     print('hg_cart:', hg_cart)
@@ -45,7 +45,7 @@ def hc_to_hg(hc_vec, degree=True, long_shift = 180.):
     :param hc_vec: Heliocentric vector [R,long,lat] where lat increases towards +z axis
     :param degree: True when angles are given in degrees (False when in radians)
     :param long_shift: Ulysses HG-long-data is shifted by pi (long=0 shifted by 75+180 deg against vernal equinox)
-    :return: vector [R,long,lat] in heliographic coordinates where lat increases towards +z axis and long according to long_shift
+    :return: vector [R,long,lat] in heliographic coordinates where lat increases towards +z axis to +90 deg and long according to long_shift
     '''
     hc_cart = sph2cart([hc_vec[0],hc_vec[1],90-hc_vec[2]],deg=degree)
     int1 = rotate(hc_cart,'z',-75.062,deg=degree)
