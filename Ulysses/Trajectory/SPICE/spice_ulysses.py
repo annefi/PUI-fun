@@ -8,8 +8,8 @@ import matplotlib.pyplot as plt
 from sys import exit
 from Ulysses.Trajectory.ul_calc_traj import hc_to_hg
 
-#os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
+os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+#os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
 
 #my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
 #my_kernel.load()
@@ -220,6 +220,8 @@ class CompTimeseries:
             last_day = datetime.datetime(tf[0].year, tf[0].month, tf[0].day) + datetime.timedelta(days=1)
             delta = last_day - first_day
         self.times = [first_day + datetime.timedelta(days=x) for x in range(delta.days + 1)]
+        self.t_southpass = datetime.datetime(1994,9,13)
+        self.t_northpass = datetime.datetime(1995,7,31)
         self.frames = frames
         self.para = para
         self.get_data()
@@ -284,7 +286,7 @@ class CompTimeseries:
                     else:
                         data_UD.append(ud_dict['RA'][ud_dict['datestring'] == t_ds][0]-360.)
             else:
-                exit("Second frame argument has not been recognised. LONG only available in ecliptical system for "
+                exit("Second frame argument has not been recognised. LONG not available in equatorial (HG) system for "
                       "ulysses_daily.")
         self.data_dict['frame'].append('UD')
         self.data_dict['data'].append(data_UD)
@@ -311,7 +313,7 @@ class CompTimeseries:
                     t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
                     data_HE.append(he_dict['HC_RA'][he_dict['datestring'] == t_ds][0] - 180.)
             else:
-                exit("Second argument has not been recognised. LONG only available in equatorial system for "
+                exit("Second argument has not been recognised. LONG not available in ecliptic system for "
                       "helio.txt")
         self.data_dict['frame'].append('HE')
         self.data_dict['data'].append(data_HE)
@@ -350,9 +352,10 @@ class CompTimeseries:
         if self.para == 'LAT':
             ax.set_ylabel("Lat. in degree")
             ax.set_ylim(-90, 90)
+            #ax.set_ylim(-79.15, -79.)
         elif self.para == 'LONG':
             ax.set_ylabel("Long. in degree")
-            ax.set_ylim(-180, 360)
+            ax.set_ylim(-190, 250)
         for i, dataset in enumerate(self.data_dict['data']):
             if self.data_dict['frame'][i] == 'SP':
                 if rou:
@@ -369,6 +372,9 @@ class CompTimeseries:
             elif self.data_dict['frame'][i] == 'CALC':
                 ax.plot(self.times, dataset, linestyle='None', label=self.data_dict['label'][i], marker='P', ms="7",
                         alpha=0.3)
+        # plot vertical lines at polar passes
+        plt.vlines(self.t_southpass, ymin = -180, ymax = 360, color = 'firebrick', alpha = 0.5, linestyle = 'dashed')
+        plt.vlines(self.t_northpass, ymin = -180, ymax = 360, color = 'navy', alpha = 0.5, linestyle = 'dashed')
         plt.gcf().autofmt_xdate()
         ax.legend()
         ax.grid(True)
@@ -407,6 +413,9 @@ class CompTimeseries:
             if i == len(self.data_dict['data']) - 2:
                 break
         diff_ax.set_ylim(ymin * 4., ymax * 4.)
+        # plot vertical lines at polar passes
+        plt.vlines(self.t_southpass, ymin = ymin * 4., ymax = ymax * 4., color = 'firebrick', alpha = 0.5, linestyle = 'dashed')
+        plt.vlines(self.t_northpass, ymin = ymin * 4., ymax = ymax * 4., color = 'navy', alpha = 0.5, linestyle = 'dashed')
         plt.gcf().autofmt_xdate()
         diff_ax.legend()
         diff_ax.grid(True)

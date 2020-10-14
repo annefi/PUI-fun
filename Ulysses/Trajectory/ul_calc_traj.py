@@ -33,7 +33,7 @@ def hg_to_hc(hg_vec, degree=True, long_shift = 0.):
     print('hg_cart:', hg_cart)
     int1 = rotate(hg_cart,'x',7.25,deg=degree)
     print('int1', int1)
-    int2 = rotate(int1,'z',75.062,deg=degree)
+    int2 = rotate(int1,'z',75.0615,deg=degree)
     print('int2', int2)
     int3 = cart2sph(int2,deg=degree)
     print('int3', int3)
@@ -48,7 +48,7 @@ def hc_to_hg(hc_vec, degree=True, long_shift = 180.):
     :return: vector [R,long,lat] in heliographic coordinates where lat increases towards +z axis to +90 deg and long according to long_shift
     '''
     hc_cart = sph2cart([hc_vec[0],hc_vec[1],90-hc_vec[2]],deg=degree)
-    int1 = rotate(hc_cart,'z',-75.062,deg=degree)
+    int1 = rotate(hc_cart,'z',-75.0615,deg=degree)
     int2 = rotate(int1, 'x', -7.25, deg=degree)
     int3 = cart2sph(int2,deg=degree)
     return array([int3[0],long_shift+int3[1],90-int3[2]])
