@@ -1,4 +1,4 @@
-from etspice import SUN, ULYSSES
+from etspice import SUN, ULYSSES, EARTH
 from etspice import ReferenceFrame, utils
 from etspice import kernels
 import datetime
@@ -6,10 +6,10 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from sys import exit
-from Ulysses.Trajectory.ul_calc_traj import hc_to_hg
+from Ulysses.Trajectory.ul_calc_traj import hc_to_hg, calc_asp_angles
 
-os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-#os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
+#os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
 
 #my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
 #my_kernel.load()
@@ -106,7 +106,7 @@ def locateBody(body, date, RF, spher = True):
     xyz = body.position(time = date, relative_to = SUN, reference_frame = RF)
     if spher == True:
         r, theta, phi = utils.cart2spherical(xyz, degrees = True)
-    print(RF.name , np.array([r/1.496e8,theta,phi]))
+    return(np.array([r/1.496e8,theta,phi]))
 
 
 def read_pool():
@@ -238,6 +238,8 @@ class CompTimeseries:
                     self.get_he_data(frame[1])
                 if frame[0] == 'CALC':
                     self.get_calc_data()
+                if frame[0] == 'CALC_SP':
+                    self.get_calc_data_SP()
             else:
                 print('Every frame needs to have two elements, e.g. [\'SP\',ECLIPB1950] or [\'UD\',\'ECL\']. Please '
                       'try again.')
@@ -328,6 +330,7 @@ class CompTimeseries:
                 hc_R = ud_dict['R'][ud_dict['datestring'] == t_ds][0]
                 hc_long = ud_dict['RA'][ud_dict['datestring'] == t_ds][0]
                 hc_lat = ud_dict['DEC'][ud_dict['datestring'] == t_ds][0]
+                #print('\n\nUD:\n',hc_R,hc_lat,hc_long)
                 hg_vec = hc_to_hg([hc_R,hc_long,hc_lat], long_shift = 0.)
                 data_CALC.append(hg_vec[2])
         if self.para == 'LONG':
@@ -341,6 +344,24 @@ class CompTimeseries:
         self.data_dict['frame'].append('CALC')
         self.data_dict['data'].append(data_CALC)
         self.data_dict['label'].append("EQ calculated")
+
+    def get_calc_data_SP(self):
+        data_CALC_SP = []
+        if self.para == 'LAT':
+            for t in self.times:
+                hc_vec = (locateUlysses(t, ECLIPB1950))
+                hg_vec = hc_to_hg([hc_vec[0],hc_vec[2],hc_vec[1]], long_shift = 0.)
+                #print("\n\n SP:\n",hc_vec)
+                data_CALC_SP.append(hg_vec[2])
+        if self.para == 'LONG':
+            for t in self.times:
+                hc_vec = (locateUlysses(t, ECLIPB1950))
+                hg_vec = hc_to_hg([hc_vec[0], hc_vec[2], hc_vec[1]], long_shift=0.)
+                data_CALC_SP.append(hg_vec[1])
+        self.data_dict['frame'].append('CALC')
+        self.data_dict['data'].append(data_CALC_SP)
+        self.data_dict['label'].append("EQ calculated SP")
+
 
     def plot_ts(self, rou = False, ax = None):
         # set up the plot
@@ -420,3 +441,40 @@ class CompTimeseries:
         diff_ax.legend()
         diff_ax.grid(True)
         return diff_ax
+
+    def get_dev_aa(self):
+        data_aspJ = []
+        data_aspB = []
+
+        for t in self.times:
+            vec_hcB = locateUlysses(t, ECLIPB1950)
+            vec_hcJ = locateUlysses(t, J2000)
+            vecE_hcJ = locateBody(EARTH, t, J2000)
+            vec_hgB = hc_to_hg([vec_hcB[0],vec_hcB[2],vec_hcB[1]])
+            vec_hgJ = hc_to_hg([vec_hcJ[0], vec_hcJ[2], vec_hcJ[1]])
+            vecE_hgJ = hc_to_hg([vecE_hcJ[0], vecE_hcJ[2], vecE_hcJ[1]])
+            data_aspB.append(np.asarray(calc_asp_angles(vec_hgB, vecE_hgJ, l_s_sc=0.)))
+            data_aspJ.append(np.asarray(calc_asp_angles(vec_hgJ, vecE_hgJ, l_s_sc = 0.)))
+            self.data_aspB = np.array(data_aspB)
+            self.data_aspJ = np.array(data_aspJ)
+
+    def plot_dev_aa(self, ax = None):
+        if ax == None:
+            fig = plt.figure()
+            ax = fig.subplots()
+        ymin = -360
+        ymax = 360
+        #ax.plot(self.times, self.data_aspB[:,1], label = "LAT B1950", linestyle='None', ms = 0.5, marker='o',
+                #color = 'teal', alpha = 0.5)
+        #ax.plot(self.times, self.data_aspB[:, 0], label="LONG B1950", linestyle='None', ms = 0.5, marker='o',
+               # color = 'yellowgreen', alpha = 0.5)
+        ax.plot(self.times, self.data_aspJ[:, 1], label="LAT J2000", linestyle='None', ms = 0.5, marker='o',
+                color = "teal")
+        ax.plot(self.times, self.data_aspJ[:, 0], label="LONG J2000", linestyle='None', ms = 0.5, marker='o',
+                color = "yellowgreen")
+        plt.vlines(self.t_southpass, ymin=ymin * 4., ymax=ymax * 4., color='firebrick', alpha=0.5, linestyle='dashed')
+        plt.vlines(self.t_northpass, ymin=ymin * 4., ymax=ymax * 4., color='navy', alpha=0.5, linestyle='dashed')
+        plt.gcf().autofmt_xdate()
+        ax.legend()
+        ax.grid(True)
+
