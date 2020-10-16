@@ -177,6 +177,26 @@ def read_helio_dat():
     fin.close()
     return p_dict
 
+def read_aa_data():
+    path_aa = "Ulysses/Trajectory/trajectory_data/aa_data.dat"
+    fin = open(path_aa, 'r')
+    paras = fin.readline().split()
+    p_dict = {p:[] for p in paras}
+    for line in fin:
+        data = line.split()
+        for i,p in enumerate(p_dict.keys()):
+            p_dict[p].append(float(data[i]))
+    p_dict['datestring'] = []
+    for i, iyear in enumerate(p_dict['YEAR']):
+        date = datetime.datetime(int(iyear), 1, 1) + datetime.timedelta(days=p_dict['DOY'][i] - 1)
+        MM = date.month
+        DD = date.day
+        p_dict['datestring'].append("%i-%i-%i" % (iyear, MM, DD))
+    for key in p_dict:
+        p_dict[key] = np.array(p_dict[key])
+    fin.close()
+    return p_dict
+
 def get_pool_data(date):
     '''
 
@@ -197,13 +217,26 @@ def comp_rf(date, RF = HCI):
     locateUlysses(date, ECLIPB1950)
     locateUlysses(date, HCI)
 
-
+def get_aa(t,RF, vec_hc = "None", vecE_hg = "None"):
+    '''
+    :param t:
+    :param RF:
+    :param vec_hc: [R,lat,long]
+    :param vecE_hc: [R,lat,long]
+    :return: asp_angs = (aspphi,asptheta)
+    '''
+    if vec_hc == "None":
+        vec_hc = locateUlysses(t, RF)
+    if vecE_hg == "None":
+        vecE_hg = locateBody(EARTH, t, HCI_J)
+    vec_hg = hc_to_hg([vec_hc[0], vec_hc[2], vec_hc[1]])
+    asp_angs = calc_asp_angles(vec_hg, vecE_hg, l_s_sc=0.)
+    return asp_angs
 
 class CompTimeseries:
     """
     Todo
     """
-
     def __init__(self, frames, para, tf = None):
         # create timeseries:
         if tf == None:
@@ -322,6 +355,7 @@ class CompTimeseries:
         self.data_dict['label'].append("helio.txt %s" % (RF))
 
     def get_calc_data(self):
+        # calculate HG (EQ) data by rotating HC (ECLIP) data from ulysses daily
         data_CALC = []
         ud_dict = read_ulysses_daily()
         if self.para == 'LAT':
@@ -346,6 +380,7 @@ class CompTimeseries:
         self.data_dict['label'].append("EQ calculated")
 
     def get_calc_data_SP(self):
+        # calculate HG (EQ) data by rotation ECLIPB1950 data by SPICE
         data_CALC_SP = []
         if self.para == 'LAT':
             for t in self.times:
@@ -362,6 +397,26 @@ class CompTimeseries:
         self.data_dict['data'].append(data_CALC_SP)
         self.data_dict['label'].append("EQ calculated SP")
 
+    def get_old_aa_data(self):
+        data_old_aa_lat = []
+        data_old_aa_long = []
+        aa_dict = read_aa_data()
+        for t in self.times:
+            t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
+            data_old_aa_lat.append(aa_dict['ASP_THETA'][aa_dict['datestring'] == t_ds][0])
+            data_old_aa_long.append(aa_dict['ASP_PHI'][aa_dict['datestring'] == t_ds][0])
+        self.data_old_aa_lat = np.array(data_old_aa_lat)
+        self.data_old_aa_long = np.array(data_old_aa_long)
+
+    def get_aa(self):
+        # calculate aspect angles based on different coordinate systems
+        data_aspJ = []
+        data_aspB = []
+        for t in self.times:
+            data_aspJ.append(get_aa(t, RF = ECLIPJ2000))
+            data_aspB.append(get_aa(t, RF = ECLIPB1950))
+        self.data_aspB = np.array(data_aspB)
+        self.data_aspJ = np.array(data_aspJ)
 
     def plot_ts(self, rou = False, ax = None):
         # set up the plot
@@ -442,21 +497,30 @@ class CompTimeseries:
         diff_ax.grid(True)
         return diff_ax
 
-    def get_dev_aa(self):
-        data_aspJ = []
-        data_aspB = []
+    def plot_aa(self, ax = None, para = 'both'):
+        self.get_old_aa_data()
+        self.get_aa()
+        if ax == None:
+            fig = plt.figure()
+            ax = fig.subplots()
+        if para == 'LAT' or para == 'both':
+            ax.plot(self.times, self.data_old_aa_lat, linestyle = 'None', marker = 'o', label = 'old asptheta', ms = 1.)
+            ax.plot(self.times, self.data_aspB[:,1], linestyle = 'None', marker = 'o', label = 'asptheta B', ms = 1.)
+            ax.plot(self.times, self.data_aspJ[:, 1], linestyle = 'None', marker = 'o', label = 'asptheta J', ms = 1.)
+        if para == 'LONG' or para == 'both':
+            ax.plot(self.times, self.data_old_aa_long, linestyle='None', marker='o', label='old aspphi', ms = 1.)
+            ax.plot(self.times, self.data_aspB[:, 0], linestyle = 'None', marker = 'o', label = 'aspphi B', ms = 1.)
+            ax.plot(self.times, self.data_aspJ[:, 0], linestyle = 'None', marker = 'o', label = 'aspphi J', ms = 1.)
 
-        for t in self.times:
-            vec_hcB = locateUlysses(t, ECLIPB1950)
-            vec_hcJ = locateUlysses(t, J2000)
-            vecE_hcJ = locateBody(EARTH, t, J2000)
-            vec_hgB = hc_to_hg([vec_hcB[0],vec_hcB[2],vec_hcB[1]])
-            vec_hgJ = hc_to_hg([vec_hcJ[0], vec_hcJ[2], vec_hcJ[1]])
-            vecE_hgJ = hc_to_hg([vecE_hcJ[0], vecE_hcJ[2], vecE_hcJ[1]])
-            data_aspB.append(np.asarray(calc_asp_angles(vec_hgB, vecE_hgJ, l_s_sc=0.)))
-            data_aspJ.append(np.asarray(calc_asp_angles(vec_hgJ, vecE_hgJ, l_s_sc = 0.)))
-            self.data_aspB = np.array(data_aspB)
-            self.data_aspJ = np.array(data_aspJ)
+
+        # plot vertical lines at polar passes
+        plt.vlines(self.t_southpass, ymin=-180, ymax=360, color='firebrick', alpha=0.5, linestyle='dashed')
+        plt.vlines(self.t_northpass, ymin=-180, ymax=360, color='navy', alpha=0.5, linestyle='dashed')
+        plt.gcf().autofmt_xdate()
+        ax.legend()
+        ax.grid(True)
+        return ax
+
 
     def plot_dev_aa(self, ax = None):
         if ax == None:
