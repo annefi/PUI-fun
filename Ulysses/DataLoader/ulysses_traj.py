@@ -47,7 +47,8 @@ class ulysses_traj(dbData):
         if kwargs.has_key("path"):
             self.path=kwargs["path"]
         else:
-            self.path="/data/projects/Ulysses/trajectory/traj_data_ulysses_pool.dat"
+            #self.path="/data/projects/Ulysses/trajectory/traj_data_ulysses_pool.dat"
+            self.path="./Ulysses/Trajectory/trajectory_data/traj_data_ulysses_pool.dat"
 
         if self.year[0] == 1990:
             if float(self.timeframe[0][0]) < 308.0:
@@ -91,7 +92,8 @@ class ulysses_traj(dbData):
 
 
         if earth:
-            earth_path = "/data/projects/Ulysses/trajectory/earth_coordinates.dat"
+            #earth_path = "/data/projects/Ulysses/trajectory/earth_coordinates.dat"
+            earth_path = "Ulysses/Trajectory/trajectory_data/earth_coordinates.dat"
             try:
                 # read in EARTH trajectory data keys
                 print('read in EARTH trajectory data keys...')
@@ -135,7 +137,9 @@ class ulysses_traj(dbData):
                 sc_vec_hg = array([self.data['R'][day],self.data['HG_Long'][day],self.data['HG_Lat'][day]])
                 earth_vec_hg = array([self.data['R_AU'][day], self.data['HGI_LON'][day], self.data['HGI_LAT'][
                     day]])
+                print('\n\nOld version SC: %s \nOld version earth: %s \n' %(sc_vec_hg, earth_vec_hg))
                 asp_phi, asp_theta = calc_asp_angles(sc_vec_hg,earth_vec_hg)
+                print(asp_phi, asp_theta)
                 self.data['asp_phi'].append(asp_phi)
                 self.data['asp_theta'].append(asp_theta)
             for key in self.data.keys():

@@ -2,17 +2,18 @@ from etspice import SUN, ULYSSES, EARTH
 from etspice import ReferenceFrame, utils
 from etspice import kernels
 import datetime
-import os
+import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
 from sys import exit
 from Ulysses.Trajectory.ul_calc_traj import hc_to_hg, calc_asp_angles
 
-#os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
-
-#my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/metakernel.tm') # load additional kernels via meta kernel
-#my_kernel.load()
+if os.path.exists("../fusessh/data/projects/spice"):
+    os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+elif os.path.exists("/data/projects/spice"):
+    os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
+else:
+    sys.exit('SPICE_DATA_DIR could not be found.\nProbably working from home and not having SSH-ed to asterix?')
 
 my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/data/test_tf.tf') # load additional rf kernel
 my_kernel.load()
@@ -228,8 +229,11 @@ def get_aa(t,RF, vec_hc = "None", vecE_hg = "None"):
     if vec_hc == "None":
         vec_hc = locateUlysses(t, RF)
     if vecE_hg == "None":
-        vecE_hg = locateBody(EARTH, t, HCI_J)
-    vec_hg = hc_to_hg([vec_hc[0], vec_hc[2], vec_hc[1]])
+        vecE = locateBody(EARTH, t, HCI_J)
+        vecE_hg = [vecE[0], vecE[2], vecE[1]]
+    vec_hg = hc_to_hg([vec_hc[0], vec_hc[2], vec_hc[1]], long_shift = 0.)
+    # print("vec_hg new: ", vec_hg)
+    # print("vec_hg Earth new: ", vecE_hg)
     asp_angs = calc_asp_angles(vec_hg, vecE_hg, l_s_sc=0.)
     return asp_angs
 
@@ -511,34 +515,33 @@ class CompTimeseries:
             ax.plot(self.times, self.data_old_aa_long, linestyle='None', marker='o', label='old aspphi', ms = 1.)
             ax.plot(self.times, self.data_aspB[:, 0], linestyle = 'None', marker = 'o', label = 'aspphi B', ms = 1.)
             ax.plot(self.times, self.data_aspJ[:, 0], linestyle = 'None', marker = 'o', label = 'aspphi J', ms = 1.)
-
-
         # plot vertical lines at polar passes
-        plt.vlines(self.t_southpass, ymin=-180, ymax=360, color='firebrick', alpha=0.5, linestyle='dashed')
-        plt.vlines(self.t_northpass, ymin=-180, ymax=360, color='navy', alpha=0.5, linestyle='dashed')
+        plt.vlines(self.t_southpass, ymin=-18, ymax=18, color='firebrick', alpha=0.5, linestyle='dashed')
+        plt.vlines(self.t_northpass, ymin=-18, ymax=18, color='navy', alpha=0.5, linestyle='dashed')
         plt.gcf().autofmt_xdate()
         ax.legend()
         ax.grid(True)
         return ax
 
 
-    def plot_dev_aa(self, ax = None):
+    def plot_dev_aa(self, ax = None, para = 'both'):
+        self.get_old_aa_data()
+        self.get_aa()
         if ax == None:
             fig = plt.figure()
             ax = fig.subplots()
-        ymin = -360
-        ymax = 360
-        #ax.plot(self.times, self.data_aspB[:,1], label = "LAT B1950", linestyle='None', ms = 0.5, marker='o',
-                #color = 'teal', alpha = 0.5)
-        #ax.plot(self.times, self.data_aspB[:, 0], label="LONG B1950", linestyle='None', ms = 0.5, marker='o',
-               # color = 'yellowgreen', alpha = 0.5)
-        ax.plot(self.times, self.data_aspJ[:, 1], label="LAT J2000", linestyle='None', ms = 0.5, marker='o',
-                color = "teal")
-        ax.plot(self.times, self.data_aspJ[:, 0], label="LONG J2000", linestyle='None', ms = 0.5, marker='o',
-                color = "yellowgreen")
-        plt.vlines(self.t_southpass, ymin=ymin * 4., ymax=ymax * 4., color='firebrick', alpha=0.5, linestyle='dashed')
-        plt.vlines(self.t_northpass, ymin=ymin * 4., ymax=ymax * 4., color='navy', alpha=0.5, linestyle='dashed')
+        if para == 'LAT' or para == 'both':
+
+            ax.plot(self.times, self.data_aspB[:,1] - self.data_old_aa_lat, linestyle = 'None', marker = 'o', label = 'aspdataB - old asptheta', ms = 1.)
+            ax.plot(self.times, self.data_aspB[:,1] - self.data_aspJ[:, 1], linestyle = 'None', marker = 'o', label = 'aspdataB - aspdataJ', ms = 1.)
+        if para == 'LONG' or para == 'both':
+            ax.plot(self.times, self.data_aspB[:,0] - self.data_old_aa_long, linestyle = 'None', marker = 'o', label = 'aspdataB - old aspphi', ms = 1.)
+            ax.plot(self.times, self.data_aspB[:,0] - self.data_aspJ[:, 0], linestyle = 'None', marker = 'o', label = 'aspdataB - aspdataJ', ms = 1.)
+        # plot vertical lines at polar passes
+        plt.vlines(self.t_southpass, ymin=-1.8, ymax=1.8, color='firebrick', alpha=0.5, linestyle='dashed')
+        plt.vlines(self.t_northpass, ymin=-1.8, ymax=1.8, color='navy', alpha=0.5, linestyle='dashed')
         plt.gcf().autofmt_xdate()
         ax.legend()
         ax.grid(True)
+        return ax
 
