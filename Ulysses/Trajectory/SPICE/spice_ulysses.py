@@ -5,8 +5,22 @@ import datetime
 import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 from sys import exit
 from Ulysses.Trajectory.ul_calc_traj import hc_to_hg, calc_asp_angles
+
+# matplotlib.rcParams.update({'font.size': 12,
+#                             'xtick.major.size': 13,
+#                             'xtick.major.width': 2,
+#                             'xtick.minor.size': 8,
+#                             'xtick.minor.width': 1,
+#                             'ytick.major.size': 13,
+#                             'ytick.major.width': 2,
+#                             'ytick.minor.size': 8,
+#                             'ytick.minor.width': 1})
+
+
+
 
 if os.path.exists("../fusessh/data/projects/spice"):
     os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
@@ -531,7 +545,6 @@ class CompTimeseries:
             fig = plt.figure()
             ax = fig.subplots()
         if para == 'LAT' or para == 'both':
-
             ax.plot(self.times, self.data_aspB[:,1] - self.data_old_aa_lat, linestyle = 'None', marker = 'o', label = 'aspdataB - old asptheta', ms = 1.)
             ax.plot(self.times, self.data_aspB[:,1] - self.data_aspJ[:, 1], linestyle = 'None', marker = 'o', label = 'aspdataB - aspdataJ', ms = 1.)
         if para == 'LONG' or para == 'both':
@@ -545,3 +558,39 @@ class CompTimeseries:
         ax.grid(True)
         return ax
 
+    def plot_val_dev_aa(self, para = 'both'):
+        self.get_old_aa_data()
+        self.get_aa()
+        fig, axes = plt.subplots(nrows = 5, gridspec_kw = {'height_ratios':[2,1,0.5,2,1]})
+
+        axes[0].plot(self.times, self.data_old_aa_lat, linestyle = 'None', marker = 'o', label = 'old asptheta', ms = 1.)
+        axes[0].plot(self.times, self.data_aspB[:,1], linestyle = 'None', marker = 'o', label = 'asptheta B1950', ms = 1.)
+        axes[0].plot(self.times, self.data_aspJ[:,1], linestyle = 'None', marker = 'o', label = 'asptheta J2000', ms = 1.)
+        axes[0].set_ylim(-90,90)
+
+        axes[1].plot(self.times, self.data_aspB[:,1] - self.data_old_aa_lat, linestyle = 'None', marker = 'o', label = 'aspdataB - old asptheta', ms = 1.)
+        axes[1].plot(self.times, self.data_aspB[:,1] - self.data_aspJ[:, 1], linestyle = 'None', marker = 'o', label = 'aspdataB - aspdataJ', ms = 1.)
+        axes[1].set_ylim(-1.,1.)
+
+        axes[3].plot(self.times, self.data_old_aa_long, linestyle = 'None', marker = 'o', label = 'old aspphi', ms = 1.)
+        axes[3].plot(self.times, self.data_aspB[:,0], linestyle = 'None', marker = 'o', label = 'aspphi B1950', ms = 1.)
+        axes[3].plot(self.times, self.data_aspJ[:,0], linestyle = 'None', marker = 'o', label = 'aspphi J2000', ms = 1.)
+        axes[3].set_ylim(-90,90)
+
+        axes[4].plot(self.times, self.data_aspB[:,0] - self.data_old_aa_long, linestyle = 'None', marker = 'o', label = 'aspdataB - old aspphi', ms = 1.)
+        axes[4].plot(self.times, self.data_aspB[:,0] - self.data_aspJ[:, 0], linestyle = 'None', marker = 'o', label = 'aspdataB - aspdataJ', ms = 1.)
+        axes[4].set_ylim(-1.,1)
+
+        fig.text(0.035, 0.75, 'Aspect Latitude / deg.', ha='center', va='center', rotation='vertical')
+        fig.text(0.035, 0.25, 'Aspect Latitude / deg.', ha='center', va='center', rotation='vertical')
+
+        plt.tight_layout(pad=1.5, h_pad=1., w_pad=None, rect=None)
+        plt.subplots_adjust(left=0.11, bottom=0.12, right=None, top=None, wspace=None, hspace=None)
+
+        fig.autofmt_xdate()
+        for ax in axes:
+            if ax == axes[2]:
+                continue
+            ax.legend()
+            ax.grid(True)
+        axes[2].set_visible(False)
