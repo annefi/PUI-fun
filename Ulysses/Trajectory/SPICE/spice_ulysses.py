@@ -17,7 +17,8 @@ from Ulysses.Trajectory.ul_calc_traj import hc_to_hg, calc_asp_angles
 #                             'ytick.major.size': 13,
 #                             'ytick.major.width': 2,
 #                             'ytick.minor.size': 8,
-#                             'ytick.minor.width': 1})
+#                             'ytick.minor.width': 1,
+#                           })
 
 
 
@@ -219,6 +220,7 @@ def get_pool_data(date):
     :return:
     '''
     data = read_pool()
+
     datestring = "%i-%i-%i" % (date.year, date.month, date.day)
     index = np.where(data['datestring'] == datestring)[0][0]
     print("HC       R_AU: %s Lat: %s, Long: %s \nHG     R_AU: %s  Lat: %s,  Long: %s \n \n" %(data['R'][index],
@@ -271,8 +273,8 @@ class CompTimeseries:
             last_day = datetime.datetime(tf[0].year, tf[0].month, tf[0].day) + datetime.timedelta(days=1)
             delta = last_day - first_day
         self.times = [first_day + datetime.timedelta(days=x) for x in range(delta.days + 1)]
-        self.t_southpass = datetime.datetime(1994,9,13)
-        self.t_northpass = datetime.datetime(1995,7,31)
+        self.t_southpass = [datetime.datetime(1994,9,13), datetime.datetime(2000,11,27), datetime.datetime(2007,2,7)]
+        self.t_northpass = [datetime.datetime(1995,7,31), datetime.datetime(2001,10,13), datetime.datetime(2008,1,14)]
         self.frames = frames
         self.para = para
         self.get_data()
@@ -558,39 +560,73 @@ class CompTimeseries:
         ax.grid(True)
         return ax
 
-    def plot_val_dev_aa(self, para = 'both'):
-        self.get_old_aa_data()
+    def plot_val_dev_aa(self, old = False):
+        if old:
+            self.get_old_aa_data()
         self.get_aa()
-        fig, axes = plt.subplots(nrows = 5, gridspec_kw = {'height_ratios':[2,1,0.5,2,1]})
+        fig, axes = plt.subplots(nrows = 5, gridspec_kw = {'height_ratios':[2,1.7,0.1,2,1.7]})
 
-        axes[0].plot(self.times, self.data_old_aa_lat, linestyle = 'None', marker = 'o', label = 'old asptheta', ms = 1.)
-        axes[0].plot(self.times, self.data_aspB[:,1], linestyle = 'None', marker = 'o', label = 'asptheta B1950', ms = 1.)
-        axes[0].plot(self.times, self.data_aspJ[:,1], linestyle = 'None', marker = 'o', label = 'asptheta J2000', ms = 1.)
-        axes[0].set_ylim(-90,90)
+        #plt.tight_layout(pad=1.5, h_pad=0.5, w_pad=None, rect=None)
+        if old:
+            axes[0].plot(self.times, self.data_old_aa_lat, linestyle = 'None', marker = 'o', label = 'old asptheta',
+                    ms = 1., color = "#bfbfbf")
+        axes[0].plot(self.times, self.data_aspB[:,1], linestyle = 'None', marker = 'o', label = 'asptheta B1950',
+                     ms = 1., color = "#940c35")
+        axes[0].plot(self.times, self.data_aspJ[:,1], linestyle = 'None', marker = 'o', label = 'asptheta J2000',
+                     ms = 1., color = "#db5c82")
+        axes[0].set_ylim(-35,35)
 
-        axes[1].plot(self.times, self.data_aspB[:,1] - self.data_old_aa_lat, linestyle = 'None', marker = 'o', label = 'aspdataB - old asptheta', ms = 1.)
-        axes[1].plot(self.times, self.data_aspB[:,1] - self.data_aspJ[:, 1], linestyle = 'None', marker = 'o', label = 'aspdataB - aspdataJ', ms = 1.)
-        axes[1].set_ylim(-1.,1.)
+        if old:
+            axes[1].plot(self.times, self.data_aspB[:,1] - self.data_old_aa_lat, linestyle = 'None', marker = 'o',
+                    label = 'B1950 - old asptheta', ms = 1., color = "#bfbfbf")
+        axes[1].plot(self.times, self.data_aspB[:,1] - self.data_aspJ[:, 1], linestyle = 'None', marker = 'o',
+                     label = 'B1950 - J2000', ms = 1., color = "#db5c82")
+        axes[1].set_ylim(-.6,.6)
 
-        axes[3].plot(self.times, self.data_old_aa_long, linestyle = 'None', marker = 'o', label = 'old aspphi', ms = 1.)
-        axes[3].plot(self.times, self.data_aspB[:,0], linestyle = 'None', marker = 'o', label = 'aspphi B1950', ms = 1.)
-        axes[3].plot(self.times, self.data_aspJ[:,0], linestyle = 'None', marker = 'o', label = 'aspphi J2000', ms = 1.)
-        axes[3].set_ylim(-90,90)
+        if old:
+            axes[3].plot(self.times, self.data_old_aa_long, linestyle = 'None', marker = 'o', label = 'old aspphi',
+                    ms = 1., color = "#bfbfbf")
+        axes[3].plot(self.times, self.data_aspB[:,0], linestyle = 'None', marker = 'o', label = 'aspphi B1950',
+                     ms = 1., color = "#002e66")
+        axes[3].plot(self.times, self.data_aspJ[:,0], linestyle = 'None', marker = 'o', label = 'aspphi J2000',
+                     ms = 1., color = "#4783cc")
+        axes[3].set_ylim(-35,35)
 
-        axes[4].plot(self.times, self.data_aspB[:,0] - self.data_old_aa_long, linestyle = 'None', marker = 'o', label = 'aspdataB - old aspphi', ms = 1.)
-        axes[4].plot(self.times, self.data_aspB[:,0] - self.data_aspJ[:, 0], linestyle = 'None', marker = 'o', label = 'aspdataB - aspdataJ', ms = 1.)
-        axes[4].set_ylim(-1.,1)
+        if old:
+            axes[4].plot(self.times, self.data_aspB[:,0] - self.data_old_aa_long, linestyle = 'None', marker = 'o',
+                    label = 'B1950 - old aspphi', ms = 1., color = "#bfbfbf")
+        axes[4].plot(self.times, self.data_aspB[:,0] - self.data_aspJ[:, 0], linestyle = 'None', marker = 'o',
+                     label = 'B1950 - J2000', ms = 1., color = "#4783cc")
+        axes[4].set_ylim(-1.9,1.5)
 
-        fig.text(0.035, 0.75, 'Aspect Latitude / deg.', ha='center', va='center', rotation='vertical')
-        fig.text(0.035, 0.25, 'Aspect Latitude / deg.', ha='center', va='center', rotation='vertical')
-
-        plt.tight_layout(pad=1.5, h_pad=1., w_pad=None, rect=None)
-        plt.subplots_adjust(left=0.11, bottom=0.12, right=None, top=None, wspace=None, hspace=None)
+        fig.text(0.035, 0.75, 'Aspect Latitude / deg.', ha='center', va='center', rotation='vertical',
+                 color = '#940c35')
+        fig.text(0.035, 0.3, 'Aspect Latitude / deg.', ha='center', va='center', rotation='vertical',
+                 color = "#002e66")
 
         fig.autofmt_xdate()
         for ax in axes:
             if ax == axes[2]:
                 continue
-            ax.legend()
+            elif ax == axes[0] or ax == axes[1]:
+                lg = ax.legend(loc='upper center', ncol=3, fontsize='small', bbox_to_anchor=(0.5, 1.2), fancybox=
+                True, framealpha=1., facecolor='#fff5f8', shadow=True)
+                for legend_handle in lg.legendHandles:
+                    legend_handle._legmarker.set_markersize(6)
+            elif ax == axes[3] or ax == axes[4]:
+                lg = ax.legend(loc = 'upper center', ncol = 3, fontsize = 'small', bbox_to_anchor = (0.5,1.3),
+                               fancybox =
+                True, framealpha = 1., facecolor = '#dfe9f5', shadow = True)
+                for legend_handle in lg.legendHandles:
+                    legend_handle._legmarker.set_markersize(6)
+
+            for s in self.t_southpass:
+                ax.axvline(s, ymin=-30, ymax=30., color='#828282', alpha=0.5,
+                           linestyle='dashed')
+            for n in self.t_northpass:
+                ax.axvline(n, ymin=-30., ymax=30, color='#828282', alpha=0.5, linestyle='dashed')
             ax.grid(True)
-        axes[2].set_visible(False)
+            axes[2].set_visible(False)
+
+
+        plt.subplots_adjust(left=0.11, bottom=0.1, right=0.97, top=0.96, wspace=0, hspace=0.3)

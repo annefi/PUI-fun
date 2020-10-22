@@ -1,11 +1,13 @@
-from etspice.kernels import LocalKernel
-from etspice import EARTH, ReferenceFrame
-import datetime as dt
-import os
+import matplotlib.pyplot as plt
 
-os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-rf_kernel = LocalKernel('Ulysses/Trajectory/SPICE/data/test_tf.tf')
-rf_kernel.load()
-HCI_B = ReferenceFrame([rf_kernel],'HCI_B1950')
-for i in range(10000):
-    print(EARTH.position(dt.datetime.utcnow(), reference_frame = HCI_B))
+
+f = figure(1)
+
+for j in 1:4
+  subplot(2,2,j)
+  plot(rand(10), rand(10))
+end
+
+# these lines do nothing for me, and I cannot understand why.
+subplots_adjust(hspace = 0.01)
+subplots_adjust(wspace = 0.01)
