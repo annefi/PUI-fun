@@ -97,8 +97,7 @@ class collimator(object):
             ax.set_zlabel("z")
         # origin:
         ax.plot([0, 0], [0, 0], [0, 0], 'o', color="k")
-        # x-axis:
-        ax.plot([-3, 3], [0, 0], [0, 0], '-', color="k", lw=.5)
+        # x-axis:       ax.plot([-3, 3], [0, 0], [0, 0], '-', color="k", lw=.5)
         # y-axis:
         ax.plot([0, 0], [-3, 3], [0, 0], '-', color="k", lw=.5)
         # z-axis:
