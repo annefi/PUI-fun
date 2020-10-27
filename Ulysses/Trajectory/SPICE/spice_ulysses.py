@@ -9,20 +9,6 @@ import matplotlib
 from sys import exit
 from Ulysses.Trajectory.ul_calc_traj import hc_to_hg, calc_asp_angles
 
-# matplotlib.rcParams.update({'font.size': 12,
-#                             'xtick.major.size': 13,
-#                             'xtick.major.width': 2,
-#                             'xtick.minor.size': 8,
-#                             'xtick.minor.width': 1,
-#                             'ytick.major.size': 13,
-#                             'ytick.major.width': 2,
-#                             'ytick.minor.size': 8,
-#                             'ytick.minor.width': 1,
-#                           })
-
-
-
-
 if os.path.exists("../fusessh/data/projects/spice"):
     os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
 elif os.path.exists("/data/projects/spice"):
@@ -117,7 +103,7 @@ def locateBody(body, date, RF, spher = True):
     :param body: body object, e.g. EARTH
     :param date: datetime object
     :param RF: etspice.ReferenceFrame
-    :return:
+    :return: Prints position vector as [R/AU, LAT/deg, LONG/deg]
     '''
     xyz = body.position(time = date, relative_to = SUN, reference_frame = RF)
     if spher == True:
@@ -126,6 +112,11 @@ def locateBody(body, date, RF, spher = True):
 
 
 def read_pool():
+    '''
+    Reader for Ulysses trajectory data from condensed file traj_data_ulysses_pool.dat
+    :return: dict with keys 'Year', 'DOY', 'MM', 'DD', 'ESP', 'SPE', 'SEP', 'R', 'R_km', 'HC_Lat', 'HC_Long', 'HG_Lat',
+                'HG_Long', 'HG_Long_wrtE', 'v', 'v_R', 'v_T', 'v_N', 'datestring'
+    '''
     path_pool = "Ulysses/Trajectory/trajectory_data/traj_data_ulysses_pool.dat"
     fin = open(path_pool,'r')
     paras = fin.readline().split()
@@ -145,6 +136,10 @@ def read_pool():
     return p_dict
 
 def read_ulysses_daily():
+    '''
+    Reader for Ulysses trajectory data from ulysses_daily_heliocentric_data_1990-2009.txt
+    :return: dict with keys "YYYY", "MM", "DD", "DOY", "R", "lat", "RA", "DEC", "long", "datestring"
+    '''
     path_pool = "Ulysses/Trajectory/trajectory_data/ulysses_daily_heliocentric_data_1990-2009.txt"
     fin = open(path_pool,'r')
     for headerline in range(4):
@@ -169,6 +164,10 @@ def read_ulysses_daily():
     return p_dict
 
 def read_helio_dat():
+    '''
+    Reader for Ulysses trajectory data from helio.dat
+    :return: dict with keys "Year", "DOY", "HR", "MN", 'R_AU', 'HG_LAT', 'HC_RA', 'HC_ECL_LAT', 'LONG_WRT_EARTH', "datestring"
+    '''
     path_pool = "Ulysses/Trajectory/trajectory_data/helio.dat"
     fin = open(path_pool,'r')
     paras_all = fin.readline().split()
@@ -194,6 +193,10 @@ def read_helio_dat():
     return p_dict
 
 def read_aa_data():
+    '''
+    Reader for "old" aspect angle data in aa_data.dat
+    :return: dict with keys "YEAR", "DOY", "D90", "ASP_PHI", "ASP_THETA", "ASP_total", "datestring"
+    '''
     path_aa = "Ulysses/Trajectory/trajectory_data/aa_data.dat"
     fin = open(path_aa, 'r')
     paras = fin.readline().split()
@@ -215,31 +218,34 @@ def read_aa_data():
 
 def get_pool_data(date):
     '''
-
     :param date: datetime.datetime object
-    :return:
+    :return: Prints out Ulysses' position data for date based on condensed orbit data file "traj_data_ulysses_pool.dat".
     '''
     data = read_pool()
-
     datestring = "%i-%i-%i" % (date.year, date.month, date.day)
     index = np.where(data['datestring'] == datestring)[0][0]
-    print("HC       R_AU: %s Lat: %s, Long: %s \nHG     R_AU: %s  Lat: %s,  Long: %s \n \n" %(data['R'][index],
-                                                                                         data['HC_Lat'][index],
-                                                                    data['HC_Long'][index],data['R'][index],
-                                                                    data['HG_Lat'][index],data['HG_Long'][index]))
+    print("HC   R_AU: %s Lat: %s, Long: %s \nHG     R_AU: %s  Lat: %s,  Long: %s \n \n" %(data['R'][index],
+         data['HC_Lat'][index], data['HC_Long'][index],data['R'][index], data['HG_Lat'][index],data['HG_Long'][index]))
 
-def comp_rf(date, RF = HCI):
-    #get_pool_data(date)
+def comp_rf(date):
+    '''
+    Compares Ulysses ephemeris data at date for different coordinate systems
+    :param date: datetime.datetime object
+    :return: Prints out position vectors as [R/AU, LAT/deg, LONG/deg]
+    '''
     locateUlysses(date, ECLIPJ2000)
     locateUlysses(date, ECLIPB1950)
     locateUlysses(date, HCI)
 
 def get_aa(t,RF, vec_hc = "None", vecE_hg = "None"):
     '''
-    :param t:
-    :param RF:
-    :param vec_hc: [R,lat,long]
-    :param vecE_hc: [R,lat,long]
+    Returns Ulysses' aspect angles at time t based on ephemeris data in ecliptic frame RF
+    :param t: datetime.datetime object
+    :param RF: ECLIPJ2000 or ECLIPJ2000
+    :param vec_hc: [R,lat,long] optional for external Ulysses ephemeris data at time t (ecliptic/HC coordinates!).
+        If None, SPICE vector in RF specified frame will be used.
+    :param vecE_hc: [R,lat,long] optional for external Earth ephemeris data at time t (equatorial/HG coordinates!).
+        If None, SPICE HCI_J vector will be used.
     :return: asp_angs = (aspphi,asptheta)
     '''
     if vec_hc == "None":
@@ -254,8 +260,22 @@ def get_aa(t,RF, vec_hc = "None", vecE_hg = "None"):
     return asp_angs
 
 class CompTimeseries:
-    """
-    Todo
+    """ Class for looking into different versions of Ulysses' ephemeris data
+
+    :param frames: Frames to be investigated as single lists in a comprehensive list "frames". Frame lists begin with
+    source keyword 'SP' (SPICE), 'UD' (ulysses_daily file) or 'HE' (helio.dat file) and the specification as a second element.
+    S. example for clarification.
+    Available specifications are
+    > for SPICE: ECLIPJ2000, ECLIPB1950, HCI_J, HCI_B...
+    > for 'UD': 'ECL' and 'EQ' for para LAT and 'ECL' for para LONG
+    > for 'HE': 'ECL' and 'EQ' for para LAT and 'EQ' for para LONG
+    Comment: Ephemeris data in UD and HE seem to be similar (but not the same) to B1950 epoch data in SPICE
+    :param para: 'LAT' or 'LONG'
+    :param tf: Time frame to investigate. Can be a single datetime.datetime object, a list of two or None (then
+    1990/11/06 until 1990/12/01 will be used)
+
+    Example: C = CompTimeseries([['SP', HCI_J], ['UD', 'EQ']], para = 'LONG', tf = datetime.datetime.utcnow)
+
     """
     def __init__(self, frames, para, tf = None):
         # create timeseries:
@@ -517,63 +537,20 @@ class CompTimeseries:
         diff_ax.grid(True)
         return diff_ax
 
-    def plot_aa(self, ax = None, para = 'both'):
-        self.get_old_aa_data()
-        self.get_aa()
-        if ax == None:
-            fig = plt.figure()
-            ax = fig.subplots()
-        if para == 'LAT' or para == 'both':
-            ax.plot(self.times, self.data_old_aa_lat, linestyle = 'None', marker = 'o', label = 'old asptheta', ms = 1.)
-            ax.plot(self.times, self.data_aspB[:,1], linestyle = 'None', marker = 'o', label = 'asptheta B', ms = 1.)
-            ax.plot(self.times, self.data_aspJ[:, 1], linestyle = 'None', marker = 'o', label = 'asptheta J', ms = 1.)
-        if para == 'LONG' or para == 'both':
-            ax.plot(self.times, self.data_old_aa_long, linestyle='None', marker='o', label='old aspphi', ms = 1.)
-            ax.plot(self.times, self.data_aspB[:, 0], linestyle = 'None', marker = 'o', label = 'aspphi B', ms = 1.)
-            ax.plot(self.times, self.data_aspJ[:, 0], linestyle = 'None', marker = 'o', label = 'aspphi J', ms = 1.)
-        # plot vertical lines at polar passes
-        plt.vlines(self.t_southpass, ymin=-18, ymax=18, color='firebrick', alpha=0.5, linestyle='dashed')
-        plt.vlines(self.t_northpass, ymin=-18, ymax=18, color='navy', alpha=0.5, linestyle='dashed')
-        plt.gcf().autofmt_xdate()
-        ax.legend()
-        ax.grid(True)
-        return ax
-
-
-    def plot_dev_aa(self, ax = None, para = 'both'):
-        self.get_old_aa_data()
-        self.get_aa()
-        if ax == None:
-            fig = plt.figure()
-            ax = fig.subplots()
-        if para == 'LAT' or para == 'both':
-            ax.plot(self.times, self.data_aspB[:,1] - self.data_old_aa_lat, linestyle = 'None', marker = 'o', label = 'aspdataB - old asptheta', ms = 1.)
-            ax.plot(self.times, self.data_aspB[:,1] - self.data_aspJ[:, 1], linestyle = 'None', marker = 'o', label = 'aspdataB - aspdataJ', ms = 1.)
-        if para == 'LONG' or para == 'both':
-            ax.plot(self.times, self.data_aspB[:,0] - self.data_old_aa_long, linestyle = 'None', marker = 'o', label = 'aspdataB - old aspphi', ms = 1.)
-            ax.plot(self.times, self.data_aspB[:,0] - self.data_aspJ[:, 0], linestyle = 'None', marker = 'o', label = 'aspdataB - aspdataJ', ms = 1.)
-        # plot vertical lines at polar passes
-        plt.vlines(self.t_southpass, ymin=-1.8, ymax=1.8, color='firebrick', alpha=0.5, linestyle='dashed')
-        plt.vlines(self.t_northpass, ymin=-1.8, ymax=1.8, color='navy', alpha=0.5, linestyle='dashed')
-        plt.gcf().autofmt_xdate()
-        ax.legend()
-        ax.grid(True)
-        return ax
-
     def plot_val_dev_aa(self, old = False):
         '''
-        :param t:
-        :param RF:
-        :param vec_hc: [R,lat,long]
-        :param vecE_hc: [R,lat,long]
-        :return: asp_angs = (aspphi,asptheta)
+        Method for plotting Ulysses' aspect angles during self.times and testing the effect of using ephemeris data of
+        the wrong epoch. Angles are based on Ulysses' ephemeris in ecliptic coordinates in B1950 resp. J2000 and
+        Earth ephemeris data in J2000.
+        Ignores self.para and self.frame.
+        :param old: merge later
+        :return: Figure with four axes, from top to bottom: Latitude values, Latitude difference, Longitude values,
+        Longitude difference
         '''
         if old:
             self.get_old_aa_data()
         self.get_aa()
         fig, axes = plt.subplots(nrows = 5, gridspec_kw = {'height_ratios':[2,1.7,0.1,2,1.7]})
-
-        #plt.tight_layout(pad=1.5, h_pad=0.5, w_pad=None, rect=None)
         if old:
             axes[0].plot(self.times, self.data_old_aa_lat, linestyle = 'None', marker = 'o', label = 'old asptheta',
                     ms = 1., color = "#bfbfbf")
@@ -610,7 +587,6 @@ class CompTimeseries:
                  color = '#940c35')
         fig.text(0.035, 0.3, 'Aspect Latitude / deg.', ha='center', va='center', rotation='vertical',
                  color = "#002e66")
-
         fig.autofmt_xdate()
         for ax in axes:
             if ax == axes[2]:
@@ -634,6 +610,4 @@ class CompTimeseries:
                 ax.axvline(n, ymin=-30., ymax=30, color='#828282', alpha=0.5, linestyle='dashed')
             ax.grid(True)
             axes[2].set_visible(False)
-
-
         plt.subplots_adjust(left=0.11, bottom=0.1, right=0.97, top=0.96, wspace=0, hspace=0.3)
