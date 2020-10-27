@@ -561,6 +561,13 @@ class CompTimeseries:
         return ax
 
     def plot_val_dev_aa(self, old = False):
+        '''
+        :param t:
+        :param RF:
+        :param vec_hc: [R,lat,long]
+        :param vecE_hc: [R,lat,long]
+        :return: asp_angs = (aspphi,asptheta)
+        '''
         if old:
             self.get_old_aa_data()
         self.get_aa()
