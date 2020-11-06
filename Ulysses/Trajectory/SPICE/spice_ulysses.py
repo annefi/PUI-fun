@@ -585,7 +585,7 @@ class CompTimeseries:
 
         fig.text(0.035, 0.75, 'Aspect Latitude / deg.', ha='center', va='center', rotation='vertical',
                  color = '#940c35')
-        fig.text(0.035, 0.3, 'Aspect Latitude / deg.', ha='center', va='center', rotation='vertical',
+        fig.text(0.035, 0.3, 'Aspect Longitude / deg.', ha='center', va='center', rotation='vertical',
                  color = "#002e66")
         fig.autofmt_xdate()
         for ax in axes:
