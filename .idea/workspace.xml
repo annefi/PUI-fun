@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a9ebe754-c13d-4791-9b00-eb3f3073c4bf" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/MA/Talks/SWmeeting/swm_2020_10_30old.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ulysses/DataLoader/test1.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ulysses/DataLoader/testsublime.py" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1knOxJzHMgvsLJYkAdyjZ2yDPH6" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a9ebe754-c13d-4791-9b00-eb3f3073c4bf" name="Default Changelist" comment="" />
+      <created>1606333133889</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1606333133889</updated>
+    </task>
+    <servers />
+  </component>
+</project>

@@ -6,8 +6,8 @@ import os.path
 ####################
 
 ### from Laptop: ###
-myrootpath = '/media/storage/PUI-fun'
-sys.path.append(myrootpath)
+myrootpath = '/home/af/PUI-fun'
+#sys.path.append(myrootpath)
 if os.path.isdir("/home/af/fusessh/data/projects/Ulysses/swics/pha/") == True:
     datarootpath = "/home/af/fusessh/data/projects/Ulysses/"
 else:

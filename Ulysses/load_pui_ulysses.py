@@ -11,7 +11,7 @@ from WShell import WShell
 from WSky import WSky
 
 #mypath = '/home/asterix/fischer/PUI/'
-mypath = '/media/storage/PUI-fun/'
+mypath = '/home/af/PUI-fun/'
 
 ###
 # Script for creating an instance d of uswipha and setting masks (s.b.)
@@ -36,11 +36,11 @@ years = [1994]
 
 if He1:
     # give path to data that includes magnet data
-    d1 = uswipha(year=years, tf=[[1, 100]], path=mypath+'Ulysses/data_misc/PHA_mag/')
+    d1 = uswipha(year=years, tf=[[1, 25]], path=mypath+'Ulysses/data_misc/PHA_mag/')
     d1.sync_swoops()
     d1.sync_traj()
     #d1.sync_mag() # not needed anymore: new PHAs including mag data
-    d1.set_mask('Master','vsw',760,770, reset = True)
+    d1.set_mask('Master','vsw',740,780, reset = True)
     d1.set_mask('Master','rng',0,0,reset=True)
     d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
@@ -68,41 +68,39 @@ if He1:
 
 
 
-# load Ulysses data:
-years = [1996]
+# # load Ulysses data:
+# years = [1996]
 
-if He1:
-    d1 = uswipha(year=years, tf=[[1, 100]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
-    d1.sync_swoops()
-    d1.sync_traj()
-    #d1.sync_mag() # not needed anymore: new PHAs including mag data
-    d1.set_mask('Master','vsw',760,770, reset = True)
-    d1.set_mask('Master','rng',0,0,reset=True)
-    d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
-    d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
-    #d1.set_mask('Master','brw',1,1,reset=True)
+# if He1:
+#     d1 = uswipha(year=years, tf=[[1, 100]], path='/home/asterix/fischer/PUI/Ulysses/data_misc/PHA_mag/')
+#     d1.sync_swoops()
+#     d1.sync_traj()
+#     #d1.sync_mag() # not needed anymore: new PHAs including mag data
+#     d1.set_mask('Master','vsw',760,770, reset = True)
+#     d1.set_mask('Master','rng',0,0,reset=True)
+#     d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
+#     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
+#     #d1.set_mask('Master','brw',1,1,reset=True)
 
-    d1.set_mask('Master', 'epq', 0, 19, reset=True)
-
-
-    # d1.set_mask('Master','Btheta',-20./180.*np.pi,20./180.*np.pi,reset=True)
-    # d1.set_mask('Master', 'Bphi', -20. / 180. * np.pi, 20. / 180. * np.pi, reset=True)
-    # #d1.set_mask('Master', 'Bphi', 85. / 180. * np.pi, 95. / 180. * np.pi)
+#     d1.set_mask('Master', 'epq', 0, 19, reset=True)
 
 
-    # d1.set_mask('Master','aa_tot', 0, 10)
-    # d1.set_mask('Master','aspphi', 0,5)
-    # d1.set_mask('Master','asptheta',4,4.5)
-
-    # get a real subset with masks applied:
-    print('*** Save Subset ***')
-    d1.save_subset('Master', filename = 'd1.tmp')
-    print('*** Load Subset ***')
-    d1.load_subset(filename = 'd1.tmp', force = True)
-
-    D6 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
+#     # d1.set_mask('Master','Btheta',-20./180.*np.pi,20./180.*np.pi,reset=True)
+#     # d1.set_mask('Master', 'Bphi', -20. / 180. * np.pi, 20. / 180. * np.pi, reset=True)
+#     # #d1.set_mask('Master', 'Bphi', 85. / 180. * np.pi, 95. / 180. * np.pi)
 
 
+#     # d1.set_mask('Master','aa_tot', 0, 10)
+#     # d1.set_mask('Master','aspphi', 0,5)
+#     # d1.set_mask('Master','asptheta',4,4.5)
+
+#     # get a real subset with masks applied:
+#     print('*** Save Subset ***')
+#     d1.save_subset('Master', filename = 'd1.tmp')
+#     print('*** Load Subset ***')
+#     d1.load_subset(filename = 'd1.tmp', force = True)
+
+#     D6 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
 
 
 
@@ -110,48 +108,50 @@ if He1:
 
 
 
-years = [1992]
-
-###########
-### He2
-###########
-
-if He2:
-
-    d2 = uswipha(year=years,tf=[[1,366]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/')
-    d2.sync_swoops()
-    d2.sync_traj()
-
-    d2.set_mask('Master','rng',0,0,reset=True)
-    d2.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
-    d2.set_mask('Master','ech',12,250,reset=True) # exclude doubles
-    d2.set_mask('Master','brw',1,np.inf,reset=True)
-
-    #d2.set_mask('Master','aa_tot', 0,2)
-    d2.set_mask('Master','aspphi', -5,5)
-    d2.set_mask('Master','asptheta',-5,5)
 
 
-    # get a real subset with masks applied:
-    print('*** Save Subset ***')
-    # d1.save_subset('Master', filename = 'd1.tmp')
-    d2.save_subset('Master', filename = 'd2.tmp')
-    print('*** Load Subset ***')
-    # d1.load_subset(filename = 'd1.tmp', force = True)
-    d2.load_subset(filename = 'd2.tmp', force = True)
+# years = [1992]
 
-    D2 = Dist3D(d2, mass = 4, charge = 2)
-    #D.hist_sec_det()
+# ###########
+# ### He2
+# ###########
 
-    # aa_phi = D.d.get_data('Master','aspphi')[0]
-    # aa_theta = D.d.get_data('Master', 'asptheta')[0]
-    # print('aspphi: ', aa_phi)
-    # print('asptheta: ', aa_theta)
-    # #ws = WSpec(D, color_norm = 'sg')
-    #
-    # # from swics_collimator_ulysses import collimator
-    # # c = collimator(aspphi = aa_phi, asptheta = aa_theta, offset_sp=185., nrs_para=6, nrs_perp = 3, edges = True,
-    # #                nrs_sec = 5)
-    # # c.fancy_plot_FoV()
-    # #
-    # # pylab.show()
+# if He2:
+
+#     d2 = uswipha(year=years,tf=[[1,366]], path = '/home/asterix/fischer/PUI/Ulysses/data_misc/pha_he2/')
+#     d2.sync_swoops()
+#     d2.sync_traj()
+
+#     d2.set_mask('Master','rng',0,0,reset=True)
+#     d2.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
+#     d2.set_mask('Master','ech',12,250,reset=True) # exclude doubles
+#     d2.set_mask('Master','brw',1,np.inf,reset=True)
+
+#     #d2.set_mask('Master','aa_tot', 0,2)
+#     d2.set_mask('Master','aspphi', -5,5)
+#     d2.set_mask('Master','asptheta',-5,5)
+
+
+#     # get a real subset with masks applied:
+#     print('*** Save Subset ***')
+#     # d1.save_subset('Master', filename = 'd1.tmp')
+#     d2.save_subset('Master', filename = 'd2.tmp')
+#     print('*** Load Subset ***')
+#     # d1.load_subset(filename = 'd1.tmp', force = True)
+#     d2.load_subset(filename = 'd2.tmp', force = True)
+
+#     D2 = Dist3D(d2, mass = 4, charge = 2)
+#     #D.hist_sec_det()
+
+#     # aa_phi = D.d.get_data('Master','aspphi')[0]
+#     # aa_theta = D.d.get_data('Master', 'asptheta')[0]
+#     # print('aspphi: ', aa_phi)
+#     # print('asptheta: ', aa_theta)
+#     # #ws = WSpec(D, color_norm = 'sg')
+#     #
+#     # # from swics_collimator_ulysses import collimator
+#     # # c = collimator(aspphi = aa_phi, asptheta = aa_theta, offset_sp=185., nrs_para=6, nrs_perp = 3, edges = True,
+#     # #                nrs_sec = 5)
+#     # # c.fancy_plot_FoV()
+#     # #
+#     # # pylab.show()

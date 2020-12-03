@@ -29,7 +29,7 @@ from DataLoader.uswiutils import getvelocity
 
 class collimator(object):
     def __init__(self, nrs_para=4, nrs_perp=2, nrs_sec=6, edges=False, aspphi=0.00001, asptheta=0.00001, vel=600.,
-                 vsw=700, offset_sp = 180.):
+                 vsw=700., offset_sp = 180.):
         """
         Class to calculate the field of view of SWICS (Ulysses) nrs_para,nrs_perp -> number of angle steps for
         collimator. The total number of point to represent each detector (three detectors in total) is
