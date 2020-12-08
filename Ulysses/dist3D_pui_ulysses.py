@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from custom_colours import lighten_color
 import matplotlib.colors as colors
 import matplotlib.ticker as ticker
-import sys
+import sys, os
 import matplotlib
 from copy import deepcopy
 import time
@@ -31,6 +31,7 @@ matplotlib.rcParams.update({'font.size': 14,
                             'figure.subplot.top': 0.94,
                             'figure.figsize': (7,4.5)})
 
+os.chdir('/home/af/PUI-fun/')
 
 class Dist3D(object):
     def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=3, nrs_para=9,
@@ -328,10 +329,6 @@ class Dist3D(object):
             self.d.data["wHe1+2"] = getvelocity(4., 1., self.d.data["epq"].astype(int)) / around(
                 self.d.data["vsw"], -1)
 
-
-
-
-
     def _add_angles(self):
         '''
         Adds phi and theta angle data products
@@ -368,11 +365,10 @@ class Dist3D(object):
         # psd per sec/det:
         self.psv = (self.vels * 1.5 * self.geomfac) * (self.vels ** 2 * (pi ** 2 / 180 ** 2. * 4. * 23)) * (0.03*self.vels)
 
-        fin = open("data_misc/%s_new.eff" % (self.ion), "r")
+        fin = open("Ulysses/data_misc/%s_new.eff" % (self.ion), "r")
         dat = loadtxt(fin)
         eff = dat[:, 1]
         self.eff = eff[arange(0,18,1)]
-
 
     def get_norm(self, vsw = [0, 1000], doys = [0,365], wbins = arange(-2., 2.01, 0.2), dim=3):
         '''

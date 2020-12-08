@@ -1,21 +1,22 @@
 import sys
-import os.path
+import os
 ### from Uni/skeletor: ###
 # myrootpath = "/home/asterix/fischer/PUI"
 # datarootpath = "/data/projects/Ulysses/"
 ####################
 
 ### from Laptop: ###
-myrootpath = '/home/af/PUI-fun'
+myrootpath = '/home/af/PUI-fun/'
+os.chdir(myrootpath)
 #sys.path.append(myrootpath)
-if os.path.isdir("/home/af/fusessh/data/projects/Ulysses/swics/pha/") == True:
-    datarootpath = "/home/af/fusessh/data/projects/Ulysses/"
+if os.path.isdir("/home/af/fusessh/data/projects/Ulysses/") == True:
+    datapath = "/home/af/fusessh/data/projects/Ulysses/"
 else:
-    print("Problem finding data path. Are you connected to asterix via fusessh?\n")
+    print("Problem finding data path on asterix (needed for SWOOPS data). \nAre you connected to asterix via fusessh?\n")
     sys.exit()
 ####################
 
-magpath = myrootpath + "/Ulysses/data_misc/PHA_mag/"
+magpath = "/Ulysses/data_misc/PHA_mag/"
 
 from pylib import *
 from numpy import *
@@ -69,7 +70,7 @@ class uswipha(dbData):
         if kwargs.has_key("path"):
             self.path=kwargs["path"]
         else:
-            self.path = datarootpath + "swics/pha/"
+            self.path = "Ulysses/data_misc/pha_he/"
 
         self.data["year"]=[]
         self.data["doy"]=[]
@@ -154,7 +155,7 @@ class uswipha(dbData):
             * wHe+ : vHe+ / vsw
 
         '''
-        swo = uswo(year = self.year,tf = self.timeframe, path = datarootpath + "swoops/4min_data/")
+        swo = uswo(year = self.year,tf = self.timeframe, path = datapath + "swoops/4min_data/")
         if not 'd90' in self.data.keys():
             self.calc_d90()
         swo.calc_d90()
@@ -205,7 +206,7 @@ class uswipha(dbData):
         Adds data products from 
 
         '''
-        traj = ulysses_traj(year = self.year,tf = self.timeframe, path = datarootpath + "trajectory/traj_data_ulysses_pool.dat")
+        traj = ulysses_traj(year = self.year,tf = self.timeframe, path = datapath + "trajectory/traj_data_ulysses_pool.dat")
         if not 'd90' in self.data.keys():
             self.calc_d90()
         traj.calc_d90()

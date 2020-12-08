@@ -10,8 +10,9 @@ from WSlice import WSlice
 from WShell import WShell
 from WSky import WSky
 
-#mypath = '/home/asterix/fischer/PUI/'
-mypath = '/home/af/PUI-fun/'
+myrootpath = '/home/af/PUI-fun/'
+#myrootpath = '/home/asterix/fischer/PUI/'
+
 
 ###
 # Script for creating an instance d of uswipha and setting masks (s.b.)
@@ -36,7 +37,7 @@ years = [1994]
 
 if He1:
     # give path to data that includes magnet data
-    d1 = uswipha(year=years, tf=[[1, 25]], path=mypath+'Ulysses/data_misc/PHA_mag/')
+    d1 = uswipha(year=years, tf=[[1, 30]])
     d1.sync_swoops()
     d1.sync_traj()
     #d1.sync_mag() # not needed anymore: new PHAs including mag data
