@@ -1,16 +1,12 @@
 import sys
 import os
-### from Uni/skeletor: ###
-# myrootpath = "/home/asterix/fischer/PUI"
-# datarootpath = "/data/projects/Ulysses/"
-####################
 
-### from Laptop: ###
-myrootpath = '/home/af/PUI-fun/'
-os.chdir(myrootpath)
-#sys.path.append(myrootpath)
 if os.path.isdir("/home/af/fusessh/data/projects/Ulysses/") == True:
+    ### from Laptop: ###
     datapath = "/home/af/fusessh/data/projects/Ulysses/"
+elif os.path.isdir("/data/projects/Ulysses/") == True:
+    ### from Uni/skeletor: ###
+    datapath = "/data/projects/Ulysses/"
 else:
     print("Problem finding data path on asterix (needed for SWOOPS data). \nAre you connected to asterix via fusessh?\n")
     sys.exit()
@@ -81,12 +77,12 @@ class uswipha(dbData):
         self.data["det"]=[]
         self.data["rng"]=[]
         self.data["brw"]=[]
-        if self.path == magpath:
-            self.data["Bphi"] = []
-            self.data["Btheta"] = []
-            self.data["BR"] = []
-            self.data["BT"] = []
-            self.data["BN"] = []
+        # if self.path == magpath:
+        #     self.data["Bphi"] = []
+        #     self.data["Btheta"] = []
+        #     self.data["BR"] = []
+        #     self.data["BT"] = []
+        #     self.data["BN"] = []
 
         for year in self.year:
             for tf in self.timeframe:

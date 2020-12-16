@@ -10,9 +10,8 @@ from WSlice import WSlice
 from WShell import WShell
 from WSky import WSky
 
-myrootpath = '/home/af/PUI-fun/'
-#myrootpath = '/home/asterix/fischer/PUI/'
-
+#myrootpath = '/home/af/PUI-fun/'
+myrootpath = '/home/asterix/fischer/PUI/'
 
 ###
 # Script for creating an instance d of uswipha and setting masks (s.b.)

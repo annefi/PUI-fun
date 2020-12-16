@@ -31,7 +31,7 @@ matplotlib.rcParams.update({'font.size': 14,
                             'figure.subplot.top': 0.94,
                             'figure.figsize': (7,4.5)})
 
-os.chdir('/home/af/PUI-fun/')
+#os.chdir('/home/af/PUI-fun/')
 
 class Dist3D(object):
     def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=3, nrs_para=9,
