@@ -77,12 +77,12 @@ class uswipha(dbData):
         self.data["det"]=[]
         self.data["rng"]=[]
         self.data["brw"]=[]
-        # if self.path == magpath:
-        #     self.data["Bphi"] = []
-        #     self.data["Btheta"] = []
-        #     self.data["BR"] = []
-        #     self.data["BT"] = []
-        #     self.data["BN"] = []
+        if self.path == magpath:
+            self.data["Bphi"] = []
+            self.data["Btheta"] = []
+            self.data["BR"] = []
+            self.data["BT"] = []
+            self.data["BN"] = []
 
         for year in self.year:
             for tf in self.timeframe:
