@@ -66,7 +66,8 @@ class uswipha(dbData):
         if kwargs.has_key("path"):
             self.path=kwargs["path"]
         else:
-            self.path = "Ulysses/data_misc/pha_he/"
+            self.path = datapath + "swics/pha/"
+            #self.path = "Ulysses/data_misc/pha_he/"
 
         self.data["year"]=[]
         self.data["doy"]=[]

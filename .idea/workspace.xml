@@ -3,6 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="a9ebe754-c13d-4791-9b00-eb3f3073c4bf" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ulysses/DataLoader/uswipha.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ulysses/DataLoader/uswipha.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ulysses/data_misc/clicks_epq_ch_He2+_mask2D_bu.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ulysses/data_misc/clicks_tch_ech_He2+_mask2D_bu.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ulysses/filter_He.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ulysses/filter_He.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ulysses/load_pui_ulysses.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ulysses/load_pui_ulysses.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Ulysses/swics_collimator_ulysses.py" beforeDir="false" afterPath="$PROJECT_DIR$/Ulysses/swics_collimator_ulysses.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

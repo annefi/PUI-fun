@@ -10,26 +10,15 @@ from WSlice import WSlice
 from WShell import WShell
 from WSky import WSky
 
-#myrootpath = '/home/af/PUI-fun/'
-myrootpath = '/home/asterix/fischer/PUI/'
+myrootpath = '/home/af/PUI-fun/'
+#myrootpath = '/home/asterix/fischer/PUI/'
 
 ###
 # Script for creating an instance d of uswipha and setting masks (s.b.)
 ###
 
-
-# # both:
-# He1 = True
-# He2 = True
-
-#He1+
-He1 = True #False #
+He1 = True #False
 He2 = False #True
-# #
-# # He2+
-# He1 = False #
-# He2 = True #
-
 
 # load Ulysses data:
 years = [1995]

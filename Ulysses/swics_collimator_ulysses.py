@@ -539,8 +539,6 @@ class collimator(object):
 
         return ax
 
-
-
     def plot_wspace(self, ax=None, epq=10, sec='all'):
         vel = getvelocity(mass=4, charge=1, step=epq, frac=1.)
         self._calc_wspace(vel=vel)
@@ -581,9 +579,6 @@ class collimator(object):
         else:
             print("no valid sector given")
         return ax
-
-
-
 
     def draw_sphere(self, ax = None, r = 1., w = False):
         u, v = mgrid[0:2 * pi:20j, 0:pi:10j]
