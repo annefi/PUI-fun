@@ -1,3 +1,8 @@
+""" Read in Ulysses magnetic field data that was found on data/projects ...by Thies?
+
+Todo: Review the data...
+"""
+
 from pylib import dbData
 from numpy import array, ndarray
 

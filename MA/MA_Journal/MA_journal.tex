@@ -14,6 +14,13 @@
 
 \newcommand{\heute}[3][April]{\textbf{#2 -- #3. #1}}
 
+\newcommand{\DayInFeb}[3][]{\vspace{2cm}%
+	\noindent \tikz \draw [draw=black, ultra thick, #1]
+	($(current page.center)-(0.5\linewidth,0)$) -- 
+	($(current page.center)+(0.5\linewidth,0)$)
+	node [midway, fill=white] {\textbf{#2 -- #3. Februar}};
+}
+
 \newcommand{\DayInApril}[3][]{\vspace{2cm}%
 	\noindent \tikz \draw [draw=black, ultra thick, #1]
 	($(current page.center)-(0.5\linewidth,0)$) -- 
@@ -863,6 +870,11 @@ Für \verb|ana_1d| Ekliptik wegschneiden, damit wir nur koronalen SW haben und k
 \todo{bessere Funktion für Journal bauen: jetzt ist schon 2020!}
 Fail...
 
+\newpage
+
+\DayInFeb{Mi}{03}
+In /DataLoader dokumentiert. Weiter und SPICE integrieren als ulysses\_traj\_spice.py.\\ \\
+Dann Filterung He anschauen (filter\_he.py) und plot\_et.py auschecken.
 %
 %
 %

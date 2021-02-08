@@ -62,7 +62,7 @@ class Filter_He(uswipha):
 
     def read_clicks(self, species = 'He2+'):
         '''
-        Read in file in which the clicks for He+ Tof and Ech channels per Epq step are stored
+        Read in file in which the clicks for He+ Tof channels per Epq step are stored
         '''
         self.esa_fin = []
         self.tch_fin = []
@@ -102,13 +102,6 @@ class Filter_He(uswipha):
             self.ech_max.append(int(l[1]))
         self.tch = array(self.tch)
         self.ech_max = array(self.ech_max)
-
-    def plot_filter(self, year, species = 'He1+'):
-        try:
-            len(self.tch_fin)
-        except:
-            self.read_clicks(species = species)
-            self.read_ech_clicks(species = species)
 
     def filter_pha(self, year, species = 'He1+'):
         try:

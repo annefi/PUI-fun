@@ -1,3 +1,9 @@
+""" Writes a text file of PHA data including magnetic field data
+
+Todo:
+Build a function/module around the code. Somewhere...
+"""
+
 from pylib import dbData
 from numpy import *
 from uswipha import uswipha

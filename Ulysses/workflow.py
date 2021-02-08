@@ -17,7 +17,7 @@ You can then multiply each vector with a velocity (based on a EpQ step and speci
 
 - class Dist3D: main attribute is d
 
-_calc_FoV(): creates an i_phi x i_theta dimensional array (FoV) - where i_phi and i_theta are the numbers of aspect angles that appear in d (even a bit different in my code but let’s keep it simple here). You fill FoV with a collimators that are rotated by the respective phi and theta
+_calc_FoV(): creates an i_phi x i_theta dimensional array (FoV) - where i_phi and i_theta are the numbers of aspect angles that appear in d (even a bit different in my code but let’s keep it simple here). You fill FoV with collimators that are rotated by the respective phi and theta
 (The FoV is independent of the EpQ step!)
 ...you don’t need this matrix when you don’t have large aspect angles. Then you only need one FoV that you rotate according to the orientation of your instrument and coordinate system
 
