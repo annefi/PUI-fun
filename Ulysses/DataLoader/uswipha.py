@@ -1,3 +1,9 @@
+"""
+PHA loader for Ulysses SWICS data
+
+Based on dbData
+"""
+
 import sys
 import os
 
@@ -18,7 +24,7 @@ from pylib import *
 from numpy import *
 from Ulysses.DataLoader.uswo import uswo
 from Ulysses.DataLoader.ulysses_traj import ulysses_traj
-from Ulysses.DataLoader.ulysses_mag_loader import mag_loader
+#from Ulysses.DataLoader.ulysses_mag_loader import mag_loader
 from Ulysses.DataLoader.uswiutils import getvelocity
 
 class uswipha(dbData):
@@ -36,12 +42,24 @@ class uswipha(dbData):
         Synchronises solar wind speed, density etc. (data from SWOOPS)
     sync_traj()
     sync_mag()
+        To be reviewed
     calc_d90_epq()
 
     Examples
     --------
     d = uswipha(year = 1991, tf = [[1,10])
 
+    Data Products
+    -------------
+    doy - day of year
+    epq - energy per charge (ESA step)
+    tch - time of flight channel
+    ech - energy channel (SSD)
+    sec - sector [0,7]
+    det - detector [0,2]
+    rng - priority range [0,2]
+    brw - base rate weight
+    vHe+ - He+ velocity based on epq
     """
 
     def load_data(self,*args,**kwargs):
@@ -78,12 +96,12 @@ class uswipha(dbData):
         self.data["det"]=[]
         self.data["rng"]=[]
         self.data["brw"]=[]
-        if self.path == magpath:
-            self.data["Bphi"] = []
-            self.data["Btheta"] = []
-            self.data["BR"] = []
-            self.data["BT"] = []
-            self.data["BN"] = []
+        # if self.path == magpath:
+        #     self.data["Bphi"] = []
+        #     self.data["Btheta"] = []
+        #     self.data["BR"] = []
+        #     self.data["BT"] = []
+        #     self.data["BN"] = []
 
         for year in self.year:
             for tf in self.timeframe:
@@ -104,13 +122,13 @@ class uswipha(dbData):
                             self.data["det"].append(int(k[5]))
                             self.data["rng"].append(int(k[6]))
                             self.data["brw"].append(float(k[7]))
-                            if self.path == magpath:
-                                self.data["Bphi"].append(float(k[8]))
-                                self.data["Btheta"].append(float(k[9]))
+                            # if self.path == magpath:
+                            #     self.data["Bphi"].append(float(k[8]))
+                            #     self.data["Btheta"].append(float(k[9]))
 
-                                self.data["BR"].append(float(k[10]))
-                                self.data["BT"].append(float(k[11]))
-                                self.data["BN"].append(float(k[12]))
+                            #     self.data["BR"].append(float(k[10]))
+                            #     self.data["BT"].append(float(k[11]))
+                            #     self.data["BN"].append(float(k[12]))
                     except:
                         print "Problems reading DoY ",doy
         self.data["year"]=array(self.data["year"])
@@ -143,13 +161,16 @@ class uswipha(dbData):
     def sync_swoops(self):
         ''' Synchronisation with SWOOPS data
 
-        Adds data products from SWOOPS:
-            * vsw : solar wind velocity
-            * dsw : solar wind density
-            * hlat : latitude Ulysses in TODO
-            * hlong :  longitude Ulysses in TODO
-            * rau : solar radius Ulysses in AU
-            * wHe+ : vHe+ / vsw
+        Adds data products from SWOOPS
+    
+        Data products
+        -------------        
+        vsw : solar wind velocity
+        dsw : solar wind density 
+        hlat : latitude Ulysses in TODO
+        hlong :  longitude Ulysses in TODO
+        rau : solar radius Ulysses in AU
+        wHe+ : vHe+ / vsw
 
         '''
         swo = uswo(year = self.year,tf = self.timeframe, path = datapath + "swoops/4min_data/")
@@ -158,7 +179,7 @@ class uswipha(dbData):
         swo.calc_d90()
         uTi,index=unique(self.data["d90"],return_inverse=True)
         uTi=append(uTi,uTi[-1]+1./24./5.) # 12 minutes
-        uTi=uTi+1./24./30. # 2 minutes. warum? Todo
+        uTi=uTi+1./24./30. # 2 minutes shift. warum? Todo
         # **
         mask = swo.data["vges"]>0
         nrT,x = histogram(swo.data["d90"][mask],bins=uTi)
@@ -200,7 +221,7 @@ class uswipha(dbData):
     def sync_traj(self):
         ''' Synchronisation with Ulysses trajectory data
 
-        Adds data products from 
+        Adds data products from ulysses_traj, i.e. trajectory data from the Ulysses archive files
 
         '''
         traj = ulysses_traj(year = self.year,tf = self.timeframe, path = datapath + "trajectory/traj_data_ulysses_pool.dat")
@@ -250,6 +271,18 @@ class uswipha(dbData):
         v_abs, x = histogram(traj.data["d90"], bins=uTi_int, weights=traj.data["v"])
         self.add_data("v_abs_sc", v_abs[index_int])
 
+    def calc_d90_epq(self):
+        '''
+        calculates refined time since 1990 with epq fraction (= 12 sec)
+        :return:
+        '''
+        offy = self.data["year"] - 1990
+        offd = offy*365 + (offy.astype(int)+2)/4
+        off_epq = self.data['epq'] * 1./24./60./60. *12.
+        self.add_data("d90_epq",self.data["doy"] + offd + off_epq)
+
+
+
     def sync_mag(self):
         '''
         todo
@@ -295,14 +328,3 @@ class uswipha(dbData):
         # add magnetic field angles in degree:
         self.add_data('Bphi_deg', (self.data['Bphi'] * 180. / pi))
         self.add_data('Btheta_deg', (self.data['Btheta'] * 180. / pi))
-
-    def calc_d90_epq(self):
-        '''
-        calculates refined time since 1990 with epq fraction (= 12 sec)
-        :return:
-        '''
-        offy = self.data["year"] - 1990
-        offd = offy*365 + (offy.astype(int)+2)/4
-        off_epq = self.data['epq'] * 1./24./60./60. *12.
-        self.add_data("d90_epq",self.data["doy"] + offd + off_epq)
-
