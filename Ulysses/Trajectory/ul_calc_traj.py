@@ -58,8 +58,8 @@ def hg_to_rtn(r_vec, sc_vec, long_shift = 180., long_shift_r = 0.):
     Transforms heliographic coordinates from vector r_vec to coordinates as seen from an RTN-system (centered at the Sun)s.
     ('active Rotation')
     !! Theta is 90deg when only z-component
-    :param r_vec: in spherical heliographic coordinates (r,long,lat)
-    :param sc_vec: in spherical heliographic coordinates (r,long,lat)
+    :param r_vec: in spherical heliographic coordinates (r,long,lat) in deg
+    :param sc_vec: in spherical heliographic coordinates (r,long,lat) in deg
     :param long_shift: Ulysses HG-long-data is shifted by pi (long=0 shifted by 75+180 deg against vernal equinox)
     :param long_shift_r: needs to be pi as well, when r_vec is sc_vec itself & SC is Ulysses data ('Ulysses in RTN')
     :return: cartesian coordinates in RTN-system
@@ -134,10 +134,11 @@ def calc_v(vec1, vec2, dt, R = "km"):
 def calc_asp_angles(sc_vec,earth_vec,cs = "hg", l_s_sc = 180.):
     '''
     Calculates aspect angles phi and theta from position vectors of SC and earth
-    :param sc_vec: Vector from sun to SC in cartesian HG (default) coordinates (specify RTN-coordinates via param cs)
-    :param earth_vec: Vector from sun to earth
-    :param cs: "hg" for heliographic cartesian coordinates (default) or "rtn" for RTN cartesian coordinates
-    :param l_s_sc: longitude shift. Needs to be 180 for Ulysses data in HG, otherwise 0.
+    :param sc_vec: Vector from sun to SC in spherical HG (default) coordinates (specify RTN-coordinates via param cs): 
+     [R,Long,Lat] in degree
+    :param earth_vec: Vector from sun to earth in hg (r,long,lat)
+    :param cs: "hg" for heliographic spherical coordinates (default) or "rtn" for RTN coordinates
+    :param l_s_sc: longitude shift. Needs to be 180 for Ulysses data in HG (from Ulyses archive textfile), otherwise 0.
     :return: asp_phi, asp_theta (PoV from SC)
     asp_phi increases to +90 deg towards negative T-axis ('left') from viewing line SC-sun and -90 deg towards positive
     T-axis

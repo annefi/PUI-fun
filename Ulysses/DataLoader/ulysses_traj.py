@@ -69,7 +69,6 @@ class ulysses_traj(dbData):
         except:
             print "Cannot get trajectory data product keys"
 
-
         if len(self.data.keys()) > 0:
             datalines = fin.readlines()[3:]
             for year in self.year:
@@ -90,7 +89,6 @@ class ulysses_traj(dbData):
                     self.data[key] = array(self.data[key])
                 print('...almost done')
 
-
         if earth:
             #earth_path = "/data/projects/Ulysses/trajectory/earth_coordinates.dat"
             earth_path = "Ulysses/Trajectory/trajectory_data/earth_coordinates.dat"
@@ -109,7 +107,6 @@ class ulysses_traj(dbData):
             except:
                 print "Cannot get EARTH trajectory data product keys"
 
-
             if len(keys_earth) > 0:
                 datalines = fin.readlines()
                 for year in self.year:
@@ -125,7 +122,6 @@ class ulysses_traj(dbData):
                                             self.data[key].append(float(k[i]))
                         except:
                             print "Problems reading EARTH DoYs"
-
 
             # Calculate AA Phi and Theta (in RTN):
             self.keys.append('asp_phi')

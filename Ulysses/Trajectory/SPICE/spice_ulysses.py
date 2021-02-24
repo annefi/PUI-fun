@@ -7,7 +7,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 from sys import exit
-from Ulysses.Trajectory.ul_calc_traj import hc_to_hg, calc_asp_angles
+from Ulysses.Trajectory.ul_calc_traj import hc_to_hg, calc_asp_angles, hg_to_rtn
+
+from Ulysses.etCoord import rotate, sph2cart, cart2sph
 
 if os.path.exists("../fusessh/data/projects/spice"):
     os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
@@ -37,7 +39,7 @@ def cart2sph(t, deg=False):
 
     Transforms a cartesian t to spherical coordinates.
 
-    The input vector has to be in cartesian coordinates. The angles angles of the output vector phi and theta (r_vec[
+    The input vector has to be in cartesian coordinates. The angles of the output vector phi and theta (r_vec[
     1],r_vec[2]) will be returned in radians. If deg == True the angles of the output vector phi and theta (r_vec[1],
     r_vec[2]) will be returned in degrees.
 
@@ -237,27 +239,26 @@ def comp_rf(date):
     locateUlysses(date, ECLIPB1950)
     locateUlysses(date, HCI)
 
-def get_aa(t,RF, vec_hc = "None", vecE_hg = "None"):
+def get_aa(t,RF= HCI_J, vec_hg = "None", vecE_hg = "None"):
     '''
     Returns Ulysses' aspect angles at time t based on ephemeris data in ecliptic frame RF
     :param t: datetime.datetime object
-    :param RF: ECLIPJ2000 or ECLIPJ2000
-    :param vec_hc: [R,lat,long] optional for external Ulysses ephemeris data at time t (ecliptic/HC coordinates!).
+    :param RF: heliographic coordinate system, i.e. based on the solar equator
+    :param vec_hc: [R,lat,long] optional for external Ulysses ephemeris data at time t (equatorial/HG coordinates!).
         If None, SPICE vector in RF specified frame will be used.
-    :param vecE_hc: [R,lat,long] optional for external Earth ephemeris data at time t (equatorial/HG coordinates!).
+    :param vecE_hg: [R,lat,long] optional for external Earth ephemeris data at time t (equatorial/HG coordinates!).
         If None, SPICE HCI_J vector will be used.
     :return: asp_angs = (aspphi,asptheta)
     '''
-    if vec_hc == "None":
-        vec_hc = locateUlysses(t, RF)
+    if vec_hg == "None":
+        vec_hg = locateUlysses(t, RF)
+        vec_hg = vec_hg[0], vec_hg[2], vec_hg[1]
     if vecE_hg == "None":
         vecE = locateBody(EARTH, t, HCI_J)
         vecE_hg = [vecE[0], vecE[2], vecE[1]]
-    vec_hg = hc_to_hg([vec_hc[0], vec_hc[2], vec_hc[1]], long_shift = 0.)
-    # print("vec_hg new: ", vec_hg)
-    # print("vec_hg Earth new: ", vecE_hg)
     asp_angs = calc_asp_angles(vec_hg, vecE_hg, l_s_sc=0.)
     return asp_angs
+
 
 class CompTimeseries:
     """ Class for looking into different versions of Ulysses' ephemeris data
@@ -611,3 +612,95 @@ class CompTimeseries:
             ax.grid(True)
             axes[2].set_visible(False)
         plt.subplots_adjust(left=0.11, bottom=0.1, right=0.97, top=0.96, wspace=0, hspace=0.3)
+
+class WriteTrajSpice:
+    """
+    """
+    def __init__(self, year, *args, **kwargs):
+        self.year = year
+        filepath = "Ulysses/Trajectory/trajectory_data/"
+        if "filename" in kwargs:
+            self.path = filepath + kwargs["filename"]
+        else:
+            self.path = filepath + "spice_traj.dat"
+        #dt = 12 * 60 # time interval in seconds: 12 minutes
+        dt = 24*60 * 60 # time interval in seconds: 1 day
+        t1 = datetime.datetime(year,1,1)
+        t2 = datetime.datetime(year+1,1,1)
+        self.times = [t1+datetime.timedelta(seconds=x) for x in range(0,int((t2-t1).total_seconds()),dt)]
+        self.get_data()
+        self.write_file()
+
+    def get_data(self):
+        '''
+        HC: heliocentric coordinate system: based on ecliptic and first point of Aries; ECLIPB1950 in SPICE
+        HG: heliographic coordinate system: based on Sun's equatorial plane and the solar ascending node on the ecliptic; HCI in SPICE
+        '''
+        self.y = []
+        self.month = []
+        self.day = []
+        self.hour = []
+        self.min = []
+        self.doy = []
+        self.doy_int = []
+        self.R = []
+        self.HC_long = []
+        self.HC_lat =  []
+        self.HG_long = []
+        self.HG_lat = []
+        self.aa_phi = []
+        self.aa_theta = []
+        for t in self.times:
+            try:
+                self.R.append(locateUlysses(t, HCI)[0])
+                self.HG_long.append(locateUlysses(t, HCI)[2])
+                self.HG_lat.append(locateUlysses(t, HCI)[1])
+                self.HC_long.append(locateUlysses(t, ECLIPB1950)[2])
+                self.HC_lat.append(locateUlysses(t, ECLIPB1950)[1])
+
+                self.y.append(self.year)
+                self.month.append(t.month)
+                self.day.append(t.day)
+                self.hour.append(t.hour)
+                self.min.append(t.minute)
+                self.doy.append(self.calc_doy(t))
+                self.doy_int.append(t.timetuple().tm_yday)
+                asp_angles = self.calc_aa(t)
+                self.aa_phi.append(asp_angles[0])
+                self.aa_theta.append(asp_angles[1])
+            except:
+                print('%f'%t.month)
+
+
+    def calc_doy(self,dt):
+        """ Recalculate doy
+        
+        dt : datetime.datetime object
+        combine doy, hour, min, sec to a more detailed doy
+        """
+        dt_tt = dt.timetuple()
+        doy = dt_tt.tm_yday+dt_tt.tm_hour*1./24.+dt_tt.tm_min*(1./(24.*60.))+dt_tt.tm_sec*(1./(24.*60.*60.))
+        return doy
+
+    def calc_aa(self,dt):
+        """ Calculate Aspect Angles (Phi, Theta) in RTN coordinates
+        
+        """
+        vec_ul_hg = locateUlysses(dt,HCI)
+        vec_e_hg = locateBody(EARTH, dt, HCI)
+        aa_phi, aa_theta = calc_asp_angles([vec_ul_hg[0],vec_ul_hg[2],vec_ul_hg[1]], [vec_e_hg[0],vec_e_hg[2],vec_e_hg[1]], l_s_sc = 0.)
+        return [aa_phi,aa_theta]
+
+    def write_file(self):
+        if self.year == 1990:
+            self.fout = open(self.path,'w')
+            self.fout.write("YYYY  MM DD  DOY  Hr Min    doy        R        HG_Long    HG_Lat    HC_Long    HC_Lat      AA_phi  AA_theta\n                                      [AU]      [deg]      [deg]      [deg]     [deg]       [deg]     [deg]\n\n")
+        else:
+            self.fout = open(self.path,'a')
+        for i in range(len(self.y)):
+            line = "%i %2i %2i  %3i   %2i %2i   %6.2f    %7.5f   %8.3f  %8.3f    %8.3f %8.3f     %8.3f %8.3f\n" %(self.y[i],self.month[i],self.day[i], self.doy_int[i], self.hour[i], self.min[i], self.doy[i], self.R[i], self.HG_long[i], self.HG_lat[i], self.HC_long[i], self.HC_lat[i], self.aa_phi[i], self.aa_theta[i])
+            self.fout.write(line)
+        self.fout.close()
+
+
+

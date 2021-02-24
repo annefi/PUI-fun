@@ -31,7 +31,7 @@ class uswo(dbData):
     """
 
     def load_data(self,*args,**kwargs):
-        print(datapath)
+        #print(datapath)
         if kwargs.has_key("year"):
             if isinstance(kwargs["year"],list):
                 self.year=kwargs["year"]
