@@ -20,12 +20,13 @@ else:
 
 magpath = "/Ulysses/data_misc/PHA_mag/"
 
-from pylib import *
+from pylib3 import *
 from numpy import *
 from Ulysses.DataLoader.uswo import uswo
 from Ulysses.DataLoader.ulysses_traj_spice import UlyssesTrajSpice
 #from Ulysses.DataLoader.ulysses_mag_loader import mag_loader
 from Ulysses.DataLoader.uswiutils import getvelocity
+
 
 class uswipha(dbData):
     """ PHA loader for Ulysses SWICS data
@@ -63,25 +64,26 @@ class uswipha(dbData):
     """
 
     def load_data(self,*args,**kwargs):
-        if kwargs.has_key("year"):
+        if "year" in kwargs:
             if isinstance(kwargs["year"],list):
                 self.year=kwargs["year"]
             elif isinstance(kwargs["year"],int) or isinstance(kwargs["year"],float):
                 self.year=[kwargs["year"]]
         else:
             self.year=[2007]
-        if kwargs.has_key("tf"):
+        if "tf" in kwargs:
             if isinstance(kwargs["tf"],list) or isinstance(kwargs["tf"],ndarray):
                 self.timeframe=kwargs["tf"]
             elif kwargs["tf"]=="all":
                 self.timeframe=[[1.,367]]
             else:
-                print "periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), no data loaded"
+                print("periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), "
+                      "no data loaded")
                 self.timeframe=[]
         else:
-            print "periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), no data loaded"
+            print("periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), no data loaded")
             self.timeframe=[]
-        if kwargs.has_key("path"):
+        if "path" in kwargs:
             self.path=kwargs["path"]
         else:
             self.path = datapath + "swics/pha/"
@@ -108,7 +110,7 @@ class uswipha(dbData):
                 for doy in range(int(tf[0]),int(tf[1])):
                     try:
                         fname = "%s%.4i/%.3i.pha"%(self.path,year,doy)
-                        print fname
+                        print(fname)
                         fin = open(fname,"r")
                         s = fin.readline()
                         for s in fin:
@@ -130,7 +132,7 @@ class uswipha(dbData):
                             #     self.data["BT"].append(float(k[11]))
                             #     self.data["BN"].append(float(k[12]))
                     except:
-                        print "Problems reading DoY ",doy
+                        print("Problems reading DoY ",doy)
         self.data["year"]=array(self.data["year"])
         self.data["doy"]=array(self.data["doy"])
         self.data["epq"]=array(self.data["epq"])
@@ -173,13 +175,14 @@ class uswipha(dbData):
         wHe+ : vHe+ / vsw
 
         '''
+        seterr(divide='ignore', invalid='ignore')
         swo = uswo(year = self.year,tf = self.timeframe, path = datapath + "swoops/4min_data/")
         if not 'd90' in self.data.keys():
             self.calc_d90()
         swo.calc_d90()
         uTi,index=unique(self.data["d90"],return_inverse=True)
         uTi=append(uTi,uTi[-1]+1./24./5.) # 12 minutes
-        uTi=uTi+1./24./30. # 2 minutes shift. warum? Todo
+        uTi=uTi+1./24./30. # 2 minutes shift
         # **
         mask = swo.data["vges"]>0
         nrT,x = histogram(swo.data["d90"][mask],bins=uTi)
@@ -229,6 +232,7 @@ class uswipha(dbData):
         # __hier weiter__
         if not 'd90' in self.data.keys():
             self.calc_d90()
+        traj.calc_d90()
         uTi_int, index_int = unique(self.data['doy'].astype(int),return_inverse=True)
         uTi_int = append(uTi_int,uTi_int[-1]+1) # insert right border for histogram bins
         # Radius (/AE):

@@ -4,12 +4,9 @@ Loads trajectory data via SPICE and adds them as data products to uswipha instan
 Also calculates and adds Aspect Angle data products.
 '''
 
-from pylib import dbData
+from pylib3 import dbData
 from numpy import array,ndarray
 import sys
-# from Ulysses.Trajectory.ul_calc_traj import calc_asp_angles, calc_SPE, hg_to_rtn
-
-# earth = True
 
 class UlyssesTrajSpice(dbData):
     """ Loader for Ulysses trajectory data
@@ -25,14 +22,14 @@ class UlyssesTrajSpice(dbData):
 
     """
     def load_data(self,*args,**kwargs):
-        if kwargs.has_key("year"):
+        if "year" in kwargs:
             if isinstance(kwargs["year"],list):
                 self.year=kwargs["year"]
             elif isinstance(kwargs["year"],int) or isinstance(kwargs["year"],float):
                 self.year=[kwargs["year"]]
         else:
             self.year=[2007]
-        if kwargs.has_key("tf"):
+        if "tf" in kwargs:
             if isinstance(kwargs["tf"],list) or isinstance(kwargs["tf"],ndarray):
                 self.timeframe=kwargs["tf"]
             elif kwargs["tf"]=="all":
@@ -43,7 +40,7 @@ class UlyssesTrajSpice(dbData):
         else:
             print("periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), no data loaded")
             self.timeframe=[]
-        if kwargs.has_key("path"):
+        if "path" in kwargs:
             self.path=kwargs["path"]
         else:
             #self.path="/data/projects/Ulysses/trajectory/traj_data_ulysses_pool.dat"
@@ -80,41 +77,14 @@ class UlyssesTrajSpice(dbData):
                                     for i,key in enumerate(self.keys):
                                         self.data[key].append(float(k[i]))
                     except:
-                        print "Problems reading DoYs "
+                        print("Problems reading DoYs ")
 
+    def calc_d90(self):
+        offy = self.data["YYYY"] - 1990
+        offd = offy*365 + (offy.astype(int)+2)/4
+        self.keys.append('d90')
+        self.add_data("d90", self.data["doy"] + offd)
 
-    #         # Calculate AA Phi and Theta (in RTN):
-    #         self.keys.append('asp_phi')
-    #         self.data['asp_phi'] = []
-    #         self.keys.append('asp_theta')
-    #         self.data['asp_theta'] = []
-
-    #         for day in range(len(self.data['DOY'])):
-    #             sc_vec_hg = array([self.data['R'][day],self.data['HG_Long'][day],self.data['HG_Lat'][day]])
-    #             earth_vec_hg = array([self.data['R_AU'][day], self.data['HGI_LON'][day], self.data['HGI_LAT'][
-    #                 day]])
-    #             print('\n\nOld version SC: %s \nOld version earth: %s \n' %(sc_vec_hg, earth_vec_hg))
-    #             asp_phi, asp_theta = calc_asp_angles(sc_vec_hg,earth_vec_hg)
-    #             print(asp_phi, asp_theta)
-    #             self.data['asp_phi'].append(asp_phi)
-    #             self.data['asp_theta'].append(asp_theta)
-    #         for key in self.data.keys():
-    #             self.data[key] = array(self.data[key])
-    #         # print('...almost done')
-
-    # def calc_d90(self):
-    #     offy = self.data["Year"] - 1990
-    #     offd = offy*365 + (offy.astype(int)+2)/4
-    #     self.keys.append('d90')
-    #     self.add_data("d90", self.data["DOY"] + offd)
-
-    # def test_aspect_angle(self):
-    #     '''
-    #     Tests if the calculated aspect angles (from earth and SC coordinates) agree with the flat AA
-    #     '''
-    #     for i, phi in enumerate(self.data['asp_phi']):
-    #         print("calculated: %s" %calc_SPE(phi,self.data['asp_theta'][i]))
-    #         print('data SPE: %s \n' %self.data['SPE'][i])
 
 
 

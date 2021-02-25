@@ -15,11 +15,9 @@ Radial-Tangential-Normal (RTN):
 
 """
 
-#from pylib import dbData
 from numpy import array, cos, arccos, pi, sqrt
 from Ulysses.Trajectory.etCoord import rotate, sph2cart, cart2sph
 from matplotlib import pylab
-
 
 def hg_to_hc(hg_vec, degree=True, long_shift = 0.):
     '''

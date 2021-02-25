@@ -1,3 +1,11 @@
+"""
+SPICE trajectory loader for Ulysses
+
+Contains different functions to load Ulysses' trajectory data via SPICE (based on etspice), compare aspect angle
+calculations and write the final trajectory file that is used for further data analysis
+"""
+
+
 from etspice import SUN, ULYSSES, EARTH
 from etspice import ReferenceFrame, utils
 from etspice import kernels
@@ -5,11 +13,8 @@ import datetime
 import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib
 from sys import exit
-from Ulysses.Trajectory.ul_calc_traj import hc_to_hg, calc_asp_angles, hg_to_rtn
-
-from Ulysses.etCoord import rotate, sph2cart, cart2sph
+from Ulysses.Trajectory.ul_coordinates import hc_to_hg, calc_asp_angles, hg_to_rtn
 
 if os.path.exists("../fusessh/data/projects/spice"):
     os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"

@@ -882,17 +882,19 @@ Dann Filterung He anschauen (filter\_he.py) und plot\_et.py auschecken.
 \DayInFeb{Di}{16}
 ulysses\_traj\_spice.py geschrieben. Wo soll ich den AA berechnen? Hier oder direkt dort, wo die Trajektorie weg geschrieben wird (in spice\_ulysses.py)?\\
 Wie berechne ich den AA nun richtig? Auf welchem System Erde/Ulysses (1950,2000,HC,HG)? Gibt es eine SPICE-interne Funktion um den Winkel zu verifizieren? $\Rightarrow$ spkpos: Vektor Ulysses--Erde; dann Vektor in RTN umrechnen und von dort in die zwei Komponenten\\
-$\Rightarrow$ Verworfen. ´
+$\Rightarrow$ Verworfen.
 
 \DayInFeb{Mi}{24}
 DbData für Python3 geladen. Dafür pylib3 installiert: In /usr/bin/ \textit{./pip3 install pylib3}. Dann im Zielordner \textit{svn co svn+ssh://asterix/data/subversion/etph/pylib3}\\ \\
 Synchronisierung mit Spice Trajektroie läuft. ToDo:
 \begin{itemize}
+	\item dbData3 einarbeiten und testen DONE
 	\item Geschwindigkeiten einpflegen
-	\item flachen Winkel?
+	\item flachen Winkel mit in die Trajektoriendatei? Oder irgendwo kurze Berechnungsfunktion. Quasi nur für den nächsten Punkt...
 	\item Vergleich mit alten Werten
-	\item Koordinatenskripte mergen
+	\item Koordinatenskripte mergen DONE
 	\item Journal polishen: ToDo Package und Datum...
 	\item Koordinatenkram aufschreiben: Graphik der Koordinatensysteme (Neigung der Erd- und Sonnenachse?!), Ulysses Trajektorie Anwendung?
+	\item in calc\_d90 Division checken: python3-kompatibel? Schaltjahr...?
 \end{itemize}
 \end{document}

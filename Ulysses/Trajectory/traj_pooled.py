@@ -1,7 +1,12 @@
+"""
+Write data file with Ulysses trajectory data based on files from Ulysses archive
+(No aspect angles here but SC velocity)
+
+"""
+
 from numpy import array, sqrt
 from matplotlib import pylab
-from ul_calc_traj import hc_to_hg, calc_v
-
+from ul_coordinates import hc_to_hg, calc_v
 
 
 # Paths to the two data files

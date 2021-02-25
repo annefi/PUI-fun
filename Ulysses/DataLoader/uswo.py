@@ -1,4 +1,4 @@
-from pylib import dbData
+from pylib3 import dbData
 from numpy import array,ndarray
 
 if __name__ == '__main__':
@@ -32,14 +32,14 @@ class uswo(dbData):
 
     def load_data(self,*args,**kwargs):
         #print(datapath)
-        if kwargs.has_key("year"):
+        if "year" in kwargs:
             if isinstance(kwargs["year"],list):
                 self.year=kwargs["year"]
             elif isinstance(kwargs["year"],int) or isinstance(kwargs["year"],float):
                 self.year=[kwargs["year"]]
         else:
             self.year=[2007]
-        if kwargs.has_key("tf"):
+        if "tf" in kwargs:
             if isinstance(kwargs["tf"],list) or isinstance(kwargs["tf"],ndarray):
                 self.timeframe=kwargs["tf"]
             elif kwargs["tf"]=="all":
@@ -51,7 +51,7 @@ class uswo(dbData):
         else:
             print("periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), no data loaded")
             self.timeframe=[]
-        if kwargs.has_key("path"):
+        if "path" in kwargs:
             self.path = kwargs["path"]
         else:
             self.path = datapath + "swoops/4min_data/"

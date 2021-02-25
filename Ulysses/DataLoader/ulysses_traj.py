@@ -3,6 +3,8 @@ Newer version of ulysses_traj_old.py, that replaces it from 03.04.2019
 Loads trajectory data from list "/data/etph/Ulysses/trajectory/traj_data_ulysses_pool.dat"
 and adds them as data products to uswipha instance.
 Also calculates and adds Aspect Angle data products.
+
+STILL PYTHON2
 '''
 
 from pylib import dbData
