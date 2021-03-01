@@ -77,7 +77,7 @@ def calc_v(vec1, vec2, dt, R = "km"):
     '''
     Calculates Ulysses' velocity components R,T and N as the "derivation" of position vectors with respect to the time.
     v1 = (pos2 - pos1) / dt
-    dt = (t2 - t1) = 1 day as Ulysses' trajectory data is given daily
+    dt = (t2 - t1) = 1 day as Ulysses' trajectory data is given daily (in seconds)
     :param vec1: location of current measurement in spherical HG (R ,long,lat) coordinates in(AU,deg,deg)
     :param vec2: location of next measurement in spherical HG (R,long,lat) coordinates
     :param dt: time between measurement vec1 and vec2 in seconds

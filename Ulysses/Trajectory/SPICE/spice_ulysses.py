@@ -634,7 +634,8 @@ class WriteTrajSpice:
         t2 = datetime.datetime(year+1,1,1)
         self.times = [t1+datetime.timedelta(seconds=x) for x in range(0,int((t2-t1).total_seconds()),dt)]
         self.get_data()
-        self.write_file()
+        #self.get_v_old(dt)
+        #self.write_file()
 
     def get_data(self):
         '''
@@ -696,6 +697,7 @@ class WriteTrajSpice:
         aa_phi, aa_theta = calc_asp_angles([vec_ul_hg[0],vec_ul_hg[2],vec_ul_hg[1]], [vec_e_hg[0],vec_e_hg[2],vec_e_hg[1]], l_s_sc = 0.)
         return [aa_phi,aa_theta]
 
+
     def write_file(self):
         if self.year == 1990:
             self.fout = open(self.path,'w')
@@ -706,6 +708,57 @@ class WriteTrajSpice:
             line = "%i %2i %2i  %3i   %2i %2i   %6.2f    %7.5f   %8.3f  %8.3f    %8.3f %8.3f     %8.3f %8.3f\n" %(self.y[i],self.month[i],self.day[i], self.doy_int[i], self.hour[i], self.min[i], self.doy[i], self.R[i], self.HG_long[i], self.HG_lat[i], self.HC_long[i], self.HC_lat[i], self.aa_phi[i], self.aa_theta[i])
             self.fout.write(line)
         self.fout.close()
+
+
+    def get_v_old(self, delta_t):
+        if not self.R:
+            self.get_data()
+        for i in range(len(self.R[:-1])):
+            vec1_hg = [self.R[i], self.HG_long[i], self.HG_lat[i]]
+            vec2_hg = [self.R[i+1], self.HG_long[i+1], self.HG_lat[i+1]]
+            print(i)
+            self.calc_v_old(vec1_hg,vec2_hg,delta_t)
+
+
+    def calc_v_old(self,vec1, vec2, delta_t, R = "km"):
+        '''
+        Calculates Ulysses' velocity components R,T and N as the "derivation" of position vectors with respect to the time.
+        v1 = (pos2 - pos1) / delta_t
+        delta_t = (t2 - t1) = 1 day as Ulysses' trajectory data is given  (in seconds)
+        :param vec1: location of current measurement in spherical HG (R ,long,lat) coordinates in(AU,deg,deg)
+        :param vec2: location of next measurement in spherical HG (R,long,lat) coordinates
+        :param dt: time between measurement vec1 and vec2 in seconds
+        :return: average vx, vy, vz between measurement 1 and 2 in km/s
+        '''
+        # vec1 and vec2 in RTN coordinates based on SC being @ vec1:
+        vec1_RTN = hg_to_rtn(vec1,vec1, long_shift = 0., long_shift_r = 0.)
+        vec2_RTN = hg_to_rtn(vec2,vec1,long_shift = 0., long_shift_r = 0.)
+        # differential quotient:
+        delta_RTN = (vec2_RTN - vec1_RTN)
+        if R == "AU":
+            vx,vy,vz = (delta_RTN / delta_t) * 1.496*10**8 # conversion from AU to km
+            print('HG:')
+            print(vec1)
+            print(vec2)
+            print('RTN:')
+            print(vec1_RTN)
+            print(vec2_RTN)
+            #print(delta_RTN)
+        elif R == "km":
+            vx, vy, vz = (delta_RTN / delta_t)
+            print('HG:')
+            vec1[0] /= 1.496*10**8
+            vec2[0] /= 1.496 * 10 ** 8
+            print(vec1)
+            print(vec2)
+            print('RTN:')
+            print(vec1_RTN / (1.496 * 10 ** 8))
+            print(vec2_RTN / (1.496 * 10 ** 8))
+            d = delta_RTN / (1.496 * 10 ** 8)
+            print(d)
+        print(vx,vy,vz)
+        return vx,vy,vz
+
 
 
 

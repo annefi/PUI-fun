@@ -205,7 +205,7 @@ diff = []
 
 def calc_velocities():
     '''
-    calculates velocities vR, vR, vN and v_abs based on the difference of position of one measurement and the next.
+    calculates velocities vR, vT, vN and v_abs based on the difference of position of one measurement and the next.
     '''
     for i in range(len(year_u)-1):
         t = 24*60*60

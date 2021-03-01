@@ -1,6 +1,6 @@
 """ Various functions for transforming between coordinate systems
 
-REPLACED WITH ul_coordinaes.py!
+REPLACED WITH ul_coordinates.py!
 
 Heliocentric (HC, 'Solar ecliptic'):
     x-axis pointing towards vernal equinox (intersection celestial & ecliptic plane);
