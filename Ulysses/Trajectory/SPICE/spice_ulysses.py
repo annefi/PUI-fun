@@ -38,6 +38,8 @@ HCI = ReferenceFrame([kernels.heliospheric_frames],'HCI')
 HCI_B = ReferenceFrame([my_kernel],'HCI_B1950')
 HCI_J = ReferenceFrame([my_kernel],'HCI_J2000')
 
+km_per_AU = 1.495979e8
+
 def cart2sph(t, deg=False):
     """
     cart2sph(t,deg)
@@ -94,12 +96,12 @@ def locateUlysses(date, RF):
     if len(xyz) == 3:
         r, theta, phi = utils.cart2spherical(xyz, degrees = True)
         #print(RF.name , np.array([r/1.496e8,theta,phi]))
-        return np.array([r/1.496e8,theta,phi])
+        return np.array([r/km_per_AU,theta,phi])
     elif len(xyz) > 3:
         positions = []
         for t in xyz:
             r, theta, phi = utils.cart2spherical(t, degrees=True)
-            positions.append(np.array([r/1.496e8,theta,phi]))
+            positions.append(np.array([r/km_per_AU,theta,phi]))
         return positions
 
 
@@ -114,7 +116,7 @@ def locateBody(body, date, RF):
     '''
     xyz = body.position(time = date, relative_to = SUN, reference_frame = RF)
     r, theta, phi = utils.cart2spherical(xyz, degrees = True)
-    return(np.array([r/1.496e8,theta,phi]))
+    return(np.array([r/km_per_AU,theta,phi]))
 
 
 def read_pool():
@@ -632,7 +634,7 @@ class WriteTrajSpice:
         #self.delta_t = 12 * 60 # time interval in seconds: 12 minutes
         #self.delta_t = 24*60 * 60 # time interval in seconds: 1 day
         t1 = datetime.datetime(year,1,1)
-        t2 = datetime.datetime(year,1,15)
+        t2 = datetime.datetime(year,3,15)
         #t2 = datetime.datetime(year+1,1,1)
         self.times = [t1+datetime.timedelta(seconds=x) for x in range(0,int((t2-t1).total_seconds()),self.delta_t)]
         self.get_data()
@@ -771,29 +773,34 @@ class WriteTrajSpice:
         '''
         '''
         from etspice import kernels
-        from spiceypy import spkezr, datetime2et
+        from spiceypy import spkpos, spkezr, datetime2et
         if not self.R:
             self.get_data()
         self.vR_new = []
         self.vT_new = []
         self.vN_new = []
-
-        #for i in range(len(self.R)-1):
-        for i in range(10):
+        for i in range(len(self.R)-1):
+        #for i in range(2):
             print(i,self.doy[i])
-            [x,y,z,v_x, v_y, v_z] = spkezr('ULYSSES',datetime2et(self.times[i]),'HCI','None', 'SUN')[0] # cart in km/s
-            v_HG_spher = cart2sph(np.array([v_x,v_y,v_z]),deg = True) # spherical in km/s and degree
-            xyz_HG_spher = cart2sph(np.array([x,y,z]),deg = True) # spherical in km and degree: for RTN calculation
-            vec_RTN = hg_to_rtn(v_HG_spher,xyz_HG_spher,long_shift = 0., long_shift_r = 0.)
-            #print(np.sqrt(v_x**2+v_y**2+v_z**2))
-            #print(self.vabs[i], '\n')
-            #(vec_RTN)
-            #(self.vR[i], self.vT[i], self.vN[i], '\n')
-            self.vR_new.append(vec_RTN[0])
-            self.vT_new.append(vec_RTN[1])
-            self.vN_new.append(vec_RTN[2])
-            self.vabs_new.append(np.sqrt(vec_RTN[0]**2+vec_RTN[1]**2+vec_RTN[2]**2))
-            
+            [x,y,z,v_x, v_y, v_z] = spkezr('ULYSSES',datetime2et(self.times[i]),'HCI','None', 'SUN')[0] # cart in km(/s)
+            [xAU,yAU,zAU] = [x/km_per_AU, y/km_per_AU, z/km_per_AU]
+            #print('x,y,z (km):', x, y, z)
+            #print('x,y,z (AU):', xAU,yAU,zAU)
+            [r,lat,long] = utils.cart2spherical(np.array([xAU,yAU,zAU]),degrees = True)
+            #print('r,lat,long: ', r,lat,long, '\n')
+
+
+            #print('v km xyz: ', v_x, v_y, v_z)
+            v_HG_spher = utils.cart2spherical(np.array([v_x,v_y,v_z]),degrees = True) # spherical in km/s and degree
+
+            xyz_HG_spher = utils.cart2spherical(np.array([x,y,z]),degrees = True) # spherical in km and degree: for RTN calculation
+            vec_RTN_km = hg_to_rtn([v_HG_spher[0],v_HG_spher[2],v_HG_spher[1]],[xyz_HG_spher[0],xyz_HG_spher[2],
+                                                                              xyz_HG_spher[1]])
+
+            #print('vec RTN km: ', vec_RTN_km, '\n\n')
+            self.vR_new.append(vec_RTN_km[0])
+            self.vT_new.append(vec_RTN_km[1])
+            self.vN_new.append(vec_RTN_km[2])
 
     def plotplot(self):
         doy = self.doy_int[:-1]
@@ -859,12 +866,12 @@ class WriteTrajSpice:
 
         Use 1991 for self.year!
         """
-        #pool_d = read_pool()
-        #vR_pool = pool_d['v_R'][pool_d['Year'] == 1991.]
-        #vT_pool = pool_d['v_T'][pool_d['Year'] == 1991.]
-        #vN_pool = pool_d['v_N'][pool_d['Year'] == 1991.]
-        #vabs_pool = np.sqrt(vR_pool**2 + vT_pool**2 + vN_pool**2)
-        #doy = pool_d['DOY'][pool_d['Year'] == 1991.]
+        pool_d = read_pool()
+        vR_pool = pool_d['v_R'][pool_d['Year'] == 1991.]
+        vT_pool = pool_d['v_T'][pool_d['Year'] == 1991.]
+        vN_pool = pool_d['v_N'][pool_d['Year'] == 1991.]
+        vabs_pool = np.sqrt(vR_pool**2 + vT_pool**2 + vN_pool**2)
+        doy = pool_d['DOY'][pool_d['Year'] == 1991.]
         self.get_v_old()
         self.get_v_new()
         if "ax" in kwargs:
@@ -872,7 +879,7 @@ class WriteTrajSpice:
         else:
             fig, axes = plt.subplots(nrows = 4)
 
-                # R
+        # R
         #axes[0].plot(doy, vR_pool, label = "R pool", marker = 'o')
         axes[0].plot(self.doy[:-1], self.vR, label = "%s"%self.delta_t, marker = 'o', markersize = 2, linestyle = "None")
         axes[0].plot(self.doy[:-1],self.vR_new,label='new',  marker = 'o', markersize = 2, linestyle = "None")
@@ -890,11 +897,11 @@ class WriteTrajSpice:
         axes[2].plot(self.doy[:-1],self.vN_new,label='new', marker = 'o', markersize = 2, linestyle = "None")
         axes[2].legend()
 
-        # abs value
-        #axes[3].plot(doy, vabs_pool, label = 'abs pool', marker = 'o')
-        axes[3].plot(self.doy[:-1], self.vabs, label = "%s"%self.delta_t, marker = 'o', markersize = 2, linestyle = "None")
-        axes[3].plot(self.doy[:-1], self.vabs_new, label = 'new abs', marker = 'o', markersize = 2, linestyle = "None") 
-        axes[3].legend()
+        # # abs value
+        # #axes[3].plot(doy, vabs_pool, label = 'abs pool', marker = 'o')
+        # axes[3].plot(self.doy[:-1], self.vabs, label = "%s"%self.delta_t, marker = 'o', markersize = 2, linestyle = "None")
+        # axes[3].plot(self.doy[:-1], self.vabs_new, label = 'new abs', marker = 'o', markersize = 2, linestyle = "None")
+        # axes[3].legend()
 
 
         # # R
@@ -902,22 +909,22 @@ class WriteTrajSpice:
         # axes[0].plot(self.doy_int[:-1], self.vR, label = "spice traj data", marker = 'o', markersize = 1)
         # #axes[0].plot(self.doy_int[:-1],self.vR_new,label='new')
         # axes[0].legend()
-
+        #
         # # T
-        # axes[1].plot(doy, vT_pool, label = "T pool", marker = 'o')
-        # axes[1].plot(self.doy_int[:-1], self.vT, label = "spice traj data", marker = 'o')
+        # axes[1].plot(doy, vT_pool, label = "T pool", marker = 'o', markersize = 1)
+        # axes[1].plot(self.doy_int[:-1], self.vT, label = "spice traj data", marker = 'o', markersize = 1)
         # #axes[1].plot(self.doy_int[:-1],self.vT_new,label='new')
         # axes[1].legend()
-
+        #
         # # N
-        # axes[2].plot(doy, vN_pool, label = "N pool", marker = 'o')
-        # axes[2].plot(self.doy_int[:-1], self.vN, label = "spice traj data", marker = 'o')
+        # axes[2].plot(doy, vN_pool, label = "N pool", marker = 'o', markersize = 1)
+        # axes[2].plot(self.doy_int[:-1], self.vN, label = "spice traj data", marker = 'o', markersize = 1)
         # #axes[2].plot(self.doy_int[:-1],self.vN_new,label='new')
         # axes[2].legend()
-
+        #
         # # abs value
-        # axes[3].plot(doy, vabs_pool, label = 'abs pool', marker = 'o')
-        # axes[3].plot(self.doy_int[:-1], self.vabs, label = 'spice traj data', marker = 'o')
+        # axes[3].plot(doy, vabs_pool, label = 'abs pool', marker = 'o', markersize = 1)
+        # axes[3].plot(self.doy_int[:-1], self.vabs, label = 'spice traj data', marker = 'o', markersize = 1)
         # #axes[3].plot(self.doy_int[:-1], self.vabs_new, label = 'new abs')
         # axes[3].legend()
 

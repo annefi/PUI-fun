@@ -51,7 +51,7 @@ def hc_to_hg(hc_vec, degree=True, long_shift = 180.):
     int3 = cart2sph(int2,deg=degree)
     return array([int3[0],long_shift+int3[1],90-int3[2]])
 
-def hg_to_rtn(r_vec, sc_vec, long_shift = 180., long_shift_r = 0.):
+def hg_to_rtn(r_vec, sc_vec, long_shift = 0., long_shift_r = 0.):
     '''
     Transforms heliographic coordinates from vector r_vec to coordinates as seen from an RTN-system (centered at the Sun)s.
     ('active Rotation')
