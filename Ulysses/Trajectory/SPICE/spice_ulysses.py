@@ -90,7 +90,7 @@ def locateUlysses(date, RF):
     :param RF: etspice.ReferenceFrame
     :return: [heliocentric range in AU, latitude, longitude]
     '''
-    xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF)
+    xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF) # in km
     if len(xyz) == 3:
         r, theta, phi = utils.cart2spherical(xyz, degrees = True)
         #print(RF.name , np.array([r/1.496e8,theta,phi]))
@@ -103,7 +103,7 @@ def locateUlysses(date, RF):
         return positions
 
 
-def locateBody(body, date, RF, spher = True):
+def locateBody(body, date, RF):
     '''
     Returns a body's position after SPICE data
 
@@ -113,8 +113,7 @@ def locateBody(body, date, RF, spher = True):
     :return: Prints position vector as [R/AU, LAT/deg, LONG/deg]
     '''
     xyz = body.position(time = date, relative_to = SUN, reference_frame = RF)
-    if spher == True:
-        r, theta, phi = utils.cart2spherical(xyz, degrees = True)
+    r, theta, phi = utils.cart2spherical(xyz, degrees = True)
     return(np.array([r/1.496e8,theta,phi]))
 
 
@@ -306,7 +305,7 @@ class CompTimeseries:
         self.get_data()
 
     def get_data(self):
-        self.data_dict = {p: [] for p in ['frame', 'data', 'data2', 'label']}
+        self.data_dict = {p: [] for p in ['frame', 'data', 'label']}
         for frame in self.frames:
             if len(frame) == 2:
                 if frame[0] == 'SP':
@@ -329,7 +328,6 @@ class CompTimeseries:
         data_SP = []
         data_SP2 = []
         if self.para == 'LAT':
-            #data_SP2.append(locateUlysses(self.times,RF)[1])
             for t in self.times:
                 data_SP.append(locateUlysses(t, RF)[1])
         elif self.para == 'LONG':
@@ -339,7 +337,6 @@ class CompTimeseries:
             print("Second argument has not been recognised. Choose one of \"LAT\", \"LONG\".")
         self.data_dict['frame'].append('SP')
         self.data_dict['data'].append(data_SP)
-        self.data_dict['data2'].append(data_SP2)
         self.data_dict['label'].append("SPICE %s" % (RF.name))
 
     def get_ud_data(self, RF):
@@ -628,13 +625,18 @@ class WriteTrajSpice:
             self.path = filepath + kwargs["filename"]
         else:
             self.path = filepath + "spice_traj.dat"
-        #dt = 12 * 60 # time interval in seconds: 12 minutes
-        dt = 24*60 * 60 # time interval in seconds: 1 day
+        if 'dt' in kwargs:
+            self.delta_t = kwargs['dt']
+        else:
+            self.delta_t = 60*60
+        #self.delta_t = 12 * 60 # time interval in seconds: 12 minutes
+        #self.delta_t = 24*60 * 60 # time interval in seconds: 1 day
         t1 = datetime.datetime(year,1,1)
-        t2 = datetime.datetime(year+1,1,1)
-        self.times = [t1+datetime.timedelta(seconds=x) for x in range(0,int((t2-t1).total_seconds()),dt)]
+        t2 = datetime.datetime(year,1,15)
+        #t2 = datetime.datetime(year+1,1,1)
+        self.times = [t1+datetime.timedelta(seconds=x) for x in range(0,int((t2-t1).total_seconds()),self.delta_t)]
         self.get_data()
-        #self.get_v_old(dt)
+        #self.get_v_old()
         #self.write_file()
 
     def get_data(self):
@@ -710,24 +712,113 @@ class WriteTrajSpice:
         self.fout.close()
 
 
-    def get_v_old(self, delta_t):
+    def get_v_old(self):
+        ''' Add velocity data product to data dictionary
+
+        Use 'old' method calc_v_old but with new position vectors
+        '''
         if not self.R:
             self.get_data()
+        self.vR = []
+        self.vT = []
+        self.vN = []
+        self.vabs = []
         for i in range(len(self.R[:-1])):
             vec1_hg = [self.R[i], self.HG_long[i], self.HG_lat[i]]
             vec2_hg = [self.R[i+1], self.HG_long[i+1], self.HG_lat[i+1]]
             print(i)
-            self.calc_v_old(vec1_hg,vec2_hg,delta_t)
+            vR, vT, vN = self.calc_v_old(vec1_hg,vec2_hg,self.delta_t, R = "AU")
+            self.vR.append(vR)
+            self.vT.append(vT)
+            self.vN.append(vN)
+            self.vabs.append(np.sqrt(vR**2+vT**2+vN**2))
 
+    # #def get_v_new(self):
+    #     '''
+    #     '''
+    #     from etspice import kernels
+    #     from spiceypy import spkezr, datetime2et
+    #     if not self.R:
+    #         self.get_data()
+    #     self.vR_new = []
+    #     self.vT_new = []
+    #     self.vN_new = []
+    #     self.vx_new = []
+    #     self.vy_new = []
+    #     self.vz_new = []
+    #     self.x_new = []
+    #     self.y_new = []
+    #     self.z_new = []
+    #     self.vabs_new = []
+    #     for i in range(len(self.R)):
+    #         [x,y,z,v_x, v_y, v_z] = spkezr('ULYSSES',datetime2et(self.times[i]),'HCI','None', 'SUN')[0]
+    #         print([x,y,z], "\n", [v_x,v_y,v_z], '\n')
+    #         R,lat,lon = utils.cart2spherical(np.array([x,y,z]), degrees = True)
+    #         vR,vlat,vlong = utils.cart2spherical(np.array([v_x,v_y,v_z]), degrees = True)
+    #         [vR,vT,vN] = hg_to_rtn( [v_x,v_y,v_z], [R,lat,lon], 0.0, 0.0)
+    #         self.vR_new.append(vR)
+    #         self.vT_new.append(vT)
+    #         self.vN_new.append(vN)
+    #         self.vx_new.append(v_x)
+    #         self.vy_new.append(v_y)
+    #         self.vz_new.append(v_z)
+    #         self.x_new.append(x/1.496e8)
+    #         self.y_new.append(y/1.496e8)
+    #         self.z_new.append(z/1.496e8)
+    #         self.vabs_new.append(np.sqrt(vR**2 + vT**2 + vN**2))
 
-    def calc_v_old(self,vec1, vec2, delta_t, R = "km"):
+    def get_v_new(self):
+        '''
+        '''
+        from etspice import kernels
+        from spiceypy import spkezr, datetime2et
+        if not self.R:
+            self.get_data()
+        self.vR_new = []
+        self.vT_new = []
+        self.vN_new = []
+
+        #for i in range(len(self.R)-1):
+        for i in range(10):
+            print(i,self.doy[i])
+            [x,y,z,v_x, v_y, v_z] = spkezr('ULYSSES',datetime2et(self.times[i]),'HCI','None', 'SUN')[0] # cart in km/s
+            v_HG_spher = cart2sph(np.array([v_x,v_y,v_z]),deg = True) # spherical in km/s and degree
+            xyz_HG_spher = cart2sph(np.array([x,y,z]),deg = True) # spherical in km and degree: for RTN calculation
+            vec_RTN = hg_to_rtn(v_HG_spher,xyz_HG_spher,long_shift = 0., long_shift_r = 0.)
+            #print(np.sqrt(v_x**2+v_y**2+v_z**2))
+            #print(self.vabs[i], '\n')
+            #(vec_RTN)
+            #(self.vR[i], self.vT[i], self.vN[i], '\n')
+            self.vR_new.append(vec_RTN[0])
+            self.vT_new.append(vec_RTN[1])
+            self.vN_new.append(vec_RTN[2])
+            self.vabs_new.append(np.sqrt(vec_RTN[0]**2+vec_RTN[1]**2+vec_RTN[2]**2))
+            
+
+    def plotplot(self):
+        doy = self.doy_int[:-1]
+        fig, axes = plt.subplots(nrows = 4)
+        # axes[0].plot(doy,self.x_new, label='x')
+        # axes[0].plot(doy,self.vx_new, label='vx')
+        # axes[0].plot(doy,self.vR_new, label='vR')
+        # axes[0].legend()
+        # axes[1].plot(doy,self.y_new, label= 'y')
+        # axes[1].plot(doy,self.vy_new, label='vy')
+        # axes[1].plot(doy,self.vT_new, label='vT')
+        # axes[1].legend()
+        # axes[2].plot(doy,self.z_new, label = 'z')
+        # axes[2].plot(doy,self.vx_new, label='vx')
+        # axes[2].plot(doy,self.vN_new, label='vN')
+        # axes[2].legend()
+
+    def calc_v_old(self, vec1, vec2, delta_t, R = "km"):
         '''
         Calculates Ulysses' velocity components R,T and N as the "derivation" of position vectors with respect to the time.
         v1 = (pos2 - pos1) / delta_t
         delta_t = (t2 - t1) = 1 day as Ulysses' trajectory data is given  (in seconds)
-        :param vec1: location of current measurement in spherical HG (R ,long,lat) coordinates in(AU,deg,deg)
+        :param vec1: location of current measurement in spherical HG (R ,long,lat) coordinates in (AU,deg,deg)
         :param vec2: location of next measurement in spherical HG (R,long,lat) coordinates
-        :param dt: time between measurement vec1 and vec2 in seconds
+        :param dt: time between measurement vec1 and vec2 in seconds  
         :return: average vx, vy, vz between measurement 1 and 2 in km/s
         '''
         # vec1 and vec2 in RTN coordinates based on SC being @ vec1:
@@ -737,13 +828,13 @@ class WriteTrajSpice:
         delta_RTN = (vec2_RTN - vec1_RTN)
         if R == "AU":
             vx,vy,vz = (delta_RTN / delta_t) * 1.496*10**8 # conversion from AU to km
-            print('HG:')
-            print(vec1)
-            print(vec2)
-            print('RTN:')
-            print(vec1_RTN)
-            print(vec2_RTN)
-            #print(delta_RTN)
+            # print('HG:')
+            # print(vec1)
+            # print(vec2)
+            # print('RTN:')
+            # print(vec1_RTN)
+            # print(vec2_RTN)
+            # print(delta_RTN)
         elif R == "km":
             vx, vy, vz = (delta_RTN / delta_t)
             print('HG:')
@@ -759,6 +850,93 @@ class WriteTrajSpice:
         print(vx,vy,vz)
         return vx,vy,vz
 
+    def comp_v(self, *args, **kwargs):
+        """
+        Quick comparison of SC velocities of different sources.
+        a: ulysses archive data HG data; velocity as differential quotient
+        b: SPICE HCI position data; velocity as differential quotient
+        c: SPICE velocity data ('new')
+
+        Use 1991 for self.year!
+        """
+        #pool_d = read_pool()
+        #vR_pool = pool_d['v_R'][pool_d['Year'] == 1991.]
+        #vT_pool = pool_d['v_T'][pool_d['Year'] == 1991.]
+        #vN_pool = pool_d['v_N'][pool_d['Year'] == 1991.]
+        #vabs_pool = np.sqrt(vR_pool**2 + vT_pool**2 + vN_pool**2)
+        #doy = pool_d['DOY'][pool_d['Year'] == 1991.]
+        self.get_v_old()
+        self.get_v_new()
+        if "ax" in kwargs:
+            axes = kwargs["ax"]
+        else:
+            fig, axes = plt.subplots(nrows = 4)
+
+                # R
+        #axes[0].plot(doy, vR_pool, label = "R pool", marker = 'o')
+        axes[0].plot(self.doy[:-1], self.vR, label = "%s"%self.delta_t, marker = 'o', markersize = 2, linestyle = "None")
+        axes[0].plot(self.doy[:-1],self.vR_new,label='new',  marker = 'o', markersize = 2, linestyle = "None")
+        axes[0].legend()
+
+        # T
+        #axes[1].plot(doy, vT_pool, label = "T pool", marker = 'o')
+        axes[1].plot(self.doy[:-1], self.vT, label = "%s"%self.delta_t, marker = 'o', markersize = 2, linestyle = "None")
+        axes[1].plot(self.doy[:-1],self.vT_new,label='new', marker = 'o', markersize = 2, linestyle = "None")
+        axes[1].legend()
+
+        # N
+        #axes[2].plot(doy, vN_pool, label = "N pool", marker = 'o')
+        axes[2].plot(self.doy[:-1], self.vN, label = "%s"%self.delta_t, marker = 'o', markersize = 2, linestyle = "None")
+        axes[2].plot(self.doy[:-1],self.vN_new,label='new', marker = 'o', markersize = 2, linestyle = "None")
+        axes[2].legend()
+
+        # abs value
+        #axes[3].plot(doy, vabs_pool, label = 'abs pool', marker = 'o')
+        axes[3].plot(self.doy[:-1], self.vabs, label = "%s"%self.delta_t, marker = 'o', markersize = 2, linestyle = "None")
+        axes[3].plot(self.doy[:-1], self.vabs_new, label = 'new abs', marker = 'o', markersize = 2, linestyle = "None") 
+        axes[3].legend()
 
 
+        # # R
+        # axes[0].plot(doy, vR_pool, label = "R pool", marker = 'o')
+        # axes[0].plot(self.doy_int[:-1], self.vR, label = "spice traj data", marker = 'o', markersize = 1)
+        # #axes[0].plot(self.doy_int[:-1],self.vR_new,label='new')
+        # axes[0].legend()
 
+        # # T
+        # axes[1].plot(doy, vT_pool, label = "T pool", marker = 'o')
+        # axes[1].plot(self.doy_int[:-1], self.vT, label = "spice traj data", marker = 'o')
+        # #axes[1].plot(self.doy_int[:-1],self.vT_new,label='new')
+        # axes[1].legend()
+
+        # # N
+        # axes[2].plot(doy, vN_pool, label = "N pool", marker = 'o')
+        # axes[2].plot(self.doy_int[:-1], self.vN, label = "spice traj data", marker = 'o')
+        # #axes[2].plot(self.doy_int[:-1],self.vN_new,label='new')
+        # axes[2].legend()
+
+        # # abs value
+        # axes[3].plot(doy, vabs_pool, label = 'abs pool', marker = 'o')
+        # axes[3].plot(self.doy_int[:-1], self.vabs, label = 'spice traj data', marker = 'o')
+        # #axes[3].plot(self.doy_int[:-1], self.vabs_new, label = 'new abs')
+        # axes[3].legend()
+
+        return axes
+
+
+def testfunc():
+    #W0 = WriteTrajSpice(1991, dt = 60*60*24*2) # 2 days
+    print('W1')
+    W1 = WriteTrajSpice(1991, dt = 60*60*24) # 1 day
+    print('W2')
+    #W2 = WriteTrajSpice(1991, dt = 60*60*12) # 12 hours
+    print('W3')
+    W3 = WriteTrajSpice(1991, dt = 60*60) # 1 hour
+    print('W4')
+    W4 = WriteTrajSpice(1991, dt = 60*12) # 12 minutes
+    print('W5')
+    #W5 = WriteTrajSpice(1991, dt = 60) # 1 minute
+    a = W1.comp_v()
+    for w in [W3,W4]:
+        w.comp_v(ax = a)
+    return W1
