@@ -1,6 +1,7 @@
 \documentclass[]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage{amssymb}% for \sphericalangle
 \usepackage{hyperref}
 \usepackage[backend=biber,style=authoryear,maxcitenames=2,maxbibnames=99,natbib=true,uniquelist=minyear]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 \addbibresource{../Dokument/MA_literatur.bib} % The filename of the bibliography
@@ -271,6 +272,46 @@ Vasyliunas und Siscoe:
 		\end{itemize}
 	\item Bahn senkrecht zur Einfallsrichtung LISM
 	\end{itemize}
+	%
+	%
+	\subsection{Trajectory}
+	In the official Ulysses archive (\url{http://ufa.esac.esa.int/ufa/#data}) one can find two text files containing the Ulysses trajectory data. These are namely \textit{helio.dat} and \textit{ulysses\_daily\_heliocentric\_data\_1990-2009.txt}. Both files contain multiple sets of Ulysses ephemeris data of which some are identical between the files. Given are daily values for the angles between Ulysses, Earth and the Sun, for Ulysses' heliocentric distance as well as for longitude and latitude in two different spherical coordinate systems (partly). In table Todo is listed under which names the data is given in each of the text files. \\ \\
+	\begin{minipage}{0.9\textwidth}
+	\begin{tabular}{|c|c|c|}
+	\hline 
+	& helio.dat & ulyssesdaily \\ 
+	\hline 
+	Time span &  23.10.1990 \footnotemark -- 30.12.2007  &  \\ 
+	\hline 
+	&  &  \\ 
+	\hline 
+	$\sphericalangle$ EU (from S)\footnotemark & Earth Sun S/C [deg] & ESP [deg \\ 
+	\hline 
+	$\sphericalangle$ SE (from U)\footnotemark & Sun S/C Earth [deg] & SPE [deg] \\ 
+	\hline 
+	$\sphericalangle$ SU (from E)\footnotemark & Sun Earth S/C [deg] & SEP [deg] \\ 
+	\hline 
+	Heliocentric distance & Helioc. Range [AU] & R [AU], R [km] \\ 
+	\hline 
+	Ecliptic Longitude BC1950 & -- & RA[deg] \\ 
+	\hline 
+	Ecliptic Latitude BC1950 & Helioc. Ecliptic Lat. [deg] & DEC [deg] \\ 
+	\hline 
+	Equatorial Longitude BC1950 - 180$^\circ$ & Helioc. Rt. Asc [deg] &  -- \\ 
+	\hline 
+	Equatorial Latitude BC1950 & Heliograph. Latitude [deg] & lat [deg] \\ 
+	\hline 
+	Equatorial Longitude wrt Earth & Solar Longitude wrt Earth [deg] & long[deg] \\  
+	\hline 
+\end{tabular}
+\footnotetext[1]{No values for \textit{Helioc. Rt. Asc.} and \textit{Solar Longitude wrt Earth} before 4.11.1990 and no values at all between 13.12.2001 and 31.12.2001}
+\footnotetext[2]{Footnote}
+
+\end{minipage}
+
+
+
+	
 	%
 	%
 	\subsection{Datenübertragung}
