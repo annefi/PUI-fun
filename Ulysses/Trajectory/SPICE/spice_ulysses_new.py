@@ -31,7 +31,7 @@ class TrajectUl():
 
     def get_data(self):
         if self.RF == 'pool':
-            self.data = read_pool()
+            self.data = read_pool(self.times)
         if self.RF == 'helio':
             self.data = read_helio_dat()
         if self.RF == 'u_daily':
@@ -44,7 +44,7 @@ class TrajectUl():
 ################################### DATA LOADERS ##############################################
 ###############################################################################################
 
-def read_pool():
+def read_pool(times):
     '''
     Reader for Ulysses trajectory data from condensed file traj_data_ulysses_pool.dat
     :return: dict with keys 'Year', 'DOY', 'MM', 'DD', 'ESP', 'SPE', 'SEP', 'R', 'R_km', 'HC_Lat', 'HC_Long', 'HG_Lat',
@@ -52,21 +52,29 @@ def read_pool():
     '''
     path_pool = "Ulysses/Trajectory/trajectory_data/traj_data_ulysses_pool.dat"
     fin = open(path_pool,'r')
-    paras = fin.readline().split()
+    keys = fin.readline().split()
     for headerline in range(3):
         fin.readline()
-    p_dict = {p:[] for p in paras}
+    p_dict = {k:[] for k in keys}
     for line in fin:
         data = line.split()
-        for i,p in enumerate(p_dict.keys()):
-            p_dict[p].append(float(data[i]))
-    p_dict["datestring"] = []
+        for i,k in enumerate(p_dict.keys()):
+            p_dict[k].append(float(data[i]))
+    p_dict["datetimes"] = []
     for i,year in enumerate(p_dict['Year']):
-        p_dict['datestring'].append("%i-%i-%i" % (year,p_dict['MM'][i],p_dict['DD'][i]))
+        p_dict['datetimes'].append(datetime.datetime(int(year),int(p_dict['MM'][i]),int(p_dict['DD'][i])))
+    HG_lat = np.empty(len(times))
+    mask =
+
     for key in p_dict:
         p_dict[key] = np.array(p_dict[key])
     fin.close()
     return p_dict
+
+
+def read_pool_pandas(times):
+    pass
+
 
 def read_helio_dat():
     '''
