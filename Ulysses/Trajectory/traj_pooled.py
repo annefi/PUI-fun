@@ -10,8 +10,8 @@ from ul_coordinates import hc_to_hg, calc_v
 
 
 # Paths to the two data files
-path_h = "trajectory_data/helio.dat"
-path_u = "trajectory_data/ulysses_daily_heliocentric_data_1990-2009.txt"
+path_h = "Ulysses/Trajectory/trajectory_data/helio.dat"
+path_u = "Ulysses/Trajectory/trajectory_data/ulysses_daily_heliocentric_data_1990-2009.txt"
 
 # Read in Helio.dat
 year_h = []
@@ -137,36 +137,6 @@ hc_lat_u = array(hc_lat_u)
 hg_long_wrt_earth_u = array(hg_long_wrt_earth_u)
 
 
-# year_h = array(year_h)
-# doy_h = array(doy_h)
-# esp_h = array(esp_h)
-# spe_h = array(spe_h)
-# sep_h = array(sep_h)
-# r_h = array(r_h)
-# hg_lat_h = array(hg_lat_h)
-# hg_long_h = array(hg_long_h)
-# hc_lat_h = array(hc_lat_h)
-# hg_long_wrt_earth_h = array(hg_long_wrt_earth_h)
-# year_u = array(year_u[:-548])
-# month_u = array(month_u[:-548])
-# day_u = array(day_u[:-548])
-# doy_u = array(doy_u[:-548])
-# jd_u = array(jd_u[:-548])
-# hour_u = array(hour_u[:-548])
-# min_u = array(min_u[:-548])
-# sec_u = array(sec_u[:-548])
-# esp_u = array(esp_u[:-548])
-# spe_u = array(spe_u[:-548])
-# sep_u = array(sep_u[:-548])
-# r_u = array(r_u[:-548])
-# r_km_u = array(r_km_u[:-548])
-# v_u = array(v_u[:-548])
-# hg_lat_u = array(hg_lat_u[:-548])
-# hc_long_u = array(hc_long_u[:-548])
-# hc_lat_u = array(hc_lat_u[:-548])
-# hg_long_wrt_earth_u = array(hg_long_wrt_earth_u[:-548])
-
-
 
 # __________ fill up data gap ______________
 def fill_up_gap():
@@ -247,7 +217,13 @@ def write_new_file():
 
 
 
-
+def comp(dataA, dataB):
+    fig, ax = pylab.subplots()
+    ax.plot(range(len(dataA)), dataA, label= 'dataA', linestyle = "None", ms = 2., marker = 'o')
+    ax.plot(range(len(dataB)), dataB, label = 'dataB', linestyle = "None", ms = 2., marker = 'x')
+    ax.plot(range(len(dataA)), dataA - dataB, label = "diff")
+    ax.grid(True)
+    ax.legend()
 
 
 # # Overview plot ESP angle
