@@ -1,13 +1,40 @@
-
 import datetime
 from typing import List
 import numpy as np
-from sys import exit
-from etspice import SUN, ULYSSES, EARTH
+import os, sys
+from etspice import *
+import spiceypy as spice
 
 # Constants:
 km_per_AU = 1.495979e8
 
+
+#####################
+### SPICE kernels ###
+#####################
+
+# J2000, ECLIPJ2000 are already loaded
+
+# SPICE built-in frames:
+B1950 = ReferenceFrame([kernels.planets], 'B1950')
+ECLIPB1950 = ReferenceFrame([kernels.planets], 'ECLIPB1950')
+
+# STEREO Kernel "heliospheric... .tf"
+HCI = ReferenceFrame([kernels.heliospheric_frames],'HCI')
+
+# DIY kernels:
+my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/data/test_tf.tf') # load additional rf kernel
+my_kernel.load()
+HCI_B = ReferenceFrame([my_kernel],'HCI_B1950')
+HCI_J = ReferenceFrame([my_kernel],'HCI_J2000') # same as HCI but without freeze_epoch (tiiiiny deviation in rotational matrix)
+
+
+if os.path.exists("../fusessh/data/projects/spice"):
+    os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+elif os.path.exists("/data/projects/spice"):
+    os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
+else:
+    sys.exit('SPICE_DATA_DIR could not be found.\nProbably working from home and not having SSH-ed to asterix?')
 
 
 class TrajectUl():
@@ -41,7 +68,7 @@ class TrajectUl():
         self.get_data()    
 
     def get_data(self):
-        paras = ['R', 'long', 'lat']
+        paras = ['R', 'lat', 'long']
         self.data = {p:[] for p in paras}
         if self.RF[0] == 'pool':
             # pool data is a file merged from the two Ulysses archive files 'helio.dat' and
@@ -51,17 +78,26 @@ class TrajectUl():
             if self.RF[1] == 'EQ':
                 # Equatorial System is mostly called HG (heliographic) within the archive files
                 self.data['R'] = self.sync_times(pool_data['datetimes'],pool_data['R'])
-                self.data['long'] = self.sync_times(pool_data['datetimes'],pool_data['HG_Long'])
                 self.data['lat'] = self.sync_times(pool_data['datetimes'],pool_data['HG_Lat'])
-            if self.RF[1] == 'EC':
+                self.data['long'] = self.sync_times(pool_data['datetimes'],pool_data['HG_Long'])
+            elif self.RF[1] == 'EC':
                 # Ecliptic System is mostly called HC (heliocentric) within the archive files
                 self.data['R'] = self.sync_times(pool_data['datetimes'],pool_data['R'])
-                self.data['long'] = self.sync_times(pool_data['datetimes'],pool_data['HC_Long'])
                 self.data['lat'] = self.sync_times(pool_data['datetimes'],pool_data['HC_Lat'])
+                self.data['long'] = self.sync_times(pool_data['datetimes'],pool_data['HC_Long'])
+            else:
+                sys.exit("\nSecond argument of RF not recognised. HAs to be \'EQ\' or \'EC\' for pool data.\n")
         elif self.RF[0] == 'SPICE':
-
+            try:
+                for t in self.times:
+                    [R,lat,long] = locateUlysses(t, self.RF[1])
+                    self.data['R'].append(R)
+                    self.data['lat'].append(lat)
+                    self.data['long'].append(long)
+            except:
+                sys.exit('Secong RF argument not recognised for SPICE')
         else:
-            exit("\nFirst argument of RF has to be either \'pool\' or \'SPICE\'\n")
+            sys.exit("\nFirst argument of RF has to be either \'pool\' or \'SPICE\'\n")
 
 
     def sync_times(self, alien_times, data):
@@ -104,11 +140,11 @@ def read_pool(times):
 
 def locateUlysses(date, RF):
     '''
-    Returns Ulysses' position after SPICE data
+    Return Ulysses' position after SPICE data
 
     :param date: datetime object
     :param RF: etspice.ReferenceFrame
-    :return: [heliocentric range in AU, latitude, longitude]
+    :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
     '''
     xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF) # in km
     if len(xyz) == 3:
@@ -118,19 +154,18 @@ def locateUlysses(date, RF):
     elif len(xyz) > 3:
         positions = []
         for t in xyz:
-            r, theta, phi = utils.cart2spherical(t, degrees=True)
+            r, theta, phi = utils.cart2spherical(t, degrees = True)
             positions.append(np.array([r/km_per_AU,theta,phi]))
         return positions
 
-
 def locateBody(body, date, RF):
     '''
-    Returns a body's position after SPICE data
+    Return a body's position after SPICE data
 
     :param body: body object, e.g. EARTH
     :param date: datetime object
     :param RF: etspice.ReferenceFrame
-    :return: Prints position vector as [R/AU, LAT/deg, LONG/deg]
+    :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
     '''
     xyz = body.position(time = date, relative_to = SUN, reference_frame = RF)
     r, theta, phi = utils.cart2spherical(xyz, degrees = True)
