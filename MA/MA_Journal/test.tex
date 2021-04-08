@@ -1,0 +1,74 @@
+\documentclass{tufte-book}
+\usepackage{datenumber, ifthen, xparse}
+\usepackage{lipsum}
+\setstartyear{2000}
+\newcounter{day}
+
+\ExplSyntaxOn
+
+% Declare variables
+\seq_new:N \g_journal_seq
+\seq_new:N \g_journal_out_seq
+\iow_new:N \g_journal_stream
+\tl_new:N \l_journal_date_tl
+
+% At the beginning of the run, read the lines of the `.jrn` file into a sequence.
+% These are the dates. If the file can not be opened, it probably does not exists
+% and we treat it as empty.
+\cs_new:Npn \readjournaldates {
+	\ior_open:NnT \g_journal_stream { \c_sys_jobname_str.jrn } {
+		\ior_map_inline:Nn \g_journal_stream {
+			\seq_gput_right:Nn \g_journal_seq { ##1 }
+		}
+		\ior_close:N \g_journal_stream
+	}
+}
+
+% The main environment:
+\NewDocumentEnvironment{ newday }{ O{} }{
+	\stepcounter{day}
+	% If the sequence \g_journal_seq is not empty yet, then we already saved a date
+	% for the current day. Save this day in `\l_journal_date_tl` and delete it from
+	% the sequence. Otherwise we have not saved anything yet, so we choose the current
+	% date.
+	\seq_gpop_left:NNF \g_journal_seq \l_journal_date_tl {
+		\tl_set:Nx \l_journal_date_tl {\datedayname,~\today}
+	}
+	% Now we have to save the choosen date for the next run. First, only store it in the
+	% sequence `\g_journal_out_seq`, we only write it to the file at the end to avoid
+	% overwriting the file if something fails:
+	\seq_gput_right:NV \g_journal_out_seq \l_journal_date_tl
+	\textbf{ #1 }
+	\marginnote{ \l_journal_date_tl } \\
+}{
+	\vspace{0.5cm}
+}
+
+% At the end of the document, iterate over `\g_journal_out_seq` and write every entry
+% into a line
+\AtEndDocument{
+	\iow_open:Nn \g_journal_stream { \c_sys_jobname_str.jrn }
+	\seq_map_inline:Nn \g_journal_out_seq {
+		\iow_now:Nn \g_journal_stream { #1 }
+	}
+	\iow_close:N \g_journal_stream
+}
+
+\ExplSyntaxOff
+
+\makeatletter
+\readjournaldates
+\makeatother
+
+\begin{document}
+	\begin{newday}[A day]
+		\lipsum[1]
+	\end{newday}
+	
+	\begin{newday}[Yet another day]
+		\lipsum[2]
+	\end{newday}
+	\begin{newday}
+		\lipsum[3]
+	\end{newday}
+\end{document}

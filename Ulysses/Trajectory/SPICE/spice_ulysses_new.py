@@ -1,6 +1,7 @@
 import datetime
 from typing import List
 import numpy as np
+import matplotlib.pyplot as plt
 import os, sys
 from etspice import *
 import spiceypy as spice
@@ -74,17 +75,21 @@ class TrajectUl():
             # pool data is a file merged from the two Ulysses archive files 'helio.dat' and
             # 'ulysses_daily_heliocentric_data_1990-2009.txt' (which on their own don't contain both HG and HC
             # coordinate systems independently)
-            pool_data = read_pool(self.times)
+            pool_data = read_pool()
             if self.RF[1] == 'EQ':
                 # Equatorial System is mostly called HG (heliographic) within the archive files
                 self.data['R'] = self.sync_times(pool_data['datetimes'],pool_data['R'])
                 self.data['lat'] = self.sync_times(pool_data['datetimes'],pool_data['HG_Lat'])
                 self.data['long'] = self.sync_times(pool_data['datetimes'],pool_data['HG_Long'])
+                self.lbl = 'Ul. Archive Solar Eq.'
+                self.clr = "darkmagenta"
             elif self.RF[1] == 'EC':
                 # Ecliptic System is mostly called HC (heliocentric) within the archive files
                 self.data['R'] = self.sync_times(pool_data['datetimes'],pool_data['R'])
                 self.data['lat'] = self.sync_times(pool_data['datetimes'],pool_data['HC_Lat'])
                 self.data['long'] = self.sync_times(pool_data['datetimes'],pool_data['HC_Long'])
+                self.lbl = 'Ul. Archive Ecliptic'
+                self.clr = "orchid"
             else:
                 sys.exit("\nSecond argument of RF not recognised. HAs to be \'EQ\' or \'EC\' for pool data.\n")
         elif self.RF[0] == 'SPICE':
@@ -93,7 +98,9 @@ class TrajectUl():
                     [R,lat,long] = locateUlysses(t, self.RF[1])
                     self.data['R'].append(R)
                     self.data['lat'].append(lat)
-                    self.data['long'].append(long)
+                    self.data['long'].append(long) 
+                self.lbl = 'SPICE %s' %self.RF[1].name
+                self.clr = "fuchsia"
             except:
                 sys.exit('Secong RF argument not recognised for SPICE')
         else:
@@ -108,12 +115,81 @@ class TrajectUl():
         data_sync[mask_t] = data[mask_at]
         return data_sync
 
+    def plot_timeseries(self, axes = None):
+        ''' Plot R, lat, long over time
+        '''
+        # set up the plot:
+        if axes is None:
+            fig, axes = plt.subplots(nrows = 3, sharex = True)
+        ### R ###
+        axes[0].plot(self.times, self.data['R'], linestyle = 'None', marker = 'o', ms = 2., label = self.lbl, c = self.clr, alpha= 0.5)
+        axes[0].set_xlim(self.times[0],self.times[-1                                                                     ])
+        axes[0].set_ylabel('R in AU')
+        lg = axes[0].legend(loc='upper center', ncol=3, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
+                True, framealpha=1., facecolor='#fff5f8', shadow=True)
+        for legend_handle in lg.legendHandles:
+                legend_handle._legmarker.set_markersize(6)
+        ### LAT ###
+        axes[1].plot(self.times, self.data['lat'], linestyle = 'None', marker = 'o', ms = 2., c = self.clr, alpha= 0.5)
+        axes[1].set_ylabel('Lat. in deg.')
+        axes[1].set_yticks([-90,-45,0,45,90])
+        axes[1].set_ylim(-95,95)
+        ### LONG ###
+        axes[2].plot(self.times, self.data['long'], linestyle = 'None', marker = 'o', ms = 2., c = self.clr, alpha= 0.5)
+        axes[2].set_ylabel('Long. in deg.')
+        axes[2].set_yticks([-180,-90,0,90,180])
+        axes[2].set_ylim(-185,185)
+        # plot vertical lines at polar passes:
+        plt.vlines(self.t_southpass, ymin = -180, ymax = 360, color = 'firebrick', alpha = 0.5, linestyle = 'dashed')
+        plt.vlines(self.t_northpass, ymin = -180, ymax = 360, color = 'navy', alpha = 0.5, linestyle = 'dashed')
+        plt.gcf().autofmt_xdate()
+        plt.gcf().tight_layout()
+        plt.gcf().align_ylabels()
+        for ax in axes:
+            ax.grid(True)
+        #plt.subplots_adjust(hspace=None)
+        return axes
+
+    def comp_timeseries(self, T, axes = None):
+        ''' Plot difference between two sets of trajectory data for R, lat, long
+        '''
+        if axes is None:
+            fig, axes = plt.subplots(nrows = 3, sharex = True, sharey = True)
+        ymin = -0.001
+        ymax = 0.001
+        ### R ###
+        axes[0].plot(self.times, self.data['R']- T.data['R'], linestyle = 'None', marker = 'o', ms = 1., label = "%s - %s" %(self.lbl, T.lbl))
+        axes[0].set_xlim(self.times[0],self.times[-1])
+        axes[0].set_ylabel(r'$\Delta$R in AU')
+        lg = axes[0].legend(loc='upper center', ncol=1, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
+                True, framealpha=1., facecolor='#dfe9f5', shadow=True)
+        for legend_handle in lg.legendHandles:
+                legend_handle._legmarker.set_markersize(6)
+        ### LAT ###
+        axes[1].plot(self.times, self.data['lat'] - T.data['lat'], linestyle = 'None', marker = 'o', ms = 1.)
+        axes[1].set_ylabel(r'$\Delta$Lat. in deg.')
+        #axes[1].set_ylim(-90,90)
+        ### LONG ###
+        axes[2].plot(self.times, self.data['long'] - T.data['long'], linestyle = 'None', marker = 'o', ms = 1.)
+        axes[2].set_ylabel(r'$\Delta$Long. in deg.')
+        #axes[2].set_ylim(-180,180)
+
+        ymin = min(-0.001,min(self.data['R']- T.data['R']),min(self.data['lat'] - T.data['lat']),min(self.data['long'] - T.data['long'])) 
+        ymax = max(0.001,max(self.data['R']- T.data['R']),max(self.data['lat'] - T.data['lat']),max(self.data['long'] - T.data['long']))
+        axes[0].set_ylim(-max(abs(ymin),abs(ymax))*2,max(abs(ymin),abs(ymax))*2) 
+        print(ymin, ymax)
+        plt.gcf().autofmt_xdate()
+        plt.gcf().tight_layout()
+        plt.gcf().align_ylabels()
+        for ax in axes:
+            ax.grid(True)
+            ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
 
 ###############################################################################################
 ################################### DATA LOADERS ##############################################
 ###############################################################################################
 
-def read_pool(times):
+def read_pool():
     '''
     Reader for Ulysses trajectory data from condensed file traj_data_ulysses_pool.dat
     :return: dict with keys 'Year', 'DOY', 'MM', 'DD', 'ESP', 'SPE', 'SEP', 'R', 'R_km', 'HC_Lat', 'HC_Long', 'HG_Lat',
@@ -128,7 +204,10 @@ def read_pool(times):
     for line in fin:
         data = line.split()
         for i,k in enumerate(p_dict.keys()):
-            p_dict[k].append(float(data[i]))
+            if k == 'HG_Long':
+                p_dict[k].append(float(data[i])-180.)
+            else:
+                p_dict[k].append(float(data[i]))
     p_dict["datetimes"] = []
     for i,year in enumerate(p_dict['Year']):
         p_dict['datetimes'].append(datetime.datetime(int(year),int(p_dict['MM'][i]),int(p_dict['DD'][i])))
@@ -170,5 +249,3 @@ def locateBody(body, date, RF):
     xyz = body.position(time = date, relative_to = SUN, reference_frame = RF)
     r, theta, phi = utils.cart2spherical(xyz, degrees = True)
     return(np.array([r/km_per_AU,theta,phi]))
-
-
