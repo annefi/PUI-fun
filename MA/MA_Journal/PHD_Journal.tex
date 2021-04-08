@@ -1,0 +1,60 @@
+\documentclass{tufte-book}
+
+%%% for no indentation at beginning of paragraph %%%
+\makeatletter
+% Paragraph indentation and separation for normal text
+\renewcommand{\@tufte@reset@par}{%
+	\setlength{\RaggedRightParindent}{0.0pc}%
+	\setlength{\JustifyingParindent}{1.0pc}%
+	\setlength{\parindent}{1pc}%
+	\setlength{\parskip}{0pt}%
+}
+\@tufte@reset@par
+% % % % % % % % % % % % % % % % % % % % % % % %
+
+\geometry{textwidth=.6\paperwidth} % for smaller margin
+\usepackage[utf8]{inputenc} % für Umlaute etc
+\usepackage[ngerman]{babel} % nur damit funktionieren "` Anführungszeichen "'
+\usepackage{hyperref} % für Links
+\usepackage{enumitem} %for customising itemize, enumerate etc.
+\setlist[itemize]{topsep=3pt,itemsep=2ex,partopsep=1ex,parsep=1ex}
+
+
+\usepackage{amsmath}
+
+\usepackage[textsize=footnotesize, textwidth = 0.2\textwidth]{todonotes} % selbsterklärend
+\setuptodonotes{noline, color=teal!70}
+%\newcommand{\done}[2]{\todo[#1, color=teal!10]{#2}}
+\newcommand{\done}[2][]{\todo[color=teal!10, #1]{#2}}
+
+
+
+
+
+\usepackage{datetime} % for date
+\usepackage{lipsum}
+\newcommand{\newday}[2]{\vspace{2cm}\marginnote{{\Large \textbf{\shortdayofweekname{#1}{#2}{2021}, ~\formatdate{#1}{#2}{2021}}}}}
+
+
+
+\begin{document}
+\newday{8}{4}
+Neues Journal eingerichtet!
+Übertrag der Todos aus dem alten MA-Journal:
+
+\begin{itemize}
+	\item Journal polishen: ToDo Package und Datum... \done{Journal}
+	\item Rechte eingeschränkt? checken \done{Rechte}
+	\item Koordinatenkram aufschreiben: Graphik der Koordinatensysteme (Neigung der Erd- und Sonnenachse?!), Ulysses Trajektorie Anwendung? \todo{Koordinatenkram aufschreiben}
+	\item in calc\_d90 Division checken: python3-kompatibel? Schaltjahr...? \todo{Schaltjahr}
+	\item SPICE Skript überarbeiten \todo{Ulysses\_SPICE}
+	\begin{itemize}
+		\item überlegen, wie ich manuelle Rotation einbaue \todo{instance: rotation by hand}
+		\item Winkel einbauen \todo{AspAngles}
+		\item 3D-Repräsentation überlegen \todo{3D Plot}
+	\end{itemize}
+	\item Koordinatenskripte überarbeiten: etCoords ersetzen \todo{Koordinatenskript}
+\end{itemize}
+Weiter: testen, wie gerade der Stand der Plots in ulysses\_spice ist.
+
+\end{document}

@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9dd247a6-ae20-4e26-95db-2e204cdb342f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MA/MA_Journal/MA_journal.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/MA_Journal/MA_journal.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MA/MA_Journal/test.jrn" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MA/MA_Journal/test.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MA/MA_Journal/test.tex" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,12 +17,13 @@
     <session id="2091974253">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="6" />
+          <entry key="project.closed" value="7" />
           <entry key="project.open.time.10" value="1" />
+          <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.6" value="2" />
           <entry key="project.open.time.7" value="2" />
-          <entry key="project.opened" value="6" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -48,7 +52,7 @@
     <splitter split-orientation="horizontal" split-proportion="0.4691589">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="600">
@@ -60,10 +64,10 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/DataLoader/uswo.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="828">
+                <state relative-caret-position="755">
                   <caret line="85" column="74" selection-start-line="85" selection-start-column="74" selection-end-line="85" selection-end-column="74" />
                 </state>
               </provider>
@@ -72,7 +76,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/DataLoader/uswipha.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2358">
+                <state relative-caret-position="3465">
                   <caret line="232" column="29" selection-start-line="232" selection-start-column="29" selection-end-line="232" selection-end-column="29" />
                 </state>
               </provider>
@@ -81,15 +85,14 @@
         </leaf>
       </split-first>
       <split-second>
-        <leaf>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="150">
                   <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
                   <folding>
-                    <element signature="e#1#16#0" expanded="true" />
-                    <marker date="1616522851636" expanded="true" signature="1791:1800" ph="..." />
+                    <element signature="e#0#15#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -184,7 +187,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1277" y="31" width="1686" height="1022" extended-state="6" />
+    <frame x="1277" y="31" width="1686" height="973" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.032549728" />
@@ -293,15 +296,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DataLoader/uswipha.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2358">
+        <state relative-caret-position="3465">
           <caret line="232" column="29" selection-start-line="232" selection-start-column="29" selection-end-line="232" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataLoader/uswo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="828">
-          <caret line="85" column="74" selection-start-line="85" selection-start-column="74" selection-end-line="85" selection-end-column="74" />
         </state>
       </provider>
     </entry>
@@ -315,13 +311,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/DataLoader/uswo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="755">
+          <caret line="85" column="74" selection-start-line="85" selection-start-column="74" selection-end-line="85" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
           <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
           <folding>
-            <element signature="e#1#16#0" expanded="true" />
-            <marker date="1616522851636" expanded="true" signature="1791:1800" ph="..." />
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
