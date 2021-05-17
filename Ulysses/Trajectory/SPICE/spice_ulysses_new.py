@@ -52,12 +52,11 @@ class TrajectUl():
     def __init__(self, TF: List[datetime.datetime], RF: List[str] = None, DT: int = None):
         if DT == None:
             DT = 60 * 60 * 24 # 24 h in seconds
-        if len(TF) == 2:
-            delta_t = (TF[1] - TF[0]).total_seconds()
-        elif len(TF) == 0 or len(TF) == 1:
-            if len(TF) == 0:
-                TF.append(datetime.datetime(1992,1,1))       
-            delta_t = (datetime.datetime(TF[0].year+1,TF[0].month,TF[0].day,TF[0].hour)-TF[0]).total_seconds()
+        if len(TF) == 1:
+            TF.append(datetime.datetime(TF[0].year+1,TF[0].month,TF[0].day,TF[0].hour))
+        elif len(TF) == 0:
+            TF = [datetime.datetime(1992,1,1), datetime.datetime(1993,1,1)]
+        delta_t = (TF[1] - TF[0]).total_seconds() # auxiliary time delta for setting up self.times
         self.times = [TF[0] + datetime.timedelta(seconds = t) for t in range(0,int(delta_t + DT),DT)]
         self.t_southpass = [datetime.datetime(1994, 9, 13), datetime.datetime(2000, 11, 27),
                             datetime.datetime(2007, 2, 7)]
@@ -91,7 +90,7 @@ class TrajectUl():
                 self.lbl = 'Ul. Archive Ecliptic'
                 self.clr = "orchid"
             else:
-                sys.exit("\nSecond argument of RF not recognised. HAs to be \'EQ\' or \'EC\' for pool data.\n")
+                sys.exit("\nSecond argument of RF not recognised. Has to be \'EQ\' or \'EC\' for pool data.\n")
         elif self.RF[0] == 'SPICE':
             try:
                 for t in self.times:
@@ -102,12 +101,14 @@ class TrajectUl():
                 self.lbl = 'SPICE %s' %self.RF[1].name
                 self.clr = "fuchsia"
             except:
-                sys.exit('Secong RF argument not recognised for SPICE')
+                sys.exit('Second RF argument not recognised for SPICE')
         else:
             sys.exit("\nFirst argument of RF has to be either \'pool\' or \'SPICE\'\n")
 
 
     def sync_times(self, alien_times, data):
+        ''' Synchronise the data set times with self.times
+        '''
         data_sync = np.empty(len(self.times))
         data_sync[:] = np.nan
         mask_t = np.isin(self.times, alien_times)
@@ -184,6 +185,7 @@ class TrajectUl():
         for ax in axes:
             ax.grid(True)
             ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
+        return axes
 
 ###############################################################################################
 ################################### DATA LOADERS ##############################################
