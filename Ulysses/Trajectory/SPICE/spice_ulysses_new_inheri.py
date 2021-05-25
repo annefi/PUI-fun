@@ -40,7 +40,6 @@ else:
 
 class TrajectoryUlysses():
     """
-
     :param TF: time frame, should be a list of start and end time as
         datetime.datetime objects (one year is assumed if list is empty or contains
         only start time) 
@@ -65,46 +64,12 @@ class TrajectoryUlysses():
         if RF == None:
             RF = ['pool', 'EQ']
         self.RF = RF
-        self.get_data()    
+        self.get_data()
+        print('inittest')
 
     def get_data(self):
         paras = ['R', 'lat', 'long']
         self.data = {p:[] for p in paras}
-        if self.RF[0] == 'pool':
-            # pool data is a file merged from the two Ulysses archive files 'helio.dat' and
-            # 'ulysses_daily_heliocentric_data_1990-2009.txt' (which on their own don't contain both HG and HC
-            # coordinate systems independently)
-            pool_data = read_pool()
-            if self.RF[1] == 'EQ':
-                # Equatorial System is mostly called HG (heliographic) within the archive files
-                self.data['R'] = self.sync_times(pool_data['datetimes'],pool_data['R'])
-                self.data['lat'] = self.sync_times(pool_data['datetimes'],pool_data['HG_Lat'])
-                self.data['long'] = self.sync_times(pool_data['datetimes'],pool_data['HG_Long'])
-                self.lbl = 'Ul. Archive Solar Eq.'
-                self.clr = "darkmagenta"
-            elif self.RF[1] == 'EC':
-                # Ecliptic System is mostly called HC (heliocentric) within the archive files
-                self.data['R'] = self.sync_times(pool_data['datetimes'],pool_data['R'])
-                self.data['lat'] = self.sync_times(pool_data['datetimes'],pool_data['HC_Lat'])
-                self.data['long'] = self.sync_times(pool_data['datetimes'],pool_data['HC_Long'])
-                self.lbl = 'Ul. Archive Ecliptic'
-                self.clr = "orchid"
-            else:
-                sys.exit("\nSecond argument of RF not recognised. Has to be \'EQ\' or \'EC\' for pool data.\n")
-        elif self.RF[0] == 'SPICE':
-            try:
-                for t in self.times:
-                    [R,lat,long] = locateUlysses(t, self.RF[1])
-                    self.data['R'].append(R)
-                    self.data['lat'].append(lat)
-                    self.data['long'].append(long) 
-                self.lbl = 'SPICE %s' %self.RF[1].name
-                self.clr = "fuchsia"
-            except:
-                sys.exit('Second RF argument not recognised for SPICE')
-        else:
-            sys.exit("\nFirst argument of RF has to be either \'pool\' or \'SPICE\'\n")
-
 
     def sync_times(self, alien_times, data):
         ''' Synchronise the data set times with self.times
@@ -192,10 +157,40 @@ class TrajectoryUlysses():
 
 
 class SpiceTra(TrajectoryUlysses):
-    pass
+    def get_data(self):
+        super().get_data()
+        #try:
+        for t in self.times:
+            [R, lat, long] = locateUlysses(t, self.RF[1])
+            self.data['R'].append(R)
+            self.data['lat'].append(lat)
+            self.data['long'].append(long)
+        self.lbl = 'SPICE %s' % self.RF[1].name
+        self.clr = "fuchsia"
+        #except:
+            #sys.exit('Second RF argument not recognised for SPICE')
 
 class ArchiveTra(TrajectoryUlysses):
-    pass
+    def get_data(self):
+        super().get_data()
+        pool_data = read_pool()
+        if self.RF[1] == 'EQ':
+            # Equatorial System is mostly called HG (heliographic) within the archive files
+            self.data['R'] = self.sync_times(pool_data['datetimes'], pool_data['R'])
+            self.data['lat'] = self.sync_times(pool_data['datetimes'], pool_data['HG_Lat'])
+            self.data['long'] = self.sync_times(pool_data['datetimes'], pool_data['HG_Long'])
+            self.lbl = 'Ul. Archive Solar Eq.'
+            self.clr = "darkmagenta"
+        elif self.RF[1] == 'EC':
+            # Ecliptic System is mostly called HC (heliocentric) within the archive files
+            self.data['R'] = self.sync_times(pool_data['datetimes'], pool_data['R'])
+            self.data['lat'] = self.sync_times(pool_data['datetimes'], pool_data['HC_Lat'])
+            self.data['long'] = self.sync_times(pool_data['datetimes'], pool_data['HC_Long'])
+            self.lbl = 'Ul. Archive Ecliptic'
+            self.clr = "orchid"
+        else:
+            sys.exit("\nSecond argument of RF not recognised. Has to be \'EQ\' or \'EC\' for pool data.\n")
+
 
 
 

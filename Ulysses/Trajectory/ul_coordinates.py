@@ -37,7 +37,7 @@ def hg_to_hc(hg_vec, degree=True, long_shift = 0.):
     print('int3', int3)
     return array([int3[0],int3[1],90.-int3[2]])
 
-def hc_to_hg(hc_vec, degree=True, long_shift = 180.):
+def hc_to_hg(hc_vec, degree=True, long_shift = 0.):
     '''
     Transformation of a vector from heliocentric to heliographic coordinate system.
     :param hc_vec: Heliocentric vector [R,long,lat] where lat increases towards +z axis
