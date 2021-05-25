@@ -38,7 +38,7 @@ else:
     sys.exit('SPICE_DATA_DIR could not be found.\nProbably working from home and not having SSH-ed to asterix?')
 
 
-class TrajectUl():
+class TrajectoryUlysses():
     """
 
     :param TF: time frame, should be a list of start and end time as
@@ -190,6 +190,12 @@ class TrajectUl():
             ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
         return axes
 
+
+class SpiceTra(TrajectoryUlysses):
+    pass
+
+class ArchiveTra(TrajectoryUlysses):
+    pass
 
 
 

@@ -22,10 +22,10 @@
 
 \usepackage{amsmath}
 
-\usepackage[color=teal!70,textsize=footnotesize, textwidth = 0.2\textwidth]{todonotes} % selbsterklärend
+\usepackage[color=teal!10,textsize=footnotesize, textwidth = 0.2\textwidth]{todonotes} % selbsterklärend
 %\setuptodonotes{noline, color=teal!70}
 %\newcommand{\done}[2]{\todo[#1, color=teal!10]{#2}}
-\newcommand{\done}[2][]{\todo[color=teal!10, #1]{#2}}
+\newcommand{\done}[2][]{\todo[color=teal!70, #1]{#2}}
 
 
 
@@ -46,11 +46,13 @@ Neues Journal eingerichtet!
 	\item Journal polishen: ToDo Package und Datum... \done{Journal}
 	\item Rechte eingeschränkt? checken \done{Rechte}
 	\item Koordinatenkram aufschreiben: Graphik der Koordinatensysteme (Neigung der Erd- und Sonnenachse?!), Ulysses Trajektorie Anwendung? \todo{Koordinatenkram aufschreiben}
-	\item in calc\_d90 Division checken: python3-kompatibel? Schaltjahr...? \todo{Schaltjahr}
+	\item in calc\_d90 Division checken: python3-kompatibel? Schaltjahr...? \done{Schaltjahr}
 	\item SPICE Skript überarbeiten \todo{Ulysses\_SPICE}
 	\begin{itemize}
 		\item überlegen, wie ich manuelle Rotation einbaue \todo{instance: rotation by hand}
 		\item Winkel einbauen \todo{AspAngles}
+		\item Funktion zum Wegschreiben der Trajektorie \todo{Write}
+		\item Geschwindigkeiten alt/neu \todo{v}
 		\item 3D-Repräsentation überlegen \todo{3D Plot}
 	\end{itemize}
 	\item Koordinatenskripte überarbeiten: etCoords ersetzen \todo{Koordinatenskript}
