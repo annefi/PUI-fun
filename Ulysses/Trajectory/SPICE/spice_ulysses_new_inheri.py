@@ -1,3 +1,5 @@
+#import sys
+#sys.path.insert(0,'/home/asterix/fischer/PUI/')
 import datetime
 from typing import List
 import numpy as np
@@ -5,6 +7,7 @@ import matplotlib.pyplot as plt
 import os, sys
 from etspice import *
 import spiceypy as spice
+from Ulysses.Trajectory.ul_coordinates import hc_to_hg
 
 # Constants:
 km_per_AU = 1.495979e8
@@ -193,9 +196,20 @@ class ArchiveTra(TrajectoryUlysses):
 
     def rotate_to_EQ(self):
         if self.RF == "EC":
-            pass
-            #self.data[]
-
+            R = []
+            lat = []
+            long = []
+            for t in range(len(self.data['R'])):
+                vec_EC = np.array([self.data['R'][t],self.data['lat'][t],self.data['long'][t]])
+                print(vec_EC)
+                vec_rotated = hc_to_hg(vec_EC)
+                print(vec_rotated)
+            #     R.append(vec_rotated[0])
+            #     lat.append(vec_rotated[1])
+            #     long.append(vec_rotated[2])
+            # self.data['R'] = R
+            # self.data['lat'] = lat
+            # self.data['long'] = long
 
 
 ###############################################################################################

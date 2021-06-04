@@ -35,6 +35,7 @@ def cart2spher(xyz: np.ndarray, deg: bool = True) -> np.ndarray:
 
     if xyz.ndim == 1:
         x, y, z = xyz
+        print(x)
         return np.array([
             math.sqrt(x ** 2 + y ** 2 + z ** 2),
             90 - math.degrees(math.acos(z / math.sqrt(x ** 2 + y ** 2 + z ** 2))) if deg else
