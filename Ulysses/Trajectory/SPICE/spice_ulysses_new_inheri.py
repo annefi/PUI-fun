@@ -48,7 +48,7 @@ class TrajectoryUlysses():
         If source == 'SPICE': possible reference frames: (...)
     :param DT: time increment in seconds; default is 24 hours
     """
-    def __init__(self, TF: List[datetime.datetime], RF: List[str] = None, DT: int = None):
+    def __init__(self, TF: List[datetime.datetime], RF: str = None, DT: int = None):
         if DT == None:
             DT = 60 * 60 * 24 # 24 h in seconds
         if len(TF) == 1:
@@ -62,7 +62,7 @@ class TrajectoryUlysses():
         self.t_northpass = [datetime.datetime(1995, 7, 31), datetime.datetime(2001, 10, 13),
                             datetime.datetime(2008, 1, 14)]
         if RF == None:
-            RF = ['pool', 'EQ']
+            RF = 'EQ'
         self.RF = RF
         self.get_data()
         print('inittest')
@@ -159,29 +159,29 @@ class TrajectoryUlysses():
 class SpiceTra(TrajectoryUlysses):
     def get_data(self):
         super().get_data()
-        #try:
         for t in self.times:
-            [R, lat, long] = locateUlysses(t, self.RF[1])
+            [R, lat, long] = locateUlysses(t, self.RF)
             self.data['R'].append(R)
             self.data['lat'].append(lat)
             self.data['long'].append(long)
-        self.lbl = 'SPICE %s' % self.RF[1].name
+        self.lbl = 'SPICE %s' % self.RF.name
         self.clr = "fuchsia"
-        #except:
-            #sys.exit('Second RF argument not recognised for SPICE')
+        
+
+
 
 class ArchiveTra(TrajectoryUlysses):
     def get_data(self):
         super().get_data()
         pool_data = read_pool()
-        if self.RF[1] == 'EQ':
+        if self.RF == 'EQ':
             # Equatorial System is mostly called HG (heliographic) within the archive files
             self.data['R'] = self.sync_times(pool_data['datetimes'], pool_data['R'])
             self.data['lat'] = self.sync_times(pool_data['datetimes'], pool_data['HG_Lat'])
             self.data['long'] = self.sync_times(pool_data['datetimes'], pool_data['HG_Long'])
             self.lbl = 'Ul. Archive Solar Eq.'
             self.clr = "darkmagenta"
-        elif self.RF[1] == 'EC':
+        elif self.RF == 'EC':
             # Ecliptic System is mostly called HC (heliocentric) within the archive files
             self.data['R'] = self.sync_times(pool_data['datetimes'], pool_data['R'])
             self.data['lat'] = self.sync_times(pool_data['datetimes'], pool_data['HC_Lat'])
@@ -189,8 +189,12 @@ class ArchiveTra(TrajectoryUlysses):
             self.lbl = 'Ul. Archive Ecliptic'
             self.clr = "orchid"
         else:
-            sys.exit("\nSecond argument of RF not recognised. Has to be \'EQ\' or \'EC\' for pool data.\n")
+            sys.exit("\nArgument RF not recognised. Has to be \'EQ\' or \'EC\' for pool data.\n")
 
+    def rotate_to_EQ(self):
+        if self.RF == "EC":
+            pass
+            #self.data[]
 
 
 
