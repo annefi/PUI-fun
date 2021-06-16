@@ -85,7 +85,7 @@ class TrajectoryUlysses():
         data_sync[mask_t] = data[mask_at]
         return data_sync
 
-    def plot_timeseries(self, axes = None):
+    def plot_coords_time(self, axes = None):
         ''' Plot R, lat, long over time
         '''
         # set up the plot:
@@ -120,7 +120,7 @@ class TrajectoryUlysses():
         #plt.subplots_adjust(hspace=None)
         return axes
 
-    def comp_timeseries(self, T, axes = None):
+    def comp_coords_time(self, T, axes = None):
         ''' Plot difference between two sets of trajectory data for R, lat, long
         '''
         if axes is None:
@@ -156,6 +156,11 @@ class TrajectoryUlysses():
             ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
         return axes
 
+    def plot_aspangles_time(self):
+        pass
+
+    def comp_aspangles_time(self):
+        pass
 
 class SpiceTra(TrajectoryUlysses):
     def get_data(self):
@@ -293,3 +298,23 @@ def locateBody(body, date, RF):
     xyz = body.position(time = date, relative_to = SUN, reference_frame = RF)
     r, theta, phi = utils.cart2spherical(xyz, degrees = True)
     return(np.array([r/km_per_AU,theta,phi]))
+
+def load_aa_data():
+    '''
+    Reader for "old" aspect angle data in aa_data.dat
+    :return: dict with keys "YEAR", "DOY", "D90", "ASP_PHI", "ASP_THETA", "ASP_total", "datestring"
+    '''
+    path_aa = "Ulysses/Trajectory/trajectory_data/aa_data.dat"
+    fin = open(path_aa, 'r')
+    paras = fin.readline().split()
+    p_dict = {p:[] for p in paras}
+    for line in fin:
+        data = line.split()
+        for i,p in enumerate(p_dict.keys()):
+            p_dict[p].append(float(data[i]))
+    for i,year in enumerate(p_dict['Year']):
+        p_dict['datetimes'].append(datetime.datetime(int(year),int(p_dict['MM'][i]),int(p_dict['DD'][i])))
+    for key in p_dict:
+        p_dict[key] = np.array(p_dict[key])
+    fin.close()
+    return p_dict
