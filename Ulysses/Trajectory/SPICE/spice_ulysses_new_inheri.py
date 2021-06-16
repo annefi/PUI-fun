@@ -1,5 +1,3 @@
-#import sys
-#sys.path.insert(0,'/home/asterix/fischer/PUI/')
 import datetime
 from typing import List
 import numpy as np
@@ -201,15 +199,34 @@ class ArchiveTra(TrajectoryUlysses):
             long = []
             for t in range(len(self.data['R'])):
                 vec_EC = np.array([self.data['R'][t],self.data['lat'][t],self.data['long'][t]])
-                print(vec_EC)
+                #print(vec_EC)
                 vec_rotated = hc_to_hg(vec_EC)
-                print(vec_rotated)
-            #     R.append(vec_rotated[0])
-            #     lat.append(vec_rotated[1])
-            #     long.append(vec_rotated[2])
-            # self.data['R'] = R
-            # self.data['lat'] = lat
-            # self.data['long'] = long
+                #print(vec_rotated, '\n')
+                R.append(vec_rotated[0])
+                lat.append(vec_rotated[1])
+                long.append(vec_rotated[2])
+            self.data['R'] = R
+            self.data['lat'] = lat
+            self.data['long'] = long
+        else:
+            sys.exit('RF has to be \'EC\' for rotation to EQ')
+
+    def rotate_to_EC(self):
+        if self.RF == "EQ":
+            R = []
+            lat = []
+            long = []
+            for t in range(len(self.data['R'])):
+                vec_EQ = np.array([self.data['R'][t],self.data['lat'][t],self.data['long'][t]])
+                vec_rotated = hg_to_hc(vec_EQ)
+                R.append(vec_rotated[0])
+                lat.append(vec_rotated[1])
+                long.append(vec_rotated[2])
+            self.data['R'] = R
+            self.data['lat'] = lat
+            self.data['long'] = long
+        else:
+            sys.exit('RF has to be \'EQ\' for rotation to EC')
 
 
 ###############################################################################################
