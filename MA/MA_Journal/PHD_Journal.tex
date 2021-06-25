@@ -55,7 +55,7 @@ Neues Journal eingerichtet!
 		\item Geschwindigkeiten alt/neu \todo{v}
 		\item 3D-Repräsentation überlegen \todo{3D Plot}
 	\end{itemize}
-	\item Koordinatenskripte überarbeiten: etCoords ersetzen \todo{Koordinatenskript}
+	\item Koordinatenskripte überarbeiten: etCoords ersetzen \done{Koordinatenskript}
 \end{itemize}
 %Weiter: testen, wie gerade der Stand der Plots in ulysses\_spice ist.
 
@@ -82,4 +82,19 @@ Next: 180-360-Grad-Sache bei Long checken (wie war das im anderen Skript? Hab ic
 Rotation ist eingepflegt, muss noch getestet werden.\\
 Dann weiter Plots reproduzieren.\\
 Farben brauchen auch noch eine dringende Überarbeitung.
+
+\newday{21}{6}
+Git Passwort Dings läuft aus. Token (PAT) erstellt auf Ubuntu Zuhause. Gespeichert(?) mit \textit{git config --global credential.helper store} \\
+Plotfunktionen für Aspect Angle fertig. Als nächstes:
+\begin{itemize}
+	\item Aspect Angle für SPICE einbauen \todo{Aspect Angle SPICE}
+	\item Alle Plotfunktionen testen und alte Plots erzeugen, Farben aussuchen... \todo{Plots erstellen}
+	\item Docstrings, Kommentare für Funktionen schreiben, oben kurz die Koordinatensysteme zusammen fassen \todo{documentation}
+\end{itemize}
+[Arbeite im \textit{...new\_inheri.py}-Skript]
+
+\newday{26}{6}
+Weiter AspAngle für SPICE schreiben: Unterscheide zwischen EC und EQ. Überlegen, ob ich auch manuelle Berechnung für Archivdaten brauche.
+
+
 \end{document}
