@@ -246,8 +246,10 @@ class SpiceTra(TrajectoryUlysses):
             for t in self.times:
                 vec_Ul = [self.data['r'][t], self.data['lat'][t], self.data['long'][t]]
                 vec_Earth = locateBody(EARTH, t, self.RF)
+                asp_phi, asp_theta =
         elif self.RF in [ECLIPJ2000, ECLIPB1950]: # ecliptic coord. sys.
-            pass
+            for t in self.times:
+                pass
         else:
             sys.exit('Reference System %s not suitable for calculating Aspect Angles. \n Please use a solar equatorial or an Earth ecliptic system.' % self.RF)
 

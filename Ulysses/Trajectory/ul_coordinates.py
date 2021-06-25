@@ -16,7 +16,6 @@ Radial-Tangential-Normal (RTN):
 """
 import numpy as np
 import math
-from Ulysses.Trajectory.etCoord import sph2cart, cart2sph
 from matplotlib import pylab
 
 
@@ -25,14 +24,13 @@ def cart2spher(xyz: np.ndarray, deg: bool = True) -> np.ndarray:
     Convert positions in cartesian coordinates xyz to spherical coordinates.
 
     Spherical coordinates (radius r, latitude theta, longitude phi), 
-    where r > 0, theta in [-90°, 90°], pi in [-180°, 180°]
+    where r > 0, theta in [-90°, 90°], phi in [-180°, 180°]
     [https://upload.wikimedia.org/wikipedia/commons/d/dc/3D_Spherical_2.svg]
 
     :param xyz: data in cartesian coordinates (1D or 2D numpy array)
     :param degrees: whether the angles theta and phi should be in degrees (True) or radians (False). Default: True
     :return: data in spherical coordinates
     """
-
     if xyz.ndim == 1:
         x, y, z = xyz
         print(x)
@@ -51,12 +49,11 @@ def cart2spher(xyz: np.ndarray, deg: bool = True) -> np.ndarray:
             np.degrees(np.arctan2(y, x)) if deg else np.arctan2(y, x)
         ]).T
 
-
 def spher2cart(vec_sph: np.ndarray, deg: bool = True):
     """
     Convert positional vector vec_sph in spherical coordinates to cartesian coordinates.
 
-    Spherical coordinates (radius r, latitude theta, longitude phi), 
+    Spherical coordinates (radius r, latitude theta, longitude phi),
     where r > 0, theta in [-90°, 90°], pi in [-180°, 180°]
     [https://upload.wikimedia.org/wikipedia/commons/d/dc/3D_Spherical_2.svg]
 
@@ -65,150 +62,198 @@ def spher2cart(vec_sph: np.ndarray, deg: bool = True):
     :return: data in cartesian coordinates
     """
     if vec_sph.ndim == 1:
-        r, theta, phi = np.array([vec_sph[0],np.radians(vec_sph[1]),np.radians(vec_sph[2])]) if deg else vec_sph
-        return np.array([r* np.sin(np.pi/2. - theta) * np.cos(phi),r* np.sin(np.pi/2. - theta) * np.sin(phi) , r* np.cos(np.pi/2. - theta)])
+        r, theta, phi = np.array([vec_sph[0], np.radians(vec_sph[1]), np.radians(vec_sph[2])]) if deg else vec_sph
+        return np.array([r * np.sin(np.pi / 2. - theta) * np.cos(phi), r * np.sin(np.pi / 2. - theta) * np.sin(phi),
+                         r * np.cos(np.pi / 2. - theta)])
     if vec_sph.ndim == 2:
         print('KK')
-        r, theta, phi = np.array([vec_sph[:,0],np.radians(vec_sph[:,1]),np.radians(vec_sph[:,2])]) if deg else vec_sph.T
-        return np.array([r* np.sin(np.pi/2. - theta) * np.cos(phi),r* np.sin(np.pi/2. - theta) * np.sin(phi) , r* np.cos(np.pi/2. - theta)]).T
+        r, theta, phi = np.array(
+            [vec_sph[:, 0], np.radians(vec_sph[:, 1]), np.radians(vec_sph[:, 2])]) if deg else vec_sph.T
+        return np.array([r * np.sin(np.pi / 2. - theta) * np.cos(phi), r * np.sin(np.pi / 2. - theta) * np.sin(phi),
+                         r * np.cos(np.pi / 2. - theta)]).T
 
-def rot_mat(axis='x',angle=0,deg=False):
-  """
-  rot_mat(axis,angle,deg)
+def rot_mat(axis ='x', angle = 0., deg: bool = True):
+    """Return the R^3 rotation matrix about angle around axis.
 
-  Returns the R^3 rotation matrix about angle around axis.
+    Example:
+    rot_mat('y',45,True)
+    >> matrix([[ 0.70710678,  0.        ,  0.70710678],
+                    [ 0.        ,  1.        ,  0.        ],
+                    [-0.70710678,  0.        ,  0.70710678]])
 
-  The value for axis can either be 'x','y','z', or an arbitrary vector. The angle argument is to be given in radians. If deg == True, the angle is to be given in degrees.
+    :param axis: str x','y','z' or an arbitrary vector (1D numpy array)
+    :param angle: angle of rotation in ° or radians
+    :param deg: if True angle is in ° (default), if False angle is given in radians
+    :return: numpy.matrix with shape (3,3): rotation matrix about angle around axis
+    """
+    if deg:
+        angle = angle * np.pi / 180.
+    xaxis = np.array([1, 0, 0])
+    yaxis = np.array([0, 1, 0])
+    zaxis = np.array([0, 0, 1])
+    axes = {'x': xaxis, 'y': yaxis, 'z': zaxis}
+    if type(axis) == type(np.ndarray(0)):
+        n = axis / math.sqrt(axis[0] ** 2. + axis[1] ** 2. + axis[2] ** 2.) #normalisation
+    elif axis in ['x', 'y', 'z']:
+        n = axes[axis]
+    else:
+        print("Axis invalid")
+        return
+    c = math.cos(angle)
+    s = math.sin(angle)
+    rot_m = np.matrix(
+        [[c + n[0] ** 2 * (1. - c), n[0] * n[1] * (1. - c) - n[2] * s, n[0] * n[2] * (1. - c) + n[1] * s],
+         [n[1] * n[0] * (1. - c) + n[2] * s, c + n[1] ** 2 * (1. - c), n[1] * n[2] * (1. - c) - n[0] * s],
+         [n[2] * n[0] * (1. - c) - n[1] * s, n[2] * n[1] * (1. - c) + n[0] * s, c + n[2] ** 2 * (1. - c)]])
+    return rot_m
 
-  Parameters
-  ----------
-  axis :  str or numpy.array with shape (3,)
-          First argument.
-  angle : float
-          Second argument.
-  deg :   bool
-          Third argument.
+def rotate(vec: np.ndarray, axis='x', angle = 0., deg: bool = True):
+    """Return the vector vec rotated by angle around axis.
 
-  Returns
-  -------
-  output : numpy.matrix with shape (3,3)
-      Returns the rotation matrix about angle around axis.
+    'Active Rotation'
+    Examples:
+    rotate(np.array([1,1,1]),'y',45,True)
+    >> np.array([ 1.37622551  1.         -0.32558154])
 
-  Examples
-  --------
-  >>> rot_mat('y',45,True)
-  matrix([[ 0.70710678,  0.        ,  0.70710678],
-        [ 0.        ,  1.        ,  0.        ],
-        [-0.70710678,  0.        ,  0.70710678]])
-  """
-  import numpy, math
-  
-  if deg:
-    angle = angle * numpy.pi / 180.
+    rotate(np.array([1,0,0]),'z',10,True)
+    >> np.array([0.98480775, 0.17364818, 0.        ])
 
-  xaxis = numpy.array([1,0,0])
-  yaxis = numpy.array([0,1,0])
-  zaxis = numpy.array([0,0,1])
+    :param vec: vector to be rotated (1D numpy array)
+    :param axis: axis around which the vector will be rotated. Can be 'x','y','z' or an arbitrary vector (1D numpy array)
+    :param angle: rotation angle
+    :param deg: True the rotation angle is given in degree (default) or False for in radians
+    :return: rotated vector as np.ndarray
+    """
+    return np.dot(rot_mat(axis, angle, deg), vec).A1
 
-  axes = {'x':xaxis,'y':yaxis,'z':zaxis}
-
-  if type(axis) == type(numpy.ndarray(0)):
-    n = axis/math.sqrt(axis[0]**2.+axis[1]**2.+axis[2]**2.)
-  elif axis in ['x','y','z']:
-    n = axes[axis]
-  else:
-    print("Axis invalid")
-    return
-  c = math.cos(angle)
-  s = math.sin(angle)
-  rot_m = numpy.matrix([[c+n[0]**2*(1.-c),n[0]*n[1]*(1.-c)-n[2]*s,n[0]*n[2]*(1.-c)+n[1]*s],[n[1]*n[0]*(1.-c)+n[2]*s,c+n[1]**2*(1.-c),n[1]*n[2]*(1.-c)-n[0]*s],[n[2]*n[0]*(1.-c)-n[1]*s,n[2]*n[1]*(1.-c)+n[0]*s,c+n[2]**2*(1.-c)]])
-  return rot_m
-
-def rotate(vec, axis = 'x', angle = 0., deg: bool = True):
-  """
-  Return the vector vec rotated by angle around axis.
-
-  'Active Rotation'
-  The value for axis can either be 'x','y','z', or an arbitrary vector. The angle argument is to be given in radians. If deg == True, the angle is to be given in degrees.
-
-  :param vec: vector to be rotated (1D numpy array)
-  :param axis: axis around which the vector will be rotated. Can be 'x','y','z' or an arbitrary vector (1D numpy array)
-  :param angle: rotation angle
-  :param deg: whether the rotation anlgle is given in degree or in radians (Default is degree)
-  :return: rotated vector
-
-  Examples
-  --------
-  >>> rotate(numpy.array([1,1,1]),'y',45,True)
-  [ 1.37622551  1.         -0.32558154]
-  """
-  return np.dot(rot_mat(axis,angle,deg),vec).A1
-
-
-
-
-
-
-
-def hg_to_hc(hg_vec: np.ndarray, degree = True, long_shift = 0.) -> np.ndarray:
-    '''
-    Transformation of a positional vector from heliographic to heliocentric coordinate system
-
+def hg_to_hc(hg_vec: np.ndarray, degree=True, long_shift = 0.) -> np.ndarray:
+    """Transformation of a positional vector from heliographic (solar equatorial) to heliocentric (ecliptic) coordinate
+    system
 
     :param hg_vec: Heliographic vector [R,lat,long] where lat in [-90°,90°], long: s. long_shift if using Ulysses data
     :param degree: True (default) when angles are given in degrees (False when in radians)
-    :param long_shift: Ulysses HG-long-data is shifted by pi (long=0 shifted by 75+180 deg against vernal equinox)
+    :param long_shift: Ulysses HG-long data is shifted by pi (long=0 shifted by 75+180 deg against vernal equinox)
     :return: vector [R,lat,long] in heliocentric coordinates
-    '''
-    hg_cart = spher2cart(np.array([hg_vec[0],hg_vec[1],hg_vec[2]-long_shift]),deg=degree)
-    #print('hg_cart:', hg_cart)
-    int1 = rotate(hg_cart,'x',7.25,deg = degree)
-    #print('int1', int1)
-    int2 = rotate(int1,'z',75.0615,deg = degree)
-    #print('int2', int2)
-    int3 = cart2spher(int2,deg = degree)
-    return np.array([int3[0],int3[1],int3[2]])
+    """
+    hg_cart = spher2cart(np.array([hg_vec[0], hg_vec[1], hg_vec[2] - long_shift]), deg=degree)
+    # print('hg_cart:', hg_cart)
+    int1 = rotate(hg_cart, 'x', 7.25, deg=degree)
+    # print('int1', int1)
+    int2 = rotate(int1, 'z', 75.0615, deg=degree)
+    # print('int2', int2)
+    int3 = cart2spher(int2, deg=degree)
+    return np.array([int3[0], int3[1], int3[2]])
 
-def hc_to_hg(hc_vec, degree=True, long_shift = 0.) -> np.ndarray:
-    '''
-    Transformation of a vector from heliocentric to heliographic coordinate system.
+def hc_to_hg(hc_vec, degree=True, long_shift=0.) -> np.ndarray:
+    """ Transformation of a vector from heliocentric to heliographic coordinate system.
 
     :param hc_vec: Heliocentric vector [R,lat,long] where lat in [-90°,90°]
     :param degree: True (default) when angles are given in degrees (False when in radians)
     :param long_shift: Ulysses HG-long-data is shifted by pi (long=0 shifted by 75+180 deg against vernal equinox)
     :return: vector [R,lat,long] in heliographic coordinates where lat increases towards +z axis to +90 deg and long according to long_shift
-    '''
-    hc_cart = spher2cart(np.array([hc_vec[0],hc_vec[1],hc_vec[2]]),deg=degree)
-    #print('hc_cart:', hc_cart)
-    int1 = rotate(hc_cart,'z',-75.0615,deg=degree)
-    #print('int1', int1)
+    """
+    hc_cart = spher2cart(np.array([hc_vec[0], hc_vec[1], hc_vec[2]]), deg=degree)
+    # print('hc_cart:', hc_cart)
+    int1 = rotate(hc_cart, 'z', -75.0615, deg=degree)
+    # print('int1', int1)
     int2 = rotate(int1, 'x', -7.25, deg=degree)
-    #print('int2', int2)
-    int3 = cart2spher(int2,deg=degree)
-    return np.array([int3[0],int3[1],int3[2]+long_shift])
+    # print('int2', int2)
+    int3 = cart2spher(int2, deg=degree)
+    return np.array([int3[0], int3[1], int3[2] + long_shift])
 
-def hg_to_rtn(r_vec, sc_vec, long_shift = 0., long_shift_r = 0.):
-    '''
-    Transform heliographic coordinates from vector r_vec to coordinates as seen from an RTN-system
+def hg_to_rtn(r_vec: np.ndarray, sc_vec: np.ndarray, long_shift = 0., long_shift_r = 0.):
+    """ Transform vector r_vec in heliographic (solar equatorial) coordinates to RTN coordinates
 
     RTN-system: centered at the Sun
 
-    :param r_vec: in spherical heliographic coordinates (r,lat,long) in deg 
-    :param sc_vec: in spherical heliographic coordinates (r,lat,long) in deg 
-    :param long_shift: Ulysses HG-long-data is shifted by pi (long=0 shifted by 75+180 deg against vernal equinox) 
-    :param long_shift_r: needs to be pi as well, when r_vec is sc_vec itself & SC is Ulysses data ('Ulysses in RTN') 
+    :param r_vec: in spherical heliographic coordinates (r,lat,long) in deg
+    :param sc_vec: in spherical heliographic coordinates (r,lat,long) in deg
+    :param long_shift: Ulysses HG-long-data is shifted by pi (long=0 shifted by 75+180 deg against vernal equinox)
+    :param long_shift_r: needs to be pi as well, when r_vec is sc_vec itself & SC is Ulysses data ('Ulysses in RTN')
     :return: cartesian coordinates in RTN-system
-    '''
-    r_vec_2conv = np.array([r_vec[0],r_vec[1],r_vec[2]-long_shift_r]) # conversion to 'classical' theta-definition
-    # print("r_vec_2conv:")
-    # print(r_vec_2conv)
-    r_vec_cart = spher2cart(r_vec_2conv, deg = True) # conversion to cartesian coordinates
+    """
+    r_vec_sph = np.array([r_vec[0], r_vec[1], r_vec[2] - long_shift_r])
+    # print("r_vec_sph:")
+    # print(r_vec_sph)
+    r_vec_cart = spher2cart(r_vec_sph, deg = True)  # conversion to cartesian coordinates
     # print("\n r_vec_cart:")
     # print(r_vec_cart)
     # principle: rotate r_vec like you had to rotate 'R' onto 'x'
-    interim_1 = rotate(r_vec_cart, 'z', -(sc_vec[2]-long_shift), deg = True)
-    R,T,N = rotate(interim_1, 'y', sc_vec[1], deg = True)
+    interim_1 = rotate(r_vec_cart, 'z', -(sc_vec[2] - long_shift), deg=True)
+    R, T, N = rotate(interim_1, 'y', sc_vec[1], deg=True)
     return np.array([R, T, N])
+
+
+
+
+
+
+
+
+
+############ above this line: definitely reviewed summer 2021. below: probably not ################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def calc_asp_angles(sc_vec: np.ndarray, earth_vec: np.ndarray, cs="hg", l_s_sc=0.):
+    '''
+    Calculates aspect angles phi and theta from position vectors of SC and earth
+    :param sc_vec: Vector from sun to SC in spherical HG (default) coordinates (specify RTN-coordinates via param cs):
+     [r,lat,long] in degree
+    :param earth_vec: Vector from sun to earth in heliographic/solar equatorial coordinates (r,lat,long)
+    :param cs: "hg" for heliographic spherical coordinates (default) or "rtn" for RTN coordinates
+    :param l_s_sc: longitude shift. Needs to be 180 for Ulysses data in HG (from Ulyses archive textfile), otherwise 0.
+    :return: asp_theta, asp_phi (PoV from SC) in °, where asp_phi increases to +90 deg towards negative T-axis ('left')
+        from viewing line SC-sun and -90 deg towards positive T-axis and asp_theta increases from zero in sun
+        direction (negative R-axis) to +90 deg towards N-axis
+    '''
+    if cs == "hg":
+        sc_vec = hg_to_rtn(sc_vec, sc_vec, long_shift=l_s_sc, long_shift_r=l_s_sc)
+        earth_vec = hg_to_rtn(earth_vec, sc_vec, long_shift=l_s_sc, long_shift_r=0.)
+        # print('\n vectors in rtn:')
+        # print(sc_vec)
+        # print(earth_vec)
+        cs = "rtn"
+    if cs == 'rtn':
+        # translation (to shift the center of the c.-s. to the SC)
+        earth_vec_trans = earth_vec - sc_vec
+        # print("\n translation: earth_vec_trans")
+        # print(earth_vec_trans)
+        # transform to spherical coordinates
+        earth_vec_sph = cart2sph(earth_vec_trans, deg=True)
+        # print('\n spherical:')
+        # print(earth_vec_sph)
+        # ToDo: evtl. noch Richtung anpassen. Momentan: positiver Asp-phi: "links" mit Blick von SC zur Sonne
+        asp_phi = earth_vec_sph[1] + 180.
+        if asp_phi > 180.:
+            asp_phi -= 360.
+        asp_theta = 90. - earth_vec_sph[2]
+        return (asp_phi, asp_theta)
+    else:
+        print('No coordinate system specification!')
+
+
+
+
+
+
 
 def calc_v(vec1, vec2, dt, R = "km"):
     '''
@@ -266,48 +311,7 @@ def calc_v(vec1, vec2, dt, R = "km"):
 #     #return array([r,long,lat])
 
 
-def calc_asp_angles(sc_vec,earth_vec,cs = "hg", l_s_sc = 180.):
-    '''
-    Calculates aspect angles phi and theta from position vectors of SC and earth
-    :param sc_vec: Vector from sun to SC in spherical HG (default) coordinates (specify RTN-coordinates via param cs): 
-     [R,Long,Lat] in degree
-    :param earth_vec: Vector from sun to earth in hg (r,long,lat)
-    :param cs: "hg" for heliographic spherical coordinates (default) or "rtn" for RTN coordinates
-    :param l_s_sc: longitude shift. Needs to be 180 for Ulysses data in HG (from Ulyses archive textfile), otherwise 0.
-    :return: asp_phi, asp_theta (PoV from SC)
-    asp_phi increases to +90 deg towards negative T-axis ('left') from viewing line SC-sun and -90 deg towards positive
-    T-axis
-    asp_theta increases from zero in sun direction (negative R-axis) to +90 deg towards N-axis
-    '''
-    if isinstance(sc_vec,list):
-        sc_vec = array(sc_vec)
-    if isinstance(earth_vec,list):
-        earth_vec = array(earth_vec)
-    # check for c.-s. of given vectors and change HG to RTN if neccessary
-    if cs == "hg":
-        earth_vec = hg_to_rtn(earth_vec,sc_vec,long_shift = l_s_sc, long_shift_r = 0.)
-        sc_vec = hg_to_rtn(sc_vec, sc_vec, long_shift = l_s_sc, long_shift_r = l_s_sc)
-        # print('\n vectors in rtn:')
-        # print(sc_vec)
-        # print(earth_vec)
-        cs = "rtn"
-    if cs == 'rtn':
-        # translation (to shift the center of the c.-s. to the SC)
-        earth_vec_trans = earth_vec -  sc_vec
-        # print("\n translation: earth_vec_trans")
-        # print(earth_vec_trans)
-        # transform to spherical coordinates
-        earth_vec_sph = cart2sph(earth_vec_trans, deg=True)
-        # print('\n spherical:')
-        # print(earth_vec_sph)
-        # ToDo: evtl. noch Richtung anpassen. Momentan: positiver Asp-phi: "links" mit Blick von SC zur Sonne
-        asp_phi = earth_vec_sph[1]+180.
-        if asp_phi > 180.:
-            asp_phi -= 360.
-        asp_theta = 90. -earth_vec_sph[2]
-        return(asp_phi,asp_theta)
-    else:
-        print('No coordinate system specification!')
+
 
 
 
