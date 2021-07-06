@@ -87,7 +87,7 @@ Farben brauchen auch noch eine dringende Überarbeitung.
 Git Passwort Dings läuft aus. Token (PAT) erstellt auf Ubuntu Zuhause. Gespeichert(?) mit \textit{git config --global credential.helper store} \\
 Plotfunktionen für Aspect Angle fertig. Als nächstes:
 \begin{itemize}
-	\item Aspect Angle für SPICE einbauen \todo{Aspect Angle SPICE}
+	\item Aspect Angle für SPICE einbauen \done{Aspect Angle SPICE}
 	\item Alle Plotfunktionen testen und alte Plots erzeugen, Farben aussuchen... \todo{Plots erstellen}
 	\item Docstrings, Kommentare für Funktionen schreiben, oben kurz die Koordinatensysteme zusammen fassen \todo{documentation}
 \end{itemize}
@@ -95,6 +95,18 @@ Plotfunktionen für Aspect Angle fertig. Als nächstes:
 
 \newday{24}{6}
 Weiter AspAngle für SPICE schreiben: Unterscheide zwischen EC und EQ. Überlegen, ob ich auch manuelle Berechnung für Archivdaten brauche.
+
+\newday{29}{6}
+Fehler in ul\_coordinates, calc\_asp\_angles() gefunden: Berechnung SC, E in RTN war vertauscht. Alle Berechnungen reviewed, aspphi getestet, jetzt noch asptheta testen. Evtl. RTN \textit{nochmal} durchdenken oder testen.
+
+\newday{5}{7}
+Aspect Angles und entsprechende Plotfunktionen laufen auf SPICE HCI, SPICE ECLIPJ2000 und Archive Data EQ. Allerdings weicht SPICE ECLIPJ2000 manchmal etwas ab. Woran liegt das? \todo{Abweichung AA}\\
+Außerdem unbedingt die Plotfunktionen verbessern:
+\begin{itemize}
+	\item Farben \todo{Farben}
+	\item Achsenbeschriftungen \todo{Achsen}
+	\item Polar Pass Marker \todo{Passes}
+\end{itemize}
 
 
 \end{document}

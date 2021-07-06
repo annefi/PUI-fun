@@ -91,7 +91,7 @@ class TrajectoryUlysses():
         data_sync[mask_t] = data[mask_at]
         return data_sync
 
-    def plot_coords_time(self, axes = None):
+    def plot_coords(self, axes = None):
         """Plot R, lat, long over time """ 
         # set up the plot:
         if axes is None:
@@ -125,7 +125,7 @@ class TrajectoryUlysses():
         #plt.subplots_adjust(hspace=None)
         return axes
 
-    def comp_coords_time(self, T, axes = None):
+    def comp_coords(self, T, axes = None):
         """Plot difference between two sets of trajectory data for R, lat, long"""
         if axes is None:
             fig, axes = plt.subplots(nrows = 3, sharex = True, sharey = True)
@@ -160,13 +160,13 @@ class TrajectoryUlysses():
             ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
         return axes
 
-    def plot_aspangles_time(self, axes = None):
+    def plot_aspangles(self, axes = None):
         """Todo"""
         # set up the plot:
         if axes is None:
             fig, axes = plt.subplots(nrows = 3, sharex = True)
         ### total ###
-        axes[0].plot(self.times, self.data['r'], linestyle = 'None', marker = 'o', ms = 2., label = self.lbl, c = self.clr, alpha= 0.5)
+        axes[0].plot(self.times, self.data['r'], linestyle = 'None', marker = 'o', ms = 2., label = self.lbl, alpha= 0.5)
         axes[0].set_xlim(self.times[0],self.times[-1])
         axes[0].set_ylabel('Asp tot in deg')
         lg = axes[0].legend(loc='upper center', ncol=3, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
@@ -174,12 +174,12 @@ class TrajectoryUlysses():
         for legend_handle in lg.legendHandles:
                 legend_handle._legmarker.set_markersize(6)
         ### ASP LAT ###
-        axes[1].plot(self.times, self.data['asp_lat'], linestyle = 'None', marker = 'o', ms = 2., c = self.clr, alpha= 0.5)
+        axes[1].plot(self.times, self.data['asp_lat'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5)
         axes[1].set_ylabel('Aspect Angle Lat. in deg.')
         axes[1].set_yticks([-90,-45,0,45,90])
         axes[1].set_ylim(-95,95)
         ### ASP LONG ###
-        axes[2].plot(self.times, self.data['asp_long'], linestyle = 'None', marker = 'o', ms = 2., c = self.clr, alpha= 0.5)
+        axes[2].plot(self.times, self.data['asp_long'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5)
         axes[2].set_ylabel('Aspect Angle Long. in deg.')
         axes[2].set_yticks([-180,-90,0,90,180])
         axes[2].set_ylim(-185,185)
@@ -194,7 +194,7 @@ class TrajectoryUlysses():
         #plt.subplots_adjust(hspace=None)
         return axes
 
-    def comp_aspangles_time(self, T, axes = None):
+    def comp_aspangles(self, T, axes = None):
         """todo"""
         if axes is None:
             fig, axes = plt.subplots(nrows = 3, sharex = True, sharey = True)
@@ -244,17 +244,24 @@ class SpiceTra(TrajectoryUlysses):
         super().get_aa_data()
         if self.RF in [HCI, HCI_B, HCI_J]: # solar equatorial coord. sys.
             for t in self.times:
-                vec_Ul = [self.data['r'][t], self.data['lat'][t], self.data['long'][t]]
+                vec_Ul = locateUlysses(t, self.RF)
                 vec_Earth = locateBody(EARTH, t, self.RF)
-                asp_phi, asp_theta =
+                asp_theta, asp_phi = calc_asp_angles(vec_Ul, vec_Earth)
+                self.data['asp_lat'].append(asp_theta)
+                self.data['asp_long'].append(asp_phi)
+                #self.data['asp_tot'].append()
         elif self.RF in [ECLIPJ2000, ECLIPB1950]: # ecliptic coord. sys.
             for t in self.times:
-                pass
+                vec_Ul = locateUlysses(t, self.RF)
+                vec_Earth = locateBody(EARTH, t, self.RF)
+                asp_theta, asp_phi = calc_asp_angles(vec_Ul, vec_Earth)
+                self.data['asp_lat'].append(asp_theta)
+                self.data['asp_long'].append(asp_phi)
         else:
             sys.exit('Reference System %s not suitable for calculating Aspect Angles. \n Please use a solar equatorial or an Earth ecliptic system.' % self.RF)
 
 
-
+ 
 
 
 class ArchiveTra(TrajectoryUlysses):

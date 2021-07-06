@@ -33,7 +33,6 @@ def cart2spher(xyz: np.ndarray, deg: bool = True) -> np.ndarray:
     """
     if xyz.ndim == 1:
         x, y, z = xyz
-        print(x)
         return np.array([
             math.sqrt(x ** 2 + y ** 2 + z ** 2),
             90 - math.degrees(math.acos(z / math.sqrt(x ** 2 + y ** 2 + z ** 2))) if deg else
@@ -176,13 +175,51 @@ def hg_to_rtn(r_vec: np.ndarray, sc_vec: np.ndarray, long_shift = 0., long_shift
     # print("r_vec_sph:")
     # print(r_vec_sph)
     r_vec_cart = spher2cart(r_vec_sph, deg = True)  # conversion to cartesian coordinates
-    # print("\n r_vec_cart:")
-    # print(r_vec_cart)
+    #print("\n r_vec_cart:")
+    #print(r_vec_cart)
     # principle: rotate r_vec like you had to rotate 'R' onto 'x'
-    interim_1 = rotate(r_vec_cart, 'z', -(sc_vec[2] - long_shift), deg=True)
+    interim_1 = rotate(r_vec_cart, 'z', - (sc_vec[2] - long_shift), deg=True)
     R, T, N = rotate(interim_1, 'y', sc_vec[1], deg=True)
     return np.array([R, T, N])
 
+def calc_asp_angles(sc_vec: np.ndarray, earth_vec: np.ndarray, cs = "hg", long_shift_sc = 0.):
+    '''
+    Calculates aspect angles phi and theta from position vectors of SC and Earth
+
+    :param sc_vec: Vector from sun to SC in spherical HG/EQ (default) coordinates (specify RTN-coordinates via param cs):
+     [r,lat,long] in °
+    :param earth_vec: Vector from Sun to Earth in HG/EQ equatorial coordinates (r,lat,long)
+    :param cs: "hg" for heliographic spherical coordinates (default) or "rtn" for RTN coordinates
+    :param long_shift_sc: longitude shift. Needs to be 180 for Ulysses data in HG (when using Ulysses archive data), otherwise 0.
+    :return: asp_theta, asp_phi (PoV from SC) in °, where asp_phi increases to +90 deg towards negative T-axis ('left')
+        from viewing line SC-sun and -90 deg towards positive T-axis and asp_theta increases from zero in sun
+        direction (negative R-axis) to +90 deg towards N-axis
+    '''
+    if cs == "hg":
+        earth_vec = hg_to_rtn(earth_vec, sc_vec, long_shift = long_shift_sc, long_shift_r = 0.)
+        sc_vec = hg_to_rtn(sc_vec, sc_vec, long_shift = long_shift_sc, long_shift_r = long_shift_sc)
+        # print('\n vectors in rtn:')
+        # print(sc_vec)
+        # print(earth_vec)
+        cs = "rtn"
+    if cs == 'rtn':
+        # translation (to shift the center of the c.-s. to the SC)
+        earth_vec_trans = earth_vec - sc_vec
+        # print("\n translation: earth_vec_trans")
+        # print(earth_vec_trans)
+        # transform to spherical coordinates
+        earth_vec_sph = cart2spher(earth_vec_trans, deg=True)
+        # print('\n spherical:')
+        # print(earth_vec_sph)
+        # ToDo: evtl. noch Richtung anpassen. Momentan: positiver Asp-phi: "links" mit Blick von SC zur Sonne
+        asp_phi = earth_vec_sph[2] + 180.
+        if asp_phi > 180.:
+            asp_phi -= 360.
+        #asp_theta = 90. - earth_vec_sph[1]
+        asp_theta = earth_vec_sph[1]
+        return (asp_theta, asp_phi)
+    else:
+        print('No coordinate system specification!')
 
 
 
@@ -212,43 +249,8 @@ def hg_to_rtn(r_vec: np.ndarray, sc_vec: np.ndarray, long_shift = 0., long_shift
 
 
 
-def calc_asp_angles(sc_vec: np.ndarray, earth_vec: np.ndarray, cs="hg", l_s_sc=0.):
-    '''
-    Calculates aspect angles phi and theta from position vectors of SC and earth
-    :param sc_vec: Vector from sun to SC in spherical HG (default) coordinates (specify RTN-coordinates via param cs):
-     [r,lat,long] in degree
-    :param earth_vec: Vector from sun to earth in heliographic/solar equatorial coordinates (r,lat,long)
-    :param cs: "hg" for heliographic spherical coordinates (default) or "rtn" for RTN coordinates
-    :param l_s_sc: longitude shift. Needs to be 180 for Ulysses data in HG (from Ulyses archive textfile), otherwise 0.
-    :return: asp_theta, asp_phi (PoV from SC) in °, where asp_phi increases to +90 deg towards negative T-axis ('left')
-        from viewing line SC-sun and -90 deg towards positive T-axis and asp_theta increases from zero in sun
-        direction (negative R-axis) to +90 deg towards N-axis
-    '''
-    if cs == "hg":
-        sc_vec = hg_to_rtn(sc_vec, sc_vec, long_shift=l_s_sc, long_shift_r=l_s_sc)
-        earth_vec = hg_to_rtn(earth_vec, sc_vec, long_shift=l_s_sc, long_shift_r=0.)
-        # print('\n vectors in rtn:')
-        # print(sc_vec)
-        # print(earth_vec)
-        cs = "rtn"
-    if cs == 'rtn':
-        # translation (to shift the center of the c.-s. to the SC)
-        earth_vec_trans = earth_vec - sc_vec
-        # print("\n translation: earth_vec_trans")
-        # print(earth_vec_trans)
-        # transform to spherical coordinates
-        earth_vec_sph = cart2sph(earth_vec_trans, deg=True)
-        # print('\n spherical:')
-        # print(earth_vec_sph)
-        # ToDo: evtl. noch Richtung anpassen. Momentan: positiver Asp-phi: "links" mit Blick von SC zur Sonne
-        asp_phi = earth_vec_sph[1] + 180.
-        if asp_phi > 180.:
-            asp_phi -= 360.
-        asp_theta = 90. - earth_vec_sph[2]
-        return (asp_phi, asp_theta)
-    else:
-        print('No coordinate system specification!')
 
+ 
 
 
 
@@ -293,23 +295,6 @@ def calc_v(vec1, vec2, dt, R = "km"):
         print(d)
     #print(vx,vy,vz)
     return vx,vy,vz
-
-
-# def calc_earth(sc_vec, long_wrt_earth, deg=True, long_shift=180.):
-#     '''
-#     Calculates position of earth in heliographic coordinates based on Ulysses trajectory data
-#     :return:
-#     '''
-#     # Longitude:
-#     long_hg = sc_vec[1]+long_shift-long_wrt_earth
-#
-#     # Latitude:
-#     long_hg_cart = sph2cart(long_hg,deg=True)
-#     diff_vec = long_hg_cart - array([1.,0.,0.,])
-#     A = '1'
-#     pass
-#     #return array([r,long,lat])
-
 
 
 
