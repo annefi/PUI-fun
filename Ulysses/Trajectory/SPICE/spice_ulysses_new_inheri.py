@@ -56,6 +56,7 @@ class TrajectoryUlysses():
             TF.append(datetime.datetime(TF[0].year+1,TF[0].month,TF[0].day,TF[0].hour))
         elif len(TF) == 0:
             TF = [datetime.datetime(1992,1,1), datetime.datetime(1993,1,1)]
+            print("time frame set automatically to %s - %s" %(TF[0],TF[1]))
         delta_t = (TF[1] - TF[0]).total_seconds() # auxiliary time delta for setting up self.times
         self.times = [TF[0] + datetime.timedelta(seconds = t) for t in range(0,int(delta_t + DT),DT)]
         self.t_southpass = [datetime.datetime(1994, 9, 13), datetime.datetime(2000, 11, 27),

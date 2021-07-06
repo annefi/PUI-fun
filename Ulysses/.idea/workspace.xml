@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9dd247a6-ae20-4e26-95db-2e204cdb342f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../MA/MA_Journal/PHD_Journal.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/MA_Journal/PHD_Journal.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../MA/MA_Journal/PHD_Journal.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/MA_Journal/PHD_Journal.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Trajectory/ul_coordinates.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/ul_coordinates.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,15 +15,16 @@
     <session id="2091974253">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="13" />
+          <entry key="project.closed" value="14" />
           <entry key="project.open.time.10" value="2" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.6" value="2" />
-          <entry key="project.open.time.7" value="3" />
+          <entry key="project.open.time.7" value="4" />
+          <entry key="project.open.time.8" value="1" />
           <entry key="project.open.time.9" value="3" />
-          <entry key="project.opened" value="13" />
+          <entry key="project.opened" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -40,29 +39,25 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="5256" />
+          <entry key="py" value="5343" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="5256" />
+          <entry key="Python" value="5343" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.18788292">
+    <splitter split-orientation="horizontal" split-proportion="0.6841389">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="496">
-                  <caret line="248" column="36" selection-start-line="248" selection-start-column="36" selection-end-line="248" selection-end-column="36" />
-                  <folding>
-                    <element signature="e#7411#9146#0" />
-                    <element signature="e#9207#11086#0" />
-                  </folding>
+                <state relative-caret-position="345">
+                  <caret line="249" column="71" lean-forward="true" selection-start-line="249" selection-start-column="71" selection-end-line="249" selection-end-column="71" />
                 </state>
               </provider>
             </entry>
@@ -136,8 +131,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Trajectory/ul_coordinates.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="405">
-                  <caret line="165" lean-forward="true" selection-start-line="165" selection-end-line="165" />
+                <state relative-caret-position="240">
+                  <caret line="154" column="32" lean-forward="true" selection-start-line="154" selection-start-column="32" selection-end-line="154" selection-end-column="32" />
                   <folding>
                     <element signature="e#522#540#0" expanded="true" />
                   </folding>
@@ -148,8 +143,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="405">
-                  <caret line="259" column="37" lean-forward="true" selection-start-line="259" selection-start-column="37" selection-end-line="259" selection-end-column="37" />
+                <state relative-caret-position="3765">
+                  <caret line="259" column="37" selection-start-line="259" selection-start-column="37" selection-end-line="259" selection-end-column="37" />
                   <folding>
                     <element signature="e#248#287#0" expanded="true" />
                   </folding>
@@ -190,8 +185,8 @@
         <option value="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new.py" />
         <option value="$PROJECT_DIR$/DataLoader/uswipha.py" />
         <option value="$PROJECT_DIR$/DataLoader/uswo.py" />
-        <option value="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" />
         <option value="$PROJECT_DIR$/Trajectory/ul_coordinates.py" />
+        <option value="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" />
       </list>
     </option>
   </component>
@@ -390,7 +385,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
+        <state relative-caret-position="60">
           <caret line="10" selection-start-line="10" selection-end-line="10" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
@@ -400,32 +395,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="259" column="37" lean-forward="true" selection-start-line="259" selection-start-column="37" selection-end-line="259" selection-end-column="37" />
+        <state relative-caret-position="3765">
+          <caret line="259" column="37" selection-start-line="259" selection-start-column="37" selection-end-line="259" selection-end-column="37" />
           <folding>
             <element signature="e#248#287#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py">
+    <entry file="file://$PROJECT_DIR$/Trajectory/ul_coordinates.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="496">
-          <caret line="248" column="36" selection-start-line="248" selection-start-column="36" selection-end-line="248" selection-end-column="36" />
+        <state relative-caret-position="240">
+          <caret line="154" column="32" lean-forward="true" selection-start-line="154" selection-start-column="32" selection-end-line="154" selection-end-column="32" />
           <folding>
-            <element signature="e#7411#9146#0" />
-            <element signature="e#9207#11086#0" />
+            <element signature="e#522#540#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/ul_coordinates.py">
+    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="165" lean-forward="true" selection-start-line="165" selection-end-line="165" />
-          <folding>
-            <element signature="e#522#540#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="345">
+          <caret line="249" column="71" lean-forward="true" selection-start-line="249" selection-start-column="71" selection-end-line="249" selection-end-column="71" />
         </state>
       </provider>
     </entry>
