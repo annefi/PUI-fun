@@ -198,15 +198,15 @@ def calc_asp_angles(sc_vec: np.ndarray, earth_vec: np.ndarray, cs = "hg", long_s
     if cs == "hg":
         earth_vec = hg_to_rtn(earth_vec, sc_vec, long_shift = long_shift_sc, long_shift_r = 0.)
         sc_vec = hg_to_rtn(sc_vec, sc_vec, long_shift = long_shift_sc, long_shift_r = long_shift_sc)
-        # print('\n vectors in rtn:')
-        # print(sc_vec)
-        # print(earth_vec)
+        print('\n vectors in rtn:')
+        print(sc_vec)
+        print(earth_vec)
         cs = "rtn"
     if cs == 'rtn':
         # translation (to shift the center of the c.-s. to the SC)
         earth_vec_trans = earth_vec - sc_vec
-        # print("\n translation: earth_vec_trans")
-        # print(earth_vec_trans)
+        print("\n translation: earth_vec_trans")
+        print(earth_vec_trans)
         # transform to spherical coordinates
         earth_vec_sph = cart2spher(earth_vec_trans, deg=True)
         # print('\n spherical:')
@@ -402,3 +402,68 @@ def plot_deviation_hg():
 
 
 
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jul 12 14:04:23 2019
+@author: artmenlope
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+
+
+
+def fill_between_3d(ax,x1,y1,z1,x2,y2,z2,mode=1,c='steelblue',alpha=0.6):
+    
+    """
+    
+    Function similar to the matplotlib.pyplot.fill_between function but 
+    for 3D plots.
+       
+    input:
+        
+        ax -> The axis where the function will plot.
+        
+        x1 -> 1D array. x coordinates of the first line.
+        y1 -> 1D array. y coordinates of the first line.
+        z1 -> 1D array. z coordinates of the first line.
+        
+        x2 -> 1D array. x coordinates of the second line.
+        y2 -> 1D array. y coordinates of the second line.
+        z2 -> 1D array. z coordinates of the second line.
+    
+    modes:
+        mode = 1 -> Fill between the lines using the shortest distance between 
+                    both. Makes a lot of single trapezoids in the diagonals 
+                    between lines and then adds them into a single collection.
+                    
+        mode = 2 -> Uses the lines as the edges of one only 3d polygon.
+           
+    Other parameters (for matplotlib): 
+        
+        c -> the color of the polygon collection.
+        alpha -> transparency of the polygon collection.
+        
+    """
+
+    if mode == 1:
+        
+        for i in range(len(x1)-1):
+            
+            verts = [(x1[i],y1[i],z1[i]), (x1[i+1],y1[i+1],z1[i+1])] + \
+                    [(x2[i+1],y2[i+1],z2[i+1]), (x2[i],y2[i],z2[i])]
+            
+            ax.add_collection3d(Poly3DCollection([verts],
+                                                 alpha=alpha,
+                                                 linewidths=0,
+                                                 color=c))
+
+    if mode == 2:
+        
+        verts = [(x1[i],y1[i],z1[i]) for i in range(len(x1))] + \
+                [(x2[i],y2[i],z2[i]) for i in range(len(x2))]
+                
+        ax.add_collection3d(Poly3DCollection([verts],alpha=alpha,color=c))
+            

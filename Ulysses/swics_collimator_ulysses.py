@@ -1,10 +1,10 @@
 from numpy import *
-from pylib.etCoord import rotate
+from etCoord import rotate
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from custom_colours import lighten_color
 import matplotlib
-from DataLoader.uswiutils import getvelocity
+#from DataLoader.uswiutils import getvelocity
 #
 # matplotlib.rcParams.update({'font.size': 12,
 #                             'xtick.major.size': 8,

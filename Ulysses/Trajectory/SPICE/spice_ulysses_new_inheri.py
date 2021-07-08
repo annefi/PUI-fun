@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import os, sys
 from etspice import *
 import spiceypy as spice
-from Ulysses.Trajectory.ul_coordinates import hc_to_hg, calc_asp_angles
+from Ulysses.Trajectory.ul_coordinates import hc_to_hg, calc_asp_angles, spher2cart, fill_between_3d
 
 # Constants:
 km_per_AU = 1.495979e8
@@ -66,8 +66,8 @@ class TrajectoryUlysses():
         if RF == None:
             RF = 'EQ'
         self.RF = RF
-        self.get_data()
-        self.get_aa_data()
+        #self.get_data()
+        #self.get_aa_data()
 
     def get_data(self):
         paras = ['r', 'lat', 'long']
@@ -91,6 +91,37 @@ class TrajectoryUlysses():
         mask_at = np.isin(alien_times,self.times)
         data_sync[mask_t] = data[mask_at]
         return data_sync
+
+    def plot_3d(self, ax = None):
+        """ blabla
+        """
+        print(ax)
+        if ax == None:
+            print('ok')
+            
+            fig = plt.figure(figsize=(10, 10))
+            ax = fig.add_subplot(111, projection='3d')
+            fig.canvas.set_window_title('Test')
+            #ax.set_title('test2')
+            ax.set_xlim(-2., 2.)
+            ax.set_ylim(-2., 2.)
+            ax.set_zlim(-2., 2.)
+            ax.set_xlabel("x")
+            ax.set_ylabel("y")
+            ax.set_zlabel("z")
+            ax.plot([0, 0], [0, 0], [0, 0], 'o', color="gold") # Sun
+            paras_Earth = ['r_earth', 'lat_earth', 'long_earth']
+            self.data = {p:[] for p in paras_Earth}
+            for t in self.times:
+                [R, lat, long] = locateBody(EARTH, t, self.RF)
+                self.data['r_earth'].append(R)
+                self.data['lat_earth'].append(lat)
+                self.data['long_earth'].append(long)
+            x,y,z = spher2cart(np.array([self.data['r_earth'],self.data['lat_earth'],self.data['long_earth']]).T).T
+            ax.plot(x,y,z, linewidth = 1)
+            #fill_between_3d(ax,[self.data['r_earth'],self.data['lat_earth'],self.data['long_earth']],[0,0,0],mode = 1, c="C0")
+            #ax.plot([x,x],[y,y],[z,z], 'o', color = 'r')
+            return ax
 
     def plot_coords(self, axes = None):
         """Plot R, lat, long over time """ 
@@ -417,3 +448,4 @@ def load_aa_data():
         p_aa_dict[key] = np.array(p_aa_dict[key])
     fin.close()
     return p_aa_dict
+
