@@ -413,6 +413,26 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
+x = np.array([-1.,0.,1.])
+y1 = np.array([0.,0.,0.])
+y2 = np.array([1.,1.,1.])
+z = np.array([0.,0.,0.])
+
+def mk_fig():
+    fig = plt.figure(figsize=(10, 10))
+    ax = fig.add_subplot(111, projection='3d')
+    fig.canvas.set_window_title('Test')
+    #ax.set_title('test2')
+    ax.set_xlim(-2., 2.)
+    ax.set_ylim(-2., 2.)
+    ax.set_zlim(-2., 2.)
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    ax.set_zlabel("z")
+    ax.scatter(x,y1,z,c='red')
+    ax.scatter(x,y2,z,c='k')
+    return ax
+
 
 
 def fill_between_3d(ax,x1,y1,z1,x2,y2,z2,mode=1,c='steelblue',alpha=0.6):

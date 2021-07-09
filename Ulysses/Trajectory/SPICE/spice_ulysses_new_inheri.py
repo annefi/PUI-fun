@@ -57,8 +57,7 @@ class TrajectoryUlysses():
         elif len(TF) == 0:
             TF = [datetime.datetime(1992,1,1), datetime.datetime(1993,1,1)]
             print("time frame set automatically to %s - %s" %(TF[0],TF[1]))
-        delta_t = (TF[1] - TF[0]).total_seconds() # auxiliary time delta for setting up self.times
-        self.times = [TF[0] + datetime.timedelta(seconds = t) for t in range(0,int(delta_t + DT),DT)]
+        self.times = timerange(TF[0],TF[1],DT)
         self.t_southpass = [datetime.datetime(1994, 9, 13), datetime.datetime(2000, 11, 27),
                             datetime.datetime(2007, 2, 7)]
         self.t_northpass = [datetime.datetime(1995, 7, 31), datetime.datetime(2001, 10, 13),
@@ -109,17 +108,22 @@ class TrajectoryUlysses():
             ax.set_xlabel("x")
             ax.set_ylabel("y")
             ax.set_zlabel("z")
-            ax.plot([0, 0], [0, 0], [0, 0], 'o', color="gold") # Sun
-            paras_Earth = ['r_earth', 'lat_earth', 'long_earth']
-            self.data = {p:[] for p in paras_Earth}
-            for t in self.times:
-                [R, lat, long] = locateBody(EARTH, t, self.RF)
-                self.data['r_earth'].append(R)
-                self.data['lat_earth'].append(lat)
-                self.data['long_earth'].append(long)
-            x,y,z = spher2cart(np.array([self.data['r_earth'],self.data['lat_earth'],self.data['long_earth']]).T).T
-            ax.plot(x,y,z, linewidth = 1)
-            #fill_between_3d(ax,[self.data['r_earth'],self.data['lat_earth'],self.data['long_earth']],[0,0,0],mode = 1, c="C0")
+            ax.scatter(0,0,0, 'o', color="gold") # Sun
+
+
+            # delta_t = (TF[1] - TF[0]).total_seconds()  # auxiliary time delta for setting up self.times
+            # self.times = [TF[0] + datetime.timedelta(seconds=t) for t in range(0, int(delta_t + DT), DT)]
+            # paras_Earth = ['r_earth', 'lat_earth', 'long_earth']
+            # self.data = {p:[] for p in paras_Earth}
+            # for t in self.times:
+            #     [R, lat, long] = locateBody(EARTH, t, self.RF)
+            #     self.data['r_earth'].append(R)
+            #     self.data['lat_earth'].append(lat)
+            #     self.data['long_earth'].append(long)
+            # x,y,z = spher2cart(np.array([self.data['r_earth'],self.data['lat_earth'],self.data['long_earth']]).T).T
+            # ax.plot(x,y,z, linewidth = 1)
+            #fill_between_3d(ax,[self.data['r_earth'],self.data['lat_earth'],self.data['long_earth']],[0,0,0],
+            # mode = 1, c="C0")
             #ax.plot([x,x],[y,y],[z,z], 'o', color = 'r')
             return ax
 
@@ -292,10 +296,6 @@ class SpiceTra(TrajectoryUlysses):
         else:
             sys.exit('Reference System %s not suitable for calculating Aspect Angles. \n Please use a solar equatorial or an Earth ecliptic system.' % self.RF)
 
-
- 
-
-
 class ArchiveTra(TrajectoryUlysses):
     def get_data(self):
         super().get_data()
@@ -449,3 +449,33 @@ def load_aa_data():
     fin.close()
     return p_aa_dict
 
+def draw_ecliptic(ax, circ = True, area = True):
+    t1 = datetime.datetime(2000,1,1)
+    t2 = datetime.datetime(2000,12,31,0,1)
+    DT = 60 * 60 * 12 # 12 hours in seconds
+    delta_t = (t2-t1).total_seconds()  # auxiliary time delta
+    times = [t1 + datetime.timedelta(seconds=t) for t in range(0, int(delta_t + DT), DT)]
+    paras_Earth = ['r_earth', 'lat_earth', 'long_earth']
+    earth_data = {p: [] for p in paras_Earth}
+    for t in times:
+        [R, lat, long] = locateBody(EARTH, t, ECLIPJ2000)
+        earth_data['r_earth'].append(R)
+        earth_data['lat_earth'].append(lat)
+        earth_data['long_earth'].append(long)
+    x, y, z = spher2cart(np.array([earth_data['r_earth'], earth_data['lat_earth'], earth_data['long_earth']]).T).T
+    if circ:
+        ax.plot(x,y,z)
+    if area:
+        fill_between_3d(ax,*[x,y,z],*np.zeros(np.shape([x,y,z])), mode = 1, c="C0")
+
+def timerange(start_t,end_t,dt):
+    """ Create a datetime.datetime range
+
+    :param start_t: datetime.datetime of first time step
+    :param end_t: datetime.datetime of last time step
+    :param dt: time increment in seconds
+    :return: numpy.array of datetime.datetimes from start_t to end_t with increment dt
+    """
+    delta_t = (end_t - start_t).total_seconds()  # auxiliary time delta
+    times = [start_t + datetime.timedelta(seconds=t) for t in range(0, int(delta_t + dt), dt)]
+    return times
