@@ -1,5 +1,5 @@
 import datetime
-from typing import List
+from typing import List, Type
 import numpy as np
 import matplotlib.pyplot as plt
 import os, sys
@@ -90,42 +90,6 @@ class TrajectoryUlysses():
         mask_at = np.isin(alien_times,self.times)
         data_sync[mask_t] = data[mask_at]
         return data_sync
-
-    def plot_3d(self, ax = None):
-        """ blabla
-        """
-        print(ax)
-        if ax == None:
-            print('ok')
-            
-            fig = plt.figure(figsize=(10, 10))
-            ax = fig.add_subplot(111, projection='3d')
-            fig.canvas.set_window_title('Test')
-            #ax.set_title('test2')
-            ax.set_xlim(-2., 2.)
-            ax.set_ylim(-2., 2.)
-            ax.set_zlim(-2., 2.)
-            ax.set_xlabel("x")
-            ax.set_ylabel("y")
-            ax.set_zlabel("z")
-            ax.scatter(0,0,0, 'o', color="gold") # Sun
-
-
-            # delta_t = (TF[1] - TF[0]).total_seconds()  # auxiliary time delta for setting up self.times
-            # self.times = [TF[0] + datetime.timedelta(seconds=t) for t in range(0, int(delta_t + DT), DT)]
-            # paras_Earth = ['r_earth', 'lat_earth', 'long_earth']
-            # self.data = {p:[] for p in paras_Earth}
-            # for t in self.times:
-            #     [R, lat, long] = locateBody(EARTH, t, self.RF)
-            #     self.data['r_earth'].append(R)
-            #     self.data['lat_earth'].append(lat)
-            #     self.data['long_earth'].append(long)
-            # x,y,z = spher2cart(np.array([self.data['r_earth'],self.data['lat_earth'],self.data['long_earth']]).T).T
-            # ax.plot(x,y,z, linewidth = 1)
-            #fill_between_3d(ax,[self.data['r_earth'],self.data['lat_earth'],self.data['long_earth']],[0,0,0],
-            # mode = 1, c="C0")
-            #ax.plot([x,x],[y,y],[z,z], 'o', color = 'r')
-            return ax
 
     def plot_coords(self, axes = None):
         """Plot R, lat, long over time """ 
@@ -449,26 +413,7 @@ def load_aa_data():
     fin.close()
     return p_aa_dict
 
-def draw_ecliptic(ax, circ = True, area = True):
-    t1 = datetime.datetime(2000,1,1)
-    t2 = datetime.datetime(2000,12,31,0,1)
-    DT = 60 * 60 * 12 # 12 hours in seconds
-    delta_t = (t2-t1).total_seconds()  # auxiliary time delta
-    times = [t1 + datetime.timedelta(seconds=t) for t in range(0, int(delta_t + DT), DT)]
-    paras_Earth = ['r_earth', 'lat_earth', 'long_earth']
-    earth_data = {p: [] for p in paras_Earth}
-    for t in times:
-        [R, lat, long] = locateBody(EARTH, t, ECLIPJ2000)
-        earth_data['r_earth'].append(R)
-        earth_data['lat_earth'].append(lat)
-        earth_data['long_earth'].append(long)
-    x, y, z = spher2cart(np.array([earth_data['r_earth'], earth_data['lat_earth'], earth_data['long_earth']]).T).T
-    if circ:
-        ax.plot(x,y,z)
-    if area:
-        fill_between_3d(ax,*[x,y,z],*np.zeros(np.shape([x,y,z])), mode = 1, c="C0")
-
-def timerange(start_t,end_t,dt):
+def timerange(start_t: datetime,end_t: datetime,dt: int):
     """ Create a datetime.datetime range
 
     :param start_t: datetime.datetime of first time step

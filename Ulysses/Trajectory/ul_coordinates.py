@@ -478,7 +478,7 @@ def fill_between_3d(ax,x1,y1,z1,x2,y2,z2,mode=1,c='steelblue',alpha=0.6):
             ax.add_collection3d(Poly3DCollection([verts],
                                                  alpha=alpha,
                                                  linewidths=0,
-                                                 color=c))
+                                                 color=c,zorder = 0))
 
     if mode == 2:
         
