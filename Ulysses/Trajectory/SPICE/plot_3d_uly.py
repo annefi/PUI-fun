@@ -7,11 +7,24 @@ from mpl_toolkits.mplot3d import proj3d
 import matplotlib
 matplotlib.rcParams['lines.linewidth'] = 0.5
 
+#import matplotlib.pyplot as plt
+#plt.rcParams['text.latex.preamble'] = r"\usepackage{wasysym} \usepackage{amsmath}"
+
+
+# import matplotlib.pyplot as plt
+# plt.rcParams.update({
+#     "text.usetex": True,
+#     "font.family": "sans-serif",
+#     "font.sans-serif": ["Helvetica"]})
+
 import matplotlib.pyplot as plt
+
+#plt.rc('text', usetex=True)
 plt.rc('text.latex', preamble=r'\usepackage{amsmath} \usepackage{wasysym}')
 
-params = {'text.latex.preamble' : [r'\usepackage{marvosym}}', r'\usepackage{amsmath}']}
-plt.rcParams.update(params)
+
+
+
 
 
 
@@ -28,7 +41,7 @@ def plot_3d(T: Type[TrajectoryUlysses], ax = None):
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.set_zlabel("z")
-    ax.scatter(0, 0, 0, 'o', color="gold")  # Sun
+    ax.scatter(0, 0, 0, 'o', s = 50, color="gold")  # Sun
     # delta_t = (TF[1] - TF[0]).total_seconds()  # auxiliary time delta for setting up self.times
     # self.times = [TF[0] + datetime.timedelta(seconds=t) for t in range(0, int(delta_t + DT), DT)]
     # paras_Earth = ['r_earth', 'lat_earth', 'long_earth']
@@ -45,6 +58,15 @@ def plot_3d(T: Type[TrajectoryUlysses], ax = None):
     # ax.plot([x,x],[y,y],[z,z], 'o', color = 'r')
     return ax
 
+
+def draw_eclip_sys(ax):
+    y_ax = Arrow3D([0,0],[0,2],[0,0], color="goldenrod", arrowstyle = '->') 
+    z_ax = Arrow3D([0,0],[0,0],[0,2], color="goldenrod", arrowstyle = '->') 
+    ax.add_artist(y_ax)
+    ax.add_artist(z_ax)
+    draw_fpoa(ax)
+    
+
 def draw_fpoa(ax):
     """draw the axis toward first point of aries
     
@@ -54,11 +76,9 @@ def draw_fpoa(ax):
     :param ax: 
     :return: 
     """
-    #ax.plot([0,2],[0,0],[0,0], color = 'r')
-    a = Arrow3D([0,2],[0,0],[0,0], mutation_scale=20, lw = 1,color="r", arrowstyle="-|>,head_length=0.3,"
-                                                                                   "head_width=0.1")
+    a = Arrow3D([0,2],[0,0],[0,0], mutation_scale=20, lw = 1,color="goldenrod", arrowstyle="-|>,head_length=0.3,head_width=0.1")
     ax.add_artist(a)
-    ax.text(2.1,0,0, r'$\text{a}$', color ='r')
+    ax.text(2.,0,0, r'$\textbf{{\LARGE \aries}}$', color ='goldenrod',fontsize = 'large', usetex = True)
 
 def draw_ecliptic(ax, circ = True, area = True):
     t1 = datetime.datetime(2000,1,1)
@@ -87,8 +107,8 @@ def draw_ecliptic(ax, circ = True, area = True):
 class Arrow3D(FancyArrowPatch):
     """ Inherited from matplotlib.patches.FancyArrowPatch
     """
-    def __init__(self, xs, ys, zs, *args, **kwargs):
-        FancyArrowPatch.__init__(self, (0,0), (0,0), *args, **kwargs)
+    def __init__(self, xs, ys, zs, mutation_scale=20, *args, **kwargs):
+        FancyArrowPatch.__init__(self, (0,0), (0,0), mutation_scale=20, *args, **kwargs)
         self._verts3d = xs, ys, zs
 
     def draw(self, renderer):
