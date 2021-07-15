@@ -65,13 +65,18 @@ def draw_eclip_sys(ax):
     ax.add_artist(y_ax)
     ax.add_artist(z_ax)
     draw_fpoa(ax)
-    
+    draw_ecliptic(ax)
+
+def draw_equ_sys(ax, epoch):
+
+    x_ax = 1
 
 def draw_fpoa(ax):
     """draw the axis toward first point of aries
     
-    This axis defines the x-axis of ecliptic coordinate systems and aligns with the x.axis in this 3d plot. Changes 
-    with time, thus needs to be given with an epoch [Todo]. Given for J2000 for now...
+    This axis defines the x-axis of ecliptic coordinate systems and always aligns with the x.axis in this 3d plot.
+    In reality it changes with time while the ascending node is relatively stable in space. The time dependent offset Delta is realised
+    when drawing the equatorial system
     
     :param ax: 
     :return: 
@@ -116,3 +121,13 @@ class Arrow3D(FancyArrowPatch):
         xs, ys, zs = proj3d.proj_transform(xs3d, ys3d, zs3d, renderer.M)
         self.set_positions((xs[0],ys[0]),(xs[1],ys[1]))
         FancyArrowPatch.draw(self, renderer)
+
+def calc_delta(epoch):
+    # longitude of the ascending node of the solar equator on the ecliptic: Delta = 75°.76+1°.397T0 with T0 Julian
+    # centuries from J2000
+    jc_per_days = 36525.
+    dt_in_days = epoch - datetime.datetime(2000,1,1,12)
+    T0 = dt_in_days.total_seconds()/ (24. * 60. * 60.) / jc_per_days
+    print(T0)
+    ang_ascnode = 75.76 + 1.397 * T0
+    return ang_ascnode
