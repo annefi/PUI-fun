@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 import os, sys
 from etspice import *
 import spiceypy as spice
-from Ulysses.Trajectory.ul_coordinates import hc_to_hg, calc_asp_angles, spher2cart, fill_between_3d
+from Ulysses.Trajectory.ul_coordinates import hc_to_hg, hg_to_hc, calc_asp_angles, spher2cart, cart2spher, \
+    fill_between_3d
 
 # Constants:
 km_per_AU = 1.495979e8

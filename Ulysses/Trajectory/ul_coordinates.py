@@ -125,35 +125,39 @@ def rotate(vec: np.ndarray, axis='x', angle = 0., deg: bool = True):
     """
     return np.dot(rot_mat(axis, angle, deg), vec).A1
 
-def hg_to_hc(hg_vec: np.ndarray, degree=True, long_shift = 0.) -> np.ndarray:
+def hg_to_hc(hg_vec: np.ndarray, degree=True, long_shift = 0., ang_ascnode = 75.0615) -> np.ndarray:
     """Transformation of a positional vector from heliographic (solar equatorial) to heliocentric (ecliptic) coordinate
-    system
+    system (passive transformation)
 
     :param hg_vec: Heliographic vector [R,lat,long] where lat in [-90°,90°], long: s. long_shift if using Ulysses data
     :param degree: True (default) when angles are given in degrees (False when in radians)
     :param long_shift: Ulysses HG-long data is shifted by pi (long=0 shifted by 75+180 deg against vernal equinox)
+    :param ang_ascnode: offset between hg(eq) system's and hc(ecl) system's x-axes (epoch dependent). Default value is
+    for BC1950
     :return: vector [R,lat,long] in heliocentric coordinates
     """
     hg_cart = spher2cart(np.array([hg_vec[0], hg_vec[1], hg_vec[2] - long_shift]), deg=degree)
     # print('hg_cart:', hg_cart)
     int1 = rotate(hg_cart, 'x', 7.25, deg=degree)
     # print('int1', int1)
-    int2 = rotate(int1, 'z', 75.0615, deg=degree)
+    int2 = rotate(int1, 'z', ang_ascnode, deg=degree)
     # print('int2', int2)
     int3 = cart2spher(int2, deg=degree)
     return np.array([int3[0], int3[1], int3[2]])
 
-def hc_to_hg(hc_vec, degree=True, long_shift=0.) -> np.ndarray:
-    """ Transformation of a vector from heliocentric to heliographic coordinate system.
+def hc_to_hg(hc_vec, degree=True, long_shift=0., ang_ascnode = 75.0615) -> np.ndarray:
+    """ Transformation of a vector from heliocentric to heliographic coordinate system. (passive transformation)
 
     :param hc_vec: Heliocentric vector [R,lat,long] where lat in [-90°,90°]
     :param degree: True (default) when angles are given in degrees (False when in radians)
     :param long_shift: Ulysses HG-long-data is shifted by pi (long=0 shifted by 75+180 deg against vernal equinox)
+    :param ang_ascnode: offset between hg(eq) system's and hc(ecl) system's x-axes (epoch dependent). Default value is
+    for BC1950
     :return: vector [R,lat,long] in heliographic coordinates where lat increases towards +z axis to +90 deg and long according to long_shift
     """
     hc_cart = spher2cart(np.array([hc_vec[0], hc_vec[1], hc_vec[2]]), deg=degree)
     # print('hc_cart:', hc_cart)
-    int1 = rotate(hc_cart, 'z', -75.0615, deg=degree)
+    int1 = rotate(hc_cart, 'z', -ang_ascnode, deg=degree)
     # print('int1', int1)
     int2 = rotate(int1, 'x', -7.25, deg=degree)
     # print('int2', int2)
