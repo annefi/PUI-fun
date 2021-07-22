@@ -43,6 +43,26 @@ class Plot_3d():
         # ax.plot([x,x],[y,y],[z,z], 'o', color = 'r')
         self.ax = ax
 
+    def plot_point(self, coords: np.ndarray, cs, epoch):
+        """
+
+        :param coords: [r,lat,long] of the (trajectory) point in °
+        :param cs: specifies reference system in which coords are given [HCI, ECLIPJ2000]
+        :param epoch:
+        :return:
+        """
+        epoch = datetime.datetime(2000, 1, 1, 12)
+        if coords.ndim == 1:
+            if cs == HCI:
+                xyz = self.transform2eq(coords, epoch, cart = False)
+            else:
+                pass
+            self.ax.scatter(*xyz, c = 'red')
+        if coords.ndim == 2:
+            if cs == HCI:
+                xyz = self.transform2eq(coords, epoch, cart = False)
+
+
     def draw_eclip_sys(self):
 
         y_ax = Arrow3D(np.array([0,1.5,0]), color="C0", arrowstyle = '->')
@@ -66,10 +86,15 @@ class Plot_3d():
                                                                                                     usetex=True)
         self.draw_solar_equator(epoch, circ = True, area = False)
 
-    def transform2eq(self, vec: np.array, epoch, cart = True):
+    def transform2eq(self, vec: np.ndarray, epoch, cart = True):
         if cart:
             vec = cart2spher(vec)
-        vec_eq = hg_to_hc(vec, ang_ascnode = calc_delta(epoch)) # strange but true: active transformation
+        if vec.ndim == 1:
+            vec_eq = hg_to_hc(vec, ang_ascnode = calc_delta(epoch)) # strange but true: active transformation
+        if vec.ndim == 2:
+            vec_eq = []
+            for v in vec:
+                pass
         return spher2cart(vec_eq)
 
     def draw_fpoa(self):

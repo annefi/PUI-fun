@@ -56,7 +56,8 @@ def spher2cart(vec_sph: np.ndarray, deg: bool = True):
     where r > 0, theta in [-90°, 90°], pi in [-180°, 180°]
     [https://upload.wikimedia.org/wikipedia/commons/d/dc/3D_Spherical_2.svg]
 
-    :param vec_sph: data in spherical coordinates (1D or 2D numpy array)
+    :param vec_sph: data in spherical coordinates (1D or 2D numpy array; if 2D in a (n,3) shape: [[r1,lat1,long1],[r2,
+    lat2,long2],...[r_n,lat_n,long_n]])
     :param deg: whether the angles theta and phi should be in degrees (True) or radians (False). Default: True
     :return: data in cartesian coordinates
     """
@@ -65,7 +66,6 @@ def spher2cart(vec_sph: np.ndarray, deg: bool = True):
         return np.array([r * np.sin(np.pi / 2. - theta) * np.cos(phi), r * np.sin(np.pi / 2. - theta) * np.sin(phi),
                          r * np.cos(np.pi / 2. - theta)])
     if vec_sph.ndim == 2:
-        print('KK')
         r, theta, phi = np.array(
             [vec_sph[:, 0], np.radians(vec_sph[:, 1]), np.radians(vec_sph[:, 2])]) if deg else vec_sph.T
         return np.array([r * np.sin(np.pi / 2. - theta) * np.cos(phi), r * np.sin(np.pi / 2. - theta) * np.sin(phi),
@@ -136,7 +136,7 @@ def hg_to_hc(hg_vec: np.ndarray, degree=True, long_shift = 0., ang_ascnode = 75.
     for BC1950
     :return: vector [R,lat,long] in heliocentric coordinates
     """
-    hg_cart = spher2cart(np.array([hg_vec[0], hg_vec[1], hg_vec[2] - long_shift]), deg=degree)
+    hg_cart = spher2cart(np.array([hg_vec[0], hg_vec[1], hg_vec[2] - long_shift]), deg = degree)
     # print('hg_cart:', hg_cart)
     int1 = rotate(hg_cart, 'x', 7.25, deg=degree)
     # print('int1', int1)
