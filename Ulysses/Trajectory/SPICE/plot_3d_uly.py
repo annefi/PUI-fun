@@ -55,20 +55,25 @@ class Plot_3d():
         if coords.ndim == 1:
             if cs == HCI:
                 xyz = self.transform2eq(coords, epoch, cart = False)
-            else:
-                pass
+            elif cs == ECLIPJ2000:
+                xyz = spher2cart(coords)
             self.ax.scatter(*xyz, c = 'red')
         if coords.ndim == 2:
             if cs == HCI:
                 xyz = self.transform2eq(coords, epoch, cart = False)
+            elif cs == ECLIPJ2000:
+                xyz = spher2cart(coords)
+            self.ax.scatter(*xyz.T, c='red')
 
 
     def draw_eclip_sys(self):
-
-        y_ax = Arrow3D(np.array([0,1.5,0]), color="C0", arrowstyle = '->')
-        z_ax = Arrow3D(np.array([0,0,1.5]), color="C0", arrowstyle = '->')
-        self.ax.add_artist(y_ax)
-        self.ax.add_artist(z_ax)
+        y_ax = self.ax.plot(*np.array([[0,1.,0],[0,0,0]]).T, c="steelblue", linestyle = '--', linewidth = 1.2,
+                            alpha = 0.8)
+        z_ax = self.ax.plot(*np.array([[0, 0, 1.], [0, 0, 0]]).T,c="steelblue", linestyle = '--', linewidth = 1.2)
+        #y_ax = Arrow3D(np.array([0,1.,0]), color="C0", arrowstyle = '->', linestyle = '--')
+        #z_ax = Arrow3D(np.array([0,0,1.]), color="C0", arrowstyle = '->', linestyle = ':')
+        #self.ax.add_artist(y_ax)
+        #self.ax.add_artist(z_ax)
         self.draw_fpoa()
         self.draw_ecliptic()
 
@@ -94,8 +99,8 @@ class Plot_3d():
         if vec.ndim == 2:
             vec_eq = []
             for v in vec:
-                pass
-        return spher2cart(vec_eq)
+                vec_eq.append(hg_to_hc(v, ang_ascnode = calc_delta(epoch)))
+        return spher2cart(np.array(vec_eq))
 
     def draw_fpoa(self):
         """draw the axis toward first point of aries
@@ -147,6 +152,13 @@ class Plot_3d():
         if area:
             fill_between_3d(self.ax,*[x,y,z],*np.zeros(np.shape([x,y,z])), mode = 1, c="C1", alpha = 0.05)
 
+    def draw_axis(self, end: np.ndarray, main: bool = False):
+        if main:
+            pass
+        else:
+            self.ax.plot()
+
+
 class Arrow3D(FancyArrowPatch):
     """ Inherited from matplotlib.patches.FancyArrowPatch
     """
@@ -163,6 +175,9 @@ class Arrow3D(FancyArrowPatch):
         xs, ys, zs = proj3d.proj_transform(xs3d, ys3d, zs3d, renderer.M)
         self.set_positions((xs[0],ys[0]),(xs[1],ys[1]))
         FancyArrowPatch.draw(self, renderer)
+
+
+
 
 def calc_delta(epoch):
     # longitude of the ascending node of the solar equator on the ecliptic: Delta = 75°.76+1°.397T0 with T0 Julian
