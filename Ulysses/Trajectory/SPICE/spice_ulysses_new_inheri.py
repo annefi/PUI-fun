@@ -7,6 +7,7 @@ from etspice import *
 import spiceypy as spice
 from Ulysses.Trajectory.ul_coordinates import hc_to_hg, hg_to_hc, calc_asp_angles, spher2cart, cart2spher, \
     fill_between_3d
+from Ulysses.Trajectory.SPICE.plot_3d_uly import Plot_3d
 
 # Constants:
 km_per_AU = 1.495979e8
@@ -66,8 +67,8 @@ class TrajectoryUlysses():
         if RF == None:
             RF = 'EQ'
         self.RF = RF
-        #self.get_data()
-        #self.get_aa_data()
+        self.get_data()
+        self.get_aa_data()
 
     def get_data(self):
         paras = ['r', 'lat', 'long']
@@ -229,6 +230,15 @@ class TrajectoryUlysses():
             ax.grid(True)
             ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
         return axes
+
+    def plot_3d(self):
+        """
+        Todo
+        :return:
+        """
+        p = Plot_3d()
+        #p.point_point()
+
 
 class SpiceTra(TrajectoryUlysses):
     def get_data(self):

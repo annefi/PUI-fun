@@ -11,8 +11,6 @@ import matplotlib.pyplot as plt
 
 plt.rc('text.latex', preamble=r'\usepackage{amsmath} \usepackage{wasysym}')
 
-
-
 class Plot_3d():
     """ blabla
     """
