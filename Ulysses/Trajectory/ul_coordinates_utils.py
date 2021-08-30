@@ -17,6 +17,7 @@ Radial-Tangential-Normal (RTN):
 import numpy as np
 import math
 from matplotlib import pylab
+import datetime
 
 
 def cart2spher(xyz: np.ndarray, deg: bool = True) -> np.ndarray:
@@ -227,8 +228,17 @@ def calc_asp_angles(sc_vec: np.ndarray, earth_vec: np.ndarray, cs = "hg", long_s
 
 
 
+def timerange(start_t: datetime,end_t: datetime,dt: int):
+    """ Create a datetime.datetime range
 
-
+    :param start_t: datetime.datetime of first time step
+    :param end_t: datetime.datetime of last time step
+    :param dt: time increment in seconds
+    :return: numpy.array of datetime.datetimes from start_t to end_t with increment dt
+    """
+    delta_t = (end_t - start_t).total_seconds()  # auxiliary time delta
+    times = [start_t + datetime.timedelta(seconds=t) for t in range(0, int(delta_t + dt), dt)]
+    return times
 
 
 

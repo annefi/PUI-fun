@@ -155,6 +155,8 @@ transform2eq in ndarray-kompatible Form umschreiben, dann das ganze auf die scat
 \newday{5}{8}
 Keine Ahnung, wo genau ich dran war. Ich glaube, dass die scatter-Funktion (plot\_point()) funktioniert. Dann kann ich jetzt eine Funktion in TrajectoryUlysses schreiben...?\\ Problem: circular import fixen beim Aufruf von plot\_3d in spice\_ulysses. Was brauche ich aus spice\_ulysses in plot\_3d? \todo{circular import fixen}
 
+\newday{30}{8}
+Circular Import versucht zu fixen. Problem: spice\_ulysses.py importiert plot\_3d-Klasse, um dann Datensätze darzustellen. Aber in spice\_ulysses.py sitzen die ganzen SPICE-Funktionen, die ich brauche, um z.B. den Äquator zu zeichnen. Plan: Funktionen, die in beiden gebraucht werden (und zugehörige) in a) ul\_coordinates\_utils oder b) in ein neues SPICE-Loader-Skript umschreiben
 %
 %
 %
