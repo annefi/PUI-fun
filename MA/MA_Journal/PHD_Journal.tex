@@ -153,10 +153,14 @@ Testen, ob ich Sonnenrotationsachse auch manuell einzeichnen kann (momentan alle
 transform2eq in ndarray-kompatible Form umschreiben, dann das ganze auf die scatter-Plot-Funktion anwenden, dann mal gucken, was ich eigentlich direkt in der init brauche (Funktion in traj\_uly schreiben)
 
 \newday{5}{8}
-Keine Ahnung, wo genau ich dran war. Ich glaube, dass die scatter-Funktion (plot\_point()) funktioniert. Dann kann ich jetzt eine Funktion in TrajectoryUlysses schreiben...?\\ Problem: circular import fixen beim Aufruf von plot\_3d in spice\_ulysses. Was brauche ich aus spice\_ulysses in plot\_3d? \todo{circular import fixen}
+Keine Ahnung, wo genau ich dran war. Ich glaube, dass die scatter-Funktion (plot\_point()) funktioniert. Dann kann ich jetzt eine Funktion in TrajectoryUlysses schreiben...?\\ Problem: circular import fixen beim Aufruf von plot\_3d in spice\_ulysses. Was brauche ich aus spice\_ulysses in plot\_3d? \done{circular import fixen}
 
 \newday{30}{8}
 Circular Import versucht zu fixen. Problem: spice\_ulysses.py importiert plot\_3d-Klasse, um dann Datensätze darzustellen. Aber in spice\_ulysses.py sitzen die ganzen SPICE-Funktionen, die ich brauche, um z.B. den Äquator zu zeichnen. Plan: Funktionen, die in beiden gebraucht werden (und zugehörige) in a) ul\_coordinates\_utils oder b) in ein neues SPICE-Loader-Skript umschreiben
+
+\newday{31}{8}
+Circular Import gefixt. Neues skript \textit{spice\_loader} beinhaltet jetzt nur das Laden der Kernels. Evtl. später noch die Positions-Funktionen hierhin? \\[0.5cm´]
+Weiter das Plot-Skript dokumentieren, so einrichten, dass man mal easy(!) einen Punkt plotten kann ohne Epoche etc. angeben zu müssen (why??). Z.B. In- und Output der transform2eq-Methode...
 %
 %
 %

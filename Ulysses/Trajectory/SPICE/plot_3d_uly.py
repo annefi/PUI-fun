@@ -1,10 +1,7 @@
-#from spice_ulysses_new_inheri import *
 import numpy as np
 import datetime
 from Ulysses.Trajectory.ul_coordinates_utils import *
-from etspice import *
-#import spiceypy as spice
-ECLIPB1950 = ReferenceFrame([kernels.planets], 'ECLIPB1950')
+from Ulysses.Trajectory.spice_loader import *
 
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.patches import FancyArrowPatch
@@ -17,29 +14,22 @@ import matplotlib.pyplot as plt
 
 plt.rc('text.latex', preamble=r'\usepackage{amsmath} \usepackage{wasysym}')
 
-# temporär:
-def locateBody(body, date, RF):
-    '''
-    Return a body's position after SPICE data
+# Constants:
+km_per_AU = 1.495979e8
 
-    :param body: body object, e.g. EARTH
-    :param date: datetime object
-    :param RF: etspice.ReferenceFrame
-    :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
-    '''
-    xyz = body.position(time = date, relative_to = SUN, reference_frame = RF)
-    r, theta, phi = cart2spher(xyz, deg = True)
-    return(np.array([r/km_per_AU,theta,phi]))
-
-
-t = datetime.datetime(2000,1,1,1,1)
-[R, lat, long] = locateBody(EARTH, t, ECLIPB1950)
-print(R,lat,long)
 
 class Plot_3d():
     """ blabla
     """
     def __init__(self, epoch = None):
+        """
+        Sets up the 3D Plot
+
+        :param epoch: Sets the epoch for which the equatorial system is drawn (as the First Point of Aries slowly
+        changes its location the relative offset between equatorial system and Earth ecliptic system changes,
+        too. Note, that it's actually the ecliptic system that changes but that is is chosen to be the fixed system
+        aligning with the xyz-axes in the plot)
+        """
         self.epoch = datetime.datetime(2000,1,1,12) if epoch == None else epoch
         fig = plt.figure(figsize=(12, 10))
         ax = fig.add_subplot(111, projection='3d')
@@ -68,7 +58,7 @@ class Plot_3d():
         # mode = 1, c="C0")
         # ax.plot([x,x],[y,y],[z,z], 'o', color = 'r')
         self.ax = ax
-        #self.draw_ecliptic()
+        self.draw_ecliptic()
         self.draw_solar_equator()
 
     def plot_point(self, coords: np.ndarray, cs, epoch):
@@ -120,6 +110,13 @@ class Plot_3d():
         self.draw_solar_equator(epoch, circ = True, area = False)
 
     def transform2eq(self, vec: np.ndarray, epoch, cart = True):
+        """ Active transformation of a vector from the "basic" ecliptic system to the solar equatorial system
+
+        :param vec:
+        :param epoch:
+        :param cart: vec should be given in cartesian coordinates if True
+        :return:
+        """
         if cart:
             vec = cart2spher(vec)
         if vec.ndim == 1:
@@ -131,7 +128,7 @@ class Plot_3d():
         return spher2cart(np.array(vec_eq))
 
     def draw_fpoa(self):
-        """draw the axis toward first point of aries
+        """ Draw the axis toward first point of aries
 
         This axis defines the x-axis of ecliptic coordinate systems and always aligns with the x.axis in this 3d plot.
         In reality it changes with time while the ascending node is relatively stable in space. The time dependent offset Delta is realised
@@ -145,51 +142,47 @@ class Plot_3d():
         self.ax.add_artist(self.fpoa)
         self.ax.text(1.5,0,0, r'$\textbf{{\LARGE \aries}}$', color ='C0',fontsize = 'large', usetex = True)
 
-    def draw_ecliptic_new(self, circ = True, area = True):
+
+    def draw_ecliptic(self, circ = True, area = True):
+        """ Draws the Earth ecliptic plane as an elliptical slice into the plot.
+
+        The ecliptic plane aligns with the x-y plane as the ecliptic reference frame is the basic frame for the plot
+
+        :param circ: Draws a line for Earth's position in 2000 if True
+        :param area: Fills the area within the line if True
+        """
         t1 = datetime.datetime(2000,1,1)
         t2 = datetime.datetime(2000,12,31)
         DT = 60 * 60 * 24# 12 hours in seconds
         times = timerange(t1,t2,DT)
-        paras_Earth = ['r_earth', 'lat_earth', 'long_earth']
+        paras_Earth = ['x_earth', 'y_earth', 'z_earth']
         earth_data = {p: [] for p in paras_Earth}
         for t in times:
-            earth_xyz = EARTH.position(time = t, relative_to = SUN, reference_frame = ECLIPJ2000)
-            [R, lat, long] = cart2spher(earth_xyz)
-            earth_data['r_earth'].append(R)
-            earth_data['lat_earth'].append(lat)
-            earth_data['long_earth'].append(long)
-        earth_data['r_earth'].append(earth_data['r_earth'][0])
-        earth_data['lat_earth'].append(earth_data['lat_earth'][0])
-        earth_data['long_earth'].append(earth_data['long_earth'][0])
-        x, y, z = spher2cart(np.array([earth_data['r_earth'], earth_data['lat_earth'], earth_data['long_earth']]).T).T
+            [x,y,z] = EARTH.position(time = t, relative_to = SUN, reference_frame = ECLIPJ2000)
+            earth_data['x_earth'].append(x/km_per_AU)
+            earth_data['y_earth'].append(y/km_per_AU)
+            earth_data['z_earth'].append(z/km_per_AU)
+        earth_data['x_earth'].append(earth_data['x_earth'][0])
+        earth_data['y_earth'].append(earth_data['y_earth'][0])
+        earth_data['z_earth'].append(earth_data['z_earth'][0])
         if circ:
-            self.ax.plot(x,y,z)
+            self.ax.plot(earth_data['x_earth'], earth_data['y_earth'], earth_data['z_earth'])
         if area:
-            fill_between_3d(self.ax,*[x,y,z],*np.zeros(np.shape([x,y,z])), mode = 1, c="C0", alpha = 0.05)
-
-    def draw_ecliptic_old(self, circ = True, area = True):
-            t1 = datetime.datetime(2000,1,1)
-            t2 = datetime.datetime(2000,12,31)
-            DT = 60 * 60 * 24# 12 hours in seconds
-            times = timerange(t1,t2,DT)
-            paras_Earth = ['r_earth', 'lat_earth', 'long_earth']
-            earth_data = {p: [] for p in paras_Earth}
-            for t in times:
-                [R, lat, long] = locateBody(EARTH, t, ECLIPJ2000)
-                earth_data['r_earth'].append(R)
-                earth_data['lat_earth'].append(lat)
-                earth_data['long_earth'].append(long)
-            earth_data['r_earth'].append(earth_data['r_earth'][0])
-            earth_data['lat_earth'].append(earth_data['lat_earth'][0])
-            earth_data['long_earth'].append(earth_data['long_earth'][0])
-            x, y, z = spher2cart(np.array([earth_data['r_earth'], earth_data['lat_earth'], earth_data['long_earth']]).T).T
-            if circ:
-                self.ax.plot(x,y,z)
-            if area:
-                fill_between_3d(self.ax,*[x,y,z],*np.zeros(np.shape([x,y,z])), mode = 1, c="C0", alpha = 0.05)
+            fill_between_3d(self.ax,*[earth_data['x_earth'],earth_data['y_earth'],earth_data['z_earth']],
+                            *np.zeros(np.shape([earth_data['x_earth'],earth_data['y_earth'],earth_data['z_earth']])),
+                            mode = 1, c="C0",
+                            alpha = 0.05)
+        self.draw_fpoa()
 
 
     def draw_solar_equator(self, circ = True, area = True):
+        """ Draws the solar equator as a slice into the plot
+
+        The solar equator is tilted by 7.25° against the Earth ecliptic plane
+
+        :param circ: Draws a circle @1AU in the solar equatorial plane if True
+        :param area: Fills the area within the circle if True
+        """
         x = []
         y = []
         z = []

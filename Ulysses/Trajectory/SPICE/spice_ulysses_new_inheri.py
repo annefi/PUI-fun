@@ -1,45 +1,14 @@
 import datetime
-from typing import List, Type
+from typing import List
 import numpy as np
 import matplotlib.pyplot as plt
-import os, sys
-from etspice import *
-import spiceypy as spice
-from Ulysses.Trajectory.ul_coordinates_utils import hc_to_hg, hg_to_hc, calc_asp_angles, spher2cart, cart2spher, \
-    fill_between_3d, timerange
+import sys
+from Ulysses.Trajectory.spice_loader import *
+from Ulysses.Trajectory.ul_coordinates_utils import *
 from Ulysses.Trajectory.SPICE.plot_3d_uly import Plot_3d
 
 # Constants:
 km_per_AU = 1.495979e8
-
-
-#####################
-### SPICE kernels ###
-#####################
-
-# J2000, ECLIPJ2000 are already loaded
-
-# SPICE built-in frames:
-B1950 = ReferenceFrame([kernels.planets], 'B1950')
-ECLIPB1950 = ReferenceFrame([kernels.planets], 'ECLIPB1950')
-
-# STEREO Kernel "heliospheric... .tf"
-HCI = ReferenceFrame([kernels.heliospheric_frames],'HCI')
-
-# DIY kernels:
-my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/data/test_tf.tf') # load additional rf kernel
-my_kernel.load()
-HCI_B = ReferenceFrame([my_kernel],'HCI_B1950')
-HCI_J = ReferenceFrame([my_kernel],'HCI_J2000') # same as HCI but without freeze_epoch (tiiiiny deviation in rotational matrix)
-
-
-if os.path.exists("../fusessh/data/projects/spice"):
-    os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-elif os.path.exists("/data/projects/spice"):
-    os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
-else:
-    sys.exit('SPICE_DATA_DIR could not be found.\nProbably working from home and not having SSH-ed to asterix?')
-
 
 class TrajectoryUlysses():
     """
@@ -68,7 +37,7 @@ class TrajectoryUlysses():
             RF = 'EQ'
         self.RF = RF
         self.get_data()
-        self.get_aa_data()
+        #self.get_aa_data()
 
     def get_data(self):
         paras = ['r', 'lat', 'long']
@@ -386,6 +355,26 @@ def locateUlysses(date, RF):
         positions = []
         for t in xyz:
             r, theta, phi = utils.cart2spherical(t, degrees = True)
+            positions.append(np.array([r/km_per_AU,theta,phi]))
+        return positions
+
+def locateUlyssesnew(date, RF):
+    '''
+    Return Ulysses' position after SPICE data
+
+    :param date: datetime object
+    :param RF: etspice.ReferenceFrame
+    :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
+    '''
+    xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF) # in km
+    if len(xyz) == 3:
+        r, theta, phi = cart2spher(xyz, deg = True)
+        #print(RF.name , np.array([r/1.496e8,theta,phi]))
+        return np.array([r/km_per_AU,theta,phi])
+    elif len(xyz) > 3:
+        positions = []
+        for t in xyz:
+            r, theta, phi = cart2spher(t, deg = True)
             positions.append(np.array([r/km_per_AU,theta,phi]))
         return positions
 
