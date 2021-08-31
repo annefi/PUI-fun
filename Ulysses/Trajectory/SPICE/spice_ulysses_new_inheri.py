@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 import os, sys
 from etspice import *
 import spiceypy as spice
-from Ulysses.Trajectory.ul_coordinates import hc_to_hg, hg_to_hc, calc_asp_angles, spher2cart, cart2spher, \
-    fill_between_3d
+from Ulysses.Trajectory.ul_coordinates_utils import hc_to_hg, hg_to_hc, calc_asp_angles, spher2cart, cart2spher, \
+    fill_between_3d, timerange
 from Ulysses.Trajectory.SPICE.plot_3d_uly import Plot_3d
 
 # Constants:
@@ -399,7 +399,7 @@ def locateBody(body, date, RF):
     :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
     '''
     xyz = body.position(time = date, relative_to = SUN, reference_frame = RF)
-    r, theta, phi = utils.cart2spherical(xyz, degrees = True)
+    r, theta, phi = cart2spher(xyz, deg = True)
     return(np.array([r/km_per_AU,theta,phi]))
 
 def load_aa_data():
@@ -424,14 +424,3 @@ def load_aa_data():
     fin.close()
     return p_aa_dict
 
-def timerange(start_t: datetime,end_t: datetime,dt: int):
-    """ Create a datetime.datetime range
-
-    :param start_t: datetime.datetime of first time step
-    :param end_t: datetime.datetime of last time step
-    :param dt: time increment in seconds
-    :return: numpy.array of datetime.datetimes from start_t to end_t with increment dt
-    """
-    delta_t = (end_t - start_t).total_seconds()  # auxiliary time delta
-    times = [start_t + datetime.timedelta(seconds=t) for t in range(0, int(delta_t + dt), dt)]
-    return times
