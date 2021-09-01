@@ -117,7 +117,7 @@ Ekliptik ausmalen: Rausfinden, wo der Endpunkt sein muss oder das einfach geomet
 Plot aus der Klasse rausnehmen? (Evtl. will ich verschiedene RF darstellen -> dann ists blöd als Klassenmethode?!) Was will ich damit überhaupt?
 \begin{itemize}
 	\item Widderpunkt Achse \done{Widderpunkt}
-	\item kart. ekliptisches System Achsen \todo{ecl. Sys.}
+	\item kart. ekliptisches System Achsen \done{ecl. Sys.}
 	\item Sonne Rotationsachse \done{Sonnenrot.achse}
 	\item kart. equatoriales System Achsen \done{equ. Sys.}
 	\item SC-Position \todo{SC pos.}
@@ -138,13 +138,13 @@ aktuellen Problem: Widderzeichen in Matplotlib bekommen: $\textbf{{\LARGE \aries
 
 \newday{19}{7}
 3D-Plot eq. Koordinatensystem. Dafür ganzes Skript in Klasse umgebaut.\\
-Erdrotationsachse einzeichnen\todo{Erdrotationsachse}\\
+Erd(meinet ich Sonnen-?)rotationsachse einzeichnen\todo{Erdrotationsachse}\\
 Habe eq. Koordinatensystem gezeichnet, zumindest x- und y-Achse. Es fehlen z-Achse und die Ebene. Vermutlich ist es schlauer, eine Methode zu schreiben, die alles direkt transformiert?
 
 \newday{20}{7}
 $\omega$ $\boldsymbol{\omega}$ \\
 Fertig mit den Koordinatensystemen! \\
-Alles ordentlich dokumentieren \todo{doku}\\
+Alles ordentlich dokumentieren \done{doku}\\
 Ulysses einzeichnen... erstmal Punkt, dann verbinden mit Traj-Klasse \todo{ulysses}\\
 Evtl. Koordinatenachsen dezenter/kürzer für bessere Übersichtlichkeit \todo{achsen}
 Testen, ob ich Sonnenrotationsachse auch manuell einzeichnen kann (momentan alles über Rotation des HC-Systems. Müsste ja eigentlich dasselbe sein...) \todo{Test Sonnenachse}
@@ -159,7 +159,7 @@ Keine Ahnung, wo genau ich dran war. Ich glaube, dass die scatter-Funktion (plot
 Circular Import versucht zu fixen. Problem: spice\_ulysses.py importiert plot\_3d-Klasse, um dann Datensätze darzustellen. Aber in spice\_ulysses.py sitzen die ganzen SPICE-Funktionen, die ich brauche, um z.B. den Äquator zu zeichnen. Plan: Funktionen, die in beiden gebraucht werden (und zugehörige) in a) ul\_coordinates\_utils oder b) in ein neues SPICE-Loader-Skript umschreiben
 
 \newday{31}{8}
-Circular Import gefixt. Neues skript \textit{spice\_loader} beinhaltet jetzt nur das Laden der Kernels. Evtl. später noch die Positions-Funktionen hierhin? \\[0.5cm´]
+Circular Import gefixt. Neues skript \textit{spice\_loader} beinhaltet jetzt nur das Laden der Kernels. Evtl. später noch die Positions-Funktionen hierhin? \\[0.5cm]
 Weiter das Plot-Skript dokumentieren, so einrichten, dass man mal easy(!) einen Punkt plotten kann ohne Epoche etc. angeben zu müssen (why??). Z.B. In- und Output der transform2eq-Methode...
 %
 %

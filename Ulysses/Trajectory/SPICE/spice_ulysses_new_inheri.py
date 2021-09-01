@@ -202,11 +202,11 @@ class TrajectoryUlysses():
 
     def plot_3d(self):
         """
-        Todo
+        Todo: Docstring, axis freigeben, plot_point-Argumente übergeben können
         :return:
         """
         p = Plot_3d()
-        #p.point_point()
+        p.plot_point(coords = np.array([self.data['r'], self.data['lat'], self.data['long']]).T)
 
 
 class SpiceTra(TrajectoryUlysses):
