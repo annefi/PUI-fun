@@ -23,7 +23,7 @@ class Plot_3d():
     """ blabla
     """
 
-    def __init__(self, epoch = None):
+    def __init__(self, epoch = None, ax = None):
         """
         Sets up the 3D Plot
 
@@ -32,22 +32,26 @@ class Plot_3d():
         too. Note, that it's actually the ecliptic system that changes but that it is chosen to be the fixed system
         aligning with the xyz-axes in the plot)
         """
+        print(ax)
         self.epoch = datetime.datetime(2000, 1, 1, 12) if epoch == None else epoch
-        fig = plt.figure(figsize=(12, 10))
-        ax = fig.add_subplot(111, projection='3d')
-        fig.canvas.set_window_title('Test')
-        ax.set_xlim(-1.8, 1.8)
-        ax.set_ylim(-1.8, 1.8)
-        ax.set_zlim(-1.8, 1.8)
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
-        ax.set_zlabel("z")
-        ax.scatter(0, 0, 0, 'o', s=50, color="gold")  # Sun
-        self.ax = ax
-        self.draw_eclip_sys()
-        self.draw_equ_sys()
+        if ax == None:
+            fig = plt.figure(figsize=(12, 10))
+            ax = fig.add_subplot(111, projection='3d')
+            fig.canvas.set_window_title('Test')
+            ax.set_xlim(-1.8, 1.8)
+            ax.set_ylim(-1.8, 1.8)
+            ax.set_zlim(-1.8, 1.8)
+            ax.set_xlabel("x")
+            ax.set_ylabel("y")
+            ax.set_zlabel("z")
+            ax.scatter(0, 0, 0, 'o', s=50, color="gold")  # Sun
+            self.ax = ax
+            self.draw_eclip_sys()
+            self.draw_equ_sys()
+        else:
+            self.ax = ax
 
-    def plot_point(self, coords: np.ndarray, cs = None, epoch = None):
+    def plot_point(self, coords: np.ndarray, cs = None, epoch = None, col = None):
         """ Plots a single point or a series of points into the plot
 
         :param coords: np.array [r,lat,long] of the (trajectory) point in ° (1D or 2D numpy array)
@@ -60,6 +64,8 @@ class Plot_3d():
             cs = ECLIPJ2000
         if epoch == None:
             epoch = self.epoch
+        if col == None:
+            col = 'red'
         if coords.ndim == 1:
             if cs == HCI:
                 xyz = self.transform2eq(coords, cart = False)
@@ -67,13 +73,14 @@ class Plot_3d():
                 xyz = spher2cart(coords)
             else:
                 sys.exit('Parameter cs has to be either HCI or ECLIPJ2000')
-            self.ax.scatter(*xyz, s = 5., c = 'red')
+            self.ax.scatter(*xyz, s = 5., c = col)
         if coords.ndim == 2:
             if cs == HCI:
                 xyz = self.transform2eq(coords, cart = False)
             elif cs == ECLIPJ2000:
                 xyz = spher2cart(coords)
-            self.ax.scatter(*xyz.T, s = 5, c='red')
+            self.ax.scatter(*xyz.T, s = 5, c= col)
+        return self.ax
 
     def draw_eclip_sys(self):
         """ Draws the Earth ecliptic system into the plot
@@ -81,6 +88,8 @@ class Plot_3d():
         This includes the ecliptic plane (aligning with the x-y plane of the plot), the x-axis pointing towards the
         1st Point of Aries, the y- and z-axis.
         """
+        x_ax = self.ax.plot(*np.array([[4., 0., 0], [0, 0, 0]]).T, c="steelblue", linestyle='--', linewidth=1.2,
+                            alpha=0.8)
         y_ax = self.ax.plot(*np.array([[0, 1., 0], [0, 0, 0]]).T, c="steelblue", linestyle='--', linewidth=1.2,
                             alpha=0.8)
         z_ax = self.ax.plot(*np.array([[0, 0, 1.], [0, 0, 0]]).T, c="steelblue", linestyle='--', linewidth=1.2)
@@ -93,6 +102,9 @@ class Plot_3d():
         This includes the Sun equatorial plane, the x-axis (aligning with the line of nodes between the eq. plane and
         the Earth ecliptic plane), the y-axis and the z-axis (labelled as omega and aligning with the Sun's spin axis)
         """
+        x_ax_long = self.transform2eq(np.array([4., 0., 0.]))
+        self.ax.plot(*np.array([x_ax_long, [0, 0, 0]]).T, c='C1', linestyle='--', linewidth=1.2,
+                            alpha=0.8)
         x_ax = self.transform2eq(np.array([1.5, 0., 0.]))
         y_ax = self.transform2eq(np.array([0., 1.5, 0.]))
         z_ax = self.transform2eq(np.array([0., 0., 1.5]))

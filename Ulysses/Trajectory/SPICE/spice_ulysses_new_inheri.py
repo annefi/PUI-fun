@@ -200,13 +200,21 @@ class TrajectoryUlysses():
             ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
         return axes
 
-    def plot_3d(self):
-        """
+    def plot_3d(self, ax = None, cs = None, col = None):
+        """ Creates a 3D-Plot of Ulysses' position for the loaded timeframe
+
         Todo: Docstring, axis freigeben, plot_point-Argumente übergeben können
         :return:
         """
-        p = Plot_3d()
-        p.plot_point(coords = np.array([self.data['r'], self.data['lat'], self.data['long']]).T)
+        if cs == None:
+            cs = self.RF
+        if ax == None:
+            p = Plot_3d()
+        else:
+            p = Plot_3d(ax = ax)
+        ax3D = p.plot_point(coords = np.array([self.data['r'], self.data['lat'], self.data['long']]).T, cs = cs,
+                            col = col)
+        return ax3D
 
 
 class SpiceTra(TrajectoryUlysses):
