@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9dd247a6-ae20-4e26-95db-2e204cdb342f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MA/MA_Journal/PHD_Journal.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/MA_Journal/PHD_Journal.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,16 +16,16 @@
     <session id="2091974253">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="28" />
+          <entry key="project.closed" value="29" />
           <entry key="project.open.time.10" value="3" />
           <entry key="project.open.time.11" value="2" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.6" value="4" />
           <entry key="project.open.time.7" value="6" />
-          <entry key="project.open.time.8" value="4" />
+          <entry key="project.open.time.8" value="5" />
           <entry key="project.open.time.9" value="7" />
-          <entry key="project.opened" value="28" />
+          <entry key="project.opened" value="29" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -40,24 +41,24 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="16696" />
+          <entry key="py" value="16722" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="16696" />
+          <entry key="Python" value="16722" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.60631996">
+    <splitter split-orientation="horizontal" split-proportion="0.36675128">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="300">
+                <state relative-caret-position="435">
                   <caret line="66" column="17" selection-start-line="66" selection-start-column="17" selection-end-line="66" selection-end-column="17" />
                   <folding>
                     <element signature="e#0#18#0" expanded="true" />
@@ -66,13 +67,18 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="510">
-                  <caret line="214" column="86" selection-start-line="214" selection-start-column="86" selection-end-line="214" selection-end-column="86" />
+                <state relative-caret-position="450">
+                  <caret line="30" column="27" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="27" />
                   <folding>
                     <element signature="e#0#15#0" expanded="true" />
+                    <element signature="e#2611#4387#0" />
+                    <element signature="e#4440#6298#0" />
+                    <element signature="e#6351#8044#0" />
+                    <element signature="e#8100#9979#0" />
+                    <element signature="e#10046#10538#0" />
                   </folding>
                 </state>
               </provider>
@@ -97,8 +103,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="625">
-                  <caret line="462" column="45" selection-start-line="462" selection-start-column="45" selection-end-line="462" selection-end-column="45" />
+                <state relative-caret-position="880">
+                  <caret line="204" column="100" selection-start-line="204" selection-start-column="100" selection-end-line="204" selection-end-column="100" />
                 </state>
               </provider>
             </entry>
@@ -178,6 +184,9 @@
       <find>print</find>
       <find>self.epoch</find>
       <find>draw_axis</find>
+      <find>asp_lat</find>
+      <find>asp_tot</find>
+      <find>timera</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -199,16 +208,17 @@
         <option value="$PROJECT_DIR$/Trajectory/ul_coordinates.py" />
         <option value="$PROJECT_DIR$/Trajectory/SPICE/duncan_heliocentric.py" />
         <option value="$PROJECT_DIR$/Trajectory/spice_loader.py" />
-        <option value="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" />
         <option value="$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py" />
+        <option value="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" />
+        <option value="$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="2080" />
-    <option name="y" value="72" />
-    <option name="width" value="632" />
-    <option name="height" value="491" />
+    <option name="x" value="1646" />
+    <option name="y" value="133" />
+    <option name="width" value="628" />
+    <option name="height" value="493" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -443,30 +453,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py">
+    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="625">
-          <caret line="462" column="45" selection-start-line="462" selection-start-column="45" selection-end-line="462" selection-end-column="45" />
+        <state relative-caret-position="435">
+          <caret line="66" column="17" selection-start-line="66" selection-start-column="17" selection-end-line="66" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="214" column="86" selection-start-line="214" selection-start-column="86" selection-end-line="214" selection-end-column="86" />
+        <state relative-caret-position="450">
+          <caret line="30" column="27" selection-start-line="30" selection-start-column="21" selection-end-line="30" selection-end-column="27" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+            <element signature="e#2611#4387#0" />
+            <element signature="e#4440#6298#0" />
+            <element signature="e#6351#8044#0" />
+            <element signature="e#8100#9979#0" />
+            <element signature="e#10046#10538#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py">
+    <entry file="file://$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="66" column="17" selection-start-line="66" selection-start-column="17" selection-end-line="66" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="880">
+          <caret line="204" column="100" selection-start-line="204" selection-start-column="100" selection-end-line="204" selection-end-column="100" />
         </state>
       </provider>
     </entry>

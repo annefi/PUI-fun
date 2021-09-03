@@ -145,7 +145,7 @@ Habe eq. Koordinatensystem gezeichnet, zumindest x- und y-Achse. Es fehlen z-Ach
 $\omega$ $\boldsymbol{\omega}$ \\
 Fertig mit den Koordinatensystemen! \\
 Alles ordentlich dokumentieren \done{doku}\\
-Ulysses einzeichnen... erstmal Punkt, dann verbinden mit Traj-Klasse \todo{ulysses}\\
+Ulysses einzeichnen... erstmal Punkt, dann verbinden mit Traj-Klasse \done{ulysses}\\
 Evtl. Koordinatenachsen dezenter/kürzer für bessere Übersichtlichkeit \todo{achsen}
 Testen, ob ich Sonnenrotationsachse auch manuell einzeichnen kann (momentan alles über Rotation des HC-Systems. Müsste ja eigentlich dasselbe sein...) \todo{Test Sonnenachse}
 
@@ -161,6 +161,9 @@ Circular Import versucht zu fixen. Problem: spice\_ulysses.py importiert plot\_3
 \newday{31}{8}
 Circular Import gefixt. Neues skript \textit{spice\_loader} beinhaltet jetzt nur das Laden der Kernels. Evtl. später noch die Positions-Funktionen hierhin? \\[0.5cm]
 Weiter das Plot-Skript dokumentieren, so einrichten, dass man mal easy(!) einen Punkt plotten kann ohne Epoche etc. angeben zu müssen (why??). Z.B. In- und Output der transform2eq-Methode...
+
+\newday{3}{9}
+Weiter: Schauen, was bei der Berechnung des Aspangles passiert: Müssten HCI und ECLIPJ2000 (hg und hc) nicht dasselbe in RTN sein? Beachte ich das überhaupt irgendwo? Dann müsste der AA nämlich auch gleich sein. Vielleicht muss der Ulysses-Vektor in RTN hart auf [R,0,0] gesetzt werden?
 %
 %
 %

@@ -37,7 +37,7 @@ class TrajectoryUlysses():
             RF = 'EQ'
         self.RF = RF
         self.get_data()
-        #self.get_aa_data()
+        self.get_aa_data()
 
     def get_data(self):
         paras = ['r', 'lat', 'long']
@@ -215,7 +215,6 @@ class TrajectoryUlysses():
         ax3D = p.plot_point(coords = np.array([self.data['r'], self.data['lat'], self.data['long']]).T, cs = cs,
                             col = col)
         return ax3D
-
 
 class SpiceTra(TrajectoryUlysses):
     def get_data(self):
