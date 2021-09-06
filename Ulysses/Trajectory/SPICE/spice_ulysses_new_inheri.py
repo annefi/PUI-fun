@@ -224,6 +224,9 @@ class SpiceTra(TrajectoryUlysses):
             self.data['r'].append(R)
             self.data['lat'].append(lat)
             self.data['long'].append(long)
+        self.data['r'] = np.array(self.data['r'])
+        self.data['lat'] = np.array(self.data['lat'])
+        self.data['long'] = np.array(self.data['long'])
         self.lbl = 'SPICE %s' % self.RF.name
         self.clr = "fuchsia"
 
@@ -241,11 +244,15 @@ class SpiceTra(TrajectoryUlysses):
             for t in self.times:
                 vec_Ul = locateUlysses(t, self.RF)
                 vec_Earth = locateBody(EARTH, t, self.RF)
-                asp_theta, asp_phi = calc_asp_angles(vec_Ul, vec_Earth)
+                asp_theta, asp_phi = calc_asp_angles(hc_to_hg(vec_Ul, ang_ascnode = calc_delta(t)),
+                                                     hc_to_hg(vec_Earth, ang_ascnode = calc_delta(t)))
                 self.data['asp_lat'].append(asp_theta)
                 self.data['asp_long'].append(asp_phi)
         else:
             sys.exit('Reference System %s not suitable for calculating Aspect Angles. \n Please use a solar equatorial or an Earth ecliptic system.' % self.RF)
+        self.data['asp_lat'] = np.array(self.data['asp_lat'])
+        self.data['asp_long'] = np.array(self.data['asp_long'])
+
 
 class ArchiveTra(TrajectoryUlysses):
     def get_data(self):

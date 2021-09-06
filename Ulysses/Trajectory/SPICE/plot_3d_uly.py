@@ -235,18 +235,4 @@ class Arrow3D(FancyArrowPatch):
         FancyArrowPatch.draw(self, renderer)
 
 
-def calc_delta(epoch):
-    """ Calculates the angle between the directions to the 1st Point of Aries (x-direction in ecliptic system) and to
-    the ascending node of the solar equator on the ecliptic plane as seen from Sun based on the given epoch
 
-    This angle determines the longitude of the equatorial coordinate system's x-axis and is dependent on the epoch:
-    Delta =  75°.76 + 1°.397T0 with T0 Julian centuries from J2000
-
-    :param epoch: datetime object
-    :return: angle of the ascending node in the Earth ecliptic coordinate system in degree
-    """
-    jc_per_days = 36525.
-    dt = epoch - datetime.datetime(2000, 1, 1, 12)
-    T0 = dt.total_seconds() / (24. * 60. * 60.) / jc_per_days
-    ang_ascnode = 75.76 + 1.397 * T0
-    return ang_ascnode

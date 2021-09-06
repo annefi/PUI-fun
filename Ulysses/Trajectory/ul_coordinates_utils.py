@@ -201,17 +201,19 @@ def calc_asp_angles(sc_vec: np.ndarray, earth_vec: np.ndarray, cs = "hg", long_s
         direction (negative R-axis) to +90 deg towards N-axis
     '''
     if cs == "hg":
+        #print('SC in hg: ', sc_vec)
+        #print('Earth in hg: ', earth_vec)
         earth_vec = hg_to_rtn(earth_vec, sc_vec, long_shift = long_shift_sc, long_shift_r = 0.)
         sc_vec = hg_to_rtn(sc_vec, sc_vec, long_shift = long_shift_sc, long_shift_r = long_shift_sc)
-        print('\n vectors in rtn:')
-        print(sc_vec)
-        print(earth_vec)
+        #print('\n vectors in rtn:')
+        #print('SC: ', sc_vec)
+        #print('Earth: ', earth_vec)
         cs = "rtn"
     if cs == 'rtn':
         # translation (to shift the center of the c.-s. to the SC)
         earth_vec_trans = earth_vec - sc_vec
-        print("\n translation: earth_vec_trans")
-        print(earth_vec_trans)
+        #print("\n translation: earth_vec_trans")
+        #print(earth_vec_trans)
         # transform to spherical coordinates
         earth_vec_sph = cart2spher(earth_vec_trans, deg=True)
         # print('\n spherical:')
@@ -226,7 +228,22 @@ def calc_asp_angles(sc_vec: np.ndarray, earth_vec: np.ndarray, cs = "hg", long_s
     else:
         print('No coordinate system specification!')
 
-
+def calc_SPE(asp_phi,asp_theta,deg=True):
+    '''
+    calculates the 'flat' aspect angle (given as SPE in Ulysses traj-data) from aspect phi and theta in spherical RTN coordinates.
+    Built for testing whether all of the previous transformations were done right.
+    Aspect angle: Angle between sun and earth as seen from SC.
+    Easy-peasy alternative to calc_SPE_umstaendlich() via some fiddling with Law of Cosine
+    :param asp_phi: Aspect phi angle in spherical RTN coordinates
+    :param asp_theta: Aspect theta angle in spherical RTN coordinates
+    :param deg: angles need to be given in degrees (default) or radians
+    :return: SPE, 'flat' aspect angle in degree
+    '''
+    if deg == True:
+        SPE = arccos(cos(asp_phi*pi/180.)+cos(asp_theta*pi/180.)-1)
+    else:
+        SPE = arccos(cos(asp_phi) + cos(asp_theta) - 1)
+    return SPE*180./pi
 
 def timerange(start_t: datetime,end_t: datetime,dt: int):
     """ Create a datetime.datetime range
@@ -239,6 +256,22 @@ def timerange(start_t: datetime,end_t: datetime,dt: int):
     delta_t = (end_t - start_t).total_seconds()  # auxiliary time delta
     times = [start_t + datetime.timedelta(seconds=t) for t in range(0, int(delta_t + dt), dt)]
     return times
+
+def calc_delta(epoch):
+    """ Calculates the angle between the directions to the 1st Point of Aries (x-direction in ecliptic system) and to
+    the ascending node of the solar equator on the ecliptic plane as seen from Sun based on the given epoch
+
+    This angle determines the longitude of the equatorial coordinate system's x-axis and is dependent on the epoch:
+    Delta =  75°.76 + 1°.397T0 with T0 Julian centuries from J2000
+
+    :param epoch: datetime object
+    :return: angle of the ascending node in the Earth ecliptic coordinate system in degree
+    """
+    jc_per_days = 36525.
+    dt = epoch - datetime.datetime(2000, 1, 1, 12)
+    T0 = dt.total_seconds() / (24. * 60. * 60.) / jc_per_days
+    ang_ascnode = 75.76 + 1.397 * T0
+    return ang_ascnode
 
 
 
@@ -335,24 +368,6 @@ def calc_SPE_umstaendlich(asp_phi,asp_theta,R,deg=True):
     c = sqrt(aux_line_a**2+aux_line_b**2)
     # ToDo: Finish (but found an easier func -> calc_SPE())
     return 1
-
-
-def calc_SPE(asp_phi,asp_theta,deg=True):
-    '''
-    calculates the 'flat' aspect angle (given as SPE in Ulysses traj-data) from aspect phi and theta in spherical RTN coordinates.
-    Built for testing whether all of the previous transformations were done right.
-    Aspect angle: Angle between sun and earth as seen from SC.
-    Easy-peasy alternative to calc_SPE_umstaendlich() via some fiddling with Law of Cosine
-    :param asp_phi: Aspect phi angle in spherical RTN coordinates
-    :param asp_theta: Aspect theta angle in spherical RTN coordinates
-    :param deg: angles need to be given in degrees (default) or radians
-    :return: SPE, 'flat' aspect angle in degree
-    '''
-    if deg == True:
-        SPE = arccos(cos(asp_phi*pi/180.)+cos(asp_theta*pi/180.)-1)
-    else:
-        SPE = arccos(cos(asp_phi) + cos(asp_theta) - 1)
-    return SPE*180./pi
 
 
 
