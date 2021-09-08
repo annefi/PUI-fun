@@ -228,7 +228,7 @@ def calc_asp_angles(sc_vec: np.ndarray, earth_vec: np.ndarray, cs = "hg", long_s
     else:
         print('No coordinate system specification!')
 
-def calc_SPE(asp_phi,asp_theta,deg=True):
+def calc_SPE(asp_theta,asp_phi,deg=True):
     '''
     calculates the 'flat' aspect angle (given as SPE in Ulysses traj-data) from aspect phi and theta in spherical RTN coordinates.
     Built for testing whether all of the previous transformations were done right.
@@ -237,13 +237,13 @@ def calc_SPE(asp_phi,asp_theta,deg=True):
     :param asp_phi: Aspect phi angle in spherical RTN coordinates
     :param asp_theta: Aspect theta angle in spherical RTN coordinates
     :param deg: angles need to be given in degrees (default) or radians
-    :return: SPE, 'flat' aspect angle in degree
+    :return: SPE, 'flat' aspect angle in degrees
     '''
     if deg == True:
-        SPE = arccos(cos(asp_phi*pi/180.)+cos(asp_theta*pi/180.)-1)
+        SPE = np.arccos(np.cos(asp_phi*np.pi/180.)+np.cos(asp_theta*np.pi/180.)-1)
     else:
-        SPE = arccos(cos(asp_phi) + cos(asp_theta) - 1)
-    return SPE*180./pi
+        SPE = np.arccos(np.cos(asp_phi) + np.cos(asp_theta) - 1)
+    return SPE*180./np.pi
 
 def timerange(start_t: datetime,end_t: datetime,dt: int):
     """ Create a datetime.datetime range

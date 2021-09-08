@@ -69,7 +69,8 @@ class TrajectoryUlysses():
             fig, axes = plt.subplots(nrows = 3, sharex = True)
         ### R ###
         axes[0].plot(self.times, self.data['r'], linestyle = 'None', marker = 'o', ms = 2., label = self.lbl, c = self.clr, alpha= 0.5)
-        axes[0].set_xlim(self.times[0],self.times[-1                                                                     ])
+        axes[0].set_xlim(self.times[0],self.times[-1])
+        axes[0].set_ylim(0., 6.)
         axes[0].set_ylabel('R in AU')
         lg = axes[0].legend(loc='upper center', ncol=3, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
                 True, framealpha=1., facecolor='#fff5f8', shadow=True)
@@ -86,14 +87,17 @@ class TrajectoryUlysses():
         axes[2].set_yticks([-180,-90,0,90,180])
         axes[2].set_ylim(-185,185)
         # plot vertical lines at polar passes:
-        plt.vlines(self.t_southpass, ymin = -180, ymax = 360, color = 'firebrick', alpha = 0.5, linestyle = 'dashed')
-        plt.vlines(self.t_northpass, ymin = -180, ymax = 360, color = 'navy', alpha = 0.5, linestyle = 'dashed')
+        for a in axes:
+            a.vlines(self.t_southpass, ymin = -180, ymax = 360, color = 'firebrick', alpha = 0.8, linestyle =
+            'dashed', linewidth = 1.5)
+            a.vlines(self.t_northpass, ymin = -180, ymax = 360, color = 'navy', alpha = 0.5, linestyles = 'dashed',
+                     linewidth = 1.5)
         plt.gcf().autofmt_xdate()
         plt.gcf().tight_layout()
         plt.gcf().align_ylabels()
         for ax in axes:
             ax.grid(True)
-        #plt.subplots_adjust(hspace=None)
+        plt.subplots_adjust(hspace=None)
         return axes
 
     def comp_coords(self, T, axes = None):
@@ -123,12 +127,19 @@ class TrajectoryUlysses():
         ymax = max(0.001,max(self.data['r']- T.data['r']),max(self.data['lat'] - T.data['lat']),max(self.data['long'] - T.data['long']))
         axes[0].set_ylim(-max(abs(ymin),abs(ymax))*2,max(abs(ymin),abs(ymax))*2) 
         print(ymin, ymax)
+        # plot vertical lines at polar passes:
+        for a in axes:
+            a.vlines(self.t_southpass, ymin=-180, ymax=360, color='firebrick', alpha=0.8, linestyle=
+            'dashed', linewidth=1.5)
+            a.vlines(self.t_northpass, ymin=-180, ymax=360, color='navy', alpha=0.5, linestyles='dashed',
+                     linewidth=1.5)
         plt.gcf().autofmt_xdate()
         plt.gcf().tight_layout()
         plt.gcf().align_ylabels()
         for ax in axes:
             ax.grid(True)
             ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
+        plt.subplots_adjust(hspace=0.2)
         return axes
 
     def plot_aspangles(self, axes = None):
@@ -139,30 +150,33 @@ class TrajectoryUlysses():
         ### total ###
         axes[0].plot(self.times, self.data['r'], linestyle = 'None', marker = 'o', ms = 2., label = self.lbl, alpha= 0.5)
         axes[0].set_xlim(self.times[0],self.times[-1])
-        axes[0].set_ylabel('Asp tot in deg')
+        axes[0].set_ylabel('Asp. tot. in deg')
         lg = axes[0].legend(loc='upper center', ncol=3, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
                 True, framealpha=1., facecolor='#fff5f8', shadow=True)
         for legend_handle in lg.legendHandles:
                 legend_handle._legmarker.set_markersize(6)
         ### ASP LAT ###
         axes[1].plot(self.times, self.data['asp_lat'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5)
-        axes[1].set_ylabel('Aspect Angle Lat. in deg.')
+        axes[1].set_ylabel('Asp. Lat. in deg.')
         axes[1].set_yticks([-90,-45,0,45,90])
         axes[1].set_ylim(-95,95)
         ### ASP LONG ###
         axes[2].plot(self.times, self.data['asp_long'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5)
-        axes[2].set_ylabel('Aspect Angle Long. in deg.')
+        axes[2].set_ylabel('Asp. Long. in deg.')
         axes[2].set_yticks([-180,-90,0,90,180])
         axes[2].set_ylim(-185,185)
         # plot vertical lines at polar passes:
-        plt.vlines(self.t_southpass, ymin = -180, ymax = 360, color = 'firebrick', alpha = 0.5, linestyle = 'dashed')
-        plt.vlines(self.t_northpass, ymin = -180, ymax = 360, color = 'navy', alpha = 0.5, linestyle = 'dashed')
+        for a in axes:
+            a.vlines(self.t_southpass, ymin=-180, ymax=360, color='firebrick', alpha=0.8, linestyle=
+            'dashed', linewidth=1.5)
+            a.vlines(self.t_northpass, ymin=-180, ymax=360, color='navy', alpha=0.5, linestyles='dashed',
+                     linewidth=1.5)
         plt.gcf().autofmt_xdate()
         plt.gcf().tight_layout()
         plt.gcf().align_ylabels()
         for ax in axes:
             ax.grid(True)
-        #plt.subplots_adjust(hspace=None)
+        plt.subplots_adjust(hspace=0.2)
         return axes
 
     def comp_aspangles(self, T, axes = None):
@@ -192,12 +206,21 @@ class TrajectoryUlysses():
         #ymax = max(0.001,max(self.data['r']- T.data['r']),max(self.data['lat'] - T.data['lat']),max(self.data['long'] - T.data['long']))
         #axes[0].set_ylim(-max(abs(ymin),abs(ymax))*2,max(abs(ymin),abs(ymax))*2) 
         #print(ymin, ymax)
+
+        # plot vertical lines at polar passes:
+        for a in axes:
+            a.vlines(self.t_southpass, ymin=-180, ymax=360, color='firebrick', alpha=0.8, linestyle=
+            'dashed', linewidth=1.5)
+            a.vlines(self.t_northpass, ymin=-180, ymax=360, color='navy', alpha=0.5, linestyles='dashed',
+                     linewidth=1.5)
+
         plt.gcf().autofmt_xdate()
         plt.gcf().tight_layout()
         plt.gcf().align_ylabels()
         for ax in axes:
             ax.grid(True)
             ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
+        plt.subplots_adjust(hspace=0.2)
         return axes
 
     def plot_3d(self, ax = None, cs = None, col = None):
@@ -239,7 +262,7 @@ class SpiceTra(TrajectoryUlysses):
                 asp_theta, asp_phi = calc_asp_angles(vec_Ul, vec_Earth)
                 self.data['asp_lat'].append(asp_theta)
                 self.data['asp_long'].append(asp_phi)
-                #self.data['asp_tot'].append()
+                self.data['asp_tot'].append(calc_SPE(asp_theta, asp_phi))
         elif self.RF in [ECLIPJ2000, ECLIPB1950]: # ecliptic coord. sys.
             for t in self.times:
                 vec_Ul = locateUlysses(t, self.RF)
@@ -248,10 +271,12 @@ class SpiceTra(TrajectoryUlysses):
                                                      hc_to_hg(vec_Earth, ang_ascnode = calc_delta(t)))
                 self.data['asp_lat'].append(asp_theta)
                 self.data['asp_long'].append(asp_phi)
+                self.data['asp_tot'].append(calc_SPE(asp_theta, asp_phi))
         else:
             sys.exit('Reference System %s not suitable for calculating Aspect Angles. \n Please use a solar equatorial or an Earth ecliptic system.' % self.RF)
         self.data['asp_lat'] = np.array(self.data['asp_lat'])
         self.data['asp_long'] = np.array(self.data['asp_long'])
+        self.data['asp_tot'] = np.array(self.data['asp_tot'])
 
 
 class ArchiveTra(TrajectoryUlysses):
@@ -342,6 +367,8 @@ def read_pool():
         for i,k in enumerate(p_dict.keys()):
             if k == 'HG_Long':
                 p_dict[k].append(float(data[i])-180.)
+            elif k == 'HC_Long' and float(data[i]) > 180.:
+                    p_dict[k].append(float(data[i])-360.)
             else:
                 p_dict[k].append(float(data[i]))
     p_dict["datetimes"] = []

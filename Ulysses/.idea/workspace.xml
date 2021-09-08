@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9dd247a6-ae20-4e26-95db-2e204cdb342f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../MA/MA_Journal/PHD_Journal.tex" beforeDir="false" afterPath="$PROJECT_DIR$/../MA/MA_Journal/PHD_Journal.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py" afterDir="false" />
     </list>
@@ -16,16 +17,16 @@
     <session id="2091974253">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="30" />
+          <entry key="project.closed" value="31" />
           <entry key="project.open.time.10" value="3" />
           <entry key="project.open.time.11" value="2" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.6" value="4" />
           <entry key="project.open.time.7" value="7" />
-          <entry key="project.open.time.8" value="5" />
+          <entry key="project.open.time.8" value="7" />
           <entry key="project.open.time.9" value="7" />
-          <entry key="project.opened" value="30" />
+          <entry key="project.opened" value="32" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -41,24 +42,24 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="17050" />
+          <entry key="py" value="17401" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="17050" />
+          <entry key="Python" value="17401" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.31345177">
+    <splitter split-orientation="horizontal" split-proportion="0.66180205">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1541">
+                <state relative-caret-position="3420">
                   <caret line="237" selection-start-line="237" selection-end-line="237" />
                   <folding>
                     <element signature="e#0#18#0" expanded="true" />
@@ -70,13 +71,10 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="493">
-                  <caret line="241" column="17" selection-start-line="241" selection-start-column="17" selection-end-line="241" selection-end-column="17" />
+                <state relative-caret-position="370">
+                  <caret line="296" column="12" lean-forward="true" selection-start-line="296" selection-start-column="12" selection-end-line="296" selection-end-column="12" />
                   <folding>
                     <element signature="e#0#15#0" expanded="true" />
-                    <element signature="e#6350#8043#0" />
-                    <element signature="e#8099#9978#0" />
-                    <element signature="e#10045#10537#0" />
                   </folding>
                 </state>
               </provider>
@@ -98,11 +96,14 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="415">
-                  <caret line="246" lean-forward="true" selection-start-line="246" selection-end-line="246" />
+                <state relative-caret-position="480">
+                  <caret line="245" column="23" selection-start-line="245" selection-start-column="23" selection-end-line="245" selection-end-column="23" />
+                  <folding>
+                    <element signature="e#522#540#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -127,11 +128,11 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-4952">
-                  <caret line="247" column="4" selection-start-line="247" selection-start-column="4" selection-end-line="247" selection-end-column="4" />
+                <state relative-caret-position="3900">
+                  <caret line="268" column="21" selection-start-line="268" selection-start-column="21" selection-end-line="268" selection-end-column="21" />
                   <folding>
                     <element signature="e#248#287#0" expanded="true" />
                   </folding>
@@ -199,8 +200,8 @@
         <option value="$PROJECT_DIR$/Trajectory/SPICE/duncan_heliocentric.py" />
         <option value="$PROJECT_DIR$/Trajectory/spice_loader.py" />
         <option value="$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py" />
-        <option value="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" />
         <option value="$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py" />
+        <option value="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" />
       </list>
     </option>
   </component>
@@ -215,7 +216,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -232,6 +232,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -390,6 +391,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trajectory/spice_loader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="30" selection-start-line="30" selection-end-line="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3420">
+          <caret line="237" selection-start-line="237" selection-end-line="237" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$USER_HOME$/.local/lib/python3.7/site-packages/etspice/kernels.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5265">
@@ -416,59 +441,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py">
+    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1541">
-          <caret line="237" selection-start-line="237" selection-end-line="237" />
+        <state relative-caret-position="3900">
+          <caret line="268" column="21" selection-start-line="268" selection-start-column="21" selection-end-line="268" selection-end-column="21" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="241" column="17" selection-start-line="241" selection-start-column="17" selection-end-line="241" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-            <element signature="e#6350#8043#0" />
-            <element signature="e#8099#9978#0" />
-            <element signature="e#10045#10537#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/spice_loader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="30" selection-start-line="30" selection-end-line="30" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#248#287#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="246" lean-forward="true" selection-start-line="246" selection-end-line="246" />
+        <state relative-caret-position="480">
+          <caret line="245" column="23" selection-start-line="245" selection-start-column="23" selection-end-line="245" selection-end-column="23" />
+          <folding>
+            <element signature="e#522#540#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py">
+    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4952">
-          <caret line="247" column="4" selection-start-line="247" selection-start-column="4" selection-end-line="247" selection-end-column="4" />
+        <state relative-caret-position="370">
+          <caret line="296" column="12" lean-forward="true" selection-start-line="296" selection-start-column="12" selection-end-line="296" selection-end-column="12" />
           <folding>
-            <element signature="e#248#287#0" expanded="true" />
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
