@@ -772,7 +772,6 @@ class WriteTrajSpice:
     def get_v_new(self):
         '''
         '''
-        from etspice import kernels
         from spiceypy import spkpos, spkezr, datetime2et
         if not self.R:
             self.get_data()

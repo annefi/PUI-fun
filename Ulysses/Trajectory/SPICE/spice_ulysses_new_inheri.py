@@ -10,6 +10,16 @@ from Ulysses.Trajectory.SPICE.plot_3d_uly import Plot_3d
 # Constants:
 km_per_AU = 1.495979e8
 
+# Colours:
+bg_blue = '#f2f3fa'
+bg_red = '#fff5f8'
+bg_creme = '#F4F2EC'
+petrol_dk = '#0570b0'
+petrol_lg = '#74a9cf'
+red_dk = '#cb181d'
+red_lg = '#fb6a4a'
+gray = '#808080'
+
 class TrajectoryUlysses():
     """
     :param TF: time frame, should be a list of start and end time as
@@ -73,7 +83,7 @@ class TrajectoryUlysses():
         axes[0].set_ylim(0., 6.)
         axes[0].set_ylabel('R in AU')
         lg = axes[0].legend(loc='upper center', ncol=3, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
-                True, framealpha=1., facecolor='#fff5f8', shadow=True)
+                True, framealpha=1., facecolor= bg_creme, shadow=True)
         for legend_handle in lg.legendHandles:
                 legend_handle._legmarker.set_markersize(6)
         ### LAT ###
@@ -88,9 +98,9 @@ class TrajectoryUlysses():
         axes[2].set_ylim(-185,185)
         # plot vertical lines at polar passes:
         for a in axes:
-            a.vlines(self.t_southpass, ymin = -180, ymax = 360, color = 'firebrick', alpha = 0.8, linestyle =
+            a.vlines(self.t_southpass, ymin = -180, ymax = 360, color = gray , alpha = 0.5, linestyle =
             'dashed', linewidth = 1.5)
-            a.vlines(self.t_northpass, ymin = -180, ymax = 360, color = 'navy', alpha = 0.5, linestyles = 'dashed',
+            a.vlines(self.t_northpass, ymin = -180, ymax = 360, color = gray, alpha = 0.5, linestyles = 'dashed',
                      linewidth = 1.5)
         plt.gcf().autofmt_xdate()
         plt.gcf().tight_layout()
@@ -103,35 +113,29 @@ class TrajectoryUlysses():
     def comp_coords(self, T, axes = None):
         """Plot difference between two sets of trajectory data for R, lat, long"""
         if axes is None:
-            fig, axes = plt.subplots(nrows = 3, sharex = True, sharey = True)
-        ymin = -0.001
-        ymax = 0.001
+            fig, axes = plt.subplots(nrows = 3, sharex = True)
         ### R ###
         axes[0].plot(self.times, self.data['r']- T.data['r'], linestyle = 'None', marker = 'o', ms = 1., label = "%s - %s" %(self.lbl, T.lbl))
         axes[0].set_xlim(self.times[0],self.times[-1])
         axes[0].set_ylabel(r'$\Delta$R in AU')
+        axes[0].set_ylim(-0.01, 0.01)
         lg = axes[0].legend(loc='upper center', ncol=1, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
-                True, framealpha=1., facecolor='#dfe9f5', shadow=True)
+                True, framealpha=1., facecolor= bg_creme, shadow=True)
         for legend_handle in lg.legendHandles:
                 legend_handle._legmarker.set_markersize(6)
         ### LAT ###
         axes[1].plot(self.times, self.data['lat'] - T.data['lat'], linestyle = 'None', marker = 'o', ms = 1.)
         axes[1].set_ylabel(r'$\Delta$Lat. in deg.')
-        #axes[1].set_ylim(-90,90)
+        axes[1].set_ylim(-0.05,0.05)
         ### LONG ###
         axes[2].plot(self.times, self.data['long'] - T.data['long'], linestyle = 'None', marker = 'o', ms = 1.)
         axes[2].set_ylabel(r'$\Delta$Long. in deg.')
-        #axes[2].set_ylim(-180,180)
-
-        ymin = min(-0.001,min(self.data['r']- T.data['r']),min(self.data['lat'] - T.data['lat']),min(self.data['long'] - T.data['long'])) 
-        ymax = max(0.001,max(self.data['r']- T.data['r']),max(self.data['lat'] - T.data['lat']),max(self.data['long'] - T.data['long']))
-        axes[0].set_ylim(-max(abs(ymin),abs(ymax))*2,max(abs(ymin),abs(ymax))*2) 
-        print(ymin, ymax)
+        axes[2].set_ylim(-0.05,0.05)
         # plot vertical lines at polar passes:
         for a in axes:
-            a.vlines(self.t_southpass, ymin=-180, ymax=360, color='firebrick', alpha=0.8, linestyle=
+            a.vlines(self.t_southpass, ymin=-180, ymax=360, color= gray , alpha=0.5, linestyle=
             'dashed', linewidth=1.5)
-            a.vlines(self.t_northpass, ymin=-180, ymax=360, color='navy', alpha=0.5, linestyles='dashed',
+            a.vlines(self.t_northpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyles='dashed',
                      linewidth=1.5)
         plt.gcf().autofmt_xdate()
         plt.gcf().tight_layout()
@@ -140,6 +144,7 @@ class TrajectoryUlysses():
             ax.grid(True)
             ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
         plt.subplots_adjust(hspace=0.2)
+        #axes[0].set_ylim(-0.01, 0.01)
         return axes
 
     def plot_aspangles(self, axes = None):
@@ -152,7 +157,7 @@ class TrajectoryUlysses():
         axes[0].set_xlim(self.times[0],self.times[-1])
         axes[0].set_ylabel('Asp. tot. in deg')
         lg = axes[0].legend(loc='upper center', ncol=3, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
-                True, framealpha=1., facecolor='#fff5f8', shadow=True)
+                True, framealpha=1., facecolor= bg_creme, shadow=True)
         for legend_handle in lg.legendHandles:
                 legend_handle._legmarker.set_markersize(6)
         ### ASP LAT ###
@@ -167,9 +172,9 @@ class TrajectoryUlysses():
         axes[2].set_ylim(-185,185)
         # plot vertical lines at polar passes:
         for a in axes:
-            a.vlines(self.t_southpass, ymin=-180, ymax=360, color='firebrick', alpha=0.8, linestyle=
+            a.vlines(self.t_southpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyle=
             'dashed', linewidth=1.5)
-            a.vlines(self.t_northpass, ymin=-180, ymax=360, color='navy', alpha=0.5, linestyles='dashed',
+            a.vlines(self.t_northpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyles='dashed',
                      linewidth=1.5)
         plt.gcf().autofmt_xdate()
         plt.gcf().tight_layout()
@@ -182,38 +187,30 @@ class TrajectoryUlysses():
     def comp_aspangles(self, T, axes = None):
         """todo"""
         if axes is None:
-            fig, axes = plt.subplots(nrows = 3, sharex = True, sharey = True)
-        ymin = -0.001
-        ymax = 0.001
+            fig, axes = plt.subplots(nrows = 3, sharex = True)
         ### total ###
         axes[0].plot(self.times, self.data['asp_tot']- T.data['asp_tot'], linestyle = 'None', marker = 'o', ms = 1., label = "%s - %s" %(self.lbl, T.lbl))
         axes[0].set_xlim(self.times[0],self.times[-1])
         axes[0].set_ylabel(r'$\Delta$ Asp. tot. in deg.')
+        axes[0].set_ylim(-1, 1)
         lg = axes[0].legend(loc='upper center', ncol=1, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
-                True, framealpha=1., facecolor='#dfe9f5', shadow=True)
+                True, framealpha=1., facecolor= bg_creme, shadow=True)
         for legend_handle in lg.legendHandles:
                 legend_handle._legmarker.set_markersize(6)
         ### Aspect Angle LAT ###
         axes[1].plot(self.times, self.data['asp_lat'] - T.data['asp_lat'], linestyle = 'None', marker = 'o', ms = 1.)
         axes[1].set_ylabel(r'$\Delta$ Asp. Lat. in deg.')
-        #axes[1].set_ylim(-90,90)
+        axes[1].set_ylim(-1,1)
         ### Aspect Angle LONG ###
         axes[2].plot(self.times, self.data['asp_long'] - T.data['asp_long'], linestyle = 'None', marker = 'o', ms = 1.)
         axes[2].set_ylabel(r'$\Delta$ Asp. Long. in deg.')
-        #axes[2].set_ylim(-180,180)
-
-        #ymin = min(-0.001,min(self.data['r']- T.data['r']),min(self.data['lat'] - T.data['lat']),min(self.data['long'] - T.data['long'])) 
-        #ymax = max(0.001,max(self.data['r']- T.data['r']),max(self.data['lat'] - T.data['lat']),max(self.data['long'] - T.data['long']))
-        #axes[0].set_ylim(-max(abs(ymin),abs(ymax))*2,max(abs(ymin),abs(ymax))*2) 
-        #print(ymin, ymax)
-
+        axes[2].set_ylim(-1,1)
         # plot vertical lines at polar passes:
         for a in axes:
-            a.vlines(self.t_southpass, ymin=-180, ymax=360, color='firebrick', alpha=0.8, linestyle=
+            a.vlines(self.t_southpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyle=
             'dashed', linewidth=1.5)
-            a.vlines(self.t_northpass, ymin=-180, ymax=360, color='navy', alpha=0.5, linestyles='dashed',
+            a.vlines(self.t_northpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyles='dashed',
                      linewidth=1.5)
-
         plt.gcf().autofmt_xdate()
         plt.gcf().tight_layout()
         plt.gcf().align_ylabels()
@@ -251,7 +248,10 @@ class SpiceTra(TrajectoryUlysses):
         self.data['lat'] = np.array(self.data['lat'])
         self.data['long'] = np.array(self.data['long'])
         self.lbl = 'SPICE %s' % self.RF.name
-        self.clr = "fuchsia"
+        if self.RF == ECLIPJ2000 or ECLIPB1950:
+            self.clr = petrol_dk
+        if self.RF == HCI:
+            self.clr = red_dk
 
     def get_aa_data(self):
         super().get_aa_data()
@@ -289,14 +289,14 @@ class ArchiveTra(TrajectoryUlysses):
             self.data['lat'] = self.sync_times(pool_data['datetimes'], pool_data['HG_Lat'])
             self.data['long'] = self.sync_times(pool_data['datetimes'], pool_data['HG_Long'])
             self.lbl = 'Ul. Archive Solar Eq.'
-            self.clr = "darkmagenta"
+            self.clr = red_lg
         elif self.RF == 'EC':
             # Ecliptic System is mostly called HC (heliocentric) within the archive files
             self.data['r'] = self.sync_times(pool_data['datetimes'], pool_data['R'])
             self.data['lat'] = self.sync_times(pool_data['datetimes'], pool_data['HC_Lat'])
             self.data['long'] = self.sync_times(pool_data['datetimes'], pool_data['HC_Long'])
             self.lbl = 'Ul. Archive Ecliptic'
-            self.clr = "orchid"
+            self.clr = petrol_lg
         else:
             sys.exit("\nArgument RF not recognised. Has to be \'EQ\' or \'EC\' for pool data.\n")
 
@@ -387,6 +387,8 @@ def locateUlysses(date, RF):
     :param RF: etspice.ReferenceFrame
     :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
     '''
+    #Todo: Folgendes einbauen
+    #[x, y, z, v_x, v_y, v_z] = spkezr('ULYSSES', datetime2et(self.times[i]), 'HCI', 'None', 'SUN')[0]  # cart in km(/s)
     xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF) # in km
     if len(xyz) == 3:
         r, theta, phi = utils.cart2spherical(xyz, degrees = True)
@@ -454,3 +456,10 @@ def load_aa_data():
     fin.close()
     return p_aa_dict
 
+
+dt1 = datetime.datetime(1990,10,7)
+dt2 = datetime.datetime(1998,1,15)
+T = SpiceTra(TF=[dt1,dt2], RF = ECLIPJ2000, DT = 24*3600*10)
+T1 = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
+A = ArchiveTra(TF=[dt1,dt2], RF = "EC", DT = 24*3600*10)
+A1 = ArchiveTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)
