@@ -387,19 +387,24 @@ def locateUlysses(date, RF):
     :param RF: etspice.ReferenceFrame
     :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
     '''
-    #Todo: Folgendes einbauen
-    #[x, y, z, v_x, v_y, v_z] = spkezr('ULYSSES', datetime2et(self.times[i]), 'HCI', 'None', 'SUN')[0]  # cart in km(/s)
     xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF) # in km
     if len(xyz) == 3:
-        r, theta, phi = utils.cart2spherical(xyz, degrees = True)
+        r, theta, phi = cart2spher(xyz, deg = True)
         #print(RF.name , np.array([r/1.496e8,theta,phi]))
         return np.array([r/km_per_AU,theta,phi])
     elif len(xyz) > 3:
         positions = []
         for t in xyz:
-            r, theta, phi = utils.cart2spherical(t, degrees = True)
+            r, theta, phi = cart2spher(t, deg = True)
             positions.append(np.array([r/km_per_AU,theta,phi]))
         return positions
+
+def velocityUlysses(date):
+    # Todo: Folgendes einbauen
+    from spiceypy import spkezr, datetime2et
+    [x, y, z, vx, vy, vz] = spkezr('ULYSSES', datetime2et(date), 'HCI', 'None', 'SUN')[0]  # cart in km(/s)
+    v_sph = cart2spher(np.array(vx,vy,vz))
+
 
 def locateUlyssesnew(date, RF):
     '''
