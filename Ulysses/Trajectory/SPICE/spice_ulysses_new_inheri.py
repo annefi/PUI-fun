@@ -400,10 +400,11 @@ def locateUlysses(date, RF):
         return positions
 
 def velocityUlysses(date):
-    # Todo: Folgendes einbauen
+    # Todo: Folgendes einbauen: will eig nur mit Archivdata vergleichen
     from spiceypy import spkezr, datetime2et
     [x, y, z, vx, vy, vz] = spkezr('ULYSSES', datetime2et(date), 'HCI', 'None', 'SUN')[0]  # cart in km(/s)
     v_sph = cart2spher(np.array(vx,vy,vz))
+    # todo: wie in rtn?
 
 
 def locateUlyssesnew(date, RF):
