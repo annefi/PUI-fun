@@ -23,8 +23,10 @@ magpath = "/Ulysses/data_misc/PHA_mag/"
 from pylib3 import *
 from numpy import *
 from Ulysses.DataLoader.uswo import uswo
-from Ulysses.DataLoader.ulysses_traj_spice import UlyssesTrajSpice
-#from Ulysses.DataLoader.ulysses_mag_loader import mag_loader
+# new: Todo: check if everything works and leads to the same results...
+#from Ulysses.DataLoader.ulysses_traj_spice import UlyssesTrajSpice
+from Ulysses.DataLoader.ulysses_traj import ulysses_traj
+#from Ulysses.DataLoader.ulysses_mag_loader import mag_loader # not working atm
 from Ulysses.DataLoader.uswiutils import getvelocity
 
 

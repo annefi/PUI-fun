@@ -7,10 +7,10 @@ Also calculates and adds Aspect Angle data products.
 STILL PYTHON2
 '''
 
-from pylib import dbData
+from pylib3 import dbData
 from numpy import array,ndarray
 import sys
-from Ulysses.Trajectory.ul_calc_traj import calc_asp_angles, calc_SPE, hg_to_rtn
+from Ulysses.Trajectory.ul_calc_traj_bu import calc_asp_angles, calc_SPE, hg_to_rtn
 
 earth = True
 
@@ -28,25 +28,26 @@ class ulysses_traj(dbData):
 
     """
     def load_data(self,*args,**kwargs):
-        if kwargs.has_key("year"):
+        if "year" in kwargs:
             if isinstance(kwargs["year"],list):
                 self.year=kwargs["year"]
             elif isinstance(kwargs["year"],int) or isinstance(kwargs["year"],float):
                 self.year=[kwargs["year"]]
         else:
             self.year=[2007]
-        if kwargs.has_key("tf"):
+        if "tf" in kwargs:
             if isinstance(kwargs["tf"],list) or isinstance(kwargs["tf"],ndarray):
                 self.timeframe=kwargs["tf"]
             elif kwargs["tf"]=="all":
                 self.timeframe=[[1.,367]]
             else:
-                print "periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), no data loaded"
+                print("periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), "
+                      "no data loaded")
                 self.timeframe=[]
         else:
-            print "periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), no data loaded"
+            print("periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), no data loaded")
             self.timeframe=[]
-        if kwargs.has_key("path"):
+        if "path" in kwargs:
             self.path=kwargs["path"]
         else:
             #self.path="/data/projects/Ulysses/trajectory/traj_data_ulysses_pool.dat"
@@ -69,7 +70,7 @@ class ulysses_traj(dbData):
                 self.data[key[0]] = []
                 self.keys.append(key[0])
         except:
-            print "Cannot get trajectory data product keys"
+            print("Cannot get trajectory data product keys")
 
         if len(self.data.keys()) > 0:
             datalines = fin.readlines()[3:]
@@ -84,7 +85,7 @@ class ulysses_traj(dbData):
                                     for i,key in enumerate(self.keys):
                                         self.data[key].append(float(k[i]))
                     except:
-                        print "Problems reading DoYs "
+                        print("Problems reading DoYs ")
 
             if earth == False:
                 for key in self.data.keys():
@@ -107,7 +108,7 @@ class ulysses_traj(dbData):
                     self.keys.append(key[0])
                     keys_earth.append(key[0])
             except:
-                print "Cannot get EARTH trajectory data product keys"
+                print("Cannot get EARTH trajectory data product keys")
 
             if len(keys_earth) > 0:
                 datalines = fin.readlines()
@@ -123,7 +124,7 @@ class ulysses_traj(dbData):
                                         for i, key in enumerate(keys_earth):
                                             self.data[key].append(float(k[i]))
                         except:
-                            print "Problems reading EARTH DoYs"
+                            print("Problems reading EARTH DoYs")
 
             # Calculate AA Phi and Theta (in RTN):
             self.keys.append('asp_phi')
