@@ -159,7 +159,7 @@ class uswipha(dbData):
 
         """
         offy = self.data["year"] - 1990
-        offd = offy*365 + (offy.astype(int)+2)/4
+        offd = offy*365 + (offy.astype(int)+1)//4
         self.add_data("d90",self.data["doy"] + offd)
 
     def sync_swoops(self):
@@ -341,11 +341,9 @@ class uswipha(dbData):
         :return:
         '''
         offy = self.data["year"] - 1990
-        offd = offy*365 + (offy.astype(int)+2)//4
+        offd = offy*365 + (offy.astype(int)+1)//4
         off_epq = self.data['epq'] * 1./24./60./60. *12.
         self.add_data("d90_epq",self.data["doy"] + offd + off_epq)
-
-
 
     def sync_mag(self):
         '''

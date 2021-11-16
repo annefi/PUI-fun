@@ -1,7 +1,7 @@
 from swics_collimator_ulysses import collimator
 from DataLoader.uswiutils import getvelocity
-from ACE.tools.ace_utils import calc_day00
-from pylib.etCoord import rotate
+# from ACE.tools.ace_utils import calc_day00 #somehow doesnt work any more... replace with d90 and delete?
+# from pylib.etCoord import rotate
 from numpy import *
 import matplotlib.pyplot as plt
 from custom_colours import lighten_color
@@ -34,23 +34,35 @@ matplotlib.rcParams.update({'font.size': 14,
 #os.chdir('/home/af/PUI-fun/')
 
 class Dist3D(object):
-    def __init__(self, d, mass=4., charge=1., aspphistep=2., aspthetastep=2., v_sc_step=1., nrs_perp=3, nrs_para=9,
-                 nrs_sec=9, nrs_epq=3, vswstep = 10, ion="He1+", offset_sp=180., sc_vel=False):
+    def __init__(self, d, mass=4., charge=1., aspphi_step=2., asptheta_step=2., nrs_v_sc = 1., nrs_perp=3,
+                 nrs_para=9,
+                 nrs_sec=9, nrs_epq=3, nrs_vswstep = 10, ion="He1+", offset_sp=180., sc_vel=False):
+        '''
 
-        # nrs_perp: 3, nrs_para: 9, nrs_sec: 6, nrs_epq: 3
-        """
-        d : dbData instance with species predefined by Master mask
-        m : Ion mass in amu
-        q : Ion charge in e
-        """
+        :param d: uswipha instance with species predefined by Master mask
+        :param mass: Ion mass in amu
+        :param charge: Ion charge in e
+        :param aspphi_step: stepsize between maximum and minimum aspect angle phi in dataset
+        :param asptheta_step: stepsize between maximum and minimum aspect angle theta in dataset
+        :param nrs_v_sc: number of v_sc (eigenvel.) steps between min and max v_sc in dataset (for R,
+        T and N component)
+        :param nrs_perp:
+        :param nrs_para:
+        :param nrs_sec:
+        :param nrs_epq:
+        :param nrs_vswstep: number of vsw-steps between maximum and minimum in dataset
+        :param ion:
+        :param offset_sp:
+        :param sc_vel:
+        '''
         self.d = d
-        self.aspphistep = aspphistep
-        self.aspthetastep = aspthetastep
+        self.aspphi_step = aspphi_step
+        self.asptheta_step = asptheta_step
         self.nrs_para = nrs_para
         self.nrs_perp = nrs_perp
         self.nrs_sec = nrs_sec
         self.nrs_epq = nrs_epq
-        self.vswstep = vswstep
+        self.nrs_vswstep = nrs_vswstep
         self.mass = mass
         self.charge = charge
         self.ion = ion
@@ -59,19 +71,17 @@ class Dist3D(object):
         self.col_dim = self.nrs_para * self.nrs_perp * self.nrs_sec
         self.sec_det_dim = self.col_dim * self.nrs_epq
         self.aspphi = arange(around(min(self.d.data["aspphi"])),
-                             around(max(self.d.data["aspphi"])) + aspphistep + 0.0001, aspphistep)
+                             around(max(self.d.data["aspphi"])) + aspphi_step + 0.0001, aspphi_step)
         self.asptheta = arange(around(min(self.d.data["asptheta"])),
-                               around(max(self.d.data["asptheta"])) + aspthetastep + 0.0001, aspthetastep)
-
+                               around(max(self.d.data["asptheta"])) + asptheta_step + 0.0001, asptheta_step)
         self.vswbins = arange(around(min(self.d.data["vsw"])),
-                              around(max(self.d.data["vsw"])) + vswstep + 0.0001, vswstep)
-
+                              around(max(self.d.data["vsw"])) + nrs_vswstep + 0.0001, nrs_vswstep)
         self.vr = arange(around(min(self.d.data["vr_sc"])),
-                         around(max(self.d.data["vr_sc"])) + v_sc_step + 0.0001, v_sc_step)
+                         around(max(self.d.data["vr_sc"])) + nrs_v_sc + 0.0001, nrs_v_sc)
         self.vt = arange(around(min(self.d.data["vt_sc"])),
-                         around(max(self.d.data["vt_sc"])) + v_sc_step + 0.0001, v_sc_step)
+                         around(max(self.d.data["vt_sc"])) + nrs_v_sc + 0.0001, nrs_v_sc)
         self.vn = arange(around(min(self.d.data["vn_sc"])),
-                         around(max(self.d.data["vn_sc"])) + v_sc_step + 0.0001, v_sc_step)
+                         around(max(self.d.data["vn_sc"])) + nrs_v_sc + 0.0001, nrs_v_sc)
         # Calculates the ion's velocity ranges from EpQ-steps:
         self.vels = getvelocity(self.mass, self.charge, arange(0, 64, 1), frac=1.)
         # nrs_epq -> deltaEpQ is +-5% -> delta v is +-2.5% -> nrs_epq equal spaced velocities in epq direction are
@@ -82,9 +92,9 @@ class Dist3D(object):
         else:
             self.d.data["d00"] = calc_day00(self.d.data["year"], self.d.data["doy"])
         self.geomfac = 0.0225 * 1e-10
+        # depends on max vsw, here in SC frame:
+        self.wshellmax = getvelocity(self.mass, self.charge, 0, frac = 1.) / max(self.d.data["vsw"]) # Todo: überdenken
 
-        # depends on max vsw, here in SC frame
-        self.wshellmax = getvelocity(self.mass, self.charge, 0, frac = 1.) / max(self.d.data["vsw"])
         self._calc_FoV()
         print('1')
         self._calc_vspace()
@@ -111,20 +121,18 @@ class Dist3D(object):
     def _calc_vspace(self):
         """
         Calculates vR,vT,vN for all epqsteps and given aspect angles.
-        shape self.vspace: (#aspphi, #asptheta, #vr, #vt, #vn, #epq-steps, #det, #sec, xyz, sec_det_dim)
+        shape self.vspace: (#aspphi, #asptheta, #epq-steps, #det, #sec, xyz, sec_det_dim)
         (sec_det_dim is col_dim * nrs_epq)
         """
         self.vspace = zeros((self.aspphi.shape[0], self.asptheta.shape[0], 64, 3, 8, 3, self.sec_det_dim))
         for i in range(self.nrs_epq):
             for iv, v in enumerate(self.vels):
-                self.vspace[:, :, iv, :, :, :, i * self.col_dim:(i + 1) * self.col_dim] = -self.FoV * v * \
-                                                                                          self.vels_fac[i]
+                self.vspace[:, :, iv, :, :, :, i * self.col_dim:(i + 1) * self.col_dim] = -self.FoV * v * self.vels_fac[i]
         self.vspace[:, :, :, :, :, 0, :] = -self.vspace[:, :, :, :, :, 0, :]  # R defined positive from Sun to SC
         self.vspace[:, :, :, :, :, 1, :] = -self.vspace[:, :, :, :, :, 1, :]  # positive T in the regular definition
 
     def _calc_wspace(self):
         """
-        Calculates vR,vT,vN for all epqsteps and given aspect angles
         not used atm: too much memory. Only used for plot_wspace.py with a smaller number of sec_det_dim
         """
         self.w3dspace = zeros(
@@ -157,9 +165,8 @@ class Dist3D(object):
         sc_vel determines, if the velocity of the SC itself should be considered in the v-space.
         """
         # divide the bins each into half and match every count to the central binedge.
-        searcharr_phi = arange(self.aspphi[0] + self.aspphistep / 2., self.aspphi[-1], self.aspphistep)
-        searcharr_theta = arange(self.asptheta[0] + self.aspthetastep / 2., self.asptheta[-1], self.aspthetastep)
-
+        searcharr_phi = arange(self.aspphi[0] + self.aspphi_step / 2., self.aspphi[-1], self.aspphi_step)
+        searcharr_theta = arange(self.asptheta[0] + self.asptheta_step / 2., self.asptheta[-1], self.asptheta_step)
         phiind = searchsorted(searcharr_phi, self.d.get_data('Master', "aspphi"))
         thetaind = searchsorted(searcharr_theta, self.d.get_data('Master', "asptheta"))
 
@@ -191,7 +198,7 @@ class Dist3D(object):
             # considering the velocity of the SC
             if not "vR" in self.d.data.keys():
                 self.d.add_data("vR", self.vspace[phiind, thetaind, epqind, detind, secind, 0] + tile(self.d.data[
-                    'vr_sc'], ( self.sec_det_dim,1)).T)
+                    'vr_sc'], (self.sec_det_dim,1)).T)
                 # a list of sec_det_dim entries is added!
             else:
                 self.d.data["vR"] = self.vspace[phiind, thetaind, epqind, detind, secind, 0] + tile(self.d.data[
@@ -202,7 +209,7 @@ class Dist3D(object):
                       'vt_sc'], (self.sec_det_dim,1)).T)
             else:
                 self.d.data["vT"] = self.vspace[phiind, thetaind, epqind, detind, secind, 1] + tile(self.d.data[
-                         'vt_sc'], (self.sec_det_dim,1)).T
+                         'vt_sc'], (self.sec_det_dim,1))
 
             if not "vN" in self.d.data.keys():
                 self.d.add_data("vN", self.vspace[phiind, thetaind, epqind, detind, secind, 2] + tile(self.d.data[
@@ -398,10 +405,10 @@ class Dist3D(object):
         # new bins: take the edges again from inbetween the aspphisteps and insert outer borders to not
         # exclude counts
         # attention: these are the asp angle bins!
-        phibins = arange(self.aspphi[0] - self.aspphistep / 2., self.aspphi[-1] + self.aspthetastep, self.aspphistep)
-        thetabins = arange(self.asptheta[0] - self.aspthetastep / 2., self.asptheta[-1] + self.aspthetastep,
-                           self.aspthetastep)
-        vswbins = arange(self.vswbins[0] - self.vswstep / 2., self.vswbins[-1] + self.vswstep, self.vswstep)
+        phibins = arange(self.aspphi[0] - self.aspphi_step / 2., self.aspphi[-1] + self.asptheta_step, self.aspphi_step)
+        thetabins = arange(self.asptheta[0] - self.asptheta_step / 2., self.asptheta[-1] + self.asptheta_step,
+                           self.asptheta_step)
+        vswbins = arange(self.vswbins[0] - self.nrs_vswstep / 2., self.vswbins[-1] + self.nrs_vswstep, self.nrs_vswstep)
 
         self.phbins = phibins
         self.vb = vswbins
@@ -481,11 +488,11 @@ class Dist3D(object):
 
         # new bins: take the edges again from inbetween the aspphisteps and insert outer borders to not
         # exclude counts
-        asp_phibins = arange(self.aspphi[0] - self.aspphistep / 2., self.aspphi[-1] + self.aspthetastep,
-                             self.aspphistep)
-        asp_thetabins = arange(self.asptheta[0] - self.aspthetastep / 2., self.asptheta[-1] + self.aspthetastep,
-                               self.aspthetastep)
-        vswbins = arange(self.vswbins[0] - self.vswstep / 2., self.vswbins[-1] + self.vswstep, self.vswstep)
+        asp_phibins = arange(self.aspphi[0] - self.aspphi_step / 2., self.aspphi[-1] + self.asptheta_step,
+                             self.aspphi_step)
+        asp_thetabins = arange(self.asptheta[0] - self.asptheta_step / 2., self.asptheta[-1] + self.asptheta_step,
+                               self.asptheta_step)
+        vswbins = arange(self.vswbins[0] - self.nrs_vswstep / 2., self.vswbins[-1] + self.nrs_vswstep, self.nrs_vswstep)
 
         # H indicates how often a particular aspphi-asptheta-usw combination occurs (= how often did ULYSSES see this
         # angle with this vsw?)
@@ -592,7 +599,6 @@ class Dist3D(object):
         self.d.remove_submask("Master", "vsw")
         self.d.remove_submask("Master", "aspphi")
         self.d.remove_submask("Master", "asptheta")
-
 
         # for each combination of aspect angles and solar wind velocity the phase space coverage has to be calculated
         # to calculate the weights for normalising the final histograms:
@@ -1602,3 +1608,18 @@ class Dist3D(object):
 #             sli = H[i + 9]
 #             sli /= amax(sli)
 #             ax.pcolormesh(wbins, wbins, sli.T, cmap="jet", vmax=1.)
+
+
+def calc_day00(years,doys):
+    # shady copy from ACE.tools.ace_utils
+    # Todo: check whether I can justt use calc_d90
+    d00=array([])
+    for year in unique(years):
+        dy=year-2000
+        if dy==0:
+            lpd=0
+        else:
+            lpd=1+int((dy-1)/4)
+        offset=dy*365+lpd
+        d00=append(d00,doys[years==year]+offset)
+    return d00

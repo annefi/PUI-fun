@@ -806,7 +806,7 @@ class dbData(object):
         else:
             for prod in prods:
                 subset[prod] = self.data[prod][self.get_mask(mask)]
-        pickle.dump(subset, open(filename, "w"), protocol=2)
+        pickle.dump(subset, open(filename, "wb"), protocol=2)
 
     @staticmethod
     def load_all(filename):
@@ -917,7 +917,7 @@ class dbData(object):
         !!! This overrides all data loaded by method self.load_data() !!!
         INPUT: mask:
         """
-        subset = pickle.load(open(filename, "r"))
+        subset = pickle.load(open(filename, "rb"))
         print( "!!! Warning !!! - If you Proceed current data set will be overwritten!")
         if force == True or raw_input("Proceed? [Y/N]").lower() in ["yes", "y", "jo", "ja", "j"]:
             keys = list(self.data.keys())

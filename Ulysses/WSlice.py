@@ -51,9 +51,6 @@ class WSlice():
             norm_arr[norm_arr == 0] = 1
             self.H = H0 / norm_arr
 
-
-
-
     def init_plot(self):
         def keypress(event):
             if event.key == 'right':
@@ -64,7 +61,7 @@ class WSlice():
                 self.rot_plot()
             plt.show()
             print(self.slice)
-            print 'click'
+            print('click')
         fig, self.ax = plt.subplots()
         fig.canvas.mpl_connect('key_press_event', keypress)
         self.txt_plane = self.ax.text(0.05, 1.05, '%s-plane'%r'$\rm{w_T-w_N}$', bbox = props, transform =

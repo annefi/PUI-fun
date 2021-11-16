@@ -4,7 +4,7 @@ Loads trajectory data from list "/data/etph/Ulysses/trajectory/traj_data_ulysses
 and adds them as data products to uswipha instance.
 Also calculates and adds Aspect Angle data products.
 
-STILL PYTHON2
+now PYTHON3 (Nov 21)
 '''
 
 from pylib3 import dbData
@@ -147,7 +147,7 @@ class ulysses_traj(dbData):
 
     def calc_d90(self):
         offy = self.data["Year"] - 1990
-        offd = offy*365 + (offy.astype(int)+2)/4
+        offd = offy*365 + (offy.astype(int)+1)//4
         self.keys.append('d90')
         self.add_data("d90", self.data["DOY"] + offd)
 

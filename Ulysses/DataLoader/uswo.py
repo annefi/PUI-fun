@@ -97,9 +97,7 @@ class uswo(dbData):
 
         """
         offy = self.data["year"] - 1990
-        print("offy", offy)
-        offd = offy*365 + (offy.astype(int)+2)//4
-        print("offd", offd, '\n')
+        offd = offy*365 + (offy.astype(int)+1)//4
         self.add_data("d90", self.data["doy"] + offd)
 
     def calc_doy(self):

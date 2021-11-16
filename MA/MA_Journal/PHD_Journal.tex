@@ -176,6 +176,21 @@ Fehler gefunden, hatte den Datensatz durch eine falsche if-Loop in einer Kompone
 
 \newday{12}{11}
 In allen Skripten das mit d90-Schaltjahr ändern (s.o.), dann weiter versuchen load\_pui\_ulysses zum Laufen zu bringen (erstmal ohne SPICE, stattdessen mit alten Daten)
+
+\newday{15}{11}
+\textbf{Dinge, die mir unterwegs auffallen und die ich überarbeiten könnte:}\\
+\begin{itemize}
+	\item In dist3D d00 mit d90 ersetzen ?!
+	\item In load\_pui\_ulysses: Warum muss ich nochmal über das Subset gehen? Testen, Lars ggf. fragen (und Bescheid sagen, dass in dbData wb und rb stehen muss in der save- und load-Funktion)
+	\item Header aufräumen
+	\item Geht das beim Bilden der aspangle-bins mit rechten Dingen zu? Passt das zusammen mit dem im Kollimator?
+	\item wshellmax: ist das nicht falsch mit dem max der vsw? Mit kleinen vsw werden ja größere ws erreicht?
+	\item Wird eigenvelocity richtig addiert in add\_3dv? Wo wird eigenvel. rtn definiert?
+	\item warum Runden in add\_w?
+	\item Warum Winkel in w? wofür? wie?
+\end{itemize}
+
+
 %
 %
 %

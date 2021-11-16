@@ -2,7 +2,7 @@ import sys
 sys.path.append('/home/asterix/fischer/PUI/old_stuff/Ulysses/swics/software/libulpy')
 sys.path.append('/home/asterix/fischer/PUI')
 from DataLoader.uswipha import uswipha
-#from dist3D_pui_ulysses import Dist3D
+from dist3D_pui_ulysses import Dist3D
 import numpy as np
 np.seterr(divide='ignore', invalid='ignore') # Ignore Ipython error messages
 #from matplotlib import pylab
@@ -53,8 +53,7 @@ if He1:
     print('*** Load Subset ***')
     d1.load_subset(filename = 'd1.tmp', force = True)
 
-    #D3 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
-
+    D3 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
 
 
 # # load Ulysses data:

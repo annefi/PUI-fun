@@ -81,7 +81,7 @@ class UlyssesTrajSpice(dbData):
 
     def calc_d90(self):
         offy = self.data["YYYY"] - 1990
-        offd = offy*365 + (offy.astype(int)+2)/4
+        offd = offy*365 + (offy.astype(int)+1)//4
         self.keys.append('d90')
         self.add_data("d90", self.data["doy"] + offd)
 
