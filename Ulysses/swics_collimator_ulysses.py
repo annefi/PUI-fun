@@ -191,7 +191,7 @@ class collimator(object):
         (It looks like the detector view direction is 135 deg ahead of the sun-pulse. Which means that the sun-pulse
         direction is typically reached at sector 5!)
 
-        For Ulysses SWICS the positioning of sun pulse sensor direction vs. SWICS has the be found out. Due to that
+        For Ulysses SWICS the positioning of sun pulse sensor direction vs. SWICS has to be found out. Due to that
         we're working with a variable angle here...
         """
         # Sunpulser viewing direction at spin start,i.e. start of sec0 (in plane spanned by spin axis and SC-Sun

@@ -27,8 +27,9 @@ props = dict(boxstyle='round', facecolor='#D3D3D3', edgecolor = 'k', alpha=0.8, 
 
 
 class WSlice():
-    def __init__(self, D, min_wHe = 0.0, slice = 0, dim = 'R', color_norm = 'sg', mode = 'ps',
-                 wbins = arange(-2.1, 2.11, 0.2) ):
+    def __init__(self, D, min_wHe = 0.0, slice = 0, dim = 'R', color_norm = 'sg', mode = 'ps', wbins = arange(-2.1,
+                                                                                                              2.11,
+                                                                                                              0.2) ):
         self.D = D
         self.slice = slice
         self.dim = dim
@@ -89,6 +90,7 @@ class WSlice():
             if dim == 'R':
                 self.Quadmesh = self.ax.pcolormesh(wbins, wbins, self.H[slice, :, :].T, cmap=colormap, vmin = vmin,
                                                    vmax = vmax, rasterized=True)
+
                 colormap.set_under(color='#D3D3D3')
                 self.txt_plane.set_text('%s plane' % r'$\rm{w_T-w_N}$')
                 self.txt_slice.set_text(r'$\mathrm{w_{sw,R} = [%2.1f, %2.1f]}$' % (wbins[slice], wbins[slice+1]))
@@ -114,6 +116,7 @@ class WSlice():
                 raise (ValueError("'dim' must be 'R', 'T' or 'N'."))
         if self.color_norm == 'sg':
             if dim == 'R':
+                #vmax = 10000.
                 vmax = amax(self.H[slice, :, :])
                 #vmax = mean(self.H[slice, :, :]) + 3.5*std(self.H[slice, :, :])
                 if vmax <= 0:
