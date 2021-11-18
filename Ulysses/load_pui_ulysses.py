@@ -18,14 +18,14 @@ myrootpath = '/home/asterix/fischer/PUI/'
 ###
 
 He1 = True #False
-He2 = #True #False
+He2 = False #True
 
 # load Ulysses data:
-years = [1995]
+years = [1995a]
 
 if He1:
     # give path to data that includes magnet data
-    d1 = uswipha(year=years, tf=[[5, 265]])
+    d1 = uswipha(year=years, tf=[[1, 365]])
     d1.sync_swoops()
     d1.sync_traj()
     #d1.sync_mag() # not needed anymore: new PHAs including mag data
