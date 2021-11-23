@@ -136,7 +136,7 @@ class ulysses_traj(dbData):
                 sc_vec_hg = array([self.data['R'][day],self.data['HG_Long'][day],self.data['HG_Lat'][day]])
                 earth_vec_hg = array([self.data['R_AU'][day], self.data['HGI_LON'][day], self.data['HGI_LAT'][
                     day]])
-                print('\n\nOld version SC: %s \nOld version earth: %s \n' %(sc_vec_hg, earth_vec_hg))
+                #print('\n\nOld version SC: %s \nOld version earth: %s \n' %(sc_vec_hg, earth_vec_hg))
                 asp_phi, asp_theta = calc_asp_angles(sc_vec_hg,earth_vec_hg)
                 print(asp_phi, asp_theta)
                 self.data['asp_phi'].append(asp_phi)

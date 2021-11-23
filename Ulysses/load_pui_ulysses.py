@@ -1,4 +1,5 @@
 import sys
+import time
 sys.path.append('/home/asterix/fischer/PUI/old_stuff/Ulysses/swics/software/libulpy')
 sys.path.append('/home/asterix/fischer/PUI')
 from DataLoader.uswipha import uswipha
@@ -21,20 +22,21 @@ He1 = True #False
 He2 = False #True
 
 # load Ulysses data:
-years = [1995a]
+years = [1995]
+
+start = time.time()
 
 if He1:
     # give path to data that includes magnet data
-    d1 = uswipha(year=years, tf=[[1, 365]])
+    d1 = uswipha(year=years, tf=[[1, 150]])
     d1.sync_swoops()
-    d1.sync_traj()
+
     #d1.sync_mag() # not needed anymore: new PHAs including mag data
     d1.set_mask('Master','vsw',760,780, reset = True)
     d1.set_mask('Master','rng',0,0,reset=True)
     d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
     #d1.set_mask('Master','brw',1,1,reset=True)
-
     d1.set_mask('Master', 'epq', 0, 19, reset=True)
 
     # d1.set_mask('Master','Btheta',-20./180.*np.pi,20./180.*np.pi,reset=True)
@@ -49,11 +51,16 @@ if He1:
     # get a real subset with masks applied:
     print('*** Save Subset ***')
     d1.save_subset('Master', filename = 'd1.tmp')
+
     print('*** Load Subset ***')
     d1.load_subset(filename = 'd1.tmp', force = True)
 
+    d1.sync_traj()
+
     D3 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
 
+end = time.time()
+print("time: ", end-start)
 
 # # load Ulysses data:
 # years = [1996]
@@ -88,12 +95,6 @@ if He1:
 #     d1.load_subset(filename = 'd1.tmp', force = True)
 
 #     D6 = Dist3D(d1, mass = 4, charge = 1, sc_vel = True)
-
-
-
-
-
-
 
 
 
