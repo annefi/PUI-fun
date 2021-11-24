@@ -82,7 +82,7 @@ class WSlice():
 
     def plot(self, dim, slice):
         wbins = self.wbins
-        colormap = plt.cm.get_cmap("viridis")
+        colormap = plt.cm.get_cmap("jet")
         if self.color_norm == 'all':
             #vmin = amin(self.H[self.H > 0])
             vmin = 0.
@@ -118,7 +118,7 @@ class WSlice():
             if dim == 'R':
                 #vmax = 10000.
                 vmax = amax(self.H[slice, :, :])
-                #vmax = mean(self.H[slice, :, :]) + 3.5*std(self.H[slice, :, :])
+                vmax = mean(self.H[slice, :, :]) + 3.5*std(self.H[slice, :, :])
                 if vmax <= 0:
                     vmax = 0.0001
 

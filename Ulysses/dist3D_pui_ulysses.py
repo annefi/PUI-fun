@@ -37,9 +37,9 @@ matplotlib.rcParams.update({'font.size': 14,
 #os.chdir('/home/af/PUI-fun/')
 
 class Dist3D(object):
-    def __init__(self, d, mass=4., charge=1., aspphi_step=2., asptheta_step=2., nrs_v_sc = 1., nrs_perp=3,
-                 nrs_para=9,
-                 nrs_sec=9, nrs_epq=3, nrs_vswstep = 10, ion="He1+", offset_sp=180., sc_vel=False):
+    def __init__(self, d, mass=4., charge=1., aspphi_step=2., asptheta_step=2., nrs_v_sc = 1., nrs_perp=1,
+                 nrs_para=6,
+                 nrs_sec=8, nrs_epq=1, nrs_vswstep = 10, ion="He1+", offset_sp=180., sc_vel=False):
         '''
 
         :param d: uswipha instance with species predefined by Master mask
@@ -230,7 +230,7 @@ class Dist3D(object):
                       'vt_sc'], (self.sec_det_dim,1)).T)
             else:
                 self.d.data["vT"] = self.vspace[phiind, thetaind, epqind, detind, secind, 1] + tile(self.d.data[
-                         'vt_sc'], (self.sec_det_dim,1))
+                         'vt_sc'], (self.sec_det_dim,1)).T
 
             if not "vN" in self.d.data.keys():
                 self.d.add_data("vN", self.vspace[phiind, thetaind, epqind, detind, secind, 2] + tile(self.d.data[
