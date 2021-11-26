@@ -246,7 +246,10 @@ class PlotdbData(object):
             elif norm:
                 print("Unrecognized norm mode!")
             hist = append(hist, 0.)
-            ax.plot(xvals[:], hist, label=self.db.mp[mask].get("name"), color=self.db.mp[mask].get("color"), lw = self.db.mp[mask].get("linewidth"), ls = "steps-post"+self.db.mp[mask].get("linestyle"), marker=self.db.mp[mask].get("marker"))
+            ax.plot(xvals[:], hist, label=self.db.mp[mask].get("name"), color=self.db.mp[mask].get("color"),
+                    lw = self.db.mp[mask].get("linewidth"), drawstyle = "steps-post", ls = self.db.mp[mask].get(
+                    "linestyle"),
+                    marker=self.db.mp[mask].get("marker"))
         if legend and legendbox:
             pylab.legend()
         elif legend:

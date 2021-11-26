@@ -20,7 +20,7 @@ matplotlib.rcParams.update({'font.size': 12,
                             'figure.subplot.bottom': 0.1,
                             'figure.subplot.right': 0.97,
                             'figure.subplot.top': 0.88,
-                            'figure.figsize': (7,5.5)}) # Achtung anders
+                            'figure.figsize': (5.5,4.5)}) # Achtung anders
 
 # define style of textboxes
 props = dict(boxstyle='round', facecolor='#D3D3D3', edgecolor = 'k', alpha=0.8, pad = 0.8)
@@ -118,7 +118,7 @@ class WSlice():
             if dim == 'R':
                 #vmax = 10000.
                 vmax = amax(self.H[slice, :, :])
-                vmax = mean(self.H[slice, :, :]) + 3.5*std(self.H[slice, :, :])
+                #vmax = mean(self.H[slice, :, :]) + 3.5*std(self.H[slice, :, :])
                 if vmax <= 0:
                     vmax = 0.0001
 

@@ -23,13 +23,13 @@ He1 = True #False
 He2 = False #True
 
 # load Ulysses data:
-years = [1996,1997]
+years = [1993]
 
 start = time.time()
 
 if He1:
     # give path to data that includes magnet data
-    d1 = uswipha(year=years, tf=[[1, 366]])
+    d1 = uswipha(year=years, tf=[[315, 366]])
     d1.sync_swoops()
     d1.sync_traj()
     #d1.sync_mag() # not needed anymore: new PHAs including mag data
@@ -39,16 +39,16 @@ if He1:
     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
     #d1.set_mask('Master','brw',1,1,reset=True)
     #d1.set_mask('Master', 'epq', 0, 19, reset=True)
-    d1.set_mask('Master', 'epq', 30,31, reset=True)
-    #d1.set_mask('Master', 'r', 0, 1.4, reset=True)
+    #d1.set_mask('Master', 'epq', 30,31, reset=True)
+    #d1.set_mask('Master', 'r', 0, 1.38, reset=True)
 
     # d1.set_mask('Master','Btheta',-20./180.*np.pi,20./180.*np.pi,reset=True)
     # d1.set_mask('Master', 'Bphi', -20. / 180. * np.pi, 20. / 180. * np.pi, reset=True)
     # #d1.set_mask('Master', 'Bphi', 85. / 180. * np.pi, 95. / 180. * np.pi)
 
     # d1.set_mask('Master','aa_tot', 0, 10)
-    d1.set_mask('Master','aspphi', -5,5)
-    d1.set_mask('Master','asptheta',-10,10)
+    #d1.set_mask('Master','aspphi', -5,5)
+    #d1.set_mask('Master','asptheta',-10,10)
 
     # get a real subset with masks applied:
     print('*** Save Subset ***')
