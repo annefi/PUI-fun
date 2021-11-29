@@ -1,0 +1,25 @@
+\documentclass{beamer}
+\usetheme{default}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage{xcolor}
+
+\definecolor{mnfgold}{HTML}{f29400}
+\definecolor{mnflight}{HTML}{f6e3c4}
+
+\title{Beamer Template}
+\author{TeXstudio Team}
+\begin{document}
+\begin{frame}[plain]
+    \maketitle
+\end{frame}
+\begin{frame}{Frame Title}
+\begin{minipage}{.2\textwidth}
+	\begin{mdframed}[roundcorner=4pt,
+		align=center,linecolor=black,backgroundcolor=mnflight,innerleftmargin = 8pt,innerrightmargin = 2pt,
+		linewidth=1pt]
+		{\large $\mathbf{w = \frac{v_{PUI}}{v_{SW}}}$}
+	\end{mdframed}
+\end{minipage}
+
+\end{frame}
+\end{document}
