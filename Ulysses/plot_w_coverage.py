@@ -23,12 +23,12 @@ matplotlib.rcParams.update({'font.size': 14,
 v_min = getvelocity(4,1,17)
 v_max = getvelocity(4,1,0)
 
-v_sw = np.arange(400.,1050.,50.)
+v_sw = np.arange(400.,950.,50.)
 
 fig, ax = plt.subplots(figsize=(8,7))
 
 for v in v_sw:
-    ax.plot(np.array([v_min,v_max])/v, [v,v], marker='o')
+    ax.plot(np.array([v_min-v,v_max-v])/v, [v,v], marker='o')
 
 ax.set_xlabel("w")
 ax.set_ylabel("vsw / km/s")

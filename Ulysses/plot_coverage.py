@@ -6,7 +6,7 @@ from custom_colours import lighten_color
 import matplotlib.colors as colors
 import matplotlib.ticker as ticker
 from numpy import *
-from pylib import dbData
+from pylib3 import dbData
 import sys
 from DataLoader.uswipha import uswipha
 from mpl_toolkits.axes_grid1 import make_axes_locatable
