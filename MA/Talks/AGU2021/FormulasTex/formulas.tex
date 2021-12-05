@@ -5,6 +5,8 @@
 
 \definecolor{mnfgold}{HTML}{f29400}
 \definecolor{mnflight}{HTML}{f6e3c4}
+\definecolor{mnfmedium}{HTML}{F6D093}
+
 
 \title{Beamer Template}
 \author{TeXstudio Team}
@@ -13,13 +15,40 @@
     \maketitle
 \end{frame}
 \begin{frame}{Frame Title}
-\begin{minipage}{.2\textwidth}
+\begin{minipage}{.3\textwidth}
 	\begin{mdframed}[roundcorner=4pt,
-		align=center,linecolor=black,backgroundcolor=mnflight,innerleftmargin = 8pt,innerrightmargin = 2pt,
+		align=center,linecolor=black,backgroundcolor=mnflight,innerleftmargin = 4pt,innerrightmargin = 2pt,
 		linewidth=1pt]
-		{\large $\mathbf{w = \frac{v_{PUI}}{v_{SW}}}$}
+		{\begin{center}
+				\large $\mathbf{w = \frac{v_{PUI}}{v_{SW}}}$\\[0.1cm]
+		{\tiny
+			
+			$\text{v}_\text{{PUI}}$: PUI velocity \\
+			$\text{v}_\text{{SW}}$: solar wind velocity
+			
+			
+	}
+		\end{center}}
 	\end{mdframed}
 \end{minipage}
+\\[1cm]
+\begin{minipage}{.3\textwidth}
+	\begin{mdframed}[roundcorner=4pt,
+		align=center,linecolor=black,backgroundcolor=mnflight,innerleftmargin = 4pt,innerrightmargin = 2pt,
+		linewidth=1pt]
+		{\begin{center}
+				\large $\mathbf{w_{SW} = \frac{v_{PUI}-v_{SW}}{v_{SW}}}$\\[0.1cm]
+				{\tiny
+					
+					$\text{v}_\text{{PUI}}$: PUI velocity \\
+					$\text{v}_\text{{SW}}$: solar wind velocity
+					
+					
+				}
+		\end{center}}
+	\end{mdframed}
+\end{minipage}
+
 
 \end{frame}
 \end{document}

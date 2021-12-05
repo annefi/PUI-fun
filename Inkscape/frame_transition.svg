@@ -14,7 +14,7 @@
    viewBox="0 0 27 20"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="frame_transition.svg"
    inkscape:export-filename="/home/asterix/fischer/PUI/Inkscape/Images/wspace_sw.pdf.png"
    inkscape:export-xdpi="96"
@@ -303,17 +303,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6"
-     inkscape:cx="47.048943"
-     inkscape:cy="42.95158"
+     inkscape:zoom="22.4"
+     inkscape:cx="51.30769"
+     inkscape:cy="44.078388"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer1"
      showgrid="true"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:window-width="1280"
-     inkscape:window-height="946"
-     inkscape:window-x="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1052"
+     inkscape:window-x="1366"
      inkscape:window-y="0"
      inkscape:window-maximized="1">
     <inkscape:grid
@@ -342,7 +342,7 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-277)"
-     style="display:none">
+     style="display:inline">
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.58333302px;line-height:125%;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -494,7 +494,7 @@
            id="tspan1223"
            sodipodi:role="line"><tspan
              id="tspan1229"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.41111112px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">|v|</tspan><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.41111112px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">v</tspan><tspan
              id="tspan1227"
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:0.70555556px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">SC</tspan></tspan></text>
       <text
@@ -517,7 +517,8 @@
      id="layer3"
      inkscape:label="Layer 3"
      transform="translate(0,-251)"
-     style="display:inline">
+     style="display:none"
+     sodipodi:insensitive="true">
     <g
        id="g7646-8-9"
        transform="matrix(1.5000002,0,0,1.5000002,-12.375006,156.87498)"
@@ -623,8 +624,9 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Layer 2"
-     style="display:none"
-     transform="translate(0,-251)">
+     style="display:inline"
+     transform="translate(0,-251)"
+     sodipodi:insensitive="true">
     <g
        transform="translate(-46,191)"
        id="g1603">
@@ -697,17 +699,17 @@
       <text
          transform="rotate(-45.018194)"
          id="text1225-6"
-         y="91.032608"
-         x="-7.8755879"
+         y="93.571983"
+         x="-6.8741336"
          style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          xml:space="preserve"><tspan
            style="stroke-width:0.26458332px"
-           y="91.032608"
-           x="-7.8755879"
+           y="93.571983"
+           x="-6.8741336"
            id="tspan1223-4"
            sodipodi:role="line"><tspan
              id="tspan1229-3"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.41111112px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px">|v|</tspan><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.41111112px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px">v</tspan><tspan
              id="tspan1227-5"
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:0.70555556px;font-family:Sans;-inkscape-font-specification:'Sans, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px">SW</tspan></tspan></text>
       <text
