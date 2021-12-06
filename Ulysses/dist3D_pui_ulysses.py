@@ -37,9 +37,9 @@ matplotlib.rcParams.update({'font.size': 14,
 #os.chdir('/home/af/PUI-fun/')
 
 class Dist3D(object):
-    def __init__(self, d, mass=4., charge=1., aspphi_step=2., asptheta_step=2., nrs_v_sc = 1., nrs_perp=1,
+    def __init__(self, d, mass=4., charge=1., aspphi_step=1., asptheta_step=1., nrs_v_sc = 1., nrs_perp=1,
                  nrs_para=6,
-                 nrs_sec=8, nrs_epq=1, nrs_vswstep = 10, ion="He1+", offset_sp=180., sc_vel=False):
+                 nrs_sec=8, nrs_epq=4, nrs_vswstep = 10, ion="He1+", offset_sp=180., sc_vel=False):
         '''
 
         :param d: uswipha instance with species predefined by Master mask

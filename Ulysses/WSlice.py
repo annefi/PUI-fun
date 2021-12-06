@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from numpy import arange, min, max, amin, amax, unique, around
 from numpy import *
 import matplotlib
+import copy
 
 matplotlib.rcParams.update({'font.size': 12,
                             'axes.labelsize': 14,
@@ -20,7 +21,7 @@ matplotlib.rcParams.update({'font.size': 12,
                             'figure.subplot.bottom': 0.1,
                             'figure.subplot.right': 0.97,
                             'figure.subplot.top': 0.88,
-                            'figure.figsize': (5.5,4.5)}) # Achtung anders
+                            'figure.figsize': (7.5,6)}) # Achtung anders
 
 # define style of textboxes
 props = dict(boxstyle='round', facecolor='#D3D3D3', edgecolor = 'k', alpha=0.8, pad = 0.8)
@@ -78,11 +79,12 @@ class WSlice():
         self.cb = plt.colorbar(self.Quadmesh, ax = self.ax)
         self.cb.set_label("%s"%(self.unit), labelpad = 10)
         self.cb.formatter.set_powerlimits((0, 0)) # limits for changing to scientific number notation -> (0,0): always
-        self.cb.update_bruteforce(self.Quadmesh) # force updating the colorbar
+        self.cb.update_normal(self.Quadmesh) # force updating the colorbar
 
     def plot(self, dim, slice):
         wbins = self.wbins
-        colormap = plt.cm.get_cmap("jet")
+        colormap = copy.copy(matplotlib.cm.get_cmap("jet"))
+        #colormap = plt.cm.get_cmap("jet")
         if self.color_norm == 'all':
             #vmin = amin(self.H[self.H > 0])
             vmin = 0.
@@ -189,7 +191,7 @@ class WSlice():
 
         self.plot(dim = self.dim, slice = self.slice)
         self.cb.formatter.set_powerlimits((0, 0)) # limits for changing to scientific number notation -> (0,0): always
-        self.cb.update_bruteforce(self.Quadmesh) # force updating range of the colorbar
+        self.cb.update_normal(self.Quadmesh) # force updating range of the colorbar
 
 
     def rot_plot(self):
@@ -201,7 +203,7 @@ class WSlice():
             self.dim = 'R'
         self.plot(dim = self.dim, slice = self.slice)
         self.cb.formatter.set_powerlimits((0, 0)) # limits for changing to scientific number notation -> (0,0): always
-        self.cb.update_bruteforce(self.Quadmesh) # force updating range of the colorbar
+        self.cb.update_normal(self.Quadmesh) # force updating range of the colorbar
 
 
 
