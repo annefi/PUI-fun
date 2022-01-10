@@ -6,6 +6,7 @@
 /Ulysses/Trajectory/SPICE/data/*
 /Ulysses.idea/workspace.xml
 /MA/MA_Journal/*.pdf
+*.mp4
 
 # binary file written by dbData:
 tmp.dat
