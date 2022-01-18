@@ -23,8 +23,8 @@ magpath = "/Ulysses/data_misc/PHA_mag/"
 from pylib3 import *
 from numpy import *
 from Ulysses.DataLoader.uswo import uswo
-# new: Todo: check if everything works and leads to the same results...
-#from Ulysses.DataLoader.ulysses_traj_spice import UlyssesTrajSpice
+# new: Todo: check if everything works and leads to the same results... then archive old method
+from Ulysses.DataLoader.ulysses_traj_spice import UlyssesTrajSpice
 from Ulysses.DataLoader.ulysses_traj import ulysses_traj
 #from Ulysses.DataLoader.ulysses_mag_loader import mag_loader # not working atm
 from Ulysses.DataLoader.uswiutils import getvelocity
@@ -223,7 +223,6 @@ class uswipha(dbData):
         # **
         self.add_data("wHe+",self.data["vHe+"]/self.data["vsw"])
 
-
     def sync_traj_spice(self):
         ''' Synchronisation with Ulysses trajectory data
 
@@ -273,7 +272,6 @@ class uswipha(dbData):
         # mask = traj.data['v'] != 0.
         # v_abs, x = histogram(traj.data["d90"], bins=uTi_int, weights=traj.data["v"])
         # self.add_data("v_abs_sc", v_abs[index_int])
-
 
     def sync_traj(self):
         ''' Synchronisation with Ulysses trajectory data
@@ -327,13 +325,6 @@ class uswipha(dbData):
         mask = traj.data['v'] != 0.
         v_abs, x = histogram(traj.data["d90"], bins=uTi_int, weights=traj.data["v"])
         self.add_data("v_abs_sc", v_abs[index_int])
-
-    # def sync_traj_SPICE(self):
-    #      ''' Synchronisation with Ulysses trajectory data
-
-    #     Adds data products from ulysses_traj_spice, i.e. trajectory data calculated with SPICE
-    #     '''
-    #     pass
 
     def calc_d90_epq(self):
         '''

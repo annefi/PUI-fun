@@ -23,8 +23,9 @@
 \usepackage{amsmath}
 \usepackage{wasysym}
 
-\usepackage[color=teal!10,textsize=footnotesize, textwidth = 0.2\textwidth]{todonotes} % selbsterklärend
-%\setuptodonotes{noline, color=teal!70}
+%%% Todo and done commands
+\usepackage[color=teal!10,textsize=footnotesize, textwidth = 0.2\textwidth]{todonotes} 
+\setuptodonotes{noline}
 %\newcommand{\done}[2]{\todo[#1, color=teal!10]{#2}}
 \newcommand{\done}[2][]{\todo[color=teal!70, #1]{#2}}
 
@@ -36,7 +37,7 @@
 \usepackage{lipsum}
 \newcommand{\newday}[2]{\vspace{2cm}\marginnote{{\Large \textbf{\shortdayofweekname{#1}{#2}{2021}, ~\formatdate{#1}{#2}{2021}}}}}
 
-
+\newcommand{\newdaytt}[2]{\vspace{2cm}\marginnote{{\Large \textbf{\shortdayofweekname{#1}{#2}{2022}, ~\formatdate{#1}{#2}{2022}}}}}
 
 \begin{document}
 \newday{8}{4}
@@ -166,7 +167,7 @@ Weiter das Plot-Skript dokumentieren, so einrichten, dass man mal easy(!) einen 
 Weiter: Schauen, was bei der Berechnung des Aspangles passiert: Müssten HCI und ECLIPJ2000 (hg und hc) nicht dasselbe in RTN sein? Beachte ich das überhaupt irgendwo? Dann müsste der AA nämlich auch gleich sein. Vielleicht muss der Ulysses-Vektor in RTN hart auf [R,0,0] gesetzt werden?
 
 \newday{6}{9}
-Das mit den Koordinatensystemen gefixt, passt nun bis zur ca. 3. Nachkommastelle.\\Als nächstes: calc\_SPE einbauen, also asp\_tot für den SPICE-Datensatz (habe keine unabhängige Quelle für die Berechnung des Winkels gefunden, aber das was ich in der Kladde geamcht habe sieht ganz schlau aus). Dann etwas mit den vier Plotfunktionen rumprobieren: Layout, Farben? (Vergleichen mit Abb. aus dem Vortrag). Docstrings einbauen in spice\_ulysses.py und in ul\_coordinates\_utils vervollständigen.
+Das mit den Koordinatensystemen gefixt, passt nun bis zur ca. 3. Nachkommastelle.\\Als nächstes: calc\_SPE einbauen, also asp\_tot für den SPICE-Datensatz (habe keine unabhängige Quelle für die Berechnung des Winkels gefunden, aber das was ich in der Kladde gemacht habe sieht ganz schlau aus). Dann etwas mit den vier Plotfunktionen rumprobieren: Layout, Farben? (Vergleichen mit Abb. aus dem Vortrag). Docstrings einbauen in spice\_ulysses.py und in ul\_coordinates\_utils vervollständigen.
 
 \newday{7}{9}
 Checken, warum Archive-EC-Timesynchro nicht funktioniert. Dann schauen, ob alle Koordinaten-Longitudes jetzt passen. Dann weiter die 4 Plots durchgehen
@@ -191,6 +192,20 @@ In allen Skripten das mit d90-Schaltjahr ändern (s.o.), dann weiter versuchen l
 	\item Spin Reference Pulse nochmal durchdenken
 \end{itemize}
 
+\newdaytt{18}{01}
+Hatte im November alles mit SPICE stehen und liegen gelassen, um Plots für die AGU mit alten Traj-Daten zu erzeugen. Jetzt:\\
+\begin{itemize}
+	\item SPICE einbauen und vergleichen, ob dieselben Spektren rauskommen \todo{SPICE}
+	\begin{itemize}
+		\item Parameter einbauen zum Wählen ob sync\_traj oder sync\_traj\_spice genutzt werden soll --- kann ich ganz einfach über zwei uswipha-Instanzen machen, jeweils die eine oder andere Methode drauf anwenden\done{Auswahl}
+		\item Spektrum vergleichen \todo{Spektren vergl.}
+		\item Eigengeschwindigkeit einbauen \todo{Eigen-vel}
+	\end{itemize}
+	\item VHM\_FGM Magnetfelddaten runterladen; ---liegen auf \textit{data/projects/Ulysses/VHM\_FGM\_1min} \done{Download Mag-Daten}
+	\item Magnetfelddaten einbauen... alte Struktur nutzen? Es gab eine Version, in denen die live gemappt wurden und eine mit fertigen Datenfiles \todo{sync Mag-Daten}
+\end{itemize}
+\newpage
+Das SPICE-Skript (\textit{spice\_new\_inheri.py}) ist irgendwie so gar nicht vollständig: Funktion zum Wegschreiben fehlt. Ich habe nur ein Datenfile aus letztem Februar gefunden, das wahrscheinlich mit dem alten Skript \textit{spice\_ulysses.py} geschrieben wurde. Von da auch compare-Funktion einpflegen und Eigengeschwindigkeit etc. Dann mal gucken, was mit \textit{spice\_ulysses\_new} ist. Kann davon mal was weg?
 
 %
 %

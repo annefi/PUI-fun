@@ -43,7 +43,6 @@ class UlyssesTrajSpice(dbData):
         if "path" in kwargs:
             self.path=kwargs["path"]
         else:
-            #self.path="/data/projects/Ulysses/trajectory/traj_data_ulysses_pool.dat"
             self.path="./Ulysses/Trajectory/trajectory_data/spice_traj.dat"
 
         if self.year[0] == 1990:

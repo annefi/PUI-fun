@@ -29,11 +29,11 @@ start = time.time()
 
 if He1:
     # give path to data that includes magnet data
-    d1 = uswipha(year=years, tf=[[315, 366]])
+    d1 = uswipha(year=years, tf=[[1, 10]])
     d1.sync_swoops()
-    d1.sync_traj()
+    d1.sync_traj_spice()
     #d1.sync_mag() # not needed anymore: new PHAs including mag data
-    d1.set_mask('Master','vsw',750,780, reset = True)
+    #d1.set_mask('Master','vsw',750,780, reset = True)
     d1.set_mask('Master','rng',0,0,reset=True)
     d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
@@ -58,7 +58,7 @@ if He1:
     print('*** Load Subset ***')
     d.load_subset(filename = 'd1.tmp', force = True)
 
-    print('done')
+    print('\ndone')
     print(len(d.data['year']))
     #D = Dist3D(d, mass = 4, charge = 1, sc_vel = True)
 
