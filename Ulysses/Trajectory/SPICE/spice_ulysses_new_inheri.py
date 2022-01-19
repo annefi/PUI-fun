@@ -126,11 +126,11 @@ class TrajectoryUlysses():
         ### LAT ###
         axes[1].plot(self.times, self.data['lat'] - T.data['lat'], linestyle = 'None', marker = 'o', ms = 1.)
         axes[1].set_ylabel(r'$\Delta$Lat. in deg.')
-        axes[1].set_ylim(-0.05,0.05)
+        #axes[1].set_ylim(-0.05,0.05)
         ### LONG ###
         axes[2].plot(self.times, self.data['long'] - T.data['long'], linestyle = 'None', marker = 'o', ms = 1.)
         axes[2].set_ylabel(r'$\Delta$Long. in deg.')
-        axes[2].set_ylim(-0.05,0.05)
+        #axes[2].set_ylim(-0.05,0.05)
         # plot vertical lines at polar passes:
         for a in axes:
             a.vlines(self.t_southpass, ymin=-180, ymax=360, color= gray , alpha=0.5, linestyle=
@@ -278,7 +278,6 @@ class SpiceTra(TrajectoryUlysses):
         self.data['asp_long'] = np.array(self.data['asp_long'])
         self.data['asp_tot'] = np.array(self.data['asp_tot'])
 
-
 class ArchiveTra(TrajectoryUlysses):
     def get_data(self):
         super().get_data()
@@ -350,6 +349,46 @@ class ArchiveTra(TrajectoryUlysses):
 ################################### DATA LOADERS ##############################################
 ###############################################################################################
 
+def locateUlysses(date, RF):
+    '''
+    Return Ulysses' position after SPICE data
+
+    :param date: datetime object
+    :param RF: etspice.ReferenceFrame
+    :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
+    '''
+    xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF) # in km
+    if len(xyz) == 3:
+        r, theta, phi = cart2spher(xyz, deg = True)
+        #print(RF.name , np.array([r/1.496e8,theta,phi]))
+        return np.array([r/km_per_AU,theta,phi])
+    elif len(xyz) > 3:
+        positions = []
+        for t in xyz:
+            r, theta, phi = cart2spher(t, deg = True)
+            positions.append(np.array([r/km_per_AU,theta,phi]))
+        return positions
+
+def velocityUlysses(date):
+    # Todo: Folgendes einbauen: will eig nur mit Archivdata vergleichen
+    from spiceypy import spkezr, datetime2et
+    [x, y, z, vx, vy, vz] = spkezr('ULYSSES', datetime2et(date), 'HCI', 'None', 'SUN')[0]  # cart in km(/s)
+    v_sph = cart2spher(np.array(vx,vy,vz))
+    # todo: wie in rtn?
+
+def locateBody(body, date, RF):
+    '''
+    Return a body's position after SPICE data
+
+    :param body: body object, e.g. EARTH
+    :param date: datetime object
+    :param RF: etspice.ReferenceFrame
+    :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
+    '''
+    xyz = body.position(time = date, relative_to = SUN, reference_frame = RF)
+    r, theta, phi = cart2spher(xyz, deg = True)
+    return(np.array([r/km_per_AU,theta,phi]))
+
 def read_pool():
     '''
     Reader for Ulysses trajectory data from condensed file traj_data_ulysses_pool.dat
@@ -378,67 +417,6 @@ def read_pool():
         p_dict[key] = np.array(p_dict[key])
     fin.close()
     return p_dict
-
-def locateUlysses(date, RF):
-    '''
-    Return Ulysses' position after SPICE data
-
-    :param date: datetime object
-    :param RF: etspice.ReferenceFrame
-    :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
-    '''
-    xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF) # in km
-    if len(xyz) == 3:
-        r, theta, phi = cart2spher(xyz, deg = True)
-        #print(RF.name , np.array([r/1.496e8,theta,phi]))
-        return np.array([r/km_per_AU,theta,phi])
-    elif len(xyz) > 3:
-        positions = []
-        for t in xyz:
-            r, theta, phi = cart2spher(t, deg = True)
-            positions.append(np.array([r/km_per_AU,theta,phi]))
-        return positions
-
-def velocityUlysses(date):
-    # Todo: Folgendes einbauen: will eig nur mit Archivdata vergleichen
-    from spiceypy import spkezr, datetime2et
-    [x, y, z, vx, vy, vz] = spkezr('ULYSSES', datetime2et(date), 'HCI', 'None', 'SUN')[0]  # cart in km(/s)
-    v_sph = cart2spher(np.array(vx,vy,vz))
-    # todo: wie in rtn?
-
-
-def locateUlyssesnew(date, RF):
-    '''
-    Return Ulysses' position after SPICE data
-
-    :param date: datetime object
-    :param RF: etspice.ReferenceFrame
-    :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
-    '''
-    xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF) # in km
-    if len(xyz) == 3:
-        r, theta, phi = cart2spher(xyz, deg = True)
-        #print(RF.name , np.array([r/1.496e8,theta,phi]))
-        return np.array([r/km_per_AU,theta,phi])
-    elif len(xyz) > 3:
-        positions = []
-        for t in xyz:
-            r, theta, phi = cart2spher(t, deg = True)
-            positions.append(np.array([r/km_per_AU,theta,phi]))
-        return positions
-
-def locateBody(body, date, RF):
-    '''
-    Return a body's position after SPICE data
-
-    :param body: body object, e.g. EARTH
-    :param date: datetime object
-    :param RF: etspice.ReferenceFrame
-    :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
-    '''
-    xyz = body.position(time = date, relative_to = SUN, reference_frame = RF)
-    r, theta, phi = cart2spher(xyz, deg = True)
-    return(np.array([r/km_per_AU,theta,phi]))
 
 def load_aa_data():
     '''

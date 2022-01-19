@@ -25,12 +25,13 @@
 
 %%% Todo and done commands
 \usepackage[color=teal!10,textsize=footnotesize, textwidth = 0.2\textwidth]{todonotes} 
-\setuptodonotes{noline}
+%\setuptodonotes{noline}
 %\newcommand{\done}[2]{\todo[#1, color=teal!10]{#2}}
 \newcommand{\done}[2][]{\todo[color=teal!70, #1]{#2}}
 
-
-
+\presetkeys%
+{todonotes}%
+{noline}{}
 
 
 \usepackage{datetime} % for date
@@ -207,6 +208,8 @@ Hatte im November alles mit SPICE stehen und liegen gelassen, um Plots für die 
 \newpage
 Das SPICE-Skript (\textit{spice\_new\_inheri.py}) ist irgendwie so gar nicht vollständig: Funktion zum Wegschreiben fehlt. Ich habe nur ein Datenfile aus letztem Februar gefunden, das wahrscheinlich mit dem alten Skript \textit{spice\_ulysses.py} geschrieben wurde. Von da auch compare-Funktion einpflegen und Eigengeschwindigkeit etc. Dann mal gucken, was mit \textit{spice\_ulysses\_new} ist. Kann davon mal was weg?
 
+\newdaytt{19}{01}
+In \textit{spice\_ulysses\_new\_inheri.py} gibts schon comp-Funktionen. Allerdings funktioniert comp\_coords nicht in den Winkel-Komponenten \todo{comp\_coords fixen}
 %
 %
 %

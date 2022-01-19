@@ -1,5 +1,5 @@
 from etspice import *
-import os
+import os, sys
 
 #####################
 ### SPICE kernels ###
@@ -27,4 +27,3 @@ elif os.path.exists("/data/projects/spice"):
     os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
 else:
     sys.exit('SPICE_DATA_DIR could not be found.\nProbably working from home and not having SSH-ed to asterix?')
-
