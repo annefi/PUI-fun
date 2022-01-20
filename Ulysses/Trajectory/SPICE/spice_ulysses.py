@@ -5,7 +5,6 @@ Contains different functions to load Ulysses' trajectory data via SPICE (based o
 calculations and write the final trajectory file that is used for further data analysis
 """
 
-
 from etspice import SUN, ULYSSES, EARTH
 from etspice import ReferenceFrame, utils
 from etspice import kernels

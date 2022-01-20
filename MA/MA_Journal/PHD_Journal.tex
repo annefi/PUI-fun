@@ -209,7 +209,12 @@ Hatte im November alles mit SPICE stehen und liegen gelassen, um Plots für die 
 Das SPICE-Skript (\textit{spice\_new\_inheri.py}) ist irgendwie so gar nicht vollständig: Funktion zum Wegschreiben fehlt. Ich habe nur ein Datenfile aus letztem Februar gefunden, das wahrscheinlich mit dem alten Skript \textit{spice\_ulysses.py} geschrieben wurde. Von da auch compare-Funktion einpflegen und Eigengeschwindigkeit etc. Dann mal gucken, was mit \textit{spice\_ulysses\_new} ist. Kann davon mal was weg?
 
 \newdaytt{19}{01}
-In \textit{spice\_ulysses\_new\_inheri.py} gibts schon comp-Funktionen. Allerdings funktioniert comp\_coords nicht in den Winkel-Komponenten \todo{comp\_coords fixen}
+In \textit{spice\_ulysses\_new\_inheri.py} gibts schon comp-Funktionen. Allerdings funktioniert comp\_coords nicht in den Winkel-Komponenten \done{comp\_coords fixen} ---> hab die Achsenbegrenzungen rausgenommen, jetzt passts (nicht schön, aber geht erstmal)
+
+\newdaytt{20}{01}
+Musste in der Uni etspice neu installieren, funktionierte mit python3.9 nicht, kryptische Fehlermeldung. Lösung war \textit{python3.9 -m pip install --upgrade setuptools}\\
+
+Jetzt Eigengeschwindigkeiten einbauen
 %
 %
 %
