@@ -59,6 +59,11 @@ class TrajectoryUlysses():
         self.data.update({p:[] for p in paras_asp})
         print('get asp ang data')
 
+    def get_eigen_vel(self):
+        paras_eigenvel = ['vR','vT','vN']
+        self.data.update({p: [] for p in paras_eigenvel})
+        print("get eigen velocity data")
+
     def sync_times(self, alien_times, data):
         """ Synchronise the data set times with self.times
 
@@ -220,6 +225,44 @@ class TrajectoryUlysses():
         plt.subplots_adjust(hspace=0.2)
         return axes
 
+    def plot_eigenvels(self, axes = None):
+        """Todo"""
+        # set up the plot:
+        if axes is None:
+            fig, axes = plt.subplots(nrows = 3, sharex = True)
+        ### total ###
+        axes[0].plot(self.times, self.data['vR'], linestyle = 'None', marker = 'o', ms = 2., label = self.lbl,
+                     alpha= 0.5)
+        axes[0].set_xlim(self.times[0],self.times[-1])
+        axes[0].set_ylabel('vR in km/s')
+        lg = axes[0].legend(loc='upper center', ncol=3, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
+                True, framealpha=1., facecolor= bg_creme, shadow=True)
+        for legend_handle in lg.legendHandles:
+                legend_handle._legmarker.set_markersize(6)
+        ### ASP LAT ###
+        axes[1].plot(self.times, self.data['vT'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5)
+        axes[1].set_ylabel('vT in km/s')
+        #axes[1].set_yticks([-90,-45,0,45,90])
+        #axes[1].set_ylim(-95,95)
+        ### ASP LONG ###
+        axes[2].plot(self.times, self.data['vN'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5)
+        axes[2].set_ylabel('vN in km/s')
+        #axes[2].set_yticks([-180,-90,0,90,180])
+        #axes[2].set_ylim(-185,185)
+        # plot vertical lines at polar passes:
+        for a in axes:
+            a.vlines(self.t_southpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyle=
+            'dashed', linewidth=1.5)
+            a.vlines(self.t_northpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyles='dashed',
+                     linewidth=1.5)
+        plt.gcf().autofmt_xdate()
+        plt.gcf().tight_layout()
+        plt.gcf().align_ylabels()
+        for ax in axes:
+            ax.grid(True)
+        plt.subplots_adjust(hspace=0.2)
+        return axes
+
     def plot_3d(self, ax = None, cs = None, col = None):
         """ Creates a 3D-Plot of Ulysses' position for the loaded timeframe
 
@@ -278,6 +321,14 @@ class SpiceTra(TrajectoryUlysses):
         self.data['asp_long'] = np.array(self.data['asp_long'])
         self.data['asp_tot'] = np.array(self.data['asp_tot'])
 
+    def get_eigen_vel(self):
+        super().get_eigen_vel()
+        for t in self.times:
+            [vR, vT, vN] = velocityUlysses(t, self.RF)
+            self.data['vR'].append(vR)
+            self.data['vT'].append(vT)
+            self.data['vN'].append(vN)
+
 class ArchiveTra(TrajectoryUlysses):
     def get_data(self):
         super().get_data()
@@ -308,6 +359,14 @@ class ArchiveTra(TrajectoryUlysses):
         self.data['asp_lat'] = self.sync_times(asp_data['datetimes'], asp_data['ASP_THETA'])
         self.data['asp_long'] = self.sync_times(asp_data['datetimes'], asp_data['ASP_PHI'])
         self.data['asp_tot'] = self.sync_times(asp_data['datetimes'], asp_data['ASP_total'])
+
+    def get_eigen_vel(self):
+        super().get_aa_data()
+        pool_data = read_pool()
+        # Equatorial System is mostly called HG (heliographic) within the archive files
+        self.data['vR'] = self.sync_times(pool_data['datetimes'], pool_data['v_R'])
+        self.data['vT'] = self.sync_times(pool_data['datetimes'], pool_data['v_T'])
+        self.data['vN'] = self.sync_times(pool_data['datetimes'], pool_data['v_N'])
 
     def rotate_to_EQ(self):
         if self.RF == "EC":
@@ -360,25 +419,28 @@ def locateUlysses(date, RF):
     xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF) # in km
     if len(xyz) == 3:
         r, theta, phi = cart2spher(xyz, deg = True)
-        #print(RF.name , np.array([r/1.496e8,theta,phi]))
         return np.array([r/km_per_AU,theta,phi])
     elif len(xyz) > 3:
+        pass
         positions = []
         for t in xyz:
             r, theta, phi = cart2spher(t, deg = True)
             positions.append(np.array([r/km_per_AU,theta,phi]))
         return positions
 
-def velocityUlysses(date):
+def velocityUlysses(date, RF = HCI):
     # Todo: Folgendes einbauen: will eig nur mit Archivdata vergleichen (-> ?? Ich brauche doch v_eigen für die
     # Analyse...)
-    # Soll am besten locateUlysses ersetzen
-    # Todo: für verschiedene RFs
+    # Soll am besten locateUlysses ersetzen <- nö
     from spiceypy import spkezr, datetime2et
-    [x, y, z, vx, vy, vz] = spkezr('ULYSSES', datetime2et(date), 'HCI', 'None', 'SUN')[0]  # cart in km(/s)
-    v_sph = cart2spher(np.array(vx,vy,vz))
-    xyz_sph = cart2spher(np.array(x,y,z))
-    # todo: wie in rtn?
+    if RF == HCI:
+        [x, y, z, vx, vy, vz] = spkezr('ULYSSES', datetime2et(date), 'HCI', 'None', 'SUN')[0]  # cart in km(/s)
+    else:
+        sys.exit("Invalid parameter RF. Only HCI is implemented yet. ")
+    r_sph = cart2spher(np.array([x,y,z]))
+    v_sph = cart2spher(np.array([vx,vy,vz]))
+    vR, vT, vN = hg_to_rtn(v_sph, r_sph)
+    return(np.array([vR,vT,vN]))
 
 def locateBody(body, date, RF):
     '''
@@ -445,9 +507,29 @@ def load_aa_data():
     return p_aa_dict
 
 
-dt1 = datetime.datetime(1990,10,7)
-dt2 = datetime.datetime(1998,1,15)
+
+dt1 = datetime.datetime(1991,1,7)
+dt2 = datetime.datetime(1998,2,15)
 T = SpiceTra(TF=[dt1,dt2], RF = ECLIPJ2000, DT = 24*3600*10)
 T1 = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
 A = ArchiveTra(TF=[dt1,dt2], RF = "EC", DT = 24*3600*10)
 A1 = ArchiveTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)
+
+class Test_v():
+    def __init__(self,dat = dt1):
+        date2 = dat+2*datetime.timedelta(seconds = 1)
+        T = SpiceTra(TF=[dat, date2], RF = HCI, DT = 1)
+        self.T = T
+
+        self.r1 = np.array([T.data['r'][0], T.data['lat'][0], T.data['long'][0]])
+        self.r2 = np.array([T.data['r'][1], T.data['lat'][1], T.data['long'][1]])
+        self.del_r = self.r2-self.r1
+        self.del_r_km = self.del_r*km_per_AU
+
+        self.xyzT0 = spher2cart(self.r1)
+        self.xyzT1 = spher2cart(self.r2)
+        self.del_xyz = self.xyzT1 - self.xyzT0
+        self.del_xyz_km = self.del_xyz*km_per_AU
+
+        #self.xyz = velocityUlysses(date=dat, RF = HCI)[0][:3]
+        self.vxyz = velocityUlysses(date=dat, RF = HCI)
