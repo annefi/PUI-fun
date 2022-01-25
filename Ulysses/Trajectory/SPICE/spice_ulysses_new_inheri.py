@@ -48,11 +48,12 @@ class TrajectoryUlysses():
         self.RF = RF
         self.get_data()
         self.get_aa_data()
+        self.get_eigen_vel()
 
     def get_data(self):
         paras = ['r', 'lat', 'long']
         self.data = {p:[] for p in paras}
-        print('getdata')
+        print('get data')
 
     def get_aa_data(self):
         paras_asp = ['asp_lat', 'asp_long', 'asp_tot']
@@ -153,7 +154,7 @@ class TrajectoryUlysses():
         return axes
 
     def plot_aspangles(self, axes = None):
-        """Todo"""
+        """Plot aspect angles (total, latitude, longitude) over time"""
         # set up the plot:
         if axes is None:
             fig, axes = plt.subplots(nrows = 3, sharex = True)
@@ -190,7 +191,7 @@ class TrajectoryUlysses():
         return axes
 
     def comp_aspangles(self, T, axes = None):
-        """todo"""
+        """Plot difference between two sets of trajectory data for aspect angles"""
         if axes is None:
             fig, axes = plt.subplots(nrows = 3, sharex = True)
         ### total ###
@@ -226,11 +227,11 @@ class TrajectoryUlysses():
         return axes
 
     def plot_eigenvels(self, axes = None):
-        """Todo"""
+        """ Plot eigen-velocity RTN components over time """
         # set up the plot:
         if axes is None:
             fig, axes = plt.subplots(nrows = 3, sharex = True)
-        ### total ###
+        ### vR ###
         axes[0].plot(self.times, self.data['vR'], linestyle = 'None', marker = 'o', ms = 2., label = self.lbl,
                      alpha= 0.5)
         axes[0].set_xlim(self.times[0],self.times[-1])
@@ -239,12 +240,12 @@ class TrajectoryUlysses():
                 True, framealpha=1., facecolor= bg_creme, shadow=True)
         for legend_handle in lg.legendHandles:
                 legend_handle._legmarker.set_markersize(6)
-        ### ASP LAT ###
+        ### vT ###
         axes[1].plot(self.times, self.data['vT'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5)
         axes[1].set_ylabel('vT in km/s')
         #axes[1].set_yticks([-90,-45,0,45,90])
         #axes[1].set_ylim(-95,95)
-        ### ASP LONG ###
+        ### vN ###
         axes[2].plot(self.times, self.data['vN'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5)
         axes[2].set_ylabel('vN in km/s')
         #axes[2].set_yticks([-180,-90,0,90,180])
@@ -281,6 +282,8 @@ class TrajectoryUlysses():
 
 class SpiceTra(TrajectoryUlysses):
     def get_data(self):
+        """ Add Ulysses trajectory data (R in AU, latitude and longitude in degrees) to data dictionary
+        and set up the style for the data set """
         super().get_data()
         for t in self.times:
             [R, lat, long] = locateUlysses(t, self.RF)
@@ -297,6 +300,15 @@ class SpiceTra(TrajectoryUlysses):
             self.clr = red_dk
 
     def get_aa_data(self):
+        """ Add Ulysses aspect angle data to data dictionary 
+
+        The aspect angle is the angle between the line-of-sights SC-Sun and SC-Earth (which is the orientation line of Ulysses' antenna)
+        measured from the SC.
+        Calculated are the total ('flat') angle and the two spherical components in RTN-system (all in degrees):
+        Aspect latitude is measured from -90° to +90°, where 0° is within the R-T-plane and +90° along the positive N-axis
+        Aspect longitude is measured from -90° to +90°, where 0° is within the R-N-plane and +90° along the negative T-axis
+            (i.e., positive asp_phi: "left" from the line-of-sight SC-Sun)
+        """
         super().get_aa_data()
         if self.RF in [HCI, HCI_B, HCI_J]: # solar equatorial coord. sys.
             for t in self.times:
@@ -307,11 +319,12 @@ class SpiceTra(TrajectoryUlysses):
                 self.data['asp_long'].append(asp_phi)
                 self.data['asp_tot'].append(calc_SPE(asp_theta, asp_phi))
         elif self.RF in [ECLIPJ2000, ECLIPB1950]: # ecliptic coord. sys.
+            t_epoch = datetime.datetime(2000,1,1) if self.RF == ECLIPJ2000 else datetime.datetime(1950,1,1)
             for t in self.times:
                 vec_Ul = locateUlysses(t, self.RF)
                 vec_Earth = locateBody(EARTH, t, self.RF)
-                asp_theta, asp_phi = calc_asp_angles(hc_to_hg(vec_Ul, ang_ascnode = calc_delta(t)),
-                                                     hc_to_hg(vec_Earth, ang_ascnode = calc_delta(t)))
+                asp_theta, asp_phi = calc_asp_angles(hc_to_hg(vec_Ul, ang_ascnode = calc_delta(t_epoch)),
+                                                     hc_to_hg(vec_Earth, ang_ascnode = calc_delta(t_epoch)))
                 self.data['asp_lat'].append(asp_theta)
                 self.data['asp_long'].append(asp_phi)
                 self.data['asp_tot'].append(calc_SPE(asp_theta, asp_phi))
@@ -322,9 +335,10 @@ class SpiceTra(TrajectoryUlysses):
         self.data['asp_tot'] = np.array(self.data['asp_tot'])
 
     def get_eigen_vel(self):
+        """ Add Ulysses eigen-velocity (in RTN components) data to data dictionary """
         super().get_eigen_vel()
         for t in self.times:
-            [vR, vT, vN] = velocityUlysses(t, self.RF)
+            [vR, vT, vN] = velocityUlysses(t, self.RF.name)
             self.data['vR'].append(vR)
             self.data['vT'].append(vT)
             self.data['vN'].append(vN)
@@ -361,7 +375,7 @@ class ArchiveTra(TrajectoryUlysses):
         self.data['asp_tot'] = self.sync_times(asp_data['datetimes'], asp_data['ASP_total'])
 
     def get_eigen_vel(self):
-        super().get_aa_data()
+        super().get_eigen_vel()
         pool_data = read_pool()
         # Equatorial System is mostly called HG (heliographic) within the archive files
         self.data['vR'] = self.sync_times(pool_data['datetimes'], pool_data['v_R'])
@@ -428,17 +442,20 @@ def locateUlysses(date, RF):
             positions.append(np.array([r/km_per_AU,theta,phi]))
         return positions
 
-def velocityUlysses(date, RF = HCI):
+def velocityUlysses(date, RF = "HCI"):
     # Todo: Folgendes einbauen: will eig nur mit Archivdata vergleichen (-> ?? Ich brauche doch v_eigen für die
     # Analyse...)
     # Soll am besten locateUlysses ersetzen <- nö
     from spiceypy import spkezr, datetime2et
-    if RF == HCI:
-        [x, y, z, vx, vy, vz] = spkezr('ULYSSES', datetime2et(date), 'HCI', 'None', 'SUN')[0]  # cart in km(/s)
-    else:
-        sys.exit("Invalid parameter RF. Only HCI is implemented yet. ")
+    [x, y, z, vx, vy, vz] = spkezr('ULYSSES', datetime2et(date), RF, 'None', 'SUN')[0]  # cart in km(/s)
     r_sph = cart2spher(np.array([x,y,z]))
-    v_sph = cart2spher(np.array([vx,vy,vz]))
+    v_sph = cart2spher(np.array([vx,vy,vz])) #does not really make sense but is needed for the rtn-function
+    if RF in [HCI, HCI_B, HCI_J]: # solar equatorial coord. sys.
+        pass
+    elif RF in [ECLIPJ2000, ECLIPB1950]: # ecliptic coord. sys.
+        t_epoch = datetime.datetime(2000,1,1) if self.RF == ECLIPJ2000 else datetime.datetime(1950,1,1)
+        r_sph = hc_to_hg(r_sph, ang_ascnode = calc_delta(t_epoch))
+        v_sph = hc_to_hg(r_sph, ang_ascnode = calc_delta(t_epoch))
     vR, vT, vN = hg_to_rtn(v_sph, r_sph)
     return(np.array([vR,vT,vN]))
 
@@ -508,12 +525,13 @@ def load_aa_data():
 
 
 
-dt1 = datetime.datetime(1991,1,7)
-dt2 = datetime.datetime(1998,2,15)
+dt1 = datetime.datetime(1990,11,1)
+dt2 = dt1
+dt2 = datetime.datetime(2009,6,28)
 T = SpiceTra(TF=[dt1,dt2], RF = ECLIPJ2000, DT = 24*3600*10)
 T1 = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
 A = ArchiveTra(TF=[dt1,dt2], RF = "EC", DT = 24*3600*10)
-A1 = ArchiveTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)
+#A1 = ArchiveTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)
 
 class Test_v():
     def __init__(self,dat = dt1):

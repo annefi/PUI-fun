@@ -23,6 +23,8 @@ HCI_J = ReferenceFrame([my_kernel],'HCI_J2000') # same as HCI but without freeze
 
 if os.path.exists("../fusessh/data/projects/spice"):
     os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
+elif os.path.exists("/media/storage/data/projects/spice"):
+    os.environ['SPICE_DATA_DIR'] = "/media/storage/data/projects/spice"
 elif os.path.exists("/data/projects/spice"):
     os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
 else:

@@ -258,7 +258,7 @@ def timerange(start_t: datetime,end_t: datetime,dt: int):
     return times
 
 def calc_delta(epoch):
-    """ Calculates the angle between the directions to the 1st Point of Aries (x-direction in ecliptic system) and to
+    """ Calculates the angle between the directions to the 1st Point of Aries (x-direction in ecliptic) and to
     the ascending node of the solar equator on the ecliptic plane as seen from Sun based on the given epoch
 
     This angle determines the longitude of the equatorial coordinate system's x-axis and is dependent on the epoch:
