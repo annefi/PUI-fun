@@ -18,7 +18,6 @@ class UlyssesTrajSpice(dbData):
     -------
     load_data()
     calc_d90()
-    test_aspect_angle()
 
     """
     def load_data(self,*args,**kwargs):
@@ -76,7 +75,10 @@ class UlyssesTrajSpice(dbData):
                                     for i,key in enumerate(self.keys):
                                         self.data[key].append(float(k[i]))
                     except:
-                        print("Problems reading DoYs ")
+                        print("Problems reading DoYs")
+                if len(self.data["YYYY"]) == 0:
+                    sys.exit('No data found for year %s'%year)
+
 
     def calc_d90(self):
         offy = self.data["YYYY"] - 1990

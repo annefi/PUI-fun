@@ -10,9 +10,9 @@ import os
 if os.path.isdir("/home/af/fusessh/data/projects/Ulysses/") == True:
     ### from Laptop old: ###
     datapath = "/home/af/fusessh/data/projects/Ulysses/"
-elif os.path.isdir("/media/storage/projects/Ulysses/") == True:
+elif os.path.isdir("/media/storage/data/projects/Ulysses/") == True:
     ### from Laptop new: ###
-    datapath = "/media/storage/projects/Ulysses/"
+    datapath = "/media/storage/data/projects/Ulysses/"
 elif os.path.isdir("/data/projects/Ulysses/") == True:
     ### from Uni/skeletor: ###
     datapath = "/data/projects/Ulysses/"

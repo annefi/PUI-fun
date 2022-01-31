@@ -1,7 +1,7 @@
 import sys
 import time
-sys.path.append('/home/asterix/fischer/PUI/old_stuff/Ulysses/swics/software/libulpy')
-sys.path.append('/home/asterix/fischer/PUI')
+#sys.path.append('/home/asterix/fischer/PUI/old_stuff/Ulysses/swics/software/libulpy')
+#sys.path.append('/home/asterix/fischer/PUI')
 from DataLoader.uswipha import uswipha
 from dist3D_pui_ulysses import Dist3D
 from WSlice import WSlice
@@ -12,9 +12,6 @@ np.seterr(divide='ignore', invalid='ignore') # Ignore Ipython error messages
 #from WShell import WShell
 #from WSky import WSky
 
-#myrootpath = '/home/af/PUI-fun/'
-myrootpath = '/home/asterix/fischer/PUI/'
-
 ###
 # Script for creating an instance d of uswipha and setting masks (s.b.)
 ###
@@ -23,13 +20,13 @@ He1 = True #False
 He2 = False #True
 
 # load Ulysses data:
-years = [1993]
+years = [1997]
 
 start = time.time()
 
 if He1:
     # give path to data that includes magnet data
-    d1 = uswipha(year=years, tf=[[1, 10]])
+    d1 = uswipha(year=years, tf=[[1, 5]])
     d1.sync_swoops()
     d1.sync_traj_spice()
     #d1.sync_mag() # not needed anymore: new PHAs including mag data

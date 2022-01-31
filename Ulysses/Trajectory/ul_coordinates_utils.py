@@ -146,16 +146,17 @@ def hg_to_hc(hg_vec: np.ndarray, degree=True, long_shift = 0., ang_ascnode = 75.
     int3 = cart2spher(int2, deg=degree)
     return np.array([int3[0], int3[1], int3[2]])
 
-def hc_to_hg(hc_vec, degree=True, long_shift=0., ang_ascnode = 75.0615) -> np.ndarray:
+def hc_to_hg(hc_vec, ang_ascnode, degree=True, long_shift=0.) -> np.ndarray:
     """ Transformation of a vector from heliocentric to heliographic coordinate system. (passive transformation)
 
     :param hc_vec: Heliocentric vector [R,lat,long] where lat in [-90°,90°]
     :param degree: True (default) when angles are given in degrees (False when in radians)
     :param long_shift: Ulysses HG-long-data is shifted by pi (long=0 shifted by 75+180 deg against vernal equinox)
-    :param ang_ascnode: offset between hg(eq) system's and hc(ecl) system's x-axes (epoch dependent). Default value is
-    for BC1950
+    :param ang_ascnode: offset between hg(eq) system's and hc(ecl) system's x-axes (epoch dependent).
+        Should be around 75°, please calculate the exact value with calc_delta()
     :return: vector [R,lat,long] in heliographic coordinates where lat increases towards +z axis to +90 deg and long according to long_shift
     """
+    print(ang_ascnode)
     hc_cart = spher2cart(np.array([hc_vec[0], hc_vec[1], hc_vec[2]]), deg=degree)
     # print('hc_cart:', hc_cart)
     int1 = rotate(hc_cart, 'z', -ang_ascnode, deg=degree)

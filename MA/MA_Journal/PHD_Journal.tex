@@ -200,7 +200,7 @@ Hatte im November alles mit SPICE stehen und liegen gelassen, um Plots für die 
 	\begin{itemize}
 		\item Parameter einbauen zum Wählen ob sync\_traj oder sync\_traj\_spice genutzt werden soll --- kann ich ganz einfach über zwei uswipha-Instanzen machen, jeweils die eine oder andere Methode drauf anwenden\done{Auswahl}
 		\item Spektrum vergleichen \todo{Spektren vergl.}
-		\item Eigengeschwindigkeit einbauen \todo{Eigen-vel}
+		\item Eigengeschwindigkeit einbauen \done{Eigen-vel}
 	\end{itemize}
 	\item VHM\_FGM Magnetfelddaten runterladen; ---liegen auf \textit{data/projects/Ulysses/VHM\_FGM\_1min} \done{Download Mag-Daten}
 	\item Magnetfelddaten einbauen... alte Struktur nutzen? Es gab eine Version, in denen die live gemappt wurden und eine mit fertigen Datenfiles \todo{sync Mag-Daten}
@@ -221,7 +221,10 @@ Eigengeschwindigkeit passt mit der alten überein. Jetzt neue Funktionen komment
 
 \newdaytt{25}{01}
 Läuft für alle Koordinatensysteme, außerdem Fehler beim Berechnen der SPICE-AspAngles gefixt (glaube ich): \textit{calc\_delta} muss (bei den ekliptischen Systemen) für die Epoche berechnet werden, nicht für das entsprechende Datum (oder...?) der Trajektorie.\\
-Next: Achsenbegrenzung Eigengeschw. anpassen \todo{Achsen} und schauen, warum ich um 1995 doch eine kleine Abweichung zwischen ekl. und eq. Systemen (SPICE) hatte \todo{Abweichung}
+Next: Achsenbegrenzung Eigengeschw. anpassen \done{Achsen} und schauen, warum ich um 1995 doch eine kleine Abweichung zwischen ekl. und eq. Systemen (SPICE) hatte \done{Abweichung} <--- Abweichung war ein Typo (r statt v kopiert) und ein if-Case, der nicht ausgelöst wurde.
+
+\newdaytt{26}{01}
+Absolute Eigengeschwindigkeit einbauen \done{v\_abs}
 %
 %
 %
