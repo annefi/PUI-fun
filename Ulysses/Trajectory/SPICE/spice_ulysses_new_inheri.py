@@ -47,8 +47,8 @@ class TrajectoryUlysses():
             RF = 'EQ'
         self.RF = RF
         self.get_data()
-        self.get_aa_data()
-        self.get_eigen_vel()
+        #self.get_aa_data()
+        #self.get_eigen_vel()
 
     def get_data(self):
         paras = ['r', 'lat', 'long']
@@ -347,6 +347,29 @@ class SpiceTra(TrajectoryUlysses):
             self.data['vN'].append(vN)
             self.data['vabs'].append(np.sqrt(vR**2 + vT**2 + vN**2))
 
+    def rotate_to_EQ(self):
+        if self.RF.name == "ECLIPB1950":
+            R = []
+            lat = []
+            long = []
+            for t in range(len(self.data['r'])):
+                vec_EC = np.array([self.data['r'][t],self.data['lat'][t],self.data['long'][t]])
+                #print(vec_EC)
+                t_epoch = datetime.datetime(2000, 1, 1,12) + datetime.timedelta(days=(2433282.42345905 - 2451545.0))
+                # exact epoch for BC1950
+                vec_rotated = hc_to_hg(vec_EC, ang_ascnode = calc_delta(t_epoch))
+                #print(vec_rotated, '\n')
+                R.append(vec_rotated[0])
+                lat.append(vec_rotated[1])
+                long.append(vec_rotated[2])
+            self.data['r'] = R
+            self.data['lat'] = lat
+            self.data['long'] = long
+        else:
+            sys.exit('RF has to be \'EC\' for rotation to EQ')
+
+
+
 class ArchiveTra(TrajectoryUlysses):
     def get_data(self):
         super().get_data()
@@ -395,7 +418,9 @@ class ArchiveTra(TrajectoryUlysses):
             for t in range(len(self.data['r'])):
                 vec_EC = np.array([self.data['r'][t],self.data['lat'][t],self.data['long'][t]])
                 #print(vec_EC)
-                vec_rotated = hc_to_hg(vec_EC)
+                t_epoch = datetime.datetime(2000, 1, 1,12) + datetime.timedelta(days=(2433282.42345905 - 2451545.0))
+                # exact epoch for BC1950
+                vec_rotated = hc_to_hg(vec_EC, ang_ascnode = calc_delta(t_epoch))
                 #print(vec_rotated, '\n')
                 R.append(vec_rotated[0])
                 lat.append(vec_rotated[1])
@@ -536,13 +561,14 @@ def load_aa_data():
     return p_aa_dict
 
 
-dt1 = datetime.datetime(1990,10,7)
-# dt2 = dt1
-dt2 = datetime.datetime(2009,6,28)
-#T = SpiceTra(TF=[dt1,dt2], RF = ECLIPB1950, DT = 24*3600*10)
-T1 = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
-A = ArchiveTra(TF=[dt1,dt2], RF = "EC", DT = 24*3600*10)
-A1 = ArchiveTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)
+#dt1 = datetime.datetime(1990,10,7)
+dt1 = datetime.datetime(1994,9,10)
+dt2 = dt1
+#dt2 = datetime.datetime(2000,6,28)
+S_ec = SpiceTra(TF=[dt1,dt2], RF = ECLIPB1950, DT = 24*3600*10)
+S_eq = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
+A_ec = ArchiveTra(TF=[dt1,dt2], RF = "EC", DT = 24*3600*10)
+A_eq = ArchiveTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)
 
 class Test_v():
     def __init__(self,dat = dt1):

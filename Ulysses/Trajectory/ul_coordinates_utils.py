@@ -274,7 +274,9 @@ def calc_delta(epoch):
     ang_ascnode = 75.76 + 1.397 * T0
     return ang_ascnode
 
-
+JD_J2000 = 2451545
+JD_1_1_1900 = 2415021
+JD_J1900 = 2415020
 
 ############ above this line: definitely reviewed summer 2021. below: probably not ################
 
