@@ -12,7 +12,7 @@ class UlyssesTrajSpice(dbData):
     """ Loader for Ulysses trajectory data
 
     Inherits from dbData
-    Loads trajectory data calculated via SPICE "/data/projects/Ulysses/trajectory/traj_data_ulysses_pool.dat"
+    Loads trajectory data calculated via SPICE ""s
 
     Methods
     -------
@@ -84,7 +84,7 @@ class UlyssesTrajSpice(dbData):
         offy = self.data["YYYY"] - 1990
         offd = offy*365 + (offy.astype(int)+1)//4
         self.keys.append('d90')
-        self.add_data("d90", self.data["doy"] + offd)
+        self.add_data("d90", self.data["DOY"] + offd)
 
 
 

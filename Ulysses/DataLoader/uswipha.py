@@ -241,24 +241,24 @@ class uswipha(dbData):
         uTi_int = append(uTi_int,uTi_int[-1]+1) # insert right border for histogram bins
         # Radius (/AE):
         mask = traj.data['R'] > 0.
-        r, x = histogram(traj.data["doy"], bins=uTi_int, weights=traj.data["R"])
+        r, x = histogram(traj.data["DOY"], bins=uTi_int, weights=traj.data["R"])
         self.add_data("r", r[index_int])
         #latitude in HG:
         mask = traj.data['HG_Lat'] != 0.
-        lat, x = histogram(traj.data["doy"], bins=uTi_int, weights=traj.data["HG_Lat"])
+        lat, x = histogram(traj.data["DOY"], bins=uTi_int, weights=traj.data["HG_Lat"])
         self.add_data("lat_hg", lat[index_int])
         # longitude in HG:
         mask = traj.data['HG_Long'] != 0.
-        long, x = histogram(traj.data["doy"], bins=uTi_int, weights=traj.data["HG_Long"])
+        long, x = histogram(traj.data["DOY"], bins=uTi_int, weights=traj.data["HG_Long"])
         self.add_data("long_hg", long[index_int])
-        # asp_phi
-        mask = traj.data['AA_phi'] != 0.
-        aa_phi, x = histogram(traj.data["doy"], bins=uTi_int, weights=traj.data["AA_phi"])
-        self.add_data("aspphi", aa_phi[index_int])
         # asp_theta
-        mask = traj.data['AA_theta'] != 0.
-        aa_theta, x = histogram(traj.data["doy"], bins=uTi_int, weights=traj.data["AA_theta"])
+        mask = traj.data['AA_lat'] != 0.
+        aa_theta, x = histogram(traj.data["DOY"], bins=uTi_int, weights=traj.data["AA_lat"])
         self.add_data("asptheta", aa_theta[index_int])
+        # asp_phi
+        mask = traj.data['AA_long'] != 0.
+        aa_phi, x = histogram(traj.data["DOY"], bins=uTi_int, weights=traj.data["AA_long"])
+        self.add_data("aspphi", aa_phi[index_int])
         # # v_r_eigen
         # mask = traj.data['v_R'] != 0.
         # v_R, x = histogram(traj.data["d90"], bins=uTi_int, weights=traj.data["v_R"])
@@ -282,7 +282,7 @@ class uswipha(dbData):
         Adds data products from ulysses_traj, i.e. trajectory data from the Ulysses archive files
 
         '''
-        traj = ulysses_traj(year = self.year,tf = self.timeframe, path = datapath + "trajectory/traj_data_ulysses_pool.dat")
+        traj = ulysses_traj(year = self.year,tf = self.timeframe)
         if not 'd90' in self.data.keys():
             self.calc_d90()
         traj.calc_d90()

@@ -468,7 +468,7 @@ def velocityUlysses(date, RF = "HCI"):
         # print('r: ',r_sph)
         # print('v: ',v_sph)
     vR, vT, vN = hg_to_rtn(v_sph, r_sph)
-    print(vR,vT,vN, "\n")
+    #print(vR,vT,vN, "\n")
     return(np.array([vR,vT,vN]))
 
 def locateBody(body, date, RF):
@@ -536,13 +536,13 @@ def load_aa_data():
     return p_aa_dict
 
 
-dt1 = datetime.datetime(1990,11,1)
+dt1 = datetime.datetime(1990,10,7)
 # dt2 = dt1
 dt2 = datetime.datetime(2009,6,28)
 #T = SpiceTra(TF=[dt1,dt2], RF = ECLIPB1950, DT = 24*3600*10)
-# T1 = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
-# A = ArchiveTra(TF=[dt1,dt2], RF = "EC", DT = 24*3600*10)
-# #A1 = ArchiveTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)
+T1 = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
+A = ArchiveTra(TF=[dt1,dt2], RF = "EC", DT = 24*3600*10)
+A1 = ArchiveTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)
 
 class Test_v():
     def __init__(self,dat = dt1):
@@ -563,25 +563,24 @@ class Test_v():
         #self.xyz = velocityUlysses(date=dat, RF = HCI)[0][:3]
         self.vxyz = velocityUlysses(date=dat, RF = HCI)
 
-def write_traj_file(del_t = 3600*12):
+def write_traj_file(del_t = 3600*24):
     ''' 
     Write trajectory data file
 
     :param dt: time delta in seconds
     '''
-    fout = open("Ulysses/Trajectory/trajectory_data/test_spice.dat",'w')
-    fout.write("YYYY  MM DD  DOY  Hr Min        R      HG_Lat  HG_Long    AA_phi  AA_theta\n[AU] \
-        [deg]      [deg]      [deg]     [deg]       [deg]     [deg]\n\n")
-    dt1 = datetime.datetime(1990,11,1) 
-    dt2 = datetime.datetime(1991,6,28) 
+    fout = open("Ulysses/Trajectory/trajectory_data/spice_traj.dat",'w')
+    fout.write("YYYY  MM  DD  DOY    Hr Min      R      HG_Lat  HG_Long    AA_lat  AA_long\n\t\t\t\t[AU] \
+    [deg]   [deg]      [deg]   [deg]\n\n")
+    dt1 = datetime.datetime(1990,10,7) 
+    dt2 = datetime.datetime(2009,6,28) 
     S = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = del_t) 
     for i in range(len(S.data['r'])): 
-        line = "%i %2i %2i %3i %2i %2i %6.2f %7.5f %7.5f %7.5f %7.5f \n" \
-        %(S.times[i].year, S.times[i].month, S.times[i].day, S.times[i].timetuple().tm_yday, S.times[i].hour, S.times[i].minute, \
-           S.data['r'][i], S.data['lat'][i], S.data['long'][i], S.data['asp_lat'][i], S.data['asp_long'][i]) 
-        #
-         #   self.aa_phi[i], self.aa_theta[i]
-         #%7.5f %8.3f %8.3f %8.3f %8.3f %8.3f %8.3f
+        line =(f"{S.times[i].year}  {S.times[i].month:2} {S.times[i].day:2}   {S.times[i].timetuple().tm_yday:3}    "
+                f"{S.times[i].hour:02} {S.times[i].minute:02}     "
+                f"{S.data['r'][i]:5.3f}   {S.data['lat'][i]:7.3f}  {S.data['long'][i]:7.3f}  "
+                f" {S.data['asp_lat'][i]:7.3f} {S.data['asp_long'][i]:7.3f}")
         fout.write(line)
+        fout.write('\n')
     fout.close()
     return S
