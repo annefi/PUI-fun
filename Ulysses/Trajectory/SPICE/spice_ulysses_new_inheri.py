@@ -47,8 +47,8 @@ class TrajectoryUlysses():
             RF = 'EQ'
         self.RF = RF
         self.get_data()
-        #self.get_aa_data()
-        #self.get_eigen_vel()
+        self.get_aa_data()
+        self.get_eigen_vel()
 
     def get_data(self):
         paras = ['r', 'lat', 'long']
@@ -596,16 +596,19 @@ def write_traj_file(del_t = 3600*24):
     :param dt: time delta in seconds
     '''
     fout = open("Ulysses/Trajectory/trajectory_data/spice_traj.dat",'w')
-    fout.write("YYYY  MM  DD  DOY    Hr Min      R      HG_Lat  HG_Long    AA_lat  AA_long\n\t\t\t\t[AU] \
-    [deg]   [deg]      [deg]   [deg]\n\n")
+    fout.write("YYYY  MM  DD  DOY    Hr Min      R      HG_Lat  HG_Long    AA_tot  AA_lat  AA_long     vSC_tot  vSC_R   vSC_T   vSC_N"
+               "\n\t\t\t\t["
+               "AU] \
+    [deg]   [deg]      [deg]   [deg]   [deg]       [km/s]  [km/s]  [km/s]  [km/s]\n\n")
     dt1 = datetime.datetime(1990,10,7) 
-    dt2 = datetime.datetime(2009,6,28) 
+    dt2 = datetime.datetime(1992,6,28)
     S = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = del_t) 
     for i in range(len(S.data['r'])): 
         line =(f"{S.times[i].year}  {S.times[i].month:2} {S.times[i].day:2}   {S.times[i].timetuple().tm_yday:3}    "
                 f"{S.times[i].hour:02} {S.times[i].minute:02}     "
-                f"{S.data['r'][i]:5.3f}   {S.data['lat'][i]:7.3f}  {S.data['long'][i]:7.3f}  "
-                f" {S.data['asp_lat'][i]:7.3f} {S.data['asp_long'][i]:7.3f}")
+                f"{S.data['r'][i]:5.3f}   {S.data['lat'][i]:7.3f}  {S.data['long'][i]:7.3f}    "
+                f"{S.data['asp_tot'][i]:7.3f} {S.data['asp_lat'][i]:7.3f} {S.data['asp_long'][i]:7.3f}    "
+                f"{S.data['vabs'][i]:7.3f} {S.data['vR'][i]:7.3f} {S.data['vT'][i]:7.3f}  {S.data['vN'][i]:7.3f}")
         fout.write(line)
         fout.write('\n')
     fout.close()
