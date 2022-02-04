@@ -57,7 +57,7 @@ if He1:
 
     print('\ndone')
     print(len(d.data['year']))
-    D = Dist3D(d, mass = 4, charge = 1, sc_vel = True)
+    D = Dist3D(d, mass = 4, charge = 1, sc_vel = False)
 
 
 ###############
@@ -94,7 +94,7 @@ if He1:
 
     print('\ndone')
     print(len(d2.data['year']))
-    D2 = Dist3D(d2, mass = 4, charge = 1, sc_vel = True)
+    D2 = Dist3D(d2, mass = 4, charge = 1, sc_vel = False)
 
 end = time.time()
 #print("time: ", end-start)

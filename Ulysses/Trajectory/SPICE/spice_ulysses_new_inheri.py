@@ -267,6 +267,47 @@ class TrajectoryUlysses():
         plt.subplots_adjust(hspace=0.2)
         return axes
 
+    def comp_eigenvels(self, T, axes = None):
+        """Plot difference between two sets of Ulysses' eigen velocity in RTN"""
+        if axes is None:
+            fig, axes = plt.subplots(nrows = 4, sharex = True)
+        ### vabs ###
+        axes[0].plot(self.times, self.data['vabs']- T.data['vabs'], linestyle = 'None', marker = 'o', ms = 1.,
+                     label = "%s - %s" %(self.lbl, T.lbl))
+        axes[0].set_xlim(self.times[0],self.times[-1])
+        axes[0].set_ylabel(r'$\Delta$ |v| in km/s')
+        axes[0].set_ylim(-1, 1)
+        lg = axes[0].legend(loc='upper center', ncol=1, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
+                True, framealpha=1., facecolor= bg_creme, shadow=True)
+        for legend_handle in lg.legendHandles:
+                legend_handle._legmarker.set_markersize(6)
+        ### vR ###
+        axes[1].plot(self.times, self.data['vR'] - T.data['vR'], linestyle = 'None', marker = 'o', ms = 1.)
+        axes[1].set_ylabel(r'$\Delta$ vR in km/s')
+        axes[1].set_ylim(-1,1)
+        ### vT ###
+        axes[2].plot(self.times, self.data['vT'] - T.data['vT'], linestyle = 'None', marker = 'o', ms = 1.)
+        axes[2].set_ylabel(r'$\Delta$ vT in km/s')
+        axes[2].set_ylim(-1,1)
+        ### vN ###
+        axes[3].plot(self.times, self.data['vN'] - T.data['vN'], linestyle = 'None', marker = 'o', ms = 1.)
+        axes[3].set_ylabel(r'$\Delta$ vN in km/s')
+        axes[3].set_ylim(-1,1)
+        # plot vertical lines at polar passes:
+        for a in axes:
+            a.vlines(self.t_southpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyle=
+            'dashed', linewidth=1.5)
+            a.vlines(self.t_northpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyles='dashed',
+                     linewidth=1.5)
+        plt.gcf().autofmt_xdate()
+        plt.gcf().tight_layout()
+        plt.gcf().align_ylabels()
+        for ax in axes:
+            ax.grid(True)
+            ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
+        plt.subplots_adjust(hspace=0.2)
+        return axes
+
     def plot_3d(self, ax = None, cs = None, col = None):
         """ Creates a 3D-Plot of Ulysses' position for the loaded timeframe
 
@@ -346,6 +387,10 @@ class SpiceTra(TrajectoryUlysses):
             self.data['vT'].append(vT)
             self.data['vN'].append(vN)
             self.data['vabs'].append(np.sqrt(vR**2 + vT**2 + vN**2))
+        self.data['vR'] = np.array(self.data['vR'])
+        self.data['vT'] = np.array(self.data['vT'])
+        self.data['vN'] = np.array(self.data['vN'])
+        self.data['vabs'] = np.array(self.data['vabs'])
 
     def rotate_to_EQ(self):
         if self.RF.name == "ECLIPB1950":
@@ -564,7 +609,7 @@ def load_aa_data():
 #dt1 = datetime.datetime(1990,10,7)
 dt1 = datetime.datetime(1994,9,10)
 dt2 = dt1
-#dt2 = datetime.datetime(2000,6,28)
+dt2 = datetime.datetime(2009,6,28)
 S_ec = SpiceTra(TF=[dt1,dt2], RF = ECLIPB1950, DT = 24*3600*10)
 S_eq = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
 A_ec = ArchiveTra(TF=[dt1,dt2], RF = "EC", DT = 24*3600*10)
@@ -601,7 +646,7 @@ def write_traj_file(del_t = 3600*24):
                "AU] \
     [deg]   [deg]      [deg]   [deg]   [deg]       [km/s]  [km/s]  [km/s]  [km/s]\n\n")
     dt1 = datetime.datetime(1990,10,7) 
-    dt2 = datetime.datetime(1992,6,28)
+    dt2 = datetime.datetime(2009,6,28)
     S = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = del_t) 
     for i in range(len(S.data['r'])): 
         line =(f"{S.times[i].year}  {S.times[i].month:2} {S.times[i].day:2}   {S.times[i].timetuple().tm_yday:3}    "
