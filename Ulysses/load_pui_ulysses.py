@@ -20,13 +20,13 @@ He1 = True #False
 He2 = False #True
 
 # load Ulysses data:
-years = [1997]
+years = [1995]
 
 start = time.time()
 
 if He1:
     # give path to data that includes magnet data
-    d1 = uswipha(year=years, tf=[[1, 5]])
+    d1 = uswipha(year=years, tf=[[101, 102]])
     d1.sync_swoops()
     d1.sync_traj_spice()
     #d1.sync_mag() # not needed anymore: new PHAs including mag data
@@ -63,7 +63,7 @@ if He1:
 ###############
 
 
-    d2 = uswipha(year=years, tf=[[1, 5]])
+    d2 = uswipha(year=years, tf=[[101, 102]])
     d2.sync_swoops()
     d2.sync_traj()
     #d1.sync_mag() # not needed anymore: new PHAs including mag data

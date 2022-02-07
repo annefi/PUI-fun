@@ -325,9 +325,15 @@ class TrajectoryUlysses():
         return ax3D
 
 class SpiceTra(TrajectoryUlysses):
+    """ Spice trajectory data instance
+
+    :example: >> spice_t_hci = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
+        (with dt1,dt2 being datetime.datetime objects)
+    """
     def get_data(self):
         """ Add Ulysses trajectory data (R in AU, latitude and longitude in degrees) to data dictionary
-        and set up the style for the data set """
+        and set up the style for the data set 
+        """
         super().get_data()
         for t in self.times:
             [R, lat, long] = locateUlysses(t, self.RF)
@@ -393,17 +399,19 @@ class SpiceTra(TrajectoryUlysses):
         self.data['vabs'] = np.array(self.data['vabs'])
 
     def rotate_to_EQ(self):
+        """ Rotate a SpiceTra object in ECLIPB1950-RF manually to the HCI(EQ)-RF
+
+        Just for testing! Label, RF etc. won't match anymore, positional coordinates will be overwritten
+        """
         if self.RF.name == "ECLIPB1950":
             R = []
             lat = []
             long = []
             for t in range(len(self.data['r'])):
                 vec_EC = np.array([self.data['r'][t],self.data['lat'][t],self.data['long'][t]])
-                #print(vec_EC)
+                # exact epoch for BC1950:
                 t_epoch = datetime.datetime(2000, 1, 1,12) + datetime.timedelta(days=(2433282.42345905 - 2451545.0))
-                # exact epoch for BC1950
                 vec_rotated = hc_to_hg(vec_EC, ang_ascnode = calc_delta(t_epoch))
-                #print(vec_rotated, '\n')
                 R.append(vec_rotated[0])
                 lat.append(vec_rotated[1])
                 long.append(vec_rotated[2])
@@ -413,10 +421,15 @@ class SpiceTra(TrajectoryUlysses):
         else:
             sys.exit('RF has to be \'EC\' for rotation to EQ')
 
-
-
 class ArchiveTra(TrajectoryUlysses):
+    """ Ulysses Archive trajectory data instance
+
+    :example: >> arch_t_eq = SpiceTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)
+        (with dt1,dt2 being datetime.datetime objects)
+    """
     def get_data(self):
+        """ Load Ulysses daily position from the Ulysses Archive
+        """
         super().get_data()
         pool_data = read_pool()
         if self.RF == 'EQ':
@@ -438,7 +451,7 @@ class ArchiveTra(TrajectoryUlysses):
 
     def get_aa_data(self):
         ''' 
-        Loads old AA from file for Archive data set
+        Load old AA from file for Archive data set
         '''
         super().get_aa_data()
         asp_data = load_aa_data()
@@ -447,6 +460,8 @@ class ArchiveTra(TrajectoryUlysses):
         self.data['asp_tot'] = self.sync_times(asp_data['datetimes'], asp_data['ASP_total'])
 
     def get_eigen_vel(self):
+        """ Load eigen velocities calculated from archive HG-coordinates
+        """
         super().get_eigen_vel()
         pool_data = read_pool()
         # Equatorial System is mostly called HG (heliographic) within the archive files
@@ -456,6 +471,10 @@ class ArchiveTra(TrajectoryUlysses):
         self.data['vabs'] = self.sync_times(pool_data['datetimes'], pool_data['v'])
 
     def rotate_to_EQ(self):
+        """ Rotate an ArchiveTra object in HC(ECLIPB1950)-RF manually to the EQ(HCI/HG)-RF
+
+        Just for testing! Label, RF etc. won't match anymore, positional coordinates will be overwritten
+        """
         if self.RF == "EC":
             R = []
             lat = []
@@ -477,6 +496,10 @@ class ArchiveTra(TrajectoryUlysses):
             sys.exit('RF has to be \'EC\' for rotation to EQ')
 
     def rotate_to_EC(self):
+        """ Rotate an ArchiveTra object in EQ(HCI/HG)-RF manually to the EC(HC/ECLIPJ1950)-RF
+
+        Just for testing! Label, RF etc. won't match anymore, positional coordinates will be overwritten
+        """
         if self.RF == "EQ":
             R = []
             lat = []
@@ -518,27 +541,24 @@ def locateUlysses(date, RF):
         return positions
 
 def velocityUlysses(date, RF = "HCI"):
-    # Todo: Folgendes einbauen: will eig nur mit Archivdata vergleichen (-> ?? Ich brauche doch v_eigen für die
-    # Analyse...)
-    # Soll am besten locateUlysses ersetzen <- nö
+    """
+    Get Ulysses' eigen-velocity from SPICE and transform it to RTN-coordinates
+
+    :param date: datetime object
+    :param RF: etspice.ReferenceFrame
+    :return: eigen-velocity in RTN-coordinates
+    """
     from spiceypy import spkezr, datetime2et
     [x, y, z, vx, vy, vz] = spkezr('ULYSSES', datetime2et(date), RF, 'None', 'SUN')[0]  # cart in km(/s)
     r_sph = cart2spher(np.array([x,y,z]))
     v_sph = cart2spher(np.array([vx,vy,vz])) #does not really make sense but is needed for the rtn-function
     if RF in ["HCI", "HCI_B", "HCI_J"]: # solar equatorial coord. sys.
         pass
-        # print("\n", RF)
-        # print('r: ',r_sph)
-        # print('v: ',v_sph)
     elif RF in ["ECLIPJ2000", "ECLIPB1950"]: # ecliptic coord. sys.
         t_epoch = datetime.datetime(2000,1,1,12) if RF == "ECLIPJ2000" else datetime.datetime(2000,1,1,12)+datetime.timedelta(days = (2433282.42345905-2451545.0))
         r_sph = hc_to_hg(r_sph, ang_ascnode = calc_delta(t_epoch))
         v_sph = hc_to_hg(v_sph, ang_ascnode = calc_delta(t_epoch))
-        # print("\n", RF)
-        # print('r: ',r_sph)
-        # print('v: ',v_sph)
     vR, vT, vN = hg_to_rtn(v_sph, r_sph)
-    #print(vR,vT,vN, "\n")
     return(np.array([vR,vT,vN]))
 
 def locateBody(body, date, RF):
@@ -605,48 +625,19 @@ def load_aa_data():
     fin.close()
     return p_aa_dict
 
-
-#dt1 = datetime.datetime(1990,10,7)
-dt1 = datetime.datetime(1994,9,10)
-dt2 = dt1
-dt2 = datetime.datetime(2009,6,28)
-S_ec = SpiceTra(TF=[dt1,dt2], RF = ECLIPB1950, DT = 24*3600*10)
-S_eq = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
-A_ec = ArchiveTra(TF=[dt1,dt2], RF = "EC", DT = 24*3600*10)
-A_eq = ArchiveTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)
-
-class Test_v():
-    def __init__(self,dat = dt1):
-        date2 = dat+2*datetime.timedelta(seconds = 1)
-        T = SpiceTra(TF=[dat, date2], RF = HCI, DT = 1)
-        self.T = T
-
-        self.r1 = np.array([T.data['r'][0], T.data['lat'][0], T.data['long'][0]])
-        self.r2 = np.array([T.data['r'][1], T.data['lat'][1], T.data['long'][1]])
-        self.del_r = self.r2-self.r1
-        self.del_r_km = self.del_r*km_per_AU
-
-        self.xyzT0 = spher2cart(self.r1)
-        self.xyzT1 = spher2cart(self.r2)
-        self.del_xyz = self.xyzT1 - self.xyzT0
-        self.del_xyz_km = self.del_xyz*km_per_AU
-
-        #self.xyz = velocityUlysses(date=dat, RF = HCI)[0][:3]
-        self.vxyz = velocityUlysses(date=dat, RF = HCI)
-
-def write_traj_file(del_t = 3600*24):
+def write_traj_file(del_t = 3600*24, dt1 = datetime.datetime(1990,10,7), dt2 = datetime.datetime(2009,6,28)):
     ''' 
     Write trajectory data file
-
-    :param dt: time delta in seconds
+    
+    :param del_t: time delta in seconds
+    :param dt1: start - datetime.datetime-object; default is beginning of mission
+    :param dt2: end - datetime.datetime-object; default is end of mission
     '''
     fout = open("Ulysses/Trajectory/trajectory_data/spice_traj.dat",'w')
     fout.write("YYYY  MM  DD  DOY    Hr Min      R      HG_Lat  HG_Long    AA_tot  AA_lat  AA_long     vSC_tot  vSC_R   vSC_T   vSC_N"
                "\n\t\t\t\t["
                "AU] \
     [deg]   [deg]      [deg]   [deg]   [deg]       [km/s]  [km/s]  [km/s]  [km/s]\n\n")
-    dt1 = datetime.datetime(1990,10,7) 
-    dt2 = datetime.datetime(2009,6,28)
     S = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = del_t) 
     for i in range(len(S.data['r'])): 
         line =(f"{S.times[i].year}  {S.times[i].month:2} {S.times[i].day:2}   {S.times[i].timetuple().tm_yday:3}    "
@@ -658,3 +649,11 @@ def write_traj_file(del_t = 3600*24):
         fout.write('\n')
     fout.close()
     return S
+
+if __name__ == "__main__":
+    dt1 = datetime.datetime(1990,10,7)
+    dt2 = datetime.datetime(2009,6,28)
+    S_ec = SpiceTra(TF=[dt1,dt2], RF = ECLIPB1950, DT = 24*3600*10)
+    S_eq = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
+    A_ec = ArchiveTra(TF=[dt1,dt2], RF = "EC", DT = 24*3600*10)
+    A_eq = ArchiveTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)
