@@ -5,118 +5,581 @@ Contains different functions to load Ulysses' trajectory data via SPICE (based o
 calculations and write the final trajectory file that is used for further data analysis
 """
 
-from etspice import SUN, ULYSSES, EARTH
-from etspice import ReferenceFrame, utils
-from etspice import kernels
 import datetime
-import os, sys
+from typing import List
 import numpy as np
 import matplotlib.pyplot as plt
-from sys import exit
-from Ulysses.Trajectory.ul_coordinates import hc_to_hg, calc_asp_angles, hg_to_rtn
+import sys
+from Ulysses.Trajectory.spice_loader import *
+from Ulysses.Trajectory.ul_coordinates_utils import *
+from Ulysses.Trajectory.SPICE.plot_3d_uly import Plot_3d
 
-if os.path.exists("../fusessh/data/projects/spice"):
-    os.environ['SPICE_DATA_DIR'] = "../fusessh/data/projects/spice"
-elif os.path.exists("/data/projects/spice"):
-    os.environ['SPICE_DATA_DIR'] = "/data/projects/spice"
-else:
-    sys.exit('SPICE_DATA_DIR could not be found.\nProbably working from home and not having SSH-ed to asterix?')
-
-my_kernel = kernels.LocalKernel('Ulysses/Trajectory/SPICE/data/test_tf.tf') # load additional rf kernel
-my_kernel.load()
-
-# SPICE built-in frames:
-from etspice import J2000, ECLIPJ2000
-B1950 = ReferenceFrame([kernels.planets], 'B1950')
-ECLIPB1950 = ReferenceFrame([kernels.planets], 'ECLIPB1950')
-
-# STEREO Kernel "heliospheric... .tf"
-HCI = ReferenceFrame([kernels.heliospheric_frames],'HCI')
-
-# DIY kernel
-HCI_B = ReferenceFrame([my_kernel],'HCI_B1950')
-HCI_J = ReferenceFrame([my_kernel],'HCI_J2000')
-
+# Constants:
 km_per_AU = 1.495979e8
 
-def cart2sph(t, deg=False):
+# Colours:
+bg_blue = '#f2f3fa'
+bg_red = '#fff5f8'
+bg_creme = '#F4F2EC'
+petrol_dk = '#0570b0'
+petrol_lg = '#74a9cf'
+red_dk = '#cb181d'
+red_lg = '#fb6a4a'
+gray = '#808080'
+
+class TrajectoryUlysses():
     """
-    cart2sph(t,deg)
-
-    Transforms a cartesian t to spherical coordinates.
-
-    The input vector has to be in cartesian coordinates. The angles of the output vector phi and theta (r_vec[
-    1],r_vec[2]) will be returned in radians. If deg == True the angles of the output vector phi and theta (r_vec[1],
-    r_vec[2]) will be returned in degrees.
-
-    Parameters
-    ----------
-    t : numpy.array with shape (3,)
-            First argument.
-    deg :   bool
-            Third argument.
-
-    Returns
-    -------
-    output : numpy.array with shape (3,)
-        Returns the vector t in spherical coordinates.
-
-    Examples
-    --------
-    >>> eg.cart2sph(numpy.array([1,1,1]),True)
-    [  1.73205081  45.          54.73561032]
+    :param TF: time frame, should be a list of start and end time as
+        datetime.datetime objects (one year is assumed if list is empty or contains
+        only start time) 
+    :param RF: 2-element-list: [source, reference frame]. E.g. ['pool','EQ']
+        If source == 'pool': possible reference frames: 'EQ' (equatorial BC1950, HG), 'EC' (ecliptic BC1950, HC)
+        If source == 'SPICE': possible reference frames: (...)
+    :param DT: time increment in seconds; default is 24 hours
     """
-    from numpy import sqrt, arctan2, arccos, pi, array
+    def __init__(self, TF: List[datetime.datetime], RF: str = None, DT: int = None):
+        if DT == None:
+            DT = 60 * 60 * 24 # 24 h in seconds
+        if len(TF) == 1:
+            TF.append(datetime.datetime(TF[0].year+1,TF[0].month,TF[0].day,TF[0].hour))
+        elif len(TF) == 0:
+            TF = [datetime.datetime(1992,1,1), datetime.datetime(1993,1,1)]
+            print("time frame set automatically to %s - %s" %(TF[0],TF[1]))
+        self.times = timerange(TF[0],TF[1],DT)
+        self.t_southpass = [datetime.datetime(1994, 9, 13), datetime.datetime(2000, 11, 27),
+                            datetime.datetime(2007, 2, 7)]
+        self.t_northpass = [datetime.datetime(1995, 7, 31), datetime.datetime(2001, 10, 13),
+                            datetime.datetime(2008, 1, 14)]
+        if RF == None:
+            RF = 'EQ'
+        self.RF = RF
+        self.get_data()
+        self.get_aa_data()
+        self.get_eigen_vel()
 
-    x = t[0]
-    y = t[1]
-    z = t[2]
+    def get_data(self):
+        paras = ['r', 'lat', 'long']
+        self.data = {p:[] for p in paras}
+        print('get data')
 
-    r = sqrt(x ** 2. + y ** 2. + z ** 2.)
-    phi = arctan2(y, x)
-    theta = arccos(z / r)
+    def get_aa_data(self):
+        paras_asp = ['asp_lat', 'asp_long', 'asp_tot']
+        self.data.update({p:[] for p in paras_asp})
+        print('get asp ang data')
 
-    if deg:
-        out = array([r, phi / pi * 180., theta / pi * 180.])
-    else:
-        out = array([r, phi, theta])
+    def get_eigen_vel(self):
+        paras_eigenvel = ['vR','vT','vN','vabs']
+        self.data.update({p: [] for p in paras_eigenvel})
+        print("get eigen velocity data \n")
 
-    return out
+    def sync_times(self, alien_times, data):
+        """ Synchronise the data set times with self.times
+
+        No nearest neighbour sampling etc., just checking for coincidence.
+        NaNs for gaps if alien_times has a lower resolution than self.times
+        """
+        data_sync = np.empty(len(self.times))
+        data_sync[:] = np.nan
+        mask_t = np.isin(self.times, alien_times)
+        mask_at = np.isin(alien_times,self.times)
+        data_sync[mask_t] = data[mask_at]
+        return data_sync
+
+    def plot_coords(self, axes = None):
+        """Plot R, lat, long over time """ 
+        # set up the plot:
+        if axes is None:
+            fig, axes = plt.subplots(nrows = 3, sharex = True)
+        ### R ###
+        axes[0].plot(self.times, self.data['r'], linestyle = 'None', marker = 'o', ms = 2., label = self.lbl, c = self.clr, alpha= 0.5)
+        axes[0].set_xlim(self.times[0],self.times[-1])
+        axes[0].set_ylim(0., 6.)
+        axes[0].set_ylabel('R in AU')
+        lg = axes[0].legend(loc='upper center', ncol=3, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
+                True, framealpha=1., facecolor= bg_creme, shadow=True)
+        for legend_handle in lg.legendHandles:
+                legend_handle._legmarker.set_markersize(6)
+        ### LAT ###
+        axes[1].plot(self.times, self.data['lat'], linestyle = 'None', marker = 'o', ms = 2., c = self.clr, alpha= 0.5)
+        axes[1].set_ylabel('Lat. in deg.')
+        axes[1].set_yticks([-90,-45,0,45,90])
+        axes[1].set_ylim(-95,95)
+        ### LONG ###
+        axes[2].plot(self.times, self.data['long'], linestyle = 'None', marker = 'o', ms = 2., c = self.clr, alpha= 0.5)
+        axes[2].set_ylabel('Long. in deg.')
+        axes[2].set_yticks([-180,-90,0,90,180])
+        axes[2].set_ylim(-185,185)
+        # plot vertical lines at polar passes:
+        for a in axes:
+            a.vlines(self.t_southpass, ymin = -180, ymax = 360, color = gray , alpha = 0.5, linestyle =
+            'dashed', linewidth = 1.5)
+            a.vlines(self.t_northpass, ymin = -180, ymax = 360, color = gray, alpha = 0.5, linestyles = 'dashed',
+                     linewidth = 1.5)
+        plt.gcf().autofmt_xdate()
+        plt.gcf().tight_layout()
+        plt.gcf().align_ylabels()
+        for ax in axes:
+            ax.grid(True)
+        plt.subplots_adjust(hspace=None)
+        return axes
+
+    def comp_coords(self, T, axes = None):
+        """Plot difference between two sets of trajectory data for R, lat, long"""
+        if axes is None:
+            fig, axes = plt.subplots(nrows = 3, sharex = True)
+        ### R ###
+        axes[0].plot(self.times, self.data['r']- T.data['r'], linestyle = 'None', marker = 'o', ms = 1., label = "%s - %s" %(self.lbl, T.lbl))
+        axes[0].set_xlim(self.times[0],self.times[-1])
+        axes[0].set_ylabel(r'$\Delta$R in AU')
+        axes[0].set_ylim(-0.01, 0.01)
+        lg = axes[0].legend(loc='upper center', ncol=1, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
+                True, framealpha=1., facecolor= bg_creme, shadow=True)
+        for legend_handle in lg.legendHandles:
+                legend_handle._legmarker.set_markersize(6)
+        ### LAT ###
+        axes[1].plot(self.times, self.data['lat'] - T.data['lat'], linestyle = 'None', marker = 'o', ms = 1.)
+        axes[1].set_ylabel(r'$\Delta$Lat. in deg.')
+        #axes[1].set_ylim(-0.05,0.05)
+        ### LONG ###
+        axes[2].plot(self.times, self.data['long'] - T.data['long'], linestyle = 'None', marker = 'o', ms = 1.)
+        axes[2].set_ylabel(r'$\Delta$Long. in deg.')
+        #axes[2].set_ylim(-0.05,0.05)
+        # plot vertical lines at polar passes:
+        for a in axes:
+            a.vlines(self.t_southpass, ymin=-180, ymax=360, color= gray , alpha=0.5, linestyle=
+            'dashed', linewidth=1.5)
+            a.vlines(self.t_northpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyles='dashed',
+                     linewidth=1.5)
+        plt.gcf().autofmt_xdate()
+        plt.gcf().tight_layout()
+        plt.gcf().align_ylabels()
+        for ax in axes:
+            ax.grid(True)
+            ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
+        plt.subplots_adjust(hspace=0.2)
+        #axes[0].set_ylim(-0.01, 0.01)
+        return axes
+
+    def plot_aspangles(self, axes = None):
+        """Plot aspect angles (total, latitude, longitude) over time"""
+        # set up the plot:
+        if axes is None:
+            fig, axes = plt.subplots(nrows = 3, sharex = True)
+        ### total ###
+        axes[0].plot(self.times, self.data['r'], linestyle = 'None', marker = 'o', ms = 2., label = self.lbl, alpha= 0.5)
+        axes[0].set_xlim(self.times[0],self.times[-1])
+        axes[0].set_ylabel('Asp. tot. in deg')
+        lg = axes[0].legend(loc='upper center', ncol=3, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
+                True, framealpha=1., facecolor= bg_creme, shadow=True)
+        for legend_handle in lg.legendHandles:
+                legend_handle._legmarker.set_markersize(6)
+        ### ASP LAT ###
+        axes[1].plot(self.times, self.data['asp_lat'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5)
+        axes[1].set_ylabel('Asp. Lat. in deg.')
+        axes[1].set_yticks([-90,-45,0,45,90])
+        axes[1].set_ylim(-95,95)
+        ### ASP LONG ###
+        axes[2].plot(self.times, self.data['asp_long'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5)
+        axes[2].set_ylabel('Asp. Long. in deg.')
+        axes[2].set_yticks([-180,-90,0,90,180])
+        axes[2].set_ylim(-185,185)
+        # plot vertical lines at polar passes:
+        for a in axes:
+            a.vlines(self.t_southpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyle=
+            'dashed', linewidth=1.5)
+            a.vlines(self.t_northpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyles='dashed',
+                     linewidth=1.5)
+        plt.gcf().autofmt_xdate()
+        plt.gcf().tight_layout()
+        plt.gcf().align_ylabels()
+        for ax in axes:
+            ax.grid(True)
+        plt.subplots_adjust(hspace=0.2)
+        return axes
+
+    def comp_aspangles(self, T, axes = None):
+        """Plot difference between two sets of trajectory data for aspect angles"""
+        if axes is None:
+            fig, axes = plt.subplots(nrows = 3, sharex = True)
+        ### total ###
+        axes[0].plot(self.times, self.data['asp_tot']- T.data['asp_tot'], linestyle = 'None', marker = 'o', ms = 1., label = "%s - %s" %(self.lbl, T.lbl))
+        axes[0].set_xlim(self.times[0],self.times[-1])
+        axes[0].set_ylabel(r'$\Delta$ Asp. tot. in deg.')
+        axes[0].set_ylim(-1, 1)
+        lg = axes[0].legend(loc='upper center', ncol=1, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
+                True, framealpha=1., facecolor= bg_creme, shadow=True)
+        for legend_handle in lg.legendHandles:
+                legend_handle._legmarker.set_markersize(6)
+        ### Aspect Angle LAT ###
+        axes[1].plot(self.times, self.data['asp_lat'] - T.data['asp_lat'], linestyle = 'None', marker = 'o', ms = 1.)
+        axes[1].set_ylabel(r'$\Delta$ Asp. Lat. in deg.')
+        axes[1].set_ylim(-1,1)
+        ### Aspect Angle LONG ###
+        axes[2].plot(self.times, self.data['asp_long'] - T.data['asp_long'], linestyle = 'None', marker = 'o', ms = 1.)
+        axes[2].set_ylabel(r'$\Delta$ Asp. Long. in deg.')
+        axes[2].set_ylim(-1,1)
+        # plot vertical lines at polar passes:
+        for a in axes:
+            a.vlines(self.t_southpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyle=
+            'dashed', linewidth=1.5)
+            a.vlines(self.t_northpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyles='dashed',
+                     linewidth=1.5)
+        plt.gcf().autofmt_xdate()
+        plt.gcf().tight_layout()
+        plt.gcf().align_ylabels()
+        for ax in axes:
+            ax.grid(True)
+            ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
+        plt.subplots_adjust(hspace=0.2)
+        return axes
+
+    def plot_eigenvels(self, axes = None):
+        """ Plot eigen-velocity RTN components over time """
+        # set up the plot:
+        if axes is None:
+            fig, axes = plt.subplots(nrows = 4, sharex = True)
+        ### vabs ###
+        axes[0].plot(self.times, self.data['vabs'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5, label = self.lbl)
+        axes[0].set_ylabel('|v| in km/s')
+        axes[0].set_ylim(-80,80)
+        lg = axes[0].legend(loc='upper center', ncol=3, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
+                True, framealpha=1., facecolor= bg_creme, shadow=True)
+        for legend_handle in lg.legendHandles:
+                legend_handle._legmarker.set_markersize(6)
+        ### vR ###
+        axes[1].plot(self.times, self.data['vR'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5)
+        axes[1].set_xlim(self.times[0],self.times[-1])
+        axes[1].set_ylabel('vR in km/s')
+        axes[1].set_ylim(-80,80)
+        ### vT ###
+        axes[2].plot(self.times, self.data['vT'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5)
+        axes[2].set_ylabel('vT in km/s')
+        #axes[1].set_yticks([-90,-45,0,45,90])
+        axes[2].set_ylim(-80,80)
+        ### vN ###
+        axes[3].plot(self.times, self.data['vN'], linestyle = 'None', marker = 'o', ms = 2., alpha= 0.5)
+        axes[3].set_ylabel('vN in km/s')
+        axes[3].set_ylim(-80,80)
+        # plot vertical lines at polar passes:
+        for a in axes:
+            a.vlines(self.t_southpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyle=
+            'dashed', linewidth=1.5)
+            a.vlines(self.t_northpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyles='dashed',
+                     linewidth=1.5)
+        plt.gcf().autofmt_xdate()
+        plt.gcf().tight_layout()
+        plt.gcf().align_ylabels()
+        for ax in axes:
+            ax.grid(True)
+        plt.subplots_adjust(hspace=0.2)
+        return axes
+
+    def comp_eigenvels(self, T, axes = None):
+        """Plot difference between two sets of Ulysses' eigen velocity in RTN"""
+        if axes is None:
+            fig, axes = plt.subplots(nrows = 4, sharex = True)
+        ### vabs ###
+        axes[0].plot(self.times, self.data['vabs']- T.data['vabs'], linestyle = 'None', marker = 'o', ms = 1.,
+                     label = "%s - %s" %(self.lbl, T.lbl))
+        axes[0].set_xlim(self.times[0],self.times[-1])
+        axes[0].set_ylabel(r'$\Delta$ |v| in km/s')
+        axes[0].set_ylim(-1, 1)
+        lg = axes[0].legend(loc='upper center', ncol=1, fontsize='small', bbox_to_anchor=(0.5, 1.3), fancybox=
+                True, framealpha=1., facecolor= bg_creme, shadow=True)
+        for legend_handle in lg.legendHandles:
+                legend_handle._legmarker.set_markersize(6)
+        ### vR ###
+        axes[1].plot(self.times, self.data['vR'] - T.data['vR'], linestyle = 'None', marker = 'o', ms = 1.)
+        axes[1].set_ylabel(r'$\Delta$ vR in km/s')
+        axes[1].set_ylim(-1,1)
+        ### vT ###
+        axes[2].plot(self.times, self.data['vT'] - T.data['vT'], linestyle = 'None', marker = 'o', ms = 1.)
+        axes[2].set_ylabel(r'$\Delta$ vT in km/s')
+        axes[2].set_ylim(-1,1)
+        ### vN ###
+        axes[3].plot(self.times, self.data['vN'] - T.data['vN'], linestyle = 'None', marker = 'o', ms = 1.)
+        axes[3].set_ylabel(r'$\Delta$ vN in km/s')
+        axes[3].set_ylim(-1,1)
+        # plot vertical lines at polar passes:
+        for a in axes:
+            a.vlines(self.t_southpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyle=
+            'dashed', linewidth=1.5)
+            a.vlines(self.t_northpass, ymin=-180, ymax=360, color= gray, alpha=0.5, linestyles='dashed',
+                     linewidth=1.5)
+        plt.gcf().autofmt_xdate()
+        plt.gcf().tight_layout()
+        plt.gcf().align_ylabels()
+        for ax in axes:
+            ax.grid(True)
+            ax.hlines(y=0.0, xmin = self.times[0], xmax = self.times[-1], color = 'dimgray')
+        plt.subplots_adjust(hspace=0.2)
+        return axes
+
+    def plot_3d(self, ax = None, cs = None, col = None):
+        """ Creates a 3D-Plot of Ulysses' position for the loaded timeframe
+
+        Todo: Docstring, axis freigeben, plot_point-Argumente übergeben können
+        :return:
+        """
+        if cs == None:
+            cs = self.RF
+        if ax == None:
+            p = Plot_3d()
+        else:
+            p = Plot_3d(ax = ax)
+        ax3D = p.plot_point(coords = np.array([self.data['r'], self.data['lat'], self.data['long']]).T, cs = cs,
+                            col = col)
+        return ax3D
+
+class SpiceTra(TrajectoryUlysses):
+    """ Spice trajectory data instance
+
+    :example: >> spice_t_hci = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
+        (with dt1,dt2 being datetime.datetime objects)
+    """
+    def get_data(self):
+        """ Add Ulysses trajectory data (R in AU, latitude and longitude in degrees) to data dictionary
+        and set up the style for the data set 
+        """
+        super().get_data()
+        for t in self.times:
+            [R, lat, long] = locateUlysses(t, self.RF)
+            self.data['r'].append(R)
+            self.data['lat'].append(lat)
+            self.data['long'].append(long)
+        self.data['r'] = np.array(self.data['r'])
+        self.data['lat'] = np.array(self.data['lat'])
+        self.data['long'] = np.array(self.data['long'])
+        self.lbl = 'SPICE %s' % self.RF.name
+        if self.RF == ECLIPJ2000 or ECLIPB1950:
+            self.clr = petrol_dk
+        if self.RF == HCI:
+            self.clr = red_dk
+
+    def get_aa_data(self):
+        """ Add Ulysses aspect angle data to data dictionary 
+
+        The aspect angle is the angle between the line-of-sights SC-Sun and SC-Earth (which is the orientation line of Ulysses' antenna)
+        measured from the SC.
+        Calculated are the total ('flat') angle and the two spherical components in RTN-system (all in degrees):
+        Aspect latitude is measured from -90° to +90°, where 0° is within the R-T-plane and +90° along the positive N-axis
+        Aspect longitude is measured from -90° to +90°, where 0° is within the R-N-plane and +90° along the negative T-axis
+            (i.e., positive asp_phi: "left" from the line-of-sight SC-Sun)
+        """
+        super().get_aa_data()
+        if self.RF in [HCI, HCI_B, HCI_J]: # solar equatorial coord. sys.
+            for t in self.times:
+                vec_Ul = locateUlysses(t, self.RF)
+                vec_Earth = locateBody(EARTH, t, self.RF)
+                asp_theta, asp_phi = calc_asp_angles(vec_Ul, vec_Earth)
+                self.data['asp_lat'].append(asp_theta)
+                self.data['asp_long'].append(asp_phi)
+                self.data['asp_tot'].append(calc_SPE(asp_theta, asp_phi))
+        elif self.RF in [ECLIPJ2000, ECLIPB1950]: # ecliptic coord. sys.
+            t_epoch = datetime.datetime(2000,1,1,12) if self.RF == ECLIPJ2000 else datetime.datetime(2000,1,1,12)+datetime.timedelta(days = (2433282.42345905-2451545.0))
+            for t in self.times:
+                vec_Ul = locateUlysses(t, self.RF)
+                vec_Earth = locateBody(EARTH, t, self.RF)
+                asp_theta, asp_phi = calc_asp_angles(hc_to_hg(vec_Ul, ang_ascnode = calc_delta(t_epoch)),
+                                                     hc_to_hg(vec_Earth, ang_ascnode = calc_delta(t_epoch)))
+                self.data['asp_lat'].append(asp_theta)
+                self.data['asp_long'].append(asp_phi)
+                self.data['asp_tot'].append(calc_SPE(asp_theta, asp_phi))
+        else:
+            sys.exit('Reference System %s not suitable for calculating Aspect Angles. \n Please use a solar equatorial or an Earth ecliptic system.' % self.RF)
+        self.data['asp_lat'] = np.array(self.data['asp_lat'])
+        self.data['asp_long'] = np.array(self.data['asp_long'])
+        self.data['asp_tot'] = np.array(self.data['asp_tot'])
+
+    def get_eigen_vel(self):
+        """ Add Ulysses eigen-velocity (in RTN components) data to data dictionary """
+        super().get_eigen_vel()
+        for t in self.times:
+            [vR, vT, vN] = velocityUlysses(t, self.RF.name)
+            self.data['vR'].append(vR)
+            self.data['vT'].append(vT)
+            self.data['vN'].append(vN)
+            self.data['vabs'].append(np.sqrt(vR**2 + vT**2 + vN**2))
+        self.data['vR'] = np.array(self.data['vR'])
+        self.data['vT'] = np.array(self.data['vT'])
+        self.data['vN'] = np.array(self.data['vN'])
+        self.data['vabs'] = np.array(self.data['vabs'])
+
+    def rotate_to_EQ(self):
+        """ Rotate a SpiceTra object in ECLIPB1950-RF manually to the HCI(EQ)-RF
+
+        Just for testing! Label, RF etc. won't match anymore, positional coordinates will be overwritten
+        """
+        if self.RF.name == "ECLIPB1950":
+            R = []
+            lat = []
+            long = []
+            for t in range(len(self.data['r'])):
+                vec_EC = np.array([self.data['r'][t],self.data['lat'][t],self.data['long'][t]])
+                # exact epoch for BC1950:
+                t_epoch = datetime.datetime(2000, 1, 1,12) + datetime.timedelta(days=(2433282.42345905 - 2451545.0))
+                vec_rotated = hc_to_hg(vec_EC, ang_ascnode = calc_delta(t_epoch))
+                R.append(vec_rotated[0])
+                lat.append(vec_rotated[1])
+                long.append(vec_rotated[2])
+            self.data['r'] = R
+            self.data['lat'] = lat
+            self.data['long'] = long
+        else:
+            sys.exit('RF has to be \'EC\' for rotation to EQ')
+
+class ArchiveTra(TrajectoryUlysses):
+    """ Ulysses Archive trajectory data instance
+
+    :example: >> arch_t_eq = SpiceTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)
+        (with dt1,dt2 being datetime.datetime objects)
+    """
+    def get_data(self):
+        """ Load Ulysses daily position from the Ulysses Archive
+        """
+        super().get_data()
+        pool_data = read_pool()
+        if self.RF == 'EQ':
+            # Equatorial System is mostly called HG (heliographic) within the archive files
+            self.data['r'] = self.sync_times(pool_data['datetimes'], pool_data['R'])
+            self.data['lat'] = self.sync_times(pool_data['datetimes'], pool_data['HG_Lat'])
+            self.data['long'] = self.sync_times(pool_data['datetimes'], pool_data['HG_Long'])
+            self.lbl = 'Ul. Archive Solar Eq.'
+            self.clr = red_lg
+        elif self.RF == 'EC':
+            # Ecliptic System is mostly called HC (heliocentric) within the archive files
+            self.data['r'] = self.sync_times(pool_data['datetimes'], pool_data['R'])
+            self.data['lat'] = self.sync_times(pool_data['datetimes'], pool_data['HC_Lat'])
+            self.data['long'] = self.sync_times(pool_data['datetimes'], pool_data['HC_Long'])
+            self.lbl = 'Ul. Archive Ecliptic'
+            self.clr = petrol_lg
+        else:
+            sys.exit("\nArgument RF not recognised. Has to be \'EQ\' or \'EC\' for pool data.\n")
+
+    def get_aa_data(self):
+        ''' 
+        Load old AA from file for Archive data set
+        '''
+        super().get_aa_data()
+        asp_data = load_aa_data()
+        self.data['asp_lat'] = self.sync_times(asp_data['datetimes'], asp_data['ASP_THETA'])
+        self.data['asp_long'] = self.sync_times(asp_data['datetimes'], asp_data['ASP_PHI'])
+        self.data['asp_tot'] = self.sync_times(asp_data['datetimes'], asp_data['ASP_total'])
+
+    def get_eigen_vel(self):
+        """ Load eigen velocities calculated from archive HG-coordinates
+        """
+        super().get_eigen_vel()
+        pool_data = read_pool()
+        # Equatorial System is mostly called HG (heliographic) within the archive files
+        self.data['vR'] = self.sync_times(pool_data['datetimes'], pool_data['v_R'])
+        self.data['vT'] = self.sync_times(pool_data['datetimes'], pool_data['v_T'])
+        self.data['vN'] = self.sync_times(pool_data['datetimes'], pool_data['v_N'])
+        self.data['vabs'] = self.sync_times(pool_data['datetimes'], pool_data['v'])
+
+    def rotate_to_EQ(self):
+        """ Rotate an ArchiveTra object in HC(ECLIPB1950)-RF manually to the EQ(HCI/HG)-RF
+
+        Just for testing! Label, RF etc. won't match anymore, positional coordinates will be overwritten
+        """
+        if self.RF == "EC":
+            R = []
+            lat = []
+            long = []
+            for t in range(len(self.data['r'])):
+                vec_EC = np.array([self.data['r'][t],self.data['lat'][t],self.data['long'][t]])
+                #print(vec_EC)
+                t_epoch = datetime.datetime(2000, 1, 1,12) + datetime.timedelta(days=(2433282.42345905 - 2451545.0))
+                # exact epoch for BC1950
+                vec_rotated = hc_to_hg(vec_EC, ang_ascnode = calc_delta(t_epoch))
+                #print(vec_rotated, '\n')
+                R.append(vec_rotated[0])
+                lat.append(vec_rotated[1])
+                long.append(vec_rotated[2])
+            self.data['r'] = R
+            self.data['lat'] = lat
+            self.data['long'] = long
+        else:
+            sys.exit('RF has to be \'EC\' for rotation to EQ')
+
+    def rotate_to_EC(self):
+        """ Rotate an ArchiveTra object in EQ(HCI/HG)-RF manually to the EC(HC/ECLIPJ1950)-RF
+
+        Just for testing! Label, RF etc. won't match anymore, positional coordinates will be overwritten
+        """
+        if self.RF == "EQ":
+            R = []
+            lat = []
+            long = []
+            for t in range(len(self.data['r'])):
+                vec_EQ = np.array([self.data['r'][t],self.data['lat'][t],self.data['long'][t]])
+                vec_rotated = hg_to_hc(vec_EQ)
+                R.append(vec_rotated[0])
+                lat.append(vec_rotated[1])
+                long.append(vec_rotated[2])
+            self.data['r'] = R
+            self.data['lat'] = lat
+            self.data['long'] = long
+        else:
+            sys.exit('RF has to be \'EQ\' for rotation to EC')
+
+###############################################################################################
+################################### DATA LOADERS ##############################################
+###############################################################################################
 
 def locateUlysses(date, RF):
     '''
-    Returns Ulysses' position after SPICE data
+    Return Ulysses' position after SPICE data
 
     :param date: datetime object
     :param RF: etspice.ReferenceFrame
-    :return: [heliocentric range in AU, latitude, longitude]
+    :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
     '''
     xyz = ULYSSES.position(time = date, relative_to = SUN, reference_frame = RF) # in km
     if len(xyz) == 3:
-        r, theta, phi = utils.cart2spherical(xyz, degrees = True)
-        #print(RF.name , np.array([r/1.496e8,theta,phi]))
+        r, theta, phi = cart2spher(xyz, deg = True)
         return np.array([r/km_per_AU,theta,phi])
     elif len(xyz) > 3:
+        pass
         positions = []
         for t in xyz:
-            r, theta, phi = utils.cart2spherical(t, degrees=True)
+            r, theta, phi = cart2spher(t, deg = True)
             positions.append(np.array([r/km_per_AU,theta,phi]))
         return positions
 
+def velocityUlysses(date, RF = "HCI"):
+    """
+    Get Ulysses' eigen-velocity from SPICE and transform it to RTN-coordinates
+
+    :param date: datetime object
+    :param RF: etspice.ReferenceFrame
+    :return: eigen-velocity in RTN-coordinates
+    """
+    from spiceypy import spkezr, datetime2et
+    [x, y, z, vx, vy, vz] = spkezr('ULYSSES', datetime2et(date), RF, 'None', 'SUN')[0]  # cart in km(/s)
+    r_sph = cart2spher(np.array([x,y,z]))
+    v_sph = cart2spher(np.array([vx,vy,vz])) #does not really make sense but is needed for the rtn-function
+    if RF in ["HCI", "HCI_B", "HCI_J"]: # solar equatorial coord. sys.
+        pass
+    elif RF in ["ECLIPJ2000", "ECLIPB1950"]: # ecliptic coord. sys.
+        t_epoch = datetime.datetime(2000,1,1,12) if RF == "ECLIPJ2000" else datetime.datetime(2000,1,1,12)+datetime.timedelta(days = (2433282.42345905-2451545.0))
+        r_sph = hc_to_hg(r_sph, ang_ascnode = calc_delta(t_epoch))
+        v_sph = hc_to_hg(v_sph, ang_ascnode = calc_delta(t_epoch))
+    vR, vT, vN = hg_to_rtn(v_sph, r_sph)
+    return(np.array([vR,vT,vN]))
 
 def locateBody(body, date, RF):
     '''
-    Returns a body's position after SPICE data
+    Return a body's position after SPICE data
 
     :param body: body object, e.g. EARTH
     :param date: datetime object
     :param RF: etspice.ReferenceFrame
-    :return: Prints position vector as [R/AU, LAT/deg, LONG/deg]
+    :return: spherical coordinates [heliocentric range in AU, latitude, longitude] with latitude in [-90 deg, 90 deg], longitude in [-180 deg, 180 deg]
     '''
     xyz = body.position(time = date, relative_to = SUN, reference_frame = RF)
-    r, theta, phi = utils.cart2spherical(xyz, degrees = True)
+    r, theta, phi = cart2spher(xyz, deg = True)
     return(np.array([r/km_per_AU,theta,phi]))
-
 
 def read_pool():
     '''
@@ -126,822 +589,78 @@ def read_pool():
     '''
     path_pool = "Ulysses/Trajectory/trajectory_data/traj_data_ulysses_pool.dat"
     fin = open(path_pool,'r')
-    paras = fin.readline().split()
+    keys = fin.readline().split()
     for headerline in range(3):
         fin.readline()
-    p_dict = {p:[] for p in paras}
+    p_dict = {k:[] for k in keys}
     for line in fin:
         data = line.split()
-        for i,p in enumerate(p_dict.keys()):
-            p_dict[p].append(float(data[i]))
-    p_dict["datestring"] = []
+        for i,k in enumerate(p_dict.keys()):
+            if k == 'HG_Long':
+                p_dict[k].append(float(data[i])-180.)
+            elif k == 'HC_Long' and float(data[i]) > 180.:
+                    p_dict[k].append(float(data[i])-360.)
+            else:
+                p_dict[k].append(float(data[i]))
+    p_dict["datetimes"] = []
     for i,year in enumerate(p_dict['Year']):
-        p_dict['datestring'].append("%i-%i-%i" % (year,p_dict['MM'][i],p_dict['DD'][i]))
+        p_dict['datetimes'].append(datetime.datetime(int(year),int(p_dict['MM'][i]),int(p_dict['DD'][i])))
     for key in p_dict:
         p_dict[key] = np.array(p_dict[key])
     fin.close()
     return p_dict
 
-def read_ulysses_daily():
-    '''
-    Reader for Ulysses trajectory data from ulysses_daily_heliocentric_data_1990-2009.txt
-    :return: dict with keys "YYYY", "MM", "DD", "DOY", "R", "lat", "RA", "DEC", "long", "datestring"
-    '''
-    path_pool = "Ulysses/Trajectory/trajectory_data/ulysses_daily_heliocentric_data_1990-2009.txt"
-    fin = open(path_pool,'r')
-    for headerline in range(4):
-        fin.readline()
-
-    paras_all = fin.readline().split()
-    paras = paras_all[:3] + [paras_all[4]] + [paras_all[12]] + paras_all[-4:]
-    p_dict = {p:[] for p in paras}
-    for headerline in range(2):
-        fin.readline()
-    for line in fin:
-        data_all = line.split()
-        data = data_all[:3] + [data_all[4]] + [data_all[12]] + data_all[-4:]
-        for i,p in enumerate(p_dict.keys()):
-            p_dict[p].append(float(data[i]))
-    p_dict["datestring"] = []
-    for i,year in enumerate(p_dict['YYYY']):
-        p_dict['datestring'].append("%i-%i-%i" % (year,p_dict['MM'][i],p_dict['DD'][i]))
-    for key in p_dict:
-        p_dict[key] = np.array(p_dict[key])
-    fin.close()
-    return p_dict
-
-def read_helio_dat():
-    '''
-    Reader for Ulysses trajectory data from helio.dat
-    :return: dict with keys "Year", "DOY", "HR", "MN", 'R_AU', 'HG_LAT', 'HC_RA', 'HC_ECL_LAT', 'LONG_WRT_EARTH', "datestring"
-    '''
-    path_pool = "Ulysses/Trajectory/trajectory_data/helio.dat"
-    fin = open(path_pool,'r')
-    paras_all = fin.readline().split()
-    paras = paras_all[:4] + ['R_AU', "HG_LAT", "HC_RA", "HC_ECL_LAT", "LONG_WRT_EARTH"]
-    p_dict = {p:[] for p in paras}
-    for headerline in range(5):
-        fin.readline()
-    for line in fin:
-        data_all = line.split()
-        data = data_all[:4] + data_all[-5:]
-        for i,p in enumerate(p_dict.keys()):
-            p_dict[p].append(float(data[i]))
-    p_dict["datestring"] = []
-    for i,iyear in enumerate(p_dict['Year']):
-        # small workaround as there's only DOY data given in helio.dat:
-        date = datetime.datetime(int(iyear),1,1) + datetime.timedelta(days = p_dict['DOY'][i] - 1)
-        MM = date.month
-        DD = date.day
-        p_dict['datestring'].append("%i-%i-%i" % (iyear,MM,DD))
-    for key in p_dict:
-        p_dict[key] = np.array(p_dict[key])
-    fin.close()
-    return p_dict
-
-def read_aa_data():
+def load_aa_data():
     '''
     Reader for "old" aspect angle data in aa_data.dat
     :return: dict with keys "YEAR", "DOY", "D90", "ASP_PHI", "ASP_THETA", "ASP_total", "datestring"
     '''
     path_aa = "Ulysses/Trajectory/trajectory_data/aa_data.dat"
     fin = open(path_aa, 'r')
-    paras = fin.readline().split()
-    p_dict = {p:[] for p in paras}
+    paras_aa = fin.readline().split()
+    p_aa_dict = {p:[] for p in paras_aa}
     for line in fin:
         data = line.split()
-        for i,p in enumerate(p_dict.keys()):
-            p_dict[p].append(float(data[i]))
-    p_dict['datestring'] = []
-    for i, iyear in enumerate(p_dict['YEAR']):
-        date = datetime.datetime(int(iyear), 1, 1) + datetime.timedelta(days=p_dict['DOY'][i] - 1)
-        MM = date.month
-        DD = date.day
-        p_dict['datestring'].append("%i-%i-%i" % (iyear, MM, DD))
-    for key in p_dict:
-        p_dict[key] = np.array(p_dict[key])
+        for i,p in enumerate(p_aa_dict.keys()):
+            p_aa_dict[p].append(float(data[i]))
+    p_aa_dict["datetimes"] = []
+    for i,year in enumerate(p_aa_dict['YEAR']):
+        # small workaround as there's only DOY data given aa_data.dat:
+        p_aa_dict['datetimes'].append(datetime.datetime(int(year),1,1) + datetime.timedelta(days = p_aa_dict['DOY'][i] - 1))
+    for key in p_aa_dict:
+        p_aa_dict[key] = np.array(p_aa_dict[key])
     fin.close()
-    return p_dict
+    return p_aa_dict
 
-def get_pool_data(date):
+def write_traj_file(del_t = 3600*24, dt1 = datetime.datetime(1990,10,7), dt2 = datetime.datetime(2009,6,28)):
+    ''' 
+    Write trajectory data file
+    
+    :param del_t: time delta in seconds
+    :param dt1: start - datetime.datetime-object; default is beginning of mission
+    :param dt2: end - datetime.datetime-object; default is end of mission
     '''
-    :param date: datetime.datetime object
-    :return: Prints out Ulysses' position data for date based on condensed orbit data file "traj_data_ulysses_pool.dat".
-    '''
-    data = read_pool()
-    datestring = "%i-%i-%i" % (date.year, date.month, date.day)
-    index = np.where(data['datestring'] == datestring)[0][0]
-    print("HC   R_AU: %s Lat: %s, Long: %s \nHG     R_AU: %s  Lat: %s,  Long: %s \n \n" %(data['R'][index],
-         data['HC_Lat'][index], data['HC_Long'][index],data['R'][index], data['HG_Lat'][index],data['HG_Long'][index]))
+    fout = open("Ulysses/Trajectory/trajectory_data/spice_traj.dat",'w')
+    fout.write("YYYY  MM  DD  DOY    Hr Min      R      HG_Lat  HG_Long    AA_tot  AA_lat  AA_long     vSC_tot  vSC_R   vSC_T   vSC_N"
+               "\n\t\t\t\t["
+               "AU] \
+    [deg]   [deg]      [deg]   [deg]   [deg]       [km/s]  [km/s]  [km/s]  [km/s]\n\n")
+    S = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = del_t) 
+    for i in range(len(S.data['r'])): 
+        line =(f"{S.times[i].year}  {S.times[i].month:2} {S.times[i].day:2}   {S.times[i].timetuple().tm_yday:3}    "
+                f"{S.times[i].hour:02} {S.times[i].minute:02}     "
+                f"{S.data['r'][i]:5.3f}   {S.data['lat'][i]:7.3f}  {S.data['long'][i]:7.3f}    "
+                f"{S.data['asp_tot'][i]:7.3f} {S.data['asp_lat'][i]:7.3f} {S.data['asp_long'][i]:7.3f}    "
+                f"{S.data['vabs'][i]:7.3f} {S.data['vR'][i]:7.3f} {S.data['vT'][i]:7.3f}  {S.data['vN'][i]:7.3f}")
+        fout.write(line)
+        fout.write('\n')
+    fout.close()
+    return S
 
-def comp_rf(date):
-    '''
-    Compares Ulysses ephemeris data at date for different coordinate systems
-    :param date: datetime.datetime object
-    :return: Prints out position vectors as [R/AU, LAT/deg, LONG/deg]
-    '''
-    locateUlysses(date, ECLIPJ2000)
-    locateUlysses(date, ECLIPB1950)
-    locateUlysses(date, HCI)
-
-def get_aa(t,RF= HCI_J, vec_hg = "None", vecE_hg = "None"):
-    '''
-    Returns Ulysses' aspect angles at time t based on ephemeris data in ecliptic frame RF
-    :param t: datetime.datetime object
-    :param RF: heliographic coordinate system, i.e. based on the solar equator
-    :param vec_hc: [R,lat,long] optional for external Ulysses ephemeris data at time t (equatorial/HG coordinates!).
-        If None, SPICE vector in RF specified frame will be used.
-    :param vecE_hg: [R,lat,long] optional for external Earth ephemeris data at time t (equatorial/HG coordinates!).
-        If None, SPICE HCI_J vector will be used.
-    :return: asp_angs = (aspphi,asptheta)
-    '''
-    if vec_hg == "None":
-        vec_hg = locateUlysses(t, RF)
-        vec_hg = vec_hg[0], vec_hg[2], vec_hg[1]
-    if vecE_hg == "None":
-        vecE = locateBody(EARTH, t, HCI_J)
-        vecE_hg = [vecE[0], vecE[2], vecE[1]]
-    asp_angs = calc_asp_angles(vec_hg, vecE_hg, l_s_sc=0.)
-    return asp_angs
-
-
-class CompTimeseries:
-    """ Class for looking into different versions of Ulysses' ephemeris data
-
-    :param frames: Frames to be investigated as single lists in a comprehensive list "frames". Frame lists begin with
-    source keyword 'SP' (SPICE), 'UD' (ulysses_daily file) or 'HE' (helio.dat file) and the specification as a second element.
-    S. example for clarification.
-    Available specifications are
-    > for SPICE: ECLIPJ2000, ECLIPB1950, HCI_J, HCI_B...
-    > for 'UD': 'ECL' and 'EQ' for para LAT and 'ECL' for para LONG
-    > for 'HE': 'ECL' and 'EQ' for para LAT and 'EQ' for para LONG
-    Comment: Ephemeris data in UD and HE seem to be similar (but not the same) to B1950 epoch data in SPICE
-    :param para: 'LAT' or 'LONG'
-    :param tf: Time frame to investigate. Can be a single datetime.datetime object, a list of two or None (then
-    1990/11/06 until 1990/12/01 will be used)
-
-    Example: C = CompTimeseries([['SP', HCI_J], ['UD', 'EQ']], para = 'LONG', tf = datetime.datetime.utcnow)
-
-    """
-    def __init__(self, frames, para, tf = None):
-        # create timeseries:
-        if tf == None:
-            # default time frame:
-            first_day = datetime.datetime(1990,11,6)
-            last_day = datetime.datetime(1990,12,1)
-            delta = last_day - first_day
-        elif len(tf) == 2:
-            first_day = datetime.datetime(tf[0].year, tf[0].month, tf[0].day)
-            last_day = datetime.datetime(tf[1].year, tf[1].month, tf[1].day)
-            delta = last_day - first_day
-        elif len(tf) == 1:
-            first_day = datetime.datetime(tf[0].year, tf[0].month, tf[0].day) - datetime.timedelta(days=1)
-            last_day = datetime.datetime(tf[0].year, tf[0].month, tf[0].day) + datetime.timedelta(days=1)
-            delta = last_day - first_day
-        self.times = [first_day + datetime.timedelta(days=x) for x in range(delta.days + 1)]
-        self.t_southpass = [datetime.datetime(1994,9,13), datetime.datetime(2000,11,27), datetime.datetime(2007,2,7)]
-        self.t_northpass = [datetime.datetime(1995,7,31), datetime.datetime(2001,10,13), datetime.datetime(2008,1,14)]
-        self.frames = frames
-        self.para = para
-        self.get_data()
-
-    def get_data(self):
-        self.data_dict = {p: [] for p in ['frame', 'data', 'label']}
-        for frame in self.frames:
-            if len(frame) == 2:
-                if frame[0] == 'SP':
-                    self.get_spice_data(frame[1])
-                if frame[0] == 'UD':
-                    self.get_ud_data(frame[1])
-                if frame[0] == 'HE':
-                    self.get_he_data(frame[1])
-                if frame[0] == 'CALC':
-                    self.get_calc_data()
-                if frame[0] == 'CALC_SP':
-                    self.get_calc_data_SP()
-            else:
-                print('Every frame needs to have two elements, e.g. [\'SP\',ECLIPB1950] or [\'UD\',\'ECL\']. Please '
-                      'try again.')
-                exit()
-
-    def get_spice_data(self, RF):
-        # calculate with SPICE
-        data_SP = []
-        data_SP2 = []
-        if self.para == 'LAT':
-            for t in self.times:
-                data_SP.append(locateUlysses(t, RF)[1])
-        elif self.para == 'LONG':
-            for t in self.times:
-                data_SP.append(locateUlysses(t, RF)[2])
-        else:
-            print("Second argument has not been recognised. Choose one of \"LAT\", \"LONG\".")
-        self.data_dict['frame'].append('SP')
-        self.data_dict['data'].append(data_SP)
-        self.data_dict['label'].append("SPICE %s" % (RF.name))
-
-    def get_ud_data(self, RF):
-        # data from "ulysses_daily_heliocentric_data_1990-2009.txt"
-        data_UD = []
-        ud_dict = read_ulysses_daily()
-        if self.para == 'LAT':
-            if RF == 'ECL':
-                for t in self.times:
-                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
-                    data_UD.append(ud_dict['DEC'][ud_dict['datestring'] == t_ds][0])
-            elif RF == 'EQ':
-                for t in self.times:
-                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
-                    data_UD.append(ud_dict['lat'][ud_dict['datestring'] == t_ds][0])
-            else:
-                print("Second argument has not been recognised. Choose one of \'ECL\' and \'EQ\'.")
-                exit()
-        if self.para == 'LONG':
-            if RF == 'ECL':
-                for t in self.times:
-                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
-                    if ud_dict['RA'][ud_dict['datestring'] == t_ds][0] <= 180.:
-                        data_UD.append(ud_dict['RA'][ud_dict['datestring'] == t_ds][0])
-                    else:
-                        data_UD.append(ud_dict['RA'][ud_dict['datestring'] == t_ds][0]-360.)
-            else:
-                exit("Second frame argument has not been recognised. LONG not available in equatorial (HG) system for "
-                      "ulysses_daily.")
-        self.data_dict['frame'].append('UD')
-        self.data_dict['data'].append(data_UD)
-        self.data_dict['label'].append("ulysses_daily %s" % (RF))
-
-    def get_he_data(self, RF):
-        # data from "helio.txt"
-        data_HE = []
-        he_dict = read_helio_dat()
-        if self.para == 'LAT':
-            if RF == 'ECL':
-                for t in self.times:
-                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
-                    data_HE.append(he_dict['HC_ECL_LAT'][he_dict['datestring'] == t_ds][0])
-            elif RF == 'EQ':
-                for t in self.times:
-                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
-                    data_HE.append(he_dict['HG_LAT'][he_dict['datestring'] == t_ds][0])
-            else:
-                exit("Second argument has not been recognised. Choose one of \'ECL\' and \'EQ\'.")
-        if self.para == 'LONG':
-            if RF == 'EQ':
-                for t in self.times:
-                    t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
-                    data_HE.append(he_dict['HC_RA'][he_dict['datestring'] == t_ds][0] - 180.)
-            else:
-                exit("Second argument has not been recognised. LONG not available in ecliptic system for "
-                      "helio.txt")
-        self.data_dict['frame'].append('HE')
-        self.data_dict['data'].append(data_HE)
-        self.data_dict['label'].append("helio.txt %s" % (RF))
-
-    def get_calc_data(self):
-        # calculate HG (EQ) data by rotating HC (ECLIP) data from ulysses daily
-        data_CALC = []
-        ud_dict = read_ulysses_daily()
-        if self.para == 'LAT':
-            for t in self.times:
-                t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
-                hc_R = ud_dict['R'][ud_dict['datestring'] == t_ds][0]
-                hc_long = ud_dict['RA'][ud_dict['datestring'] == t_ds][0]
-                hc_lat = ud_dict['DEC'][ud_dict['datestring'] == t_ds][0]
-                #print('\n\nUD:\n',hc_R,hc_lat,hc_long)
-                hg_vec = hc_to_hg([hc_R,hc_long,hc_lat], long_shift = 0.)
-                data_CALC.append(hg_vec[2])
-        if self.para == 'LONG':
-            for t in self.times:
-                t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
-                hc_R = ud_dict['R'][ud_dict['datestring'] == t_ds][0]
-                hc_long = ud_dict['RA'][ud_dict['datestring'] == t_ds][0]
-                hc_lat = ud_dict['DEC'][ud_dict['datestring'] == t_ds][0]
-                hg_vec = hc_to_hg([hc_R,hc_long,hc_lat], long_shift = 0.)
-                data_CALC.append(hg_vec[1])
-        self.data_dict['frame'].append('CALC')
-        self.data_dict['data'].append(data_CALC)
-        self.data_dict['label'].append("EQ calculated")
-
-    def get_calc_data_SP(self):
-        # calculate HG (EQ) data by rotation ECLIPB1950 data by SPICE
-        data_CALC_SP = []
-        if self.para == 'LAT':
-            for t in self.times:
-                hc_vec = (locateUlysses(t, ECLIPB1950))
-                hg_vec = hc_to_hg([hc_vec[0],hc_vec[2],hc_vec[1]], long_shift = 0.)
-                #print("\n\n SP:\n",hc_vec)
-                data_CALC_SP.append(hg_vec[2])
-        if self.para == 'LONG':
-            for t in self.times:
-                hc_vec = (locateUlysses(t, ECLIPB1950))
-                hg_vec = hc_to_hg([hc_vec[0], hc_vec[2], hc_vec[1]], long_shift=0.)
-                data_CALC_SP.append(hg_vec[1])
-        self.data_dict['frame'].append('CALC')
-        self.data_dict['data'].append(data_CALC_SP)
-        self.data_dict['label'].append("EQ calculated SP")
-
-    def get_old_aa_data(self):
-        data_old_aa_lat = []
-        data_old_aa_long = []
-        aa_dict = read_aa_data()
-        for t in self.times:
-            t_ds = "%i-%i-%i" % (t.year, t.month, t.day)
-            data_old_aa_lat.append(aa_dict['ASP_THETA'][aa_dict['datestring'] == t_ds][0])
-            data_old_aa_long.append(aa_dict['ASP_PHI'][aa_dict['datestring'] == t_ds][0])
-        self.data_old_aa_lat = np.array(data_old_aa_lat)
-        self.data_old_aa_long = np.array(data_old_aa_long)
-
-    def get_aa(self):
-        # calculate aspect angles based on different coordinate systems
-        data_aspJ = []
-        data_aspB = []
-        for t in self.times:
-            data_aspJ.append(get_aa(t, RF = ECLIPJ2000))
-            data_aspB.append(get_aa(t, RF = ECLIPB1950))
-        self.data_aspB = np.array(data_aspB)
-        self.data_aspJ = np.array(data_aspJ)
-
-    def plot_ts(self, rou = False, ax = None):
-        # set up the plot
-
-        if ax == None:
-            fig = plt.figure()
-            ax = fig.subplots()
-
-        if self.para == 'LAT':
-            ax.set_ylabel("Lat. in degree")
-            ax.set_ylim(-90, 90)
-            #ax.set_ylim(-79.15, -79.)
-        elif self.para == 'LONG':
-            ax.set_ylabel("Long. in degree")
-            ax.set_ylim(-190, 250)
-        for i, dataset in enumerate(self.data_dict['data']):
-            if self.data_dict['frame'][i] == 'SP':
-                if rou:
-                    ax.plot(self.times, np.around(np.array(dataset),2), linestyle='None', label = self.data_dict[
-                        'label'][i], marker='v', ms="5", alpha=0.3)
-                else:
-                    ax.plot(self.times, dataset, linestyle='None', label = self.data_dict['label'][i], marker='v', ms="7", alpha=0.3)
-            elif self.data_dict['frame'][i] == 'UD':
-                ax.plot(self.times, dataset, linestyle='None', label=self.data_dict['label'][i], marker='o', ms="7",
-                        alpha=0.3)
-            elif self.data_dict['frame'][i] == 'HE':
-                ax.plot(self.times, dataset, linestyle='None', label=self.data_dict['label'][i], marker='s', ms="7",
-                        alpha=0.3)
-            elif self.data_dict['frame'][i] == 'CALC':
-                ax.plot(self.times, dataset, linestyle='None', label=self.data_dict['label'][i], marker='P', ms="7",
-                        alpha=0.3)
-        # plot vertical lines at polar passes
-        plt.vlines(self.t_southpass, ymin = -180, ymax = 360, color = 'firebrick', alpha = 0.5, linestyle = 'dashed')
-        plt.vlines(self.t_northpass, ymin = -180, ymax = 360, color = 'navy', alpha = 0.5, linestyle = 'dashed')
-        plt.gcf().autofmt_xdate()
-        ax.legend()
-        ax.grid(True)
-        return ax
-
-    def plot_diff(self, rou = False, ax = None):
-        '''
-        plots the difference between first frame and the other frames resp.
-        :return:
-        '''
-        if len(self.frames) == 1:
-            exit('Cannot subtract frames: Only one frame loaded.')
-        if ax == None:
-            fig = plt.figure()
-            diff_ax = fig.subplots()
-            if self.para == 'LAT':
-                diff_ax.set_ylabel("Diff. of Lat. in degree")
-            elif self.para == 'LONG':
-                diff_ax.set_ylabel("Diff. of Long. in degree")
-        else:
-            diff_ax = ax
-        ymin = -0.001
-        ymax = 0.001
-        for i, dataset in enumerate(self.data_dict['data'][1:]):
-            #print('i: ', i)
-            #print("%s - %s" % (self.data_dict['label'][0],self.data_dict['label'][i]))
-            if rou:
-                diff_data = np.around(np.array(self.data_dict['data'][0]),2) - np.around(np.array(dataset),2)
-            else:
-                diff_data = np.array(self.data_dict['data'][0]) - np.array(dataset)
-            diff_ax.plot(self.times, diff_data, linestyle='None', label="%s - %s" % (self.data_dict['label'][
-                                                0], self.data_dict['label'][i+1]),marker='v',ms="5",alpha=0.3)
-            if ax == None:
-                ymin = min(list(diff_data) + [ymin])
-                ymax = max(list(diff_data) + [ymax])
-            if i == len(self.data_dict['data']) - 2:
-                break
-        diff_ax.set_ylim(ymin * 4., ymax * 4.)
-        # plot vertical lines at polar passes
-        plt.vlines(self.t_southpass, ymin = ymin * 4., ymax = ymax * 4., color = 'firebrick', alpha = 0.5, linestyle = 'dashed')
-        plt.vlines(self.t_northpass, ymin = ymin * 4., ymax = ymax * 4., color = 'navy', alpha = 0.5, linestyle = 'dashed')
-        plt.gcf().autofmt_xdate()
-        diff_ax.legend()
-        diff_ax.grid(True)
-        return diff_ax
-
-    def plot_val_dev_aa(self, old = False):
-        '''
-        Method for plotting Ulysses' aspect angles during self.times and testing the effect of using ephemeris data of
-        the wrong epoch. Angles are based on Ulysses' ephemeris in ecliptic coordinates in B1950 resp. J2000 and
-        Earth ephemeris data in J2000.
-        Ignores self.para and self.frame.
-        :param old: merge later
-        :return: Figure with four axes, from top to bottom: Latitude values, Latitude difference, Longitude values,
-        Longitude difference
-        '''
-        if old:
-            self.get_old_aa_data()
-        self.get_aa()
-        fig, axes = plt.subplots(nrows = 5, gridspec_kw = {'height_ratios':[2,1.7,0.1,2,1.7]})
-        if old:
-            axes[0].plot(self.times, self.data_old_aa_lat, linestyle = 'None', marker = 'o', label = 'old asptheta',
-                    ms = 1., color = "#bfbfbf")
-        axes[0].plot(self.times, self.data_aspB[:,1], linestyle = 'None', marker = 'o', label = 'asptheta B1950',
-                     ms = 1., color = "#940c35")
-        axes[0].plot(self.times, self.data_aspJ[:,1], linestyle = 'None', marker = 'o', label = 'asptheta J2000',
-                     ms = 1., color = "#db5c82")
-        axes[0].set_ylim(-35,35)
-
-        if old:
-            axes[1].plot(self.times, self.data_aspB[:,1] - self.data_old_aa_lat, linestyle = 'None', marker = 'o',
-                    label = 'B1950 - old asptheta', ms = 1., color = "#bfbfbf")
-        axes[1].plot(self.times, self.data_aspB[:,1] - self.data_aspJ[:, 1], linestyle = 'None', marker = 'o',
-                     label = 'B1950 - J2000', ms = 1., color = "#db5c82")
-        axes[1].set_ylim(-.6,.6)
-
-        if old:
-            axes[3].plot(self.times, self.data_old_aa_long, linestyle = 'None', marker = 'o', label = 'old aspphi',
-                    ms = 1., color = "#bfbfbf")
-        axes[3].plot(self.times, self.data_aspB[:,0], linestyle = 'None', marker = 'o', label = 'aspphi B1950',
-                     ms = 1., color = "#002e66")
-        axes[3].plot(self.times, self.data_aspJ[:,0], linestyle = 'None', marker = 'o', label = 'aspphi J2000',
-                     ms = 1., color = "#4783cc")
-        axes[3].set_ylim(-35,35)
-
-        if old:
-            axes[4].plot(self.times, self.data_aspB[:,0] - self.data_old_aa_long, linestyle = 'None', marker = 'o',
-                    label = 'B1950 - old aspphi', ms = 1., color = "#bfbfbf")
-        axes[4].plot(self.times, self.data_aspB[:,0] - self.data_aspJ[:, 0], linestyle = 'None', marker = 'o',
-                     label = 'B1950 - J2000', ms = 1., color = "#4783cc")
-        axes[4].set_ylim(-1.9,1.5)
-
-        fig.text(0.035, 0.75, 'Aspect Latitude / deg.', ha='center', va='center', rotation='vertical',
-                 color = '#940c35')
-        fig.text(0.035, 0.3, 'Aspect Longitude / deg.', ha='center', va='center', rotation='vertical',
-                 color = "#002e66")
-        fig.autofmt_xdate()
-        for ax in axes:
-            if ax == axes[2]:
-                continue
-            elif ax == axes[0] or ax == axes[1]:
-                lg = ax.legend(loc='upper center', ncol=3, fontsize='small', bbox_to_anchor=(0.5, 1.2), fancybox=
-                True, framealpha=1., facecolor='#fff5f8', shadow=True)
-                for legend_handle in lg.legendHandles:
-                    legend_handle._legmarker.set_markersize(6)
-            elif ax == axes[3] or ax == axes[4]:
-                lg = ax.legend(loc = 'upper center', ncol = 3, fontsize = 'small', bbox_to_anchor = (0.5,1.3),
-                               fancybox =
-                True, framealpha = 1., facecolor = '#dfe9f5', shadow = True)
-                for legend_handle in lg.legendHandles:
-                    legend_handle._legmarker.set_markersize(6)
-
-            for s in self.t_southpass:
-                ax.axvline(s, ymin=-30, ymax=30., color='#828282', alpha=0.5,
-                           linestyle='dashed')
-            for n in self.t_northpass:
-                ax.axvline(n, ymin=-30., ymax=30, color='#828282', alpha=0.5, linestyle='dashed')
-            ax.grid(True)
-            axes[2].set_visible(False)
-        plt.subplots_adjust(left=0.11, bottom=0.1, right=0.97, top=0.96, wspace=0, hspace=0.3)
-
-class WriteTrajSpice:
-    """
-    """
-    def __init__(self, year, *args, **kwargs):
-        self.year = year
-        filepath = "Ulysses/Trajectory/trajectory_data/"
-        if "filename" in kwargs:
-            self.path = filepath + kwargs["filename"]
-        else:
-            self.path = filepath + "spice_traj.dat"
-        if 'dt' in kwargs:
-            self.delta_t = kwargs['dt']
-        else:
-            self.delta_t = 60*60
-        #self.delta_t = 12 * 60 # time interval in seconds: 12 minutes
-        #self.delta_t = 24*60 * 60 # time interval in seconds: 1 day
-        t1 = datetime.datetime(year,1,1)
-        t2 = datetime.datetime(year,3,15)
-        #t2 = datetime.datetime(year+1,1,1)
-        self.times = [t1+datetime.timedelta(seconds=x) for x in range(0,int((t2-t1).total_seconds()),self.delta_t)]
-        self.get_data()
-        #self.get_v_old()
-        #self.write_file()
-
-    def get_data(self):
-        '''
-        HC: heliocentric coordinate system: based on ecliptic and first point of Aries; ECLIPB1950 in SPICE
-        HG: heliographic coordinate system: based on Sun's equatorial plane and the solar ascending node on the ecliptic; HCI in SPICE
-        '''
-        self.y = []
-        self.month = []
-        self.day = []
-        self.hour = []
-        self.min = []
-        self.doy = []
-        self.doy_int = []
-        self.R = []
-        self.HC_long = []
-        self.HC_lat =  []
-        self.HG_long = []
-        self.HG_lat = []
-        self.aa_phi = []
-        self.aa_theta = []
-        for t in self.times:
-            try:
-                self.R.append(locateUlysses(t, HCI)[0])
-                self.HG_long.append(locateUlysses(t, HCI)[2])
-                self.HG_lat.append(locateUlysses(t, HCI)[1])
-                self.HC_long.append(locateUlysses(t, ECLIPB1950)[2])
-                self.HC_lat.append(locateUlysses(t, ECLIPB1950)[1])
-
-                self.y.append(self.year)
-                self.month.append(t.month)
-                self.day.append(t.day)
-                self.hour.append(t.hour)
-                self.min.append(t.minute)
-                self.doy.append(self.calc_doy(t))
-                self.doy_int.append(t.timetuple().tm_yday)
-                asp_angles = self.calc_aa(t)
-                self.aa_phi.append(asp_angles[0])
-                self.aa_theta.append(asp_angles[1])
-            except:
-                print('%f'%t.month)
-
-
-    def calc_doy(self,dt):
-        """ Recalculate doy
-        
-        dt : datetime.datetime object
-        combine doy, hour, min, sec to a more detailed doy
-        """
-        dt_tt = dt.timetuple()
-        doy = dt_tt.tm_yday+dt_tt.tm_hour*1./24.+dt_tt.tm_min*(1./(24.*60.))+dt_tt.tm_sec*(1./(24.*60.*60.))
-        return doy
-
-    def calc_aa(self,dt):
-        """ Calculate Aspect Angles (Phi, Theta) in RTN coordinates
-        
-        """
-        vec_ul_hg = locateUlysses(dt,HCI)
-        vec_e_hg = locateBody(EARTH, dt, HCI)
-        aa_phi, aa_theta = calc_asp_angles([vec_ul_hg[0],vec_ul_hg[2],vec_ul_hg[1]], [vec_e_hg[0],vec_e_hg[2],vec_e_hg[1]], l_s_sc = 0.)
-        return [aa_phi,aa_theta]
-
-
-    def write_file(self):
-        if self.year == 1990:
-            self.fout = open(self.path,'w')
-            self.fout.write("YYYY  MM DD  DOY  Hr Min    doy        R        HG_Long    HG_Lat    HC_Long    HC_Lat      AA_phi  AA_theta\n                                      [AU]      [deg]      [deg]      [deg]     [deg]       [deg]     [deg]\n\n")
-        else:
-            self.fout = open(self.path,'a')
-        for i in range(len(self.y)):
-            line = "%i %2i %2i  %3i   %2i %2i   %6.2f    %7.5f   %8.3f  %8.3f    %8.3f %8.3f     %8.3f %8.3f\n" %(self.y[i],self.month[i],self.day[i], self.doy_int[i], self.hour[i], self.min[i], self.doy[i], self.R[i], self.HG_long[i], self.HG_lat[i], self.HC_long[i], self.HC_lat[i], self.aa_phi[i], self.aa_theta[i])
-            self.fout.write(line)
-        self.fout.close()
-
-
-    def get_v_old(self):
-        ''' Add velocity data product to data dictionary
-
-        Use 'old' method calc_v_old but with new position vectors
-        '''
-        if not self.R:
-            self.get_data()
-        self.vR = []
-        self.vT = []
-        self.vN = []
-        self.vabs = []
-        for i in range(len(self.R[:-1])):
-            vec1_hg = [self.R[i], self.HG_long[i], self.HG_lat[i]]
-            vec2_hg = [self.R[i+1], self.HG_long[i+1], self.HG_lat[i+1]]
-            print(i)
-            vR, vT, vN = self.calc_v_old(vec1_hg,vec2_hg,self.delta_t, R = "AU")
-            self.vR.append(vR)
-            self.vT.append(vT)
-            self.vN.append(vN)
-            self.vabs.append(np.sqrt(vR**2+vT**2+vN**2))
-
-    # #def get_v_new(self):
-    #     '''
-    #     '''
-    #     from etspice import kernels
-    #     from spiceypy import spkezr, datetime2et
-    #     if not self.R:
-    #         self.get_data()
-    #     self.vR_new = []
-    #     self.vT_new = []
-    #     self.vN_new = []
-    #     self.vx_new = []
-    #     self.vy_new = []
-    #     self.vz_new = []
-    #     self.x_new = []
-    #     self.y_new = []
-    #     self.z_new = []
-    #     self.vabs_new = []
-    #     for i in range(len(self.R)):
-    #         [x,y,z,v_x, v_y, v_z] = spkezr('ULYSSES',datetime2et(self.times[i]),'HCI','None', 'SUN')[0]
-    #         print([x,y,z], "\n", [v_x,v_y,v_z], '\n')
-    #         R,lat,lon = utils.cart2spherical(np.array([x,y,z]), degrees = True)
-    #         vR,vlat,vlong = utils.cart2spherical(np.array([v_x,v_y,v_z]), degrees = True)
-    #         [vR,vT,vN] = hg_to_rtn( [v_x,v_y,v_z], [R,lat,lon], 0.0, 0.0)
-    #         self.vR_new.append(vR)
-    #         self.vT_new.append(vT)
-    #         self.vN_new.append(vN)
-    #         self.vx_new.append(v_x)
-    #         self.vy_new.append(v_y)
-    #         self.vz_new.append(v_z)
-    #         self.x_new.append(x/1.496e8)
-    #         self.y_new.append(y/1.496e8)
-    #         self.z_new.append(z/1.496e8)
-    #         self.vabs_new.append(np.sqrt(vR**2 + vT**2 + vN**2))
-
-    def get_v_new(self):
-        '''
-        '''
-        from spiceypy import spkpos, spkezr, datetime2et
-        if not self.R:
-            self.get_data()
-        self.vR_new = []
-        self.vT_new = []
-        self.vN_new = []
-        for i in range(len(self.R)-1):
-        #for i in range(2):
-            print(i,self.doy[i])
-            [x,y,z,v_x, v_y, v_z] = spkezr('ULYSSES',datetime2et(self.times[i]),'HCI','None', 'SUN')[0] # cart in km(/s)
-            [xAU,yAU,zAU] = [x/km_per_AU, y/km_per_AU, z/km_per_AU]
-            #print('x,y,z (km):', x, y, z)
-            #print('x,y,z (AU):', xAU,yAU,zAU)
-            [r,lat,long] = utils.cart2spherical(np.array([xAU,yAU,zAU]),degrees = True)
-            #print('r,lat,long: ', r,lat,long, '\n')
-
-
-            #print('v km xyz: ', v_x, v_y, v_z)
-            v_HG_spher = utils.cart2spherical(np.array([v_x,v_y,v_z]),degrees = True) # spherical in km/s and degree
-
-            xyz_HG_spher = utils.cart2spherical(np.array([x,y,z]),degrees = True) # spherical in km and degree: for RTN calculation
-            vec_RTN_km = hg_to_rtn([v_HG_spher[0],v_HG_spher[2],v_HG_spher[1]],[xyz_HG_spher[0],xyz_HG_spher[2],
-                                                                              xyz_HG_spher[1]])
-
-            #print('vec RTN km: ', vec_RTN_km, '\n\n')
-            self.vR_new.append(vec_RTN_km[0])
-            self.vT_new.append(vec_RTN_km[1])
-            self.vN_new.append(vec_RTN_km[2])
-
-    def plotplot(self):
-        doy = self.doy_int[:-1]
-        fig, axes = plt.subplots(nrows = 4)
-        # axes[0].plot(doy,self.x_new, label='x')
-        # axes[0].plot(doy,self.vx_new, label='vx')
-        # axes[0].plot(doy,self.vR_new, label='vR')
-        # axes[0].legend()
-        # axes[1].plot(doy,self.y_new, label= 'y')
-        # axes[1].plot(doy,self.vy_new, label='vy')
-        # axes[1].plot(doy,self.vT_new, label='vT')
-        # axes[1].legend()
-        # axes[2].plot(doy,self.z_new, label = 'z')
-        # axes[2].plot(doy,self.vx_new, label='vx')
-        # axes[2].plot(doy,self.vN_new, label='vN')
-        # axes[2].legend()
-
-    def calc_v_old(self, vec1, vec2, delta_t, R = "km"):
-        '''
-        Calculates Ulysses' velocity components R,T and N as the "derivation" of position vectors with respect to the time.
-        v1 = (pos2 - pos1) / delta_t
-        delta_t = (t2 - t1) = 1 day as Ulysses' trajectory data is given  (in seconds)
-        :param vec1: location of current measurement in spherical HG (R ,long,lat) coordinates in (AU,deg,deg)
-        :param vec2: location of next measurement in spherical HG (R,long,lat) coordinates
-        :param dt: time between measurement vec1 and vec2 in seconds  
-        :return: average vx, vy, vz between measurement 1 and 2 in km/s
-        '''
-        # vec1 and vec2 in RTN coordinates based on SC being @ vec1:
-        vec1_RTN = hg_to_rtn(vec1,vec1, long_shift = 0., long_shift_r = 0.)
-        vec2_RTN = hg_to_rtn(vec2,vec1,long_shift = 0., long_shift_r = 0.)
-        # differential quotient:
-        delta_RTN = (vec2_RTN - vec1_RTN)
-        if R == "AU":
-            vx,vy,vz = (delta_RTN / delta_t) * 1.496*10**8 # conversion from AU to km
-            # print('HG:')
-            # print(vec1)
-            # print(vec2)
-            # print('RTN:')
-            # print(vec1_RTN)
-            # print(vec2_RTN)
-            # print(delta_RTN)
-        elif R == "km":
-            vx, vy, vz = (delta_RTN / delta_t)
-            print('HG:')
-            vec1[0] /= 1.496*10**8
-            vec2[0] /= 1.496 * 10 ** 8
-            print(vec1)
-            print(vec2)
-            print('RTN:')
-            print(vec1_RTN / (1.496 * 10 ** 8))
-            print(vec2_RTN / (1.496 * 10 ** 8))
-            d = delta_RTN / (1.496 * 10 ** 8)
-            print(d)
-        print(vx,vy,vz)
-        return vx,vy,vz
-
-    def comp_v(self, *args, **kwargs):
-        """
-        Quick comparison of SC velocities of different sources.
-        a: ulysses archive data HG data; velocity as differential quotient
-        b: SPICE HCI position data; velocity as differential quotient
-        c: SPICE velocity data ('new')
-
-        Use 1991 for self.year!
-        """
-        pool_d = read_pool()
-        vR_pool = pool_d['v_R'][pool_d['Year'] == 1991.]
-        vT_pool = pool_d['v_T'][pool_d['Year'] == 1991.]
-        vN_pool = pool_d['v_N'][pool_d['Year'] == 1991.]
-        vabs_pool = np.sqrt(vR_pool**2 + vT_pool**2 + vN_pool**2)
-        doy = pool_d['DOY'][pool_d['Year'] == 1991.]
-        self.get_v_old()
-        self.get_v_new()
-        if "ax" in kwargs:
-            axes = kwargs["ax"]
-        else:
-            fig, axes = plt.subplots(nrows = 4)
-
-        # R
-        #axes[0].plot(doy, vR_pool, label = "R pool", marker = 'o')
-        axes[0].plot(self.doy[:-1], self.vR, label = "%s"%self.delta_t, marker = 'o', markersize = 2, linestyle = "None")
-        axes[0].plot(self.doy[:-1],self.vR_new,label='new',  marker = 'o', markersize = 2, linestyle = "None")
-        axes[0].legend()
-
-        # T
-        #axes[1].plot(doy, vT_pool, label = "T pool", marker = 'o')
-        axes[1].plot(self.doy[:-1], self.vT, label = "%s"%self.delta_t, marker = 'o', markersize = 2, linestyle = "None")
-        axes[1].plot(self.doy[:-1],self.vT_new,label='new', marker = 'o', markersize = 2, linestyle = "None")
-        axes[1].legend()
-
-        # N
-        #axes[2].plot(doy, vN_pool, label = "N pool", marker = 'o')
-        axes[2].plot(self.doy[:-1], self.vN, label = "%s"%self.delta_t, marker = 'o', markersize = 2, linestyle = "None")
-        axes[2].plot(self.doy[:-1],self.vN_new,label='new', marker = 'o', markersize = 2, linestyle = "None")
-        axes[2].legend()
-
-        # # abs value
-        # #axes[3].plot(doy, vabs_pool, label = 'abs pool', marker = 'o')
-        # axes[3].plot(self.doy[:-1], self.vabs, label = "%s"%self.delta_t, marker = 'o', markersize = 2, linestyle = "None")
-        # axes[3].plot(self.doy[:-1], self.vabs_new, label = 'new abs', marker = 'o', markersize = 2, linestyle = "None")
-        # axes[3].legend()
-
-
-        # # R
-        # axes[0].plot(doy, vR_pool, label = "R pool", marker = 'o')
-        # axes[0].plot(self.doy_int[:-1], self.vR, label = "spice traj data", marker = 'o', markersize = 1)
-        # #axes[0].plot(self.doy_int[:-1],self.vR_new,label='new')
-        # axes[0].legend()
-        #
-        # # T
-        # axes[1].plot(doy, vT_pool, label = "T pool", marker = 'o', markersize = 1)
-        # axes[1].plot(self.doy_int[:-1], self.vT, label = "spice traj data", marker = 'o', markersize = 1)
-        # #axes[1].plot(self.doy_int[:-1],self.vT_new,label='new')
-        # axes[1].legend()
-        #
-        # # N
-        # axes[2].plot(doy, vN_pool, label = "N pool", marker = 'o', markersize = 1)
-        # axes[2].plot(self.doy_int[:-1], self.vN, label = "spice traj data", marker = 'o', markersize = 1)
-        # #axes[2].plot(self.doy_int[:-1],self.vN_new,label='new')
-        # axes[2].legend()
-        #
-        # # abs value
-        # axes[3].plot(doy, vabs_pool, label = 'abs pool', marker = 'o', markersize = 1)
-        # axes[3].plot(self.doy_int[:-1], self.vabs, label = 'spice traj data', marker = 'o', markersize = 1)
-        # #axes[3].plot(self.doy_int[:-1], self.vabs_new, label = 'new abs')
-        # axes[3].legend()
-
-        return axes
-
-
-def testfunc():
-    #W0 = WriteTrajSpice(1991, dt = 60*60*24*2) # 2 days
-    print('W1')
-    W1 = WriteTrajSpice(1991, dt = 60*60*24) # 1 day
-    print('W2')
-    #W2 = WriteTrajSpice(1991, dt = 60*60*12) # 12 hours
-    print('W3')
-    W3 = WriteTrajSpice(1991, dt = 60*60) # 1 hour
-    print('W4')
-    W4 = WriteTrajSpice(1991, dt = 60*12) # 12 minutes
-    print('W5')
-    #W5 = WriteTrajSpice(1991, dt = 60) # 1 minute
-    a = W1.comp_v()
-    for w in [W3,W4]:
-        w.comp_v(ax = a)
-    return W1
+if __name__ == "__main__":
+    dt1 = datetime.datetime(1990,10,7)
+    dt2 = datetime.datetime(2009,6,28)
+    S_ec = SpiceTra(TF=[dt1,dt2], RF = ECLIPB1950, DT = 24*3600*10)
+    S_eq = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
+    A_ec = ArchiveTra(TF=[dt1,dt2], RF = "EC", DT = 24*3600*10)
+    A_eq = ArchiveTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)

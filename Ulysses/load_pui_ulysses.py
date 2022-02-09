@@ -26,7 +26,7 @@ start = time.time()
 
 if He1:
     # give path to data that includes magnet data
-    d1 = uswipha(year=years, tf=[[101, 102]])
+    d1 = uswipha(year=years, tf=[[101, 122]])
     d1.sync_swoops()
     d1.sync_traj_spice()
     #d1.sync_mag() # not needed anymore: new PHAs including mag data
@@ -54,47 +54,12 @@ if He1:
     d = uswipha(year=years, tf=[[1, 2]])
     print('*** Load Subset ***')
     d.load_subset(filename = 'd1.tmp', force = True)
-
-    print('\ndone')
-    print(len(d.data['year']))
+    print("No. of PHAs: ",len(d.data['year']))
     D = Dist3D(d, mass = 4, charge = 1, sc_vel = False)
 
 
 ###############
 
-
-    d2 = uswipha(year=years, tf=[[101, 102]])
-    d2.sync_swoops()
-    d2.sync_traj()
-    #d1.sync_mag() # not needed anymore: new PHAs including mag data
-    #d1.set_mask('Master','vsw',750,780, reset = True)
-    d2.set_mask('Master','rng',0,0,reset=True)
-    d2.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
-    d2.set_mask('Master','ech',12,250,reset=True) # exclude doubles
-    #d1.set_mask('Master','brw',1,1,reset=True)
-    #d1.set_mask('Master', 'epq', 0, 19, reset=True)
-    #d1.set_mask('Master', 'epq', 30,31, reset=True)
-    #d1.set_mask('Master', 'r', 0, 1.38, reset=True)
-
-    # d1.set_mask('Master','Btheta',-20./180.*np.pi,20./180.*np.pi,reset=True)
-    # d1.set_mask('Master', 'Bphi', -20. / 180. * np.pi, 20. / 180. * np.pi, reset=True)
-    # #d1.set_mask('Master', 'Bphi', 85. / 180. * np.pi, 95. / 180. * np.pi)
-
-    # d1.set_mask('Master','aa_tot', 0, 10)
-    #d1.set_mask('Master','aspphi', -5,5)
-    #d1.set_mask('Master','asptheta',-10,10)
-
-    # get a real subset with masks applied:
-    print('*** Save Subset ***')
-    d2.save_subset('Master', filename = 'd2.tmp')
-    del(d2)
-    d2 = uswipha(year=years, tf=[[1, 2]])
-    print('*** Load Subset ***')
-    d2.load_subset(filename = 'd2.tmp', force = True)
-
-    print('\ndone')
-    print(len(d2.data['year']))
-    D2 = Dist3D(d2, mass = 4, charge = 1, sc_vel = False)
 
 end = time.time()
 #print("time: ", end-start)

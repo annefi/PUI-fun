@@ -20,7 +20,7 @@ km_per_AU = 1.495979e8
 
 
 class Plot_3d():
-    """ blabla
+    """ Class for plotting 3D trajectory data
     """
 
     def __init__(self, epoch = None, ax = None):
