@@ -3,8 +3,9 @@
 import os
 import numpy as np
 
-path = "/data/projects/Ulysses/VHM_FGM/1min/"
-years = range(2005,2010)
+#path = "/data/projects/Ulysses/VHM_FGM/1min/"
+path = "/media/storage/data/projects/Ulysses/VHM_FGM/1min/"
+years = range(2000,2010)
 
 
 for year in years:

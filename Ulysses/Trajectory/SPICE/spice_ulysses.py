@@ -657,10 +657,10 @@ def write_traj_file(del_t = 3600*24, dt1 = datetime.datetime(1990,10,7), dt2 = d
     fout.close()
     return S
 
-if __name__ == "__main__":
-    dt1 = datetime.datetime(1990,10,7)
-    dt2 = datetime.datetime(2009,6,28)
-    S_ec = SpiceTra(TF=[dt1,dt2], RF = ECLIPB1950, DT = 24*3600*10)
-    S_eq = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
-    A_ec = ArchiveTra(TF=[dt1,dt2], RF = "EC", DT = 24*3600*10)
-    A_eq = ArchiveTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)
+# if __name__ == "__main__":
+#     dt1 = datetime.datetime(1990,10,7)
+#     dt2 = datetime.datetime(2009,6,28)
+#     S_ec = SpiceTra(TF=[dt1,dt2], RF = ECLIPB1950, DT = 24*3600*10)
+#     S_eq = SpiceTra(TF=[dt1,dt2], RF = HCI, DT = 24*3600*10)
+#     A_ec = ArchiveTra(TF=[dt1,dt2], RF = "EC", DT = 24*3600*10)
+#     A_eq = ArchiveTra(TF=[dt1,dt2], RF = "EQ", DT = 24*3600*10)

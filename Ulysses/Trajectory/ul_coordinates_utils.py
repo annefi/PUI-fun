@@ -188,6 +188,25 @@ def hg_to_rtn(r_vec: np.ndarray, sc_vec: np.ndarray, long_shift = 0., long_shift
     R, T, N = rotate(interim_1, 'y', sc_vec[1], deg=True)
     return np.array([R, T, N])
 
+def get_RTN_axes(sc_vec):
+    ### sc_vec in sph coords
+    R = cart2spher(sc_vec)
+    R_norm = R/np.sqrt(R[0]**2+R[1]**2+R[2]**2)
+    T = np.cross(np.array([0.,0.,1.]),R_norm)
+    T_norm = T/np.sqrt(T[0]**2+T[1]**2+T[2]**2)
+    N_norm = np.cross(R_norm,T_norm)
+    #N_norm = N/np.sqrt(N[0]**2+N[1]**2+N[2]**2)
+    return R_norm, T_norm, N_norm
+
+def rtn_to_hg(r_vec, sc_vec):
+    # principle: rotate r_vec like you had to rotate "x" onto "R"
+    #r_vec_cart = spher2cart(r_vec, deg = True)
+    R,T,N = get_RTN_axes(sc_vec)
+    interim_1 = rotate(r_vec, N, (sc_vec[2]), deg=True)
+    #print("interim_1", interim_1)
+    x,y,z = rotate(interim_1, T, - sc_vec[1], deg=True)
+    return cart2spher(np.array([x,y,z]))
+
 def calc_asp_angles(sc_vec: np.ndarray, earth_vec: np.ndarray, cs = "hg", long_shift_sc = 0.):
     '''
     Calculates aspect angles phi and theta from position vectors of SC and Earth
