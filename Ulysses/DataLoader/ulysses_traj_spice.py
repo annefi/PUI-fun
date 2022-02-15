@@ -48,7 +48,6 @@ class UlyssesTrajSpice(dbData):
             if float(self.timeframe[0][0]) < 280.0:
                 print("No trajectory data available before DOY 280 in 1990. \n ")
                 sys.exit()
-
         try:
             # read in trajectory data keys
             print('read in trajectory data keys...')

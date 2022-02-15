@@ -14,6 +14,7 @@ Radial-Tangential-Normal (RTN):
     N: completes the right-handed c.s.
 
 """
+import sys
 import numpy as np
 import math
 from matplotlib import pylab
@@ -178,15 +179,30 @@ def hg_to_rtn(r_vec: np.ndarray, sc_vec: np.ndarray, long_shift = 0., long_shift
     :return: cartesian coordinates in RTN-system
     """
     r_vec_sph = np.array([r_vec[0], r_vec[1], r_vec[2] - long_shift_r])
-    # print("r_vec_sph:")
-    # print(r_vec_sph)
+    #print("r_vec_sph: ", r_vec_sph)
     r_vec_cart = spher2cart(r_vec_sph, deg = True)  # conversion to cartesian coordinates
-    #print("\n r_vec_cart:")
-    #print(r_vec_cart)
+    #print("r_vec_cart: ",r_vec_cart)
     # principle: rotate r_vec like you had to rotate 'R' onto 'x'
     interim_1 = rotate(r_vec_cart, 'z', - (sc_vec[2] - long_shift), deg=True)
+    #print("interim1: ", interim_1)
     R, T, N = rotate(interim_1, 'y', sc_vec[1], deg=True)
     return np.array([R, T, N])
+
+def rtn_to_hg(r_vec, sc_vec):
+    """ Transform cartesian RTN coordinates to spherical heliographic (solar equatorial, HCI) coordinates
+
+    :param r_vec: in cartesian RTN coordinates
+    :param sc_vec: in spherical hg coordinates
+    :return: r_vec in spherical hg coordinates
+    """
+    if r_vec.ndim == 1 and sc_vec.ndim == 1:
+        interim1 = rotate(r_vec, 'y', - sc_vec[1], deg = True)
+        #print("interim1: ", interim1)
+        x,y,z = rotate(interim1, 'z', sc_vec[2], deg = True)
+        #print('x,y,z: ', x,y,z)
+        return cart2spher(np.array([x,y,z]))
+    else:
+        sys.exit('\n r_vec.ndim and sc_vec.ndim do not match or are not 1\n')
 
 def get_RTN_axes(sc_vec):
     ### sc_vec in sph coords
@@ -197,15 +213,6 @@ def get_RTN_axes(sc_vec):
     N_norm = np.cross(R_norm,T_norm)
     #N_norm = N/np.sqrt(N[0]**2+N[1]**2+N[2]**2)
     return R_norm, T_norm, N_norm
-
-def rtn_to_hg(r_vec, sc_vec):
-    # principle: rotate r_vec like you had to rotate "x" onto "R"
-    #r_vec_cart = spher2cart(r_vec, deg = True)
-    R,T,N = get_RTN_axes(sc_vec)
-    interim_1 = rotate(r_vec, N, (sc_vec[2]), deg=True)
-    #print("interim_1", interim_1)
-    x,y,z = rotate(interim_1, T, - sc_vec[1], deg=True)
-    return cart2spher(np.array([x,y,z]))
 
 def calc_asp_angles(sc_vec: np.ndarray, earth_vec: np.ndarray, cs = "hg", long_shift_sc = 0.):
     '''
@@ -369,27 +376,27 @@ def calc_v(vec1, vec2, dt, R = "km"):
 
 
 
-def calc_SPE_umstaendlich(asp_phi,asp_theta,R,deg=True):
-    '''
-    calculates the 'flat' aspect angle (given as SPE in Ulysses traj-data) from aspect phi and theta in spherical RTN coordinates.
-    Built for testing if all of the previous transformations were done right.
-    Aspect angle: Angle between sun and earth as seen from SC.
-    :param asp_phi: Aspect phi angle in spherical RTN coordinates
-    :param asp_theta: Aspect theta angle in spherical RTN coordinates
-    :param R: Radius vector in spherical RTN coordinates (probably distance SC<->earth)
-    :param deg: angles need to be given in degrees (default) or radians
-    :return:
-    '''
-    # auxiliary lines for calculating the leg opposing the angle SPE C
-    if deg == True:
-        aux_line_a = sqrt(2*R**2(1-cos(asp_phi*pi/180.)))
-        aux_line_b = sqrt(2*R**2(1-cos(asp_theta*pi/180.)))
-    else:
-        aux_line_a = sqrt(2*R**2(1-cos(asp_phi)))
-        aux_line_b = sqrt(2*R**2(1-cos(asp_theta)))
-    c = sqrt(aux_line_a**2+aux_line_b**2)
-    # ToDo: Finish (but found an easier func -> calc_SPE())
-    return 1
+# def calc_SPE_umstaendlich(asp_phi,asp_theta,R,deg=True):
+#     '''
+#     calculates the 'flat' aspect angle (given as SPE in Ulysses traj-data) from aspect phi and theta in spherical RTN coordinates.
+#     Built for testing if all of the previous transformations were done right.
+#     Aspect angle: Angle between sun and earth as seen from SC.
+#     :param asp_phi: Aspect phi angle in spherical RTN coordinates
+#     :param asp_theta: Aspect theta angle in spherical RTN coordinates
+#     :param R: Radius vector in spherical RTN coordinates (probably distance SC<->earth)
+#     :param deg: angles need to be given in degrees (default) or radians
+#     :return:
+#     '''
+#     # auxiliary lines for calculating the leg opposing the angle SPE C
+#     if deg == True:
+#         aux_line_a = sqrt(2*R**2(1-cos(asp_phi*pi/180.)))
+#         aux_line_b = sqrt(2*R**2(1-cos(asp_theta*pi/180.)))
+#     else:
+#         aux_line_a = sqrt(2*R**2(1-cos(asp_phi)))
+#         aux_line_b = sqrt(2*R**2(1-cos(asp_theta)))
+#     c = sqrt(aux_line_a**2+aux_line_b**2)
+#     # ToDo: Finish (but found an easier func -> calc_SPE())
+#     return 1
 
 
 

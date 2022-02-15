@@ -2,8 +2,11 @@
 """
 
 from pylib3 import dbData
-from numpy import array, ndarray, sqrt
+from numpy import array, ndarray, sqrt, column_stack
+from Ulysses.Trajectory.ul_coordinates_utils import rtn_to_hg
+from Ulysses.DataLoader.ulysses_traj_spice import UlyssesTrajSpice
 import matplotlib.pyplot as plt
+
 
 class mag_loader(dbData):
     def load_data(self, *args, **kwargs):
@@ -55,7 +58,7 @@ class mag_loader(dbData):
                         print("Problems reading DoY ",doy)
         for key in self.data.keys():
             self.data[key]=array(self.data[key])
-        self.calc_doy_refined()
+        #self.calc_doy_refined()
 
     def calc_d90(self):
         offy = self.data["year"] - 1990
@@ -66,6 +69,18 @@ class mag_loader(dbData):
         doy = self.data["doy"] + self.data["hour"] * 1. / 24. + self.data["min"] * (1. / (24. * 60.)) + self.data[
             "sec"] * (1. / (24. * 60. * 60.))
         self.data["doy"] = doy
+
+    def plot_mag(self):
+        fig, ax = plt.subplots()
+        Br = self.data['Br']
+        Bt = self.data['Bt']
+        Bn = self.data['Bn']
+        B_lat = []
+        B_long = []
+        for i, b in enumerate(Br):
+            B_rtn = np.array([Br[i], Bt[i], Bn[i]])
+            B_sph = rtn_to_hg(B_rtn, )
+        ax.plot()
 
     def test_abs_value(self):
         fig, ax = plt.subplots()
