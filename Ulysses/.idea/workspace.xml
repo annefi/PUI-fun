@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9dd247a6-ae20-4e26-95db-2e204cdb342f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataLoader/mag_stuff/ulysses_mag_loader.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataLoader/mag_stuff/ulysses_mag_loader.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataLoader/ulysses_traj_spice.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataLoader/ulysses_traj_spice.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataLoader/mag_stuff/write_mag_files_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataLoader/mag_stuff/write_mag_files_new.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py" beforeDir="false" afterPath="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,7 +17,7 @@
     <session id="2091974253">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="56" />
+          <entry key="project.closed" value="58" />
           <entry key="project.open.time.10" value="8" />
           <entry key="project.open.time.11" value="4" />
           <entry key="project.open.time.12" value="5" />
@@ -25,64 +26,105 @@
           <entry key="project.open.time.16" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.6" value="4" />
-          <entry key="project.open.time.7" value="8" />
+          <entry key="project.open.time.7" value="9" />
           <entry key="project.open.time.8" value="11" />
           <entry key="project.open.time.9" value="13" />
-          <entry key="project.opened" value="58" />
+          <entry key="project.opened" value="59" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="dat" value="1" />
-          <entry key="py" value="164" />
+          <entry key="py" value="169" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="1" />
-          <entry key="Python" value="162" />
+          <entry key="Python" value="167" />
           <entry key="Scratch" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="29479" />
+          <entry key="py" value="30334" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="29479" />
+          <entry key="Python" value="30334" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.50249064">
+    <splitter split-orientation="horizontal" split-proportion="0.43711084">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/DataLoader/mag_stuff/ulysses_mag_loader.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="357">
-                  <caret line="62" column="23" lean-forward="true" selection-start-line="62" selection-start-column="23" selection-end-line="62" selection-end-column="23" />
+                <state relative-caret-position="536">
+                  <caret line="88" column="93" selection-start-line="88" selection-start-column="93" selection-end-line="88" selection-end-column="93" />
                   <folding>
                     <element signature="e#76#101#0" expanded="true" />
-                    <marker date="1644941695632" expanded="true" signature="2887:2893" ph="..." />
-                    <marker date="1644941695632" expanded="true" signature="2912:2921" ph="..." />
-                    <marker date="1644941695632" expanded="true" signature="2912:3221" ph="..." />
+                    <marker date="1645026564496" expanded="true" signature="3336:3342" ph="..." />
+                    <marker date="1645026564496" expanded="true" signature="3572:3673" ph="..." />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/DataLoader/ulysses_traj_spice.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="195">
-                  <caret line="13" column="24" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
+                <state relative-caret-position="1106">
+                  <caret line="79" lean-forward="true" selection-start-line="79" selection-end-line="79" />
                   <folding>
                     <element signature="e#212#237#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/DataLoader/uswo.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="656">
+                  <caret line="94" column="16" selection-start-line="94" selection-start-column="8" selection-end-line="94" selection-end-column="16" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/DataLoader/uswipha.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="240">
+                  <caret line="184" column="41" lean-forward="true" selection-start-line="184" selection-start-column="8" selection-end-line="184" selection-end-column="41" />
+                  <folding>
+                    <element signature="e#60#70#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/DataLoader/mag_stuff/merge_mag_files.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="465">
+                  <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+                  <folding>
+                    <element signature="e#51#60#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="675">
+                  <caret line="52" column="11" selection-start-line="52" selection-start-column="11" selection-end-line="52" selection-end-column="11" />
                 </state>
               </provider>
             </entry>
@@ -94,8 +136,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="9900">
-                  <caret line="660" column="40" lean-forward="true" selection-start-line="660" selection-start-column="40" selection-end-line="660" selection-end-column="40" />
+                <state relative-caret-position="1497">
+                  <caret line="659" column="7" selection-start-line="659" selection-start-column="7" selection-end-line="659" selection-end-column="7" />
                   <folding>
                     <element signature="e#247#262#0" expanded="true" />
                   </folding>
@@ -104,25 +146,13 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/DataLoader/mag_stuff/merge_mag_files.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="120">
-                  <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-                  <folding>
-                    <element signature="e#51#60#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/DataLoader/mag_stuff/write_mag_files_new.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="17" column="39" selection-start-line="17" selection-start-column="39" selection-end-line="17" selection-end-column="39" />
+                <state relative-caret-position="225">
+                  <caret line="18" column="39" lean-forward="true" selection-start-line="18" selection-start-column="39" selection-end-line="18" selection-end-column="39" />
                   <folding>
                     <element signature="e#51#66#0" expanded="true" />
-                    <marker date="1644943362166" expanded="true" signature="328:674" ph="..." />
+                    <marker date="1645011269254" expanded="true" signature="374:720" ph="..." />
                   </folding>
                 </state>
               </provider>
@@ -131,7 +161,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="149">
+                <state relative-caret-position="4260">
                   <caret line="284" column="16" selection-start-line="284" selection-start-column="16" selection-end-line="284" selection-end-column="16" />
                   <folding>
                     <element signature="e#522#532#0" expanded="true" />
@@ -141,7 +171,7 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Trajectory/spice_loader.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="420">
@@ -235,15 +265,15 @@
         <option value="$PROJECT_DIR$/dist3D_pui_ulysses.py" />
         <option value="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" />
         <option value="$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py" />
-        <option value="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py" />
         <option value="$PROJECT_DIR$/testtt.py" />
         <option value="$PROJECT_DIR$/test_dies_das.py" />
         <option value="$PROJECT_DIR$/DataLoader/mag_stuff/merge_mag_files.py" />
         <option value="$PROJECT_DIR$/DataLoader/ulysses_traj_spice.py" />
         <option value="$PROJECT_DIR$/DataLoader/mag_stuff/mag_write_file.py" />
         <option value="$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py" />
-        <option value="$PROJECT_DIR$/DataLoader/mag_stuff/ulysses_mag_loader.py" />
+        <option value="$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py" />
         <option value="$PROJECT_DIR$/DataLoader/mag_stuff/write_mag_files_new.py" />
+        <option value="$PROJECT_DIR$/DataLoader/mag_stuff/ulysses_mag_loader.py" />
       </list>
     </option>
   </component>
@@ -258,8 +288,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
       <pane id="Scope" />
+      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -348,17 +378,6 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/DataLoader/ulysses_traj_spice.py</url>
-          <line>6</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/filter_He.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -442,13 +461,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="42" selection-start-line="28" selection-start-column="42" selection-end-line="28" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new.py" />
     <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses_new_inheri.py" />
     <entry file="file://$PROJECT_DIR$/Trajectory/ul_calc_traj_bu.py" />
@@ -485,19 +497,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="806">
           <caret line="236" column="14" selection-start-line="236" selection-start-column="14" selection-end-line="236" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DataLoader/mag_stuff/mag_write_file.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="33" selection-start-line="4" selection-start-column="33" selection-end-line="4" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/DataLoader/mag_stuff/mag_write_file.py" />
     <entry file="file://$PROJECT_DIR$/ana_B.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-855" />
@@ -505,16 +508,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DataLoader/mag_stuff/create_pha_mag.py">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataLoader/uswipha.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3422">
-          <caret line="97" column="22" selection-start-line="97" selection-start-column="19" selection-end-line="97" selection-end-column="22" />
-          <folding>
-            <element signature="e#60#70#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/plot_3d_uly.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -534,9 +527,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1335">
           <caret line="7" column="34" selection-start-line="7" selection-start-column="34" selection-end-line="7" selection-end-column="34" />
-          <folding>
-            <marker date="1644419935207" expanded="true" signature="1748:1757" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -545,53 +535,75 @@
         <state relative-caret-position="-2433" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DataLoader/uswo.py">
+    <entry file="file://$PROJECT_DIR$/DataLoader/ulysses_traj.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="942">
-          <caret line="99" column="49" selection-start-line="99" selection-start-column="49" selection-end-line="99" selection-end-column="49" />
+        <state relative-caret-position="1530">
+          <caret line="102" column="29" lean-forward="true" selection-start-line="102" selection-start-column="29" selection-end-line="102" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/load_pui_ulysses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="52" column="11" selection-start-line="52" selection-start-column="11" selection-end-line="52" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1497">
+          <caret line="659" column="7" selection-start-line="659" selection-start-column="7" selection-end-line="659" selection-end-column="7" />
+          <folding>
+            <element signature="e#247#262#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DataLoader/mag_stuff/merge_mag_files.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        <state relative-caret-position="465">
+          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
           <folding>
             <element signature="e#51#60#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DataLoader/ulysses_traj.py">
+    <entry file="file://$PROJECT_DIR$/DataLoader/mag_stuff/write_mag_files_new.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1530">
-          <caret line="102" column="29" lean-forward="true" selection-start-line="102" selection-start-column="29" selection-end-line="102" selection-end-column="29" />
+        <state relative-caret-position="225">
+          <caret line="18" column="39" lean-forward="true" selection-start-line="18" selection-start-column="39" selection-end-line="18" selection-end-column="39" />
           <folding>
-            <element signature="e#298#323#0" expanded="true" />
+            <element signature="e#51#66#0" expanded="true" />
+            <marker date="1645011269254" expanded="true" signature="374:720" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataLoader/uswo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="656">
+          <caret line="94" column="16" selection-start-line="94" selection-start-column="8" selection-end-line="94" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/DataLoader/uswipha.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="184" column="41" lean-forward="true" selection-start-line="184" selection-start-column="8" selection-end-line="184" selection-end-column="41" />
+          <folding>
+            <element signature="e#60#70#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Trajectory/ul_coordinates_utils.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
+        <state relative-caret-position="4260">
           <caret line="284" column="16" selection-start-line="284" selection-start-column="16" selection-end-line="284" selection-end-column="16" />
           <folding>
             <element signature="e#522#532#0" expanded="true" />
             <marker date="1644934409642" expanded="true" signature="9107:10082" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataLoader/mag_stuff/ulysses_mag_loader.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="62" column="23" lean-forward="true" selection-start-line="62" selection-start-column="23" selection-end-line="62" selection-end-column="23" />
-          <folding>
-            <element signature="e#76#101#0" expanded="true" />
-            <marker date="1644941695632" expanded="true" signature="2887:2893" ph="..." />
-            <marker date="1644941695632" expanded="true" signature="2912:2921" ph="..." />
-            <marker date="1644941695632" expanded="true" signature="2912:3221" ph="..." />
           </folding>
         </state>
       </provider>
@@ -605,31 +617,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DataLoader/ulysses_traj_spice.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="24" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
+        <state relative-caret-position="1106">
+          <caret line="79" lean-forward="true" selection-start-line="79" selection-end-line="79" />
           <folding>
             <element signature="e#212#237#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Trajectory/SPICE/spice_ulysses.py">
+    <entry file="file://$PROJECT_DIR$/DataLoader/mag_stuff/ulysses_mag_loader.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="9900">
-          <caret line="660" column="40" lean-forward="true" selection-start-line="660" selection-start-column="40" selection-end-line="660" selection-end-column="40" />
+        <state relative-caret-position="536">
+          <caret line="88" column="93" selection-start-line="88" selection-start-column="93" selection-end-line="88" selection-end-column="93" />
           <folding>
-            <element signature="e#247#262#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/DataLoader/mag_stuff/write_mag_files_new.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="39" selection-start-line="17" selection-start-column="39" selection-end-line="17" selection-end-column="39" />
-          <folding>
-            <element signature="e#51#66#0" expanded="true" />
-            <marker date="1644943362166" expanded="true" signature="328:674" ph="..." />
+            <element signature="e#76#101#0" expanded="true" />
+            <marker date="1645026564496" expanded="true" signature="3336:3342" ph="..." />
+            <marker date="1645026564496" expanded="true" signature="3572:3673" ph="..." />
           </folding>
         </state>
       </provider>

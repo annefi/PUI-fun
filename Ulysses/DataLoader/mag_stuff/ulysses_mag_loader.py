@@ -6,6 +6,7 @@ from numpy import array, ndarray, sqrt, column_stack
 from Ulysses.Trajectory.ul_coordinates_utils import rtn_to_hg
 from Ulysses.DataLoader.ulysses_traj_spice import UlyssesTrajSpice
 import matplotlib.pyplot as plt
+import datetime
 
 
 class mag_loader(dbData):
@@ -35,7 +36,7 @@ class mag_loader(dbData):
             self.path="/data/projects/Ulysses/VHM_FGM/1min/"
 
         # initialise keys
-        self.keys = ['year', 'doy', 'hour', 'min', 'sec' ,'Br', 'Bt', 'Bn', 'Babs']
+        self.keys = ['year', 'doy', 'hour', 'min', 'sec' ,'Br', 'Bt', 'Bn', 'Babs', 'B_r', 'B_lat', 'B_long']
         for key in self.keys:
             self.data[key] = []
 
@@ -44,7 +45,7 @@ class mag_loader(dbData):
             for tf in self.timeframe:
                 for doy in range(int(tf[0]),int(tf[1])):
                     try:
-                        fname = "%s%.4i/%.3i.dat"%(self.path,year,doy)
+                        fname = "%s%.4i/new/%.3i.dat"%(self.path,year,doy)
                         print(fname)
                         fin = open(fname,"r")
                         for s in fin:
@@ -70,17 +71,22 @@ class mag_loader(dbData):
             "sec"] * (1. / (24. * 60. * 60.))
         self.data["doy"] = doy
 
-    def plot_mag(self):
+    def calc_datetime(self):
+        datetimes = []
+        for i in range(len(self.data['year'])):
+            datetimes.append(
+                datetime.datetime(self.data['year'][i], 1, 1, int(self.data['hour'][i]), int(self.data['min'][i]),
+                                  int(self.data['sec'][i])) + datetime.timedelta(days=self.data['doy'][i] - 1))
+        self.add_data('datetime', datetimes)
+
+    def plot_mag_hg(self):
         fig, ax = plt.subplots()
-        Br = self.data['Br']
-        Bt = self.data['Bt']
-        Bn = self.data['Bn']
-        B_lat = []
-        B_long = []
-        for i, b in enumerate(Br):
-            B_rtn = np.array([Br[i], Bt[i], Bn[i]])
-            B_sph = rtn_to_hg(B_rtn, )
-        ax.plot()
+        Br = self.data['B_r']
+        Bt = self.data['B_lat']
+        Bn = self.data['B_long']
+        if not 'datetime' in self.data.keys():
+            self.calc_datetime()
+        ax.plot(self.data['datetime'],self.data['B_r'], linestyle = None, marker = 'o', ms=.1)
 
     def test_abs_value(self):
         fig, ax = plt.subplots()
