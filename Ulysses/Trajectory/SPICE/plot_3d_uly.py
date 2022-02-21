@@ -38,12 +38,12 @@ class Plot_3d():
             fig = plt.figure(figsize=(12, 10))
             ax = fig.add_subplot(111, projection='3d')
             fig.canvas.set_window_title('Test')
-            ax.set_xlim(-1.8, 1.8)
-            ax.set_ylim(-1.8, 1.8)
+            ax.set_xlim(-5.1, 1.8)
+            ax.set_ylim(-1.5, 1.8)
             ax.set_zlim(-1.8, 1.8)
-            ax.set_xlabel("x")
-            ax.set_ylabel("y")
-            ax.set_zlabel("z")
+            ax.set_xlabel("x/AU")
+            ax.set_ylabel("y/AU")
+            ax.set_zlabel("z/AU")
             ax.scatter(0, 0, 0, 'o', s=50, color="gold")  # Sun
             self.ax = ax
             self.draw_eclip_sys()
@@ -93,7 +93,7 @@ class Plot_3d():
         y_ax = self.ax.plot(*np.array([[0, 1., 0], [0, 0, 0]]).T, c="steelblue", linestyle='--', linewidth=1.2,
                             alpha=0.8)
         z_ax = self.ax.plot(*np.array([[0, 0, 1.], [0, 0, 0]]).T, c="steelblue", linestyle='--', linewidth=1.2)
-        self.draw_fpoa()
+        #self.draw_fpoa()
         self.draw_ecliptic()
 
     def draw_equ_sys(self):
@@ -185,7 +185,7 @@ class Plot_3d():
                             *np.zeros(np.shape([earth_data['x_earth'], earth_data['y_earth'], earth_data['z_earth']])),
                             mode=1, c="C0",
                             alpha=0.05)
-        self.draw_fpoa()
+        #self.draw_fpoa()
 
     def draw_solar_equator(self, circ=True, area=True):
         """ Draws the solar equator as a slice into the plot
