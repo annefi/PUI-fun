@@ -87,19 +87,3 @@ class mag_loader(dbData):
         if not 'datetime' in self.data.keys():
             self.calc_datetime()
         ax.plot(self.data['datetime'],self.data['B_r'], linestyle = None, marker = 'o', ms=.1)
-
-    def test_abs_value(self):
-        fig, ax = plt.subplots()
-        #ax.plot(self.data['doy'],self.data['Babs'], linestyle = 'None', marker = 'o', ms = 1., label = 'Babs')
-        #ax.plot(self.data['doy'], sqrt(self.data['Br']**2 + self.data['Bt']**2 + self.data['Bn']**2),
-        #        linestyle='None', marker='o', ms=1., label='Babs_calc')
-        Babs = self.data['Babs']
-        Babs_calc = sqrt(self.data['Br']**2 + self.data['Bt']**2 + self.data['Bn']**2)
-        ax.plot(self.data['doy'], Babs - Babs_calc, linestyle = 'None', marker = 'o', ms = 1., label = "Babs - "
-                                                                                                       "Babs_calc")
-        ax.grid(True)
-        ax.set_xlabel('doy in %s'%self.data["year"][0])
-        ax.set_ylabel('B_abs in nT')
-        ax.legend()
-        fig.suptitle('Comparison Absolute Magnitudes')
-        fig.savefig('comp_babs.png')
