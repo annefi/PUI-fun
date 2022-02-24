@@ -30,6 +30,7 @@ from Ulysses.DataLoader.uswo import uswo
 from Ulysses.DataLoader.ulysses_traj_spice import UlyssesTrajSpice
 from Ulysses.DataLoader.ulysses_traj import ulysses_traj
 #from Ulysses.DataLoader.ulysses_mag_loader import mag_loader # not working atm
+from Ulysses.DataLoader.mag_stuff.ulysses_mag_loader import mag_loader
 from Ulysses.DataLoader.uswiutils import getvelocity
 
 
@@ -343,8 +344,54 @@ class uswipha(dbData):
         offd = offy*365 + (offy.astype(int)+1)//4
         off_epq = self.data['epq'] * 1./24./60./60. *12.
         self.add_data("d90_epq",self.data["doy"] + offd + off_epq)
-
+    
     def sync_mag(self):
+        '''
+        todo
+        '''
+        mag = mag_loader(year = self.year, tf = self.timeframe)
+        mag.calc_d90()
+        self.mag = mag
+
+        if not 'd90_epq' in self.data.keys():
+            self.calc_d90_epq()
+
+        #bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1.)
+
+        bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1./24./60.)
+        N, bins = histogram(mag.data['d90'], bins = bins1min)
+        N[N==0] = 1.
+
+        Babs, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Babs'])
+        Babs = Babs / N
+        index_Babs = searchsorted(bins1min[1:-1], self.data['d90_epq'])
+        self.add_data('Babs', Babs[index_Babs])
+        Br, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Br'])
+        Br = Br / N
+        index_Br = searchsorted(bins1min[1:-1], self.data['d90_epq'])
+        self.add_data('Br', Br[index_Br])
+        Bt, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Bt'])
+        Bt = Bt / N
+        index_Bt = searchsorted(bins1min[1:-1], self.data['d90_epq'])
+        self.add_data('Bt', Bt[index_Bt])
+        Bn, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Bn'])
+        Bn = Bn / N
+        index_Bn = searchsorted(bins1min[1:-1], self.data['d90_epq'])
+        self.add_data('Bn', Bn[index_Bn])
+        # add magnetic field angles in radian:
+        self.Br = Br
+        # Todo: Achtung: NaNs drin
+        Br = self.data['Br']
+        Bt = self.data['Bt']
+        Bn = self.data['Bn']
+        self.add_data('Bphi', (arctan2(Bt , Br)))
+        self.add_data('Btheta',  (arcsin(Bn / sqrt(Br**2 + Bt**2 + Bn**2))))
+
+        # add magnetic field angles in degree:
+        self.add_data('Bphi_deg', (self.data['Bphi'] * 180. / pi))
+        self.add_data('Btheta_deg', (self.data['Btheta'] * 180. / pi))
+
+    def sync_mag_old(self):
         '''
         todo
         '''

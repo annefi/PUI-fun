@@ -3,7 +3,7 @@
 
 from pylib3 import dbData
 from numpy import array, ndarray, sqrt, column_stack
-from Ulysses.Trajectory.ul_coordinates_utils import rtn_to_hg
+from Ulysses.Trajectory.ul_coordinates_utils import rtn_to_hg, hg_to_hc
 from Ulysses.DataLoader.ulysses_traj_spice import UlyssesTrajSpice
 import matplotlib.pyplot as plt
 import datetime
@@ -87,3 +87,17 @@ class mag_loader(dbData):
         if not 'datetime' in self.data.keys():
             self.calc_datetime()
         ax.plot(self.data['datetime'],self.data['B_r'], linestyle = None, marker = 'o', ms=.1)
+
+    def calc_hc(self):
+        B_hc_r = []
+        B_hc_lat = []
+        B_hc_long = []
+        for i in range(len(self.data['year'])):
+            R, lat, lon = hg_to_hc(np.array(self.data['B_r'][i], self.data['B_lat'][i], self.data['B_long'][i]))
+            B_hc_r.append(R)
+            B_hc_lat.append(lat)
+            B_hc_long.append(lon)
+        self.add_data('B_hc_r', B_hc_r)
+        self.add_data('B_hc_lat', B_hc_lat)
+        self.add_data('B_hc_long', B_hc_long)
+
