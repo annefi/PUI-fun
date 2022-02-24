@@ -93,7 +93,7 @@ class Plot_3d():
         y_ax = self.ax.plot(*np.array([[0, 1., 0], [0, 0, 0]]).T, c="steelblue", linestyle='--', linewidth=1.2,
                             alpha=0.8)
         z_ax = self.ax.plot(*np.array([[0, 0, 1.], [0, 0, 0]]).T, c="steelblue", linestyle='--', linewidth=1.2)
-        #self.draw_fpoa()
+        self.draw_fpoa()
         self.draw_ecliptic()
 
     def draw_equ_sys(self):

@@ -6,6 +6,7 @@ Also calculates and adds Aspect Angle data products.
 
 from pylib3 import dbData
 from numpy import array,ndarray
+from Ulysses.Trajectory.ul_coordinates_utils import hg_to_hc
 import sys
 
 class UlyssesTrajSpice(dbData):
@@ -85,6 +86,16 @@ class UlyssesTrajSpice(dbData):
         self.keys.append('d90')
         self.add_data("d90", self.data["DOY"] + offd)
 
+    def calc_hc(self):
+        lat_hc = []
+        long_hc = []
+        for i in range(len(self.data['YYYY'])):
+            R, lat, lon = hg_to_hc(array([self.data['R'][i], self.data['HG_Lat'][i], self.data['HG_Long'][i]]),
+                                   ang_ascnode = 75.634) # ang_ascnode not accurate but for 1.1.1991
+            lat_hc.append(lat)
+            long_hc.append(lon)
+        self.add_data('HC_Lat', lat_hc)
+        self.add_data('HC_Long', long_hc)
 
 
 

@@ -28,7 +28,7 @@ from numpy import *
 from Ulysses.DataLoader.uswo import uswo
 # new: Todo: check if everything works and leads to the same results... then archive old method
 from Ulysses.DataLoader.ulysses_traj_spice import UlyssesTrajSpice
-from Ulysses.DataLoader.ulysses_traj import ulysses_traj
+#from Ulysses.DataLoader.ulysses_traj import ulysses_traj
 #from Ulysses.DataLoader.ulysses_mag_loader import mag_loader # not working atm
 from Ulysses.DataLoader.mag_stuff.ulysses_mag_loader import mag_loader
 from Ulysses.DataLoader.uswiutils import getvelocity
@@ -280,7 +280,16 @@ class uswipha(dbData):
         mask = traj.data['vSC_N'] != 0.
         v_N, x = histogram(traj.data["d90"], bins=uTi_int, weights=traj.data["vSC_N"])
         self.add_data("vn_sc", v_N[index_int])
-
+        ###
+        traj.calc_hc()
+        # HC_Lat
+        mask = traj.data['HC_Lat'] != 0.
+        HC_Lat, x = histogram(traj.data["d90"], bins=uTi_int, weights=traj.data["HC_Lat"])
+        self.add_data("HC_Lat", HC_Lat[index_int])
+        # HC_Long
+        mask = traj.data['HC_Long'] != 0.
+        HC_Long, x = histogram(traj.data["d90"], bins=uTi_int, weights=traj.data["HC_Long"])
+        self.add_data("HC_Long", HC_Long[index_int])
 
     def sync_traj(self):
         ''' Synchronisation with Ulysses trajectory data
@@ -350,46 +359,75 @@ class uswipha(dbData):
         todo
         '''
         mag = mag_loader(year = self.year, tf = self.timeframe)
+        mag.calc_doy_refined()
         mag.calc_d90()
-        self.mag = mag
+        mag.calc_hc()
 
-        if not 'd90_epq' in self.data.keys():
-            self.calc_d90_epq()
+        if not 'd90' in self.data.keys():
+            self.calc_d90()
 
-        #bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1.)
+        # if not 'd90_epq' in self.data.keys():
+        #     self.calc_d90_epq()
 
-        bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1./24./60.)
-        N, bins = histogram(mag.data['d90'], bins = bins1min)
-        N[N==0] = 1.
+        uTi, index = unique(self.data["d90"], return_inverse = True)
+        uTi = append(uTi, uTi[-1] + 1. / 24. / 5.)  # 12 minutes
+        #uTi = uTi + 1. / 24. / 30.  # 2 minutes shift
 
-        Babs, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Babs'])
-        Babs = Babs / N
-        index_Babs = searchsorted(bins1min[1:-1], self.data['d90_epq'])
-        self.add_data('Babs', Babs[index_Babs])
-        Br, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Br'])
-        Br = Br / N
-        index_Br = searchsorted(bins1min[1:-1], self.data['d90_epq'])
-        self.add_data('Br', Br[index_Br])
-        Bt, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Bt'])
-        Bt = Bt / N
-        index_Bt = searchsorted(bins1min[1:-1], self.data['d90_epq'])
-        self.add_data('Bt', Bt[index_Bt])
-        Bn, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Bn'])
-        Bn = Bn / N
-        index_Bn = searchsorted(bins1min[1:-1], self.data['d90_epq'])
-        self.add_data('Bn', Bn[index_Bn])
-        # add magnetic field angles in radian:
-        self.Br = Br
-        # Todo: Achtung: NaNs drin
-        Br = self.data['Br']
-        Bt = self.data['Bt']
-        Bn = self.data['Bn']
-        self.add_data('Bphi', (arctan2(Bt , Br)))
-        self.add_data('Btheta',  (arcsin(Bn / sqrt(Br**2 + Bt**2 + Bn**2))))
+        N, bins = histogram(mag.data["d90"], bins = uTi)
+        N[N == 0] = 1.
 
-        # add magnetic field angles in degree:
-        self.add_data('Bphi_deg', (self.data['Bphi'] * 180. / pi))
-        self.add_data('Btheta_deg', (self.data['Btheta'] * 180. / pi))
+        Br, bins = histogram(mag.data["d90"], bins = uTi, weights = mag.data["Br"])
+        Br = Br / N  # mean
+        Br[isnan(Br)] = 0.
+        self.add_data("Br", Br[index])  # number of B-steps are filled into self.datas shape here
+
+        Bt, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["Bt"])
+        Bt = Bt / N  # mean
+        Bt[isnan(Bt)] = 0.
+        self.add_data("Bt", Bt[index])
+
+        Bn, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["Bn"])
+        Bn = Bn / N  # mean
+        Bn[isnan(Bn)] = 0.
+        self.add_data("Bn", Bn[index])
+
+        B_r, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["B_r"])
+        B_r = B_r / N  # mean
+        B_r[isnan(B_r)] = 0.
+        self.add_data("B_r", B_r[index])
+
+        B_lat, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["B_lat"])
+        B_lat = B_lat / N  # mean
+        B_lat[isnan(B_lat)] = 0.
+        self.add_data("B_lat", B_lat[index])
+
+        B_long, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["B_long"])
+        B_long = B_long / N  # mean
+        B_long[isnan(B_long)] = 0.
+        self.add_data("B_long", B_long[index])
+
+        B_hc_lat, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["B_hc_lat"])
+        B_hc_lat = B_hc_lat / N  # mean
+        B_hc_lat[isnan(B_hc_lat)] = 0.
+        self.add_data("B_hc_lat", B_hc_lat[index])
+
+        B_hc_long, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["B_hc_long"])
+        B_hc_long = B_hc_long / N  # mean
+        B_hc_long[isnan(B_hc_long)] = 0.
+        self.add_data("B_hc_long", B_hc_long[index])
+
+        # # add magnetic field angles in radian:
+        # self.Br = Br
+        # # Todo: Achtung: NaNs drin
+        # Br = self.data['Br']
+        # Bt = self.data['Bt']
+        # Bn = self.data['Bn']
+        # self.add_data('Bphi', (arctan2(Bt , Br)))
+        # self.add_data('Btheta',  (arcsin(Bn / sqrt(Br**2 + Bt**2 + Bn**2))))
+        #
+        # # add magnetic field angles in degree:
+        # self.add_data('Bphi_deg', (self.data['Bphi'] * 180. / pi))
+        # self.add_data('Btheta_deg', (self.data['Btheta'] * 180. / pi))
 
     def sync_mag_old(self):
         '''
@@ -402,8 +440,6 @@ class uswipha(dbData):
         if not 'd90_epq' in self.data.keys():
             self.calc_d90_epq()
 
-        #bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1.)
-
         bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1./24./60.)
         N, bins = histogram(mag.data['d90'], bins = bins1min)
         N[N==0] = 1.
@@ -436,3 +472,16 @@ class uswipha(dbData):
         # add magnetic field angles in degree:
         self.add_data('Bphi_deg', (self.data['Bphi'] * 180. / pi))
         self.add_data('Btheta_deg', (self.data['Btheta'] * 180. / pi))
+
+    def check_b(self):
+        #import matplotlib.pyplot as plt
+        self.sync_mag()
+        self.sync_traj_spice()
+        self.add_data('B_ang',self.data['HC_Long'] - self.data['B_hc_long'])
+        self.set_mask('under_ecl', 'HC_Lat', -20, 0)
+        self.set_mask('above_ecl', 'HC_Lat', 0,20)
+        self.hist1d('B_ang', smask = ['under_ecl','above_ecl'])
+
+
+
+

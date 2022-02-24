@@ -63,7 +63,7 @@ class mag_loader(dbData):
 
     def calc_d90(self):
         offy = self.data["year"] - 1990
-        offd = offy * 365 + (offy.astype(int) + 2) / 4
+        offd = offy * 365 + (offy.astype(int) + 1) // 4
         self.add_data("d90", self.data["doy"] + offd)
 
     def calc_doy_refined(self):
@@ -89,15 +89,13 @@ class mag_loader(dbData):
         ax.plot(self.data['datetime'],self.data['B_r'], linestyle = None, marker = 'o', ms=.1)
 
     def calc_hc(self):
-        B_hc_r = []
         B_hc_lat = []
         B_hc_long = []
         for i in range(len(self.data['year'])):
-            R, lat, lon = hg_to_hc(np.array(self.data['B_r'][i], self.data['B_lat'][i], self.data['B_long'][i]))
-            B_hc_r.append(R)
+            R, lat, lon = hg_to_hc(array([self.data['B_r'][i], self.data['B_lat'][i], self.data['B_long'][i]]),
+                                   ang_ascnode = 75.634) # ang_ascnode not accurate but for 1.1.1991
             B_hc_lat.append(lat)
             B_hc_long.append(lon)
-        self.add_data('B_hc_r', B_hc_r)
         self.add_data('B_hc_lat', B_hc_lat)
         self.add_data('B_hc_long', B_hc_long)
 
