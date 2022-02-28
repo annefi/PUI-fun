@@ -478,8 +478,8 @@ class uswipha(dbData):
         self.sync_mag()
         self.sync_traj_spice()
         self.add_data('B_ang',self.data['HC_Long'] - self.data['B_hc_long'])
-        self.set_mask('under_ecl', 'HC_Lat', -20, 0)
         self.set_mask('above_ecl', 'HC_Lat', 0,20)
+        self.set_mask('under_ecl', 'HC_Lat', -20, 0)
         self.hist1d('B_ang', smask = ['under_ecl','above_ecl'])
 
 

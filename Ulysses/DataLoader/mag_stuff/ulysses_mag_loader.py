@@ -33,7 +33,8 @@ class mag_loader(dbData):
         if "path" in kwargs:
             self.path=kwargs["path"]
         else:
-            self.path="/data/projects/Ulysses/VHM_FGM/1min/"
+            #self.path="/data/projects/Ulysses/VHM_FGM/1min/"
+            self.path = "/media/storage/data/projects/Ulysses/VHM_FGM/1min/"
 
         # initialise keys
         self.keys = ['year', 'doy', 'hour', 'min', 'sec' ,'Br', 'Bt', 'Bn', 'Babs', 'B_r', 'B_lat', 'B_long']
