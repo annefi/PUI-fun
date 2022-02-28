@@ -196,10 +196,10 @@ In allen Skripten das mit d90-Schaltjahr ändern (s.o.), dann weiter versuchen l
 \newdaytt{18}{01}
 Hatte im November alles mit SPICE stehen und liegen gelassen, um Plots für die AGU mit alten Traj-Daten zu erzeugen. Jetzt:\\
 \begin{itemize}
-	\item SPICE einbauen und vergleichen, ob dieselben Spektren rauskommen \todo{SPICE}
+	\item SPICE einbauen und vergleichen, ob dieselben Spektren rauskommen \done{SPICE}
 	\begin{itemize}
 		\item Parameter einbauen zum Wählen ob sync\_traj oder sync\_traj\_spice genutzt werden soll --- kann ich ganz einfach über zwei uswipha-Instanzen machen, jeweils die eine oder andere Methode drauf anwenden\done{Auswahl}
-		\item Spektrum vergleichen \todo{Spektren vergl.}
+		\item Spektrum vergleichen \done{Spektren vergl.}
 		\item Eigengeschwindigkeit einbauen \done{Eigen-vel}
 	\end{itemize}
 	\item VHM\_FGM Magnetfelddaten runterladen; ---liegen auf \textit{data/projects/Ulysses/VHM\_FGM\_1min} \done{Download Mag-Daten}
@@ -248,6 +248,9 @@ Ideen, was man mit den Magnetfelddaten machen kann/müsste (Verena):
 	\item Auf 12 min mitteln
 \end{itemize}
 
+\newdaytt{28}{02}
+Habe Magnetfeld von RTN in HG umgewandelt und nochmal weggeschrieben. Dann alle anderen Ideen (Backmapping etc.) verworfen und nur den Winkel zwischen SC und Magnetfeldvektor für SC-Positionen +- 20 Grad der Ekliptik histogrammiert und geschaut, ob das ungefähr mit dem erwarteten Parkerwinkel (etwas mehr als 45 Grad) passt. Passt und die Polarität stimmt überein mit der im McComas-Plot. Dafür habe ich die Mag-Daten jeweils über die 12.8 Minuten gemittelt, mit denen die PHA-Daten getaggt sind (bzw. über die Zeitstempel mit denen sie real getaggt sind). Es gibt noch eine Routine in uswipha, die die tatsächlichen Messzeiten aus den EpQ-Steps berechnet, also die Lücke zwischen den 13 Minuten schließt. Überlegen, ob das Sinn macht, das zu verfeinern und wie ich dann das Magnetfeld mitteln würde \todo{calc\_d90\_epq benutzen?} \\
+Als nächstes: In Gesamtanalyse einbauen, überlegen, was ich überhaupt anschauen will. Dafür auch die Normierung nochmal durchgehen...
 %
 %
 %

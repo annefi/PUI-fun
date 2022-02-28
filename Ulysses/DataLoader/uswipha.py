@@ -17,7 +17,8 @@ elif os.path.isdir("/data/projects/Ulysses/") == True:
     ### from Uni/skeletor: ###
     datapath = "/data/projects/Ulysses/"
 else:
-    print("Problem finding data path on asterix (needed for SWOOPS data). \nAre you connected to asterix via fusessh?\n")
+    print(
+        "Problem finding data path on asterix (needed for SWOOPS data). \nAre you connected to asterix via fusessh?\n")
     sys.exit()
 ####################
 
@@ -28,8 +29,8 @@ from numpy import *
 from Ulysses.DataLoader.uswo import uswo
 # new: Todo: check if everything works and leads to the same results... then archive old method
 from Ulysses.DataLoader.ulysses_traj_spice import UlyssesTrajSpice
-#from Ulysses.DataLoader.ulysses_traj import ulysses_traj
-#from Ulysses.DataLoader.ulysses_mag_loader import mag_loader # not working atm
+# from Ulysses.DataLoader.ulysses_traj import ulysses_traj
+# from Ulysses.DataLoader.ulysses_mag_loader import mag_loader # not working atm
 from Ulysses.DataLoader.mag_stuff.ulysses_mag_loader import mag_loader
 from Ulysses.DataLoader.uswiutils import getvelocity
 
@@ -69,41 +70,41 @@ class uswipha(dbData):
     vHe+ - He+ velocity based on epq
     """
 
-    def load_data(self,*args,**kwargs):
+    def load_data(self, *args, **kwargs):
         if "year" in kwargs:
-            if isinstance(kwargs["year"],list):
-                self.year=kwargs["year"]
-            elif isinstance(kwargs["year"],int) or isinstance(kwargs["year"],float):
-                self.year=[kwargs["year"]]
+            if isinstance(kwargs["year"], list):
+                self.year = kwargs["year"]
+            elif isinstance(kwargs["year"], int) or isinstance(kwargs["year"], float):
+                self.year = [kwargs["year"]]
         else:
-            self.year=[2007]
+            self.year = [2007]
         if "tf" in kwargs:
-            if isinstance(kwargs["tf"],list) or isinstance(kwargs["tf"],ndarray):
-                self.timeframe=kwargs["tf"]
-            elif kwargs["tf"]=="all":
-                self.timeframe=[[1.,367]]
+            if isinstance(kwargs["tf"], list) or isinstance(kwargs["tf"], ndarray):
+                self.timeframe = kwargs["tf"]
+            elif kwargs["tf"] == "all":
+                self.timeframe = [[1., 367]]
             else:
                 print("periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), "
                       "no data loaded")
-                self.timeframe=[]
+                self.timeframe = []
         else:
             print("periods need to be specified via key tf ([[start,stop],...,[start,stop]] or 'all'), no data loaded")
-            self.timeframe=[]
+            self.timeframe = []
         if "path" in kwargs:
-            self.path=kwargs["path"]
+            self.path = kwargs["path"]
         else:
             self.path = datapath + "swics/pha/"
-            #self.path = "Ulysses/data_misc/pha_he/"
+            # self.path = "Ulysses/data_misc/pha_he/"
 
-        self.data["year"]=[]
-        self.data["doy"]=[]
-        self.data["epq"]=[]
-        self.data["tch"]=[]
-        self.data["ech"]=[]
-        self.data["sec"]=[]
-        self.data["det"]=[]
-        self.data["rng"]=[]
-        self.data["brw"]=[]
+        self.data["year"] = []
+        self.data["doy"] = []
+        self.data["epq"] = []
+        self.data["tch"] = []
+        self.data["ech"] = []
+        self.data["sec"] = []
+        self.data["det"] = []
+        self.data["rng"] = []
+        self.data["brw"] = []
         # if self.path == magpath:
         #     self.data["Bphi"] = []
         #     self.data["Btheta"] = []
@@ -113,11 +114,11 @@ class uswipha(dbData):
 
         for year in self.year:
             for tf in self.timeframe:
-                for doy in range(int(tf[0]),int(tf[1])):
+                for doy in range(int(tf[0]), int(tf[1])):
                     try:
-                        fname = "%s%.4i/%.3i.pha"%(self.path,year,doy)
+                        fname = "%s%.4i/%.3i.pha" % (self.path, year, doy)
                         print(fname)
-                        fin = open(fname,"r")
+                        fin = open(fname, "r")
                         s = fin.readline()
                         for s in fin:
                             k = s.split()
@@ -138,17 +139,17 @@ class uswipha(dbData):
                             #     self.data["BT"].append(float(k[11]))
                             #     self.data["BN"].append(float(k[12]))
                     except:
-                        print("Problems reading DoY ",doy)
-        self.data["year"]=array(self.data["year"])
-        self.data["doy"]=array(self.data["doy"])
-        self.data["epq"]=array(self.data["epq"])
-        self.data["tch"]=array(self.data["tch"])
-        self.data["ech"]=array(self.data["ech"])
-        self.data["sec"]=array(self.data["sec"])
-        self.data["det"]=array(self.data["det"])
-        self.data["rng"]=array(self.data["rng"])
-        self.data["brw"]=array(self.data["brw"])
-        self.data["vHe+"] = getvelocity(4.,1.,self.data["epq"])
+                        print("Problems reading DoY ", doy)
+        self.data["year"] = array(self.data["year"])
+        self.data["doy"] = array(self.data["doy"])
+        self.data["epq"] = array(self.data["epq"])
+        self.data["tch"] = array(self.data["tch"])
+        self.data["ech"] = array(self.data["ech"])
+        self.data["sec"] = array(self.data["sec"])
+        self.data["det"] = array(self.data["det"])
+        self.data["rng"] = array(self.data["rng"])
+        self.data["brw"] = array(self.data["brw"])
+        self.data["vHe+"] = getvelocity(4., 1., self.data["epq"])
 
         # if self.path == magpath:
         #     self.data["Bphi"] = array(self.data["Bphi"])
@@ -163,8 +164,8 @@ class uswipha(dbData):
 
         """
         offy = self.data["year"] - 1990
-        offd = offy*365 + (offy.astype(int)+1)//4
-        self.add_data("d90",self.data["doy"] + offd)
+        offd = offy * 365 + (offy.astype(int) + 1) // 4
+        self.add_data("d90", self.data["doy"] + offd)
 
     def sync_swoops(self):
         ''' Synchronisation with SWOOPS data
@@ -182,50 +183,50 @@ class uswipha(dbData):
 
         '''
         seterr(divide='ignore', invalid='ignore')
-        swo = uswo(year = self.year,tf = self.timeframe, path = datapath + "swoops/4min_data/")
+        swo = uswo(year=self.year, tf=self.timeframe, path=datapath + "swoops/4min_data/")
         if not 'd90' in self.data.keys():
             self.calc_d90()
         swo.calc_d90()
-        uTi,index=unique(self.data["d90"],return_inverse=True)
-        uTi=append(uTi,uTi[-1]+1./24./5.) # 12 minutes
-        uTi=uTi+1./24./30. # 2 minutes shift
+        uTi, index = unique(self.data["d90"], return_inverse=True)
+        uTi = append(uTi, uTi[-1] + 1. / 24. / 5.)  # 12 minutes
+        uTi = uTi + 1. / 24. / 30.  # 2 minutes shift
         # **
-        mask = swo.data["vges"]>0
-        nrT,x = histogram(swo.data["d90"][mask],bins=uTi)
-        vsw,x = histogram(swo.data["d90"][mask],bins=uTi,weights=swo.data["vges"])
-        vsw = vsw/nrT # mean
-        vsw[isnan(vsw)]=0.
-        self.add_data("vsw",vsw[index]) #number of vsw-steps are filled into self.datas shape here
+        mask = swo.data["vges"] > 0
+        nrT, x = histogram(swo.data["d90"][mask], bins=uTi)
+        vsw, x = histogram(swo.data["d90"][mask], bins=uTi, weights=swo.data["vges"])
+        vsw = vsw / nrT  # mean
+        vsw[isnan(vsw)] = 0.
+        self.add_data("vsw", vsw[index])  # number of vsw-steps are filled into self.datas shape here
         # **
-        mask = swo.data["denp"]>0
-        nrT,x = histogram(swo.data["d90"][mask],bins=uTi)
-        dsw,x = histogram(swo.data["d90"][mask],bins=uTi,weights=swo.data["denp"])
-        dsw = dsw/nrT # mean
-        dsw[isnan(dsw)]=0.
-        self.add_data("dsw",dsw[index])
+        mask = swo.data["denp"] > 0
+        nrT, x = histogram(swo.data["d90"][mask], bins=uTi)
+        dsw, x = histogram(swo.data["d90"][mask], bins=uTi, weights=swo.data["denp"])
+        dsw = dsw / nrT  # mean
+        dsw[isnan(dsw)] = 0.
+        self.add_data("dsw", dsw[index])
         # **
-        mask = (swo.data["hlat"]>=-90.)*(swo.data["hlat"]<=90.)
-        nrT,x = histogram(swo.data["d90"][mask],bins=uTi)
-        hlat,x = histogram(swo.data["d90"][mask],bins=uTi,weights=swo.data["hlat"])
-        hlat = hlat/nrT
-        hlat[isnan(hlat)]=0.
-        self.add_data("hlat",hlat[index])
+        mask = (swo.data["hlat"] >= -90.) * (swo.data["hlat"] <= 90.)
+        nrT, x = histogram(swo.data["d90"][mask], bins=uTi)
+        hlat, x = histogram(swo.data["d90"][mask], bins=uTi, weights=swo.data["hlat"])
+        hlat = hlat / nrT
+        hlat[isnan(hlat)] = 0.
+        self.add_data("hlat", hlat[index])
         # **
-        mask = (swo.data["hlong"]>=0.)*(swo.data["hlong"]<=360.)
-        nrT,x = histogram(swo.data["d90"][mask],bins=uTi)
-        hlong,x = histogram(swo.data["d90"][mask],bins=uTi,weights=swo.data["hlong"])
-        hlong = hlong/nrT
-        hlong[isnan(hlong)]=0.
-        self.add_data("hlong",hlong[index])
+        mask = (swo.data["hlong"] >= 0.) * (swo.data["hlong"] <= 360.)
+        nrT, x = histogram(swo.data["d90"][mask], bins=uTi)
+        hlong, x = histogram(swo.data["d90"][mask], bins=uTi, weights=swo.data["hlong"])
+        hlong = hlong / nrT
+        hlong[isnan(hlong)] = 0.
+        self.add_data("hlong", hlong[index])
         # **
-        mask = (swo.data["rau"]>=0.)*(swo.data["rau"]<=6.)
-        nrT,x = histogram(swo.data["d90"][mask],bins=uTi)
-        rau,x = histogram(swo.data["d90"][mask],bins=uTi,weights=swo.data["rau"])
-        rau = 1.*rau/nrT
-        rau[isnan(rau)]=0.
-        self.add_data("rau",rau[index])
+        mask = (swo.data["rau"] >= 0.) * (swo.data["rau"] <= 6.)
+        nrT, x = histogram(swo.data["d90"][mask], bins=uTi)
+        rau, x = histogram(swo.data["d90"][mask], bins=uTi, weights=swo.data["rau"])
+        rau = 1. * rau / nrT
+        rau[isnan(rau)] = 0.
+        self.add_data("rau", rau[index])
         # **
-        self.add_data("wHe+",self.data["vHe+"]/self.data["vsw"])
+        self.add_data("wHe+", self.data["vHe+"] / self.data["vsw"])
 
     def sync_traj_spice(self):
         ''' Synchronisation with Ulysses trajectory data
@@ -233,18 +234,18 @@ class uswipha(dbData):
         Adds data products from ulysses_traj_spice, i.e. trajectory data from SPICE
 
         '''
-        traj = UlyssesTrajSpice(year = self.year,tf = self.timeframe)
+        traj = UlyssesTrajSpice(year=self.year, tf=self.timeframe)
         # __hier weiter__
         if not 'd90' in self.data.keys():
             self.calc_d90()
         traj.calc_d90()
-        uTi_int, index_int = unique(self.data['d90'].astype(int),return_inverse=True)
-        uTi_int = append(uTi_int,uTi_int[-1]+1) # insert right border for histogram bins
+        uTi_int, index_int = unique(self.data['d90'].astype(int), return_inverse=True)
+        uTi_int = append(uTi_int, uTi_int[-1] + 1)  # insert right border for histogram bins
         # Radius (/AE):
         mask = traj.data['R'] > 0.
         r, x = histogram(traj.data["d90"], bins=uTi_int, weights=traj.data["R"])
         self.add_data("r", r[index_int])
-        #latitude in HG:
+        # latitude in HG:
         mask = traj.data['HG_Lat'] != 0.
         lat, x = histogram(traj.data["d90"], bins=uTi_int, weights=traj.data["HG_Lat"])
         self.add_data("lat_hg", lat[index_int])
@@ -297,12 +298,12 @@ class uswipha(dbData):
         Adds data products from ulysses_traj, i.e. trajectory data from the Ulysses archive files
 
         '''
-        traj = ulysses_traj(year = self.year,tf = self.timeframe)
+        traj = ulysses_traj(year=self.year, tf=self.timeframe)
         if not 'd90' in self.data.keys():
             self.calc_d90()
         traj.calc_d90()
-        uTi_int, index_int = unique(self.data['d90'].astype(int),return_inverse=True)
-        uTi_int = append(uTi_int,uTi_int[-1]+1) # insert right border for histogram bins
+        uTi_int, index_int = unique(self.data['d90'].astype(int), return_inverse=True)
+        uTi_int = append(uTi_int, uTi_int[-1] + 1)  # insert right border for histogram bins
         # Aspect Angle Total (flat):
         mask = traj.data['SPE'] != 0.
         aa, x = histogram(traj.data["d90"], bins=uTi_int, weights=traj.data["SPE"])
@@ -311,7 +312,7 @@ class uswipha(dbData):
         mask = traj.data['R'] > 0.
         r, x = histogram(traj.data["d90"], bins=uTi_int, weights=traj.data["R"])
         self.add_data("r", r[index_int])
-        #latitude in HG:
+        # latitude in HG:
         mask = traj.data['HG_Lat'] != 0.
         lat, x = histogram(traj.data["d90"], bins=uTi_int, weights=traj.data["HG_Lat"])
         self.add_data("lat_hg", lat[index_int])
@@ -350,15 +351,16 @@ class uswipha(dbData):
         :return:
         '''
         offy = self.data["year"] - 1990
-        offd = offy*365 + (offy.astype(int)+1)//4
-        off_epq = self.data['epq'] * 1./24./60./60. *12.
-        self.add_data("d90_epq",self.data["doy"] + offd + off_epq)
-    
+        offd = offy * 365 + (offy.astype(int) + 1) // 4
+        off_epq = self.data['epq'] * 1. / 24. / 60. / 60. * 12.
+        self.add_data("d90_epq", self.data["doy"] + offd + off_epq)
+
     def sync_mag(self):
+        ''' Synchronisation with VHM magnet field data
+
+        Adds magnetic field data products in different coordinate systems
         '''
-        todo
-        '''
-        mag = mag_loader(year = self.year, tf = self.timeframe)
+        mag = mag_loader(year=self.year, tf=self.timeframe)
         mag.calc_doy_refined()
         mag.calc_d90()
         mag.calc_hc()
@@ -366,17 +368,13 @@ class uswipha(dbData):
         if not 'd90' in self.data.keys():
             self.calc_d90()
 
-        # if not 'd90_epq' in self.data.keys():
-        #     self.calc_d90_epq()
-
-        uTi, index = unique(self.data["d90"], return_inverse = True)
+        uTi, index = unique(self.data["d90"], return_inverse=True) # unique times of PHA data
         uTi = append(uTi, uTi[-1] + 1. / 24. / 5.)  # 12 minutes
-        #uTi = uTi + 1. / 24. / 30.  # 2 minutes shift
 
-        N, bins = histogram(mag.data["d90"], bins = uTi)
+        N, bins = histogram(mag.data["d90"], bins=uTi)
         N[N == 0] = 1.
 
-        Br, bins = histogram(mag.data["d90"], bins = uTi, weights = mag.data["Br"])
+        Br, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["Br"])
         Br = Br / N  # mean
         Br[isnan(Br)] = 0.
         self.add_data("Br", Br[index])  # number of B-steps are filled into self.datas shape here
@@ -416,47 +414,35 @@ class uswipha(dbData):
         B_hc_long[isnan(B_hc_long)] = 0.
         self.add_data("B_hc_long", B_hc_long[index])
 
-        # # add magnetic field angles in radian:
-        # self.Br = Br
-        # # Todo: Achtung: NaNs drin
-        # Br = self.data['Br']
-        # Bt = self.data['Bt']
-        # Bn = self.data['Bn']
-        # self.add_data('Bphi', (arctan2(Bt , Br)))
-        # self.add_data('Btheta',  (arcsin(Bn / sqrt(Br**2 + Bt**2 + Bn**2))))
-        #
-        # # add magnetic field angles in degree:
-        # self.add_data('Bphi_deg', (self.data['Bphi'] * 180. / pi))
-        # self.add_data('Btheta_deg', (self.data['Btheta'] * 180. / pi))
 
     def sync_mag_old(self):
         '''
         todo
         '''
-        mag = mag_loader(year = self.year, tf = self.timeframe)
+        mag = mag_loader(year=self.year, tf=self.timeframe)
         mag.calc_d90()
         self.mag = mag
 
         if not 'd90_epq' in self.data.keys():
             self.calc_d90_epq()
 
-        bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1./24./60.)
-        N, bins = histogram(mag.data['d90'], bins = bins1min)
-        N[N==0] = 1.
+        bins1min = arange(around(min(mag.data['d90'])), around(max(mag.data['d90'])), 1. / 24. / 60.)
+        N, bins = histogram(mag.data['d90'], bins=bins1min)
+        N[N == 0] = 1.
 
-        Babs, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Babs'])
+        Babs, bins = histogram(mag.data['d90'], bins=bins1min, weights=mag.data['Babs'])
         Babs = Babs / N
         index_Babs = searchsorted(bins1min[1:-1], self.data['d90_epq'])
         self.add_data('Babs', Babs[index_Babs])
-        Br, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Br'])
+        Br, bins = histogram(mag.data['d90'], bins=bins1min, weights=mag.data['Br'])
         Br = Br / N
         index_Br = searchsorted(bins1min[1:-1], self.data['d90_epq'])
         self.add_data('Br', Br[index_Br])
-        Bt, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Bt'])
+        Bt, bins = histogram(mag.data['d90'], bins=bins1min, weights=mag.data['Bt'])
         Bt = Bt / N
         index_Bt = searchsorted(bins1min[1:-1], self.data['d90_epq'])
         self.add_data('Bt', Bt[index_Bt])
-        Bn, bins = histogram(mag.data['d90'], bins = bins1min, weights = mag.data['Bn'])
+        Bn, bins = histogram(mag.data['d90'], bins=bins1min, weights=mag.data['Bn'])
         Bn = Bn / N
         index_Bn = searchsorted(bins1min[1:-1], self.data['d90_epq'])
         self.add_data('Bn', Bn[index_Bn])
@@ -466,22 +452,22 @@ class uswipha(dbData):
         Br = self.data['Br']
         Bt = self.data['Bt']
         Bn = self.data['Bn']
-        self.add_data('Bphi', (arctan2(Bt , Br)))
-        self.add_data('Btheta',  (arcsin(Bn / sqrt(Br**2 + Bt**2 + Bn**2))))
+        self.add_data('Bphi', (arctan2(Bt, Br)))
+        self.add_data('Btheta', (arcsin(Bn / sqrt(Br ** 2 + Bt ** 2 + Bn ** 2))))
 
         # add magnetic field angles in degree:
         self.add_data('Bphi_deg', (self.data['Bphi'] * 180. / pi))
         self.add_data('Btheta_deg', (self.data['Btheta'] * 180. / pi))
 
     def check_b(self):
-        #import matplotlib.pyplot as plt
+        """ Sanity check for magnetic field data
+
+        Histogram the angle between SC and magentic field vector in ecliptic coordinate system for +- 20 degree above
+        and below ecliptic plane to check whether the magnetic field data centers around the expected parker angle
+        """
         self.sync_mag()
         self.sync_traj_spice()
-        self.add_data('B_ang',self.data['HC_Long'] - self.data['B_hc_long'])
-        self.set_mask('above_ecl', 'HC_Lat', 0,20)
+        self.add_data('B_ang', self.data['HC_Long'] - self.data['B_hc_long'])
+        self.set_mask('above_ecl', 'HC_Lat', 0, 20)
         self.set_mask('under_ecl', 'HC_Lat', -20, 0)
-        self.hist1d('B_ang', smask = ['under_ecl','above_ecl'])
-
-
-
-
+        self.hist1d('B_ang', smask=['under_ecl', 'above_ecl'])
