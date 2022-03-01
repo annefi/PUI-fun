@@ -355,12 +355,12 @@ class uswipha(dbData):
         off_epq = self.data['epq'] * 1. / 24. / 60. / 60. * 12.
         self.add_data("d90_epq", self.data["doy"] + offd + off_epq)
 
-    def sync_mag(self):
+    def sync_mag(self, magpath = datapath + "VHM_FGM/1min/"):
         ''' Synchronisation with VHM magnet field data
 
         Adds magnetic field data products in different coordinate systems
         '''
-        mag = mag_loader(year=self.year, tf=self.timeframe)
+        mag = mag_loader(year=self.year, tf=self.timeframe, path = magpath)
         mag.calc_doy_refined()
         mag.calc_d90()
         mag.calc_hc()

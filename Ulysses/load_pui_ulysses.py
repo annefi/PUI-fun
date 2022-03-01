@@ -25,25 +25,26 @@ years = [1995]
 start = time.time()
 
 if He1:
-    # give path to data that includes magnet data
     d1 = uswipha(year=years, tf=[[101, 122]])
     d1.sync_swoops()
     d1.sync_traj_spice()
-    #d1.sync_mag() # not needed anymore: new PHAs including mag data
-    #d1.set_mask('Master','vsw',750,780, reset = True)
-    d1.set_mask('Master','rng',0,0,reset=True)
+    d1.sync_mag()
+
+    d1.set_mask('Master','rng',0,0,reset=True) # priority range 0
     d1.set_mask('Master','det',0,2,reset=True) # cut out det = 3 (=rubbish?)
     d1.set_mask('Master','ech',12,250,reset=True) # exclude doubles
-    #d1.set_mask('Master','brw',1,1,reset=True)
+    d1.set_mask('Master','brw',1,1,reset=True)
+
+    #d1.set_mask('Master','vsw',750,780, reset = True)
     #d1.set_mask('Master', 'epq', 0, 19, reset=True)
     #d1.set_mask('Master', 'epq', 30,31, reset=True)
     #d1.set_mask('Master', 'r', 0, 1.38, reset=True)
 
     # d1.set_mask('Master','Btheta',-20./180.*np.pi,20./180.*np.pi,reset=True)
     # d1.set_mask('Master', 'Bphi', -20. / 180. * np.pi, 20. / 180. * np.pi, reset=True)
-    # #d1.set_mask('Master', 'Bphi', 85. / 180. * np.pi, 95. / 180. * np.pi)
+    # d1.set_mask('Master', 'Bphi', 85. / 180. * np.pi, 95. / 180. * np.pi)
 
-    # d1.set_mask('Master','aa_tot', 0, 10)
+    #d1.set_mask('Master','aa_tot', 0, 10)
     #d1.set_mask('Master','aspphi', -5,5)
     #d1.set_mask('Master','asptheta',-10,10)
 
