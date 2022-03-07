@@ -356,7 +356,7 @@ class uswipha(dbData):
         off_epq = self.data['epq'] * 1. / 24. / 60. / 60. * 12.
         self.add_data("d90_epq", self.data["doy"] + offd + off_epq)
 
-    def sync_mag(self, magpath=datapath + "VHM_FGM/1min/"):
+    def sync_mag(self, magpath=datapath + "VHM_FGM/1min/", hc = False):
         ''' Synchronisation with VHM magnet field data
 
         Adds magnetic field data products in different coordinate systems
@@ -364,86 +364,35 @@ class uswipha(dbData):
         if not 'd90_epq' in self.data.keys():
             self.calc_d90_epq()
 
-        mag = mag_loader(year=self.year, tf=self.timeframe, path=magpath)
+        # extend timeframe for mag data (because PHA timeframe overlaps to next day with refined d90 calculation):
+        mag_tf = self.timeframe
+        mag_year = self.year
+        if self.timeframe[0][1] < 366.:
+            mag_tf = [[self.timeframe[0][0],self.timeframe[0][1]+1]]
+        else:
+            mag_year = [self.year[0],self.year[0]+1]
+
+        mag = mag_loader(year=mag_year, tf=mag_tf, path=magpath)
         mag.calc_doy_refined()
         mag.calc_d90()
-        mag.calc_hc()
         mag.calc_angles_RTN()
 
-        if not 'd90' in self.data.keys():
-            self.calc_d90()
+        bins1min_shifted = mag.data['d90'] + 1/24/60/2 # shift bin edges 0.5 min for sorting
+        index = searchsorted(bins1min_shifted, self.data['d90_epq'])
 
-        uTi, index = unique(self.data["d90"], return_inverse=True)  # unique times of PHA data
-        uTi = append(uTi, uTi[-1] + 1. / 24. / 5.)  # 12 minutes
+        self.add_data("Br", mag.data['Br'][index])
+        self.add_data("Bt", mag.data['Bt'][index])
+        self.add_data("Bn", mag.data['Bn'][index])
+        self.add_data("B_abs", mag.data['B_r'][index])
+        self.add_data("B_hg_lat", mag.data['B_lat'][index])
+        self.add_data("B_hg_long", mag.data['B_long'][index])
+        self.add_data("B_RTN_lat", mag.data['B_RTN_lat'][index])
+        self.add_data("B_RTN_long", mag.data['B_RTN_long'][index])
 
-        N, bins = histogram(mag.data["d90"], bins=uTi)
-        N[N == 0] = 1.
-
-        index_B = searchsorted(mag.data['d90'], self.data['d90'])
-        self.add_data("Br", mag.data['Br'][index_B])
-
-        Br, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["Br"])
-        Br = Br / N  # mean
-        Br[isnan(Br)] = 0.
-        self.add_data("Br", Br[index])  # number of B-steps are filled into self.datas shape here
-
-        Bt, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["Bt"])
-        Bt = Bt / N  # mean
-        Bt[isnan(Bt)] = 0.
-        self.add_data("Bt", Bt[index])
-
-        Bn, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["Bn"])
-        Bn = Bn / N  # mean
-        Bn[isnan(Bn)] = 0.
-        self.add_data("Bn", Bn[index])
-
-        B_abs, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["B_r"])
-        B_abs = B_abs / N  # mean
-        B_abs[isnan(B_abs)] = 0.
-        self.add_data("B_abs", B_abs[index])
-
-        B_hg_lat, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["B_lat"])
-        B_hg_lat = B_hg_lat / N  # mean
-        B_hg_lat[isnan(B_hg_lat)] = 0.
-        self.add_data("B_hg_lat", B_hg_lat[index])
-
-        B_hg_long, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["B_long"])
-        B_hg_long = B_hg_long / N  # mean
-        B_hg_long[isnan(B_hg_long)] = 0.
-        self.add_data("B_hg_long", B_hg_long[index])
-
-        B_hc_lat, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["B_hc_lat"])
-        B_hc_lat = B_hc_lat / N  # mean
-        B_hc_lat[isnan(B_hc_lat)] = 0.
-        self.add_data("B_hc_lat", B_hc_lat[index])
-
-        B_hc_long, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["B_hc_long"])
-        B_hc_long = B_hc_long / N  # mean
-        B_hc_long[isnan(B_hc_long)] = 0.
-        self.add_data("B_hc_long", B_hc_long[index])
-
-        B_RTN_lat, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["B_RTN_lat"])
-        B_RTN_lat = B_RTN_lat / N  # mean
-        B_RTN_lat[isnan(B_RTN_lat)] = 0.
-        self.add_data("B_RTN_lat", B_RTN_lat[index])
-
-        B_RTN_long, bins = histogram(mag.data["d90"], bins=uTi, weights=mag.data["B_RTN_long"])
-        B_RTN_long = B_RTN_long / N  # mean
-        B_RTN_long[isnan(B_RTN_long)] = 0.
-        self.add_data("B_RTN_long", B_RTN_long[index])
-
-        # self.add_data('B_RTN_lat', 90 - math.degrees(
-        #    math.acos(self.data['Bn'] / math.sqrt(self.data['Br'] ** 2 + self.data['Bt'] ** 2 + self.data['Bn'] **
-        # 2))))
-        # self.add_data('B_RTN_long', math.degrees(math.atan2(self.data['Bt'], self.data['Br'])))
-
-        Br = self.data['Br']
-        Bt = self.data['Bt']
-        Bn = self.data['Bn']
-        self.add_data('Bphi', (arctan2(Bt, Br)))
-        self.add_data('Btheta', (arcsin(Bn / sqrt(Br ** 2 + Bt ** 2 + Bn ** 2))))
-        self.add_data('Bphi_deg', (self.data['Bphi'] * 180. / pi))
-        self.add_data('Btheta_deg', (self.data['Btheta'] * 180. / pi))
+        if hc:
+            mag.calc_hc()
+            self.add_data("B_hc_lat", mag.data['B_hc_lat'][index])
+            self.add_data("B_hc_long", mag.data['B_hc_long'][index])
 
     def sync_mag_old(self):
         '''
@@ -495,7 +444,7 @@ class uswipha(dbData):
         Histogram the angle between SC and magentic field vector in ecliptic coordinate system for +- 20 degree above
         and below ecliptic plane to check whether the magnetic field data centers around the expected parker angle
         """
-        self.sync_mag()
+        self.sync_mag(hc = True)
         self.sync_traj_spice()
         self.add_data('B_ang', self.data['HC_Long'] - self.data['B_hc_long'])
         self.set_mask('above_ecl', 'HC_Lat', 0, 20)
