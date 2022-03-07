@@ -38,7 +38,7 @@ class collimator(object):
         detectors and the sector are included (for visualisation of the total FoV). False means the detector and
         sector boundaries are not included, resulting in points representing almost equal phase space volumes (this
         option should be used for data analysis).
-        aspphi,ansptheta = Aspect angle in degrees, i.e. orientation of the
+        aspphi,asptheta = Aspect angle in degrees, i.e. orientation of the
         spacecraft spin axis. NOTE rotation around theta is against usual sense of direction therefore the rotation
         has to be by -asptheta!!!!
 
