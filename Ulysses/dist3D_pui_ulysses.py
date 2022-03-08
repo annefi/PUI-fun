@@ -113,11 +113,11 @@ class Dist3D(object):
         #print('*** calc w space ***')
         # self._calc_wspace()
         print('*** add data products ***')
-        self._add_3Dvels()
-        t9 = time.time()
-        self._add_w()
-        self._add_angles()
-        t10 = time.time()
+        # self._add_3Dvels()
+        # t9 = time.time()
+        # self._add_w()
+        # self._add_angles()
+        # t10 = time.time()
 
         #for i,t in enumerate([t1,t2,t3,t4,t5,t6,t7,t8,t9,t10]):
         #    print(i+1,t-start)
@@ -134,7 +134,7 @@ class Dist3D(object):
 
     def _calc_vspace(self):
         """
-        Calculates vR,vT,vN for all epqsteps and given aspect angles.
+        Calculate vR,vT,vN for all epqsteps and given aspect angles.
         shape self.vspace: (#aspphi, #asptheta, #epq-steps, #det, #sec, xyz, sec_det_dim)
         (sec_det_dim is col_dim * nrs_epq)
         """
@@ -173,10 +173,12 @@ class Dist3D(object):
 
     def _add_3Dvels(self):
         """
-        Adds vR,vT,vN in SC-frame and vRsw,vTsw,vNsw in SW-frame based on aspect angles to pha data
-        Also adds vRsw2,vTsw2,vNsw2 in SW-frame based on aspect angles and rounded vsw to pha data 
+        'Make use of the look up array self.vspace'
+        Add vR,vT,vN in SC-frame and vRsw,vTsw,vNsw in SW-frame based on aspect angles to pha data
+        Also add vRsw2,vTsw2,vNsw2 in SW-frame based on aspect angles and rounded vsw to pha data
+
         In the current version vsw is taken to be stricly radial, i.e. along v_x / v_R!
-        sc_vel determines, if the velocity of the SC itself should be considered in the v-space.
+        sc_vel determines if the velocity of the SC itself should be considered in the v-space.
         """
         # divide the bins each into half and match every count to the central binedge.
         searcharr_phi = arange(self.aspphi[0] + self.aspphi_step / 2., self.aspphi[-1], self.aspphi_step)
@@ -187,6 +189,8 @@ class Dist3D(object):
         epqind = self.d.get_data('Master', 'epq').astype(int)
         detind = self.d.get_data('Master', 'det').astype(int)
         secind = self.d.get_data('Master', 'sec').astype(int)
+        self.checklist = [phiind, thetaind, epqind, detind, secind]
+        #sys.exit()
         if self.sc_vel == False:
             if not "vR" in self.d.data.keys():
                 self.d.add_data("vR", self.vspace[phiind, thetaind, epqind, detind, secind, 0])  # a list of
@@ -207,7 +211,6 @@ class Dist3D(object):
             else:
                 self.d.data["v"] = sqrt(
                     self.d.data["vR"] ** 2 + self.d.data["vT"] ** 2 + self.d.data["vN"] ** 2)
-
         elif self.sc_vel == True:
             # considering the velocity of the SC
             if not "vR" in self.d.data.keys():

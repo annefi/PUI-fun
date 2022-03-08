@@ -1,5 +1,5 @@
 from numpy import *
-from etCoord import rotate
+from Trajectory.ul_coordinates_utils import rotate
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from custom_colours import lighten_color
