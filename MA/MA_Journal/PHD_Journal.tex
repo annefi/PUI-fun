@@ -249,8 +249,13 @@ Ideen, was man mit den Magnetfelddaten machen kann/müsste (Verena):
 \end{itemize}
 
 \newdaytt{28}{02}
-Habe Magnetfeld von RTN in HG umgewandelt und nochmal weggeschrieben. Dann alle anderen Ideen (Backmapping etc.) verworfen und nur den Winkel zwischen SC und Magnetfeldvektor für SC-Positionen +- 20 Grad der Ekliptik histogrammiert und geschaut, ob das ungefähr mit dem erwarteten Parkerwinkel (etwas mehr als 45 Grad) passt. Passt und die Polarität stimmt überein mit der im McComas-Plot. Dafür habe ich die Mag-Daten jeweils über die 12.8 Minuten gemittelt, mit denen die PHA-Daten getaggt sind (bzw. über die Zeitstempel mit denen sie real getaggt sind). Es gibt noch eine Routine in uswipha, die die tatsächlichen Messzeiten aus den EpQ-Steps berechnet, also die Lücke zwischen den 13 Minuten schließt. Überlegen, ob das Sinn macht, das zu verfeinern und wie ich dann das Magnetfeld mitteln würde \todo{calc\_d90\_epq benutzen?} \\
+Habe Magnetfeld von RTN in HG umgewandelt und nochmal weggeschrieben. Dann alle anderen Ideen (Backmapping etc.) verworfen und nur den Winkel zwischen SC und Magnetfeldvektor für SC-Positionen +- 20 Grad der Ekliptik histogrammiert und geschaut, ob das ungefähr mit dem erwarteten Parkerwinkel (etwas mehr als 45 Grad) passt. Passt und die Polarität stimmt überein mit der im McComas-Plot. Dafür habe ich die Mag-Daten jeweils über die 12.8 Minuten gemittelt, mit denen die PHA-Daten getaggt sind (bzw. über die Zeitstempel mit denen sie real getaggt sind). Es gibt noch eine Routine in uswipha, die die tatsächlichen Messzeiten aus den EpQ-Steps berechnet, also die Lücke zwischen den 13 Minuten schließt. Überlegen, ob das Sinn macht, das zu verfeinern und wie ich dann das Magnetfeld mitteln würde \done{calc\_d90\_epq benutzen?} \\
 Als nächstes: In Gesamtanalyse einbauen, überlegen, was ich überhaupt anschauen will. Dafür auch die Normierung nochmal durchgehen...
+
+\newdaytt{09}{03}
+Magnetfeld: Habe den PHA-Worten die 1min-Mittel zugeordnet (mit der refined Auflösung... allerdings ist mir nirgendwo ersichtlich dokumentiert, ob das wirklich passt. beziehen sich die Timestamps in den PHA-files auf den Anfang oder das Ende der Cycles?) \\[0.5cm] 
+Gucke gerade dist3d-Klasse durch. Scheint bisher alles Sinn zu machen. Warum aber in \_add\_3Dvels() bei der gerundeten vsw -1? Glaube im MA-Journal im Oktober steht was dazu (hat das was mit Normierung zu tun?). Nachlesen!
+
 %
 %
 %

@@ -6,7 +6,6 @@ Based on dbData
 
 import sys
 import os
-import math
 
 if os.path.isdir("/home/af/fusessh/data/projects/Ulysses/") == True:
     ### from Laptop old: ###
